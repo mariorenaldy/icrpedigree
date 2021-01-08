@@ -1,0 +1,63 @@
+
+
+{% extends "template/frontend.twig" %}
+{% block title %}Produk
+{% endblock %}
+{% block styles %}
+
+<link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block inverted %}inverted{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+
+<section class="portfolio-block" style="margin-bottom: 25px;">
+
+                <div class="container">
+                    <div class="portfolio-container zoom-gallery" style="position: relative; ">
+                      <div class="row">
+
+                          {% for galery in galeries %}
+                            <div class="col-md-4">
+                              <!-- <div class="project development design" style="position: absolute; left: 0px; top: 0px;"> -->
+                                  <a href="javascript:;" class="gallery-item-title">{{galery.gal_title}}</a>
+                                  <a href="{{base_url()}}{{galery.gal_photo}}" data-source="{{base_url()}}{{galery.gal_photo}}" title="{{galery.gal_title}}" class="gallery-item effect-milo">
+                                      <img src="{{base_url()}}{{galery.gal_photo}}">
+                                  </a>
+                                  <p class="text-sm text-muted">
+                                      {{galery.gal_description}}
+                                  </p>
+                              <!-- </div> -->
+                            </div>
+                          {% endfor %}
+
+                      </div>
+
+                      <div class="row" style="">
+                          {% if galeries == null %}
+                          <div class="col-md-12 animated fadeIn" style="margin-bottom: 100px;
+    margin-top: 83px;">
+                              <center>
+                                  <strong><h1>--Belum ada foto untuk acara ini--</h1></strong>
+                              </center>
+                          </div>
+                          {% endif %}
+                      </div>
+
+
+
+                    </div>
+                </div>
+            </section>
+
+
+
+{% endblock %}
+
+{% block scripts %}{% endblock %}

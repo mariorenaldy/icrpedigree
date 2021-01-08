@@ -1,0 +1,62 @@
+{# ARTechnology #}
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+
+<style>
+    #imgPreview, #imgPreview-update{
+        /*border-radius:50%;*/
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Approve Request Pengubahan Data Canine</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <h4>Approve Request Pengubahan Data Canine</h4>
+        </div>
+        <div class="block-content table-responsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/employee.js -->
+            <table class="table table-borderless table-striped data-requests">
+                <thead>
+                    <tr>
+                        <th width="1%">Foto</th>
+                        <th>Tanggal Request</th>
+                        <th>AS</th>
+                        <th>Kennel</th>
+                        <th>Alamat</th>
+                        <th>Pemilik</th>
+                        <th>Approver</th>
+                        <th>Tanggal Approve</th>
+                        <th class="text-center" width="1%">#</th>
+                        <th class="text-center" width="1%">#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/requests.js"></script>
+{% endblock %}

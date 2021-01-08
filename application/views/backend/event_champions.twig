@@ -1,0 +1,378 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<!-- <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/style.css"> -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/search.css" media="screen" title="no title" charset="utf-8">
+
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+    }
+    .fileUpload input.upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    #imgPreview, #imgPreview-update{
+        /*border-radius:50%;*/
+        margin-bottom: 15px;
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+  <div class="col-sm-12 text-right hidden-xs">
+    <ol class="breadcrumb">
+      <li><a href="{{base_url()}}backend/" class="link-effect">Dashboard</a></li>
+      <li><a href="{{base_url()}}backend/events" class="link-effect">Events</a></li>
+      <li>Daftar Juara </li>
+    </ol>
+  </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+  <!-- Dynamic Table Full -->
+  <div class="block">
+    <div class="block-header text-center bg-gray-lighter">
+      {% if champions == null %}
+          <button class="btn btn-primary btn-add-albums pull-right" onClick="openModal('#modal-add-champ', 'add')" data-toggle="tooltip" title="Tambah Event"><i class="si si-note"></i></button>
+        {% else %}
+          <button class="btn btn-danger pull-right"  data-toggle="tooltip" title="Sudah ada Juara" disabled><i class="si si-note"></i></button>
+      {% endif %}
+      <h4> <small>Daftar Juara </small>Event</h4>
+    </div>
+    <div class="block-content table-responsive">
+
+      <div class="row" style="">
+        {% if champions %}
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <h4 class="h6 font-w400 text-black-op push-15">{{canine1.can_a_s}} (Juara 1)</h4>
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+
+              <img class="img-responsive" src="{{base_url()}}uploads/canine/{{canine1.can_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{canine1.can_a_s}}</h3>
+                  <!-- <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{champ.gal_id}})"><i class="fa fa-pencil"></i> Edit</a> -->
+                  <!-- <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{champ.gal_id}})"><i class="fa fa-times"></i> Delete</a> -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <h4 class="h6 font-w400 text-black-op push-15">{{canine2.can_a_s}} (Juara 2)</h4>
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+
+              <img class="img-responsive" src="{{base_url()}}uploads/canine/{{canine2.can_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{canine2.can_a_s}}</h3>
+                  <!-- <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{champ.gal_id}})"><i class="fa fa-pencil"></i> Edit</a> -->
+                  <!-- <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{champ.gal_id}})"><i class="fa fa-times"></i> Delete</a> -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <h4 class="h6 font-w400 text-black-op push-15">{{canine3.can_a_s}} (Juara 3)</h4>
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+
+              <img class="img-responsive" src="{{base_url()}}uploads/canine/{{canine3.can_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{canine3.can_a_s}}</h3>
+                  <!-- <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{champ.gal_id}})"><i class="fa fa-pencil"></i> Edit</a> -->
+                  <!-- <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{champ.gal_id}})"><i class="fa fa-times"></i> Delete</a> -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="row" style="">
+          {% if champions == null %}
+          <div class="col-md-12 animated fadeIn" style="margin-bottom:20px;">
+              <center>
+                  <h4>--Belum ada Juara 1, 2 dan 3 untuk event ini--</h4>
+              </center>
+          </div>
+          {% endif %}
+      </div>
+
+</div>
+</div>
+</div>
+<!-- modals -->
+<div class="modal fade" id="modal-add-champ" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top modal-md">
+        <div class="modal-content">
+            <form action="{{base_url()}}backend/events/championsAdd/{{id}}" class="form-add-champions form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Tambah Juara</h3>
+                </div>
+                <div class="block-content">
+                  <div class="col-md-12">
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="champ1-search">
+                          <label for="champ1">juara 1</label>
+                          <input class="form-control typeahead" id="champ1" name="champ1" type="text" required>
+                          <input type="hidden" name="ech_champion_id_1" id="ech_champion_id_1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="champ2-search">
+                          <label for="champ2">juara 2</label>
+                          <input class="form-control typeahead" id="champ2" name="champ2" type="text" required>
+                          <input type="hidden" name="ech_champion_id_2" id="ech_champion_id_2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="champ3-search">
+                          <label for="champ3">juara 3</label>
+                          <input class="form-control typeahead" id="champ3" name="champ3" type="text" required>
+                          <input type="hidden" name="ech_champion_id_3" id="ech_champion_id_3">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary submit-add-canines">Save</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal add-->
+
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_champions.js"></script>
+<script>
+    jQuery(function () {
+        $('#dob-add-canines').datetimepicker({
+            format: 'YYYY-MM-DD',
+            showTodayButton: true,
+            showClose: true,
+            icons: {
+                time: 'si si-clock',
+                date: 'si si-calendar',
+                up: 'si si-arrow-up',
+                down: 'si si-arrow-down',
+                previous: 'si si-arrow-left',
+                next: 'si si-arrow-right',
+                today: 'si si-size-actual',
+                clear: 'si si-trash',
+                close: 'si si-close'
+            }
+        });
+        $('#dob-update-canines').datetimepicker({
+            format: 'YYYY-MM-DD',
+            showTodayButton: true,
+            showClose: true,
+            icons: {
+                time: 'si si-clock',
+                date: 'si si-calendar',
+                up: 'si si-arrow-up',
+                down: 'si si-arrow-down',
+                previous: 'si si-arrow-left',
+                next: 'si si-arrow-right',
+                today: 'si si-size-actual',
+                clear: 'si si-trash',
+                close: 'si si-close'
+            }
+        });
+    });
+</script>
+
+<!-- search engine -->
+<script src="{{ base_url() }}assets/typeahead.js/dist/bloodhound.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.bundle.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.jquery.min.js"></script>
+<script>
+var base_url = $('.base_url').val();
+
+
+function functionChamp1($id){
+  $('#ech_champion_id_1').val($id);
+}
+
+function functionChamp2($id){
+  $('#ech_champion_id_2').val($id);
+}
+
+function functionChamp3($id){
+  $('#ech_champion_id_3').val($id);
+}
+
+var champ1 = $('#ech_champion_id_1').val();
+var champ2 = $('#ech_champion_id_2').val();
+var champ3 = $('#ech_champion_id_3').val();
+
+// sire
+var champ1 = new Bloodhound({
+    identify: function(o) { return o.can_a_s; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_a_s'),
+    dupDetector: function(a, b) { return a.can_a_s === b.can_a_s; },
+
+    remote: {
+      url: base_url+'backend/canines/search?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+champ1.initialize();
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#champ1-search .typeahead').typeahead(null, {
+name: 'champ1',
+display: 'can_a_s',
+placeholder: false,
+source: champ1.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+    // if (data.can_id != champ2 || data.can_id != champ3) {
+      $('#ech_champion_id_1').val(data.can_id);
+      // champ1 = $('#ech_champion_id_1').val();
+      return '<a style="color:black;" href="javascript:functionChamp1('+data.can_id+')"><div style="margin-bottom:20px;"><img width="30px" style="float:left; margin:5px;" src="'+base_url+'uploads/canine/'+data.can_photo+'">' + data.can_a_s + '</div></a>';
+    // }
+ }
+}
+});
+
+var champ2 = new Bloodhound({
+    identify: function(o) { return o.can_a_s; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_a_s'),
+    dupDetector: function(a, b) { return a.can_a_s === b.can_a_s; },
+    // prefetch: {
+    //   cache: false,
+    //     url : base_url+'canines/search'
+    // },
+    remote: {
+      url: base_url+'backend/canines/search?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+champ2.initialize();
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#champ2-search .typeahead').typeahead(null, {
+name: 'champ2',
+display: 'can_a_s',
+placeholder: false,
+source: champ2.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+      // if (data.can_id !=champ1 || data.can_id != champ3) {
+          $('#ech_champion_id_2').val(data.can_id);
+          // champ2 = $('#ech_champion_id_2').val();
+         return '<a style="color:black;" href="javascript:functionChamp2('+data.can_id+')"><div style="margin-bottom:20px;"><img width="30px" style="float:left; margin:5px;" src="'+base_url+'uploads/canine/'+data.can_photo+'">' + data.can_a_s + '</div></a>';
+      // }
+
+ }
+}
+});
+
+var champ3 = new Bloodhound({
+    identify: function(o) { return o.can_a_s; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_a_s'),
+    dupDetector: function(a, b) { return a.can_a_s === b.can_a_s; },
+    // prefetch: {
+    //   cache: false,
+    //     url : base_url+'canines/search'
+    // },
+    remote: {
+      url: base_url+'backend/canines/search?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+champ3.initialize();
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#champ3-search .typeahead').typeahead(null, {
+name: 'champ3',
+display: 'can_a_s',
+placeholder: false,
+source: champ2.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+      // alert(champ1);
+      // if (data.can_id !=champ1 || data.can_id != champ2) {
+        $('#ech_champion_id_3').val(data.can_id);
+        // champ3 = $('#ech_champion_id_3').val();
+        return '<a style="color:black;" href="javascript:functionChamp3('+data.can_id+')"><div style="margin-bottom:20px;"><img width="30px" style="float:left; margin:5px;" src="'+base_url+'uploads/canine/'+data.can_photo+'">' + data.can_a_s + '</div></a>';
+      // }
+ }
+}
+});
+
+</script>
+{% endblock %}

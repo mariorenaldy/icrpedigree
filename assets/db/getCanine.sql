@@ -1,0 +1,4 @@
+CREATE PROCEDURE `getCanine` ()
+BEGIN
+	SELECT * FROM canines;
+END

@@ -1,0 +1,77 @@
+{# By: ARTechnology #}
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<!-- <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/style.css"> -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+
+<style>
+    #imgPreview, #imgPreview-update{
+        /*border-radius:50%;*/
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li><a href="javascript:history.back()" class="link-effect">Sebelumnya</a></li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <h4>Logs {{canines.can_a_s}}</h4>
+        </div>
+        <div class="block-content ">
+            <div class="table-responsive">
+            <table class="table table-borderless table-striped data-logs">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Owner</th>
+                        <th>Alamat</th>
+                        <th>Kennel</th>
+                        <th>Member</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if logs %}
+                        {% for row in logs %}
+                            {% if row.log_owner or row.log_address or row.log_cage or row.log_member %}
+                                <tr>
+                                    <td>{{ row.log_tanggal }}</td>
+                                    <td>{{ row.log_owner }}</td>
+                                    <td>{{ row.log_address }}</td>
+                                    <td>{{ row.log_cage }}</td>
+                                    <td>{{ row.log_member }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<!-- Page JS Code -->
+
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+{% endblock %}

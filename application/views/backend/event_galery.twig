@@ -1,0 +1,356 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+
+
+<style>
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+}
+.fileUpload input.upload {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+#imgPreview, #imgPreview-update{
+  /*border-radius:50%;*/
+  margin-bottom: 15px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+  <div class="col-sm-12 text-right hidden-xs">
+    <ol class="breadcrumb">
+      <li><a href="{{base_url()}}backend/" class="link-effect">Dashboard</a></li>
+      <li><a href="{{base_url()}}backend/events" class="link-effect">Events</a></li>
+      <li>Galeri Event</li>
+    </ol>
+  </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+  <!-- Dynamic Table Full -->
+  <div class="block">
+    <div class="block-header text-center bg-gray-lighter">
+      <!-- <button class="btn btn-default btn-delete-event pull-left"  data-toggle="tooltip" title="Hapus yang dipilih" disabled><i class="si si-trash"></i></button> -->
+
+      <button class="btn btn-primary btn-add-albums pull-right" onClick="openModal('#modal-add-albums', 'add')" data-toggle="tooltip" title="Tambah Event"><i class="si si-note"></i></button>
+      <h4> <small>Albums </small>Event</h4>
+    </div>
+    <div class="block-content table-responsive">
+
+      <div class="row" style="">
+        {% for galery in galeries %}
+          {% if loop.index <= 3 %}
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+              <img class="img-responsive" src="{{base_url()}}{{galery.gal_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{galery.gal_title}}</h3>
+                  <h4 class="h6 font-w400 text-white-op push-15">{{galery.gal_description}}</h4>
+                  <button class="btn btn-sm btn-warning" onClick="openModal('#modal-update-albums', 'update', {{galery.gal_id}})"><i class="fa fa-pencil"></i> Edit</button>
+                  <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{galery.gal_id}})"><i class="fa fa-times"></i> Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row" style="">
+        {% for galery in galeries %}
+          {% if loop.index >3 and loop.index <= 6 %}
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+              <img class="img-responsive" src="{{base_url()}}{{galery.gal_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{galery.gal_title}}</h3>
+                  <h4 class="h6 font-w400 text-white-op push-15">{{galery.gal_description}}</h4>
+                  <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{galery.gal_id}})"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{galery.gal_id}})"><i class="fa fa-times"></i> Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="row" style="">
+        {% for galery in galeries %}
+          {% if loop.index > 6 and loop.index <= 9 %}
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+              <img class="img-responsive" src="{{base_url()}}{{galery.gal_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{galery.gal_title}}</h3>
+                  <h4 class="h6 font-w400 text-white-op push-15">{{galery.gal_description}}</h4>
+                  <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{galery.gal_id}})"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{galery.gal_id}})"><i class="fa fa-times"></i> Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="row" style="">
+        {% for galery in galeries %}
+          {% if loop.index >9 and loop.index <= 12 %}
+          <div class="col-md-4 animated fadeIn" style="margin-bottom:20px;">
+            <div class="img-container fx-img-zoom-in fx-opt-zoom-in">
+              <img class="img-responsive" src="{{base_url()}}{{galery.gal_photo}}" alt="">
+              <div class="img-options">
+                <div class="img-options-content">
+                  <h3 class="font-w400 text-white push-5">{{galery.gal_title}}</h3>
+                  <h4 class="h6 font-w400 text-white-op push-15">{{galery.gal_description}}</h4>
+                  <a class="btn btn-sm btn-warning" href="javascript:openModal('#modal-update-albums', 'update', {{galery.gal_id}})"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-sm btn-danger" href="javascript:deletedPhoto({{galery.gal_id}})"><i class="fa fa-times"></i> Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="row" style="">
+          {% if galeries == null %}
+          <div class="col-md-12 animated fadeIn" style="margin-bottom:20px;">
+              <center>
+                  <h4>--Belum ada foto untuk event ini--</h4>
+              </center>
+          </div>
+          {% endif %}
+      </div>
+
+</div>
+</div>
+</div>
+<!-- modals -->
+<div class="modal fade" id="modal-add-albums" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top">
+    <div class="modal-content">
+      <form action="{{base_url()}}backend/events/albumsadd/{{id}}" class="form-add-albums form-horizontal" method="post">
+        <div class="block block-themed block-transparent remove-margin-b">
+          <div class="block-header bg-primary-dark">
+            <ul class="block-options">
+              <li>
+                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+              </li>
+            </ul>
+            <h3 class="block-title">Tambah Foto</h3>
+          </div>
+          <div class="block-content">
+            <div class="form-group">
+              <div class="col-xs-4 col-xs-offset-4">
+                <img id="imgPreview" width="100%" src="{{base_url()}}assets/oneui/img/avatars/image.png">
+                <div class="fileUpload btn btn-default btn-flat btn-block">
+                  <span>Upload Foto</span>
+                  <input type="file" class="upload" name="photo" id="imageInput"/>
+                  <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop-update"/>
+                </div>
+                <!-- <small class="text-muted">Ratio 1:1</small> -->
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <label for="title-add-event">Judul foto</label>
+                <input class="form-control" id="title-add-event" name="gal_title" type="text" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <label for="description-add-event">Deskripsi</label>
+                <textarea class="form-control" name="gal_description" id="description-add-event"  rows="4" cols="20" required></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="clearfix"></div><br>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary submit-add-event">Simpan</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal add-->
+
+<div class="modal fade" id="modal-update-albums" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top modal-md">
+    <div class="modal-content">
+      <form action="" class="form-update-albums form-horizontal" method="post">
+        <div class="block block-themed block-transparent remove-margin-b">
+          <div class="block-header bg-primary-dark">
+            <ul class="block-options">
+              <li>
+                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+              </li>
+            </ul>
+            <h3 class="block-title">Ubah Foto </h3>
+          </div>
+          <div class="block-content">
+            <!-- <div class="col-sm-6"> -->
+            <div class="form-group">
+              <div class="col-xs-4 col-xs-offset-4">
+                <img id="imgPreview-update" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                <div class="fileUpload btn btn-default btn-flat btn-block">
+                  <span>Ubah Foto</span>
+                  <input type="file" class="upload" name="photo" id="imageInput"/>
+                  <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop"/>
+                </div>
+                <!-- <small class="text-muted">Ratio 1:1</small> -->
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <label for="title-update-event">Judul Event</label>
+                <input class="form-control" id="title-update-event" name="gal_title" type="text" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <label for="description-update-event">Deskripsi</label>
+                <textarea class="form-control" name="gal_description" id="description-update-event"  rows="4" cols="20" required></textarea>
+              </div>
+            </div>
+            <!-- </div> -->
+          </div>
+        </div>
+        <div class="clearfix"></div><br>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary submit-update-event">Save</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal update-->
+
+<div class="modal fade" id="cropper-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-popout modal-dialog-top">
+    <div class="modal-content">
+      <div class="block block-themed block-transparent remove-margin-b">
+        <div class="block-header bg-primary-dark">
+          <ul class="block-options">
+            <li>
+              <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+            </li>
+          </ul>
+          <h3 class="block-title">Image Cropper</h3>
+        </div>
+        <div class="block-content">
+          <div id="cropper-wrap-img">
+            <img width="100%" src="/img/default.png" alt="Picture">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
+        <button type="button" class="btn btn-primary btn-crop">Crop</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_albums.js"></script>
+<script>
+
+function deletedPhoto(id){
+  var conf = confirm('Apakah anda ingin menghapus foto ini?');
+  if (conf) {
+  $.ajax({
+      url:base_url+'backend/events/removeAlbums/'+id,
+      type:'POST',
+      // data:data,
+      success: function(res) {
+          res = $.parseJSON(res);
+          if (res.data == '1') {
+              // window.tableevent.api().ajax.reload();
+              // $('.btn-delete-event').attr('disabled', 'disabled');
+              // $('.data-events input:checkbox:checked').removeAttr('checked');
+
+              window.location.reload();
+          }else {
+              alert(res.data);
+
+          }
+      },
+
+      error: function(jqXHR, exception) {
+          alert(jqXHR.status);
+
+      },
+  });
+}
+}
+
+jQuery(function () {
+  $('#date-add-event').datetimepicker({
+    format: 'YYYY-MM-DD',
+    showTodayButton: true,
+    showClose: true,
+    icons: {
+      time: 'si si-clock',
+      date: 'si si-calendar',
+      up: 'si si-arrow-up',
+      down: 'si si-arrow-down',
+      previous: 'si si-arrow-left',
+      next: 'si si-arrow-right',
+      today: 'si si-size-actual',
+      clear: 'si si-trash',
+      close: 'si si-close'
+    }
+  });
+  $('#date_update_event').datetimepicker({
+    format: 'YYYY-MM-DD',
+    showTodayButton: true,
+    showClose: true,
+    icons: {
+      time: 'si si-clock',
+      date: 'si si-calendar',
+      up: 'si si-arrow-up',
+      down: 'si si-arrow-down',
+      previous: 'si si-arrow-left',
+      next: 'si si-arrow-right',
+      today: 'si si-size-actual',
+      clear: 'si si-trash',
+      close: 'si si-close'
+    }
+  });
+});
+</script>
+{% endblock %}

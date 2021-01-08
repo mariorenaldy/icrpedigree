@@ -1,0 +1,869 @@
+
+
+{% extends "template/frontend.twig" %}
+{% block title %}Pedigrees
+{% endblock %}
+{% block styles %}
+
+<link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" id="css-main" href="{{ base_url() }}assets/typeahead.js/css/typeaheadjs.css">
+<link rel="stylesheet" href="{{base_url()}}assets/primitive/demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css" />
+<link href="{{base_url()}}assets/primitive/demo/css/primitives.latest.css" media="screen" rel="stylesheet" type="text/css" />
+<style media="screen">
+.bp-title {
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  line-height: 16px;
+  color: white;
+  padding: 0;
+}
+
+input{
+  margin-top: 0px;
+  /*border-color: #B4B1B1;*/
+}
+#prefetch input:focus{
+  /*color: #646464;*/
+  color: #222;
+  /*border: 1px solid #CB3838;*/
+  border-radius: 3px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+}
+#prefetch .empty-message{
+  padding: 5px 10px;
+  text-align: center;
+  width: auto;
+
+}
+
+.twitter-typeahead{
+  /*width: auto;*/
+  display: block !important;
+}
+.tt-menu{
+  width: 100%;
+  border: .2px solid grey;
+  margin-top: 5px;
+  border-radius: 3px;
+  /*box-shadow: 1px 1px gray;*/
+}
+
+/*.tt-dataset .tt-selectable:hover{
+background-color: gray !important;
+}*/
+
+.tt-dataset{
+  display: block; overflow:auto;
+  width: auto;
+  max-height: 120px;
+  overflow-y: auto;
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+  -webkit-overflow-scrolling: touch;
+
+}
+.eac-item{
+  width: auto;
+}
+.eac-item ul img{
+  margin-bottom: 10px;
+  clear: both;
+}
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 120px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+// ARTechnology
+.containerCard {
+  padding: 2px;
+}
+
+.hero-banner{
+  background-color: black !important;
+}
+
+.medium{
+  font-size: medium;
+  color: white;
+}
+
+.small{
+  font-size: small;
+  color: #CDCDCD;
+}
+
+.middle-center{
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+// ARTechnology
+
+/*#basicdiagram{
+  overflow:auto;
+  overflow-y: auto;
+}*/
+
+.bg-info {
+    background-color: #000000 !important;
+}
+
+</style>
+{% endblock %}
+
+{% block inverted %}inverted{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-banner">
+  <div class="container-fluid ">
+    <!-- <div class="block"> -->
+        <div >
+            <!-- ARTechnology --> 
+            <h3 style="color:white; text-align:center;" > Silsilah Anjing</h3>
+            <!-- ARTechnology -->
+        </div>
+        <div class="block-content" style="background-color:black;overflow-y: auto; padding:10px; border-radius:0px;">
+          <table class="table table-bordered table-responsive ">
+              <tr>
+                  <!-- ARTechnology -->
+                  <td colspan="4" align="right">
+                    <div class="card">
+                    <center>
+                      {% if canine[0].can_photo == '-' %}
+                          <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                          {% else %}
+                          <img src="{{base_url()}}uploads/canine/{{canine[0].can_photo}}" width="120px" alt="" />
+                      {% endif %}
+                      <div class="containerCard">
+                        
+                        <div><div class="medium"><b>{{canine[0].can_a_s}}</b></div>
+                        <div class="small">
+                          {% if canine[0].can_icr_moc_number %}
+                            {{canine[0].can_icr_moc_number}}
+                            {% else %}
+                                -
+                          {% endif %}
+                          </div>
+                          <div class="small">
+                          {% if canine[0].can_owner %}
+                            {{canine[0].can_owner}}
+                            {% else %}
+                                -
+                          {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </center>  
+                    </div>
+                  </td>
+                  <td colspan="4" class="middle-center">
+                    <div class="small">{{canine[0].can_note}}</div>
+                  </td>
+                  <!-- ARTechnology -->
+              </tr>
+              <tr>
+                  <td colspan="4">
+                    {% if canine[0].sire[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].sire[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].sire[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].sire[0].can_icr_moc_number %}
+                                {{canine[0].sire[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].sire[0].can_owner %}
+                                {{canine[0].sire[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <!-- <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].can_photo}}" width="120px" alt="" /> -->
+                        <div class="containerCard">
+                          <p><b>NO F</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+
+                  </td>
+                  <td colspan="4">
+                    {% if canine[0].mom[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].mom[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].mom[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].mom[0].can_icr_moc_number %}
+                                {{canine[0].mom[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].mom[0].can_owner %}
+                                {{canine[0].mom[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO M</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+              </tr>
+
+
+              <tr>
+                <!-- father -->
+                  <td colspan="2">
+                    {% if canine[0].sire[0].sire[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].sire[0].sire[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].sire[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].sire[0].sire[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].sire[0].sire[0].can_icr_moc_number %}
+                                {{canine[0].sire[0].sire[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].sire[0].sire[0].can_owner %}
+                                {{canine[0].sire[0].sire[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO F</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+                  <td colspan="2">
+                    {% if canine[0].sire[0].mom[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].sire[0].mom[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].mom[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].sire[0].mom[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].sire[0].mom[0].can_icr_moc_number %}
+                                {{canine[0].sire[0].mom[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].sire[0].mom[0].can_owner %}
+                                {{canine[0].sire[0].mom[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO M</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+                  <!-- ==============================================================================================================  -->
+                  <!-- mom -->
+                  <td colspan="2">
+                    {% if canine[0].mom[0].sire[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].mom[0].sire[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].sire[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].mom[0].sire[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].can_icr_moc_number %}
+                                {{canine[0].mom[0].sire[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].can_owner %}
+                                {{canine[0].mom[0].sire[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO F</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+                  <td colspan="2">
+                    {% if canine[0].mom[0].mom[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].mom[0].mom[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].mom[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].mom[0].mom[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].mom[0].mom[0].can_icr_moc_number %}
+                                {{canine[0].mom[0].mom[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].mom[0].mom[0].can_owner %}
+                                {{canine[0].mom[0].mom[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO M</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+
+              </tr>
+
+
+              <!--================================  -->
+              <tr>
+                <td>
+                  {% if canine[0].sire[0].sire[0].sire[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].sire[0].sire[0].sire[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].sire[0].sire[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].sire[0].sire[0].sire[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].sire[0].sire[0].sire[0].can_icr_moc_number %}
+                              {{canine[0].sire[0].sire[0].sire[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].sire[0].sire[0].sire[0].can_owner %}
+                              {{canine[0].sire[0].sire[0].sire[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO F</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if canine[0].sire[0].sire[0].mom[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].sire[0].sire[0].mom[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].sire[0].mom[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].sire[0].sire[0].mom[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].sire[0].sire[0].mom[0].can_icr_moc_number %}
+                              {{canine[0].sire[0].sire[0].mom[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].sire[0].sire[0].mom[0].can_owner %}
+                              {{canine[0].sire[0].sire[0].mom[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO M</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <!-- sire sire sire-->
+                <td>
+                  {% if canine[0].sire[0].mom[0].sire[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].sire[0].mom[0].sire[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].mom[0].sire[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].sire[0].mom[0].sire[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].sire[0].mom[0].sire[0].can_icr_moc_number %}
+                              {{canine[0].sire[0].mom[0].sire[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].sire[0].mom[0].sire[0].can_owner %}
+                              {{canine[0].sire[0].mom[0].sire[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO F</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if canine[0].sire[0].mom[0].mom[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].sire[0].mom[0].mom[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].sire[0].mom[0].mom[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].sire[0].mom[0].mom[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].sire[0].mom[0].mom[0].can_icr_moc_number %}
+                              {{canine[0].sire[0].mom[0].mom[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].sire[0].mom[0].mom[0].can_owner %}
+                              {{canine[0].sire[0].mom[0].mom[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO M</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <!-- sire sire mom -->
+
+                  <td>
+                    {% if canine[0].mom[0].sire[0].sire[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].mom[0].sire[0].sire[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].sire[0].sire[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].mom[0].sire[0].sire[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].sire[0].can_icr_moc_number %}
+                                {{canine[0].mom[0].sire[0].sire[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].sire[0].can_owner %}
+                                {{canine[0].mom[0].sire[0].sire[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO F</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if canine[0].mom[0].sire[0].mom[0] != null %}
+                      <center>
+                        <div class="card">
+                          {% if canine[0].mom[0].sire[0].mom[0].can_photo == '-' %}
+                              <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                              {% else %}
+                              <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].sire[0].mom[0].can_photo}}" width="120px" alt="" />
+                          {% endif %}
+                          <!-- ARTechnology -->
+                          <div class="containerCard">
+                            <div><div class="medium"><b>{{canine[0].mom[0].sire[0].mom[0].can_a_s}}</b></div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].mom[0].can_icr_moc_number %}
+                                {{canine[0].mom[0].sire[0].mom[0].can_icr_moc_number}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                              <div class="small">
+                              {% if canine[0].mom[0].sire[0].mom[0].can_owner %}
+                                {{canine[0].mom[0].sire[0].mom[0].can_owner}}
+                                {% else %}
+                                    -
+                              {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- ARTechnology -->
+                        </div>
+                      </center>
+                    {% else %}
+                    <center>
+                      <div class="card">
+                        <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                        <div class="containerCard">
+                          <p><b>NO M</b>
+                          </p>
+                        </div>
+                      </div>
+                    </center>
+                    {% endif %}
+                  </td>
+
+                <!-- mom mom sire -->
+                <td>
+                  {% if canine[0].mom[0].mom[0].sire[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].mom[0].mom[0].sire[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].mom[0].sire[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].mom[0].mom[0].sire[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].mom[0].mom[0].sire[0].can_icr_moc_number %}
+                              {{canine[0].mom[0].mom[0].sire[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].mom[0].mom[0].sire[0].can_owner %}
+                              {{canine[0].mom[0].mom[0].sire[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO F</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if canine[0].mom[0].mom[0].mom[0] != null %}
+                    <center>
+                      <div class="card">
+                        {% if canine[0].mom[0].mom[0].mom[0].can_photo == '-' %}
+                            <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px" height="105px" alt="" />
+                            {% else %}
+                            <img src="{{base_url()}}uploads/canine/{{canine[0].mom[0].mom[0].mom[0].can_photo}}" width="120px" alt="" />
+                        {% endif %}
+                        <!-- ARTechnology -->
+                        <div class="containerCard">
+                          <div><div class="medium"><b>{{canine[0].mom[0].mom[0].mom[0].can_a_s}}</b></div>
+                            <div class="small">
+                            {% if canine[0].mom[0].mom[0].mom[0].can_icr_moc_number %}
+                              {{canine[0].mom[0].mom[0].mom[0].can_icr_moc_number}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                            <div class="small">
+                            {% if canine[0].mom[0].mom[0].mom[0].can_owner %}
+                              {{canine[0].mom[0].mom[0].mom[0].can_owner}}
+                              {% else %}
+                                  -
+                            {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- ARTechnology -->
+                      </div>
+                    </center>
+                  {% else %}
+                  <center>
+                    <div class="card">
+                      <img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="120px"  height="105px" alt="" />
+                      <div class="containerCard">
+                        <p><b>NO M</b>
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                  {% endif %}
+                </td>
+                <!-- mom mom mom -->
+
+              </tr>
+          </table>
+
+        </div>
+    <!-- </div> -->
+
+  </div>
+</section>
+
+
+
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<input type="hidden" value="{{canine.can_id}}" class="can_id" />
+{% endblock %}
+
+{% block scripts %}
+<script src="{{base_url()}}assets/oneui/js/core/jquery.slimscroll.min.js"></script>
+<script src="{{base_url()}}assets/oneui/js/core/jquery.scrollLock.min.js"></script>
+<script type="text/javascript" src="{{base_url()}}assets/primitive/demo/js/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="{{base_url()}}assets/primitive/demo/js/jquery/jquery-ui-1.10.2.custom.min.js"></script>
+<script  type="text/javascript" src="{{base_url()}}assets/primitive/demo/js/primitives.min.js"></script>
+
+<script>
+$(function () {
+    // Init page helpers (SlimScroll plugin)
+    App.initHelpers('slimscroll');
+});
+
+var can_id = $('.can_id').val();
+var base_url = $('.base_url').val();
+
+$(window).load(function () {
+
+    $.get(base_url+'pedigrees/cid/'+can_id, function(res) {
+      res = $.parseJSON(res);
+
+      var options = new primitives.orgdiagram.Config();
+
+        var item = [];
+        var canines = res;
+        canines.forEach(function(v, i){
+          var newItem = new primitives.famdiagram.ItemConfig(
+            {
+                id: v.id,
+                parent: v.parent,
+                title: v.can_a_s,
+                description: v.can_date_of_birth,
+                image: base_url+'uploads/canine/'+v.can_photo,
+            });
+
+            item.push(newItem);
+
+        })
+
+        var items = item;
+        options.items = items;
+        options.cursorItem = 0;
+        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+        // delete items[0];
+        jQuery("#basicdiagram").orgDiagram(options);
+      });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Kritik dan Saran</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <button class="btn btn-default btn-delete-faqs pull-left"  data-toggle="tooltip" title="Hapus yang dipilih" disabled><i class="si si-trash"></i></button>
+
+            <!-- <button class="btn btn-primary btn-add-faqs pull-right" onClick="openModal('#modal-add-faqs', 'add')" data-toggle="tooltip" title="Tambah Kritik dan Saran"><i class="si si-note"></i></button> -->
+            <h4> <small>Daftar</small> Kritik dan Saran</h4>
+        </div>
+        <div class="block-content table-requonsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/faqs.js -->
+            <table class="table table-borderless table-striped data-faqss">
+                <thead>
+                    <tr>
+                        <th width="5">
+                            <div class="checkbox-faqs-all">
+                              <input type="checkbox" data-toggle="tooltip" title="Select all">
+                            </div>
+                        </th>
+                        <th>Email</th>
+                        <th>Content</th>
+                        <th>Jenis</th>
+                        <!-- <th>Tanggal</th> -->
+                        <!-- <th class="text-center" width="1%">#</th> -->
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_faqs.js"></script>
+{% endblock %}
