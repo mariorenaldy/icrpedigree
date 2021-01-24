@@ -69,6 +69,14 @@ class Navigation extends CI_Model {
               ),
 
               array(
+                'url' => 'backend/kennels',
+                'displayName' => 'Kennels',
+                'child' => false,
+                'heading' => false,
+                'icon' => 'si-home'
+              ),
+
+              array(
                 'url' => 'backend/canines/logs_request',
                 'displayName' => 'Request Pengubahan Data Canine',
                 'child' => false,
