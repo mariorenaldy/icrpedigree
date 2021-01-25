@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/search.css" media="screen" title="no title" charset="utf-8">
-
+<link rel="stylesheet" href="{{ base_url() }}/assets/select2/css/select2.min.css" />
 <style>
     .fileUpload {
         position: relative;
@@ -68,6 +68,7 @@
                             <th>Alamat</th>
                             <th>Alamat Surat</th>
                             <th>No. Telp</th>
+                            <th>Kennel</th>
                             <th>Status</th>
                             <th>Approver</th>
                             <th>Tanggal Approve</th>
@@ -130,6 +131,13 @@
                         <div class="col-xs-12">
                             <label for="hp-add-member">No. Telp</label>
                             <input class="form-control" id="hp-add-member" name="mem_hp" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="kennel-add-member">Kennel</label>
+                            </br>
+                            <select class="form-control kennel" id="kennel-add-member" name="mem_ken_id" required style="height: 34px;width:100%"></select>
                         </div>
                     </div>
                   </div>
@@ -213,6 +221,13 @@
                             <div class="col-xs-12">
                                 <label for="hp-update-member">No. Telp</label>
                                 <input class="form-control" id="hp-update-member" name="mem_hp" type="text" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <label for="kennel-update-member">Kennel</label>
+                                </br>
+                                <select class="form-control kennel" id="kennel-update-member" name="mem_ken_id" required style="height: 34px;width:100%"></select>
                             </div>
                         </div>
                     </div>
@@ -328,7 +343,85 @@
 <script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
 <script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<script src="{{ base_url() }}assets/select2/js/select2.min.js"></script>
+<!-- search engine -->
+<script src="{{ base_url() }}assets/typeahead.js/dist/bloodhound.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.bundle.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.jquery.min.js"></script>
 <!-- Page JS Code -->
 <input type="hidden" value="{{ base_url() }}" class="base_url" />
 <script src="{{ base_url() }}/assets/oneui/js/pages/adm_member.js"></script>
+<script>
+    var base_url = $('.base_url').val();
+    
+    $("#kennel-add-member").select2({
+        placeholder: 'Pilih Kennel',
+        ajax: {
+            url: base_url+"backend/kennels/kennel",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results: data
+            };
+            },
+            cache: true
+        },
+        dropdownParent: $("#modal-add-member")
+    });
+
+    $("#kennel-update-member").select2({
+        placeholder: 'Pilih Kennel',
+        ajax: {
+            url: base_url+"backend/kennels/kennel",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results: data
+            };
+            },
+            cache: true
+        },
+        dropdownParent: $("#modal-update-member")
+    });
+
+    function functionKennel($id){
+        $('#kennel-update-member').val($id);
+    }
+
+    var kennel = new Bloodhound({
+        identify: function(o) { return o.mem_ken_id; },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('mem_ken_id'),
+        dupDetector: function(a, b) { return a.mem_ken_id === b.mem_ken_id; },
+        remote: {
+            url: base_url+'backend/kennels/kennel?q=%QUERY',
+            wildcard: '%QUERY',
+            cache: false
+        }
+    });
+
+    kennel.initialize();
+    // passing in `null` for the `options` arguments will result in the default
+    // options being used
+
+    $('#kennel-update-member .typeahead').typeahead(null, {
+        name: 'kennel',
+        display: 'mem_ken_id',
+        placeholder: false,
+        source: kennel.ttAdapter(),
+        templates: {
+        empty: [
+            '<div class="empty-message">',
+            '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+            '</div>'
+        ].join('\n'),
+        suggestion: function (data) {
+            $('#kennel-update-member').val(data.mem_ken_id);
+                return '<a style="color:black;" href="javascript:functionKennel('+data.mem_ken_id+')"><div style="margin-bottom:15px;">' + data.mem_name + '</div></a><br><br>';
+            }
+        }
+    });
+</script>
 {% endblock %}

@@ -7,7 +7,7 @@ class Members extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->library('bcrypt');
-			$this->load->model('memberModel');
+			$this->load->model(array('memberModel', 'KennelModel'));
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
 			$this->path_upload = 'uploads/members/';
@@ -16,10 +16,11 @@ class Members extends CI_Controller {
         	if(!$session) redirect('backend');
 		}
 		public function index(){
-				$user = $this->session->userdata('user_data');
-				$data['users'] = $user;
-				$data['navigations'] = $this->navigations;
-				$this->twig->display('backend/members', $data);
+			$user = $this->session->userdata('user_data');
+			$data['users'] = $user;
+			$data['navigations'] = $this->navigations;
+			$data['kennels'] = $this->KennelModel->daftar_kennels();
+			$this->twig->display('backend/members', $data);
 		}
 
 		public function add(){
@@ -66,7 +67,7 @@ class Members extends CI_Controller {
 						$member = $this->memberModel->get_members($where)->row();
 						echo json_encode($member);
 				}else{
-						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username');
+						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username', 'ken_name', 'mem_ken_id');
 						$sTable = 'members';
 
 						$iDisplayStart = $this->input->get_post('start', true);
@@ -122,6 +123,7 @@ class Members extends CI_Controller {
 						// Select Data
 						$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
 						$this->db->join('users','users.use_id = members.mem_app_user');
+						$this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
 						$this->db->where('mem_id !=', 0);
 						$this->db->order_by('mem_id', 'DESC');
 						$rResult = $this->db->get($sTable);
@@ -157,7 +159,7 @@ class Members extends CI_Controller {
 
 		public function update($id = null){
 			$img = $this->input->post('srcDataCrop');
-			if($img){
+			if ($img){
 				$title = self::_clean_text('member');
 				$_POST['mem_photo'] = self::_upload_base64($img, $title, true, $id);
 			}

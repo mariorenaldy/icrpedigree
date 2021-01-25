@@ -11,7 +11,7 @@ var BaseTableDatatables = function() {
     var initDataTablemember = function() {
         window.tablemember = jQuery('.data-members').dataTable({
             order: [[2, 'asc']],
-            columnDefs: [{ orderable: false, targets: [0, 1, 9, 10, 11] }],
+            columnDefs: [{ orderable: false, targets: [0, 1, 10, 11, 12] }],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
             processing: true,
@@ -44,6 +44,7 @@ var BaseTableDatatables = function() {
                     { data: 'mem_address'},
                     { data: 'mem_mail_address'},
                     { data: 'mem_hp'},
+                    { data: 'ken_name'},
                     { data: 'mem_stat',
                       render: function(data, type, row) {
                         if (row.mem_stat == 0) {
@@ -582,6 +583,11 @@ function openModal(target, type, id) {
             $('#address-update-member').val(res.mem_address);
             $('#mail-address-update-member').val(res.mem_mail_address);
             $('#hp-update-member').val(res.mem_hp);
+
+            $("#kennel-update-member").html("").trigger('change');
+            var newOption = new Option(res.ken_name, res.mem_ken_id, false, false);
+            $('#kennel-update-member').append(newOption).trigger('change');
+            
             $('#username-update-member').val(res.mem_username);
             $('#pass-update-member').val('');
             $('#newpass-update-member').val('');
