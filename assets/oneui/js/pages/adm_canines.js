@@ -8,8 +8,8 @@ var BaseTableDatatables = function() {
     // Init full DataTable, for more examples you can check out https://www.datatables.net/
     var initDataTablecanine = function() {
         window.tablecanine = jQuery('.data-canines').dataTable({
-            order: [[1, 'desc']],
-            columnDefs: [{ orderable: false, targets: [0,3] }],
+            order: [[0, 'desc']],
+            columnDefs: [{ orderable: false, targets: [0, 1, 11, 12, 13, 14, 15, 16, 17] }],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
             cancessing: true,
@@ -40,7 +40,19 @@ var BaseTableDatatables = function() {
                     { data: 'can_current_reg_number'},
                     { data: 'can_icr_moc_number'},
                     { data: 'can_icr_number'},
-                    { data: 'can_a_s'},
+                    { data: 'can_id',
+                        render: function(data, type, row) {
+                            if (row.ken_type_id == 1) {
+                                return row.can_a_s+' von '+row.ken_name;
+                            }
+                            else if (row.ken_type_id == 2){
+                                return row.ken_name+'\' '+row.can_a_s;
+                            }
+                            else{
+                                return row.can_a_s;
+                            }
+                        },
+                    },
                     { data: 'can_gender'},
                     { data: 'can_owner'},
                     // ARTechnology 1
