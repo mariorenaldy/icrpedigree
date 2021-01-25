@@ -17,7 +17,7 @@ class KennelModel extends CI_Model {
     }
 
     public function get_kennels($where = null){
-        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name AS ken_name, kennels.ken_type_id, kennels_type.ken_name AS ken_type');
+        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_type_id, kennels_type.ken_type_name');
         if ($where != null) {
             $this->db->where($where);
         }

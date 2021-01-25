@@ -11,7 +11,7 @@ var BaseTableDatatables = function() {
     var initDataTableKennel = function() {
         window.tablekennel = jQuery('.data-kennels').dataTable({
             order: [[2, 'asc']],
-            columnDefs: [{ orderable: false, targets: [0, 1] }],
+            columnDefs: [{ orderable: false, targets: [0, 1, 5] }],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
             processing: true,
@@ -41,7 +41,7 @@ var BaseTableDatatables = function() {
                       },
                     },
                     { data: 'ken_name'},
-                    { data: 'ken_id'},
+                    { data: 'ken_type_name'},
                     { data: 'ken_stat',
                       render: function(data, type, row) {
                         if (row.ken_stat == 0) {

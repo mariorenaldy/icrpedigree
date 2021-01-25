@@ -112,7 +112,7 @@
                             <label for="format-add-kennel">Format Penamaan Canine</label>
                             <select class="form-control" id="format-add-kennel" name="ken_type_id" required>
                                 {% for ken_type in ken_types %}
-                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_name}}</option>
+                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_type_name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -165,7 +165,7 @@
                             <label for="format-update-kennel">Format Penamaan Canine</label>
                             <select class="form-control" id="format-update-kennel" name="ken_type_id" required>
                                 {% for ken_type in ken_types %}
-                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_name}}</option>
+                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_type_name}}</option>
                                 {% endfor %}
                             </select>
                         </div>

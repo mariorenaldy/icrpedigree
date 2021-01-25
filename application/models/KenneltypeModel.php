@@ -8,7 +8,7 @@ class KenneltypeModel extends CI_Model{
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->order_by('ken_name');
+        $this->db->order_by('ken_type_name');
         return $this->db->get('kennels_type');
     }
 }

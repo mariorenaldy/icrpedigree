@@ -48,7 +48,7 @@ class Kennels extends CI_Controller {
 					$kennel = $this->KennelModel->get_kennels($where)->row();
 					echo json_encode($kennel);
 			} else {
-					$aColumns = array('ken_id', 'ken_photo', 'kennels.ken_name AS ken_name', 'kennels.ken_type_id', 'kennels_type.ken_name AS ken_type', 'ken_stat');
+					$aColumns = array('ken_id', 'ken_photo', 'ken_name', 'kennels.ken_type_id', 'ken_stat', 'ken_type_name');
 					$sTable = 'kennels';
 
 					$iDisplayStart = $this->input->get_post('start', true);
@@ -85,19 +85,18 @@ class Kennels extends CI_Controller {
 					* word by word on any field. It's possible to do here, but concerned about efficiency
 					* on very large tables, and MySQL's regex functionality is very limited
 					*/
-					if(isset($sSearch['value']) && !empty($sSearch['value'])){
-							for($i=0; $i<count($columns); $i++){
-									// $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
-									$bSearchable = $columns[$i]['searchable'];
+					if (isset($sSearch['value']) && !empty($sSearch['value'])){
+						for($i=0; $i<count($columns); $i++){
+							// $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
+							$bSearchable = $columns[$i]['searchable'];
 
-									// Individual column filtering
-									if(isset($bSearchable) && $bSearchable == 'true')
-									{
-											for($j=0; $j<count($aColumns); $j++){
-												$this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
-											}
-									}
+							// Individual column filtering
+							if (isset($bSearchable) && $bSearchable == 'true'){
+								for ($j=0; $j<count($aColumns); $j++){
+									$this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
+								}
 							}
+						}
 					}
 
 
@@ -247,5 +246,15 @@ class Kennels extends CI_Controller {
 		else{
 			echo json_encode(array('data' => 'Kennel dengan id = '.$err.' tidak dapat dideaktivasi'));
 		}
+	}
+
+	public function kennel(){
+		if (isset($_GET['q'])) {
+			$q = $_GET['q'];
+			$kennel = $this->KennelModel->kennel_search($q)->result();
+		} else {
+			$kennel = $this->KennelModel->kennel_search()->result();
+		}
+		echo json_encode($kennel);
 	}
 }
