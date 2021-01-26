@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
 <link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" id="css-main" href="{{ base_url() }}/assets/oneui/css/oneui.css">
 
 <style>
     .bg-info{
@@ -26,7 +27,7 @@
         opacity: 0;
         filter: alpha(opacity=0);
     }
-    #imgPreview, #imgPreview-update{
+    #imgPreview, #imgPreviewLogo{
         /*border-radius:50%;*/
         margin-bottom: 15px;
     }
@@ -52,7 +53,7 @@
             <form id="form-update-member" data-is-member="{{ members|json_encode }}" action="" class="form-update-member form-horizontal" method="post">
                 <div class="form-group">
                     <div class="col-xs-2 col-xs-offset-5">
-                        <img id="imgPreview-update" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                        <img id="imgPreview" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
                         <div class="fileUpload btn btn-default btn-flat btn-block">
                             <span>Upload KTP</span>
                             <input type="file" class="upload" name="photo" id="imageInput"/>
@@ -108,9 +109,43 @@
                         </div>
                     </div>
                 </div>
-                <br/>
-                <div class="col-xs-12 text-center">
-                    <button type="submit" class="btn btn-primary submit-update-member">Simpan</button>
+                <div class="form-group">
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2 col-xs-offset-5">
+                        <img id="imgPreviewLogo" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2 col-xs-offset-5">
+                        <div class="fileUpload btn btn-default btn-flat btn-block">
+                            <span>Upload Logo</span>
+                            <input type="file" class="upload" name="ken_photo" id="imageInputLogo"/>
+                            <input type="hidden" class="" name="ken_srcDataCrop" id="srcDataCropLogo"/>
+                        </div>
+                        <!-- <small class="text-muted">Ratio 1:1</small> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <label class="text-white-1" for="name-update-kennel">Nama Kennel</label>
+                        <input type ="hidden" id="id-update-kennel" name="mem_ken_id">
+                        <input class="form-control" id="name-update-kennel" name="ken_name" type="text" required>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="text-white-1" for="format-update-kennel">Format Penamaan Canine</label>
+                        <select class="form-control" id="format-update-kennel" name="ken_type_id" required>
+                            {% for ken_type in ken_types %}
+                                <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_type_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 text-center">
+                        <button type="submit" class="btn btn-primary submit-update-member">Simpan</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -137,7 +172,33 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
-            <button type="button" class="btn btn-primary btn-crop">Crop</button>
+            <button type="button" class="btn btn-primary btn-crop" id="btn-crop">Crop</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cropper-modal-logo" data-backdrop="static" data-keyboard="false" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-popout modal-dialog-top">
+    <div class="modal-content">
+        <div class="block block-themed block-transparent remove-margin-b">
+            <div class="block-header bg-primary-dark">
+                <ul class="block-options">
+                    <li>
+                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                    </li>
+                </ul>
+                <h3 class="block-title">Image Cropper</h3>
+            </div>
+            <div class="block-content">
+                <div id="cropper-wrap-img-logo">
+                    <img width="100%" src="/img/default.png" alt="Picture">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
+            <button type="button" class="btn btn-primary btn-crop" id="btn-crop-logo">Crop</button>
         </div>
     </div>
   </div>
@@ -149,6 +210,11 @@
 <script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
 <script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<script src="{{ base_url() }}assets/select2/js/select2.min.js"></script>
+<!-- search engine -->
+<script src="{{ base_url() }}assets/typeahead.js/dist/bloodhound.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.bundle.min.js"></script>
+<script src="{{ base_url() }}assets/typeahead.js/dist/typeahead.jquery.min.js"></script>
 <!-- Page JS Code -->
 <input type="hidden" value="{{ base_url() }}" class="base_url" />
 <script src="{{ base_url() }}/assets/oneui/js/pages/edit_member.js"></script>

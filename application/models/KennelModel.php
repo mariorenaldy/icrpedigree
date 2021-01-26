@@ -52,6 +52,15 @@ class KennelModel extends CI_Model {
         return $result;
     }
 
+    public function edit_kennels($data, $id){
+        $result = false;
+        if ($data != null && $id != null){
+            $this->db->where('ken_id', $id);
+            $result = $this->db->update('kennels', $data);
+        }
+        return $result;
+    }
+
     public function kennel_search($q = null){
         $this->db->select('ken_id as id, ken_name as text');
         if (isset($q)) {
