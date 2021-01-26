@@ -43,8 +43,7 @@ class Members extends CI_Controller {
 				'mem_name' => $this->input->post('mem_name'),
 				'mem_address' => $this->input->post('mem_address'),
 				'mem_mail_address' => $this->input->post('mem_mail_address'),
-				'mem_hp' => $this->input->post('mem_hp'),
-				'mem_username' => $this->input->post('mem_username'),
+				'mem_hp' => $this->input->post('mem_hp')
 			);
 
 			$img = $this->input->post('srcDataCrop');
