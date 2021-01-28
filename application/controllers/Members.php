@@ -86,6 +86,8 @@ class Members extends CI_Controller {
 				$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
 			}
 
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			if ($this->input->post('mem_ken_id'))
 				$this->KennelModel->edit_kennels($kennel, $this->input->post('mem_ken_id'));
 			else{
@@ -97,6 +99,7 @@ class Members extends CI_Controller {
 			}
 
 			$this->memberModel->update_members($data, $where);
+			$this->db->trans_complete();
 			echo json_encode(array('data' => '1'));
 		}
 

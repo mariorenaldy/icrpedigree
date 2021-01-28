@@ -57,10 +57,14 @@ class Signup extends CI_Controller {
 
 			$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
 			$data['mem_ken_id'] = $kennel['ken_id'];
+
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			$this->KennelModel->add_kennels($kennel);
 
 			$user = $this->memberModel->daftar_users($this->input->post('mem_username'))->result();
 			if ($user) {
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Username Sudah Ada!'));
 				return false;
 			}
@@ -70,12 +74,16 @@ class Signup extends CI_Controller {
 				$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('password'));
 				$id = $this->memberModel->add_members($data);
 				if (!$id) {
+					$this->db->trans_rollback();
 					echo json_encode(array('data' => 'Gagal Memproses Akun Anda, Coba Lagi.'));
 					return false;
 				}
-				else
+				else{
+					$this->db->trans_complete();
 					echo json_encode(array('data' => '1'));
+				}
 			} else {
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
 			}
 		}
