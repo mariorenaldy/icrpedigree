@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
 <link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" id="css-main" href="{{ base_url() }}/assets/oneui/css/oneui.css">
 
 <style>
     .bg-info{
@@ -151,21 +150,15 @@
 </section>
 <!-- modals -->
 <div class="modal fade" id="cropper-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" >
-  <div class="modal-dialog modal-dialog-popout modal-dialog-top">
+  <div class="modal-dialog">
     <div class="modal-content">
-        <div class="block block-themed block-transparent remove-margin-b">
-            <div class="block-header bg-primary-dark">
-                <ul class="block-options">
-                    <li>
-                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                    </li>
-                </ul>
-                <h3 class="block-title">Image Cropper</h3>
-            </div>
-            <div class="block-content">
-                <div id="cropper-wrap-img">
-                    <img width="100%" src="/img/default.png" alt="Picture">
-                </div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title" id="myModalLabel">Image Cropper</h3>
+        </div>
+        <div class="modal-body">
+            <div id="cropper-wrap-img">
+                <img width="100%" src="/img/default.png" alt="Picture">
             </div>
         </div>
         <div class="modal-footer">
@@ -176,19 +169,15 @@
   </div>
 </div>
 
-<div class="modal fade" id="cropper-modal-logo" data-backdrop="static" data-keyboard="false" tabindex="-1" >
-  <div class="modal-dialog modal-dialog-popout modal-dialog-top">
+<div class="modal fade" id="cropper-modal-logo" data-backdrop="static" data-keyboard="false" tabindex="-1">
+  <div class="modal-dialog">
     <div class="modal-content">
         <div class="block block-themed block-transparent remove-margin-b">
-            <div class="block-header bg-primary-dark">
-                <ul class="block-options">
-                    <li>
-                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                    </li>
-                </ul>
-                <h3 class="block-title">Image Cropper</h3>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Image Cropper</h3>
             </div>
-            <div class="block-content">
+            <div class="modal-body">
                 <div id="cropper-wrap-img-logo">
                     <img width="100%" src="/img/default.png" alt="Picture">
                 </div>
