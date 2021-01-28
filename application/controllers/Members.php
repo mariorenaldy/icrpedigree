@@ -66,7 +66,7 @@ class Members extends CI_Controller {
 						echo json_encode(array('data' => 'Password Yang Sama Tidak Dapat Digunakan Lagi!'));
 						return false;
 					}
-					$data['mem_password'] = $this->bcrypt->hash_password($data['newpass']);
+					$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('password'));
 				}
 				else {
 					echo json_encode(array('data' => 'Password Awal Salah'));

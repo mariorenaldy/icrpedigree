@@ -30,11 +30,11 @@ class MemberModel extends CI_Model {
 
     public function daftar_users($username = null){
         $this->db->select('*');
-          if ($username != null ) {
-              $user['mem_username'] = $username;
-              $this->db->where($user);
-          }
-          return $this->db->get('members');
+        if ($username != null ) {
+            $this->db->where('mem_username', $username);
+        }
+        $this->db->from('members');
+        return $this->db->get();
       }
 
     public function add_members($data = null){

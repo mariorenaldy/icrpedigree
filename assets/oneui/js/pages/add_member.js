@@ -46,10 +46,8 @@ var initValidationAdd = function() {
                 success: function(res) {
                     res = $.parseJSON(res);
                     if (res.data == '1') {
-                        form.reset();
-                        $('#imgPreview').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg')
-                        alert('Data berhasil disimpan!');
                         window.location = base_url;
+                        alert('Data berhasil disimpan!');
                     }else {
                         alert(res.data);
                     }
@@ -170,7 +168,7 @@ jQuery(function() {
 
 /* PROCCESSING */
 // add
-$('input.upload').on('change', function(e) {
+$('#imageInput').on('change', function(e) {
     if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
         var image = $('#cropper-wrap-img > img'), cropBoxData, canvasData;
         var reader = new FileReader();
@@ -180,6 +178,21 @@ $('input.upload').on('change', function(e) {
 
         reader.readAsDataURL(this.files[0]);
         $('#cropper-modal').modal('show');
+    }else {
+        alert('file not supported');
+    }
+});
+
+$('#imageInputLogo').on('change', function(e) {
+    if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
+        var image = $('#cropper-wrap-img-logo > img'), cropBoxData, canvasData;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(this.files[0]);
+        $('#cropper-modal-logo').modal('show');
     }else {
         alert('file not supported');
     }
@@ -201,16 +214,40 @@ $('#cropper-modal').on('shown.bs.modal', function() {
     });
 });
 
+$('#cropper-modal-logo').on('shown.bs.modal', function() {
+    var image = $('#cropper-wrap-img-logo > img'), cropBoxData, canvasData;
+    image.cropper({
+        aspectRatio: 1 / 1,
+        autoCropArea: 0.5,
+        cropBoxResizable: true,
+        checkImageOrigin: true,
+        responsive: true,
+        built: function() {
+            // Strict mode: set crop box data first
+            image.cropper('setCropBoxData', cropBoxData);
+            image.cropper('setCanvasData', canvasData);
+        },
+    });
+});
 
-$('.btn-crop').on('click', function(e) {
+$('#btn-crop').on('click', function(e) {
     var imgb64 = $('#cropper-wrap-img > img').cropper('getCroppedCanvas').toDataURL('image/png');
     $('img#imgPreview').attr('src', imgb64);
     $('#srcDataCrop').val(imgb64);
-    $('img#imgPreview-update').attr('src', imgb64);
-    $('#srcDataCrop-update').val(imgb64);
     $('#cropper-modal').modal('hide');
+});
+
+$('#btn-crop-logo').on('click', function(e) {
+    var imgb64 = $('#cropper-wrap-img-logo > img').cropper('getCroppedCanvas').toDataURL('image/png');
+    $('img#imgPreviewLogo').attr('src', imgb64);
+    $('#srcDataCropLogo').val(imgb64);
+    $('#cropper-modal-logo').modal('hide');
 });
 
 $('#cropper-modal').on('hidden.bs.modal', function() {
     $('#cropper-wrap-img > img').cropper('destroy');
+});
+
+$('#cropper-modal-logo').on('hidden.bs.modal', function() {
+    $('#cropper-wrap-img-logo > img').cropper('destroy');
 });
