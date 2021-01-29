@@ -136,6 +136,8 @@ class CaninesModel extends CI_Model {
         }
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
+        $this->db->join('members','members.mem_id = canines.can_mem_id');
+        $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get();
     }
