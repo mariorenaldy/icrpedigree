@@ -1,5 +1,3 @@
-
-
 {% extends "template/frontend.twig" %}
 {% block title %}Pedigrees
 {% endblock %}
@@ -117,12 +115,16 @@ $('#prefetch .typeahead').typeahead(null, {
     ].join('\n'),
     suggestion: function (data) {
       // data = $.parseJSON(data);
+      kennel = '';
+      if (data.ken_type_id == 1)
+        kennel = data.can_a_s + " von " + data.ken_name;
+      else
+        kennel = data.ken_name + "\' " + data.can_a_s;
       if (data.can_photo == '-') {
-          return '<a style="color:black;" href="'+base_url+'pedigrees/id/'+data.can_id+'"><div style="margin-bottom:15px;"><img width="40px" style="float:left; margin:5px;" src="'+base_url+'assets/oneui/img/avatars/image.png"><strong>' + data.can_icr_number + '</strong> <br> ' + data.can_a_s + '</div></a><br><br>';
+          return '<a style="color:black;" href="'+base_url+'pedigrees/id/'+data.can_id+'"><div style="margin-bottom:15px;"><img width="40px" style="float:left; margin:5px;" src="'+base_url+'assets/oneui/img/avatars/image.png"><strong>' + data.can_icr_number + '</strong> <br> ' + kennel + '</div></a><br><br>';
       }else{
-        return '<a style="color:black;" href="'+base_url+'pedigrees/id/'+data.can_id+'"><div style="margin-bottom:15px;"><img width="40px" style="float:left; margin:5px;" src="'+base_url+'uploads/canine/'+data.can_photo+'"><strong>' + data.can_icr_number + '</strong> <br> ' + data.can_a_s + '</div></a><br><br>';
+        return '<a style="color:black;" href="'+base_url+'pedigrees/id/'+data.can_id+'"><div style="margin-bottom:15px;"><img width="40px" style="float:left; margin:5px;" src="'+base_url+'uploads/canine/'+data.can_photo+'"><strong>' + data.can_icr_number + '</strong> <br> ' + kennel + '</div></a><br><br>';
       }
-
     }
   }
 });

@@ -120,14 +120,17 @@
                                 <td><img src="{{base_url()}}uploads/canine/{{row.bir_photo}}" width="100" class="img img-thumbnail" style="border-radius:5%"></td>
                             {% endif %}
 
-                            <td class="text-white-1">{{row.bir_a_s}}</td>
+                            {% if row.ken_type_id == 1 %}
+                                <td class="text-white-1">{{row.bir_a_s}} von {{row.ken_name}}</td>
+                            {% else %}
+                                <td class="text-white-1">{{row.ken_name}}' {{row.bir_a_s}}</td>
+                            {% endif %}
                             <td class="text-white-1">{{row.bir_breed}}</td>
                             <td class="text-white-1">{{row.bir_gender}}</td>
                             <td class="text-white-1">{{row.bir_color}}</td>
                             <td class="text-white-1">{{row.bir_date_of_birth|date("d-m-Y")}}</td>
                             <td class="text-white-1">{{row.bir_owner_name}}</td>
                             <td class="text-white-1">{{row.bir_cage}}</td>
-
                             <td class="text-white-1">{{row.stat_name}}</td>
                             <td class="text-white-1">{{row.use_username}}</td>
 

@@ -24,6 +24,8 @@ class BirthModel extends CI_Model {
         }
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
+        $this->db->join('members','members.mem_id = births.bir_member');
+        $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
         $this->db->order_by('births.bir_date', 'desc');
         return $this->db->get();
     }
@@ -61,7 +63,7 @@ class BirthModel extends CI_Model {
             $date = $piece[2]."-".$piece[1]."-".$piece[0];
         }
 
-        $sql = "select * from births s, users u, members m, approval_status a where u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member AND m.mem_id = ".$user['mem_id']." AND (s.bir_a_s LIKE '%".$q."%' OR s.bir_cage LIKE '%".$q."%'";
+        $sql = "select * from births s, users u, members m, approval_status a, kennels k where u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member AND m.mem_ken_id = k.ken_id AND m.mem_id = ".$user['mem_id']." AND (s.bir_a_s LIKE '%".$q."%' OR s.bir_cage LIKE '%".$q."%'";
         if ($date)
             $sql .= " OR s.bir_date_of_birth LIKE '%".$date."%')";
         else

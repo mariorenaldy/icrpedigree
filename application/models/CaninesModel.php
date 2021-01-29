@@ -253,12 +253,12 @@ class CaninesModel extends CI_Model {
             $date = $piece[2]."-".$piece[1]."-".$piece[0];
         }
 
-        $sql = "select * from canines where can_stat = 1 AND (can_icr_number LIKE '%".$q."%' OR can_icr_moc_number LIKE '%".$q."%' OR can_a_s LIKE '%".$q."%' OR can_cage LIKE '%".$q."%'";
+        $sql = "select * from canines c, members m, kennels k where c.can_member = m.mem_id AND m.mem_ken_id = k.ken_id AND c.can_stat = 1 AND (c.can_icr_number LIKE '%".$q."%' OR c.can_icr_moc_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR c.can_cage LIKE '%".$q."%'";
         if ($date)
             $sql .= " OR c.can_date_of_birth LIKE '%".$date."%')";
         else
             $sql .= ")";
-        $sql .= " ORDER BY can_icr_number";
+        $sql .= " ORDER BY c.can_icr_number";
         $query = $this->db->query($sql);
         
         return $query->result();
