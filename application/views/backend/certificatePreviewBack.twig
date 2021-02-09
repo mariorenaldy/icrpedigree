@@ -1,3 +1,4 @@
+{# ARTechnology #}
 {% extends "template/backend.twig" %}
 
 {% block styles %}
@@ -6,535 +7,360 @@
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
 <link rel="stylesheet" href="{{ base_url()}}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
-<!-- ARTechnology -->
+{# ARTechnology #}
 {# <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/fonts/MTCORSVA/font.css"> #}
-<!-- ARTechnology -->
+{# ARTechnology #}
 <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:500" rel="stylesheet">
 
 <style>
-    .fileUpload {
-        position: relative;
-        overflow: hidden;
-    }
-    .fileUpload input.upload {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 0;
-        padding: 0;
-        font-size: 20px;
-        cursor: pointer;
-        opacity: 0;
-        filter: alpha(opacity=0);
-    }
-    #imgPreview, #imgPreview-update{
-        /*border-radius:50%;*/
-        margin-bottom: 15px;
-    }
-    td{
-      padding: 5px 5px;
-    }
     .cert {
-      /*background: blue;*/
-      {% for trah in trahs %}
-          {% if trah.tra_name == canine[0].can_breed  %}
-              background: url('{{base_url()}}{{trah.tra_back}}') no-repeat;
-          {% endif %}
-      {% endfor %}
-      /* background: url('{{base_url()}}assets/blkng.jpg') no-repeat; */
-      background-size: contain;
-      /*background-color: black;*/
-    }
-    .tentang_surat, .isi_surat{
-      font-family: ;
-      /*font-weight: bold;*/
-      letter-spacing: 1px;
-    }
-    /*.tentang_surat h2, .tentang_surat h3, .tentang_surat p{
-      font-family: 'MTCORSVA' !important;
-    }*/
-    .tentang_surat h2{
-      margin-top: -10px;
-    }
-    .tentang_surat h3{
-      margin-top: -5px;
-      margin-bottom: -5px;
-      font-size: 25px;
-    }
-    .tentang_surat p{
-      font-size: 16px;
-      line-height: 1;
-    }
-    .isi_surat{
-      font-size: 19px;
-      letter-spacing: 0px;
-    }
-    .kopsurat{
-      text-align: right;
-      padding-right: 0px;
-    }
-    @media print{
-      .cert {
-        /*background: blue;*/
-
-        margin: 0px !important;
-      }
-      body{
         {% for trah in trahs %}
             {% if trah.tra_name == canine[0].can_breed  %}
-                background: url('{{base_url()}}{{trah.tra_back}}') no-repeat !important;
+                background: url('{{base_url()}}{{trah.tra_back}}') no-repeat;
             {% endif %}
         {% endfor %}
-        /* background: url('{{base_url()}}assets/blkng.jpg') no-repeat !important; */
-        background-size: contain !important;
-              padding: 0px !important;
-              margin: 0px !important;  /* the margin on the content before printing */
-      }
-
-      .graph-image img{
-          display:inline !important;
-      }
-      .kopsurat{
-        margin-top: -40px;
-      }
-      .konten_surat{
-        color: #FF0000 !important;
-      }
-      .as{
-          /*margin-left: 110px;*/
-          color: #FF0000 !important;
-      }
-     .dam{
-        color: #FF0000 !important;
-      }
-
-      .sire{
-        color: #FF0000 !important;
-      }
-
-       .as2{
-         color: #FFF !important;
-       }
-
-      .white{
-        color: white !important;
-      }
-   }
-   /*@page narrow {size: 0mm 0mm}*/
-   /*@page rotated {size: landscape}*/
-
-   @page {
-         size:  landscape;   /* auto is the initial value */
-        margin: 0mm;
+        background: url('{{base_url()}}assets/blkng.jpg') no-repeat;
+        background-size: contain;
     }
     .tentang_surat{
-      text-align: left;
-      /*margin-top: 181px;*/
-      /*margin-top: 185px;*/
-      /*margin-top: 164px;*/
-      font-family: 'Alegreya Sans SC', sans-serif !important;
-      padding-top: 30px;
-      /*font-family: Arial, sans-serif ;*/
+        text-align: left;
+        font-family: 'Alegreya Sans SC', sans-serif !important;
+        color: white !important;
     }
-
-    .as{
-       color: #FF0000 !important;
-     }
-
-     .as2{
-       color: #FFF !important;
-     }
-
-
+    .parent_name{
+        margin-top: 4px;
+    }
+    .parent_number{
+        margin-top: 4px;
+    }
+    .parent_color{
+        margin-top: 4px;
+    }
+    .icr{
+        color: #FF0000 !important;
+    }
+    @media print{
+        .cert {
+            margin: 0px !important;
+        }
+        body{
+            {% for trah in trahs %}
+                {% if trah.tra_name == canine[0].can_breed  %}
+                    background: url('{{base_url()}}{{trah.tra_back}}') no-repeat !important;
+                {% endif %}
+            {% endfor %}
+            background: url('{{base_url()}}assets/blkng.jpg') no-repeat !important;
+            background-size: contain !important;
+            padding: 0px !important;
+            margin: 0px !important;
+        }
+        .graph-image img{
+            display:inline !important;
+        }
+    }
+    @page {
+        size: landscape;   /* auto is the initial value */
+        margin: 0mm;
+    }
 </style>
 {% endblock %}
 
 {% block body %}
-<!-- <div class="content wrap-breadcrumb hidden-print">
-    <div class="col-sm-12 text-right hidden-xs">
-        <ol class="breadcrumb">
-            <li><a href="{{base_url()}}dashboard" class="link-effect">Dashboard</a></li>
-            <li><a href="javascript:history.back()" class="link-effect">Sebelumnya</a></li>
-        </ol>
-    </div>
-</div> -->
 <!-- Page Content -->
-
 <div class="content">
-  <div class="block graph-image cert" >
-    <!-- <div class="block-header text-center bg-gray-lighter">
-      <button class="btn btn-primary btn-add-section-detail pull-right" onClick="openModal('#modal-add-section-detail', 'add')" data-toggle="tooltip" title="Cetak Pengumuman"><i class="si si-printer"></i></button>
-      <h4>Pengumuman <small>Detail</small></h4>
-    </div> -->
-    <div class="block-content" style="background-color: black;">
-        <div class="surat">
-            <div class="row kopsurat">
+    <div class="block graph-image cert" >
+        <div class="block-content" style="background-color: black;">
+            <div class="row tentang_surat">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top:25px; margin-right: 5px;">
+                    {% if canine[0].sire[0].sire[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].sire[0].sire[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].sire[0].can_a_s}}</span></h6>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].sire[0].sire[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].sire[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
 
-            </div>
-            <div class="row">
-              <div class="col-xs-12 tentang_surat" style="color:white;">
+                    {% if canine[0].sire[0].sire[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].sire[0].sire[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].mom[0].can_a_s}}</span></h6>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].sire[0].mom[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].sire[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span><span style="font-weight:500; font-size: 0.9em;">NO F</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
 
-                  <div class="konten_surat"style="margin-left: 15px;margin-top:75px;">
+                    {% if canine[0].sire[0].mom[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].sire[0].mom[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].sire[0].can_a_s}}</span></h6>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].mom[0].sire[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].mom[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
 
-                    <div class="font-w600 pull-right white" style="margin-right: -156px; width: 430px; z-index:2; margin-top: 14px;">
+                    {% if canine[0].sire[0].mom[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].sire[0].mom[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].mom[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].mom[0].mom[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].mom[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>NO F<span style="font-weight:500; font-size: 0.9em;"></span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
 
-                          {% if canine[0].sire[0].sire[0].sire[0] != null %}
+                    {% if canine[0].mom[0].sire[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].mom[0].sire[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].sire[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].sire[0].sire[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].sire[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
 
-                            {% if canine[0].sire[0].sire[0].sire[0].can_icr_number != '-' %}
-                                <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px">{{canine[0].sire[0].sire[0].sire[0].can_a_s}}</h6>
-                                {% else %}
-                                <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px">{{canine[0].sire[0].sire[0].sire[0].can_a_s}}</h6>
+                    {% if canine[0].mom[0].sire[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].mom[0].sire[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].mom[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].sire[0].mom[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].sire[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span><span style="font-weight:500; font-size: 0.9em;">NO F</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
+
+                    {% if canine[0].mom[0].mom[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].mom[0].mom[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].sire[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].mom[0].sire[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].mom[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br>
+
+                    {% if canine[0].mom[0].mom[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].mom[0].mom[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].mom[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].mom[0].mom[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].mom[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span><span style="font-weight:500; font-size: 0.9em;">NO F</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                </div>
+                
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top:100px; margin-right: 5px;">
+                    {% if canine[0].sire[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].sire[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].sire[0].can_current_reg_number}}</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br><br><br><br><br><br>
+
+                    {% if canine[0].sire[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].sire[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].mom[0].can_current_reg_number}}</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span><span style="font-weight:500; font-size: 0.9em;">NO F</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br><br><br><br><br><br>
+
+                    {% if canine[0].mom[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].mom[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].sire[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].sire[0].can_current_reg_number}}</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br><br><br><br><br><br>
+
+                    {% if canine[0].mom[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].mom[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].can_a_s}}</span>
+                            {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].mom[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].mom[0].can_current_reg_number}}</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].mom[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>NO F</h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                </div>
+
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top: 225px; margin-right: 5px;">
+                    {% if canine[0].sire[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
+                        {% if canine[0].sire[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size: 0.9em;">{{canine[0].sire[0].can_a_s}}</span>
+                        </h6>
+                        {% endif %}
+                            <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].sire[0].can_current_reg_number}}</h6>
+                            <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].sire[0].can_color}}</h6>
+                    {% else %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span><span style="font-weight:500; font-size: 0.9em;">NO M</span></h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+                    {% if canine[0].mom[0] != null %}
+                        <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
+                        {% if canine[0].mom[0].can_icr_number != '-' %}
+                            <span class="icr" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].can_a_s}}</span>
+                        {% else %}
+                            <span style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].can_a_s}}</span>
+                        {% endif %}
+                        </h6>
+                        <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> {{canine[0].mom[0].can_current_reg_number}}</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">{{canine[0].mom[0].can_color}}</h6>
+                    {% else %}
+                    <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span><span style="font-weight:500; font-size: 0.9em;">NO F</span></h6>
+                        <h6 class="parent_number" style="font-weight:500; font-size:0.9em;">Current Reg./ICR No. #: -</h6>
+                        <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
+                    {% endif %}
+                    <br><br><br>
+
+                    <h6 class="font-w600 white" style="margin-top: 10px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{now|date('D')}},&nbsp;&nbsp;&nbsp;{{now|date('F')}} &nbsp;&nbsp;&nbsp;{{now|date('dS')}}&nbsp;&nbsp;&nbsp;&nbsp; {{now|date('Y')}}</h6>
+                    <br><br><br>
+
+                    <h6 class="font-w600 white text-center" style="margin-left: -35px; margin-top: 10px;">KRIS JOHAN</h6>
+                    <h6 class="font-w600 white text-center" style="margin-left: -35px; margin-top: 5px; font-size: 0.9em;"><i>The President of Indonesian Canine Registry</i></h6>
+                </div>     
+
+                <div class="col-xs-4 pull-left" style="margin-left: 40px; margin-top: 380px; position: absolute; z-index:1 !important;">
+                    <h3 class="font-w600" style="color:#FF0000 !important;">{{canine[0].can_a_s}}</h3>
+                    <h4 style="margin-top: 10px;" >Breeder: {{canine[0].can_owner_name}}</h4>
+                    <div style="margin-top: 5px; font-size:0.7em;">Siblings:</div>
+                    <div style="margin-top: 5px; font-size:0.7em;">
+                        {% for male in sibling_male %}
+                            {% if loop.index == male|length %}
+                                {{- male.can_a_s}}
+                            {% else %}
+                                ,{{- male.can_a_s}}
                             {% endif %}
-
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].sire[0].sire[0].sire[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].sire[0].sire[0].sire[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px">NO F</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-                          {% if canine[0].sire[0].sire[0].mom[0] != null %}
-
-                            {% if canine[0].sire[0].sire[0].mom[0].can_icr_number != '-' %}
-                                <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px">{{canine[0].sire[0].sire[0].mom[0].can_a_s}}</h6>
-                                {% else %}
-                                <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px">{{canine[0].sire[0].sire[0].mom[0].can_a_s}}</h6>
+                        {% endfor %}(male)
+                    </div>
+                    <div style="margin-top: 5px; font-size:0.7em;">
+                        {% for female in sibling_female %}
+                            {% if loop.index == female|length %}
+                                {{female.can_a_s}}
+                            {% else %}
+                                ,{{female.can_a_s}}
                             {% endif %}
-
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].sire[0].sire[0].mom[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].sire[0].sire[0].mom[0].can_color}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px">NO M</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-                          {% if canine[0].sire[0].mom[0].sire[0] != null %}
-
-
-                          {% if canine[0].sire[0].mom[0].sire[0].can_icr_number != '-' %}
-                            <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">{{canine[0].sire[0].mom[0].sire[0].can_a_s}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">{{canine[0].sire[0].mom[0].sire[0].can_a_s}}</h6>
-
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].sire[0].mom[0].sire[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].sire[0].mom[0].sire[0].can_color}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">NO F</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-                          {% if canine[0].sire[0].mom[0].mom[0] != null %}
-
-                          {% if canine[0].sire[0].mom[0].mom[0].can_icr_number != '-' %}
-                            <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:1px;">{{canine[0].sire[0].mom[0].mom[0].can_a_s}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:1px;">{{canine[0].sire[0].mom[0].mom[0].can_a_s}}</h6>
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].sire[0].mom[0].mom[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].sire[0].mom[0].mom[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:1px;">NO M</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-{# mom #}
-                          {% if canine[0].mom[0].sire[0].sire[0] != null %}
-
-                          {% if canine[0].mom[0].sire[0].sire[0].can_icr_number != '-' %}
-                                <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 10px;">{{canine[0].mom[0].sire[0].sire[0].can_a_s}}</h6>
-                              {% else %}
-                                <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 10px;">{{canine[0].mom[0].sire[0].sire[0].can_a_s}}</h6>
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].sire[0].sire[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].mom[0].sire[0].sire[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 10px;">NO F</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-                          {% if canine[0].mom[0].sire[0].mom[0] != null %}
-
-                          {% if canine[0].mom[0].sire[0].mom[0].can_icr_number != '-' %}
-
-                            <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px;">{{canine[0].mom[0].sire[0].mom[0].can_a_s}}</h6>
-                              {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px;">{{canine[0].mom[0].sire[0].mom[0].can_a_s}}</h6>
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].sire[0].mom[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].mom[0].sire[0].mom[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top:2px;">NO M</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-                          {% if canine[0].mom[0].mom[0].sire[0] != null %}
-
-                          {% if canine[0].mom[0].mom[0].sire[0].can_icr_number != '-' %}
-                            <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">{{canine[0].mom[0].mom[0].sire[0].can_a_s}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">{{canine[0].mom[0].mom[0].sire[0].can_a_s}}</h6>
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].mom[0].sire[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].mom[0].mom[0].sire[0].can_color}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 8px;">NO F</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-                          <br>
-
-                          {% if canine[0].mom[0].mom[0].mom[0] != null %}
-
-                          {% if canine[0].mom[0].mom[0].mom[0].can_icr_number != '-' %}
-                            <h6 class="as" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 1px;">{{canine[0].mom[0].mom[0].mom[0].can_a_s}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 1px;">{{canine[0].mom[0].mom[0].mom[0].can_a_s}}</h6>
-                          {% endif %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].mom[0].mom[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">{{canine[0].mom[0].mom[0].mom[0].can_color}}</h6>
-                            {% else %}
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-right: 200px;margin-top: 1px;">NO M</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="white" style="font-weight:500; font-size:0.9em; margin-left: -30px;">-</h6>
-                          {% endif %}
-
-
+                        {% endfor %}(female)
                     </div>
-
-                    <div class="font-w600 pull-right white" style="margin-right: -162px;
-                                width: 430px;
-                                z-index:2;
-                                margin-top: 50px;">
-                                <!-- margin-right: 222px; -->
-                          {% if canine[0].sire[0].sire[0] != null %}
-
-                          {% if canine[0].sire[0].sire[0].can_icr_number != '-' %}
-                          <h6 class="as" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px">{{canine[0].sire[0].sire[0].can_a_s}}</h6>
-                          {% else %}
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px">{{canine[0].sire[0].sire[0].can_a_s}}</h6>
-                          {% endif %}
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:10px;">{{canine[0].sire[0].sire[0].can_current_reg_number}}</h6>
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -30px;">{{canine[0].sire[0].sire[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px">NO F</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:10px;">-</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -30px;">-</h6>
-                          {% endif %}
-
-                          {% if canine[0].sire[0].mom[0] != null %}
-
-                          {% if canine[0].sire[0].mom[0].can_icr_number != '-' %}
-                          <h6 class="as" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top:100px;">{{canine[0].sire[0].mom[0].can_a_s}}</h6>
-
-                          {% else %}
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top:100px;">{{canine[0].sire[0].mom[0].can_a_s}}</h6>
-
-                          {% endif %}
-
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:8px;">{{canine[0].sire[0].mom[0].can_current_reg_number}}</h6>
-                          <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">{{canine[0].sire[0].mom[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top:100px;">NO M</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:8px;">-</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">-</h6>
-                          {% endif %}
-
-                          {% if canine[0].mom[0].sire[0] != null %}
-
-                          {% if canine[0].mom[0].sire[0].can_icr_number != '-' %}
-                            <h6 class="as" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 100px;">{{canine[0].mom[0].sire[0].can_a_s}}</h6>
-                            {% else %}
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 100px;">{{canine[0].mom[0].sire[0].can_a_s}}</h6>
-                          {% endif %}
-
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:8px;">{{canine[0].mom[0].sire[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">{{canine[0].mom[0].sire[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 100px;">NO F</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:8px;">-</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">-</h6>
-                          {% endif %}
-
-                          {% if canine[0].mom[0].mom[0] != null %}
-
-                          {% if canine[0].mom[0].mom[0].can_icr_number != '-' %}
-                                <h6 class="as" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 102px;">{{canine[0].mom[0].mom[0].can_a_s}}</h6>
-                              {% else %}
-                                 <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 102px;">{{canine[0].mom[0].mom[0].can_a_s}}</h6>
-                          {% endif %}
-
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:9px;">{{canine[0].mom[0].mom[0].can_current_reg_number}}</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">{{canine[0].mom[0].mom[0].can_color}}</h6>
-                          {% else %}
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-right: 200px;margin-top: 102px;">NO M</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: 70px;margin-top:9px;">-</h6>
-                            <h6 class="white" style=" font-weight: 500;font-size: 0.8em;margin-left: -33px;">-</h6>
-                          {% endif %}
-
-                    </div>
-                    <div class="font-w600 pull-right white" style="margin-right: -164px;
-                                width: 430px;
-                                z-index:2;
-                                margin-top: 99px;">
-                          {% if canine[0].sire[0] != null %}
-                          <div class="">
-                            <!-- font-size: 0.8em;
-                            margin-right: 225px;
-                            margin-top: -10px; -->
-                            {% if canine[0].sire[0].sire_as_count > 25 %}
-
-                                {% if canine[0].sire[0].can_icr_number != '-' %}
-                                    <h6 class="font-w600 as" style="font-size: 0.8em;
-                                    margin-right: 225px;
-                                    margin-top: -10px;">{{canine[0].sire[0].can_a_s}}</h6>
-
-                                    {% else %}
-
-                                    <h6 class="font-w600 as2" style="font-size: 0.8em;
-                                    margin-right: 225px;
-                                    margin-top: -10px;">{{canine[0].sire[0].can_a_s}}</h6>
-                                {% endif %}
-
-                                <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:6px;">{{canine[0].sire[0].can_current_reg_number}}</h6>
-                                <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">{{canine[0].sire[0].can_color}}</h6>
-
-                              {% else %}
-
-                                {% if canine[0].sire[0].can_icr_number != '-' %}
-                                    <h6 class="font-w600 as" style="font-size: 0.9em;margin-right: 200px">{{canine[0].sire[0].can_a_s}}</h6>
-                                  {% else %}
-                                    <h6 class="font-w600 as2" style="font-size: 0.9em;margin-right: 200px">{{canine[0].sire[0].can_a_s}}</h6>
-                                {% endif %}
-
-                                <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:6px;">{{canine[0].sire[0].can_current_reg_number}}</h6>
-                                <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">{{canine[0].sire[0].can_color}}</h6>
-                            {% endif %}
-
-                          </div>
-
-                          {% else %}
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-right: 200px">NO F</h6>
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:6px;">-</h6>
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">-</h6>
-                          {% endif %}
-
-                          <h6 style="margin-top: 283px;"></h6>
-
-                          {% if canine[0].mom[0] != null %}
-
-                              {% if canine[0].mom[0].mom_as_count > 25 %}
-
-
-                                  {% if canine[0].mom[0].can_icr_numbe != '-' %}
-
-                                      <h6 class="font-w600 as" style="
-                                      font-size: 0.8em;
-                                      margin-right: 225px;
-                                      margin-top: -10px;
-                                      margin-left: 5px;
-                                      z-index:3;">{{canine[0].mom[0].can_a_s}}</h6>
-
-                                      {% else %}
-
-                                      <h6 class="font-w600 as2" style="
-                                      font-size: 0.8em;
-                                      margin-right: 225px;
-                                      margin-top: -10px;
-                                      margin-left: 5px;
-                                      z-index:3;">{{canine[0].mom[0].can_a_s}}</h6>
-
-                                  {% endif %}
-                                  <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].can_current_reg_number}}</h6>
-                                  <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">{{canine[0].mom[0].can_color}}</h6>
-
-                                {% else %}
-
-                                    {% if canine[0].mom[0].can_icr_numbe != '-' %}
-                                      <h6 class="font-w600 as" style="font-size: 0.9em;margin-left: 5px;margin-right: 200px;z-index:3;">{{canine[0].mom[0].can_a_s}}</h6>
-                                      {% else %}
-                                      <h6 class="font-w600 as2" style="font-size: 0.9em;margin-left: 5px;margin-right: 200px;z-index:3;">{{canine[0].mom[0].can_a_s}}</h6>
-                                    {% endif %}
-
-                                    <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:4px;">{{canine[0].mom[0].can_current_reg_number}}</h6>
-                                    <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">{{canine[0].mom[0].can_color}}</h6>
-                              {% endif %}
-
-                            {% else %}
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 5px;margin-right: 200px;z-index:3;">NO M</h6>
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: 80px;margin-top:4px;">-</h6>
-                            <h6 class="font-w600 white" style="font-size: 0.9em;margin-left: -30px;margin-top:1px;">-</h6>
-                          {% endif %}
-
-                          <br><br><br>
-                          <h6 class="font-w600 white" style="margin-left: -35px;margin-top:10px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{now|date('D')}},&nbsp;&nbsp;&nbsp;{{now|date('F')}} &nbsp;&nbsp;&nbsp;{{now|date('dS')}}&nbsp;&nbsp;&nbsp;&nbsp; {{now|date('Y')}}</h6>
-                    </div>
-
-                    <div class="pull-left" style="margin-left: 20px;
-                                width: 350px;
-                                margin-top: 185px;position: absolute;z-index:1 !important;">
-                        <h3 class="as font-w600" style="color:#FF0000;position: absolute;z-index:2 !important;">{{canine[0].can_a_s}}</h3>
-                        <h4 class="white " style="color:white;margin-top:55px;margin-left:80px;" >{{canine[0].can_owner_name}}</h4>
-                        <br/>
-                        <font class="white" style="margin-top:5px;" size="0.1">{% for male in sibling_male %}
-                          {% if loop.index == male|length %}
-                            {{- male.can_a_s|trim}}{% else %},{{- male.can_a_s|trim}}
-                          {% endif %}
-                        {% endfor %}(male)</font>
-                        <br>
-                        <br>
-                        <font class="white" style="margin-top:5px;" size="0.1">
-                          {% spaceless %}
-                            {% for female in sibling_female %}
-                                {% if loop.index == female|length %}
-                                  {{female.can_a_s}}{% else %},{{female.can_a_s}}
-                                {% endif %}
-                            {% endfor %}(female)</font>
-                          {% endspaceless %}
-                    </div>
-                    <!-- <div class="font-w300 pull-right white" style="margin-right: -166px;
-                                width: 430px;
-                                z-index:9;
-                                margin-top: 66px;">
-
-                    </div> -->
-                  </div>
-              </div>
-
-              <div class="col-xs-12 isi_surat">
-                <!-- <br><br><br> -->
-                <br class="hidden-print">
-                <br class="hidden-print">
-                <br class="hidden-print">
-                <br class="hidden-print">
-                <br class="hidden-print">
-
-              </div>
-              <div class="clearfix hidden-print"></div>
-              <hr class="hidden-print hidden-print">
-
-              <button class="btn btn-primary pull-right hidden-print" onclick="_print(this)" title="Cetak Sertifikat"><i class="si si-printer"></i>&nbsp;&nbsp;Cetak Sertifikat</button>
-
-              <a href="{{base_url()}}backend/canines" class="btn btn-success btn-done pull-right hidden-print" title="Proses Selesai" style="margin-right:10px; display:none"><i class="si si-check"></i>&nbsp;&nbsp;Selesai</a>
-              <div class="clearfix hidden-print"></div>
-              <br class="hidden-print">
+                </div>
             </div>
 
+            <div class="col-xs-12">
+                <br class="hidden-print">
+                <br class="hidden-print">
+            </div>
+            <div class="clearfix hidden-print"></div>
+            <hr class="hidden-print hidden-print">
+
+            <button class="btn btn-primary pull-right hidden-print" onclick="_print(this)" title="Cetak Sertifikat"><i class="si si-printer"></i>&nbsp;&nbsp;Cetak Sertifikat</button>
+
+            <a href="{{base_url()}}backend/canines" class="btn btn-success btn-done pull-right hidden-print" title="Proses Selesai" style="margin-right:10px; display:none"><i class="si si-check"></i>&nbsp;&nbsp;Selesai</a>
+            <div class="clearfix hidden-print"></div>
+            <br class="hidden-print">
+            </div>
         </div>
+        <!-- Dynamic Table Full -->
     </div>
-<!-- Dynamic Table Full -->
-  </div>
 </div>
 {% endblock %}
 
@@ -549,37 +375,15 @@
 <script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
 <!-- Page JS Code -->
 <input type="hidden" value="{{ base_url() }}" class="base_url" />
-<!-- ARTechnology -->
-<!-- <script src="{{ base_url() }}/assets/oneui/js/pages/adm_section_detail.js"></script> -->
-<!-- ARTechnology -->
 <script type="text/javascript">
-jQuery(function () {
-    $('#page-container').addClass('sidebar-mini');
-});
-function _print(btn){
-  App.initHelper('print-page');
-  $('.btn-done').show();
-  $(btn).hide();
-}
-/* ARTechnology */
-// function _chstat(scoid){
-//   $.post('{{base_url()}}scores/update_student_score_status/'+scoid, function(res){
-//     res = $.parseJSON(res);
-//     if (res.data == '1') {
-//         $.post('{{base_url()}}certificate/add/'+scoid, function(res2){
-//           res2 = $.parseJSON(res2);
-//           if (res2.data == '1') {
-//             alert('proses selesai');
-//             document.location.href = '{{base_url()}}certificate/filing';
-//           }else {
-//               alert('proses gagal silahkan ulangi lagi');
-//           }
-//         });
-//     }else {
-//         alert('proses gagal silahkan ulangi lagi');
-//     }
-//   })
-// }
-/* ARTechnology */
+    jQuery(function () {
+        $('#page-container').addClass('sidebar-mini');
+    });
+    function _print(btn){
+        App.initHelper('print-page');
+        $('.btn-done').show();
+        $(btn).hide();
+    }
 </script>
 {% endblock %}
+{# ARTechnology #}
