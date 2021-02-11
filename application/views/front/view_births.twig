@@ -122,8 +122,10 @@
 
                             {% if row.ken_type_id == 1 %}
                                 <td class="text-white-1">{{row.bir_a_s}} von {{row.ken_name}}</td>
-                            {% else %}
+                            {% elseif row.ken_type_id == 2 %}
                                 <td class="text-white-1">{{row.ken_name}}' {{row.bir_a_s}}</td>
+                            {% else %}
+                                <td class="text-white-1">{{row.bir_a_s}}</td>
                             {% endif %}
                             <td class="text-white-1">{{row.bir_breed}}</td>
                             <td class="text-white-1">{{row.bir_gender}}</td>
