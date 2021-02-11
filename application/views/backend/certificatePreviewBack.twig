@@ -321,24 +321,60 @@
                 </div>     
 
                 <div class="col-xs-4 pull-left" style="margin-left: 40px; margin-top: 380px; position: absolute; z-index:1 !important;">
-                    <h3 class="font-w600" style="color:#FF0000 !important;">{{canine[0].can_a_s}}</h3>
+                    <h3 class="font-w600" style="color:#FF0000 !important;">
+                        {% if canine[0].ken_type_id == 1 %}
+                            {{canine[0].can_a_s}} von {{canine[0].ken_name}}
+                        {% elseif canine[0].ken_type_id == 2 %}
+                            {{canine[0].ken_name}}' {{canine[0].can_a_s}}
+                        {% else %}
+                            {{canine[0].can_a_s}}
+                        {% endif %}
+                    </h3>
                     <h4 style="margin-top: 10px;" >Breeder: {{canine[0].can_owner_name}}</h4>
                     <div style="margin-top: 5px; font-size:0.7em;">Siblings:</div>
                     <div style="margin-top: 5px; font-size:0.7em;">
                         {% for male in sibling_male %}
                             {% if loop.index == male|length %}
-                                {{- male.can_a_s}}
+                                {% if male.ken_type_id == 1 %}
+                                    {{- male.can_a_s}} von {{male.ken_name}}
+                                {% elseif male.ken_type_id == 2 %}
+                                    {{- male.ken_name}}' {{male.can_a_s}}
+                                {% else %}
+                                    {{- male.can_a_s}}
+                                {% endif %}
+                                {# {{- male.can_a_s}} #}
                             {% else %}
-                                ,{{- male.can_a_s}}
+                                {% if male.ken_type_id == 1 %}
+                                    ,{{- male.can_a_s}} von {{male.ken_name}}
+                                {% elseif male.ken_type_id == 2 %}
+                                    ,{{- male.ken_name}}' {{male.can_a_s}}
+                                {% else %}
+                                    ,{{- male.can_a_s}}
+                                {% endif %}
+                                {# ,{{- male.can_a_s}} #}
                             {% endif %}
                         {% endfor %}(male)
                     </div>
                     <div style="margin-top: 5px; font-size:0.7em;">
                         {% for female in sibling_female %}
                             {% if loop.index == female|length %}
-                                {{female.can_a_s}}
+                                {% if female.ken_type_id == 1 %}
+                                    {{- female.can_a_s}} von {{female.ken_name}}
+                                {% elseif female.ken_type_id == 2 %}
+                                    {{- female.ken_name}}' {{female.can_a_s}}
+                                {% else %}
+                                    {{- female.can_a_s}}
+                                {% endif %}
+                                {# {{female.can_a_s}} #}
                             {% else %}
-                                ,{{female.can_a_s}}
+                                {% if female.ken_type_id == 1 %}
+                                    ,{{- female.can_a_s}} von {{female.ken_name}}
+                                {% elseif female.ken_type_id == 2 %}
+                                    ,{{- female.ken_name}}' {{female.can_a_s}}
+                                {% else %}
+                                    ,{{- female.can_a_s}}
+                                {% endif %}
+                                {# ,{{female.can_a_s}} #}
                             {% endif %}
                         {% endfor %}(female)
                     </div>
