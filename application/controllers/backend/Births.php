@@ -64,7 +64,7 @@ class Births extends CI_Controller {
 						$birth = $this->birthModel->get_births($where)->row();
 						echo json_encode($birth);
 				}else{
-						$aColumns = array('bir_id', 'bir_stu_id', 'bir_photo', 'bir_a_s', 'bir_breed', 'bir_gender', 'bir_color', 'bir_date_of_birth', 'bir_cage', 'bir_owner_name', 'bir_stat', 'mem_name');
+						$aColumns = array('bir_id', 'bir_stu_id', 'bir_photo', 'bir_a_s', 'bir_breed', 'bir_gender', 'bir_color', 'bir_date_of_birth', 'bir_cage', 'bir_owner_name', 'bir_stat', 'mem_name', 'kennels.ken_name', 'kennels.ken_type_id');
 						$sTable = 'births';
 
 						$iDisplayStart = $this->input->get_post('start', true);
@@ -120,6 +120,7 @@ class Births extends CI_Controller {
 						// Select Data
 						$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
 						$this->db->join('members','members.mem_id = births.bir_member');
+						$this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
 						$this->db->where('bir_stat', 0);
 						$this->db->order_by('bir_date', 'DESC');
 						$rResult = $this->db->get($sTable);
@@ -167,7 +168,7 @@ class Births extends CI_Controller {
 				$birth = $this->birthModel->get_births($where)->row();
 				echo json_encode($birth);
 			}else{
-				$aColumns = array('bir_id', 'bir_stu_id', 'bir_photo', 'bir_a_s', 'bir_breed', 'bir_gender', 'bir_color', 'bir_date_of_birth', 'bir_cage', 'bir_owner_name', 'bir_stat', 'mem_name', 'use_username', 'bir_app_date', 'bir_note', 'stat_name', 'bir_stat', 'bir_member');
+				$aColumns = array('bir_id', 'bir_stu_id', 'bir_photo', 'bir_a_s', 'bir_breed', 'bir_gender', 'bir_color', 'bir_date_of_birth', 'bir_cage', 'bir_owner_name', 'bir_stat', 'mem_name', 'use_username', 'bir_app_date', 'bir_note', 'stat_name', 'bir_stat', 'bir_member', 'kennels.ken_name', 'kennels.ken_type_id');
 				$sTable = 'births';
 
 				$iDisplayStart = $this->input->get_post('start', true);
@@ -225,6 +226,7 @@ class Births extends CI_Controller {
 				$this->db->join('members','members.mem_id = births.bir_member');
 				$this->db->join('users','users.use_id = births.bir_app_user');
 				$this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
+				$this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
 				$this->db->order_by('bir_date', 'DESC');
 				$rResult = $this->db->get($sTable);
 

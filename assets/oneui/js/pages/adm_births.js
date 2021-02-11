@@ -34,8 +34,11 @@ var BaseTableDatatables = function() {
                             if (row.ken_type_id == 1){
                                 return data + ' von ' + row.ken_name; 
                             }
-                            else
+                            else if (row.ken_type_id == 2){
                                 return row.ken_name + '\' ' + data;
+                            }
+                            else
+                                return data;
                         },
                     },
                     { data: 'bir_breed'},
