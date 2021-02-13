@@ -136,7 +136,7 @@ class CaninesModel extends CI_Model {
         }
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
-        $this->db->join('members','members.mem_id = canines.can_mem_id');
+        $this->db->join('members','members.mem_id = canines.can_member');
         $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get();
@@ -331,7 +331,7 @@ class CaninesModel extends CI_Model {
 
         $member = $this->session->userdata('member_data');
 
-        $sql = "select * from canines c, members m where m.mem_id = c.can_member AND m.mem_id = ".$member['mem_id']." AND c.can_stat = 1 AND (c.can_icr_number LIKE '%".$q."%' OR c.can_icr_moc_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR c.can_cage LIKE '%".$q."%'";
+        $sql = "select * from canines c, members m, kennels k where m.mem_id = c.can_member AND m.mem_id = ".$member['mem_id']." AND m.mem_ken_id = k.ken_id AND c.can_stat = 1 AND (c.can_icr_number LIKE '%".$q."%' OR c.can_icr_moc_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR c.can_cage LIKE '%".$q."%'";
         if ($date)
             $sql .= " OR c.can_date_of_birth LIKE '%".$date."%')";
         else
