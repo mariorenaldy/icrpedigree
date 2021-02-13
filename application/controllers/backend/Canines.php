@@ -861,7 +861,7 @@ class Canines extends CI_Controller {
     }
 
     public function request_data(){
-      $aColumns = array('req_id', 'can_id', 'req_can_id', 'can_a_s', 'req_can_photo', 'can_cage', 'req_can_cage', 'can_address', 'req_can_address', 'can_owner', 'req_can_owner', 'use_username', 'req_app_date', 'req_date', 'stat_name');
+      $aColumns = array('req_id', 'can_id', 'req_can_id', 'can_a_s', 'req_can_photo', 'can_cage', 'req_can_cage', 'can_address', 'req_can_address', 'can_owner', 'req_can_owner', 'use_username', 'req_app_date', 'req_date', 'stat_name', 'kennels.ken_name', 'kennels.ken_type_id');
       $sTable = 'requests';
 
       $iDisplayStart = $this->input->get_post('start', true);
@@ -921,6 +921,8 @@ class Canines extends CI_Controller {
       $this->db->join('canines','canines.can_id = requests.req_can_id');
       $this->db->join('users','users.use_id = requests.req_app_user');
       $this->db->join('approval_status','approval_status.stat_id = requests.req_stat');
+      $this->db->join('members','members.mem_id = canines.can_member');
+      $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
       $this->db->where('req_stat', 0);
       $this->db->order_by('req_date', 'desc');
       $rResult = $this->db->get($sTable);
@@ -1056,7 +1058,7 @@ class Canines extends CI_Controller {
     }
 
     public function data_logs_request(){
-      $aColumns = array('log_owner', 'log_address', 'log_cage', 'log_tanggal', 'log_old_photo', 'log_photo', 'req_app_date', 'can_a_s', 'stat_name', 'use_username');
+      $aColumns = array('log_owner', 'log_address', 'log_cage', 'log_tanggal', 'log_old_photo', 'log_photo', 'req_app_date', 'can_a_s', 'stat_name', 'use_username', 'kennels.ken_name', 'kennels.ken_type_id');
       $sTable = 'logs_canine';
 
       $iDisplayStart = $this->input->get_post('start', true);
@@ -1117,6 +1119,8 @@ class Canines extends CI_Controller {
       $this->db->join('requests','requests.req_id = logs_canine.log_req');
       $this->db->join('users','users.use_id = requests.req_app_user');
       $this->db->join('approval_status','approval_status.stat_id = requests.req_stat');
+      $this->db->join('members','members.mem_id = canines.can_member');
+      $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
       $this->db->where('log_stat', 1);
       $this->db->where('req_stat <> ', 0);
       $this->db->order_by('log_tanggal', 'desc');

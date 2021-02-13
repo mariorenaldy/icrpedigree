@@ -180,10 +180,8 @@ class Certificate extends CI_Controller {
 				// 	$data['sibling_female'] = $this->pedigreesModel->get_sibling($whereFamale)->result();
 				// }
 
-				// sibling male
 				if ($data['canine'][0]['ped_sire_id'] != '86' && $data['canine'][0]['ped_mom_id'] != '87') {
-
-
+					// sibling male
 					$whereMale['can_gender'] = 'Male';
 					$whereMale['can_date_of_birth'] = $data['canine'][0]['can_date_of_birth'];
 					$whereMale['ped_canine_id !='] = $data['canine'][0]['can_id'];
