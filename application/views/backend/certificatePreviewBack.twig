@@ -14,11 +14,11 @@
 
 <style>
     .cert {
-        {% for trah in trahs %}
+        /* {% for trah in trahs %}
             {% if trah.tra_name == canine[0].can_breed  %}
                 background: url('{{base_url()}}{{trah.tra_back}}') no-repeat;
             {% endif %}
-        {% endfor %}
+        {% endfor %} */
         background: url('{{base_url()}}assets/blkng.jpg') no-repeat;
         background-size: contain;
     }
@@ -44,11 +44,11 @@
             margin: 0px !important;
         }
         body{
-            {% for trah in trahs %}
+            /* {% for trah in trahs %}
                 {% if trah.tra_name == canine[0].can_breed  %}
                     background: url('{{base_url()}}{{trah.tra_back}}') no-repeat !important;
                 {% endif %}
-            {% endfor %}
+            {% endfor %} */
             background: url('{{base_url()}}assets/blkng.jpg') no-repeat !important;
             background-size: contain !important;
             padding: 0px !important;
@@ -69,10 +69,10 @@
 <!-- Page Content -->
 <div class="content">
     <div class="block graph-image cert" >
-        <div class="block-content" style="background-color: black;">
+        <div class="block-content">
             <div class="row tentang_surat">
                 <div class="col-xs-3"></div>
-                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top:25px; margin-right: 5px;">
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin:10px 10px 0 0;">
                     {% if canine[0].sire[0].sire[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
                         {% if canine[0].sire[0].sire[0].sire[0].can_icr_number != '-' %}
@@ -209,7 +209,7 @@
                     {% endif %}
                 </div>
                 
-                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top:100px; margin-right: 5px;">
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin:90px 5px 0 0;">
                     {% if canine[0].sire[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
                         {% if canine[0].sire[0].sire[0].can_icr_number != '-' %}
@@ -242,7 +242,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br><br>
+                    <br><br><br><br><br>
 
                     {% if canine[0].mom[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
@@ -278,7 +278,7 @@
                     {% endif %}
                 </div>
 
-                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin-top: 225px; margin-right: 5px;">
+                <div class="col-xs-3 font-w600 pull-right white" style="z-index:2; margin: 170px 5px 0 0;">
                     {% if canine[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
                         {% if canine[0].sire[0].can_icr_number != '-' %}
@@ -294,7 +294,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br>
 
                     {% if canine[0].mom[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
@@ -320,7 +320,7 @@
                     <h6 class="font-w600 white text-center" style="margin-left: -35px; margin-top: 5px; font-size: 0.9em;"><i>The President of Indonesian Canine Registry</i></h6>
                 </div>     
 
-                <div class="col-xs-4 pull-left" style="margin-left: 40px; margin-top: 380px; position: absolute; z-index:1 !important;">
+                <div class="col-xs-4 pull-left" style="z-index:1 !important; margin: 280px 0 0 45px; position: absolute;">
                     <h3 class="font-w600" style="color:#FF0000 !important;">
                         {% if canine[0].ken_type_id == 1 %}
                             {{canine[0].can_a_s}} von {{canine[0].ken_name}}
