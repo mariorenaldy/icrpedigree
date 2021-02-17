@@ -27,49 +27,48 @@ class Signup extends CI_Controller {
 		}
 
 		public function add(){
-			$data = array(
-				'mem_name' => $this->input->post('mem_name'),
-				'mem_address' => $this->input->post('mem_address'),
-				'mem_mail_address' => $this->input->post('mem_mail_address'),
-				'mem_hp' => $this->input->post('mem_hp')
-			);
-
-			$data['mem_photo'] = '-';
-			$img = $this->input->post('srcDataCrop');
-			if ($img){
-				$title = self::_clean_text('member');
-				$this->path_upload = 'uploads/members/';
-				$data['mem_photo'] = self::_upload_base64($img, $title);
-			}
-
-			$kennel = array(
-				'ken_name' => $this->input->post('ken_name'),
-				'ken_type_id' => $this->input->post('ken_type_id')
-			);
-
-			$kennel['ken_photo'] = '-';
-			$ken_img = $this->input->post('ken_srcDataCrop');
-			if ($ken_img) {
-				$ken_title = self::_clean_text('kennel');
-				$this->path_upload = 'uploads/kennels/';
-				$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
-			}	
-
-			$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
-			$data['mem_ken_id'] = $kennel['ken_id'];
-
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			$this->KennelModel->add_kennels($kennel);
-
 			$user = $this->memberModel->daftar_users($this->input->post('mem_username'))->result();
 			if ($user) {
-				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Username Sudah Ada!'));
 				return false;
 			}
 
 			if ($this->input->post('password') == $this->input->post('repass')) {
+				$data = array(
+					'mem_name' => $this->input->post('mem_name'),
+					'mem_address' => $this->input->post('mem_address'),
+					'mem_mail_address' => $this->input->post('mem_mail_address'),
+					'mem_hp' => $this->input->post('mem_hp')
+				);
+	
+				$data['mem_photo'] = '-';
+				$img = $this->input->post('srcDataCrop');
+				if ($img){
+					$title = self::_clean_text('member');
+					$this->path_upload = 'uploads/members/';
+					$data['mem_photo'] = self::_upload_base64($img, $title);
+				}
+	
+				$kennel = array(
+					'ken_name' => $this->input->post('ken_name'),
+					'ken_type_id' => $this->input->post('ken_type_id')
+				);
+	
+				$kennel['ken_photo'] = '-';
+				$ken_img = $this->input->post('ken_srcDataCrop');
+				if ($ken_img) {
+					$ken_title = self::_clean_text('kennel');
+					$this->path_upload = 'uploads/kennels/';
+					$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
+				}	
+	
+				$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
+				$data['mem_ken_id'] = $kennel['ken_id'];
+
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$this->KennelModel->add_kennels($kennel);
+
 				$data['mem_username'] = $this->input->post('mem_username');
 				$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('password'));
 				$id = $this->memberModel->add_members($data);
@@ -82,10 +81,8 @@ class Signup extends CI_Controller {
 					$this->db->trans_complete();
 					echo json_encode(array('data' => '1'));
 				}
-			} else {
-				$this->db->trans_rollback();
+			} else 
 				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
-			}
 		}
 
     	//  PHP Helper
