@@ -2,10 +2,6 @@
 // ARTechnology
 
 class KennelModel extends CI_Model {
-    public function __construct(){
-        parent::__construct();
-    }
-
     public function record_count() {
       return $this->db->count_all("kennels");
     }
