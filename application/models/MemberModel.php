@@ -89,4 +89,13 @@ class MemberModel extends CI_Model {
         $this->db->order_by('mem_id');
         return $this->db->get();
     }
+
+    function edit_password($id, $pass){
+		$data = array(
+			'mem_password' => $pass
+		);
+		$this->db->where('mem_id', $id);
+		$edit = $this->db->update('members', $data);
+		return $edit; 
+	}
 }

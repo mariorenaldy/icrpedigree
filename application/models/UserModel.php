@@ -46,5 +46,4 @@ class UserModel extends CI_Model {
             return $this->db->delete('users', $where);
         }
     }
-
 }
