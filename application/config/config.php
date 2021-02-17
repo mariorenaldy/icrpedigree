@@ -523,3 +523,25 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+// ARTechnology
+$config['upload_path_member'] = realpath(APPPATH.'../uploads/members/');
+$config['path_member'] = 'uploads/members/';
+$config['upload_member'] = Array(
+    'upload_path' => $config['upload_path_member'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'max_size' => '512',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'member_'.time()
+);
+
+$config['upload_path_kennel'] = realpath(APPPATH.'../uploads/kennels/');
+$config['path_kennel'] = 'uploads/kennels/';
+$config['upload_kennel'] = Array(
+    'upload_path' => $config['upload_path_kennel'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'max_size' => '512',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'kennel_'.time()
+);
+// ARTechnology
