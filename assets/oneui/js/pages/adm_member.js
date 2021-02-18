@@ -591,6 +591,7 @@ function openModal(target, type, id) {
             $('#username-update-member').val(res.mem_username);
             $('#pass-update-member').val('');
             $('#newpass-update-member').val('');
+            $('#repass-update-member').val('');
         });
     }
     else if (type == "password"){
@@ -600,6 +601,7 @@ function openModal(target, type, id) {
             $('#username-update-password').val(res.mem_username);
             $('#pass-update-password').val('');
             $('#newpass-update-password').val('');
+            $('#repass-update-password').val('');
         });
     }
 

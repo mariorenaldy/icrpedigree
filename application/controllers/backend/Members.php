@@ -173,16 +173,23 @@ class Members extends CI_Controller {
 			}
 			
 			if (isset($data['password']) && $data['password'] != ''){
-				if ($this->bcrypt->check_password($data['password'], $user['mem_password']) == true) {
+				if ($data['newpass'] == $data['repass']){
 					if ($data['newpass'] == $data['password']) {
-						echo json_encode(array('data' => 'Password Yang Sama Tidak Dapat Digunakan Lagi!'));
+						echo json_encode(array('data' => 'Password lama tidak boleh sama dengan password baru'));
 						return false;
 					}
-
-					$data['mem_password'] = $this->bcrypt->hash_password($data['newpass']);
+					else{
+						if ($this->bcrypt->check_password($data['password'], $user['mem_password']) == true) {
+							$data['mem_password'] = $this->bcrypt->hash_password($data['newpass']);
+						}
+						else {
+							echo json_encode(array('data' => 'Password tidak benar'));
+							return false;
+						}
+					}
 				}
-				else {
-					echo json_encode(array('data' => 'Password Awal Salah'));
+				else{
+					echo json_encode(array('data' => 'Password baru tidak sama dengan konfirmasi password'));
 					return false;
 				}
 			}
@@ -191,6 +198,7 @@ class Members extends CI_Controller {
 			}
 			unset($data['password']);
 			unset($data['newpass']);
+			unset($data['repass']);
 			$this->memberModel->update_members($data, $where);
 
 			unset($data['mem_password']);
@@ -198,25 +206,26 @@ class Members extends CI_Controller {
 		}
 
 		public function reset($id = null){
-			$data = $this->input->post(null, true);
 			$where['mem_id'] = $id;
 			$user = $this->memberModel->get_members($where)->row_array();
-			if ($user== null) {
+			if ($user == null) {
 				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
 				return false;
 			}
 			
-			if ($data['password'] == $data['repass']) {
-				$data['mem_password'] = $this->bcrypt->hash_password($data['password']);
-				unset($data['password']);
-				unset($data['repass']);
-
-				$this->memberModel->update_members($data, $where);
-
-				unset($data['mem_password']);
-				echo json_encode(array('data' => '1'));
-			}else{
+			if ($this->input->post('newpass') == $this->input->post('repass')) {
+				if ($this->bcrypt->check_password($this->input->post('password'), $user['mem_password']) == true) {
+					$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('newpass'));
+					$this->memberModel->update_members($data, $where);
+					echo json_encode(array('data' => '1'));
+				}
+				else{
+					echo json_encode(array('data' => 'Password Awal Salah'));
+					return false;
+				}
+			} else {
 				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
+				return false;
 			}
 		}
 
