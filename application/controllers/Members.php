@@ -61,15 +61,20 @@ class Members extends CI_Controller {
 			}
 			
 			if ($this->input->post('password') && $this->input->post('password') != ''){
-				if ($this->bcrypt->check_password($this->input->post('password'), $user['mem_password']) == true) {
-					if ($this->input->post('newpass') == $this->input->post('password')) {
-						echo json_encode(array('data' => 'Password Yang Sama Tidak Dapat Digunakan Lagi!'));
+				if ($this->input->post('newpass') == $this->input->post('repass')) {
+					if ($this->bcrypt->check_password($this->input->post('password'), $user['mem_password']) == true) {
+						if ($this->input->post('newpass') == $this->input->post('password')) {
+							echo json_encode(array('data' => 'Password Yang Sama Tidak Dapat Digunakan Lagi!'));
+							return false;
+						}
+						$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('newpass'));
+					}
+					else {
+						echo json_encode(array('data' => 'Password Awal Salah'));
 						return false;
 					}
-					$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('password'));
-				}
-				else {
-					echo json_encode(array('data' => 'Password Awal Salah'));
+				} else {
+					echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
 					return false;
 				}
 			}

@@ -178,6 +178,7 @@ function getDataMember() {
     $('#username-update-member').val(res.mem_username);
     $('#pass-update-member').val('');
     $('#newpass-update-member').val('');
+    $('#repass-update-member').val('');
 
     $('#id-update-kennel').val(res.mem_ken_id);
     if (res.ken_photo == '-')
