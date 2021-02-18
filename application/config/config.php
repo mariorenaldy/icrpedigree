@@ -530,7 +530,6 @@ $config['path_member'] = 'uploads/members/';
 $config['upload_member'] = Array(
     'upload_path' => $config['upload_path_member'],
     'allowed_types' => 'jpg|jpeg|png',
-    'max_size' => '512',
     'file_ext_tolower' => TRUE,
     'file_name' => 'member_'.time()
 );
@@ -540,7 +539,6 @@ $config['path_kennel'] = 'uploads/kennels/';
 $config['upload_kennel'] = Array(
     'upload_path' => $config['upload_path_kennel'],
     'allowed_types' => 'jpg|jpeg|png',
-    'max_size' => '512',
     'file_ext_tolower' => TRUE,
     'file_name' => 'kennel_'.time()
 );
