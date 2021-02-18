@@ -268,6 +268,7 @@ var BaseTableDatatables = function() {
                             $('#imgPreview').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg')
                             $('#modal-add-user').modal('hide');
                             window.tableuser.api().ajax.reload();
+                            alert('Data pengguna berhasil ditambahkan!');
                         }else {
                             alert(res.data);
 
@@ -333,6 +334,7 @@ var BaseTableDatatables = function() {
                             $('#imgPreview-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg')
                             $('#modal-update-user').modal('hide');
                             window.tableuser.api().ajax.reload();
+                            alert('Data pengguna berhasil diubah!');
                         }else {
                             alert(res.data);
 
