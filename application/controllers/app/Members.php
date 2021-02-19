@@ -286,7 +286,7 @@ class Members extends CI_Controller {
 						'status' => true,
 						'data' => [ 
 							'username' => $obj['username'],
-							'photo' => $member['mem_photo']
+							'userid' => $member['mem_id']
 						]
 					]);
 				}
