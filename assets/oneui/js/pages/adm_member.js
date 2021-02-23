@@ -11,7 +11,7 @@ var BaseTableDatatables = function() {
     var initDataTablemember = function() {
         window.tablemember = jQuery('.data-members').dataTable({
             order: [[2, 'asc']],
-            columnDefs: [{ orderable: false, targets: [0, 1, 10, 11, 12] }],
+            columnDefs: [{ orderable: false, targets: [0, 1, 9, 14, 15, 16]}],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
             processing: true,
@@ -44,6 +44,20 @@ var BaseTableDatatables = function() {
                     { data: 'mem_address'},
                     { data: 'mem_mail_address'},
                     { data: 'mem_hp'},
+                    { data: 'mem_kota'},
+                    { data: 'mem_kode_pos'},
+                    { data: 'mem_email'},
+                    { data: 'mem_pp',
+                      render: function(data, type, row) {
+                        if (data == '-') {
+                          var str = '<img src="'+base_url+'assets/oneui/img/avatars/image.png" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }else{
+                          var str = '<img src="'+base_url+'uploads/members/'+ data + '" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }
+                      },
+                    },
                     { data: 'ken_name'},
                     { data: 'mem_stat',
                       render: function(data, type, row) {
@@ -302,7 +316,8 @@ var BaseTableDatatables = function() {
                         res = $.parseJSON(res);
                         if (res.data == '1') {
                             form.reset();
-                            $('#imgPreview').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg')
+                            $('#imgPreview').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
+                            $('#imgPreviewPP').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
                             $('#modal-add-member').modal('hide');
                             window.tablemember.api().ajax.reload();
                             alert('Data member berhasil ditambahkan!');
@@ -368,7 +383,8 @@ var BaseTableDatatables = function() {
                         res = $.parseJSON(res);
                         if (res.data == '1') {
                             form.reset();
-                            $('#imgPreview-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg')
+                            $('#imgPreview-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
+                            $('#imgPreviewPP-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
                             $('#modal-update-member').modal('hide');
                             window.tablemember.api().ajax.reload();
                             alert('Data member berhasil diubah!');
@@ -578,11 +594,18 @@ function openModal(target, type, id) {
                 $('img#imgPreview-update').attr('src', base_url+'assets/oneui/img/avatars/image.png');
             else
                 $('img#imgPreview-update').attr('src', base_url+'uploads/members/'+res.mem_photo);
+            if (res.mem_pp == '-')
+                $('img#imgPreviewPP-update').attr('src', base_url+'assets/oneui/img/avatars/image.png');
+            else
+                $('img#imgPreviewPP-update').attr('src', base_url+'uploads/members/'+res.mem_pp);
             
             $('#name-update-member').val(res.mem_name);
             $('#address-update-member').val(res.mem_address);
             $('#mail-address-update-member').val(res.mem_mail_address);
             $('#hp-update-member').val(res.mem_hp);
+            $('#kota-update-member').val(res.mem_kota);
+            $('#kode-pos-update-member').val(res.mem_kode_pos);
+            $('#email-update-member').val(res.mem_email);
 
             $("#kennel-update-member").html("").trigger('change');
             var newOption = new Option(res.ken_name, res.mem_ken_id, false, false);
@@ -633,7 +656,7 @@ function approveMember(id) {
 }
 
 // add
-$('input.upload').on('change', function(e) {
+$('#imageInput').on('change', function(e) {
     if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
         var image = $('#cropper-wrap-img > img'), cropBoxData, canvasData;
         var reader = new FileReader();
@@ -643,6 +666,51 @@ $('input.upload').on('change', function(e) {
 
         reader.readAsDataURL(this.files[0]);
         $('#cropper-modal').modal('show');
+    }else {
+        alert('file not supported');
+    }
+});
+
+$('#imageInputPP').on('change', function(e) {
+    if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
+        var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(this.files[0]);
+        $('#cropper-modal-PP').modal('show');
+    }else {
+        alert('file not supported');
+    }
+});
+
+$('#imageInput-update').on('change', function(e) {
+    if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
+        var image = $('#cropper-wrap-img > img'), cropBoxData, canvasData;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(this.files[0]);
+        $('#cropper-modal').modal('show');
+    }else {
+        alert('file not supported');
+    }
+});
+
+$('#imageInputPP-update').on('change', function(e) {
+    if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
+        var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(this.files[0]);
+        $('#cropper-modal-PP').modal('show');
     }else {
         alert('file not supported');
     }
@@ -664,12 +732,28 @@ $('#cropper-modal').on('shown.bs.modal', function() {
     });
 });
 
+$('#cropper-modal-PP').on('shown.bs.modal', function() {
+    var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
+    image.cropper({
+        aspectRatio: 1 / 1,
+        autoCropArea: 0.5,
+        cropBoxResizable: true,
+        checkImageOrigin: true,
+        responsive: true,
+        built: function() {
+            // Strict mode: set crop box data first
+            image.cropper('setCropBoxData', cropBoxData);
+            image.cropper('setCanvasData', canvasData);
+        },
+    });
+});
 
-$('.btn-crop').on('click', function(e) {
+
+$('#btn-crop').on('click', function(e) {
     var imgb64 = $('#cropper-wrap-img > img').cropper('getCroppedCanvas').toDataURL('image/png');
-    $('img#imgPreview').attr('src', imgb64);
+    $('#imgPreview').attr('src', imgb64);
     $('#srcDataCrop').val(imgb64);
-    $('img#imgPreview-update').attr('src', imgb64);
+    $('#imgPreview-update').attr('src', imgb64);
     $('#srcDataCrop-update').val(imgb64);
     $('#cropper-modal').modal('hide');
 });
@@ -679,14 +763,32 @@ $('#cropper-modal').on('hidden.bs.modal', function() {
     $('body').addClass('modal-open');
 });
 
+$('#btn-crop-PP').on('click', function(e) {
+    var imgb64 = $('#cropper-wrap-img-PP > img').cropper('getCroppedCanvas').toDataURL('image/png');
+    $('#imgPreviewPP').attr('src', imgb64);
+    $('#srcDataCropPP').val(imgb64);
+    $('#imgPreviewPP-update').attr('src', imgb64);
+    $('#srcDataCropPP-update').val(imgb64);
+    $('#cropper-modal-PP').modal('hide');
+});
+
+$('#cropper-modal-PP').on('hidden.bs.modal', function() {
+    $('#cropper-wrap-img-PP > img').cropper('destroy');
+    $('body').addClass('modal-open');
+});
+
 $('#modal-add-member').on('hidden.bs.modal', function() {
     $('img#imgPreview').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
+    $('img#imgPreviewPP').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
     $('#srcDataCrop').val('');
+    $('#srcDataCropPP').val('');
 });
 
 $('#modal-update-member').on('hidden.bs.modal', function() {
     $('img#imgPreview-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
+    $('img#imgPreviewPP-update').attr('src', base_url+'assets/oneui/img/avatars/avatar1.jpg');
     $('#srcDataCrop-update').val('');
+    $('#srcDataCropPP-update').val('');
 });
 
 // remove

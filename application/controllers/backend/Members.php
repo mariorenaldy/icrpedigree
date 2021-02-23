@@ -24,39 +24,40 @@ class Members extends CI_Controller {
 		}
 
 		public function add(){
-
-			$img = $this->input->post('srcDataCrop');
 			$title = self::_clean_text('member');
-
+			$img = $this->input->post('srcDataCrop');
 			$_POST['mem_photo'] = '-';
-			if($img) $_POST['mem_photo'] = self::_upload_base64($img, $title);
+			if ($img) 
+				$_POST['mem_photo'] = self::_upload_base64($img, $title);
 			unset($_POST['srcDataCrop']);
+
+			$titlePP = self::_clean_text('pp');
+			$imgPP = $this->input->post('srcDataCropPP');
+			$_POST['mem_pp'] = '-';
+			if ($imgPP) 
+				$_POST['mem_pp'] = self::_upload_base64($imgPP, $titlePP);
+			unset($_POST['srcDataCropPP']);
 
 			$data = $this->input->post(null, true);
 			$username = $data['mem_username'];
 			$user = self::_same_user($username);
-
 			if ($user) {
 				echo json_encode(array('data' => 'Username Sudah Ada!'));
 				return false;
 			}
 			if ($data['password'] == $data['repass']) {
-
 				$data['mem_password'] = $this->bcrypt->hash_password($data['password']);
 				unset($data['password']);
 				unset($data['repass']);
-
 				$id = $this->memberModel->add_members($data);
 				if (!$id) {
 					echo json_encode(array('data' => 'Gagal Memproses Akun Anda, Coba Lagi.'));
 					return false;
 				}
-
 				unset($data['mem_password']);
-
 				echo json_encode(array('data' => '1'));
 
-			}else{
+			} else {
 				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
 			}
 		}
@@ -67,7 +68,7 @@ class Members extends CI_Controller {
 						$member = $this->memberModel->get_members($where)->row();
 						echo json_encode($member);
 				}else{
-						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username', 'ken_name', 'mem_ken_id');
+						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username', 'ken_name', 'mem_ken_id', 'mem_email', 'mem_pp', 'mem_kota', 'mem_kode_pos');
 						$sTable = 'members';
 
 						$iDisplayStart = $this->input->get_post('start', true);
@@ -164,6 +165,14 @@ class Members extends CI_Controller {
 				$_POST['mem_photo'] = self::_upload_base64($img, $title, true, $id);
 			}
 			unset($_POST['srcDataCrop']);
+
+			$imgPP = $this->input->post('srcDataCropPP');
+			if ($imgPP){
+				$titlePP = self::_clean_text('pp');
+				$_POST['mem_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
+			}
+			unset($_POST['srcDataCropPP']);
+
 			$data = $this->input->post(null, true);
 			$where['mem_id'] = $id;
 			$user = $this->memberModel->get_members($where)->row_array();
