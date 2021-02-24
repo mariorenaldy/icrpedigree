@@ -317,7 +317,6 @@ $('#cropper-modal').on('hidden.bs.modal', function() {
 
 $('#cropper-modal-PP').on('hidden.bs.modal', function() {
     $('#cropper-wrap-img-PP > img').cropper('destroy');
-    $('body').addClass('modal-open');
 });
 
 $('#cropper-modal-logo').on('hidden.bs.modal', function() {
