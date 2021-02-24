@@ -37,7 +37,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Nama member wajib diisi'
+					'message' => 'Nama sesuai KTP wajib diisi'
 				]); 
 			}
 
@@ -45,7 +45,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Alamat member wajib diisi'
+					'message' => 'Alamat sesuai KTP wajib diisi'
 				]); 
 			}
 
@@ -53,7 +53,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Alamat surat member wajib diisi'
+					'message' => 'Alamat surat menyurat wajib diisi'
 				]); 
 			}
 
@@ -62,6 +62,30 @@ class Members extends CI_Controller {
 				echo json_encode([
 					'status' => false,
 					'message' => 'No. telp member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_kota'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Kota member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_kode_pos'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Kode pos member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_email'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Email member wajib diisi'
 				]); 
 			}
 
@@ -80,6 +104,24 @@ class Members extends CI_Controller {
 					if ($this->upload->do_upload('attachment_member')){
 						$uploadData = $this->upload->data();
 						$photo = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						echo json_encode([
+							'status' => false,
+							'message' => $this->upload->display_errors()
+						]);
+					}
+				}
+			}
+
+			if (!$err){
+				$pp = '-';
+				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_member'));
+					if ($this->upload->do_upload('attachment_pp')){
+						$uploadData = $this->upload->data();
+						$pp = $uploadData['file_name'];
 					}
 					else{
 						$err++;
@@ -126,6 +168,13 @@ class Members extends CI_Controller {
 				}
 			}
 
+			if (!$err && $pp && $member->result()[0]->mem_pp){
+				$curr_image = $this->config->item('upload_path_member').'/'.$member->result()[0]->mem_pp;
+				if (file_exists($curr_image)){
+					unlink($curr_image);
+				}
+			}
+
 			$where2['ken_id'] = $member->result()[0]->mem_ken_id;
 			$kennel = $this->KennelModel->get_kennels($where2);
 			if (!$err && $logo && $kennel && $kennel->result()[0]->ken_id && $kennel->result()[0]->ken_photo){
@@ -140,7 +189,11 @@ class Members extends CI_Controller {
 				'mem_address' => $this->input->post('mem_address'),
 				'mem_mail_address' => $this->input->post('mem_mail_address'),
 				'mem_hp' => $this->input->post('mem_hp'),
-				'mem_photo' => $photo
+				'mem_photo' => $photo,
+				'mem_kota' => $this->input->post('mem_kota'),
+				'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+				'mem_email' => $this->input->post('mem_email'),
+				'mem_pp' => $pp
 			);
 			
 			$kennel_data = array(
@@ -334,7 +387,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Nama member wajib diisi'
+					'message' => 'Nama sesuai KTP wajib diisi'
 				]); 
 			}
 
@@ -342,7 +395,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Alamat member wajib diisi'
+					'message' => 'Alamat sesuai KTP wajib diisi'
 				]); 
 			}
 
@@ -350,7 +403,7 @@ class Members extends CI_Controller {
 				$err++;
 				echo json_encode([
 					'status' => false,
-					'message' => 'Alamat surat member wajib diisi'
+					'message' => 'Alamat surat menyurat wajib diisi'
 				]); 
 			}
 
@@ -359,6 +412,30 @@ class Members extends CI_Controller {
 				echo json_encode([
 					'status' => false,
 					'message' => 'No. telp member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_kota'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Kota member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_kode_pos'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Kode pos member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('mem_email'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Email member wajib diisi'
 				]); 
 			}
 
@@ -414,6 +491,24 @@ class Members extends CI_Controller {
 			}
 
 			if (!$err){
+				$pp = '-';
+				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_member'));
+					if ($this->upload->do_upload('attachment_pp')){
+						$uploadData = $this->upload->data();
+						$pp = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						echo json_encode([
+							'status' => false,
+							'message' => $this->upload->display_errors()
+						]);
+					}
+				}
+			}
+
+			if (!$err){
 				$logo = '-';
 				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_kennel'));
@@ -446,6 +541,10 @@ class Members extends CI_Controller {
 					'mem_mail_address' => $this->input->post('mem_mail_address'),
 					'mem_hp' => $this->input->post('mem_hp'),
 					'mem_photo' => $photo,
+					'mem_kota' => $this->input->post('mem_kota'),
+					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+					'mem_email' => $this->input->post('mem_email'),
+					'mem_pp' => $pp,
 					'mem_username' => $this->input->post('mem_username'),
 					'mem_password' => $this->bcrypt->hash_password($this->input->post('password')),
 					'mem_ken_id' => $ken_id
