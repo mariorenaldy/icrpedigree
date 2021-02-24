@@ -30,7 +30,6 @@ class Setting extends CI_Controller {
 		}
 
 		public function update($id = null){
-				// $data = $this->input->post(null, true);
 				$data = array( $_POST['name'] => $_POST['value'] );
 				$where['set_id'] = $id;
 				$this->settingModel->update_settings($data, $where);

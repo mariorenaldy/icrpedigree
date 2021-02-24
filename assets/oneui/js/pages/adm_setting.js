@@ -53,7 +53,14 @@ $(function () {
       }
     });
 
-
-
-
+    $('#set_tc').editable({
+      validate: function(value) {
+          if($.trim(value) == '') {
+              return 'Inputan tidak boleh kosong!';
+          }
+      },
+      success: function(response, newValue) {
+        if(response.status == 'error') return response.msg; //msg will be shown in editable form
+      }
+    });
 });

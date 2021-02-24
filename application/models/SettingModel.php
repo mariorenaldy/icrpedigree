@@ -46,7 +46,7 @@ class SettingModel extends CI_Model {
 
     // ARTechnology
     function get_all(){
-		$sql = "SELECT * FROM setting";
+		$sql = "SELECT set_tc AS tc FROM settings";
 		$query = $this->db->query($sql);		
         return $query->result(); 		
 	}
