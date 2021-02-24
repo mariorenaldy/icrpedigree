@@ -38,7 +38,10 @@ class Signup extends CI_Controller {
 					'mem_name' => $this->input->post('mem_name'),
 					'mem_address' => $this->input->post('mem_address'),
 					'mem_mail_address' => $this->input->post('mem_mail_address'),
-					'mem_hp' => $this->input->post('mem_hp')
+					'mem_hp' => $this->input->post('mem_hp'),
+					'mem_kota' => $this->input->post('mem_kota'),
+					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+					'mem_email' => $this->input->post('mem_email'),
 				);
 	
 				$data['mem_photo'] = '-';
@@ -47,6 +50,14 @@ class Signup extends CI_Controller {
 					$title = self::_clean_text('member');
 					$this->path_upload = 'uploads/members/';
 					$data['mem_photo'] = self::_upload_base64($img, $title);
+				}
+
+				$data['mem_pp'] = '-';
+				$imgPP = $this->input->post('srcDataCropPP');
+				if ($imgPP){
+					$titlePP = self::_clean_text('pp');
+					$this->path_upload = 'uploads/members/';
+					$data['mem_pp'] = self::_upload_base64($imgPP, $titlePP);
 				}
 	
 				$kennel = array(

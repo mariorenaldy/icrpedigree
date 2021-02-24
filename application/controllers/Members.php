@@ -43,7 +43,10 @@ class Members extends CI_Controller {
 				'mem_name' => $this->input->post('mem_name'),
 				'mem_address' => $this->input->post('mem_address'),
 				'mem_mail_address' => $this->input->post('mem_mail_address'),
-				'mem_hp' => $this->input->post('mem_hp')
+				'mem_hp' => $this->input->post('mem_hp'),
+				'mem_kota' => $this->input->post('mem_kota'),
+				'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+				'mem_email' => $this->input->post('mem_email'),
 			);
 
 			$img = $this->input->post('srcDataCrop');
@@ -51,6 +54,13 @@ class Members extends CI_Controller {
 				$title = self::_clean_text('member');
 				$this->path_upload = 'uploads/members/';
 				$data['mem_photo'] = self::_upload_base64($img, $title, true, $id);
+			}
+
+			$imgPP = $this->input->post('srcDataCropPP');
+			if ($imgPP){
+				$titlePP = self::_clean_text('pp');
+				$this->path_upload = 'uploads/members/';
+				$data['mem_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
 			}
 
 			$where['mem_id'] = $id;
@@ -88,9 +98,12 @@ class Members extends CI_Controller {
 			if ($ken_img) {
 				$ken_title = self::_clean_text('kennel');
 				$this->path_upload = 'uploads/kennels/';
-				$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
+				if ($this->input->post('mem_ken_id'))
+					$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+				else
+					$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
 			}
-
+			
 			$this->db->trans_strict(FALSE);
 			$this->db->trans_start();
 			if ($this->input->post('mem_ken_id'))
@@ -123,13 +136,28 @@ class Members extends CI_Controller {
 
 				$url_image = $name_image.'.png';
 
-				if($update && $id != null){
+				if ($update && $id != null){
+					if ($name == "member" || $name == "pp"){
 						$where['mem_id'] = $id;
 						$member = $this->memberModel->get_members($where)->row();
-						$curr_image = $this->path_upload.basename($member->mem_photo);
-						if(file_exists($curr_image)){
-								unlink($curr_image);
+						if ($name == "member")
+							$curr_image = $this->path_upload.basename($member->mem_photo);
+						else
+							$curr_image = $this->path_upload.basename($member->mem_pp);
+						if (file_exists($curr_image)){
+							unlink($curr_image);
 						}
+					}
+					else{
+						$where['ken_id'] = $id;
+						$kennel = $this->KennelModel->get_kennels($where)->row();
+						if ($kennel){
+							$curr_image = $this->path_upload.basename($kennel->ken_photo);
+							if (file_exists($curr_image)){
+								unlink($curr_image);
+							}
+						}
+					}
 				}
 				return $url_image;
 		}

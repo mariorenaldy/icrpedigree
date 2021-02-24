@@ -26,8 +26,8 @@
         opacity: 0;
         filter: alpha(opacity=0);
     }
-    #imgPreview, #imgPreview-update{
-        /*border-radius:50%;*/
+    #imgPreview, #imgPreviewPP,
+    #imgPreview-update, #imgPreviewPP-update{
         margin-bottom: 15px;
     }
 </style>
@@ -51,7 +51,8 @@
         <div class="row">
             <form action="{{base_url()}}signup/add" class="form-add-member form-horizontal" method="post">
                 <div class="form-group">
-                    <div class="col-xs-2 col-xs-offset-5">
+                    <div class="col-xs-3"></div>
+                    <div class="col-xs-2">
                         <img id="imgPreview" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
                         <div class="fileUpload btn btn-default btn-flat btn-block">
                             <span>Upload KTP</span>
@@ -60,24 +61,35 @@
                         </div>
                         <!-- <small class="text-muted">Ratio 1:1</small> -->
                     </div>
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-2">
+                        <img id="imgPreviewPP" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                        <div class="fileUpload btn btn-default btn-flat btn-block">
+                            <span>Upload Profile<br/> Picture</span>
+                            <input type="file" class="upload" name="photoPP" id="imageInputPP" required/>
+                            <input type="hidden" class="" name="srcDataCropPP" id="srcDataCropPP" required/>
+                        </div>
+                        <!-- <small class="text-muted">Ratio 1:1</small> -->
+                    </div>
+                    <div class="col-xs-3"></div>
                 </div>
                 <br/>
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <label class="text-white-1" or="name-add-member">Nama Member</label>
+                            <label class="text-white-1" or="name-add-member">Nama Sesuai KTP</label>
                             <input class="form-control" id="name-add-member" name="mem_name" type="text" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <label class="text-white-1" for="address-add-member">Alamat Member</label>
+                            <label class="text-white-1" for="address-add-member">Alamat Sesuai KTP</label>
                             <input class="form-control" id="address-add-member" name="mem_address" type="text" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <label class="text-white-1" for="mail-address-add-member">Alamat Surat Member</label>
+                            <label class="text-white-1" for="mail-address-add-member">Alamat Surat Menyurat</label>
                             <input class="form-control" id="mail-address-add-member" name="mem_mail_address" type="text" required>
                         </div>
                     </div>
@@ -85,6 +97,24 @@
                         <div class="col-xs-12">
                             <label class="text-white-1" for="hp-add-member">No. Telp</label>
                             <input class="form-control" id="hp-add-member" name="mem_hp" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="text-white-1" for="kota-add-member">Kota</label>
+                            <input class="form-control" id="kota-add-member" name="mem_kota" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="text-white-1" for="kode-pos-add-member">Kode Pos</label>
+                            <input class="form-control" id="kode-pos-add-member" name="mem_kode_pos" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="text-white-1" for="email-add-member">email</label>
+                            <input class="form-control" id="email-add-member" name="mem_email" type="text" required>
                         </div>
                     </div>
                 </div>
@@ -164,6 +194,28 @@
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
             <button type="button" class="btn btn-primary btn-crop" id="btn-crop">Crop</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cropper-modal-PP" data-backdrop="static" data-keyboard="false" tabindex="-1" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="block block-themed block-transparent remove-margin-b">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Image Cropper</h3>
+            </div>
+            <div class="modal-body">
+                <div id="cropper-wrap-img-PP">
+                    <img width="100%" src="/img/default.png" alt="Picture">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
+            <button type="button" class="btn btn-primary btn-crop" id="btn-crop-PP">Crop</button>
         </div>
     </div>
   </div>

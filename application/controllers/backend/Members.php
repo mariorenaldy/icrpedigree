@@ -260,13 +260,16 @@ class Members extends CI_Controller {
 
 				$url_image = $name_image.'.png';
 
-				if($update && $id != null){
-						$where['mem_id'] = $id;
-						$member = $this->memberModel->get_members($where)->row();
+				if ($update && $id != null){
+					$where['mem_id'] = $id;
+					$member = $this->memberModel->get_members($where)->row();
+					if ($name == "member")
 						$curr_image = $this->path_upload.basename($member->mem_photo);
-						if(file_exists($curr_image)){
-								unlink($curr_image);
-						}
+					else
+						$curr_image = $this->path_upload.basename($member->mem_pp);
+					if (file_exists($curr_image)){
+						unlink($curr_image);
+					}
 				}
 				return $url_image;
 		}

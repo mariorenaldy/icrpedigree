@@ -183,6 +183,21 @@ $('#imageInput').on('change', function(e) {
     }
 });
 
+$('#imageInputPP').on('change', function(e) {
+    if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
+        var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(this.files[0]);
+        $('#cropper-modal-PP').modal('show');
+    }else {
+        alert('file not supported');
+    }
+});
+
 $('#imageInputLogo').on('change', function(e) {
     if (this.files && this.files[0].name.match(/\.(jpg|jpeg|png|JPG|JPEG|PNG)$/)) {
         var image = $('#cropper-wrap-img-logo > img'), cropBoxData, canvasData;
@@ -200,6 +215,22 @@ $('#imageInputLogo').on('change', function(e) {
 
 $('#cropper-modal').on('shown.bs.modal', function() {
     var image = $('#cropper-wrap-img > img'), cropBoxData, canvasData;
+    image.cropper({
+        aspectRatio: 1 / 1,
+        autoCropArea: 0.5,
+        cropBoxResizable: true,
+        checkImageOrigin: true,
+        responsive: true,
+        built: function() {
+            // Strict mode: set crop box data first
+            image.cropper('setCropBoxData', cropBoxData);
+            image.cropper('setCanvasData', canvasData);
+        },
+    });
+});
+
+$('#cropper-modal-PP').on('shown.bs.modal', function() {
+    var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
     image.cropper({
         aspectRatio: 1 / 1,
         autoCropArea: 0.5,
@@ -237,6 +268,13 @@ $('#btn-crop').on('click', function(e) {
     $('#cropper-modal').modal('hide');
 });
 
+$('#btn-crop-PP').on('click', function(e) {
+    var imgb64 = $('#cropper-wrap-img-PP > img').cropper('getCroppedCanvas').toDataURL('image/png');
+    $('#imgPreviewPP').attr('src', imgb64);
+    $('#srcDataCropPP').val(imgb64);
+    $('#cropper-modal-PP').modal('hide');
+});
+
 $('#btn-crop-logo').on('click', function(e) {
     var imgb64 = $('#cropper-wrap-img-logo > img').cropper('getCroppedCanvas').toDataURL('image/png');
     $('img#imgPreviewLogo').attr('src', imgb64);
@@ -246,6 +284,11 @@ $('#btn-crop-logo').on('click', function(e) {
 
 $('#cropper-modal').on('hidden.bs.modal', function() {
     $('#cropper-wrap-img > img').cropper('destroy');
+});
+
+$('#cropper-modal-PP').on('hidden.bs.modal', function() {
+    $('#cropper-wrap-img-PP > img').cropper('destroy');
+    $('body').addClass('modal-open');
 });
 
 $('#cropper-modal-logo').on('hidden.bs.modal', function() {
