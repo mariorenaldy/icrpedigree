@@ -542,4 +542,15 @@ $config['upload_kennel'] = Array(
     'file_ext_tolower' => TRUE,
     'file_name' => 'kennel_'.time()
 );
+
+$config['upload_path_canine'] = realpath(APPPATH.'../uploads/canine/');
+$config['path_canine'] = 'uploads/canine/';
+$config['upload_canine'] = Array(
+    'upload_path' => $config['upload_path_canine'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'canines_'.time()
+);
+
+$config['canine_count'] = 5;
 // ARTechnology

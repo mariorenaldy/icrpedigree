@@ -376,5 +376,40 @@ class CaninesModel extends CI_Model {
         
         return count($query->result());
     }
+
+    public function search_by_member_app($q, $can_member, $offset){ 
+        $date = '';
+        $sql = "SELECT * FROM canines c, members m, kennels k WHERE m.mem_id = c.can_member AND m.mem_id = ".$can_member." AND m.mem_ken_id = k.ken_id AND c.can_stat = 1";
+        if ($q){
+            $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_icr_moc_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR c.can_cage LIKE '%".$q."%'";
+            $piece = explode("-", $q);
+            if (count($piece) == 3)
+                $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+        if ($date)
+            $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
+        if ($q)
+            $sql .= ")";
+        $sql .= " ORDER BY can_a_s LIMIT ".$offset.", ".$this->config->item('canine_count');
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    function search_count_by_member_app($q, $can_member){
+        $date = '';
+		$sql = "SELECT COUNT(*) AS count FROM canines c, members m, kennels k WHERE m.mem_id = c.can_member AND m.mem_id = ".$can_member." AND m.mem_ken_id = k.ken_id AND c.can_stat = 1";
+		if ($q){
+            $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_icr_moc_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR c.can_cage LIKE '%".$q."%'";
+            $piece = explode("-", $q);
+            if (count($piece) == 3)
+                $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+        if ($date)
+            $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
+        if ($q)
+            $sql .= ")";
+        $query = $this->db->query($sql);
+        return $query->result();  
+	}
     // ARTechnology
 }
