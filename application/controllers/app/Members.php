@@ -11,16 +11,23 @@ class Members extends CI_Controller {
 		}
 		
 		public function get_member(){
-			$where['mem_id'] = $this->uri->segment(4);
-			$member = $this->memberModel->get_members($where)->row();
-			$ken_types = $this->KenneltypeModel->get_kennel_types()->result();
-			echo json_encode([
-				'status' => true,
-				'data' => [
-					'member' => $member,
-					'ken_types' => $ken_types
-				]
-			]);
+			if ($this->uri->segment(4)){
+				$where['mem_id'] = $this->uri->segment(4);
+				$member = $this->memberModel->get_members($where)->row();
+				$ken_types = $this->KenneltypeModel->get_kennel_types()->result();
+				echo json_encode([
+					'status' => true,
+					'data' => [
+						'member' => $member,
+						'ken_types' => $ken_types
+					]
+				]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id Member wajib diisi'
+				]);
 		}
 
 		public function update_profile(){
