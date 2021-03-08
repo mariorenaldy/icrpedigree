@@ -11,23 +11,70 @@ class Canines extends CI_Controller {
 		}
 
 		public function get_canine(){
-			$canine = $this->caninesModel->search_by_member_app('', $this->uri->segment(4), 0);
-			$count = $this->caninesModel->search_count_by_member_app('', $this->uri->segment(4));
-			echo json_encode([
-				'status' => true,
-				'count' => $count[0]->count,
-				'data' => $canine
-			]);
+			if ($this->uri->segment(4)){
+				if ($this->uri->segment(5)){
+					$canine = $this->caninesModel->search_by_member_app('', $this->uri->segment(4), $this->uri->segment(5));
+					$count = $this->caninesModel->search_count_by_member_app('', $this->uri->segment(4));
+					echo json_encode([
+						'status' => true,
+						'count_data' => $count[0]->count,
+						'count_canine' => $this->config->item('canine_count'),
+						'data' => $canine
+					]);
+				}
+				else{
+					$canine = $this->caninesModel->search_by_member_app('', $this->uri->segment(4), 0);
+					$count = $this->caninesModel->search_count_by_member_app('', $this->uri->segment(4));
+					echo json_encode([
+						'status' => true,
+						'count_data' => $count[0]->count,
+						'count_canine' => $this->config->item('canine_count'),
+						'data' => $canine
+					]);
+				}
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id canine wajib diisi'
+				]);
 		}
 
 		public function search_canine(){
-			$canine = $this->caninesModel->search_by_member_app($this->uri->segment(5), $this->uri->segment(4), $this->uri->segment(6));
-			$count = $this->caninesModel->search_count_by_member_app($this->uri->segment(5), $this->uri->segment(4), $this->uri->segment(6));
-			echo json_encode([
-				'status' => true,
-				'count' => $count[0]->count,
-				'data' => $canine
-			]);
+			if ($this->uri->segment(4)){
+				if ($this->uri->segment(5)){
+					if ($this->uri->segment(6)){
+						$canine = $this->caninesModel->search_by_member_app($this->uri->segment(5), $this->uri->segment(4), $this->uri->segment(6));
+						$count = $this->caninesModel->search_count_by_member_app($this->uri->segment(5), $this->uri->segment(4));
+						echo json_encode([
+							'status' => true,
+							'count_data' => $count[0]->count,
+							'count_canine' => $this->config->item('canine_count'),
+							'data' => $canine
+						]);
+					}
+					else{
+						$canine = $this->caninesModel->search_by_member_app($this->uri->segment(5), $this->uri->segment(4), 0);
+						$count = $this->caninesModel->search_count_by_member_app($this->uri->segment(5), $this->uri->segment(4));
+						echo json_encode([
+							'status' => true,
+							'count_data' => $count[0]->count,
+							'count_canine' => $this->config->item('canine_count'),
+							'data' => $canine
+						]);
+					}
+				}
+				else
+					echo json_encode([
+						'status' => false,
+						'message' => 'Query wajib diisi'
+					]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id Member wajib diisi'
+				]);
 		}
 
 		public function update(){
