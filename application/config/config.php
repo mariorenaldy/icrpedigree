@@ -553,4 +553,5 @@ $config['upload_canine'] = Array(
 );
 
 $config['canine_count'] = 5;
+$config['pedigree_count'] = 5;
 // ARTechnology
