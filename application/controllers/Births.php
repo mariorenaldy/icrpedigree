@@ -80,6 +80,21 @@ class Births extends CI_Controller {
 
 				unset($_POST['srcDataCrop']);
 				
+				$cek = true;
+				$piece = explode("-", $this->input->post('bir_date_of_birth'));
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+		
+				$ts = new DateTime($date);
+				$ts_now = new DateTime();
+				
+				if ($ts > $ts_now)
+					$cek = false;
+				else{
+					$diff = floor($ts->diff($ts_now)->days/7);
+					if ($diff > 1)
+						$cek = false;
+				}
+
 				$data = $this->input->post(null,false);
 
 				$piece = explode("-", $this->input->post('bir_date_of_birth'));
