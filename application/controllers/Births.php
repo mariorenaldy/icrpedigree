@@ -95,18 +95,22 @@ class Births extends CI_Controller {
 						$cek = false;
 				}
 
-				$data = $this->input->post(null,false);
+				if ($cek){
+					$data = $this->input->post(null,false);
 
-				$piece = explode("-", $this->input->post('bir_date_of_birth'));
-				$date = $piece[2]."-".$piece[1]."-".$piece[0];
-				$data['bir_date_of_birth'] = $date;
+					$piece = explode("-", $this->input->post('bir_date_of_birth'));
+					$date = $piece[2]."-".$piece[1]."-".$piece[0];
+					$data['bir_date_of_birth'] = $date;
 
-				$member = $this->session->userdata('member_data');
-				$data['bir_member'] = $member['mem_id'];
+					$member = $this->session->userdata('member_data');
+					$data['bir_member'] = $member['mem_id'];
 
-				$births = $this->birthModel->add_births($data);
+					$births = $this->birthModel->add_births($data);
 
-				echo json_encode(array('data' => '1'));
+					echo json_encode(array('data' => '1'));
+				}
+				else
+					echo json_encode(array('data' => 'Pelaporan lahir harus kurang dari 1 minggu'));
 			}
 			else
 				echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
@@ -123,20 +127,39 @@ class Births extends CI_Controller {
 					
 				unset($_POST['srcDataCrop']);
 
-				$data = $this->input->post(null,false);
-
+				$cek = true;
 				$piece = explode("-", $this->input->post('bir_date_of_birth'));
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
-				$data['bir_date_of_birth'] = $date;
-
-				$member = $this->session->userdata('member_data');
-				$data['bir_member'] = $member['mem_id'];
+		
+				$ts = new DateTime($date);
+				$ts_now = new DateTime();
 				
-				$where['bir_id'] = $id;
+				if ($ts > $ts_now)
+					$cek = false;
+				else{
+					$diff = floor($ts->diff($ts_now)->days/7);
+					if ($diff > 1)
+						$cek = false;
+				}
 
-				$this->birthModel->update_births($data, $where);
+				if ($cek){
+					$data = $this->input->post(null,false);
 
-				echo json_encode(array('data' => '1'));
+					$piece = explode("-", $this->input->post('bir_date_of_birth'));
+					$date = $piece[2]."-".$piece[1]."-".$piece[0];
+					$data['bir_date_of_birth'] = $date;
+
+					$member = $this->session->userdata('member_data');
+					$data['bir_member'] = $member['mem_id'];
+					
+					$where['bir_id'] = $id;
+
+					$this->birthModel->update_births($data, $where);
+
+					echo json_encode(array('data' => '1'));
+				}
+				else
+					echo json_encode(array('data' => 'Pelaporan lahir harus kurang dari 1 minggu'));
 			}
 			else
 				echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
