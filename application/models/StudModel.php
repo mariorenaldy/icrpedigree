@@ -123,6 +123,12 @@ class StudModel extends CI_Model {
 		return $edit; 
     }
 
+    public function check_date($id, $stu_mom_id, $date){
+        $sql = "SELECT stu_stud_date FROM studs s where s.stu_id <> ".$id." AND s.stu_mom_id = ".$stu_mom_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= 120";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
     // public function update($id){
     //     $data = array(
     //         'stu_sire_id' => $this->input->post('stu_sire_id'),

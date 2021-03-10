@@ -25,8 +25,16 @@ class Studs extends CI_Controller {
 		}
 
 		public function approve($id = null){
-			$this->studModel->approve($id);
-			echo json_encode(array('data' => '1'));
+			$where['stu_id'] = $id;
+			$stud = $this->studModel->get_studs($where)->row();
+			$cek = true;
+			$res = $this->studModel->check_date($id, $this->input->post('stu_mom_id'), $stud->stu_stud_date);
+			if (!$res){
+				$this->studModel->approve($id);
+				echo json_encode(array('data' => '1'));
+			}
+			else
+				echo json_encode(array('data' => 'Pacak interval harus lebih dari 120 hari'));
 		}
 
 		public function reject($id = null){
