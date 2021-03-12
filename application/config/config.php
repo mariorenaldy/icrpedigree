@@ -552,6 +552,28 @@ $config['upload_canine'] = Array(
     'file_name' => 'canines_'.time()
 );
 
+$config['upload_path_stud'] = realpath(APPPATH.'../uploads/stud/');
+$config['path_stud'] = 'uploads/stud/';
+$config['upload_stud'] = Array(
+    'upload_path' => $config['upload_path_stud'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'stud_'.time()
+);
+$config['upload_stud_sire'] = Array(
+    'upload_path' => $config['upload_path_stud'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'sire_'.time()
+);
+$config['upload_stud_dam'] = Array(
+    'upload_path' => $config['upload_path_stud'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'dam_'.time()
+);
+
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
+$config['stud_count'] = 5;
 // ARTechnology

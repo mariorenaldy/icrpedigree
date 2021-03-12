@@ -64,11 +64,40 @@ class StudModel extends CI_Model {
         $sql = "select * from studs s, users u, members m, approval_status a where u.use_id = s.stu_app_user AND a.stat_id = s.stu_stat AND m.mem_id = s.stu_member AND m.mem_id = ".$user['mem_id'];
         if ($date)
             $sql .= " AND s.stu_date LIKE '%".$date."%'";
-        else
-            $sql .= " AND s.stu_date = '".$q."'";
         $sql .= " ORDER BY s.stu_date DESC";
         $query = $this->db->query($sql);
         
+        return $query->result();
+    }
+
+    public function search_by_member_app($q, $stu_member, $offset){
+        $date = '';
+        $piece = explode("-", $q);
+        if (count($piece) == 3){
+            $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+
+        $sql = "SELECT * FROM studs s, users u, members m, approval_status a WHERE u.use_id = s.stu_app_user AND a.stat_id = s.stu_stat AND m.mem_id = s.stu_member AND m.mem_id = ".$stu_member;
+        if ($date)
+            $sql .= " AND s.stu_date LIKE '%".$date."%'";
+        $sql .= " ORDER BY s.stu_date DESC LIMIT ".$offset.", ".$this->config->item('stud_count');
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    public function search_count_by_member_app($q, $stu_member){
+        $date = '';
+        $piece = explode("-", $q);
+        if (count($piece) == 3){
+            $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+
+        $sql = "SELECT COUNT(*) AS count FROM studs s, users u, members m, approval_status a WHERE u.use_id = s.stu_app_user AND a.stat_id = s.stu_stat AND m.mem_id = s.stu_member AND m.mem_id = ".$stu_member;
+        if ($date)
+            $sql .= " AND s.stu_date LIKE '%".$date."%'";
+        $query = $this->db->query($sql);
+
         return $query->result();
     }
 
