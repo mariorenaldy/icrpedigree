@@ -104,8 +104,8 @@ class Members extends CI_Controller {
 				]); 
 			}
 
+			$photo = '';
 			if (!$err){
-				$photo = '-';
 				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_member')){
@@ -122,8 +122,8 @@ class Members extends CI_Controller {
 				}
 			}
 
+			$pp = '';
 			if (!$err){
-				$pp = '-';
 				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_pp')){
@@ -140,8 +140,8 @@ class Members extends CI_Controller {
 				}
 			}
 
+			$logo = '';
 			if (!$err){
-				$logo = '-';
 				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_kennel'));
 					if ($this->upload->do_upload('attachment_logo')){
@@ -201,18 +201,21 @@ class Members extends CI_Controller {
 					'mem_address' => $this->input->post('mem_address'),
 					'mem_mail_address' => $this->input->post('mem_mail_address'),
 					'mem_hp' => $this->input->post('mem_hp'),
-					'mem_photo' => $photo,
 					'mem_kota' => $this->input->post('mem_kota'),
 					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
-					'mem_email' => $this->input->post('mem_email'),
-					'mem_pp' => $pp
+					'mem_email' => $this->input->post('mem_email')
 				);
+				if ($photo)
+					$data['mem_photo'] = $photo;
+				if ($pp)
+					$data['mem_pp'] = $pp;
 				
 				$kennel_data = array(
 					'ken_name' => $this->input->post('ken_name'),
-					'ken_type_id' => $this->input->post('ken_type_id'),
-					'ken_photo' => $logo
+					'ken_type_id' => $this->input->post('ken_type_id')
 				);
+				if ($logo)
+					$kennel_data['ken_photo'] = $logo;
 
 				$this->db->trans_strict(FALSE);
 				$this->db->trans_start();
@@ -221,6 +224,8 @@ class Members extends CI_Controller {
 				else{
 					$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
 					$data['mem_ken_id'] = $kennel_data['ken_id'];
+					if (!$logo)
+						$kennel_data['ken_photo'] = '-';
 					$this->KennelModel->add_kennels($kennel_data);
 				}
 
