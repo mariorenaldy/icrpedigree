@@ -84,12 +84,9 @@ class Canines extends CI_Controller {
 		
 		public function update($id = null){
 			$img = $this->input->post('srcDataCrop');
-			if($img){
+			if ($img){
 				$title = self::_clean_text('canine');
 				$data['req_can_photo'] = self::_upload_base64($img, $title);
-			}
-			else{
-				$data['req_can_photo'] = '-';
 			}
 			unset($_POST['srcDataCrop']);
 
