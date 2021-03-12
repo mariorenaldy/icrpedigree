@@ -158,14 +158,16 @@ class Members extends CI_Controller {
 				}
 			}
 
-			$where['mem_id'] = $this->input->post('mem_id');
-			$member = $this->memberModel->get_members($where);
-			if (!$member){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Id member tidak valid'
-				]);
+			if (!$err){
+				$where['mem_id'] = $this->input->post('mem_id');
+				$member = $this->memberModel->get_members($where);
+				if (!$member){
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Id member tidak valid'
+					]);
+				}
 			}
 
 			if (!$err && $photo && $member->result()[0]->mem_photo){
@@ -182,48 +184,52 @@ class Members extends CI_Controller {
 				}
 			}
 
-			$where2['ken_id'] = $member->result()[0]->mem_ken_id;
-			$kennel = $this->KennelModel->get_kennels($where2);
-			if (!$err && $logo && $kennel && $kennel->result()[0]->ken_id && $kennel->result()[0]->ken_photo){
-				$curr_image = $this->config->item('upload_path_kennel').'/'.$kennel->result()[0]->ken_photo;
-				if (file_exists($curr_image)){
-					unlink($curr_image);
+			if (!$err){
+				$where2['ken_id'] = $member->result()[0]->mem_ken_id;
+				$kennel = $this->KennelModel->get_kennels($where2);
+				if ($logo && $kennel && $kennel->result()[0]->ken_id && $kennel->result()[0]->ken_photo){
+					$curr_image = $this->config->item('upload_path_kennel').'/'.$kennel->result()[0]->ken_photo;
+					if (file_exists($curr_image)){
+						unlink($curr_image);
+					}
 				}
 			}
 
-			$data = array(
-				'mem_name' => $this->input->post('mem_name'),
-				'mem_address' => $this->input->post('mem_address'),
-				'mem_mail_address' => $this->input->post('mem_mail_address'),
-				'mem_hp' => $this->input->post('mem_hp'),
-				'mem_photo' => $photo,
-				'mem_kota' => $this->input->post('mem_kota'),
-				'mem_kode_pos' => $this->input->post('mem_kode_pos'),
-				'mem_email' => $this->input->post('mem_email'),
-				'mem_pp' => $pp
-			);
-			
-			$kennel_data = array(
-				'ken_name' => $this->input->post('ken_name'),
-				'ken_type_id' => $this->input->post('ken_type_id'),
-				'ken_photo' => $logo
-			);
+			if (!$err){
+				$data = array(
+					'mem_name' => $this->input->post('mem_name'),
+					'mem_address' => $this->input->post('mem_address'),
+					'mem_mail_address' => $this->input->post('mem_mail_address'),
+					'mem_hp' => $this->input->post('mem_hp'),
+					'mem_photo' => $photo,
+					'mem_kota' => $this->input->post('mem_kota'),
+					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+					'mem_email' => $this->input->post('mem_email'),
+					'mem_pp' => $pp
+				);
+				
+				$kennel_data = array(
+					'ken_name' => $this->input->post('ken_name'),
+					'ken_type_id' => $this->input->post('ken_type_id'),
+					'ken_photo' => $logo
+				);
 
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			if ($kennel && $kennel->result()[0]->ken_id)
-				$this->KennelModel->edit_kennels($kennel_data, $kennel->result()[0]->ken_id);
-			else{
-				$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
-				$data['mem_ken_id'] = $kennel_data['ken_id'];
-				$this->KennelModel->add_kennels($kennel_data);
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				if ($kennel && $kennel->result()[0]->ken_id)
+					$this->KennelModel->edit_kennels($kennel_data, $kennel->result()[0]->ken_id);
+				else{
+					$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
+					$data['mem_ken_id'] = $kennel_data['ken_id'];
+					$this->KennelModel->add_kennels($kennel_data);
+				}
+
+				$this->memberModel->update_members($data, $where);
+				$this->db->trans_complete();
+				echo json_encode([
+					'status' => true
+				]);
 			}
-
-			$this->memberModel->update_members($data, $where);
-			$this->db->trans_complete();
-			echo json_encode([
-				'status' => true
-			]);
 		}
 
 		public function change_password(){
@@ -263,9 +269,9 @@ class Members extends CI_Controller {
 				]);
 			}
 	
-			$where['mem_id'] = $obj['mem_id'];
-			$member = $this->memberModel->get_members($where);
 			if (!$err){
+				$where['mem_id'] = $obj['mem_id'];
+				$member = $this->memberModel->get_members($where);
 				if ($this->bcrypt->check_password($obj['password'], $member->result()[0]->mem_password) == false){
 					$err++;
 					echo json_encode([
@@ -470,13 +476,15 @@ class Members extends CI_Controller {
 				]); 
 			}
 
-			$member = $this->memberModel->daftar_users($this->input->post('mem_username'))->result();
-			if (!$err && $member) {
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Username sudah ada'
-				]);
+			if (!$err){
+				$member = $this->memberModel->daftar_users($this->input->post('mem_username'))->result();
+				if ($member) {
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Username sudah ada'
+					]);
+				}
 			}
 
 			if (!$err){
