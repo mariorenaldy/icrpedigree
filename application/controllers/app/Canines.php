@@ -67,7 +67,7 @@ class Canines extends CI_Controller {
 				else
 					echo json_encode([
 						'status' => false,
-						'message' => 'Query wajib diisi'
+						'message' => 'Kata kunci wajib diisi'
 					]);
 			}
 			else
@@ -129,36 +129,40 @@ class Canines extends CI_Controller {
 				}
 			}
 
-			$where['can_id'] = $this->input->post('can_id');
-			$can = $this->caninesModel->get_can_pedigrees($where)->row();
-			if (!$can){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Id canine tidak valid'
-				]);
+			if (!$err){
+				$where['can_id'] = $this->input->post('can_id');
+				$can = $this->caninesModel->get_can_pedigrees($where)->row();
+				if (!$can){
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Id canine tidak valid'
+					]);
+				}
 			}
 			
-			$data['req_can_id'] = $this->input->post('can_id');
-			if ($this->input->post('can_cage') && $this->input->post('can_cage') != $can->can_cage)
-				$data['req_can_cage'] = $this->input->post('can_cage');
-			else
-				$data['req_can_cage'] = '';
-			if ($this->input->post('can_address') && $this->input->post('can_address') != $can->can_address)
-				$data['req_can_address'] = $this->input->post('can_address');
-			else
-				$data['req_can_address'] = '';
-			if ($this->input->post('can_owner') && $this->input->post('can_owner') != $can->can_owner)
-				$data['req_can_owner'] = $this->input->post('can_owner');
-			else
-				$data['req_can_owner'] = '';
-			$data['req_can_photo'] = $photo;
-			$data['req_app_user'] = 0;
+			if (!$err){
+				$data['req_can_id'] = $this->input->post('can_id');
+				if ($this->input->post('can_cage') && $this->input->post('can_cage') != $can->can_cage)
+					$data['req_can_cage'] = $this->input->post('can_cage');
+				else
+					$data['req_can_cage'] = '';
+				if ($this->input->post('can_address') && $this->input->post('can_address') != $can->can_address)
+					$data['req_can_address'] = $this->input->post('can_address');
+				else
+					$data['req_can_address'] = '';
+				if ($this->input->post('can_owner') && $this->input->post('can_owner') != $can->can_owner)
+					$data['req_can_owner'] = $this->input->post('can_owner');
+				else
+					$data['req_can_owner'] = '';
+				$data['req_can_photo'] = $photo;
+				$data['req_app_user'] = 0;
 
-			$this->requestModel->add_requests($data);
-            echo json_encode([
-				'status' => true
-			]);
+				$this->requestModel->add_requests($data);
+				echo json_encode([
+					'status' => true
+				]);
+			}
 		}
 
 		public function logs(){
