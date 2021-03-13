@@ -74,6 +74,41 @@ class BirthModel extends CI_Model {
         return $query->result();
     }
 
+    public function search_by_member_app($q, $bir_member, $offset){
+        $date = '';
+        $piece = explode("-", $q);
+        if (count($piece) == 3){
+            $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+
+        $sql = "SELECT * FROM births s, users u, members m, approval_status a, kennels k WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member AND m.mem_ken_id = k.ken_id AND m.mem_id = ".$bir_member." AND (s.bir_a_s LIKE '%".$q."%' OR s.bir_cage LIKE '%".$q."%'";
+        if ($date)
+            $sql .= " OR s.bir_date_of_birth LIKE '%".$date."%')";
+        else
+            $sql .= ")";
+        $sql .= " ORDER BY s.bir_date DESC LIMIT ".$offset.", ".$this->config->item('birth_count');
+        $query = $this->db->query($sql);
+        
+        return $query->result();
+    }
+
+    public function search_count_by_member_app($q, $bir_member){
+        $date = '';
+        $piece = explode("-", $q);
+        if (count($piece) == 3){
+            $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        }
+
+        $sql = "SELECT COUNT(*) AS count FROM births s, users u, members m, approval_status a, kennels k WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member AND m.mem_ken_id = k.ken_id AND m.mem_id = ".$bir_member." AND (s.bir_a_s LIKE '%".$q."%' OR s.bir_cage LIKE '%".$q."%'";
+        if ($date)
+            $sql .= " OR s.bir_date_of_birth LIKE '%".$date."%')";
+        else
+            $sql .= ")";
+        $query = $this->db->query($sql);
+        
+        return $query->result();
+    }
+
     public function add_births($data = null){
         $result = false;
         if ($data != null) {
