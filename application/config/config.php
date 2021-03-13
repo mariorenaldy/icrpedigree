@@ -577,4 +577,5 @@ $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
 $config['stud_count'] = 5;
 $config['birth_count'] = 5;
+$config['trah_count'] = 5;
 // ARTechnology
