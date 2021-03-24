@@ -183,22 +183,12 @@ class Members extends CI_Controller {
 			
 			if (isset($data['password']) && $data['password'] != ''){
 				if ($data['newpass'] == $data['repass']){
-					if ($data['newpass'] == $data['password']) {
-						echo json_encode(array('data' => 'Password lama tidak boleh sama dengan password baru'));
-						return false;
-					}
-					else{
-						if ($this->bcrypt->check_password($data['password'], $user['mem_password']) == true) {
-							$data['mem_password'] = $this->bcrypt->hash_password($data['newpass']);
-						}
-						else {
-							echo json_encode(array('data' => 'Password tidak benar'));
-							return false;
-						}
+					if ($this->bcrypt->check_password($data['password'], $user['mem_password']) == true) {
+						$data['mem_password'] = $this->bcrypt->hash_password($data['newpass']);
 					}
 				}
 				else{
-					echo json_encode(array('data' => 'Password baru tidak sama dengan konfirmasi password'));
+					echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password'));
 					return false;
 				}
 			}
