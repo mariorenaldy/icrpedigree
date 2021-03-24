@@ -218,7 +218,7 @@ class Members extends CI_Controller {
 				echo json_encode(array('data' => '1'));
 				return true;
 			} else {
-				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
+				echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
 				return false;
 			}
 		}
