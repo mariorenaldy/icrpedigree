@@ -223,22 +223,10 @@ class Members extends CI_Controller {
 			}
 			
 			if ($this->input->post('newpass') == $this->input->post('repass')) {
-				if ($this->input->post('newpass') != $this->input->post('password')) {
-					if ($this->bcrypt->check_password($this->input->post('password'), $user['mem_password']) == true) {
-						$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('newpass'));
-						$this->memberModel->update_members($data, $where);
-						echo json_encode(array('data' => '1'));
-						return true;
-					}
-					else{
-						echo json_encode(array('data' => 'Password tidak benar'));
-						return false;
-					}
-				}
-				else{
-					echo json_encode(array('data' => 'Password lama tidak boleh sama dengan password baru'));
-					return false;
-				}
+				$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('newpass'));
+				$this->memberModel->update_members($data, $where);
+				echo json_encode(array('data' => '1'));
+				return true;
 			} else {
 				echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
 				return false;
