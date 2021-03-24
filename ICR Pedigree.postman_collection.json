@@ -1,0 +1,913 @@
+{
+	"info": {
+		"_postman_id": "eed26b81-6ad2-4001-8160-fc0556d8c744",
+		"name": "ICR Pedigree",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Member",
+			"item": [
+				{
+					"name": "Sign In",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"riska\",\n\t\"password\": \"riska\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Members/signin",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Out",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"riska\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Members/signout",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"signout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mem_name",
+									"value": "Audi",
+									"type": "text"
+								},
+								{
+									"key": "mem_address",
+									"value": "Gg. Virgo No. 3",
+									"type": "text"
+								},
+								{
+									"key": "mem_mail_address",
+									"value": "Gg. Virgo No. 3",
+									"type": "text"
+								},
+								{
+									"key": "mem_hp",
+									"value": "021",
+									"type": "text"
+								},
+								{
+									"key": "mem_kota",
+									"value": "Bandung",
+									"type": "text"
+								},
+								{
+									"key": "mem_kode_pos",
+									"value": "40221",
+									"type": "text"
+								},
+								{
+									"key": "mem_email",
+									"value": "audi@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "attachment_pp",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/pp_1614130955.png"
+								},
+								{
+									"key": "mem_username",
+									"value": "audi",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "audi",
+									"type": "text"
+								},
+								{
+									"key": "attachment_member",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+								},
+								{
+									"key": "attachment_logo",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/pp_1614130014.png"
+								},
+								{
+									"key": "ken_name",
+									"value": "Audi",
+									"type": "text"
+								},
+								{
+									"key": "ken_type_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Members/signup",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mem_id",
+									"value": "14",
+									"type": "text"
+								},
+								{
+									"key": "mem_name",
+									"value": "Riska",
+									"type": "text"
+								},
+								{
+									"key": "mem_address",
+									"value": "Gg. Virgo No. 3",
+									"type": "text"
+								},
+								{
+									"key": "mem_mail_address",
+									"value": "Gg. Virgo No. 3",
+									"type": "text"
+								},
+								{
+									"key": "mem_hp",
+									"value": "022",
+									"type": "text"
+								},
+								{
+									"key": "mem_kota",
+									"value": "Bandung",
+									"type": "text"
+								},
+								{
+									"key": "mem_kode_pos",
+									"value": "40134",
+									"type": "text"
+								},
+								{
+									"key": "mem_email",
+									"value": "riskadewi.hendaya@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "attachment_member",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+								},
+								{
+									"key": "attachment_logo",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1614131946.png"
+								},
+								{
+									"key": "ken_name",
+									"value": "Riska",
+									"type": "text"
+								},
+								{
+									"key": "ken_type_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "attachment_pp",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1614132970.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Members/update_profile",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"update_profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Member",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Members/get_member/1",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"get_member",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"mem_id\": 14,\n\t\"password\": \"riskadewi\",\n\t\"newpass\": \"riska\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Members/change_password",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"change_password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"mem_id\": 14,\n\t\"newpass\": \"riskadewi\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Members/reset_password",
+							"host": [
+								"{{url}}Members"
+							],
+							"path": [
+								"reset_password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Canine",
+			"item": [
+				{
+					"name": "Get Canine",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Canines/get_canine/1/0",
+							"host": [
+								"{{url}}Canines"
+							],
+							"path": [
+								"get_canine",
+								"1",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Canine",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Canines/search_canine/1/z/0",
+							"host": [
+								"{{url}}Canines"
+							],
+							"path": [
+								"search_canine",
+								"1",
+								"z",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "can_id",
+									"value": "8",
+									"type": "text"
+								},
+								{
+									"key": "can_cage",
+									"value": "Kris Kennel",
+									"type": "text"
+								},
+								{
+									"key": "can_address",
+									"value": "Kennel address",
+									"type": "text"
+								},
+								{
+									"key": "can_owner",
+									"value": "Heaven",
+									"type": "text"
+								},
+								{
+									"key": "attachment_canine",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Canines/update",
+							"host": [
+								"{{url}}Canines"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Log",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Canines/logs/8",
+							"host": [
+								"{{url}}Canines"
+							],
+							"path": [
+								"logs",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedigree",
+			"item": [
+				{
+					"name": "Search Pedigree",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Pedigrees/search/z/0",
+							"host": [
+								"{{url}}Pedigrees"
+							],
+							"path": [
+								"search",
+								"z",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail Pedigree",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Pedigrees/detail/2",
+							"host": [
+								"{{url}}Pedigrees"
+							],
+							"path": [
+								"detail",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stud",
+			"item": [
+				{
+					"name": "Get Stud",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Studs/get/1/0",
+							"host": [
+								"{{url}}Studs"
+							],
+							"path": [
+								"get",
+								"1",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Stud",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Studs/search/1/10-03-2021",
+							"host": [
+								"{{url}}Studs"
+							],
+							"path": [
+								"search",
+								"1",
+								"10-03-2021"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "stu_member",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "stu_stud_date",
+									"value": "10-03-2021",
+									"type": "text"
+								},
+								{
+									"key": "attachment_stud",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611478230.png"
+								},
+								{
+									"key": "attachment_sire",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611478230.png"
+								},
+								{
+									"key": "attachment_dam",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611478924.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Studs/add",
+							"host": [
+								"{{url}}Studs"
+							],
+							"path": [
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "stu_id",
+									"value": "17",
+									"type": "text"
+								},
+								{
+									"key": "stu_stud_date",
+									"value": "11-03-2021",
+									"type": "text"
+								},
+								{
+									"key": "attachment_stud",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611480873.png"
+								},
+								{
+									"key": "attachment_sire",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611480873.png"
+								},
+								{
+									"key": "attachment_dam",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1611480873.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Studs/update",
+							"host": [
+								"{{url}}Studs"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Birth",
+			"item": [
+				{
+					"name": "Get Birth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Births/get/1/0",
+							"host": [
+								"{{url}}Births"
+							],
+							"path": [
+								"get",
+								"1",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Birth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Births/search/1/pom",
+							"host": [
+								"{{url}}Births"
+							],
+							"path": [
+								"search",
+								"1",
+								"pom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "bir_member",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "bir_stu_id",
+									"value": "17",
+									"type": "text"
+								},
+								{
+									"key": "bir_a_s",
+									"value": "new pom",
+									"type": "text"
+								},
+								{
+									"key": "bir_breed",
+									"value": "DESIGNER BULLS",
+									"type": "text"
+								},
+								{
+									"key": "bir_color",
+									"value": "brown",
+									"type": "text"
+								},
+								{
+									"key": "bir_date_of_birth",
+									"value": "13-03-2021",
+									"type": "text"
+								},
+								{
+									"key": "bir_gender",
+									"value": "Male",
+									"type": "text"
+								},
+								{
+									"key": "attachment_canine",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+								},
+								{
+									"key": "bir_cage",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "bir_owner_name",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Births/add",
+							"host": [
+								"{{url}}Births"
+							],
+							"path": [
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "bir_id",
+									"value": "21",
+									"type": "text"
+								},
+								{
+									"key": "bir_a_s",
+									"value": "new pom pom",
+									"type": "text"
+								},
+								{
+									"key": "bir_breed",
+									"value": "DESIGNER BULLS",
+									"type": "text"
+								},
+								{
+									"key": "bir_color",
+									"value": "brown black",
+									"type": "text"
+								},
+								{
+									"key": "bir_date_of_birth",
+									"value": "10-03-2021",
+									"type": "text"
+								},
+								{
+									"key": "bir_gender",
+									"value": "Male",
+									"type": "text"
+								},
+								{
+									"key": "attachment_canine",
+									"type": "file",
+									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+								},
+								{
+									"key": "bir_cage",
+									"value": "kris kennel",
+									"type": "text"
+								},
+								{
+									"key": "bir_owner_name",
+									"value": "kris",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}Births/update",
+							"host": [
+								"{{url}}Births"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Kennel Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Kenneltype/get_all",
+					"host": [
+						"{{url}}Kenneltype"
+					],
+					"path": [
+						"get_all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Trah",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Trah/get",
+					"host": [
+						"{{url}}Trah"
+					],
+					"path": [
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get T&C",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Setting/getall",
+					"host": [
+						"{{url}}Setting"
+					],
+					"path": [
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Events/get_events",
+					"host": [
+						"{{url}}Events"
+					],
+					"path": [
+						"get_events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event Gallery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Events/get_gallery/6",
+					"host": [
+						"{{url}}Events"
+					],
+					"path": [
+						"get_gallery",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Product/get_products",
+					"host": [
+						"{{url}}Product"
+					],
+					"path": [
+						"get_products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product Detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Product/get_detail/1",
+					"host": [
+						"{{url}}Product"
+					],
+					"path": [
+						"get_detail",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
