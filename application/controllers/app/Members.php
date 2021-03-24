@@ -5,7 +5,6 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->library('bcrypt');
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->model(array('memberModel', 'KenneltypeModel', 'KennelModel'));
 		}
@@ -269,7 +268,7 @@ class Members extends CI_Controller {
 			if (!$err){
 				$where['mem_id'] = $obj['mem_id'];
 				$member = $this->memberModel->get_members($where);
-				if ($this->bcrypt->check_password($obj['password'], $member->result()[0]->mem_password) == false){
+				if (sha1($obj['password']) != $member->result()[0]->mem_password){
 					$err++;
 					echo json_encode([
 						'status' => false,
@@ -278,7 +277,7 @@ class Members extends CI_Controller {
 				}
 				
 				if (!$err) {
-					$res = $this->memberModel->edit_password($obj['mem_id'], $this->bcrypt->hash_password($obj['newpass']));
+					$res = $this->memberModel->edit_password($obj['mem_id'], sha1($obj['newpass']));
 					if ($res){
 						echo json_encode([
 							'status' => true
@@ -338,7 +337,7 @@ class Members extends CI_Controller {
 						]);
 					}
 
-					if (!$this->bcrypt->check_password($obj['password'], $member['mem_password'])){
+					if (sha1($obj['password']) != $member['mem_password']){
 						echo json_encode([
 							'status' => false,
 							'message' => 'Password salah'
@@ -558,7 +557,7 @@ class Members extends CI_Controller {
 					'mem_email' => $this->input->post('mem_email'),
 					'mem_pp' => $pp,
 					'mem_username' => $this->input->post('mem_username'),
-					'mem_password' => $this->bcrypt->hash_password($this->input->post('password')),
+					'mem_password' => sha1($this->input->post('password')),
 					'mem_ken_id' => $ken_id
 				);
 				
@@ -611,13 +610,13 @@ class Members extends CI_Controller {
 					$err++;
 					echo json_encode([
 						'status' => false,
-						'message' => 'Data Tidak Ditemukan'
+						'message' => 'Data tidak ditemukan'
 					]);
 				}
 			}
 			
 			if (!$err){
-				$data['mem_password'] = $this->bcrypt->hash_password($obj['newpass']);
+				$data['mem_password'] = sha1($obj['newpass']);
 				$this->memberModel->update_members($data, $where);
 				echo json_encode([
 					'status' => true

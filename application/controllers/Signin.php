@@ -6,7 +6,6 @@ class Signin extends CI_Controller {
 		public function __construct(){
 				// Call the CI_Controller constructor
 				parent::__construct();
-        $this->load->library('bcrypt');
         $this->load->model('contactModel');
 				$this->load->model('caninesModel');
 				$this->load->model('pedigreesModel');
@@ -65,13 +64,13 @@ class Signin extends CI_Controller {
           return false;
         }
 
-        if (!$this->bcrypt->check_password($data['password'], $member['mem_password'])){
+        if (sha1($data['password']) != $member['mem_password']){
           echo json_encode(array('data' => 'Maaf kata sandi anda salah.'));
           return false;
         }
 
         unset($member['mem_password']);
-        $data['password'] = $this->bcrypt->hash_password($data['password']);
+        $data['password'] = sha1($data['password']);
         $this->session->set_userdata('member_data', $member);
 
 				echo json_encode(array('data' => '1'));

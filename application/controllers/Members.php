@@ -6,7 +6,6 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->library('bcrypt');
 			$this->load->model(array('contactModel', 'caninesModel', 'pedigreesModel', 'profileModel', 'sponsorModel', 'productModel', 'navigation', 'memberModel', 'KenneltypeModel', 'KennelModel'));
 			$this->navigations = $this->navigation->get_navigation();
 			
@@ -72,19 +71,15 @@ class Members extends CI_Controller {
 			
 			if ($this->input->post('password') && $this->input->post('password') != ''){
 				if ($this->input->post('newpass') == $this->input->post('repass')) {
-					if ($this->bcrypt->check_password($this->input->post('password'), $user['mem_password']) == true) {
-						if ($this->input->post('newpass') == $this->input->post('password')) {
-							echo json_encode(array('data' => 'Password Yang Sama Tidak Dapat Digunakan Lagi!'));
-							return false;
-						}
-						$data['mem_password'] = $this->bcrypt->hash_password($this->input->post('newpass'));
+					if (sha1($this->input->post('password')) == $user['mem_password']) {
+						$data['mem_password'] = sha1($this->input->post('newpass'));
 					}
 					else {
-						echo json_encode(array('data' => 'Password Awal Salah'));
+						echo json_encode(array('data' => 'Password salah'));
 						return false;
 					}
 				} else {
-					echo json_encode(array('data' => 'Konfirmasi kata sandi gagal.'));
+					echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
 					return false;
 				}
 			}
