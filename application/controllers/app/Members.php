@@ -265,14 +265,6 @@ class Members extends CI_Controller {
 					'message' => 'Password wajib diisi'
 				]); 
 			}
-
-			if (!$err && $obj['newpass'] == $obj['password']) {
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Password lama tidak boleh sama dengan password baru'
-				]);
-			}
 	
 			if (!$err){
 				$where['mem_id'] = $obj['mem_id'];
@@ -588,6 +580,48 @@ class Members extends CI_Controller {
 						'message' => 'Failed to save account sign up data'
 					]);
 				}
+			}
+		}
+
+		public function reset_password(){
+			$json = file_get_contents('php://input');
+			$obj = json_decode($json, true);
+	
+			$err = 0;
+			if (empty($obj['mem_id'])){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Member id wajib diisi'
+				]); 
+			}
+			
+			if (!$err && empty($obj['newpass'])){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Password baru wajib diisi'
+				]); 
+			}
+
+			if (!$err){
+				$where['mem_id'] = $obj['mem_id'];
+				$user = $this->memberModel->get_members($where)->row_array();
+				if ($user == null) {
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Data Tidak Ditemukan'
+					]);
+				}
+			}
+			
+			if (!$err){
+				$data['mem_password'] = $this->bcrypt->hash_password($obj['newpass']);
+				$this->memberModel->update_members($data, $where);
+				echo json_encode([
+					'status' => true
+				]);
 			}
 		}
 }
