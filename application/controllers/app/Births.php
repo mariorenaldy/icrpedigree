@@ -76,6 +76,22 @@ class Births extends CI_Controller {
 					'message' => 'Id member wajib diisi'
 				]);
 		}
+
+		public function get_by_id(){
+			if ($this->uri->segment(4)){
+				$where['bir_id'] = $this->uri->segment(4);
+				$birth = $this->birthModel->get_non_approved_births($where)->row();
+				echo json_encode([
+					'status' => true,
+					'data' => $birth
+				]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id lahir wajib diisi'
+				]);
+		}
 		
 		public function add(){
 			$err = 0;

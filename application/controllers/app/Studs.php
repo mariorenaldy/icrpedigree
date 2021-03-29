@@ -76,6 +76,22 @@ class Studs extends CI_Controller {
 				]);
 		}
 
+		public function get_by_id(){
+			if ($this->uri->segment(4)){
+				$where['stu_id'] = $this->uri->segment(4);
+				$stud = $this->studModel->get_non_approved_studs($where)->row();
+				echo json_encode([
+					'status' => true,
+					'data' => $stud
+				]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id pacak wajib diisi'
+				]);
+		}
+
 		public function add(){
 			$err = 0;
 			if (empty($this->input->post('stu_member'))){
