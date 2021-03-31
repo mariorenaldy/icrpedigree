@@ -110,7 +110,7 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && empty($this->input->post('attachment_stud'))){
+			if (!$err && !$this->input->post('attachment_stud')){
 				$err++;
 				echo json_encode([
 					'status' => false,
@@ -118,7 +118,7 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && empty($this->input->post('attachment_sire'))){
+			if (!$err && !$this->input->post('attachment_sire')){
 				$err++;
 				echo json_encode([
 					'status' => false,
@@ -126,7 +126,7 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && empty($this->input->post('attachment_dam'))){
+			if (!$err && !$this->input->post('attachment_dam')){
 				$err++;
 				echo json_encode([
 					'status' => false,
