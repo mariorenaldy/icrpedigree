@@ -110,6 +110,30 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
+			if (!$err && empty($this->input->post('attachment_stud'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto pacak wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('attachment_sire'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto sire wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('attachment_dam'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto dam wajib diisi'
+				]); 
+			}
+
 			if (!$err){
 				$photo = '-';
 				if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
@@ -220,8 +244,8 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
-			if (!$err){
-				$photo = '';
+			$photo = '';
+			if (!$err && $this->input->post('attachment_stud')){
 				if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud'));
 					if ($this->upload->do_upload('attachment_stud')){
@@ -238,8 +262,8 @@ class Studs extends CI_Controller {
 				}
 			}
 
-			if (!$err){
-				$sire = '';
+			$sire = '';
+			if (!$err && $this->input->post('attachment_sire')){
 				if (is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud_sire'));
 					if ($this->upload->do_upload('attachment_sire')){
@@ -256,8 +280,8 @@ class Studs extends CI_Controller {
 				}
 			}
 
-			if (!$err){
-				$dam = '';
+			$dam = '';
+			if (!$err && $this->input->post('attachment_dam')){
 				if (is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud_dam'));
 					if ($this->upload->do_upload('attachment_dam')){
@@ -331,7 +355,7 @@ class Studs extends CI_Controller {
 						$data['stu_sire_photo'] = $sire;
 					if ($dam)
 						$data['stu_mom_photo'] = $dam;
-					$this->studModel->update_studs($data, $where);
+					$res = $this->studModel->update_studs($data, $where);
 					echo json_encode([
 						'status' => true
 					]);

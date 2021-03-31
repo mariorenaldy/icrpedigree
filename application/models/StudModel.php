@@ -111,13 +111,12 @@ class StudModel extends CI_Model {
     }
 
     public function update_studs($data = null, $where = null){
-        $result = false;
-        if($data != null && $where != null){
+        if ($data != null && $where != null){
             $this->db->set($data);
             $this->db->where($where);
             $this->db->update('studs');
         }
-        return $result;
+        return $this->db->affected_rows();
     }
 
     public function approve($id){
