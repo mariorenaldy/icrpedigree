@@ -104,7 +104,7 @@ class Members extends CI_Controller {
 			}
 
 			$photo = '';
-			if (!$err){
+			if (!$err && $this->input->post('attachment_member') && !$_FILES['attachment_member']['error']){
 				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_member')){
@@ -122,7 +122,7 @@ class Members extends CI_Controller {
 			}
 
 			$pp = '';
-			if (!$err){
+			if (!$err && $this->input->post('attachment_pp') && !$_FILES['attachment_pp']['error']){
 				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_pp')){
@@ -140,7 +140,7 @@ class Members extends CI_Controller {
 			}
 
 			$logo = '';
-			if (!$err){
+			if (!$err && $this->input->post('attachment_logo') && !$_FILES['attachment_logo']['error']){
 				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_kennel'));
 					if ($this->upload->do_upload('attachment_logo')){
@@ -483,58 +483,68 @@ class Members extends CI_Controller {
 				}
 			}
 
-			if (!$err){
-				$photo = '-';
-				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_member'));
-					if ($this->upload->do_upload('attachment_member')){
-						$uploadData = $this->upload->data();
-						$photo = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			$photo = '-';
+			if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_member'));
+				if ($this->upload->do_upload('attachment_member')){
+					$uploadData = $this->upload->data();
+					$photo = $uploadData['file_name'];
+				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
 				}
 			}
 
-			if (!$err){
-				$pp = '-';
-				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_member'));
-					if ($this->upload->do_upload('attachment_pp')){
-						$uploadData = $this->upload->data();
-						$pp = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			$pp = '-';
+			if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_member'));
+				if ($this->upload->do_upload('attachment_pp')){
+					$uploadData = $this->upload->data();
+					$pp = $uploadData['file_name'];
+				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
 				}
 			}
 
-			if (!$err){
-				$logo = '-';
-				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_kennel'));
-					if ($this->upload->do_upload('attachment_logo')){
-						$uploadData = $this->upload->data();
-						$logo = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			$logo = '-';
+			if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_kennel'));
+				if ($this->upload->do_upload('attachment_logo')){
+					$uploadData = $this->upload->data();
+					$logo = $uploadData['file_name'];
 				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
+				}
+			}
+
+			if (!$err && $photo == "-"){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto KTP wajib diisi'
+				]);
+			}
+
+			if (!$err && $logo == "-"){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto logo wajib diisi'
+				]);
 			}
 
 			if (!$err){

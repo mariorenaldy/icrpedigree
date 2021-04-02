@@ -111,8 +111,8 @@ class Canines extends CI_Controller {
 				]); 
 			}
 
-			if (!$err){
-				$photo = '-';
+			$photo = '-';
+			if (!$err && isset($_FILES['attachment_canine']) && !empty($_FILES['attachment_canine']['tmp_name'])){
 				if (is_uploaded_file($_FILES['attachment_canine']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_canine'));
 					if ($this->upload->do_upload('attachment_canine')){

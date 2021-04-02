@@ -110,33 +110,9 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && !$this->input->post('attachment_stud')){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Foto pacak wajib diisi'
-				]); 
-			}
-
-			if (!$err && !$this->input->post('attachment_sire')){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Foto sire wajib diisi'
-				]); 
-			}
-
-			if (!$err && !$this->input->post('attachment_dam')){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Foto dam wajib diisi'
-				]); 
-			}
-
 			if (!$err){
 				$photo = '-';
-				if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
+				if (isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud'));
 					if ($this->upload->do_upload('attachment_stud')){
 						$uploadData = $this->upload->data();
@@ -154,7 +130,7 @@ class Studs extends CI_Controller {
 
 			if (!$err){
 				$sire = '-';
-				if (is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
+				if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud_sire'));
 					if ($this->upload->do_upload('attachment_sire')){
 						$uploadData = $this->upload->data();
@@ -172,7 +148,7 @@ class Studs extends CI_Controller {
 
 			if (!$err){
 				$dam = '-';
-				if (is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
+				if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_stud_dam'));
 					if ($this->upload->do_upload('attachment_dam')){
 						$uploadData = $this->upload->data();
@@ -186,6 +162,30 @@ class Studs extends CI_Controller {
 						]);
 					}
 				}
+			}
+
+			if (!$err && $photo == "-"){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto pacak wajib diisi'
+				]); 
+			}
+
+			if (!$err && $sire == "-"){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto sire wajib diisi'
+				]); 
+			}
+
+			if (!$err && $dam == "-"){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Foto dam wajib diisi'
+				]); 
 			}
 
 			if (!$err){
@@ -245,56 +245,50 @@ class Studs extends CI_Controller {
 			}
 
 			$photo = '';
-			if (!$err && $this->input->post('attachment_stud')){
-				if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_stud'));
-					if ($this->upload->do_upload('attachment_stud')){
-						$uploadData = $this->upload->data();
-						$photo = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_stud'));
+				if ($this->upload->do_upload('attachment_stud')){
+					$uploadData = $this->upload->data();
+					$photo = $uploadData['file_name'];
+				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
 				}
 			}
 
 			$sire = '';
-			if (!$err && $this->input->post('attachment_sire')){
-				if (is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_stud_sire'));
-					if ($this->upload->do_upload('attachment_sire')){
-						$uploadData = $this->upload->data();
-						$sire = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			if (!$err && isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_stud_sire'));
+				if ($this->upload->do_upload('attachment_sire')){
+					$uploadData = $this->upload->data();
+					$sire = $uploadData['file_name'];
+				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
 				}
 			}
 
 			$dam = '';
-			if (!$err && $this->input->post('attachment_dam')){
-				if (is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_stud_dam'));
-					if ($this->upload->do_upload('attachment_dam')){
-						$uploadData = $this->upload->data();
-						$dam = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
+			if (!$err && isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
+				$this->upload->initialize($this->config->item('upload_stud_dam'));
+				if ($this->upload->do_upload('attachment_dam')){
+					$uploadData = $this->upload->data();
+					$dam = $uploadData['file_name'];
+				}
+				else{
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => $this->upload->display_errors()
+					]);
 				}
 			}
 
