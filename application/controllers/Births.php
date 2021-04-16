@@ -55,7 +55,7 @@ class Births extends CI_Controller {
 					$this->twig->display('front/view_births', $data);
 				}
 				else{
-					$data['births'] = $this->birthModel->get_births()->result();
+					$data['births'] = $this->birthModel->get_member_births()->result();
 					$this->twig->display('front/view_births', $data);
 				}
 		}
