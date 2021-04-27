@@ -104,7 +104,7 @@ class Members extends CI_Controller {
 			}
 
 			$photo = '';
-			if (!$err && $this->input->post('attachment_member') && !$_FILES['attachment_member']['error']){
+			if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_member')){
@@ -122,7 +122,7 @@ class Members extends CI_Controller {
 			}
 
 			$pp = '';
-			if (!$err && $this->input->post('attachment_pp') && !$_FILES['attachment_pp']['error']){
+			if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
 				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_member'));
 					if ($this->upload->do_upload('attachment_pp')){
@@ -140,7 +140,7 @@ class Members extends CI_Controller {
 			}
 
 			$logo = '';
-			if (!$err && $this->input->post('attachment_logo') && !$_FILES['attachment_logo']['error']){
+			if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
 				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
 					$this->upload->initialize($this->config->item('upload_kennel'));
 					if ($this->upload->do_upload('attachment_logo')){
