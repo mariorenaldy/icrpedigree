@@ -9,9 +9,12 @@ class Product extends CI_Controller {
     }
 
     public function get_products(){
+        $offset = 0;
+        if ($this->uri->segment(4))
+          $offset = $this->uri->segment(4);
         echo json_encode([
           'status' => true,
-          'data' => $this->productModel->fetch_data($this->config->item('product_count'), 0)->result()
+          'data' => $this->productModel->fetch_data($this->config->item('product_count'), $offset)->result()
         ]);
     }
 
