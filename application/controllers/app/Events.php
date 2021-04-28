@@ -14,7 +14,9 @@ class Events extends CI_Controller {
       $offset = $this->uri->segment(4);
     echo json_encode([
       'status' => true,
-      'data' => $this->eventModel->fetch_data($this->config->item('event_count'), $offset)->result()
+      'data' => $this->eventModel->fetch_data($this->config->item('event_count'), $offset)->result(),
+      'count_event' => $this->eventModel->record_count(),
+      'count_data' => $this->config->item('event_count'),
     ]);
   }
 
