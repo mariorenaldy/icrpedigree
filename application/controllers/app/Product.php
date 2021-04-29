@@ -15,8 +15,8 @@ class Product extends CI_Controller {
         echo json_encode([
           'status' => true,
           'data' => $this->productModel->fetch_data($this->config->item('product_count'), $offset)->result(),
-          'count_product' => $this->productModel->record_count(),
-          'count_data' => $this->config->item('product_count'),
+          'count_product' => $this->config->item('product_count'),
+          'count_data' => $this->productModel->record_count(),
         ]);
     }
 
