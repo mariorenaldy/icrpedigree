@@ -5,7 +5,7 @@ class Events extends CI_Controller {
   public function __construct(){
     // Call the CI_Controller constructor
     parent::__construct();
-    $this->load->model(array('eventModel', 'eventGaleryModel'));
+    $this->load->model(array('eventModel'));
   }
 
   public function get_events(){
@@ -20,12 +20,12 @@ class Events extends CI_Controller {
     ]);
   }
 
-  public function get_gallery(){
+  public function get_detail(){
     if ($this->uri->segment(4)){
-      $where['gal_event_id'] = $this->uri->segment(4);
+      $where['evn_id'] = $this->uri->segment(4);
       echo json_encode([
         'status' => true,
-        'data' => $this->eventGaleryModel->get_event_galleries($where)->result()
+        'data' => $this->eventModel->get_events($where)->result()
       ]);
     }
     else
