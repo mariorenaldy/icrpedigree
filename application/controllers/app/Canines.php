@@ -77,6 +77,29 @@ class Canines extends CI_Controller {
 				]);
 		}
 
+		public function get_by_id(){
+			if ($this->uri->segment(4)){
+				$where['can_id'] = $this->uri->segment(4);
+				$canine = $this->caninesModel->get_canines($where);
+				if ($canine){
+					echo json_encode([
+						'status' => true,
+						'data' => $canine->row()
+					]);
+				}
+				else
+					echo json_encode([
+						'status' => false,
+						'message' => 'Canine tidak ditemukan'
+					]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id canine wajib diisi'
+				]);
+		}
+
 		public function update(){
 			$err = 0;
 			if (empty($this->input->post('can_id'))){
