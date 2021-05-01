@@ -227,6 +227,8 @@ class Canines extends CI_Controller {
                 }
 
                 if ($cek5){
+                  $this->db->trans_strict(FALSE);
+                  $this->db->trans_start();
                   // ARTechnology
                   $canines = $this->caninesModel->add_canines($data);
                   // ARTechnology
@@ -255,6 +257,7 @@ class Canines extends CI_Controller {
                   $pedigree = $this->pedigreesModel->add_pedigrees($pedigree);
                   // ARTechnology
 
+                  $this->db->trans_complete();
                   echo json_encode(array('data' => '1'));
                 }
                 else
@@ -397,6 +400,8 @@ class Canines extends CI_Controller {
                   }
 
                   // write log 
+                  $this->db->trans_strict(FALSE);
+                  $this->db->trans_start();
                   if ($owner != '' || $address != '' || $cage != '' || $member != ''){
                     $log = array(
                       'log_id' => $id,
@@ -434,16 +439,17 @@ class Canines extends CI_Controller {
 
                     if ($res){
                       $this->caninesModel->update_canines($data, $where);
-
+                      $this->db->trans_complete();
                       echo json_encode(array('data' => '1'));
                     }
                     else{
+                      $this->db->trans_rollback();
                       echo json_encode(array('data' => 'Gagal menulis ke log'));
                     }
                   }
                   else{ 
                       $this->caninesModel->update_canines($data, $where);
-
+                      $this->db->trans_complete();
                       echo json_encode(array('data' => '1'));
                   }
                 }
@@ -993,6 +999,8 @@ class Canines extends CI_Controller {
           $owner = $can->can_owner." => ".$req->req_can_owner;
         }
 
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
         // write log 
         if ($photo != '-' || $owner != '' || $address != '' || $cage != ''){
           $log = array(
@@ -1013,13 +1021,16 @@ class Canines extends CI_Controller {
 
             $res2 = $this->requestModel->update_status($id, 1);
             if ($res2){
+              $this->db->trans_complete();
               echo json_encode(array('data' => '1'));
             }
             else{
+              $this->db->trans_rollback();
               echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
             }
           }
           else{
+            $this->db->trans_rollback();
             echo json_encode(array('data' => 'Gagal menulis ke log'));
           }
         }
@@ -1028,9 +1039,11 @@ class Canines extends CI_Controller {
 
           $res2 = $this->requestModel->update_status($id, 1);
           if ($res2){
+            $this->db->trans_complete();
             echo json_encode(array('data' => '1'));
           }
           else{
+            $this->db->trans_rollback();
             echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
           }
         }
