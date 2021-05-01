@@ -25,6 +25,8 @@ class Births extends CI_Controller {
 		}
 
 		public function approve($id = null){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			// approve
 			$res = $this->birthModel->approve($id);
 			if ($res){
@@ -38,16 +40,25 @@ class Births extends CI_Controller {
 				$where['stu_id'] = $birth->bir_stu_id;
 				$stud = $this->studModel->get_studs($where)->row();
 				
-				$pedigree = array('ped_canine_id' => $canine,
+				if ($stud->stu_sire_id && $stud->stu_mom_id){
+					$pedigree = array('ped_canine_id' => $canine,
 								'ped_sire_id' => $stud->stu_sire_id,
 								'ped_mom_id' => $stud->stu_mom_id );
-				
-				$res = $this->pedigreesModel->add_pedigrees($pedigree);
 
-				echo json_encode(array('data' => '1'));
+					$res = $this->pedigreesModel->add_pedigrees($pedigree);
+
+					$this->db->trans_complete();
+					echo json_encode(array('data' => '1'));
+				}
+				else{
+					$this->db->trans_rollback();
+					echo json_encode(array('data' => 'Data pacak belum di-approve'));
+				}
 			}
-			else
+			else{
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Data lahir gagal di-approve'));
+			}
 		}
 
 		public function reject($id = null){
@@ -283,6 +294,8 @@ class Births extends CI_Controller {
 			$data['bir_app_date'] = date('Y-m-d H:i:s');
 			$data['bir_stat'] = 1;
 
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			// add birth data
 			$births = $this->birthModel->add_births($data);
 			if ($births){
@@ -299,10 +312,13 @@ class Births extends CI_Controller {
 				
 				$res = $this->pedigreesModel->add_pedigrees($pedigree);
 
+				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
 			}
-			else
+			else{
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Data lahir gagal disimpan'));
+			}
 		}
 		else
 			echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
