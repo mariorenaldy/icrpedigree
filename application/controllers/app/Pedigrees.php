@@ -38,7 +38,7 @@ class Pedigrees extends CI_Controller {
             ]);
     }
 
-    public function detail(){
+    public function id(){
         if ($this->uri->segment(4)){
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->result_array();
@@ -107,15 +107,7 @@ class Pedigrees extends CI_Controller {
               $data['sibling_female'] = $this->pedigreesModel->get_sibling($whereFamale)->result();
             }
 
-            echo json_encode([
-              'status' => true,
-              'data' => $data
-            ]);
+            $this->load->view('pedigree.php', $data);
         }
-        else
-            echo json_encode([
-              'status' => false,
-              'message' => 'Id canine wajib diisi'
-            ]);
     }
 }
