@@ -8,7 +8,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <meta name="MobileOptimized" content="width" />
    <meta name="HandheldFriendly" content="true" />
@@ -16,7 +15,13 @@
    <title>Family</title>
 </head>
 <body>
-
+<?php
+   if (! $this->session->userdata('user_data')){
+	echo '<script type="text/javascript">';
+	echo 'window.location = "'.base_url().'index.php/backend";';
+	echo "</script>";
+   }
+?>
 <div class="container-fluid">
 	<h3>Family</h3>
 	<br />
