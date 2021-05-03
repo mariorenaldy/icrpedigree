@@ -225,10 +225,18 @@ class Navigation extends CI_Model {
 
               array(
                 'url' => 'backend/faqs',
-                'displayName' => 'Keritik & Saran',
+                'displayName' => 'Kritik & Saran',
                 'child' => false,
                 'heading' => false,
                 'icon' => 'si-bubbles'
+              ),
+
+              array(
+                'url' => 'backend/notificationtype',
+                'displayName' => 'Notifikasi',
+                'child' => false,
+                'heading' => false,
+                'icon' => 'si-feed'
               ),
             ),
             'admin' => array(

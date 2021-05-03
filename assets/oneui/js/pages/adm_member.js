@@ -451,9 +451,8 @@ var BaseTableDatatables = function() {
                             form.reset();
                             $('#modal-update-password').modal('hide');
                             alert('Data password berhasil diubah!');
-                        }else {
+                        } else {
                             alert(res.data);
-
                         }
                         button.removeAttr('disabled');
                         button.text('Save');
