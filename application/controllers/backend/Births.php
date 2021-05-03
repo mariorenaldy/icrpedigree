@@ -8,7 +8,7 @@ class Births extends CI_Controller {
 			parent::__construct();
 			$this->load->library('bcrypt');
 			$this->load->model('caninesModel');
-			$this->load->model(array('studModel', 'birthModel', 'memberModel', 'trahModel', 'pedigreesModel'));
+			$this->load->model(array('studModel', 'birthModel', 'memberModel', 'trahModel', 'pedigreesModel', 'notification_model'));
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
 			$this->path_upload = 'uploads/canine/';
@@ -34,25 +34,41 @@ class Births extends CI_Controller {
 				$whe['bir_id'] = $id;
 				$birth = $this->birthModel->get_births($whe)->row();
 
-				$canine = $this->caninesModel->add_canine($birth->bir_photo, $birth->bir_a_s, $birth->bir_breed, $birth->bir_gender, $birth->bir_color, $birth->bir_date_of_birth, $birth->bir_cage, $birth->bir_owner_name, $birth->bir_member);
-				
-				// add pedigree data
-				$where['stu_id'] = $birth->bir_stu_id;
-				$stud = $this->studModel->get_studs($where)->row();
-				
-				if ($stud->stu_sire_id && $stud->stu_mom_id){
-					$pedigree = array('ped_canine_id' => $canine,
-								'ped_sire_id' => $stud->stu_sire_id,
-								'ped_mom_id' => $stud->stu_mom_id );
-
-					$res = $this->pedigreesModel->add_pedigrees($pedigree);
-
-					$this->db->trans_complete();
-					echo json_encode(array('data' => '1'));
+				$can = $this->caninesModel->get_search($birth->bir_a_s);
+				if ($can){
+					$this->db->trans_rollback();
+					echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
 				}
 				else{
-					$this->db->trans_rollback();
-					echo json_encode(array('data' => 'Data pacak belum di-approve'));
+					$canine = $this->caninesModel->add_canine($birth->bir_photo, $birth->bir_a_s, $birth->bir_breed, $birth->bir_gender, $birth->bir_color, $birth->bir_date_of_birth, $birth->bir_cage, $birth->bir_owner_name, $birth->bir_member);
+					
+					// add pedigree data
+					$where['stu_id'] = $birth->bir_stu_id;
+					$stud = $this->studModel->get_studs($where)->row();
+					
+					if ($stud->stu_sire_id && $stud->stu_mom_id){
+						$pedigree = array('ped_canine_id' => $canine,
+									'ped_sire_id' => $stud->stu_sire_id,
+									'ped_mom_id' => $stud->stu_mom_id );
+
+						$res = $this->pedigreesModel->add_pedigrees($pedigree);
+
+						if ($res){
+							if ($birth->bir_member)
+								$result = $this->notification_model->add(2, $id, $birth->bir_member);
+
+							$this->db->trans_complete();
+							echo json_encode(array('data' => '1'));
+						}
+						else{
+							$this->db->trans_rollback();
+							echo json_encode(array('data' => 'Data lahir gagal di-approve'));
+						}
+					}
+					else{
+						$this->db->trans_rollback();
+						echo json_encode(array('data' => 'Data pacak belum di-approve'));
+					}
 				}
 			}
 			else{
@@ -62,11 +78,23 @@ class Births extends CI_Controller {
 		}
 
 		public function reject($id = null){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			$res = $this->birthModel->reject($id);
-			if ($res)
+			if ($res){
+				$whe['bir_id'] = $id;
+				$birth = $this->birthModel->get_births($whe)->row();
+
+				if ($birth->bir_member)
+					$result = $this->notification_model->add(7, $id, $birth->bir_member);
+
+				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
-			else
+			}
+			else{
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Data lahir gagal ditolak'));
+			}
 		}
 
 		public function data($id = null){
