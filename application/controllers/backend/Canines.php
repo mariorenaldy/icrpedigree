@@ -1052,6 +1052,8 @@ class Canines extends CI_Controller {
 
     public function reject($id = null){
       if ($id){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
         $res = $this->requestModel->update_status($id, 2);
         if ($res){
           $whe['req_id'] = $id;
@@ -1062,9 +1064,11 @@ class Canines extends CI_Controller {
           
           if ($can->mem_id)
             $result = $this->notification_model->add(8, $id, $can->mem_id);
+          $this->db->trans_complete();
           echo json_encode(array('data' => '1'));
         }
         else{
+          $this->db->trans_rollback();
           echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-reject'));
         }
       }
