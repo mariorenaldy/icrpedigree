@@ -13,7 +13,7 @@ class Canines extends CI_Controller {
         $this->load->model('settingModel');
         $this->load->model('trahModel');
         // ARTechnology
-        $this->load->model(array('memberModel', 'logcanineModel', 'requestModel'));
+        $this->load->model(array('memberModel', 'logcanineModel', 'requestModel', 'notification_model'));
         // ARTechnology
         $this->load->model('navigation');
 
@@ -1015,12 +1015,12 @@ class Canines extends CI_Controller {
             'log_req' => $req->req_id
           );
           $res = $this->logcanineModel->add_log($log);
-        
           if ($res){
             $this->caninesModel->update_canines($data, $where);
-
             $res2 = $this->requestModel->update_status($id, 1);
             if ($res2){
+              if ($can->mem_id)
+                $res3 = $this->notification_model->add(3, $id, $can->mem_id);
               $this->db->trans_complete();
               echo json_encode(array('data' => '1'));
             }
@@ -1054,6 +1054,14 @@ class Canines extends CI_Controller {
       if ($id){
         $res = $this->requestModel->update_status($id, 2);
         if ($res){
+          $whe['req_id'] = $id;
+          $req = $this->requestModel->get_requests($whe)->row();
+
+          $where['can_id'] = $req->req_can_id;
+          $can = $this->caninesModel->get_can_pedigrees($where)->row();
+          
+          if ($can->mem_id)
+            $result = $this->notification_model->add(8, $id, $can->mem_id);
           echo json_encode(array('data' => '1'));
         }
         else{
