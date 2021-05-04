@@ -7,7 +7,7 @@ class Studs extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->library('bcrypt');
-			$this->load->model(array('studModel', 'trahModel'));
+			$this->load->model(array('studModel', 'trahModel', 'notification_model'));
 			$this->load->model('caninesModel');
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
@@ -28,17 +28,32 @@ class Studs extends CI_Controller {
 			$where['stu_id'] = $id;
 			$stud = $this->studModel->get_studs($where)->row();
 			$cek = true;
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			$res = $this->studModel->check_date($id, $this->input->post('stu_mom_id'), $stud->stu_stud_date);
 			if (!$res){
 				$this->studModel->approve($id);
+				if ($stud->stu_member)
+					$result = $this->notification_model->add(1, $id, $stud->stu_member);
+				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
 			}
-			else
+			else{
+				$this->db->trans_rollback();
 				echo json_encode(array('data' => 'Pacak interval harus lebih dari 120 hari'));
+			}
 		}
 
 		public function reject($id = null){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
 			$this->studModel->reject($id);
+
+			$where['stu_id'] = $id;
+			$stud = $this->studModel->get_studs($where)->row();
+			if ($stud->stu_member)
+				$result = $this->notification_model->add(6, $id, $stud->stu_member);
+			$this->db->trans_complete();
 			echo json_encode(array('data' => '1'));
 		}
 
