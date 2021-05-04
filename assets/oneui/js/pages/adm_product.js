@@ -3,6 +3,11 @@
  *  Author     : pixelcave
  *  Description: Custom JS code used in Tables Datatables Page
  */
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 var base_url = $('.base_url').val();
 var BaseTableDatatables = function() {
     // Init full DataTable, for more examples you can check out https://www.datatables.net/
@@ -34,7 +39,12 @@ var BaseTableDatatables = function() {
                       },
                     },
                     { data: 'pro_name'},
-                    { data: 'pro_price'},
+                    { data: 'pro_price',
+                      render: function (data, type, row) {
+                        var str = numberWithCommas(data);
+                        return str;
+                      },
+                    },
                     { data: 'pro_desc'},
                     { data: 'pro_id',
                       render: function(data, type, row) {
