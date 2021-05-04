@@ -107,7 +107,7 @@
                   <div class="form-group">
                       <div class="col-xs-12">
                         <label for="price-add-product">Harga Produk</label>
-                        <input class="form-control" id="price-add-product" name="pro_price" type="number" min="0" required>
+                        <input class="form-control" id="price-add-product" name="pro_price" type="text" required>
                       </div>
                   </div>
                   <div class="form-group">
@@ -164,7 +164,7 @@
                       <div class="form-group">
                           <div class="col-xs-12">
                             <label for="price-update-product">Harga Produk</label>
-                            <input class="form-control" id="price-update-product" name="pro_price" type="number" min="0" required>
+                            <input class="form-control" id="price-update-product" name="pro_price" type="text" required>
                           </div>
                       </div>
                       <div class="form-group">
@@ -228,8 +228,9 @@
 <script src="{{ base_url() }}/assets/js/jquery.priceformat.min.js"></script>
 <script>
 	function setSeparator(id){
-		$(id).priceFormat({ prefix: '', centsSeparator: ',', thousandsSeparator: '.', centsLimit: 0 });
+		$(id).priceFormat({ prefix: '', centsSeparator: '.', thousandsSeparator: ',', centsLimit: 0 });
 	}
+    setSeparator('#price-add-product');
     setSeparator('#price-update-product');
 </script>
 {% endblock %}

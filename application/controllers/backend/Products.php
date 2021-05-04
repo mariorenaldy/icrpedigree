@@ -31,7 +31,7 @@ class Products extends CI_Controller {
 				unset($_POST['srcDataCrop']);
 
 				$data = $this->input->post(null, true);
-				$data['pro_price'] = (int)str_replace('.', '', $this->input->post('pro_price'));
+				$data['pro_price'] = (int)str_replace(',', '', $this->input->post('pro_price'));
 				$this->db->trans_strict(FALSE);
 				$this->db->trans_start();
 				$res = $this->productModel->add_products($data);
@@ -150,7 +150,7 @@ class Products extends CI_Controller {
 				}
 				unset($_POST['srcDataCrop']);
 				$data = $this->input->post(null, true);
-				$data['pro_price'] = (int)str_replace('.', '', $this->input->post('pro_price'));
+				$data['pro_price'] = (int)str_replace(',', '', $this->input->post('pro_price'));
 				$where['pro_id'] = $id;
 				$this->productModel->update_products($data, $where);
 				// $data['pro_id'] = $id;
