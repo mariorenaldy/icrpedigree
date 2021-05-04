@@ -14,7 +14,7 @@ var BaseTableDatatables = function() {
     var initDataTableproduct = function() {
         window.tableproduct = jQuery('.data-products').dataTable({
             order: [[1, 'desc']],
-            columnDefs: [{ orderable: false, targets: [0,3] }],
+            columnDefs: [{ orderable: false, targets: [0, 1, 5] }],
             pageLength: 10,
             lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
             processing: true,
@@ -40,6 +40,7 @@ var BaseTableDatatables = function() {
                     },
                     { data: 'pro_name'},
                     { data: 'pro_price',
+                      className: "text-right",
                       render: function (data, type, row) {
                         var str = numberWithCommas(data);
                         return str;

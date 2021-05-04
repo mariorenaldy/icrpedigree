@@ -225,4 +225,11 @@
 <!-- Page JS Code -->
 <input type="hidden" value="{{ base_url() }}" class="base_url" />
 <script src="{{ base_url() }}/assets/oneui/js/pages/adm_product.js"></script>
+<script src="{{ base_url() }}/assets/js/jquery.priceformat.min.js"></script>
+<script>
+	function setSeparator(id){
+		$(id).priceFormat({ prefix: '', centsSeparator: ',', thousandsSeparator: '.', centsLimit: 0 });
+	}
+    setSeparator('#price-update-product');
+</script>
 {% endblock %}
