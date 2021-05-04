@@ -6,7 +6,7 @@ class Products extends CI_Controller {
 		public function __construct(){
 				// Call the CI_Controller constructor
 				parent::__construct();
-				$this->load->model('productModel');
+				$this->load->model(array('productModel', 'notification_model', 'memberModel'));
 				$this->load->model('navigation');
 				$this->navigations = $this->navigation->get_navigation();
 				$this->path_upload = 'uploads/products/';
@@ -23,20 +23,29 @@ class Products extends CI_Controller {
 		}
 
 		public function add(){
+				$img = $this->input->post('srcDataCrop');
+				$title = self::_clean_text('product');
+				$_POST['pro_photo'] = '';
+				if ($img) 
+					$_POST['pro_photo'] = self::_upload_base64($img, $title);
+				unset($_POST['srcDataCrop']);
 
-					$img = $this->input->post('srcDataCrop');
-					$title = self::_clean_text('product');
-
-					$_POST['pro_photo'] = '';
-					if($img) $_POST['pro_photo'] = self::_upload_base64($img, $title);
-					unset($_POST['srcDataCrop']);
-
-					$data = $this->input->post(null, true);
-					$this->productModel->add_products($data);
-
-					// self::_is_write_log('add', $data, 'aris');
+				$data = $this->input->post(null, true);
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$res = $this->productModel->add_products($data);
+				if ($res){
+					$member = $this->memberModel->daftar_users()->result();
+					foreach ($member AS $row){
+						$result = $this->notification_model->add(4, $res, $row->mem_id);
+					}
+					$this->db->trans_complete();
 					echo json_encode(array('data' => '1'));
-
+				}
+				else{
+					$this->db->trans_rollback();
+					echo json_encode(array('data' => 'Data produk gagal disimpan'));
+				}
 		}
 
 		public function data($id = null){
