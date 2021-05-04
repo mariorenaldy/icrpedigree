@@ -6,7 +6,7 @@ class Events extends CI_Controller {
 		public function __construct(){
 				// Call the CI_Controller constructor
 				parent::__construct();
-				$this->load->model('eventModel');
+				$this->load->model(array('eventModel', 'notification_model', 'memberModel'));
 				$this->load->model('championsModel');
 				$this->load->model('settingModel');
 				$this->load->model('caninesModel');
@@ -74,19 +74,29 @@ class Events extends CI_Controller {
 		}
 
 		public function add(){
+				$img = $this->input->post('srcDataCrop');
+				$title = self::_clean_text('events');
 
-					$img = $this->input->post('srcDataCrop');
-					$title = self::_clean_text('events');
+				$_POST['evn_photo'] = '';
+				if($img) $_POST['evn_photo'] = self::_upload_base64($img, $title);
+				unset($_POST['srcDataCrop']);
 
-					$_POST['evn_photo'] = '';
-					if($img) $_POST['evn_photo'] = self::_upload_base64($img, $title);
-					unset($_POST['srcDataCrop']);
-
-					$data = $this->input->post(null, true);
-					$this->eventModel->add_events($data);
-
-					// self::_is_write_log('add', $data, 'aris');
+				$data = $this->input->post(null, true);
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$res = $this->eventModel->add_events($data);
+				if ($res){
+					$member = $this->memberModel->daftar_users()->result();
+					foreach ($member AS $row){
+						$result = $this->notification_model->add(5, $res, $row->mem_id);
+					}
+					$this->db->trans_complete();
 					echo json_encode(array('data' => '1'));
+				}
+				else{
+					$this->db->trans_rollback();
+					echo json_encode(array('data' => 'Data event gagal disimpan'));
+				}
 
 		}
 
