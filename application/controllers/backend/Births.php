@@ -34,7 +34,7 @@ class Births extends CI_Controller {
 				$whe['bir_id'] = $id;
 				$birth = $this->birthModel->get_births($whe)->row();
 
-				$can = $this->caninesModel->get_search($birth->bir_a_s);
+				$can = $this->caninesModel->check_can_a_s(0, $birth->bir_a_s);
 				if ($can){
 					$this->db->trans_rollback();
 					echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
