@@ -49,6 +49,8 @@ class StudModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('users','users.use_id = studs.stu_app_user');
+        $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
         return $this->db->get();
     }
 

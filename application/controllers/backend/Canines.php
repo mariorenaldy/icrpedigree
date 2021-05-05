@@ -1020,7 +1020,7 @@ class Canines extends CI_Controller {
             $res2 = $this->requestModel->update_status($id, 1);
             if ($res2){
               if ($can->mem_id)
-                $res3 = $this->notification_model->add(3, $id, $can->mem_id);
+                $res3 = $this->notification_model->add(3, $req->req_can_id, $can->mem_id);
               $this->db->trans_complete();
               echo json_encode(array('data' => '1'));
             }
