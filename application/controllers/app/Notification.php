@@ -16,13 +16,15 @@ class Notification extends CI_Controller{
 			if ($this->uri->segment(5))
 				$offset = $this->uri->segment(5);
 
+			$read = $this->notification_model->get_read($this->uri->segment(4));
 			$count = $this->notification_model->get_count($this->uri->segment(4));
 			$notification = $this->notification_model->get_by_mem_id($this->uri->segment(4), $offset);
 			echo json_encode([
 				'status' => true,
 				'data' => $notification,
 				'count_notif' => $this->config->item('notif_count'),
-				'count_data' => $count,
+				'count_data' => $count[0]->count,
+				'count_read' => $read[0]->count,
 			]);
 		}
 		else{

@@ -57,6 +57,12 @@ class Notification_model extends CI_Model{
 	}
 
 	function get_count($member){
+		$sql = "SELECT COUNT(n.is_read) AS count FROM notification n WHERE n.mem_id = ".$member;
+		$query = $this->db->query($sql);
+        return $query->result();  
+	}
+
+	function get_read($member){
 		$sql = "SELECT COUNT(n.is_read) AS count FROM notification n WHERE n.mem_id = ".$member." AND n.is_read = 0";
 		$query = $this->db->query($sql);
         return $query->result();  
