@@ -21,6 +21,8 @@ class Notification extends CI_Controller{
 			echo json_encode([
 				'status' => true,
 				'data' => $notification,
+				'count_notif' => $this->config->item('notif_count'),
+				'count_data' => $count,
 			]);
 		}
 		else{
