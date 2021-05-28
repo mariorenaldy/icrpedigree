@@ -525,6 +525,28 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 // ARTechnology
+$config['email'] = Array(
+    'protocol' => 'smtp',
+    'smtp_host' => 'ssl://smtp.hostinger.com',
+    'smtp_port' => 465,
+    'smtp_user' => 'admin@icrpedigree.com',
+    'smtp_pass' => 'Adm1n12345',
+    'mailtype'  => 'html', 
+    'charset'   => 'iso-8859-1'
+);
+
+// $config['email'] = Array(
+//     'protocol' => 'smtp',
+//     'smtp_host' => 'ssl://smtp.googlemail.com',
+//     'smtp_port' => 465,
+//     'smtp_user' => 'erteerwe2020@gmail.com',
+//     'smtp_pass' => 'ngakpenting',
+//     'mailtype'  => 'html', 
+//     'charset'   => 'iso-8859-1'
+// );
+
+$config['forgot_password'] = 'app/Email/forgotpassword/';
+
 $config['upload_path_member'] = realpath(APPPATH.'../uploads/members/');
 $config['path_member'] = 'uploads/members/';
 $config['upload_member'] = Array(

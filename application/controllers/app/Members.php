@@ -5,8 +5,13 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->model(array('memberModel', 'KenneltypeModel', 'KennelModel'));
+			$this->load->library('upload', $this->config->item('upload_member'));
+			$this->load->library('email', $this->config->item('email'));
+			$this->email->set_newline("\r\n");
+			$this->load->library(array('session', 'form_validation'));
+			$this->load->helper(array('url'));
+			$this->load->database();
 		}
 		
 		public function get_member(){
@@ -632,5 +637,74 @@ class Members extends CI_Controller {
 					'status' => true
 				]);
 			}
+		}
+
+		public function test_input($data) {
+			$data = trim($data);
+			$data = stripslashes($data);
+			$data = htmlspecialchars($data);
+			return $data;
+		}
+
+		public function forgotpassword(){
+			$json = file_get_contents('php://input');
+			$obj = json_decode($json, true);
+			
+			$err = 0;
+			if (empty($obj['email'])){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Email wajib diisi'
+				]); 
+			}
+	
+			$email = $this->test_input($obj['email']);
+			if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Format email tidak valid'
+				]); 
+			}
+	
+			if (!$err){
+				$where['members.mem_email'] = $obj['email'];
+				$res = $this->memberModel->get_members($where);
+				if ($res){
+					$this->email->set_mailtype('html');
+					$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+					$this->email->to($obj['email']);
+					$this->email->subject('Ubah Password');
+
+					$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+					$message .= '<div>Kami mendapat permintaan untuk mengubah password ICR Pedigree. Klik link di bawah untuk mengubah password:</div>';
+					$message .= '<div><a href="' . base_url().$this->config->item('forgot_password').$res->row()->mem_id.'">Ubah Password</a></div>';
+					$message .= '<div>Jika Anda tidak ingin mengubah password, abaikan email ini.</div>';
+					$message .= '<div>Salam </div>';
+					$message .= '<div>ICR Pedigree Customer Service</div>';
+					$message .= '<div><br/><hr/></div>';
+
+					$this->email->message($message);
+					$res = $this->email->send();
+					if ($res){
+						echo json_encode([
+							'status' => true
+						]);
+					} else {
+						echo json_encode([
+							'status' => false,
+							'message' => 'Gagal mengirim email',
+							'error' => $this->email->print_debugger()
+						]); 
+					}
+				}
+				else{
+					echo json_encode([
+						'status' => false,
+						'message' => 'Email tidak valid'
+					]);
+				}
+			} 			
 		}
 }
