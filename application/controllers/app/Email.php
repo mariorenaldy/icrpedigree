@@ -27,7 +27,7 @@ class Email extends CI_Controller{
 			$this->load->view('forgotpassword.php', $data);
 		}
 		else{
-			$res = $this->MemberModel->edit_password($this->input->post('id'), $this->input->post('password'));
+			$res = $this->MemberModel->edit_password($this->input->post('id'), SHA1($this->input->post('password')));
 			if ($res){
 				$data['status'] = 1;
 			}
