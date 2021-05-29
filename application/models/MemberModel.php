@@ -98,4 +98,13 @@ class MemberModel extends CI_Model {
 		$edit = $this->db->update('members', $data);
 		return $edit; 
 	}
+
+    public function edit_token($id, $token){
+        $data = array(
+            'mem_firebase_token' => $token
+        );
+        $this->db->where('mem_id', $id);
+        $edit = $this->db->update('members', $data);
+		return $edit; 
+    }
 }
