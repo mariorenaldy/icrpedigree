@@ -323,6 +323,13 @@ class Members extends CI_Controller {
 					'message' => 'Password wajib diisi'
 				]); 
 			}
+
+			if (!$err && empty($obj['token'])){
+				echo json_encode([
+					'status' => false,
+					'message' => 'Token wajib diisi'
+				]); 
+			}
 			
 			if (!$err){
 				$where['members.mem_username'] = $obj['username'];
@@ -333,6 +340,7 @@ class Members extends CI_Controller {
 							'status' => false,
 							'message' => 'Masa berlaku member telah habis. Harap melakukan pembayaran'
 						]);
+						return false;
 					}
 
 					if (!$member['mem_app_user']){
@@ -340,6 +348,7 @@ class Members extends CI_Controller {
 							'status' => false,
 							'message' => 'Data member belum di-approve. Harap menghubungi customer service'
 						]);
+						return false;
 					}
 
 					if (sha1($obj['password']) != $member['mem_password']){
@@ -347,21 +356,34 @@ class Members extends CI_Controller {
 							'status' => false,
 							'message' => 'Password salah'
 						]);
+						return false;
 					}
 
-					echo json_encode([
-						'status' => true,
-						'data' => [ 
-							'username' => $obj['username'],
-							'userid' => $member['mem_id']
-						]
-					]);
+					$res = $this->memberModel->edit_token($member['mem_id'], $obj['token']);
+					if ($res){
+						echo json_encode([
+							'status' => true,
+							'data' => [ 
+								'username' => $obj['username'],
+								'userid' => $member['mem_id']
+							]
+						]);
+						return true;
+					}
+					else{
+						echo json_encode([
+							'status' => false,
+							'message' => 'Gagal login'
+						]);
+						return false;
+					}
 				}
 				else{
 					echo json_encode([
 						'status' => false,
 						'message' => 'Username tidak terdaftar'
 					]);
+					return false;
 				}
 			} 
 		}
