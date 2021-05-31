@@ -8,7 +8,7 @@ class Births extends CI_Controller {
 			parent::__construct();
 			$this->load->library('bcrypt');
 			$this->load->model('caninesModel');
-			$this->load->model(array('studModel', 'birthModel', 'memberModel', 'trahModel', 'pedigreesModel', 'notification_model'));
+			$this->load->model(array('studModel', 'birthModel', 'memberModel', 'trahModel', 'pedigreesModel', 'notification_model', 'notificationtype_model'));
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
 			$this->path_upload = 'uploads/canine/';
@@ -54,8 +54,43 @@ class Births extends CI_Controller {
 						$res = $this->pedigreesModel->add_pedigrees($pedigree);
 
 						if ($res){
-							if ($birth->bir_member)
+							if ($birth->bir_member){
 								$result = $this->notification_model->add(2, $id, $birth->bir_member);
+
+								$whe_birth['mem_id'] = $birth->bir_member;
+								$member = $this->memberModel->get_members($whe_birth)->row();
+								if ($member->mem_firebase_token){
+									$notif = $this->notificationtype_model->get_by_id(2);
+									$url = 'https://fcm.googleapis.com/fcm/send';
+									$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+									$fields = array (
+										'to' => $member->mem_firebase_token,
+										'notification' => array(
+											"channelId" => "ICRPedigree",
+											'title' => $notif[0]->title,
+											'body' => $notif[0]->description
+										)
+									);
+									$fields = json_encode ( $fields );
+
+									$headers = array (
+											'Authorization: key=' . $key,
+											'Content-Type: application/json'
+									);
+
+									$ch = curl_init ();
+									curl_setopt ( $ch, CURLOPT_URL, $url );
+									curl_setopt ( $ch, CURLOPT_POST, true );
+									curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+									curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+									curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+									$result = curl_exec ( $ch );
+									// echo $result;
+									curl_close ( $ch );
+								}
+							}
 
 							$this->db->trans_complete();
 							echo json_encode(array('data' => '1'));
@@ -85,8 +120,43 @@ class Births extends CI_Controller {
 				$whe['bir_id'] = $id;
 				$birth = $this->birthModel->get_births($whe)->row();
 
-				if ($birth->bir_member)
+				if ($birth->bir_member){
 					$result = $this->notification_model->add(7, $id, $birth->bir_member);
+
+					$whe_birth['mem_id'] = $birth->bir_member;
+					$member = $this->memberModel->get_members($whe_birth)->row();
+					if ($member->mem_firebase_token){
+						$notif = $this->notificationtype_model->get_by_id(7);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+						$fields = array (
+							'to' => $member->mem_firebase_token,
+							'notification' => array(
+								"channelId" => "ICRPedigree",
+								'title' => $notif[0]->title,
+								'body' => $notif[0]->description
+							)
+						);
+						$fields = json_encode ( $fields );
+
+						$headers = array (
+								'Authorization: key=' . $key,
+								'Content-Type: application/json'
+						);
+
+						$ch = curl_init ();
+						curl_setopt ( $ch, CURLOPT_URL, $url );
+						curl_setopt ( $ch, CURLOPT_POST, true );
+						curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+						curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+						curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+						$result = curl_exec ( $ch );
+						// echo $result;
+						curl_close ( $ch );
+					}
+				}
 
 				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
