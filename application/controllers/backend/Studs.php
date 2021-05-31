@@ -7,7 +7,7 @@ class Studs extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->library('bcrypt');
-			$this->load->model(array('studModel', 'trahModel', 'notification_model'));
+			$this->load->model(array('studModel', 'trahModel', 'notification_model', 'notificationtype_model', 'memberModel'));
 			$this->load->model('caninesModel');
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
@@ -33,8 +33,43 @@ class Studs extends CI_Controller {
 			$res = $this->studModel->check_date($id, $this->input->post('stu_mom_id'), $stud->stu_stud_date);
 			if (!$res){
 				$this->studModel->approve($id);
-				if ($stud->stu_member)
+				if ($stud->stu_member){
 					$result = $this->notification_model->add(1, $id, $stud->stu_member);
+
+					$whe['mem_id'] = $stud->stu_member;
+					$member = $this->memberModel->get_members($whe)->row();
+					if ($member->mem_firebase_token){
+						$notif = $this->notificationtype_model->get_by_id(1);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+						$fields = array (
+							'to' => $member->mem_firebase_token,
+							'notification' => array(
+								"channelId" => "ICRPedigree",
+								'title' => $notif[0]->title,
+								'body' => $notif[0]->description
+							)
+						);
+						$fields = json_encode ( $fields );
+
+						$headers = array (
+								'Authorization: key=' . $key,
+								'Content-Type: application/json'
+						);
+
+						$ch = curl_init ();
+						curl_setopt ( $ch, CURLOPT_URL, $url );
+						curl_setopt ( $ch, CURLOPT_POST, true );
+						curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+						curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+						curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+						$result = curl_exec ( $ch );
+						// echo $result;
+						curl_close ( $ch );
+					}
+				}
 				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
 			}
@@ -398,5 +433,41 @@ class Studs extends CI_Controller {
 	
 	private function _clean_text($name = null){
 		return str_replace(array(' ', '-'), '_', $name);
+	}
+
+	public function test(){
+		$whe['mem_id'] = 14;
+		$member = $this->memberModel->get_members($whe)->row();
+		if ($member->mem_firebase_token){
+			$notif = $this->notificationtype_model->get_by_id(1);
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+			$fields = array (
+				'to' => $member->mem_firebase_token,
+				'notification' => array(
+					"channelId" => "ICRPedigree",
+					'title' => $notif[0]->title,
+					'body' => $notif[0]->description
+				)
+			);
+			$fields = json_encode ( $fields );
+
+			$headers = array (
+					'Authorization: key=' . $key,
+					'Content-Type: application/json'
+			);
+
+			$ch = curl_init ();
+			curl_setopt ( $ch, CURLOPT_URL, $url );
+			curl_setopt ( $ch, CURLOPT_POST, true );
+			curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+			curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+			$result = curl_exec ( $ch );
+			// echo $result;
+			curl_close ( $ch );
+		}
 	}
 }

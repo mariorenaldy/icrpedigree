@@ -14,6 +14,6 @@ class Notificationtype_model extends CI_Model{
 	function get_by_id($id){
 		$sql = "SELECT nt.notificationtype_id AS notificationtypeid, nt.title, nt.description FROM notificationtype nt WHERE nt.notificationtype_id = ".$id;
 		$query = $this->db->query($sql);
-        return $query;  		
+        return $query->result();  		
 	}
 }
