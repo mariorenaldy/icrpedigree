@@ -86,8 +86,43 @@ class Studs extends CI_Controller {
 
 			$where['stu_id'] = $id;
 			$stud = $this->studModel->get_studs($where)->row();
-			if ($stud->stu_member)
+			if ($stud->stu_member){
 				$result = $this->notification_model->add(6, $id, $stud->stu_member);
+
+				$whe['mem_id'] = $stud->stu_member;
+				$member = $this->memberModel->get_members($whe)->row();
+				if ($member->mem_firebase_token){
+					$notif = $this->notificationtype_model->get_by_id(6);
+					$url = 'https://fcm.googleapis.com/fcm/send';
+					$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+					$fields = array (
+						'to' => $member->mem_firebase_token,
+						'notification' => array(
+							"channelId" => "ICRPedigree",
+							'title' => $notif[0]->title,
+							'body' => $notif[0]->description
+						)
+					);
+					$fields = json_encode ( $fields );
+
+					$headers = array (
+							'Authorization: key=' . $key,
+							'Content-Type: application/json'
+					);
+
+					$ch = curl_init ();
+					curl_setopt ( $ch, CURLOPT_URL, $url );
+					curl_setopt ( $ch, CURLOPT_POST, true );
+					curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+					curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+					curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+					$result = curl_exec ( $ch );
+					// echo $result;
+					curl_close ( $ch );
+				}
+			}
 			$this->db->trans_complete();
 			echo json_encode(array('data' => '1'));
 		}
