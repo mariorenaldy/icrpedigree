@@ -13,7 +13,7 @@ class Canines extends CI_Controller {
         $this->load->model('settingModel');
         $this->load->model('trahModel');
         // ARTechnology
-        $this->load->model(array('memberModel', 'logcanineModel', 'requestModel', 'notification_model'));
+        $this->load->model(array('memberModel', 'logcanineModel', 'requestModel', 'notification_model', 'notificationtype_model'));
         // ARTechnology
         $this->load->model('navigation');
 
@@ -1019,8 +1019,43 @@ class Canines extends CI_Controller {
             $this->caninesModel->update_canines($data, $where);
             $res2 = $this->requestModel->update_status($id, 1);
             if ($res2){
-              if ($can->mem_id)
+              if ($can->mem_id){
                 $res3 = $this->notification_model->add(3, $req->req_can_id, $can->mem_id);
+
+                $whe_can['mem_id'] = $can->mem_id;
+                $member = $this->memberModel->get_members($whe_can)->row();
+                if ($member->mem_firebase_token){
+                  $notif = $this->notificationtype_model->get_by_id(3);
+                  $url = 'https://fcm.googleapis.com/fcm/send';
+                  $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+      
+                  $fields = array (
+                    'to' => $member->mem_firebase_token,
+                    'notification' => array(
+                      "channelId" => "ICRPedigree",
+                      'title' => $notif[0]->title,
+                      'body' => $notif[0]->description
+                    )
+                  );
+                  $fields = json_encode ( $fields );
+      
+                  $headers = array (
+                      'Authorization: key=' . $key,
+                      'Content-Type: application/json'
+                  );
+      
+                  $ch = curl_init ();
+                  curl_setopt ( $ch, CURLOPT_URL, $url );
+                  curl_setopt ( $ch, CURLOPT_POST, true );
+                  curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+                  curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+                  curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+      
+                  $result = curl_exec ( $ch );
+                  // echo $result;
+                  curl_close ( $ch );
+                }
+              }
               $this->db->trans_complete();
               echo json_encode(array('data' => '1'));
             }
@@ -1062,8 +1097,43 @@ class Canines extends CI_Controller {
           $where['can_id'] = $req->req_can_id;
           $can = $this->caninesModel->get_can_pedigrees($where)->row();
           
-          if ($can->mem_id)
+          if ($can->mem_id){
             $result = $this->notification_model->add(8, $id, $can->mem_id);
+
+            $whe_can['mem_id'] = $can->mem_id;
+            $member = $this->memberModel->get_members($whe_can)->row();
+            if ($member->mem_firebase_token){
+              $notif = $this->notificationtype_model->get_by_id(8);
+              $url = 'https://fcm.googleapis.com/fcm/send';
+              $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+  
+              $fields = array (
+                'to' => $member->mem_firebase_token,
+                'notification' => array(
+                  "channelId" => "ICRPedigree",
+                  'title' => $notif[0]->title,
+                  'body' => $notif[0]->description
+                )
+              );
+              $fields = json_encode ( $fields );
+  
+              $headers = array (
+                  'Authorization: key=' . $key,
+                  'Content-Type: application/json'
+              );
+  
+              $ch = curl_init ();
+              curl_setopt ( $ch, CURLOPT_URL, $url );
+              curl_setopt ( $ch, CURLOPT_POST, true );
+              curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+              curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+              curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+  
+              $result = curl_exec ( $ch );
+              // echo $result;
+              curl_close ( $ch );
+            }
+          }
           $this->db->trans_complete();
           echo json_encode(array('data' => '1'));
         }
