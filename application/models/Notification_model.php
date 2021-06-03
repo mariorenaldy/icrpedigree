@@ -67,4 +67,11 @@ class Notification_model extends CI_Model{
 		$query = $this->db->query($sql);
         return $query->result();  
 	}
+
+	public function get_members_notif(){
+        $member = $this->session->userdata('member_data');
+        $sql = "SELECT n.notification_id, n.transaction_id, n.created_date, n.notificationtype_id, nt.title, nt.description, n.is_read FROM notification n, notificationtype nt WHERE n.notificationtype_id = nt.notificationtype_id AND n.mem_id = ".$member['mem_id']." ORDER BY n.created_date DESC";
+		$query = $this->db->query($sql);
+		return $query->result(); 
+    }
 }
