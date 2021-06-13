@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Mar 24, 2021 at 07:33 AM
+-- Generation Time: Jun 13, 2021 at 07:10 AM
 -- Server version: 5.7.30
 -- PHP Version: 7.3.21
 
@@ -80,12 +80,17 @@ INSERT INTO `births` (`bir_id`, `bir_stu_id`, `bir_date`, `bir_app_user`, `bir_a
 (14, 10, '2019-07-19 00:42:20', 1, '2019-07-18 17:42:20', 1, 2, 'pom2', 'DESIGNER BULLS', 'Female', 'red', '2019-07-18', 'canine_1563496940.png', 'SYNDICATE KENNEL TOMOHON', 'FANDY MARCELLO LIJONO LIE', 'ket'),
 (15, 6, '2019-07-19 03:10:19', 1, '2019-07-18 20:12:48', 1, 1, 'pom pup', 'DESIGNER BULLS', 'Male', 'red black', '2019-07-19', 'canine_1563505819.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', ''),
 (16, 4, '2019-07-19 03:15:45', 1, '2019-07-18 20:16:23', 1, 1, 'pom pup 4', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', 'canine_1563506145.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', 'test'),
-(17, 7, '2019-07-19 03:44:01', 0, NULL, 0, 2, 'pom puppy 2', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', 'canine_1563507841.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', 'note'),
+(17, 7, '2019-07-19 03:44:01', 1, '2021-05-01 06:00:31', 1, 2, 'pom puppy 2', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', 'canine_1563507841.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', ''),
 (18, 7, '2019-07-19 04:50:51', 1, '2019-07-18 21:51:51', 1, 2, 'lahiran 3 pup', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', 'canine_1563511851.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', 'lahir'),
-(19, 6, '2019-07-19 04:58:16', 0, NULL, 0, 2, 'hammie', 'DESIGNER BULLS', 'Male', 'red', '2019-07-19', '-', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', ''),
+(19, 6, '2019-07-19 04:58:16', 1, '2021-05-03 07:40:45', 1, 2, 'hammie', 'DESIGNER BULLS', 'Male', 'red', '2019-07-19', '-', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', ''),
 (20, 12, '2019-07-19 05:16:54', 1, '2019-07-18 22:16:54', 1, 3, 'pom', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', 'canine_1563513414.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', 'ket'),
-(21, 17, '2021-03-13 03:05:02', 0, NULL, 0, 1, 'new pom pom', 'DESIGNER BULLS', 'Male', 'brown black', '2021-03-10', 'canines_1615604866.png', 'kris kennel', 'kris', ''),
-(22, 17, '2021-03-13 03:05:25', 0, NULL, 0, 1, 'new pom', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-13', 'canines_1615604725.png', '', '', '');
+(21, 17, '2021-03-13 03:05:02', 1, '2021-05-01 06:00:46', 1, 1, 'molly', 'DESIGNER BULLS', 'Male', 'brown black', '2021-03-10', 'canines_1615604866.png', 'kris kennel', 'kris', ''),
+(22, 17, '2021-03-13 03:05:25', 1, '2021-05-31 07:52:31', 1, 14, 'maui', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-13', 'canines_1615604725.png', '', '', ''),
+(23, 17, '2021-04-01 07:28:35', 1, '2021-05-31 07:50:04', 1, 1, 'mia', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', '-', '', '', ''),
+(24, 17, '2021-04-01 07:38:47', 1, '2021-05-31 07:54:23', 2, 14, 'maia', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', 'canines_1617262727.png', '', '', ''),
+(25, 17, '2021-04-01 07:38:57', 1, '2021-05-03 07:50:11', 2, 1, 'maudy', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', 'canines_1617262737.png', '', '', ''),
+(26, 17, '2021-04-01 07:40:17', 1, '2021-05-01 06:08:59', 1, 1, 'new pom', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', 'canines_1617262817.png', '', '', ''),
+(27, 19, '2021-05-31 07:47:49', 1, '2021-05-31 07:47:49', 1, 14, 'mau', 'DESIGNER BULLS', 'Male', 'creamy', '2021-05-31', 'canine_1622447269.png', 'SYNDICATE KENNEL TOMOHON', 'FERNANDO TBS', '');
 
 -- --------------------------------------------------------
 
@@ -127,7 +132,7 @@ CREATE TABLE `canines` (
 INSERT INTO `canines` (`can_id`, `can_current_reg_number`, `can_a_s`, `can_icr_number`, `can_breed`, `can_gender`, `can_color`, `can_date_of_birth`, `can_icr_moc_number`, `can_owner_name`, `can_reg_date`, `can_remaining_payment`, `can_photo`, `can_owner`, `can_cage`, `can_desc`, `can_address`, `can_score`, `can_created_at`, `can_updated_at`, `can_stat`, `can_note`, `can_member`, `can_print`) VALUES
 (2, 'UKC A266,984', 'PR.SQUIRES CHILLING WITH ZATO PR.SQUIRES CHILLING', '-', 'AMERICAN PIT BULL TERRIER', 'Male', 'Blue white', '2008-02-16', '-', '-', '2013-05-04', 110000, 'PR.SQUIRES CHILLING WITH ZATO.jpg', 'KRIS JOHAN', 'DK', '0', 'JL.KOPO 642. BANDUNG', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 0, 15),
 (7, '-', 'INA CH DK` HERO - RIP 28SEP17', '13-D-05-033-M', 'AMERICAN PIT BULL TERRIER', 'Male', 'Fawn white', '2011-02-10', '900164000117733', 'KRIS JOHAN', '2013-05-04', 110000, 'INA. CH. DK` HERO.jpg', 'KRIS JOHAN', 'DK', '0', 'JL.KOPO 642. BANDUNG', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 0, 2),
-(8, 'AKSI 23886', 'ZEKO VON HALTEU', '-', 'AMERICAN PIT BULL TERRIER', 'Male', 'Brown white', '2007-07-25', '-', '-', '2013-05-04', 110000, 'canine_1561420223.png', 'owner', 'kennel', '0', 'address', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 1, 0),
+(8, 'AKSI 23886', 'ZEKO VON HALTEU', '-', 'AMERICAN PIT BULL TERRIER', 'Male', 'Brown white', '2007-07-25', '-', '-', '2013-05-04', 110000, 'canines_1617259330.png', 'Heaven', 'Kris Kennel', '0', 'Kris Kennel address', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 1, 0),
 (9, 'AKSI 23887', 'ZELO VON HALTEU', '-', 'AMERICAN PIT BULL TERRIER', 'Male', 'Fawn white', '2007-07-25', '-', '-', '2013-05-04', 110000, '-', '-', '-', '0', '-', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 2, 0),
 (11, '-', 'DK` DRAGON', '-', 'AMERICAN PIT BULL TERRIER', 'Male', 'Blue brindle', '2011-12-30', '-', 'KRIS JOHAN', '2013-05-04', 110000, 'DK` DRAGON.jpg', 'owner', 'DK', '0', 'JL.KOPO 642. BANDUNG', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 0, 0),
 (13, '-', 'DK` LUNA', '-', 'AMERICAN PIT BULL TERRIER', 'Female', 'Blue', '2011-12-30', '-', 'KRIS JOHAN', '2013-05-04', 110000, 'DK` LUNA.jpg', 'owner', 'DK', '0', 'JL.KOPO 642. BANDUNG', 0, '2017-05-06 04:56:15', '2017-05-06 04:56:15', 1, '', 0, 0),
@@ -3780,7 +3785,14 @@ INSERT INTO `canines` (`can_id`, `can_current_reg_number`, `can_a_s`, `can_icr_n
 (4230, '-', 'pom pup 5', '-', 'DESIGNER BULLS', 'Male', 'Cacao white markings Red nose', '2019-07-19', '-', 'FERNANDO TBS', '2019-07-19', 0, '-', 'FANDY MARCELLO LIJONO LIE', 'SYNDICATE KENNEL TOMOHON', '', 'JL.RAYA KOLONGAN TOMOHON NO 31', 0, '2019-07-19 03:29:26', '2019-07-19 03:29:26', 1, 'test', 1, 0),
 (4231, '-', 'ZURICH VON ANGLO SAXON3', '-', 'DESIGNER BULLS', 'Female', 'Fawn white', '2019-07-19', '-', 'FERNANDO TBS', '2019-07-19', 0, 'canines_1563507053.png', 'FANDY MARCELLO LIJONO LIE', 'SYNDICATE KENNEL TOMOHON', '', 'address', 0, '2019-07-19 03:30:53', '2019-07-19 03:30:53', 1, 'test', 3, 0),
 (4232, '-', 'lahiran 3 pup', '-', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', '-', 'FERNANDO TBS', '2019-07-19', 0, 'canine_1563511851.png', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2019-07-19 04:51:51', '2019-07-19 04:51:51', 1, 'puppy', 2, 7),
-(4233, '-', 'pom', '-', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', '-', 'FERNANDO TBS', '2019-07-19', 0, 'canine_1563513414.png', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2019-07-19 05:16:54', '2019-07-19 05:16:54', 1, '', 3, 0);
+(4233, '-', 'pom', '-', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', '-', 'FERNANDO TBS', '2019-07-19', 0, 'canine_1563513414.png', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2019-07-19 05:16:54', '2019-07-19 05:16:54', 1, '', 3, 0),
+(4234, '-', 'pom puppy 2', '-', 'DESIGNER BULLS', 'Male', 'brown', '2019-07-19', '-', 'FERNANDO TBS', '2021-05-01', 0, 'canine_1563507841.png', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2021-05-01 06:00:31', '2021-05-01 06:00:31', 1, '', 2, 0),
+(4235, '-', 'new pom pom', '-', 'DESIGNER BULLS', 'Male', 'brown black', '2021-03-10', '-', 'kris', '2021-05-01', 0, 'canines_1615604866.png', 'kris', 'kris kennel', '', '-', 0, '2021-05-01 06:00:41', '2021-05-01 06:00:41', 1, '', 1, 0),
+(4237, '-', 'new pom', '-', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', '-', '', '2021-05-01', 0, 'canines_1617262817.png', '', '', '', '-', 0, '2021-05-01 06:08:59', '2021-05-01 06:08:59', 1, '', 1, 0),
+(4241, '-', 'hammie', '-', 'DESIGNER BULLS', 'Male', 'red', '2019-07-19', '-', 'FERNANDO TBS', '2021-05-03', 0, '-', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2021-05-03 07:40:45', '2021-05-03 07:40:45', 1, '', 2, 0),
+(4246, '-', 'mau', '-', 'DESIGNER BULLS', 'Male', 'creamy', '2021-05-31', '-', 'FERNANDO TBS', '2021-05-31', 0, 'canine_1622447269.png', 'FERNANDO TBS', 'SYNDICATE KENNEL TOMOHON', '', '-', 0, '2021-05-31 07:47:49', '2021-05-31 07:47:49', 1, '', 14, 0),
+(4247, '-', 'mia', '-', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-31', '-', '', '2021-05-31', 0, '-', '', '', '', '-', 0, '2021-05-31 07:50:04', '2021-05-31 07:50:04', 1, '', 1, 0),
+(4248, '-', 'maui', '-', 'DESIGNER BULLS', 'Male', 'brown', '2021-03-13', '-', '', '2021-05-31', 0, '', 'Riska', 'SYNDICATE KENNEL TOMOHON', '', 'JL.RAYA KOLONGAN TOMOHON NO 31', 0, '2021-05-31 07:52:31', '2021-05-31 07:52:31', 1, '', 14, 0);
 
 -- --------------------------------------------------------
 
@@ -3869,7 +3881,13 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`evn_id`, `evn_title`, `evn_desc`, `evn_place`, `evn_date`, `evn_photo`, `evn_created_at`, `evn_updated_at`) VALUES
-(8, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17');
+(8, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(9, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(10, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(11, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(12, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(13, 'PATH OF GLORY', 'Judge claudia honig & errol boden', 'MIKO MALL BANDUNG', '2017-03-12', 'uploads/events/events_1492053121.png', '2017-03-17 23:36:17', '2017-03-17 23:36:17'),
+(14, 'AR', 'AR Event', 'Bandung', '2021-05-04', 'uploads/events/events_1620097991.png', '2021-05-04 03:13:11', '2021-05-04 03:13:11');
 
 -- --------------------------------------------------------
 
@@ -3992,7 +4010,10 @@ INSERT INTO `kennels` (`ken_id`, `ken_type_id`, `ken_name`, `ken_photo`, `ken_st
 (45, 1, 'kris', 'kennel_1614132739.png', 1),
 (46, 1, 'Veyron', 'kennel_1614134500.png', 1),
 (47, 1, 'Tessa', 'kennel_1614134702.png', 1),
-(48, 1, 'Audi', '-', 1);
+(48, 1, 'Audi', '-', 1),
+(49, 1, 'Teddy', 'kennel_1617237192.png', 1),
+(50, 1, 'Louis', 'kennel_1617239393.png', 1),
+(51, 1, 'Audi', 'kennel_1617332000.png', 1);
 
 -- --------------------------------------------------------
 
@@ -4093,7 +4114,12 @@ INSERT INTO `logs_canine` (`log_id`, `log_owner`, `log_cage`, `log_address`, `lo
 (49, '', '', '', 'NO MEMBER => JUNAEDI', '2019-06-26 22:20:57', '-', '-', 0, 0),
 (3896, '', '', '', 'NO MEMBER => JUNAEDI', '2019-06-26 22:25:28', '-', '-', 0, 0),
 (4226, ' => -', '', ' => -', '', '2019-07-19 03:35:41', '-', '-', 0, 0),
-(998, '', '', '', 'NO MEMBER => RIA KARINA', '2021-01-25 03:52:45', '-', '-', 0, 0);
+(998, '', '', '', 'NO MEMBER => RIA KARINA', '2021-01-25 03:52:45', '-', '-', 0, 0),
+(8, 'owner => Heaven', 'owner => Kris Kennel', 'address => Kris Kennel address', '', '2021-04-01 06:48:19', '-', '-', 37, 1),
+(8, 'Heaven => Heaven', 'Heaven => Kris Kennel', 'Kris Kennel address => Kris Kennel address', '', '2021-04-01 06:49:22', 'canine_1561420223.png', 'canines_1617259624.png', 36, 1),
+(8, 'Heaven => Heaven', 'Heaven => Kris Kennel', 'Kris Kennel address => Kris Kennel address', '', '2021-05-03 07:25:59', '-', 'canines_1617259330.png', 35, 1),
+(4248, ' => Riska Dewi', ' => SYNDICATE KENNEL TOMOHON', '- => JL.RAYA KOLONGAN TOMOHON NO 31', '', '2021-06-01 01:18:37', 'canines_1615604725.png', '', 38, 1),
+(4248, 'Riska Dewi => Riska', '', '', '', '2021-06-01 01:22:36', '', '', 39, 1);
 
 -- --------------------------------------------------------
 
@@ -4138,39 +4164,197 @@ CREATE TABLE `members` (
   `mem_email` varchar(50) NOT NULL,
   `mem_pp` varchar(255) NOT NULL,
   `mem_kota` varchar(50) NOT NULL,
-  `mem_kode_pos` varchar(10) NOT NULL
+  `mem_kode_pos` varchar(10) NOT NULL,
+  `mem_firebase_token` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `members`
 --
 
-INSERT INTO `members` (`mem_id`, `mem_name`, `mem_address`, `mem_mail_address`, `mem_hp`, `mem_photo`, `mem_created_at`, `mem_updated_at`, `mem_stat`, `mem_app_user`, `mem_app_date`, `mem_username`, `mem_password`, `mem_ken_id`, `mem_email`, `mem_pp`, `mem_kota`, `mem_kode_pos`) VALUES
-(0, 'NO MEMBER', '-', '-', '-', '', '2019-06-14 00:54:19', '2021-02-23 03:54:52', 0, 0, NULL, 'super', '$2a$08$CqTRMafSGYA3.JUO6aET9edQBAswXqDE60C9zeZ2XRAd3bHZ/.5hq', 0, '', '-', '', ''),
-(1, 'KRIS JOHAN', 'JL.KOPO 642. BANDUNG, 40221', 'JL.KOPO 642. BANDUNG, 40221', '021-1234567', 'member_1614130912.png', '2019-06-10 23:55:37', '2021-03-24 06:37:41', 1, 1, '2019-06-11 00:13:17', 'kris', '5386c1e7bd9c410d07ffcc88fc2ceb29deafe180', 45, 'kris@yahoo.com', 'pp_1614131128.png', 'Bandung', '40134'),
-(2, 'JUNAEDI', 'CIKAWAO 53 BANDUNG', 'CIKAWAO 53 BANDUNG', '022', '-', '2019-06-11 02:38:04', '2021-02-23 03:54:52', 1, 1, '2019-06-19 00:52:50', 'junaedi', '$2a$08$YuMZxd2hEXe7lnqQDyxM2.GNJkEUg1rzk7NxouG4spqSmKo8blofG', 1, '', '-', '', ''),
-(3, 'WILLY NATHANAEL M', 'SUMBER HEGAR III NO 10-23. BANDUNG', 'SUMBER HEGAR III NO 10-23. BANDUNG', '023', '-', '2019-06-11 03:29:14', '2021-02-23 03:54:52', 1, 1, '2019-06-10 23:13:38', 'willy', '$2a$08$QJbw4i0AYneLtdWYOYRlde/f/wPTXPu0tP72hPbeXb16W0JbRcYrC', 0, '', '-', '', ''),
-(4, 'RENDY RENALDY', 'SUMBER HEGAR II NO 12. BANDUNG', 'SUMBER HEGAR II NO 12. BANDUNG', '021', '-', '2019-06-11 08:17:12', '2021-02-23 03:54:52', 1, 1, '2019-06-19 01:23:55', 'rendy', '$2a$08$Va0Q9SWyJYD3ktZLmo4eee45AYNPeQULGqs3xfE9ITi.3P4dbZgAu', 0, '', '-', '', ''),
-(5, 'TOMMY GUNAWAN', 'CIBURIAL 15. DAGO. BANDUNG', 'CIBURIAL 15. DAGO. BANDUNG', '022', '-', '2019-06-12 03:14:41', '2021-02-23 03:54:52', 1, 0, NULL, 'tommy', '$2a$08$w0E8WYczxyiui1plbGBpAOLl8ttssz/sjy0LS/l7obdkpGFaooy3G', 0, '', '-', '', ''),
-(6, 'INDRA SAPUTRA', 'AHMAD YANI. JL WIRANTA 21. BANDUNG 40121', 'AHMAD YANI. JL WIRANTA 21. BANDUNG 40121', '022', '-', '2019-06-12 06:24:57', '2021-02-23 03:54:52', 1, 0, NULL, 'indra', '$2a$08$dPhwhNpMswPTSUu5bjLyAOrK4jhJOOaAGck4SXYcLx52J04miWqqG', 0, '', '-', '', ''),
-(7, 'DIPO RUHUT SOMARMARA.SH', 'CISATU II NO 12. BANDUNG', 'CISATU II NO 12. BANDUNG', '021', '-', '2019-06-12 06:26:53', '2021-02-23 03:54:52', 1, 0, NULL, 'dipo', '$2a$08$m6y5f6UrzA12/SNzFJYJbeZ3BcJNLwIgfrgupSptjwt1JPstmymRm', 0, '', '-', '', ''),
-(8, 'LINGGA KWA', 'JL.HOLIS 171 F. BANDUNG', 'JL.HOLIS 171 F. BANDUNG', '021', '-', '2019-06-13 21:06:53', '2021-02-23 03:54:52', 1, 0, NULL, 'lingga', '$2a$08$EpyGjmq82ju4ZorcE7H6Pe3pkDPTAMQX5sIWISvkG4lhYKOiFN5zG', 2, '', '-', '', ''),
-(9, 'ANDY REZERYSALLY SIMANJUNTAK', 'JL.SEMARANG NO 108. ANTAPANI. BANDUNG', 'JL.SEMARANG NO 108. ANTAPANI. BANDUNG', '022', 'member_1614132970.png', '2019-06-18 00:40:56', '2021-02-24 02:17:16', 1, 0, NULL, 'andy', '$2a$08$.jWR021akRc40RuEHvfPRe.Oe9Oc2fq7nlOnOwc7DZtNGnRkI.LsS', 0, 'andy@yahoo.com', 'pp_1614133036.png', 'Bandung', '40134'),
-(10, 'RIA KARINA', 'JL.H.ABDUL HAMID NO 17. CICAHEUM. BANDUNG', 'JL.H.ABDUL HAMID NO 17. CICAHEUM. BANDUNG', '022', 'member_1611539739.png', '2021-01-25 01:55:39', '2021-02-23 03:54:52', 1, 0, NULL, 'riakarina', '$2a$08$Nq4njTPpUXYS4qI/B/KhXeyQCFTt9R7nMCpWyWALKPT.TwIy7MlaO', 3, '', '-', '', ''),
-(11, 'Fredy', 'JL.BAMBANG UTOYO 381. BATURAJA. SUM-SEL', 'JL.BAMBANG UTOYO 381. BATURAJA. SUM-SEL', '021', 'member_1611802167.png', '2021-01-28 02:49:27', '2021-03-24 05:44:39', 1, 1, '2021-03-24 05:44:21', 'fredy', '$2a$08$ZOm2PzlVQYsjlvzYONQbL.2QbwIbuuoMjFY4ONWOiORHgJD.MGlZa', 34, '', '-', '', ''),
-(12, 'DAVID WIJAYA', 'JL.MARIBAYA NO 74/138 KP SUKAMANAH, DESA LANGENSARI', 'JL.MARIBAYA NO 74/138 KP SUKAMANAH, DESA LANGENSARI', '022', 'member_1611803059.png', '2021-01-28 03:04:20', '2021-02-23 03:54:52', 1, 0, NULL, 'david', '$2a$08$t0MTgOcjiVwxzgyqfmYxhujey3jWJV3rIescFVcz4MBzoE6vlvI9u', 37, '', '-', '', ''),
-(13, 'ANDREW VS', 'JL.KAVLING DKI 1 NO 89. CIPAYUNG. JAKTIM', 'JL.KAVLING DKI 1 NO 89. CIPAYUNG. JAKTIM', '021', 'member_1611817679.png', '2021-01-28 03:07:33', '2021-02-23 03:54:52', 1, 1, '2021-01-27 20:08:02', 'andrew', '$2a$08$g0nT4IMpd7KbQGNTQjbvy.RSat1BEqB.TcroujbnQgEdcFrSx6kk6', 38, '', '-', '', ''),
-(14, 'Riska', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '022', 'member_1614134091.png', '2021-01-28 07:04:51', '2021-03-24 06:43:09', 1, 1, '2021-02-15 00:49:11', 'riska', '2d0a289874ef0cc560eb4233720be3cb0cfad1d5', 39, 'riskadewi.hendaya@gmail.com', 'member_16141340911.png', 'Bandung', '40134'),
-(15, 'Anton', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1611817742.png', '2021-01-28 07:09:02', '2021-02-23 03:54:52', 1, 0, NULL, 'anton', '$2a$08$YyVte9Z5d09PX0ngnWKbfeo4m65T3lvvnic5.uwsXxhhMBsqF32pO', 40, 'comxpert@gmail.com', '-', 'Bandung', '40134'),
-(16, 'Riska Dewi', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', '-', '2021-02-17 00:28:56', '2021-02-23 03:54:52', 1, 1, '2021-02-17 01:06:14', 'riskadewi', '$2a$08$iuHsftQ7Ir9IvmMx3rkiCeoNwguLqFPSjUQpxLogp6qy5ZpvuYaTu', 41, '', '-', '', ''),
-(17, 'Brabus', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1613522021.png', '2021-02-17 00:33:41', '2021-02-23 03:54:52', 1, 1, '2021-02-16 17:35:22', 'brabus', '$2a$08$MC6qmpqdOjTKP5NLVcciQe5g9Xuk8YPVO0Y1rO713sazqpcEUWN1C', 42, '', '-', '', ''),
-(18, 'Fiero', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1613522564.png', '2021-02-17 00:42:44', '2021-03-24 06:05:48', 1, 0, NULL, 'fiero', '$2a$08$q5gZCePBDkIMXnP4r3MpCeIB9j3sUpC6BvfCNDgzwCdEikEvmK0Ce', 43, 'fiero@yahoo.com', '-', 'bandung', '40134'),
-(19, 'Clio', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '022', 'member_1614061323.png', '2021-02-23 06:09:32', '2021-02-23 06:22:03', 1, 0, NULL, 'clio', '$2a$08$CzDjADZnOvQvHdL/1ic3Bu2jSBOhHwj1ISDa/fph6fHOSNlKGyaNy', 1, 'clio@yahoo.com', 'pp_1614061323.png', 'Bandung', '40134'),
-(20, 'Enzo', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614061133.png', '2021-02-23 06:14:27', '2021-02-23 06:18:53', 1, 0, NULL, 'enzo', '$2a$08$2hbY.Jyor76cuFIxRX6Z/e75fzQ3CZfhXIrR2J5mHgLhEMmgJnn5e', 1, 'enzo_von_hendric@yahoo.com', 'pp_1614061133.png', 'Bdg', '40221'),
-(21, 'Monza', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1614066499.png', '2021-02-23 07:48:19', '2021-02-23 07:48:19', 1, 0, NULL, 'monza', '$2a$08$tPR/cvgm3artbnwE6FbYze0nmrl3PxQ677765ZOuo38ik3dNU.FxG', 44, 'monza@yahoo.com', 'pp_1614066499.png', 'Bandung', '40134'),
-(22, 'Veyron', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614134500.png', '2021-02-24 02:41:41', '2021-02-24 02:41:41', 1, 0, NULL, 'veyron', '$2a$08$DuewAB.57B8QUz4fZ8wyCOxiSNhbw/dnhJzwlpRqXchd0.FmO1NyO', 46, '', '', '', ''),
-(23, 'Tessa', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614134702.png', '2021-02-24 02:45:02', '2021-02-24 02:45:02', 1, 0, NULL, 'tessa', '$2a$08$JtJmmCtD0qQ5GwiCK7V/i.Qg.GJA9CTptPfQQwDv2OzmtcUynnn2W', 47, 'tessa@gmail.com', 'member_16141347021.png', 'Bandung', '40221'),
-(24, 'Audi', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', '-', '2021-03-24 06:44:24', '2021-03-24 06:44:24', 1, 0, NULL, 'audi', 'df44a1c6f830f3230610f6812231585f7b883859', 48, 'audi@gmail.com', '-', 'Bandung', '40221');
+INSERT INTO `members` (`mem_id`, `mem_name`, `mem_address`, `mem_mail_address`, `mem_hp`, `mem_photo`, `mem_created_at`, `mem_updated_at`, `mem_stat`, `mem_app_user`, `mem_app_date`, `mem_username`, `mem_password`, `mem_ken_id`, `mem_email`, `mem_pp`, `mem_kota`, `mem_kode_pos`, `mem_firebase_token`) VALUES
+(0, 'NO MEMBER', '-', '-', '-', '', '2019-06-14 00:54:19', '2021-05-29 06:39:22', 0, 0, NULL, 'super', '$2a$08$CqTRMafSGYA3.JUO6aET9edQBAswXqDE60C9zeZ2XRAd3bHZ/.5hq', 0, '', '-', '', '', 'token'),
+(1, 'KRIS JOHAN', 'JL.KOPO 642. BANDUNG, 40221', 'JL.KOPO 642. BANDUNG, 40221', '021-1234567', 'member_1614130912.png', '2019-06-10 23:55:37', '2021-03-24 06:37:41', 1, 1, '2019-06-11 00:13:17', 'kris', '5386c1e7bd9c410d07ffcc88fc2ceb29deafe180', 45, 'kris@yahoo.com', 'pp_1614131128.png', 'Bandung', '40134', ''),
+(2, 'JUNAEDI', 'CIKAWAO 53 BANDUNG', 'CIKAWAO 53 BANDUNG', '022', '-', '2019-06-11 02:38:04', '2021-02-23 03:54:52', 1, 1, '2019-06-19 00:52:50', 'junaedi', '$2a$08$YuMZxd2hEXe7lnqQDyxM2.GNJkEUg1rzk7NxouG4spqSmKo8blofG', 1, '', '-', '', '', ''),
+(3, 'WILLY NATHANAEL M', 'SUMBER HEGAR III NO 10-23. BANDUNG', 'SUMBER HEGAR III NO 10-23. BANDUNG', '023', '-', '2019-06-11 03:29:14', '2021-02-23 03:54:52', 1, 1, '2019-06-10 23:13:38', 'willy', '$2a$08$QJbw4i0AYneLtdWYOYRlde/f/wPTXPu0tP72hPbeXb16W0JbRcYrC', 0, '', '-', '', '', ''),
+(4, 'RENDY RENALDY', 'SUMBER HEGAR II NO 12. BANDUNG', 'SUMBER HEGAR II NO 12. BANDUNG', '021', '-', '2019-06-11 08:17:12', '2021-02-23 03:54:52', 1, 1, '2019-06-19 01:23:55', 'rendy', '$2a$08$Va0Q9SWyJYD3ktZLmo4eee45AYNPeQULGqs3xfE9ITi.3P4dbZgAu', 0, '', '-', '', '', ''),
+(5, 'TOMMY GUNAWAN', 'CIBURIAL 15. DAGO. BANDUNG', 'CIBURIAL 15. DAGO. BANDUNG', '022', '-', '2019-06-12 03:14:41', '2021-02-23 03:54:52', 1, 0, NULL, 'tommy', '$2a$08$w0E8WYczxyiui1plbGBpAOLl8ttssz/sjy0LS/l7obdkpGFaooy3G', 0, '', '-', '', '', ''),
+(6, 'INDRA SAPUTRA', 'AHMAD YANI. JL WIRANTA 21. BANDUNG 40121', 'AHMAD YANI. JL WIRANTA 21. BANDUNG 40121', '022', '-', '2019-06-12 06:24:57', '2021-02-23 03:54:52', 1, 0, NULL, 'indra', '$2a$08$dPhwhNpMswPTSUu5bjLyAOrK4jhJOOaAGck4SXYcLx52J04miWqqG', 0, '', '-', '', '', ''),
+(7, 'DIPO RUHUT SOMARMARA.SH', 'CISATU II NO 12. BANDUNG', 'CISATU II NO 12. BANDUNG', '021', '-', '2019-06-12 06:26:53', '2021-02-23 03:54:52', 1, 0, NULL, 'dipo', '$2a$08$m6y5f6UrzA12/SNzFJYJbeZ3BcJNLwIgfrgupSptjwt1JPstmymRm', 0, '', '-', '', '', ''),
+(8, 'LINGGA KWA', 'JL.HOLIS 171 F. BANDUNG', 'JL.HOLIS 171 F. BANDUNG', '021', '-', '2019-06-13 21:06:53', '2021-02-23 03:54:52', 1, 0, NULL, 'lingga', '$2a$08$EpyGjmq82ju4ZorcE7H6Pe3pkDPTAMQX5sIWISvkG4lhYKOiFN5zG', 2, '', '-', '', '', ''),
+(9, 'ANDY REZERYSALLY SIMANJUNTAK', 'JL.SEMARANG NO 108. ANTAPANI. BANDUNG', 'JL.SEMARANG NO 108. ANTAPANI. BANDUNG', '022', 'member_1614132970.png', '2019-06-18 00:40:56', '2021-02-24 02:17:16', 1, 0, NULL, 'andy', '$2a$08$.jWR021akRc40RuEHvfPRe.Oe9Oc2fq7nlOnOwc7DZtNGnRkI.LsS', 0, 'andy@yahoo.com', 'pp_1614133036.png', 'Bandung', '40134', ''),
+(10, 'RIA KARINA', 'JL.H.ABDUL HAMID NO 17. CICAHEUM. BANDUNG', 'JL.H.ABDUL HAMID NO 17. CICAHEUM. BANDUNG', '022', 'member_1611539739.png', '2021-01-25 01:55:39', '2021-02-23 03:54:52', 1, 0, NULL, 'riakarina', '$2a$08$Nq4njTPpUXYS4qI/B/KhXeyQCFTt9R7nMCpWyWALKPT.TwIy7MlaO', 3, '', '-', '', '', ''),
+(11, 'Fredy', 'JL.BAMBANG UTOYO 381. BATURAJA. SUM-SEL', 'JL.BAMBANG UTOYO 381. BATURAJA. SUM-SEL', '021', 'member_1611802167.png', '2021-01-28 02:49:27', '2021-03-24 05:44:39', 1, 1, '2021-03-24 05:44:21', 'fredy', '$2a$08$ZOm2PzlVQYsjlvzYONQbL.2QbwIbuuoMjFY4ONWOiORHgJD.MGlZa', 34, '', '-', '', '', ''),
+(12, 'DAVID WIJAYA', 'JL.MARIBAYA NO 74/138 KP SUKAMANAH, DESA LANGENSARI', 'JL.MARIBAYA NO 74/138 KP SUKAMANAH, DESA LANGENSARI', '022', 'member_1611803059.png', '2021-01-28 03:04:20', '2021-02-23 03:54:52', 1, 0, NULL, 'david', '$2a$08$t0MTgOcjiVwxzgyqfmYxhujey3jWJV3rIescFVcz4MBzoE6vlvI9u', 37, '', '-', '', '', ''),
+(13, 'ANDREW VS', 'JL.KAVLING DKI 1 NO 89. CIPAYUNG. JAKTIM', 'JL.KAVLING DKI 1 NO 89. CIPAYUNG. JAKTIM', '021', 'member_1611817679.png', '2021-01-28 03:07:33', '2021-02-23 03:54:52', 1, 1, '2021-01-27 20:08:02', 'andrew', '$2a$08$g0nT4IMpd7KbQGNTQjbvy.RSat1BEqB.TcroujbnQgEdcFrSx6kk6', 38, '', '-', '', '', ''),
+(14, 'Riska', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '022', 'member_1614134091.png', '2021-01-28 07:04:51', '2021-05-31 05:40:22', 1, 1, '2021-02-15 00:49:11', 'riska', '2d0a289874ef0cc560eb4233720be3cb0cfad1d5', 39, 'riskadewi.hendaya@gmail.com', 'member_16141340911.png', 'Bandung', '40134', 'cBH2ePavSFCclGoFNpc0cL:APA91bHjGnpn_Q-niL8s6im2tJyxkmxIRt4NKpQATkyneRNdV_qlbJn8t-XCyWCZYgC7j2UU7CKVLAWBhWcXF3qTCX77XC8bZU7_KgBEqlyxcDBPmlB0YWcz_M9gegRAvnApXFF5VIe8'),
+(15, 'Anton', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1611817742.png', '2021-01-28 07:09:02', '2021-02-23 03:54:52', 1, 0, NULL, 'anton', '$2a$08$YyVte9Z5d09PX0ngnWKbfeo4m65T3lvvnic5.uwsXxhhMBsqF32pO', 40, 'comxpert@gmail.com', '-', 'Bandung', '40134', ''),
+(16, 'Riska Dewi', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', '-', '2021-02-17 00:28:56', '2021-02-23 03:54:52', 1, 1, '2021-02-17 01:06:14', 'riskadewi', '$2a$08$iuHsftQ7Ir9IvmMx3rkiCeoNwguLqFPSjUQpxLogp6qy5ZpvuYaTu', 41, '', '-', '', '', ''),
+(17, 'Brabus', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1613522021.png', '2021-02-17 00:33:41', '2021-02-23 03:54:52', 1, 1, '2021-02-16 17:35:22', 'brabus', '$2a$08$MC6qmpqdOjTKP5NLVcciQe5g9Xuk8YPVO0Y1rO713sazqpcEUWN1C', 42, '', '-', '', '', ''),
+(18, 'Fiero', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1613522564.png', '2021-02-17 00:42:44', '2021-03-24 06:05:48', 1, 0, NULL, 'fiero', '$2a$08$q5gZCePBDkIMXnP4r3MpCeIB9j3sUpC6BvfCNDgzwCdEikEvmK0Ce', 43, 'fiero@yahoo.com', '-', 'bandung', '40134', ''),
+(19, 'Clio', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '022', 'member_1614061323.png', '2021-02-23 06:09:32', '2021-02-23 06:22:03', 1, 0, NULL, 'clio', '$2a$08$CzDjADZnOvQvHdL/1ic3Bu2jSBOhHwj1ISDa/fph6fHOSNlKGyaNy', 1, 'clio@yahoo.com', 'pp_1614061323.png', 'Bandung', '40134', ''),
+(20, 'Enzo', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614061133.png', '2021-02-23 06:14:27', '2021-02-23 06:18:53', 1, 0, NULL, 'enzo', '$2a$08$2hbY.Jyor76cuFIxRX6Z/e75fzQ3CZfhXIrR2J5mHgLhEMmgJnn5e', 1, 'enzo_von_hendric@yahoo.com', 'pp_1614061133.png', 'Bdg', '40221', ''),
+(21, 'Monza', 'Gg. Virgo ', 'Gg. Virgo ', '022', 'member_1614066499.png', '2021-02-23 07:48:19', '2021-02-23 07:48:19', 1, 0, NULL, 'monza', '$2a$08$tPR/cvgm3artbnwE6FbYze0nmrl3PxQ677765ZOuo38ik3dNU.FxG', 44, 'monza@yahoo.com', 'pp_1614066499.png', 'Bandung', '40134', ''),
+(22, 'Veyron', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614134500.png', '2021-02-24 02:41:41', '2021-02-24 02:41:41', 1, 0, NULL, 'veyron', '$2a$08$DuewAB.57B8QUz4fZ8wyCOxiSNhbw/dnhJzwlpRqXchd0.FmO1NyO', 46, '', '', '', '', ''),
+(23, 'Tessa', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1614134702.png', '2021-02-24 02:45:02', '2021-02-24 02:45:02', 1, 0, NULL, 'tessa', '$2a$08$JtJmmCtD0qQ5GwiCK7V/i.Qg.GJA9CTptPfQQwDv2OzmtcUynnn2W', 47, 'tessa@gmail.com', 'member_16141347021.png', 'Bandung', '40221', ''),
+(24, 'Audi', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', '-', '2021-03-24 06:44:24', '2021-03-24 06:44:24', 1, 0, NULL, 'audi', 'df44a1c6f830f3230610f6812231585f7b883859', 48, 'audi@gmail.com', '-', 'Bandung', '40221', ''),
+(25, 'Teddy', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1617237192.png', '2021-04-01 00:33:12', '2021-04-01 00:33:50', 1, 0, NULL, 'teddy', '8e253411902717ec585a7911662d2d8f285d52d0', 49, 'teddy@gmail.com', '-', 'Bandung', '40221', ''),
+(26, 'Louis', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1617239393.png', '2021-04-01 01:09:53', '2021-04-01 01:09:53', 1, 0, NULL, 'louis', 'd82ece8d514aca7e24d3fc11fbb8dada57f2966c', 50, 'audi@gmail.com', '-', 'Bandung', '40221', ''),
+(27, 'Pikachu', 'Gg. Virgo No. 3', 'Gg. Virgo No. 3', '021', 'member_1617332000.png', '2021-04-02 02:53:20', '2021-04-02 02:53:20', 1, 0, NULL, 'pikachu', 'e4409822ba1d95bebcec2dfaf8f8b3d2e7c8291e', 51, 'pikachu@yahoo.com', '-', 'Bandung', '40221', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `notification_id` int(11) NOT NULL,
+  `notificationtype_id` tinyint(4) NOT NULL,
+  `transaction_id` int(11) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `mem_id` int(11) NOT NULL,
+  `is_read` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notification_id`, `notificationtype_id`, `transaction_id`, `created_date`, `mem_id`, `is_read`) VALUES
+(1, 3, 35, '2021-05-03 14:25:59', 1, 0),
+(2, 8, 34, '2021-05-03 14:29:10', 1, 0),
+(3, 2, 19, '2021-05-03 14:40:45', 2, 0),
+(4, 8, 33, '2021-05-03 14:47:10', 1, 0),
+(5, 7, 25, '2021-05-03 14:50:11', 1, 0),
+(6, 1, 15, '2021-05-04 08:10:38', 1, 0),
+(7, 6, 17, '2021-05-04 08:12:51', 1, 0),
+(8, 4, 10, '2021-05-04 08:31:23', 0, 0),
+(9, 4, 10, '2021-05-04 08:31:23', 1, 0),
+(10, 4, 10, '2021-05-04 08:31:23', 2, 0),
+(11, 4, 10, '2021-05-04 08:31:23', 3, 0),
+(12, 4, 10, '2021-05-04 08:31:23', 4, 0),
+(13, 4, 10, '2021-05-04 08:31:23', 5, 0),
+(14, 4, 10, '2021-05-04 08:31:23', 6, 0),
+(15, 4, 10, '2021-05-04 08:31:23', 7, 0),
+(16, 4, 10, '2021-05-04 08:31:23', 8, 0),
+(17, 4, 10, '2021-05-04 08:31:23', 9, 0),
+(18, 4, 10, '2021-05-04 08:31:23', 10, 0),
+(19, 4, 10, '2021-05-04 08:31:23', 11, 0),
+(20, 4, 10, '2021-05-04 08:31:23', 12, 0),
+(21, 4, 10, '2021-05-04 08:31:23', 13, 0),
+(22, 4, 10, '2021-05-04 08:31:23', 14, 0),
+(23, 4, 10, '2021-05-04 08:31:23', 15, 0),
+(24, 4, 10, '2021-05-04 08:31:23', 16, 0),
+(25, 4, 10, '2021-05-04 08:31:23', 17, 0),
+(26, 4, 10, '2021-05-04 08:31:23', 18, 0),
+(27, 4, 10, '2021-05-04 08:31:23', 19, 0),
+(28, 4, 10, '2021-05-04 08:31:23', 20, 0),
+(29, 4, 10, '2021-05-04 08:31:23', 21, 0),
+(30, 4, 10, '2021-05-04 08:31:23', 22, 0),
+(31, 4, 10, '2021-05-04 08:31:23', 23, 0),
+(32, 4, 10, '2021-05-04 08:31:23', 24, 0),
+(33, 4, 10, '2021-05-04 08:31:23', 25, 0),
+(34, 4, 10, '2021-05-04 08:31:23', 26, 0),
+(35, 4, 10, '2021-05-04 08:31:23', 27, 0),
+(36, 4, 11, '2021-05-04 08:31:27', 0, 0),
+(37, 4, 11, '2021-05-04 08:31:27', 1, 0),
+(38, 4, 11, '2021-05-04 08:31:27', 2, 0),
+(39, 4, 11, '2021-05-04 08:31:27', 3, 0),
+(40, 4, 11, '2021-05-04 08:31:27', 4, 0),
+(41, 4, 11, '2021-05-04 08:31:27', 5, 0),
+(42, 4, 11, '2021-05-04 08:31:27', 6, 0),
+(43, 4, 11, '2021-05-04 08:31:27', 7, 0),
+(44, 4, 11, '2021-05-04 08:31:27', 8, 0),
+(45, 4, 11, '2021-05-04 08:31:27', 9, 0),
+(46, 4, 11, '2021-05-04 08:31:27', 10, 0),
+(47, 4, 11, '2021-05-04 08:31:27', 11, 0),
+(48, 4, 11, '2021-05-04 08:31:27', 12, 0),
+(49, 4, 11, '2021-05-04 08:31:27', 13, 0),
+(50, 4, 11, '2021-05-04 08:31:27', 14, 0),
+(51, 4, 11, '2021-05-04 08:31:27', 15, 0),
+(52, 4, 11, '2021-05-04 08:31:27', 16, 0),
+(53, 4, 11, '2021-05-04 08:31:27', 17, 0),
+(54, 4, 11, '2021-05-04 08:31:27', 18, 0),
+(55, 4, 11, '2021-05-04 08:31:27', 19, 0),
+(56, 4, 11, '2021-05-04 08:31:27', 20, 0),
+(57, 4, 11, '2021-05-04 08:31:27', 21, 0),
+(58, 4, 11, '2021-05-04 08:31:27', 22, 0),
+(59, 4, 11, '2021-05-04 08:31:27', 23, 0),
+(60, 4, 11, '2021-05-04 08:31:27', 24, 0),
+(61, 4, 11, '2021-05-04 08:31:27', 25, 0),
+(62, 4, 11, '2021-05-04 08:31:27', 26, 0),
+(63, 4, 11, '2021-05-04 08:31:27', 27, 0),
+(64, 5, 14, '2021-05-04 10:13:11', 0, 0),
+(65, 5, 14, '2021-05-04 10:13:11', 1, 0),
+(66, 5, 14, '2021-05-04 10:13:11', 2, 0),
+(67, 5, 14, '2021-05-04 10:13:11', 3, 0),
+(68, 5, 14, '2021-05-04 10:13:11', 4, 0),
+(69, 5, 14, '2021-05-04 10:13:11', 5, 0),
+(70, 5, 14, '2021-05-04 10:13:11', 6, 0),
+(71, 5, 14, '2021-05-04 10:13:11', 7, 0),
+(72, 5, 14, '2021-05-04 10:13:11', 8, 0),
+(73, 5, 14, '2021-05-04 10:13:11', 9, 0),
+(74, 5, 14, '2021-05-04 10:13:11', 10, 0),
+(75, 5, 14, '2021-05-04 10:13:11', 11, 0),
+(76, 5, 14, '2021-05-04 10:13:11', 12, 0),
+(77, 5, 14, '2021-05-04 10:13:11', 13, 0),
+(78, 5, 14, '2021-05-04 10:13:11', 14, 0),
+(79, 5, 14, '2021-05-04 10:13:11', 15, 0),
+(80, 5, 14, '2021-05-04 10:13:11', 16, 0),
+(81, 5, 14, '2021-05-04 10:13:11', 17, 0),
+(82, 5, 14, '2021-05-04 10:13:11', 18, 0),
+(83, 5, 14, '2021-05-04 10:13:11', 19, 0),
+(84, 5, 14, '2021-05-04 10:13:11', 20, 0),
+(85, 5, 14, '2021-05-04 10:13:11', 21, 0),
+(86, 5, 14, '2021-05-04 10:13:11', 22, 0),
+(87, 5, 14, '2021-05-04 10:13:11', 23, 0),
+(88, 5, 14, '2021-05-04 10:13:11', 24, 0),
+(89, 5, 14, '2021-05-04 10:13:11', 25, 0),
+(90, 5, 14, '2021-05-04 10:13:11', 26, 0),
+(91, 5, 14, '2021-05-04 10:13:11', 27, 0),
+(92, 1, 18, '2021-05-30 13:56:41', 14, 0),
+(93, 1, 18, '2021-05-30 14:01:49', 14, 0),
+(94, 1, 18, '2021-05-30 14:06:57', 14, 0),
+(95, 1, 18, '2021-05-30 14:08:27', 14, 0),
+(96, 1, 18, '2021-05-30 14:09:10', 14, 0),
+(97, 1, 18, '2021-05-30 14:14:14', 14, 0),
+(98, 1, 18, '2021-05-30 14:16:14', 14, 0),
+(99, 1, 18, '2021-05-30 14:39:11', 14, 0),
+(100, 1, 18, '2021-05-31 12:50:13', 14, 0),
+(101, 6, 18, '2021-05-31 13:23:00', 14, 0),
+(102, 2, 23, '2021-05-31 14:50:04', 1, 0),
+(103, 2, 22, '2021-05-31 14:52:31', 14, 0),
+(104, 7, 24, '2021-05-31 14:54:23', 14, 0),
+(105, 3, 4248, '2021-06-01 08:18:37', 14, 0),
+(106, 3, 4248, '2021-06-01 08:22:36', 14, 0),
+(107, 8, 40, '2021-06-01 08:25:04', 14, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notificationtype`
+--
+
+CREATE TABLE `notificationtype` (
+  `notificationtype_id` tinyint(4) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `notificationtype`
+--
+
+INSERT INTO `notificationtype` (`notificationtype_id`, `title`, `description`) VALUES
+(1, 'Stud Approval', 'Stud Approval Desc'),
+(2, 'Birth Approval', 'Birth Approval'),
+(3, 'Canine Update Approval', 'Canine Update Approval'),
+(4, 'New Product', 'New Product'),
+(5, 'New Event', 'New Event'),
+(6, 'Stud Rejection', 'Stud Rejection'),
+(7, 'Birth Rejection', 'Birth Rejection'),
+(8, 'Canine Update Rejection', 'Canine Update Rejection');
 
 -- --------------------------------------------------------
 
@@ -7819,7 +8003,12 @@ INSERT INTO `pedigrees` (`ped_id`, `ped_sire_id`, `ped_mom_id`, `ped_canine_id`,
 (3743, 4192, 4089, 4230, '2019-07-19 03:29:26', '2019-07-19 03:29:26'),
 (3744, 4175, 4149, 4231, '2019-07-19 03:30:53', '2019-07-19 03:30:53'),
 (3745, 4192, 4193, 4232, '2019-07-19 04:51:51', '2019-07-19 04:51:51'),
-(3746, 4207, 4180, 4233, '2019-07-19 05:16:54', '2019-07-19 05:16:54');
+(3746, 4207, 4180, 4233, '2019-07-19 05:16:54', '2019-07-19 05:16:54'),
+(3747, 4209, 4193, 4234, '2021-05-01 06:00:31', '2021-05-01 06:00:31'),
+(3748, 4211, 4195, 4241, '2021-05-03 07:40:45', '2021-05-03 07:40:45'),
+(3750, 4241, 4224, 4246, '2021-05-31 07:47:49', '2021-05-31 07:47:49'),
+(3751, 4241, 4221, 4247, '2021-05-31 07:50:04', '2021-05-31 07:50:04'),
+(3752, 4241, 4221, 4248, '2021-05-31 07:52:31', '2021-05-31 07:52:31');
 
 -- --------------------------------------------------------
 
@@ -7842,7 +8031,14 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`pro_id`, `pro_name`, `pro_price`, `pro_desc`, `pro_photo`, `pro_created_at`, `pro_updated_at`) VALUES
-(1, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47');
+(1, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(2, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(3, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(4, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(5, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(6, 'PEDIGREE POUCH', 6000, 'RAW FOOD', '', '2017-08-10 04:45:47', '2017-08-10 04:45:47'),
+(10, 'Star', 10000, 'Star', 'uploads/products/product_1620096428.png', '2021-05-04 01:31:23', '2021-05-04 01:31:23'),
+(11, 'Paw', 100000, 'Paw', 'uploads/products/product_1620091887.png', '2021-05-04 01:31:27', '2021-05-04 01:31:27');
 
 -- --------------------------------------------------------
 
@@ -7940,7 +8136,20 @@ INSERT INTO `requests` (`req_id`, `req_can_id`, `req_can_photo`, `req_can_cage`,
 (24, 537, 'canine_1561526666.png', 'kennel', 'address', 'owner', 0, NULL, '2019-06-26 05:24:26', 0),
 (25, 4211, '-', '', 'address', '', 0, NULL, '2019-06-30 08:54:08', 0),
 (26, 4230, 'canine_1611805364.png', '', '', '', 0, NULL, '2021-01-28 03:42:44', 0),
-(27, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-05 06:35:34', 0);
+(27, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-05 06:35:34', 0),
+(28, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-31 06:46:28', 0),
+(29, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-31 06:46:36', 0),
+(30, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-31 23:47:33', 0),
+(31, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-03-31 23:48:03', 0),
+(32, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 0, NULL, '2021-04-01 00:03:11', 0),
+(33, 8, '', 'Kris Kennel', 'Kennel address', 'Heaven', 1, '2021-05-03 07:47:10', '2021-04-01 06:41:32', 2),
+(34, 8, 'canines_1617259309.png', 'Kris Kennel', 'Kennel address', 'Heaven', 1, '2021-05-03 07:29:10', '2021-04-01 06:41:49', 2),
+(35, 8, 'canines_1617259330.png', 'Kris Kennel', 'Kris Kennel address', 'Heaven', 1, '2021-05-03 07:25:59', '2021-04-01 06:42:10', 1),
+(36, 8, 'canines_1617259624.png', 'Kris Kennel', 'Kris Kennel address', 'Heaven', 1, '2021-04-01 06:49:22', '2021-04-01 06:47:04', 1),
+(37, 8, '-', 'Kris Kennel', 'Kris Kennel address', 'Heaven', 1, '2021-04-01 06:48:19', '2021-04-01 06:47:08', 1),
+(38, 4248, '', 'SYNDICATE KENNEL TOMOHON', 'JL.RAYA KOLONGAN TOMOHON NO 31', 'Riska Dewi', 1, '2021-06-01 01:18:37', '2021-06-01 01:18:22', 1),
+(39, 4248, '', '', '', 'Riska', 1, '2021-06-01 01:22:36', '2021-06-01 01:22:27', 1),
+(40, 4246, '', '', 'TERUSAN JAKARTA UTARA NO 14 BANDUNG', 'Riska', 1, '2021-06-01 01:25:04', '2021-06-01 01:24:55', 2);
 
 -- --------------------------------------------------------
 
@@ -8071,16 +8280,18 @@ INSERT INTO `studs` (`stu_id`, `stu_sire_id`, `stu_sire_photo`, `stu_mom_id`, `s
 (5, 0, 'sire_1561921633.png', 0, 'dam_1561921633.png', '2019-06-25', 1, '2019-07-03 00:01:51', '2019-06-30 06:04:54', 'stud_1561921633.png', 2, 1, 'test'),
 (6, 4211, 'sire_1561880070.png', 4195, 'dam_1561880070.png', '2019-06-30', 1, '2019-07-02 01:04:06', '2019-06-30 07:34:30', 'stud_1561880070.png', 1, 1, 'note2'),
 (7, 4209, 'sire_1561922782.png', 4193, 'dam_1561922782.png', '2019-06-26', 1, '2019-07-02 01:07:45', '2019-06-30 19:26:22', 'stud_1561922782.png', 1, 2, 'ketr'),
-(8, 4209, 'sire_1561922782.png', 4193, 'dam_1561922782.png', '2019-06-26', 0, NULL, '2019-06-30 19:26:22', 'stud_1561922782.png', 0, 2, ''),
+(8, 4232, 'sire_1561922782.png', 4221, 'dam_1561922782.png', '2019-06-26', 1, '2021-05-01 06:05:08', '2019-06-30 19:26:22', 'stud_1561922782.png', 1, 2, ''),
 (9, 4186, 'sire_1562228194.png', 4188, 'dam_1562228194.png', '2019-07-04', 1, '2019-07-18 21:51:35', '2019-07-04 08:16:34', 'stud_1562228194.png', 1, 1, 'pacak'),
 (10, 4209, 'sire_1562311919.png', 4193, 'dam_1562311919.png', '2019-07-05', 1, '2019-07-05 07:31:59', '2019-07-05 07:31:59', 'stud_1562311919.png', 1, 3, ''),
 (11, 4207, 'sire_1562314993.png', 4187, 'dam_1562314993.png', '2019-06-30', 1, '2019-07-05 00:41:52', '2019-07-05 07:41:52', 'stud_1562314993.png', 1, 4, 'notes'),
 (12, 4207, 'sire_1562312730.png', 4180, 'dam_1562312730.png', '2019-07-05', 1, '2019-07-05 00:45:30', '2019-07-05 07:45:30', 'stud_1562312730.png', 1, 4, ''),
 (13, 4233, 'sire_1615341888.png', 4231, 'dam_1615341888.png', '2021-03-04', 1, '2021-03-10 02:06:01', '2021-03-10 02:04:48', 'stud_1615341888.png', 1, 1, 'approve'),
 (14, 4233, 'sire_1615348908.png', 4231, 'dam_1615348908.png', '2021-07-03', 1, '2021-03-10 04:13:12', '2021-03-10 04:01:48', 'stud_1615348908.png', 1, 1, 'pacak ah'),
-(15, 4233, 'sire_1615349623.png', 4231, 'dam_1615349623.png', '2021-03-10', 0, '2021-03-10 04:14:04', '2021-03-10 04:13:43', 'stud_1615349623.png', 0, 1, 'pacak'),
+(15, 4241, 'sire_1615349623.png', 4224, 'dam_1615349623.png', '2021-03-10', 1, '2021-05-04 01:10:38', '2021-03-10 04:13:43', 'stud_1615349623.png', 1, 1, ''),
 (16, 4233, 'sire_1615350074.png', 4231, 'dam_1615350074.png', '2020-12-01', 1, '2021-03-10 04:22:57', '2021-03-10 04:21:14', 'stud_1615350074.png', 1, 1, ''),
-(17, 0, 'sire_1615520095.png', 0, 'dam_1615520095.png', '2021-03-11', 0, NULL, '2021-03-12 03:32:51', 'stud_1615520095.png', 0, 1, '');
+(17, 4241, 'sire_1617176985.png', 4221, 'dam_1617176985.png', '2021-03-31', 1, '2021-05-04 01:12:51', '2021-03-12 03:32:51', 'stud_1617176985.png', 1, 1, ''),
+(18, 4241, 'sire_1622357146.png', 4221, 'dam_1622357146.png', '2021-05-30', 1, '2021-05-31 06:23:00', '2021-05-30 06:45:46', 'stud_1622357146.png', 1, 14, ''),
+(19, 4241, 'sire_1622357228.png', 4224, 'dam_1622357228.png', '2021-05-30', 1, '2021-05-30 06:47:08', '2021-05-30 06:47:08', 'stud_1622357228.png', 1, 14, 'test');
 
 -- --------------------------------------------------------
 
@@ -8375,6 +8586,20 @@ ALTER TABLE `members`
   ADD KEY `fk_member_kennel` (`mem_ken_id`);
 
 --
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`notification_id`),
+  ADD KEY `fk_notification_type` (`notificationtype_id`),
+  ADD KEY `fk_notification_member` (`mem_id`);
+
+--
+-- Indexes for table `notificationtype`
+--
+ALTER TABLE `notificationtype`
+  ADD PRIMARY KEY (`notificationtype_id`);
+
+--
 -- Indexes for table `pedigrees`
 --
 ALTER TABLE `pedigrees`
@@ -8459,13 +8684,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `births`
 --
 ALTER TABLE `births`
-  MODIFY `bir_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `bir_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `canines`
 --
 ALTER TABLE `canines`
-  MODIFY `can_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4234;
+  MODIFY `can_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4249;
 
 --
 -- AUTO_INCREMENT for table `contacts`
@@ -8477,7 +8702,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `evn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `evn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `event_champions`
@@ -8507,19 +8732,19 @@ ALTER TABLE `managements`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `mem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `mem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `pedigrees`
 --
 ALTER TABLE `pedigrees`
-  MODIFY `ped_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3747;
+  MODIFY `ped_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3753;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `pro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `profile`
@@ -8537,7 +8762,7 @@ ALTER TABLE `quotes`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `req_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `req_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `services`
@@ -8567,7 +8792,7 @@ ALTER TABLE `sponsors`
 -- AUTO_INCREMENT for table `studs`
 --
 ALTER TABLE `studs`
-  MODIFY `stu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `stu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `testimonials`
@@ -8609,6 +8834,13 @@ ALTER TABLE `logs_canine`
 --
 ALTER TABLE `members`
   ADD CONSTRAINT `fk_member_kennel` FOREIGN KEY (`mem_ken_id`) REFERENCES `kennels` (`ken_id`);
+
+--
+-- Constraints for table `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `fk_notification_member` FOREIGN KEY (`mem_id`) REFERENCES `members` (`mem_id`),
+  ADD CONSTRAINT `fk_notification_type` FOREIGN KEY (`notificationtype_id`) REFERENCES `notificationtype` (`notificationtype_id`);
 
 --
 -- Constraints for table `pedigrees`
