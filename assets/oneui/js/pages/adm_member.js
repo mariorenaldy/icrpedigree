@@ -718,8 +718,8 @@ $('#imageInputPP-update').on('change', function(e) {
 $('#cropper-modal').on('shown.bs.modal', function() {
     var image = $('#cropper-wrap-img > img'), cropBoxData, canvasData;
     image.cropper({
-        aspectRatio: 1 / 1,
-        autoCropArea: 0.5,
+        aspectRatio: NaN,
+        autoCropArea: 1,
         cropBoxResizable: true,
         checkImageOrigin: true,
         responsive: true,
@@ -734,8 +734,8 @@ $('#cropper-modal').on('shown.bs.modal', function() {
 $('#cropper-modal-PP').on('shown.bs.modal', function() {
     var image = $('#cropper-wrap-img-PP > img'), cropBoxData, canvasData;
     image.cropper({
-        aspectRatio: 1 / 1,
-        autoCropArea: 0.5,
+        aspectRatio: NaN,
+        autoCropArea: 1,
         cropBoxResizable: true,
         checkImageOrigin: true,
         responsive: true,
