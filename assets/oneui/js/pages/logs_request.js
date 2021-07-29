@@ -51,18 +51,7 @@ var BaseTableDatatables = function() {
                                 return '';
                         },
                     },
-                    { data: 'can_a_s',
-                        render: function(data, type, row) {
-                            if (row.ken_type_id == 1){
-                                return data + ' von ' + row.ken_name; 
-                            }
-                            else if (row.ken_type_id == 2){
-                                return row.ken_name + '\' ' + data;
-                            }
-                            else
-                                return data;
-                        },
-                    },
+                    { data: 'can_a_s'},
                     { data: 'log_cage'},
                     { data: 'log_address'},
                     { data: 'log_owner'},

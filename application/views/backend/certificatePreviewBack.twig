@@ -36,7 +36,7 @@
     .parent_color{
         color: #FFFFFF !important;
     }
-    .parent_name span.icr{
+    .icr{
         color: #FF0000 !important;
     }
     .white{
@@ -75,6 +75,8 @@
             <div class="row tentang_surat">
                 <div class="col-xs-3"></div>
                 <div class="col-xs-3 font-w600 pull-right" style="z-index:2; margin:0 0 0 0;">
+                    <br>
+                    <br>
                     {% if canine[0].sire[0].sire[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
                         {% if canine[0].sire[0].sire[0].sire[0].can_icr_number != '-' %}
@@ -91,6 +93,7 @@
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
                     <br>
+                    
 
                     {% if canine[0].sire[0].sire[0].mom[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
@@ -107,6 +110,8 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
+                    <br>
+                    <br>
                     <br>
 
                     {% if canine[0].sire[0].mom[0].sire[0] != null %}
@@ -142,6 +147,8 @@
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
                     <br>
+                    <br>
+                    <br>
 
                     {% if canine[0].mom[0].sire[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
@@ -176,6 +183,9 @@
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
                     <br>
+                    <br>
+                    <br>
+                    
 
                     {% if canine[0].mom[0].mom[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
@@ -227,7 +237,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br>
+                    <br><br><br><br><br><br><br>
 
                     {% if canine[0].sire[0].mom[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
@@ -244,7 +254,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br>
+                    <br><br><br><br><br><br>
 
                     {% if canine[0].mom[0].sire[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Sire:</span>
@@ -261,7 +271,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</span></h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br>
+                    <br><br><br><br><br><br><br>
 
                     {% if canine[0].mom[0].mom[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
@@ -296,7 +306,7 @@
                         <h6 class="parent_number" style="font-weight:500;"><span style="font-size:0.7em;">Current Reg./ICR No. #:</span><span style="font-size: 0.9em;"> -</h6>
                         <h6 class="parent_color" style="font-weight:500; font-size:0.9em;">-</h6>
                     {% endif %}
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
                     {% if canine[0].mom[0] != null %}
                         <h6 class="parent_name"><span style="font-weight:500; font-size: 1.1em;">Dam:</span>
@@ -324,59 +334,25 @@
 
                 <div class="col-xs-4" style="z-index:1 !important; margin: 280px 0 0 45px; position: absolute;">
                     <h3 class="font-w600" style="color:#FF0000 !important;">
-                        {% if canine[0].ken_type_id == 1 %}
-                            {{canine[0].can_a_s}} von {{canine[0].ken_name}}
-                        {% elseif canine[0].ken_type_id == 2 %}
-                            {{canine[0].ken_name}}' {{canine[0].can_a_s}}
-                        {% else %}
-                            {{canine[0].can_a_s}}
-                        {% endif %}
+                        {{canine[0].can_a_s}}
                     </h3>
                     <h4 class="white" style="margin-top: 10px;" >Breeder: {{canine[0].can_owner_name}}</h4>
                     <div class="white" style="margin-top: 5px; font-size:0.7em;">Siblings:</div>
                     <div class="white" style="margin-top: 5px; font-size:0.7em;">
                         {% for male in sibling_male %}
                             {% if loop.index == male|length %}
-                                {% if male.ken_type_id == 1 %}
-                                    {{- male.can_a_s}} von {{male.ken_name}}
-                                {% elseif male.ken_type_id == 2 %}
-                                    {{- male.ken_name}}' {{male.can_a_s}}
-                                {% else %}
-                                    {{- male.can_a_s}}
-                                {% endif %}
-                                {# {{- male.can_a_s}} #}
+                                {{- male.can_a_s}}
                             {% else %}
-                                {% if male.ken_type_id == 1 %}
-                                    ,{{- male.can_a_s}} von {{male.ken_name}}
-                                {% elseif male.ken_type_id == 2 %}
-                                    ,{{- male.ken_name}}' {{male.can_a_s}}
-                                {% else %}
-                                    ,{{- male.can_a_s}}
-                                {% endif %}
-                                {# ,{{- male.can_a_s}} #}
+                                ,{{- male.can_a_s}}
                             {% endif %}
                         {% endfor %}(male)
                     </div>
                     <div class="white" style="margin-top: 5px; font-size:0.7em;">
                         {% for female in sibling_female %}
                             {% if loop.index == female|length %}
-                                {% if female.ken_type_id == 1 %}
-                                    {{- female.can_a_s}} von {{female.ken_name}}
-                                {% elseif female.ken_type_id == 2 %}
-                                    {{- female.ken_name}}' {{female.can_a_s}}
-                                {% else %}
-                                    {{- female.can_a_s}}
-                                {% endif %}
-                                {# {{female.can_a_s}} #}
+                                {{female.can_a_s}}
                             {% else %}
-                                {% if female.ken_type_id == 1 %}
-                                    ,{{- female.can_a_s}} von {{female.ken_name}}
-                                {% elseif female.ken_type_id == 2 %}
-                                    ,{{- female.ken_name}}' {{female.can_a_s}}
-                                {% else %}
-                                    ,{{- female.can_a_s}}
-                                {% endif %}
-                                {# ,{{female.can_a_s}} #}
+                                ,{{female.can_a_s}}
                             {% endif %}
                         {% endfor %}(female)
                     </div>

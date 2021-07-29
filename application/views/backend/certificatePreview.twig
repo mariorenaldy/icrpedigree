@@ -169,25 +169,9 @@
                     {% if canine[0].can_as_count > 28 %}
 
                       {% if canine[0].can_icr_number != '-' %}
-                        <p class="as" style="color:red; width: 310px;" >
-                              {% if canine[0].ken_type_id == 1 %}
-                                  {{canine[0].can_a_s}} von {{canine[0].ken_name}}
-                              {% elseif canine[0].ken_type_id == 2 %}
-                                  {{canine[0].ken_name}}' {{canine[0].can_a_s}}
-                              {% else %}
-                                  {{canine[0].can_a_s}}
-                              {% endif %}
-                          </p>
+                        <p class="as" style="color:red; width: 310px;" >{{canine[0].can_a_s}}</p>
                           {% else %}
-                        <p class="as2" style="color:white; width: 310px;" >
-                              {% if canine[0].ken_type_id == 1 %}
-                                  {{canine[0].can_a_s}} von {{canine[0].ken_name}}
-                              {% elseif canine[0].ken_type_id == 2 %}
-                                  {{canine[0].ken_name}}' {{canine[0].can_a_s}}
-                              {% else %}
-                                  {{canine[0].can_a_s}}
-                              {% endif %}
-                          </p>
+                        <p class="as2" style="color:white; width: 310px;" >{{canine[0].can_a_s}}</p>
                       {% endif %}
 
 
@@ -198,25 +182,9 @@
                     {% else %}
 
                     {% if canine[0].can_icr_number != '-' %}
-                        <p class="as" style="color:red;" >
-                            {% if canine[0].ken_type_id == 1 %}
-                                {{canine[0].can_a_s}} von {{canine[0].ken_name}}
-                            {% elseif canine[0].ken_type_id == 2 %}
-                                {{canine[0].ken_name}}' {{canine[0].can_a_s}}
-                            {% else %}
-                                {{canine[0].can_a_s}}
-                            {% endif %}
-                        </p>
+                        <p class="as" style="color:red;" >{{canine[0].can_a_s}}</p>
                         {% else %}
-                        <p class="as2" style="color:white;" >
-                            {% if canine[0].ken_type_id == 1 %}
-                                {{canine[0].can_a_s}} von {{canine[0].ken_name}}
-                            {% elseif canine[0].ken_type_id == 2 %}
-                                {{canine[0].ken_name}}' {{canine[0].can_a_s}}
-                            {% else %}
-                                {{canine[0].can_a_s}}
-                            {% endif %}
-                        </p>
+                        <p class="as2" style="color:white;" >{{canine[0].can_a_s}}</p>
                     {% endif %}
 
 

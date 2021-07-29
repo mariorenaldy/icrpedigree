@@ -220,8 +220,19 @@ class Canines extends CI_Controller {
               }
 
               if ($cek4){
+                if (!empty($this->input->post('can_member'))){
+                  $whereMember['mem_id'] = $this->input->post('can_member');
+                  $member = $this->memberModel->get_members($whereMember)->result();
+                  if ($member){
+                    if ($member[0]->ken_type_id == 1)
+                      $data['can_a_s'] = $this->input->post('can_a_s')." VON ".$member[0]->ken_name;
+                    else if ($member[0]->ken_type_id == 2)
+                      $data['can_a_s'] = $member[0]->ken_name."` ".$this->input->post('can_a_s');
+                  }
+                }
+
                 $cek5 = true;
-                $res = $this->caninesModel->check_can_a_s('', $this->input->post('can_a_s'));
+                $res = $this->caninesModel->check_can_a_s('', $data['can_a_s']);
                 if ($res){
                   $cek5 = false;
                 }
