@@ -183,7 +183,7 @@ class Certificate extends CI_Controller {
 				if ($data['canine'][0]['ped_sire_id'] != '86' && $data['canine'][0]['ped_mom_id'] != '87') {
 					// sibling male
 					$whereMale['can_gender'] = 'Male';
-					$whereMale['can_date_of_birth'] = $data['canine'][0]['can_date_of_birth'];
+					$whereMale['DATE_FORMAT(can_date_of_birth, "%d-%m-%Y") = '] = $data['canine'][0]['can_date_of_birth'];
 					$whereMale['ped_canine_id !='] = $data['canine'][0]['can_id'];
 					$whereMale['ped_sire_id'] = $data['canine'][0]['ped_sire_id'];
 					$whereMale['ped_mom_id'] = $data['canine'][0]['ped_mom_id'];
@@ -191,7 +191,7 @@ class Certificate extends CI_Controller {
 
 					// sibling Female
 					$whereFamale['can_gender'] = 'Female';
-					$whereFamale['can_date_of_birth'] = $data['canine'][0]['can_date_of_birth'];
+					$whereFamale['DATE_FORMAT(can_date_of_birth, "%d-%m-%Y") = '] = $data['canine'][0]['can_date_of_birth'];
 					$whereFamale['ped_canine_id !='] = $data['canine'][0]['can_id'];
 					$whereFamale['ped_sire_id'] = $data['canine'][0]['ped_sire_id'];
 					$whereFamale['ped_mom_id'] = $data['canine'][0]['ped_mom_id'];
