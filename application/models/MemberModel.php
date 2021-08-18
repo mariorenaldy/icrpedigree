@@ -37,6 +37,15 @@ class MemberModel extends CI_Model {
         return $this->db->get();
       }
 
+    public function get_ktp($ktp){
+        $this->db->select('*');
+        if ($ktp != null ) {
+            $this->db->where('mem_ktp', $ktp);
+        }
+        $this->db->from('members');
+        return $this->db->get();
+    }
+
     public function add_members($data = null){
         $result = false;
         if ($data != null) {

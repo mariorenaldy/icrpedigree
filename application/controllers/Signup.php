@@ -33,6 +33,12 @@ class Signup extends CI_Controller {
 				return false;
 			}
 
+			$member = $this->memberModel->get_ktp($this->input->post('mem_ktp'))->result();
+			if ($member) {
+				echo json_encode(array('data' => 'KTP Anda Sudah Terdaftar!'));
+				return false;
+			}
+
 			if ($this->input->post('password') == $this->input->post('repass')) {
 				$data = array(
 					'mem_name' => $this->input->post('mem_name'),
@@ -42,6 +48,7 @@ class Signup extends CI_Controller {
 					'mem_kota' => $this->input->post('mem_kota'),
 					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 					'mem_email' => $this->input->post('mem_email'),
+					'mem_ktp' => $this->input->post('mem_ktp'),
 				);
 	
 				$data['mem_photo'] = '-';

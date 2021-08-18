@@ -66,8 +66,8 @@
                         <img id="imgPreviewPP" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
                         <div class="fileUpload btn btn-default btn-flat btn-block">
                             <span>Upload Profile<br/> Picture</span>
-                            <input type="file" class="upload" name="photoPP" id="imageInputPP" required/>
-                            <input type="hidden" class="" name="srcDataCropPP" id="srcDataCropPP" required/>
+                            <input type="file" class="upload" name="photoPP" id="imageInputPP"/>
+                            <input type="hidden" class="" name="srcDataCropPP" id="srcDataCropPP"/>
                         </div>
                         <!-- <small class="text-muted">Ratio 1:1</small> -->
                     </div>
@@ -119,6 +119,12 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="text-white-1" for="ktp-add-member">No. KTP</label>
+                            <input class="form-control" id="ktp-add-member" name="mem_ktp" type="text" required>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-xs-12">
                             <label class="text-white-1" for="username-add-user">Username</label>
