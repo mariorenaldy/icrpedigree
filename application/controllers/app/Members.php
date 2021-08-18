@@ -475,6 +475,14 @@ class Members extends CI_Controller {
 				]); 
 			}
 
+			if (!$err && empty($this->input->post('mem_ktp'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'No. KTP member wajib diisi'
+				]); 
+			}
+
 			if (!$err && empty($this->input->post('mem_username'))){
 				$err++;
 				echo json_encode([
@@ -506,6 +514,17 @@ class Members extends CI_Controller {
 					echo json_encode([
 						'status' => false,
 						'message' => 'Username sudah ada'
+					]);
+				}
+			}
+
+			if (!$err){
+				$member = $this->memberModel->get_ktp($this->input->post('mem_ktp'))->result();
+				if ($member) {
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'No. KTP sudah ada'
 					]);
 				}
 			}
@@ -592,6 +611,7 @@ class Members extends CI_Controller {
 					'mem_kota' => $this->input->post('mem_kota'),
 					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 					'mem_email' => $this->input->post('mem_email'),
+					'mem_ktp' => $this->input->post('mem_ktp'),
 					'mem_pp' => $pp,
 					'mem_username' => $this->input->post('mem_username'),
 					'mem_password' => sha1($this->input->post('password')),
