@@ -51,17 +51,18 @@
         <div class="row">
             <form id="form-update-member" data-is-member="{{ members|json_encode }}" action="" class="form-update-member form-horizontal" method="post">
                 <div class="form-group">
-                    <div class="col-xs-3"></div>
+                    <!-- <div class="col-xs-3"></div>
                     <div class="col-xs-2">
                         <img id="imgPreview" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
                         <div class="fileUpload btn btn-default btn-flat btn-block">
                             <span>Upload KTP</span>
                             <input type="file" class="upload" name="photo" id="imageInput"/>
                             <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop"/>
-                        </div>
+                        </div> -->
                         <!-- <small class="text-muted">Ratio 1:1</small> -->
-                    </div>
-                    <div class="col-xs-2"></div>
+                    <!-- </div>
+                    <div class="col-xs-2"></div> -->
+                    <div class="col-xs-5"></div> 
                     <div class="col-xs-2">
                         <img id="imgPreviewPP" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
                         <div class="fileUpload btn btn-default btn-flat btn-block">
@@ -71,9 +72,11 @@
                         </div>
                         <!-- <small class="text-muted">Ratio 1:1</small> -->
                     </div>
-                    <div class="col-xs-3"></div>
+                    <div class="col-xs-5"></div> 
+                    <!-- <div class="col-xs-3"></div> -->
                 </div>
                 <br/>
+                <!--
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -118,7 +121,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                -->
+                <div class="col-md-6 col-md-offset-3">
                     <div class="form-group">
                         <div class="col-xs-12">
                             <label class="text-white-1" for="username-update-member">Username</label>
@@ -147,6 +151,7 @@
                 <div class="form-group">
                     <br/>
                 </div>
+                <!--
                 <div class="form-group">
                     <div class="col-xs-2 col-xs-offset-5">
                         <img id="imgPreviewLogo" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
@@ -159,7 +164,9 @@
                             <input type="file" class="upload" name="ken_photo" id="imageInputLogo"/>
                             <input type="hidden" class="" name="ken_srcDataCrop" id="srcDataCropLogo"/>
                         </div>
+                        -->
                         <!-- <small class="text-muted">Ratio 1:1</small> -->
+                        <!--
                     </div>
                 </div>
                 <div class="form-group">
@@ -177,6 +184,7 @@
                         </select>
                     </div>
                 </div>
+                -->
                 <div class="form-group">
                     <div class="col-xs-12 text-center">
                         <button type="submit" class="btn btn-primary submit-update-member">Simpan</button>

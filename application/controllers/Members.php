@@ -38,22 +38,22 @@ class Members extends CI_Controller {
 		}
 
 		public function update($id = null){
-			$data = array(
-				'mem_name' => $this->input->post('mem_name'),
-				'mem_address' => $this->input->post('mem_address'),
-				'mem_mail_address' => $this->input->post('mem_mail_address'),
-				'mem_hp' => $this->input->post('mem_hp'),
-				'mem_kota' => $this->input->post('mem_kota'),
-				'mem_kode_pos' => $this->input->post('mem_kode_pos'),
-				'mem_email' => $this->input->post('mem_email'),
-			);
+			// $data = array(
+			// 	'mem_name' => $this->input->post('mem_name'),
+			// 	'mem_address' => $this->input->post('mem_address'),
+			// 	'mem_mail_address' => $this->input->post('mem_mail_address'),
+			// 	'mem_hp' => $this->input->post('mem_hp'),
+			// 	'mem_kota' => $this->input->post('mem_kota'),
+			// 	'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+			// 	'mem_email' => $this->input->post('mem_email'),
+			// );
 
-			$img = $this->input->post('srcDataCrop');
-			if ($img){
-				$title = self::_clean_text('member');
-				$this->path_upload = 'uploads/members/';
-				$data['mem_photo'] = self::_upload_base64($img, $title, true, $id);
-			}
+			// $img = $this->input->post('srcDataCrop');
+			// if ($img){
+			// 	$title = self::_clean_text('member');
+			// 	$this->path_upload = 'uploads/members/';
+			// 	$data['mem_photo'] = self::_upload_base64($img, $title, true, $id);
+			// }
 
 			$imgPP = $this->input->post('srcDataCropPP');
 			if ($imgPP){
@@ -84,32 +84,32 @@ class Members extends CI_Controller {
 				}
 			}
 			
-			$kennel = array(
-				'ken_name' => $this->input->post('ken_name'),
-				'ken_type_id' => $this->input->post('ken_type_id')
-			);
+			// $kennel = array(
+			// 	'ken_name' => $this->input->post('ken_name'),
+			// 	'ken_type_id' => $this->input->post('ken_type_id')
+			// );
 
-			$ken_img = $this->input->post('ken_srcDataCrop');
-			if ($ken_img) {
-				$ken_title = self::_clean_text('kennel');
-				$this->path_upload = 'uploads/kennels/';
-				if ($this->input->post('mem_ken_id'))
-					$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
-				else
-					$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
-			}
+			// $ken_img = $this->input->post('ken_srcDataCrop');
+			// if ($ken_img) {
+			// 	$ken_title = self::_clean_text('kennel');
+			// 	$this->path_upload = 'uploads/kennels/';
+			// 	if ($this->input->post('mem_ken_id'))
+			// 		$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+			// 	else
+			// 		$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
+			// }
 			
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			if ($this->input->post('mem_ken_id'))
-				$this->KennelModel->edit_kennels($kennel, $this->input->post('mem_ken_id'));
-			else{
-				if (!$ken_img) 
-					$kennel['ken_photo'] = '-';
-				$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
-				$data['mem_ken_id'] = $kennel['ken_id'];
-				$this->KennelModel->add_kennels($kennel);
-			}
+			// $this->db->trans_strict(FALSE);
+			// $this->db->trans_start();
+			// if ($this->input->post('mem_ken_id'))
+			// 	$this->KennelModel->edit_kennels($kennel, $this->input->post('mem_ken_id'));
+			// else{
+			// 	if (!$ken_img) 
+			// 		$kennel['ken_photo'] = '-';
+			// 	$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
+			// 	$data['mem_ken_id'] = $kennel['ken_id'];
+			// 	$this->KennelModel->add_kennels($kennel);
+			// }
 
 			$this->memberModel->update_members($data, $where);
 			$this->db->trans_complete();
