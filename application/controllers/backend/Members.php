@@ -184,7 +184,11 @@ class Members extends CI_Controller {
 				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
 				return false;
 			}
-			
+			$member = $this->memberModel->get_ktp_update($this->input->post('mem_ktp'), $id)->result();
+			if (count($member) > 1){
+				echo json_encode(array('data' => 'No. KTP sudah ada'));
+				return false;
+			}
 			if (isset($data['password']) && $data['password'] != ''){
 				if ($data['newpass'] == $data['repass']){
 					if (sha1($data['password']) == $user['mem_password']) {
