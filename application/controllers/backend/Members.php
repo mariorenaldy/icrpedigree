@@ -44,6 +44,11 @@ class Members extends CI_Controller {
 				echo json_encode(array('data' => 'Username Sudah Ada!'));
 				return false;
 			}
+			$member = $this->memberModel->get_ktp($this->input->post('mem_ktp'))->result();
+			if (count($member) > 1){
+				echo json_encode(array('data' => 'No. KTP sudah ada'));
+				return false;
+			}
 			if ($data['password'] == $data['repass']) {
 				$data['mem_password'] = sha1($data['password']);
 				unset($data['password']);
@@ -67,7 +72,7 @@ class Members extends CI_Controller {
 						$member = $this->memberModel->get_members($where)->row();
 						echo json_encode($member);
 				}else{
-						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username', 'ken_name', 'mem_ken_id', 'mem_email', 'mem_pp', 'mem_kota', 'mem_kode_pos');
+						$aColumns = array('mem_id', 'mem_name', 'mem_address', 'mem_mail_address', 'mem_hp', 'mem_photo', 'mem_created_at', 'mem_updated_at', 'mem_stat', 'mem_app_user', 'mem_app_date', 'use_username', 'ken_name', 'mem_ken_id', 'mem_email', 'mem_pp', 'mem_kota', 'mem_kode_pos', 'mem_ktp');
 						$sTable = 'members';
 
 						$iDisplayStart = $this->input->get_post('start', true);

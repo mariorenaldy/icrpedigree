@@ -47,6 +47,7 @@ var BaseTableDatatables = function() {
                     { data: 'mem_kota'},
                     { data: 'mem_kode_pos'},
                     { data: 'mem_email'},
+                    { data: 'mem_ktp'},
                     { data: 'mem_pp',
                       render: function(data, type, row) {
                         if (data == '-') {
@@ -605,6 +606,7 @@ function openModal(target, type, id) {
             $('#kota-update-member').val(res.mem_kota);
             $('#kode-pos-update-member').val(res.mem_kode_pos);
             $('#email-update-member').val(res.mem_email);
+            $('#ktp-update-member').val(res.mem_ktp);
 
             $("#kennel-update-member").html("").trigger('change');
             var newOption = new Option(res.ken_name, res.mem_ken_id, false, false);
