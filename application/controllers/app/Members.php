@@ -44,87 +44,87 @@ class Members extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && empty($this->input->post('mem_name'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Nama sesuai KTP wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_name'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Nama sesuai KTP wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_address'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Alamat sesuai KTP wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_address'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Alamat sesuai KTP wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_mail_address'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Alamat surat menyurat wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_mail_address'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Alamat surat menyurat wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_hp'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'No. telp member wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_hp'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'No. telp member wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_kota'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Kota member wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_kota'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Kota member wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_kode_pos'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Kode pos member wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_kode_pos'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Kode pos member wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('mem_email'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Email member wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('mem_email'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Email member wajib diisi'
+			// 	]); 
+			// }
 
-			if (!$err && empty($this->input->post('ken_name'))){
-				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Nama kennel wajib diisi'
-				]); 
-			}
+			// if (!$err && empty($this->input->post('ken_name'))){
+			// 	$err++;
+			// 	echo json_encode([
+			// 		'status' => false,
+			// 		'message' => 'Nama kennel wajib diisi'
+			// 	]); 
+			// }
 
-			$photo = '';
-			if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_member'));
-					if ($this->upload->do_upload('attachment_member')){
-						$uploadData = $this->upload->data();
-						$photo = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
-				}
-			}
+			// $photo = '';
+			// if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+			// 	if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+			// 		$this->upload->initialize($this->config->item('upload_member'));
+			// 		if ($this->upload->do_upload('attachment_member')){
+			// 			$uploadData = $this->upload->data();
+			// 			$photo = $uploadData['file_name'];
+			// 		}
+			// 		else{
+			// 			$err++;
+			// 			echo json_encode([
+			// 				'status' => false,
+			// 				'message' => $this->upload->display_errors()
+			// 			]);
+			// 		}
+			// 	}
+			// }
 
 			$pp = '';
 			if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
@@ -144,23 +144,23 @@ class Members extends CI_Controller {
 				}
 			}
 
-			$logo = '';
-			if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-					$this->upload->initialize($this->config->item('upload_kennel'));
-					if ($this->upload->do_upload('attachment_logo')){
-						$uploadData = $this->upload->data();
-						$logo = $uploadData['file_name'];
-					}
-					else{
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => $this->upload->display_errors()
-						]);
-					}
-				}
-			}
+			// $logo = '';
+			// if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+			// 	if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+			// 		$this->upload->initialize($this->config->item('upload_kennel'));
+			// 		if ($this->upload->do_upload('attachment_logo')){
+			// 			$uploadData = $this->upload->data();
+			// 			$logo = $uploadData['file_name'];
+			// 		}
+			// 		else{
+			// 			$err++;
+			// 			echo json_encode([
+			// 				'status' => false,
+			// 				'message' => $this->upload->display_errors()
+			// 			]);
+			// 		}
+			// 	}
+			// }
 
 			if (!$err){
 				$where['mem_id'] = $this->input->post('mem_id');
@@ -174,12 +174,12 @@ class Members extends CI_Controller {
 				}
 			}
 
-			if (!$err && $photo && $member->result()[0]->mem_photo){
-				$curr_image = $this->config->item('upload_path_member').'/'.$member->result()[0]->mem_photo;
-				if (file_exists($curr_image)){
-					unlink($curr_image);
-				}
-			}
+			// if (!$err && $photo && $member->result()[0]->mem_photo){
+			// 	$curr_image = $this->config->item('upload_path_member').'/'.$member->result()[0]->mem_photo;
+			// 	if (file_exists($curr_image)){
+			// 		unlink($curr_image);
+			// 	}
+			// }
 
 			if (!$err && $pp && $member->result()[0]->mem_pp){
 				$curr_image = $this->config->item('upload_path_member').'/'.$member->result()[0]->mem_pp;
@@ -188,53 +188,53 @@ class Members extends CI_Controller {
 				}
 			}
 
-			if (!$err){
-				$where2['ken_id'] = $member->result()[0]->mem_ken_id;
-				$kennel = $this->KennelModel->get_kennels($where2);
-				if ($logo && $kennel && $kennel->result()[0]->ken_id && $kennel->result()[0]->ken_photo){
-					$curr_image = $this->config->item('upload_path_kennel').'/'.$kennel->result()[0]->ken_photo;
-					if (file_exists($curr_image)){
-						unlink($curr_image);
-					}
-				}
-			}
+			// if (!$err){
+			// 	$where2['ken_id'] = $member->result()[0]->mem_ken_id;
+			// 	$kennel = $this->KennelModel->get_kennels($where2);
+			// 	if ($logo && $kennel && $kennel->result()[0]->ken_id && $kennel->result()[0]->ken_photo){
+			// 		$curr_image = $this->config->item('upload_path_kennel').'/'.$kennel->result()[0]->ken_photo;
+			// 		if (file_exists($curr_image)){
+			// 			unlink($curr_image);
+			// 		}
+			// 	}
+			// }
 
 			if (!$err){
-				$data = array(
-					'mem_name' => $this->input->post('mem_name'),
-					'mem_address' => $this->input->post('mem_address'),
-					'mem_mail_address' => $this->input->post('mem_mail_address'),
-					'mem_hp' => $this->input->post('mem_hp'),
-					'mem_kota' => $this->input->post('mem_kota'),
-					'mem_kode_pos' => $this->input->post('mem_kode_pos'),
-					'mem_email' => $this->input->post('mem_email')
-				);
-				if ($photo)
-					$data['mem_photo'] = $photo;
+				// $data = array(
+				// 	'mem_name' => $this->input->post('mem_name'),
+				// 	'mem_address' => $this->input->post('mem_address'),
+				// 	'mem_mail_address' => $this->input->post('mem_mail_address'),
+				// 	'mem_hp' => $this->input->post('mem_hp'),
+				// 	'mem_kota' => $this->input->post('mem_kota'),
+				// 	'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+				// 	'mem_email' => $this->input->post('mem_email')
+				// );
+				// if ($photo)
+				// 	$data['mem_photo'] = $photo;
 				if ($pp)
 					$data['mem_pp'] = $pp;
 				
-				$kennel_data = array(
-					'ken_name' => $this->input->post('ken_name'),
-					'ken_type_id' => $this->input->post('ken_type_id')
-				);
-				if ($logo)
-					$kennel_data['ken_photo'] = $logo;
+				// $kennel_data = array(
+				// 	'ken_name' => $this->input->post('ken_name'),
+				// 	'ken_type_id' => $this->input->post('ken_type_id')
+				// );
+				// if ($logo)
+				// 	$kennel_data['ken_photo'] = $logo;
 
-				$this->db->trans_strict(FALSE);
-				$this->db->trans_start();
-				if ($kennel && $kennel->result()[0]->ken_id)
-					$this->KennelModel->edit_kennels($kennel_data, $kennel->result()[0]->ken_id);
-				else{
-					$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
-					$data['mem_ken_id'] = $kennel_data['ken_id'];
-					if (!$logo)
-						$kennel_data['ken_photo'] = '-';
-					$this->KennelModel->add_kennels($kennel_data);
-				}
+				// $this->db->trans_strict(FALSE);
+				// $this->db->trans_start();
+				// if ($kennel && $kennel->result()[0]->ken_id)
+				// 	$this->KennelModel->edit_kennels($kennel_data, $kennel->result()[0]->ken_id);
+				// else{
+				// 	$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
+				// 	$data['mem_ken_id'] = $kennel_data['ken_id'];
+				// 	if (!$logo)
+				// 		$kennel_data['ken_photo'] = '-';
+				// 	$this->KennelModel->add_kennels($kennel_data);
+				// }
 
 				$this->memberModel->update_members($data, $where);
-				$this->db->trans_complete();
+				// $this->db->trans_complete();
 				echo json_encode([
 					'status' => true
 				]);
