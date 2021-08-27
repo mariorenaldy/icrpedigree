@@ -42,7 +42,7 @@ var initValidationUpdate = function() {
                     res = $.parseJSON(res);
                     if (res.data == '1') {
                         window.location.reload();
-                        alert('Data member berhasil diubah!');
+                        alert('Data member berhasil disimpan!');
                     }else {
                         alert(res.data);
                     }

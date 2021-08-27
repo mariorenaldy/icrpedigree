@@ -6,7 +6,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('contactModel', 'caninesModel', 'pedigreesModel', 'profileModel', 'sponsorModel', 'productModel', 'navigation', 'memberModel', 'KenneltypeModel', 'KennelModel'));
+			$this->load->model(array('contactModel', 'caninesModel', 'pedigreesModel', 'profileModel', 'sponsorModel', 'productModel', 'navigation', 'memberModel', 'KenneltypeModel', 'KennelModel', 'logmemberModel'));
 			$this->navigations = $this->navigation->get_navigation();
 			
 			$session = self::_is_logged_in();
@@ -38,28 +38,42 @@ class Members extends CI_Controller {
 		}
 
 		public function update($id = null){
-			// $data = array(
-			// 	'mem_name' => $this->input->post('mem_name'),
-			// 	'mem_address' => $this->input->post('mem_address'),
-			// 	'mem_mail_address' => $this->input->post('mem_mail_address'),
-			// 	'mem_hp' => $this->input->post('mem_hp'),
-			// 	'mem_kota' => $this->input->post('mem_kota'),
-			// 	'mem_kode_pos' => $this->input->post('mem_kode_pos'),
-			// 	'mem_email' => $this->input->post('mem_email'),
-			// );
+			$data = array(
+				'log_member_id' => $id,
+				'log_name' => $this->input->post('mem_name'),
+				'log_address' => $this->input->post('mem_address'),
+				'log_mail_address' => $this->input->post('mem_mail_address'),
+				'log_hp' => $this->input->post('mem_hp'),
+				'log_kota' => $this->input->post('mem_kota'),
+				'log_kode_pos' => $this->input->post('mem_kode_pos'),
+				'log_email' => $this->input->post('mem_email'),
+				'log_kennel_name' => $this->input->post('ken_name'),
+				'log_kennel_type_id' => $this->input->post('ken_type_id'),
+				'log_stat' => 0
+			);
 
-			// $img = $this->input->post('srcDataCrop');
-			// if ($img){
-			// 	$title = self::_clean_text('member');
-			// 	$this->path_upload = 'uploads/members/';
-			// 	$data['mem_photo'] = self::_upload_base64($img, $title, true, $id);
-			// }
+			$img = $this->input->post('srcDataCrop');
+			if ($img){
+				$title = self::_clean_text('member');
+				$this->path_upload = 'uploads/members/';
+				$data['log_photo'] = self::_upload_base64($img, $title, true, $id);
+			}
 
 			$imgPP = $this->input->post('srcDataCropPP');
 			if ($imgPP){
 				$titlePP = self::_clean_text('pp');
 				$this->path_upload = 'uploads/members/';
-				$data['mem_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
+				$data['log_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
+			}
+
+			$ken_img = $this->input->post('ken_srcDataCrop');
+			if ($ken_img) {
+				$ken_title = self::_clean_text('kennel');
+				$this->path_upload = 'uploads/kennels/';
+				if ($this->input->post('mem_ken_id'))
+					$kennel['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+				else
+					$kennel['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title);
 			}
 
 			$where['mem_id'] = $id;
@@ -69,49 +83,19 @@ class Members extends CI_Controller {
 				return false;
 			}
 			
-			if ($this->input->post('password') && $this->input->post('password') != ''){
-				if ($this->input->post('newpass') == $this->input->post('repass')) {
-					if (sha1($this->input->post('password')) == $user['mem_password']) {
-						$data['mem_password'] = sha1($this->input->post('newpass'));
-					}
-					else {
-						echo json_encode(array('data' => 'Password salah'));
-						return false;
-					}
-				} else {
-					echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
-					return false;
-				}
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			if (!$this->input->post('mem_ken_id')){
+				if (!$ken_img) 
+					$kennel['ken_photo'] = '-';
+				$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
+				$this->KennelModel->add_kennels($kennel);
+				$data['log_kennel_id'] = $kennel['ken_id'];
 			}
-			
-			// $kennel = array(
-			// 	'ken_name' => $this->input->post('ken_name'),
-			// 	'ken_type_id' => $this->input->post('ken_type_id')
-			// );
+			else
+				$data['log_kennel_id'] = $this->input->post('mem_ken_id');
 
-			// $ken_img = $this->input->post('ken_srcDataCrop');
-			// if ($ken_img) {
-			// 	$ken_title = self::_clean_text('kennel');
-			// 	$this->path_upload = 'uploads/kennels/';
-			// 	if ($this->input->post('mem_ken_id'))
-			// 		$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
-			// 	else
-			// 		$kennel['ken_photo'] = self::_upload_base64($ken_img, $ken_title);
-			// }
-			
-			// $this->db->trans_strict(FALSE);
-			// $this->db->trans_start();
-			// if ($this->input->post('mem_ken_id'))
-			// 	$this->KennelModel->edit_kennels($kennel, $this->input->post('mem_ken_id'));
-			// else{
-			// 	if (!$ken_img) 
-			// 		$kennel['ken_photo'] = '-';
-			// 	$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
-			// 	$data['mem_ken_id'] = $kennel['ken_id'];
-			// 	$this->KennelModel->add_kennels($kennel);
-			// }
-
-			$this->memberModel->update_members($data, $where);
+			$this->logmemberModel->add_log($data);
 			$this->db->trans_complete();
 			echo json_encode(array('data' => '1'));
 		}
