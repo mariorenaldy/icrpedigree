@@ -100,6 +100,57 @@ class Members extends CI_Controller {
 			echo json_encode(array('data' => '1'));
 		}
 
+		public function ubah_password(){
+			$product = $this->productModel->get_products()->result();
+			$data['products'] = $product;
+			$sponsor = $this->sponsorModel->get_sponsors()->result();
+			$data['sponsors'] = $sponsor;
+			$whereCont['con_id'] = 1;
+			$contact = $this->contactModel->get_contacts($whereCont)->row_array();
+			$data['contact'] = $contact;
+			$wherePro['prof_id'] = 1;
+			$profile = $this->profileModel->get_profiles($wherePro)->row();
+			$data['profile'] = $profile;
+
+			$user = $this->session->userdata('member_data');
+			$data['users'] = $user;
+
+			$where['mem_id'] = $user['mem_id'];
+			$data['members'] = $this->memberModel->get_members($where)->row();
+			$data['ken_types'] = $this->KenneltypeModel->get_kennel_types()->result();
+			$data['navigations'] = $this->navigations;
+
+			$this->twig->display('front/edit_password', $data);
+		}
+
+		public function change_password($id = null){
+			$where['mem_id'] = $id;
+			$user = $this->memberModel->get_members($where)->row_array();
+			if ($user == null) {
+				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
+				return false;
+			}
+
+			if ($this->input->post('newpass') == $this->input->post('repass')) {
+				if (sha1($this->input->post('password')) == $user['mem_password']) {
+					$res = $this->memberModel->edit_password($id, sha1($this->input->post('newpass')));
+					if ($res){
+						echo json_encode(array('data' => '1'));
+					}
+					else{
+						echo json_encode(array('data' => 'Gagal menyimpan password'));
+					}
+				}
+				else {
+					echo json_encode(array('data' => 'Password salah'));
+					return false;
+				}
+			} else {
+				echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
+				return false;
+			}
+		}
+
     //  PHP Helper
 
 		private function _upload_base64($image = null, $name = null, $update = false, $id = null){
