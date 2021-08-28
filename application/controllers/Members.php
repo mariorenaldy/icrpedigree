@@ -71,9 +71,9 @@ class Members extends CI_Controller {
 				$ken_title = self::_clean_text('kennel');
 				$this->path_upload = 'uploads/kennels/';
 				if ($this->input->post('mem_ken_id'))
-					$kennel['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+					$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
 				else
-					$kennel['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title);
+					$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title);
 			}
 
 			$where['mem_id'] = $id;
@@ -151,6 +151,30 @@ class Members extends CI_Controller {
 			}
 		}
 
+		public function logs(){
+			$product = $this->productModel->get_products()->result();
+			$data['products'] = $product;
+			$sponsor = $this->sponsorModel->get_sponsors()->result();
+			$data['sponsors'] = $sponsor;
+			$whereCont['con_id'] = 1;
+			$contact = $this->contactModel->get_contacts($whereCont)->row_array();
+			$data['contact'] = $contact;
+			$wherePro['prof_id'] = 1;
+			$profile = $this->profileModel->get_profiles($wherePro)->row();
+			$data['profile'] = $profile;
+
+			$user = $this->session->userdata('member_data');
+			$data['users'] = $user;
+
+			$where['mem_id'] = $user['mem_id'];
+			$data['members'] = $this->memberModel->get_members($where)->row();
+			$data['navigations'] = $this->navigations;
+
+			$where['log_member_id'] = $user['mem_id'];
+			$data['logs'] = $this->logmemberModel->get_logs($where)->result();
+			$this->twig->display('front/log_member', $data);
+		}
+
     //  PHP Helper
 
 		private function _upload_base64($image = null, $name = null, $update = false, $id = null){
@@ -166,29 +190,30 @@ class Members extends CI_Controller {
 
 				$url_image = $name_image.'.png';
 
-				if ($update && $id != null){
-					if ($name == "member" || $name == "pp"){
-						$where['mem_id'] = $id;
-						$member = $this->memberModel->get_members($where)->row();
-						if ($name == "member")
-							$curr_image = $this->path_upload.basename($member->mem_photo);
-						else
-							$curr_image = $this->path_upload.basename($member->mem_pp);
-						if (file_exists($curr_image)){
-							unlink($curr_image);
-						}
-					}
-					else{
-						$where['ken_id'] = $id;
-						$kennel = $this->KennelModel->get_kennels($where)->row();
-						if ($kennel){
-							$curr_image = $this->path_upload.basename($kennel->ken_photo);
-							if (file_exists($curr_image)){
-								unlink($curr_image);
-							}
-						}
-					}
-				}
+				// if ($update && $id != null){
+				// 	if ($name == "member" || $name == "pp"){
+				// 		$where['mem_id'] = $id;
+				// 		$member = $this->memberModel->get_members($where)->row();
+				// 		if ($name == "member")
+				// 			$curr_image = $this->path_upload.basename($member->mem_photo);
+				// 		else
+				// 			$curr_image = $this->path_upload.basename($member->mem_pp);
+				// 		if (file_exists($curr_image)){
+				// 			unlink($curr_image);
+				// 		}
+				// 	}
+				// 	else{
+				// 		$where['ken_id'] = $id;
+				// 		$kennel = $this->KennelModel->get_kennels($where)->row();
+				// 		if ($kennel){
+				// 			$curr_image = $this->path_upload.basename($kennel->ken_photo);
+				// 			if (file_exists($curr_image)){
+				// 				unlink($curr_image);
+				// 			}
+				// 		}
+				// 	}
+				// }
+				
 				return $url_image;
 		}
 
