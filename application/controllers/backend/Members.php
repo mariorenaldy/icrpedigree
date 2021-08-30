@@ -235,6 +235,393 @@ class Members extends CI_Controller {
 			}
 		}
 
+		public function request(){
+			$user = $this->session->userdata('user_data');
+			$data['users'] = $user;
+			$data['navigations'] = $this->navigations;
+	  
+			$this->twig->display('backend/requests_member', $data);
+		}
+	  
+		public function request_data(){
+			$aColumns = array('log_id', 'log_name', 'log_address', 'log_photo', 'log_kennel_photo', 'log_kennel_name', 'log_hp', 'log_email', 'log_kota', 'log_kode_pos', 'use_username', 'log_app_date', 'log_tanggal', 'stat_name', 'mem_photo', 'kennels.ken_photo', 'mem_name', 'mem_address', 'mem_kode_pos', 'mem_hp', 'mem_email', 'ken_name', 'mem_kota');
+			$sTable = 'logs_member';
+	  
+			$iDisplayStart = $this->input->get_post('start', true);
+			$iDisplayLength = $this->input->get_post('length', true);
+			$sSearch = $this->input->post('search', true);
+			$sEcho = $this->input->get_post('sEcho', true);
+			$columns = $this->input->get_post('columns', true);
+			$orders = $this->input->get_post('order', true);
+	  
+			// Paging
+			if(isset($iDisplayStart) && $iDisplayLength != '-1'){
+				$this->db->limit($this->db->escape_str($iDisplayLength), $this->db->escape_str($iDisplayStart));
+			}
+	  
+			// Ordering
+			if(isset($orders[0]['column'])){
+				// for($i=0; $i<intval($columns); $i++){
+					// $iSortCol = $this->input->get_post('iSortCol_'.$i, true);
+					// $bSortable = $this->input->get_post('bSortable_'.intval($iSortCol), true);
+					$bSortable = $columns[$orders[0]['column']]['orderable'];
+					// $sSortDir = $this->input->get_post('sSortDir_'.$i, true);
+	  
+					if($bSortable == 'true')
+					{
+						$this->db->order_by($columns[$orders[0]['column']]['data'], $orders[0]['dir']);
+						// $this->db->order_by($aColumns[intval($this->db->escape_str($iSortCol))], $this->db->escape_str($sSortDir));
+					}
+				// }
+			}
+	  
+			/*
+			  * Filtering
+			  * NOTE this does not match the built-in DataTables filtering which does it
+			  * word by word on any field. It's possible to do here, but concerned about efficiency
+			  * on very large tables, and MySQL's regex functionality is very limited
+			  */
+			if(isset($sSearch['value']) && !empty($sSearch['value'])){
+				// ARTechnology
+				for($i=0; $i<count($columns); $i++){
+				// ARTechnology
+	  
+					// $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
+					$bSearchable = $columns[$i]['searchable'];
+	  
+					// Individual column filtering
+					if(isset($bSearchable) && $bSearchable == 'true')
+					{
+						for($j=0; $j<count($aColumns); $j++){
+						  $this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
+						}
+					}
+				}
+			}
+	  
+			// Select Data
+			$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
+			$this->db->join('members','members.mem_id = logs_member.log_member_id');
+			$this->db->join('kennels','kennels.ken_id = logs_member.log_kennel_id');
+			$this->db->join('users','users.use_id = logs_member.log_app_user');
+			$this->db->join('approval_status','approval_status.stat_id = logs_member.log_stat');
+			$this->db->where('log_stat', 0);
+			$this->db->order_by('log_tanggal', 'desc');
+			$rResult = $this->db->get($sTable);
+			
+			// Data set length after filtering
+			$this->db->select('FOUND_ROWS() AS found_rows');
+			$iFilteredTotal = $this->db->get()->row()->found_rows;
+	  
+			// Total data set length
+			$iTotal = $this->db->count_all($sTable);
+	  
+			// Output
+			$output = array(
+				'sEcho' => intval($sEcho),
+				'iTotalRecords' => $iTotal,
+				'iTotalDisplayRecords' => $iFilteredTotal,
+				'aaData' => array()
+			);
+	  
+			foreach($rResult->result_array() as $i => $aRow){
+				$row = array();
+	  
+				// foreach($aColumns as $col){
+				// 		if($col == 'stock')
+				//     $row[$col] = $aRow[$col];
+				// }
+				$output['aaData'][] = $aRow;
+			}
+	  
+			echo json_encode($output);
+		}
+	  
+		public function approve_profile($id = null){
+			if ($id){
+			  $whe['req_id'] = $id;
+			  $req = $this->requestModel->get_requests($whe)->row();
+	  
+			  $where['can_id'] = $req->req_can_id;
+			  $can = $this->caninesModel->get_can_pedigrees($where)->row();
+	  
+			  $old = '-';
+			  $photo = '-';
+			  if ($req->req_can_photo != '-'){
+				$photo = $req->req_can_photo;
+				$data['can_photo'] = $req->req_can_photo;
+				$curr_image = $this->path_upload.basename($can->can_photo);
+				if(file_exists($curr_image)){
+				  $old = $can->can_photo;
+				  unlink($curr_image);
+				}
+			  }
+	  
+			  $cage = '';
+			  if ($req->req_can_cage){
+				$data['can_cage'] = $req->req_can_cage;
+				$cage = $can->can_owner." => ".$req->req_can_cage;
+			  }
+	  
+			  $address = '';
+			  if ($req->req_can_address){
+				$data['can_address'] = $req->req_can_address;
+				$address = $can->can_address." => ".$req->req_can_address;
+			  }
+	  
+			  $owner = '';
+			  if ($req->req_can_owner){
+				$data['can_owner'] = $req->req_can_owner;
+				$owner = $can->can_owner." => ".$req->req_can_owner;
+			  }
+	  
+			  $this->db->trans_strict(FALSE);
+			  $this->db->trans_start();
+			  // write log 
+			  if ($photo != '-' || $owner != '' || $address != '' || $cage != ''){
+				$log = array(
+				  'log_id' => $req->req_can_id,
+				  'log_owner' => $owner,
+				  'log_address' => $address,
+				  'log_cage' => $cage,
+				  'log_member' => '',
+				  'log_old_photo' => $old,
+				  'log_photo' => $photo,
+				  'log_stat' => 1,
+				  'log_req' => $req->req_id
+				);
+				$res = $this->logcanineModel->add_log($log);
+				if ($res){
+				  $this->caninesModel->update_canines($data, $where);
+				  $res2 = $this->requestModel->update_status($id, 1);
+				  if ($res2){
+					if ($can->mem_id){
+					  $res3 = $this->notification_model->add(3, $req->req_can_id, $can->mem_id);
+	  
+					  $whe_can['mem_id'] = $can->mem_id;
+					  $member = $this->memberModel->get_members($whe_can)->row();
+					  if ($member->mem_firebase_token){
+						$notif = $this->notificationtype_model->get_by_id(3);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+			
+						$fields = array (
+						  'to' => $member->mem_firebase_token,
+						  'notification' => array(
+							"channelId" => "ICRPedigree",
+							'title' => $notif[0]->title,
+							'body' => $notif[0]->description
+						  )
+						);
+						$fields = json_encode ( $fields );
+			
+						$headers = array (
+							'Authorization: key=' . $key,
+							'Content-Type: application/json'
+						);
+			
+						$ch = curl_init ();
+						curl_setopt ( $ch, CURLOPT_URL, $url );
+						curl_setopt ( $ch, CURLOPT_POST, true );
+						curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+						curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+						curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+			
+						$result = curl_exec ( $ch );
+						// echo $result;
+						curl_close ( $ch );
+					  }
+					}
+					$this->db->trans_complete();
+					echo json_encode(array('data' => '1'));
+				  }
+				  else{
+					$this->db->trans_rollback();
+					echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
+				  }
+				}
+				else{
+				  $this->db->trans_rollback();
+				  echo json_encode(array('data' => 'Gagal menulis ke log'));
+				}
+			  }
+			  else{
+				$this->caninesModel->update_canines($data, $where);
+	  
+				$res2 = $this->requestModel->update_status($id, 1);
+				if ($res2){
+				  $this->db->trans_complete();
+				  echo json_encode(array('data' => '1'));
+				}
+				else{
+				  $this->db->trans_rollback();
+				  echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
+				}
+			  }
+			}
+		}
+	  
+		public function reject_profile($id = null){
+			if ($id){
+			  $this->db->trans_strict(FALSE);
+			  $this->db->trans_start();
+			  $res = $this->requestModel->update_status($id, 2);
+			  if ($res){
+				$whe['req_id'] = $id;
+				$req = $this->requestModel->get_requests($whe)->row();
+	  
+				$where['can_id'] = $req->req_can_id;
+				$can = $this->caninesModel->get_can_pedigrees($where)->row();
+				
+				if ($can->mem_id){
+				  $result = $this->notification_model->add(8, $id, $can->mem_id);
+	  
+				  $whe_can['mem_id'] = $can->mem_id;
+				  $member = $this->memberModel->get_members($whe_can)->row();
+				  if ($member->mem_firebase_token){
+					$notif = $this->notificationtype_model->get_by_id(8);
+					$url = 'https://fcm.googleapis.com/fcm/send';
+					$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+		
+					$fields = array (
+					  'to' => $member->mem_firebase_token,
+					  'notification' => array(
+						"channelId" => "ICRPedigree",
+						'title' => $notif[0]->title,
+						'body' => $notif[0]->description
+					  )
+					);
+					$fields = json_encode ( $fields );
+		
+					$headers = array (
+						'Authorization: key=' . $key,
+						'Content-Type: application/json'
+					);
+		
+					$ch = curl_init ();
+					curl_setopt ( $ch, CURLOPT_URL, $url );
+					curl_setopt ( $ch, CURLOPT_POST, true );
+					curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+					curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+					curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+					$result = curl_exec ( $ch );
+					// echo $result;
+					curl_close ( $ch );
+				  }
+				}
+				$this->db->trans_complete();
+				echo json_encode(array('data' => '1'));
+			  }
+			  else{
+				$this->db->trans_rollback();
+				echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-reject'));
+			  }
+			}
+		}
+	  
+		public function logs_request(){
+			$user = $this->session->userdata('user_data');
+			$data['users'] = $user;
+			$data['navigations'] = $this->navigations;
+			
+			$this->twig->display('backend/logsRequest_member', $data);
+		}
+	  
+		public function data_logs_request(){
+			$aColumns = array('log_id', 'log_name', 'log_address', 'log_photo', 'log_kennel_photo', 'log_kennel_name', 'log_hp', 'log_email', 'log_kota', 'log_kode_pos', 'use_username', 'log_app_date', 'log_tanggal', 'stat_name', 'mem_photo', 'kennels.ken_photo', 'mem_name', 'mem_address', 'mem_kode_pos', 'mem_hp', 'mem_email', 'ken_name', 'mem_kota');
+			$sTable = 'logs_member';
+	  
+			$iDisplayStart = $this->input->get_post('start', true);
+			$iDisplayLength = $this->input->get_post('length', true);
+			$sSearch = $this->input->post('search', true);
+			$sEcho = $this->input->get_post('sEcho', true);
+			$columns = $this->input->get_post('columns', true);
+			$orders = $this->input->get_post('order', true);
+	  
+			// Paging
+			if(isset($iDisplayStart) && $iDisplayLength != '-1'){
+				$this->db->limit($this->db->escape_str($iDisplayLength), $this->db->escape_str($iDisplayStart));
+			}
+	  
+			// Ordering
+			if(isset($orders[0]['column'])){
+				// for($i=0; $i<intval($columns); $i++){
+					// $iSortCol = $this->input->get_post('iSortCol_'.$i, true);
+					// $bSortable = $this->input->get_post('bSortable_'.intval($iSortCol), true);
+					$bSortable = $columns[$orders[0]['column']]['orderable'];
+					// $sSortDir = $this->input->get_post('sSortDir_'.$i, true);
+	  
+					if($bSortable == 'true')
+					{
+						$this->db->order_by($columns[$orders[0]['column']]['data'], $orders[0]['dir']);
+						// $this->db->order_by($aColumns[intval($this->db->escape_str($iSortCol))], $this->db->escape_str($sSortDir));
+					}
+				// }
+			}
+	  
+			/*
+			  * Filtering
+			  * NOTE this does not match the built-in DataTables filtering which does it
+			  * word by word on any field. It's possible to do here, but concerned about efficiency
+			  * on very large tables, and MySQL's regex functionality is very limited
+			  */
+			if(isset($sSearch['value']) && !empty($sSearch['value'])){
+				// ARTechnology
+				for($i=0; $i<count($columns); $i++){
+				// ARTechnology
+	  
+					// $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
+					$bSearchable = $columns[$i]['searchable'];
+	  
+					// Individual column filtering
+					if(isset($bSearchable) && $bSearchable == 'true')
+					{
+						for($j=0; $j<count($aColumns); $j++){
+						  $this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
+						}
+					}
+				}
+			}
+	  
+			// Select Data
+			$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
+			$this->db->join('members','members.mem_id = logs_member.log_member_id');
+			$this->db->join('kennels','kennels.ken_id = logs_member.log_kennel_id');
+			$this->db->join('users','users.use_id = logs_member.log_app_user');
+			$this->db->join('approval_status','approval_status.stat_id = logs_member.log_stat');
+			$this->db->where('log_stat <>', 0);
+			$this->db->order_by('log_tanggal', 'desc');
+			$rResult = $this->db->get($sTable);
+			
+			// Data set length after filtering
+			$this->db->select('FOUND_ROWS() AS found_rows');
+			$iFilteredTotal = $this->db->get()->row()->found_rows;
+	  
+			// Total data set length
+			$iTotal = $this->db->count_all($sTable);
+	  
+			// Output
+			$output = array(
+				'sEcho' => intval($sEcho),
+				'iTotalRecords' => $iTotal,
+				'iTotalDisplayRecords' => $iFilteredTotal,
+				'aaData' => array()
+			);
+	  
+			foreach($rResult->result_array() as $i => $aRow){
+				$row = array();
+	  
+				// foreach($aColumns as $col){
+				// 		if($col == 'stock')
+				//     $row[$col] = $aRow[$col];
+				// }
+				$output['aaData'][] = $aRow;
+			}
+	  
+			echo json_encode($output);
+		}
+
     //  PHP Helper
 
 		private function _upload_base64($image = null, $name = null, $update = false, $id = null){
