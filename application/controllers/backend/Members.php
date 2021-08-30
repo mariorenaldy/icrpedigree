@@ -6,7 +6,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('memberModel', 'KennelModel'));
+			$this->load->model(array('memberModel', 'KennelModel', 'LogmemberModel', 'notification_model', 'notificationtype_model'));
 			$this->load->model('navigation');
 			$this->navigations = $this->navigation->get_navigation();
 			$this->path_upload = 'uploads/members/';
@@ -339,79 +339,75 @@ class Members extends CI_Controller {
 	  
 		public function approve_profile($id = null){
 			if ($id){
-			  $whe['req_id'] = $id;
-			  $req = $this->requestModel->get_requests($whe)->row();
+				$whe['log_id'] = $id;
+				$req = $this->LogmemberModel->get_logs($whe)->row();
+		
+				$where['mem_id'] = $req->log_member_id;
+				$member = $this->memberModel->get_members($where)->row();
 	  
-			  $where['can_id'] = $req->req_can_id;
-			  $can = $this->caninesModel->get_can_pedigrees($where)->row();
-	  
-			  $old = '-';
-			  $photo = '-';
-			  if ($req->req_can_photo != '-'){
-				$photo = $req->req_can_photo;
-				$data['can_photo'] = $req->req_can_photo;
-				$curr_image = $this->path_upload.basename($can->can_photo);
-				if(file_exists($curr_image)){
-				  $old = $can->can_photo;
-				  unlink($curr_image);
-				}
-			  }
-	  
-			  $cage = '';
-			  if ($req->req_can_cage){
-				$data['can_cage'] = $req->req_can_cage;
-				$cage = $can->can_owner." => ".$req->req_can_cage;
-			  }
-	  
-			  $address = '';
-			  if ($req->req_can_address){
-				$data['can_address'] = $req->req_can_address;
-				$address = $can->can_address." => ".$req->req_can_address;
-			  }
-	  
-			  $owner = '';
-			  if ($req->req_can_owner){
-				$data['can_owner'] = $req->req_can_owner;
-				$owner = $can->can_owner." => ".$req->req_can_owner;
-			  }
-	  
-			  $this->db->trans_strict(FALSE);
-			  $this->db->trans_start();
-			  // write log 
-			  if ($photo != '-' || $owner != '' || $address != '' || $cage != ''){
-				$log = array(
-				  'log_id' => $req->req_can_id,
-				  'log_owner' => $owner,
-				  'log_address' => $address,
-				  'log_cage' => $cage,
-				  'log_member' => '',
-				  'log_old_photo' => $old,
-				  'log_photo' => $photo,
-				  'log_stat' => 1,
-				  'log_req' => $req->req_id
+				$whe_ken['ken_id'] = $req->log_kennel_id;
+				$kennel = $this->KennelModel->get_kennels($whe_ken)->row();
+
+				$data = array(
+					'mem_name' => $req->log_name,
+					'mem_address' => $req->log_address,
+					'mem_mail_address' => $req->log_mail_address,
+					'mem_hp' => $req->log_hp,
+					'mem_kota' => $req->log_kota,
+					'mem_kode_pos' => $req->log_kode_pos,
+					'mem_email' => $req->log_email
 				);
-				$res = $this->logcanineModel->add_log($log);
-				if ($res){
-				  $this->caninesModel->update_canines($data, $where);
-				  $res2 = $this->requestModel->update_status($id, 1);
-				  if ($res2){
-					if ($can->mem_id){
-					  $res3 = $this->notification_model->add(3, $req->req_can_id, $can->mem_id);
+
+				$data_kennel = array(
+					'ken_name' => $req->log_kennel_name,
+					'ken_type_id' => $req->log_kennel_type_id
+				);
+
+				if ($req->log_photo != ''){
+					$data['mem_photo'] = $req->log_photo;
+					$curr_image = $this->path_upload.basename($member->mem_photo);
+					if(file_exists($curr_image)){
+					unlink($curr_image);
+					}
+				}
+
+				if ($req->log_pp != ''){
+					$data['mem_pp'] = $req->log_pp;
+					$curr_image = $this->path_upload.basename($member->mem_pp);
+					if(file_exists($curr_image)){
+					unlink($curr_image);
+					}
+				}
+
+				if ($req->log_kennel_photo != ''){
+					$data_kennel['ken_photo'] = $req->log_kennel_photo;
+					$curr_image = $this->path_upload.basename($kennel->ken_photo);
+					if(file_exists($curr_image)){
+					unlink($curr_image);
+					}
+				}
 	  
-					  $whe_can['mem_id'] = $can->mem_id;
-					  $member = $this->memberModel->get_members($whe_can)->row();
-					  if ($member->mem_firebase_token){
-						$notif = $this->notificationtype_model->get_by_id(3);
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$this->memberModel->update_members($data, $where);
+				$this->KennelModel->update_kennels($data_kennel, $whe_ken);
+				$res2 = $this->LogmemberModel->update_status($id, 1);
+				if ($res2){
+					if ($member->mem_id){
+					$res3 = $this->notification_model->add(9, $req->log_id, $member->mem_id);
+	
+					if ($member->mem_firebase_token){
+						$notif = $this->notificationtype_model->get_by_id(9);
 						$url = 'https://fcm.googleapis.com/fcm/send';
 						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 			
 						$fields = array (
-						  'to' => $member->mem_firebase_token,
-						  'notification' => array(
+						'to' => $member->mem_firebase_token,
+						'notification' => array(
 							"channelId" => "ICRPedigree",
 							'title' => $notif[0]->title,
 							'body' => $notif[0]->description
-						  )
+						)
 						);
 						$fields = json_encode ( $fields );
 			
@@ -430,34 +426,15 @@ class Members extends CI_Controller {
 						$result = curl_exec ( $ch );
 						// echo $result;
 						curl_close ( $ch );
-					  }
+					}
 					}
 					$this->db->trans_complete();
 					echo json_encode(array('data' => '1'));
-				  }
-				  else{
+				}
+				else{
 					$this->db->trans_rollback();
 					echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
-				  }
 				}
-				else{
-				  $this->db->trans_rollback();
-				  echo json_encode(array('data' => 'Gagal menulis ke log'));
-				}
-			  }
-			  else{
-				$this->caninesModel->update_canines($data, $where);
-	  
-				$res2 = $this->requestModel->update_status($id, 1);
-				if ($res2){
-				  $this->db->trans_complete();
-				  echo json_encode(array('data' => '1'));
-				}
-				else{
-				  $this->db->trans_rollback();
-				  echo json_encode(array('data' => 'Request dengan id = '.$id.' tidak dapat di-approve'));
-				}
-			  }
 			}
 		}
 	  
@@ -465,21 +442,18 @@ class Members extends CI_Controller {
 			if ($id){
 			  $this->db->trans_strict(FALSE);
 			  $this->db->trans_start();
-			  $res = $this->requestModel->update_status($id, 2);
+			  $res = $this->LogmemberModel->update_status($id, 2);
 			  if ($res){
-				$whe['req_id'] = $id;
-				$req = $this->requestModel->get_requests($whe)->row();
+				$whe['log_id'] = $id;
+				$req = $this->LogmemberModel->get_logs($whe)->row();
 	  
-				$where['can_id'] = $req->req_can_id;
-				$can = $this->caninesModel->get_can_pedigrees($where)->row();
-				
-				if ($can->mem_id){
-				  $result = $this->notification_model->add(8, $id, $can->mem_id);
+				if ($req->log_member_id){
+				  $result = $this->notification_model->add(10, $id, $req->log_member_id);
 	  
-				  $whe_can['mem_id'] = $can->mem_id;
+				  $whe_can['mem_id'] = $req->log_member_id;
 				  $member = $this->memberModel->get_members($whe_can)->row();
 				  if ($member->mem_firebase_token){
-					$notif = $this->notificationtype_model->get_by_id(8);
+					$notif = $this->notificationtype_model->get_by_id(10);
 					$url = 'https://fcm.googleapis.com/fcm/send';
 					$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 		

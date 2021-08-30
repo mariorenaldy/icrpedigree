@@ -77,6 +77,22 @@ class Navigation extends CI_Model {
               ),
 
               array(
+                'url' => 'backend/members/logs_request',
+                'displayName' => 'Request Pengubahan Data Member',
+                'child' => false,
+                'heading' => false,
+                'icon' => 'fa fa-list-ul'
+              ),
+
+              array(
+                'url' => 'backend/members/request',
+                'displayName' => 'Approve Request Pengubahan Data Member',
+                'child' => false,
+                'heading' => false,
+                'icon' => 'fa fa-check-circle'
+              ),
+
+              array(
                 'url' => 'backend/canines/logs_request',
                 'displayName' => 'Request Pengubahan Data Canine',
                 'child' => false,
