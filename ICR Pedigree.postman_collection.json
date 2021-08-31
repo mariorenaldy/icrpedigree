@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"riska\",\n\t\"password\": \"riska\"\n}",
+							"raw": "{\n\t\"username\": \"riskadewi\",\n\t\"password\": \"riskadewi\",\n    \"token\": \"token\" \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -30,9 +30,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}Members/signin",
+							"raw": "{{urls}}Members/signin",
 							"host": [
-								"{{url}}Members"
+								"{{urls}}Members"
 							],
 							"path": [
 								"signin"
@@ -77,7 +77,7 @@
 							"formdata": [
 								{
 									"key": "mem_name",
-									"value": "Audi",
+									"value": "Test 6",
 									"type": "text"
 								},
 								{
@@ -107,33 +107,38 @@
 								},
 								{
 									"key": "mem_email",
-									"value": "audi@gmail.com",
+									"value": "test6@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "mem_ktp",
+									"value": "123456",
 									"type": "text"
 								},
 								{
 									"key": "attachment_pp",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/members/pp_1614130955.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/addthis-dreamstale01.png"
 								},
 								{
 									"key": "mem_username",
-									"value": "audi",
+									"value": "test6",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "audi",
+									"value": "test6",
 									"type": "text"
 								},
 								{
 									"key": "attachment_member",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/ask-dreamstale07.png"
 								},
 								{
 									"key": "attachment_logo",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/members/pp_1614130014.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/ask-dreamstale07.png"
 								},
 								{
 									"key": "ken_name",
@@ -148,11 +153,12 @@
 							]
 						},
 						"url": {
-							"raw": "{{url}}Members/signup",
+							"raw": "{{url}}/Members/signup",
 							"host": [
-								"{{url}}Members"
+								"{{url}}"
 							],
 							"path": [
+								"Members",
 								"signup"
 							]
 						}
@@ -174,52 +180,52 @@
 								},
 								{
 									"key": "mem_name",
-									"value": "Riska",
+									"value": "Riska upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_address",
-									"value": "Gg. Virgo No. 3",
+									"value": "Gg. Virgo No. 3 upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_mail_address",
-									"value": "Gg. Virgo No. 3",
+									"value": "Gg. Virgo No. 3 upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_hp",
-									"value": "022",
+									"value": "022 upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_kota",
-									"value": "Bandung",
+									"value": "Bandung upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_kode_pos",
-									"value": "40134",
+									"value": "40134 upd",
 									"type": "text"
 								},
 								{
 									"key": "mem_email",
-									"value": "riskadewi.hendaya@gmail.com",
+									"value": "riskadewi.hendaya@gmail.com upd",
 									"type": "text"
 								},
 								{
 									"key": "attachment_member",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1560223593.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/aol-dreamstale04.png"
 								},
 								{
 									"key": "attachment_logo",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/kennels/kennel_1614131946.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/appstore-dreamstale06.png"
 								},
 								{
 									"key": "ken_name",
-									"value": "Riska",
+									"value": "Riska upd",
 									"type": "text"
 								},
 								{
@@ -230,16 +236,17 @@
 								{
 									"key": "attachment_pp",
 									"type": "file",
-									"src": "/Applications/MAMP/htdocs/icr/uploads/members/member_1614132970.png"
+									"src": "/Users/riskadewi/Downloads/Icons/90-Social-Media-Vector-Icons/Png/48px/Rounded/badoo-dreamstale08.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}Members/update_profile",
+							"raw": "{{url}}/Members/update_profile",
 							"host": [
-								"{{url}}Members"
+								"{{url}}"
 							],
 							"path": [
+								"Members",
 								"update_profile"
 							]
 						}
@@ -315,6 +322,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"riskadewi@yahoo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{urls}}Members/forgotpassword",
+							"host": [
+								"{{urls}}Members"
+							],
+							"path": [
+								"forgotpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/app/Members/logs/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"app",
+								"Members",
+								"logs",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -355,6 +408,24 @@
 								"1",
 								"z",
 								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Canine By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Canines/get_by_id/1",
+							"host": [
+								"{{url}}Canines"
+							],
+							"path": [
+								"get_by_id",
+								"1"
 							]
 						}
 					},
@@ -428,48 +499,6 @@
 			]
 		},
 		{
-			"name": "Pedigree",
-			"item": [
-				{
-					"name": "Search Pedigree",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}Pedigrees/search/z/0",
-							"host": [
-								"{{url}}Pedigrees"
-							],
-							"path": [
-								"search",
-								"z",
-								"0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Detail Pedigree",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}Pedigrees/detail/2",
-							"host": [
-								"{{url}}Pedigrees"
-							],
-							"path": [
-								"detail",
-								"2"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Stud",
 			"item": [
 				{
@@ -478,14 +507,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}Studs/get/1/0",
+							"raw": "{{urls}}Studs/get/15/0",
+							"host": [
+								"{{urls}}Studs"
+							],
+							"path": [
+								"get",
+								"15",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stud By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Studs/get_by_id/1",
 							"host": [
 								"{{url}}Studs"
 							],
 							"path": [
-								"get",
-								"1",
-								"0"
+								"get_by_id",
+								"1"
 							]
 						}
 					},
@@ -623,6 +670,24 @@
 								"get",
 								"1",
 								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Birth By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Births/get_by_id/1",
+							"host": [
+								"{{url}}Births"
+							],
+							"path": [
+								"get_by_id",
+								"1"
 							]
 						}
 					},
@@ -789,6 +854,181 @@
 			]
 		},
 		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "Get Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Events/get_events/5",
+							"host": [
+								"{{url}}Events"
+							],
+							"path": [
+								"get_events",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Events/get_detail/8",
+							"host": [
+								"{{url}}Events"
+							],
+							"path": [
+								"get_detail",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Product/get_products",
+							"host": [
+								"{{url}}Product"
+							],
+							"path": [
+								"get_products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Product/get_detail/1",
+							"host": [
+								"{{url}}Product"
+							],
+							"path": [
+								"get_detail",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Get Notification",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Notification/get/1",
+							"host": [
+								"{{url}}Notification"
+							],
+							"path": [
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notification_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Notification/read",
+							"host": [
+								"{{url}}Notification"
+							],
+							"path": [
+								"read"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read All",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mem_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}Notification/read_all",
+							"host": [
+								"{{url}}Notification"
+							],
+							"path": [
+								"read_all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search Pedigree",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}Pedigrees/search/z/0",
+					"host": [
+						"{{url}}Pedigrees"
+					],
+					"path": [
+						"search",
+						"z",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Kennel Type",
 			"request": {
 				"method": "GET",
@@ -834,76 +1074,6 @@
 					],
 					"path": [
 						"getall"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Events",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}Events/get_events",
-					"host": [
-						"{{url}}Events"
-					],
-					"path": [
-						"get_events"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Event Gallery",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}Events/get_gallery/6",
-					"host": [
-						"{{url}}Events"
-					],
-					"path": [
-						"get_gallery",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Products",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}Product/get_products",
-					"host": [
-						"{{url}}Product"
-					],
-					"path": [
-						"get_products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Product Detail",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}Product/get_detail/1",
-					"host": [
-						"{{url}}Product"
-					],
-					"path": [
-						"get_detail",
-						"1"
 					]
 				}
 			},
