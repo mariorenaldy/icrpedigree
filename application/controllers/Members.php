@@ -82,14 +82,22 @@ class Members extends CI_Controller {
 				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
 				return false;
 			}
+
+			$kennel_data = array(
+				'ken_name' => $this->input->post('ken_name'),
+				'ken_type_id' => $this->input->post('ken_type_id')
+			);
 			
 			$this->db->trans_strict(FALSE);
 			$this->db->trans_start();
+			
 			if (!$this->input->post('mem_ken_id')){
 				if (!$ken_img) 
-					$kennel['ken_photo'] = '-';
-				$kennel['ken_id'] = $this->KennelModel->record_count() + 1;
-				$this->KennelModel->add_kennels($kennel);
+					$kennel_data['ken_photo'] = '-';
+				else
+					$kennel_data['ken_photo'] = $ken_img;
+				$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
+				$this->KennelModel->add_kennels($kennel_data);
 				$data['log_kennel_id'] = $kennel['ken_id'];
 			}
 			else
