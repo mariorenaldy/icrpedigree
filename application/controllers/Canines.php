@@ -58,6 +58,27 @@ class Canines extends CI_Controller {
 				}
 		}
 
+		public function sire(){
+			$member = $this->session->userdata('member_data');
+			if (isset($_GET['q'])) {
+			  $q = $_GET['q'];
+			  $canines = $this->caninesModel->sire_search_by_id($q, $member['mem_id'])->result();
+			} else {
+			  $canines = $this->caninesModel->sire_search_by_id(null, $member['mem_id'])->result();
+			}
+			echo json_encode($canines);
+			}
+	
+		public function dam(){
+			if (isset($_GET['q'])) {
+			  $q = $_GET['q'];
+			  $canines = $this->caninesModel->dam_search($q)->result();
+			} else {
+			  $canines = $this->caninesModel->dam_search()->result();
+			}
+			echo json_encode($canines);
+		}
+
 		public function breeder(){
 			$q = $_GET['q'];
 			$canines = $this->caninesModel->breeder_search($q)->result();
@@ -67,6 +88,12 @@ class Canines extends CI_Controller {
 		public function kennel(){
 			$q = $_GET['q'];
 			$canines = $this->caninesModel->kennel_search($q)->result();
+			echo json_encode($canines);
+		}
+
+		public function parentId($id = null){
+			$where['can_id'] = $id;
+			$canines = $this->caninesModel->get_parent($where)->row();
 			echo json_encode($canines);
 		}
 

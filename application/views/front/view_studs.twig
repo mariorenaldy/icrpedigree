@@ -9,6 +9,7 @@
 <link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/search.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{ base_url() }}/assets/select2/css/select2.min.css" />
 
 <style>
     .bg-info{
@@ -168,7 +169,27 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title" id="myModalLabel">Request Penambahan Data Pacak</h3>
                 </div>
+                
                 <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-xs-12" id="sire-add-canines">
+                          <label for="sire-add">Sire</label>
+                          <select class="form-control sire" id="sire-add" name="stu_sire_id" required style="height: 34px;width:100%"></select>
+                          {# <input type="hidden" name="can_sire" id="can_sire"> #}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="dam-add-canines">
+                          <label for="dam-add">Dam</label>
+                          </br>
+                            <select class="form-control dam" id="dam-add" name="stu_mom_id" required style="height: 34px;width:100%"></select>
+
+                            {# <select class="form-control dam"  name="can_dam" required width="100%"></select> #}
+                            {# <input type="hidden" name="can_dam" id="can_dam"> #}
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-xs-4 col-xs-offset-4">
                             <img id="imgStud" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
@@ -228,6 +249,25 @@
                     <h3 class="modal-title" id="myModalLabel">Request Pengubahan Data Pacak</h3>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-xs-12" id="sire-update-canines">
+                          <label for="sire-update">Sire</label>
+                          <select class="form-control sire" id="sire-update" name="stu_sire_id" required style="height: 34px;width:100%"></select>
+                          {# <input type="hidden" name="can_sire" id="can_sire"> #}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="dam-update-canines">
+                          <label for="dam-update">Dam</label>
+                          </br>
+                            <select class="form-control dam" id="dam-update" name="stu_mom_id" required style="height: 34px;width:100%"></select>
+
+                            {# <select class="form-control dam"  name="can_dam" required width="100%"></select> #}
+                            {# <input type="hidden" name="can_dam" id="can_dam"> #}
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-xs-4 col-xs-offset-4">
                             <img id="imgStud-update" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
@@ -405,8 +445,197 @@
 <!-- Page JS Code -->
 <script src="{{ base_url() }}/assets/oneui/js/pages/view_studs.js"></script>
 
+<script src="{{ base_url() }}assets/select2/js/select2.min.js"></script>
+
 <script>
+function functionSire($id){
+  $('#sire_update').val($id);
+}
+
+function functionDam($id){
+  $('#dam_update').val($id);
+}
+
 var base_url = $('.base_url').val();
+
+$("#dam-add").select2({
+    placeholder: 'Pilih Dam',
+    ajax: {
+        url: base_url+"/canines/dam",
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+        return {
+            results: data
+        };
+        },
+        cache: true
+    },
+    dropdownParent: $("#modal-add-stud")
+});
+
+$("#sire-add").select2({
+    placeholder: 'Pilih Sire',
+    ajax: {
+        url: base_url+"/canines/sire",
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+        return {
+            results: data
+        };
+        },
+        cache: true
+    },
+    dropdownParent: $("#modal-add-stud")
+});
+
+$("#dam-update").select2({
+    placeholder: 'Pilih Dam',
+    ajax: {
+        url: base_url+"/canines/dam",
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+        return {
+            results: data
+        };
+        },
+        cache: true
+    },
+    dropdownParent: $("#modal-update-stud")
+});
+
+$("#sire-update").select2({
+    placeholder: 'Pilih Sire',
+    ajax: {
+        url: base_url+"/canines/sire",
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+        return {
+            results: data
+        };
+        },
+        cache: true
+    },
+    dropdownParent: $("#modal-update-stud")
+});
+
+var sire = new Bloodhound({
+    identify: function(o) { return o.can_a_s; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_a_s'),
+    dupDetector: function(a, b) { return a.can_a_s === b.can_a_s; },
+    // prefetch: {
+    //   cache: false,
+    //     url : base_url+'canines/search'
+    // },
+    remote: {
+      url: base_url+'canines/sire?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+sire.initialize();
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+
+$('#sire-add-canines .typeahead').typeahead(null, {
+name: 'sire',
+display: 'can_a_s',
+placeholder: false,
+source: sire.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+    $('#can_sire_update').val(data.can_id);
+     return '<a style="color:black;" href="javascript:functionSire('+data.can_id+')"><div style="margin-bottom:15px;"><img width="30px" style="float:left; margin:5px;" src="'+data.can_photo+'">' + data.can_a_s + '</div></a><br><br>';
+ }
+}
+});
+
+$('#sire-update-canines .typeahead').typeahead(null, {
+name: 'sire',
+display: 'can_a_s',
+placeholder: false,
+source: sire.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+    $('#can_sire_update').val(data.can_id);
+     return '<a style="color:black;" href="javascript:functionSire('+data.can_id+')"><div style="margin-bottom:15px;"><img width="30px" style="float:left; margin:5px;" src="'+data.can_photo+'">' + data.can_a_s + '</div></a><br><br>';
+ }
+}
+});
+
+// dam
+var dam = new Bloodhound({
+    identify: function(o) { return o.can_a_s; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_a_s'),
+    dupDetector: function(a, b) { return a.can_a_s === b.can_a_s; },
+    // prefetch: {
+    //   cache: false,
+    //     url : base_url+'canines/search'
+    // },
+    remote: {
+      url: base_url+'canines/dam?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+dam.initialize();
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+
+$('#dam-add-canines .typeahead').typeahead(null, {
+name: 'dam',
+display: 'can_a_s',
+placeholder: false,
+source: dam.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+    $('#can_dam_update').val(data.can_id);
+    console.log(data.can_id);
+     return '<a style="color:black;" href="javascript:functionDam('+data.can_id+')"><div style="margin-bottom:15px;"><img width="30px" style="float:left; margin:5px;" src="'+data.can_photo+'">' + data.can_a_s + '</div></a><br><br>';
+ }
+}
+});
+
+$('#dam-update-canines .typeahead').typeahead(null, {
+name: 'dam',
+display: 'can_a_s',
+placeholder: false,
+source: dam.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+    $('#can_dam_update').val(data.can_id);
+    console.log(data.can_id);
+     return '<a style="color:black;" href="javascript:functionDam('+data.can_id+')"><div style="margin-bottom:15px;"><img width="30px" style="float:left; margin:5px;" src="'+data.can_photo+'">' + data.can_a_s + '</div></a><br><br>';
+ }
+}
+});
 
 // breeder
 var breeder = new Bloodhound({

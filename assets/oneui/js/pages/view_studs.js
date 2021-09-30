@@ -280,6 +280,19 @@ function openModal(target, type, id) {
                 $('img#imgDam-update').attr('src', base_url+'uploads/stud/'+res.stu_mom_photo);
             
             $('#date-update-stud').val(res.stu_stud_date);
+
+            $.get(base_url+'canines/parentId/'+res.stu_sire_id, function(resSire) {
+                res1 = $.parseJSON(resSire);
+                $("#sire-update").html("").trigger('change');
+                var newOption = new Option(res1.can_a_s, res1.can_id, false, false);
+                $('#sire-update').append(newOption).trigger('change');
+            });
+            $.get(base_url+'canines/parentId/'+res.stu_mom_id, function(resMom) {
+                res2 = $.parseJSON(resMom);
+                $("#dam-update").html("").trigger('change');
+                var newOption = new Option(res2.can_a_s, res2.can_id, false, false);
+                $('#dam-update').append(newOption).trigger('change');
+            });
         });
     }
     else if (type == 'add-birth') {
