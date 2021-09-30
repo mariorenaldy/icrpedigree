@@ -46,4 +46,12 @@ class LogmemberModel extends CI_Model {
 
 		return $edit; 
     }
+
+    public function get_log($id){
+        $this->db->select('*');
+        $this->db->from('logs_member');
+        $this->db->where('log_member_id', $id);
+        $this->db->where('log_stat', 0);
+        return $this->db->get();
+    }
 }
