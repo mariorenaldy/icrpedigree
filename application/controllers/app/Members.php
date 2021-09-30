@@ -176,6 +176,17 @@ class Members extends CI_Controller {
 			}
 
 			if (!$err){
+				$log = $this->logmemberModel->get_log($this->input->post('mem_id'))->result();
+				if ($log){
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Data pengubahan sebelumnya belum diproses'
+					]);
+				}
+			}
+
+			if (!$err){
 				$data = array(
 					'log_member_id' => $this->input->post('mem_id'),
 					'log_name' => $this->input->post('mem_name'),
