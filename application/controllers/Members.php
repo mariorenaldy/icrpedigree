@@ -38,74 +38,80 @@ class Members extends CI_Controller {
 		}
 
 		public function update($id = null){
-			$data = array(
-				'log_member_id' => $id,
-				'log_name' => $this->input->post('mem_name'),
-				'log_address' => $this->input->post('mem_address'),
-				'log_mail_address' => $this->input->post('mem_mail_address'),
-				'log_hp' => $this->input->post('mem_hp'),
-				'log_kota' => $this->input->post('mem_kota'),
-				'log_kode_pos' => $this->input->post('mem_kode_pos'),
-				'log_email' => $this->input->post('mem_email'),
-				'log_kennel_name' => $this->input->post('ken_name'),
-				'log_kennel_type_id' => $this->input->post('ken_type_id'),
-				'log_stat' => 0
-			);
-
-			$img = $this->input->post('srcDataCrop');
-			if ($img){
-				$title = self::_clean_text('member');
-				$this->path_upload = 'uploads/members/';
-				$data['log_photo'] = self::_upload_base64($img, $title, true, $id);
+			$res = $this->logmemberModel->get_log($id)->result();
+			if ($res){
+				echo json_encode(array('data' => 'Data pengubahan sebelumnya belum diproses'));
 			}
+			else{
+				$data = array(
+					'log_member_id' => $id,
+					'log_name' => $this->input->post('mem_name'),
+					'log_address' => $this->input->post('mem_address'),
+					'log_mail_address' => $this->input->post('mem_mail_address'),
+					'log_hp' => $this->input->post('mem_hp'),
+					'log_kota' => $this->input->post('mem_kota'),
+					'log_kode_pos' => $this->input->post('mem_kode_pos'),
+					'log_email' => $this->input->post('mem_email'),
+					'log_kennel_name' => $this->input->post('ken_name'),
+					'log_kennel_type_id' => $this->input->post('ken_type_id'),
+					'log_stat' => 0
+				);
 
-			$imgPP = $this->input->post('srcDataCropPP');
-			if ($imgPP){
-				$titlePP = self::_clean_text('pp');
-				$this->path_upload = 'uploads/members/';
-				$data['log_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
-			}
+				$img = $this->input->post('srcDataCrop');
+				if ($img){
+					$title = self::_clean_text('member');
+					$this->path_upload = 'uploads/members/';
+					$data['log_photo'] = self::_upload_base64($img, $title, true, $id);
+				}
 
-			$ken_img = $this->input->post('ken_srcDataCrop');
-			if ($ken_img) {
-				$ken_title = self::_clean_text('kennel');
-				$this->path_upload = 'uploads/kennels/';
-				if ($this->input->post('mem_ken_id'))
-					$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+				$imgPP = $this->input->post('srcDataCropPP');
+				if ($imgPP){
+					$titlePP = self::_clean_text('pp');
+					$this->path_upload = 'uploads/members/';
+					$data['log_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
+				}
+
+				$ken_img = $this->input->post('ken_srcDataCrop');
+				if ($ken_img) {
+					$ken_title = self::_clean_text('kennel');
+					$this->path_upload = 'uploads/kennels/';
+					if ($this->input->post('mem_ken_id'))
+						$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title, true, $this->input->post('mem_ken_id'));
+					else
+						$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title);
+				}
+
+				$where['mem_id'] = $id;
+				$user = $this->memberModel->get_members($where)->row_array();
+				if ($user == null) {
+					echo json_encode(array('data' => 'Data Tidak Ditemukan'));
+					return false;
+				}
+
+				$kennel_data = array(
+					'ken_name' => $this->input->post('ken_name'),
+					'ken_type_id' => $this->input->post('ken_type_id')
+				);
+				
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				
+				if (!$this->input->post('mem_ken_id')){
+					if (!$ken_img) 
+						$kennel_data['ken_photo'] = '-';
+					else
+						$kennel_data['ken_photo'] = $ken_img;
+					$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
+					$this->KennelModel->add_kennels($kennel_data);
+					$data['log_kennel_id'] = $kennel['ken_id'];
+				}
 				else
-					$data['log_kennel_photo'] = self::_upload_base64($ken_img, $ken_title);
-			}
+					$data['log_kennel_id'] = $this->input->post('mem_ken_id');
 
-			$where['mem_id'] = $id;
-			$user = $this->memberModel->get_members($where)->row_array();
-			if ($user == null) {
-				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
-				return false;
+				$this->logmemberModel->add_log($data);
+				$this->db->trans_complete();
+				echo json_encode(array('data' => '1'));
 			}
-
-			$kennel_data = array(
-				'ken_name' => $this->input->post('ken_name'),
-				'ken_type_id' => $this->input->post('ken_type_id')
-			);
-			
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			
-			if (!$this->input->post('mem_ken_id')){
-				if (!$ken_img) 
-					$kennel_data['ken_photo'] = '-';
-				else
-					$kennel_data['ken_photo'] = $ken_img;
-				$kennel_data['ken_id'] = $this->KennelModel->record_count() + 1;
-				$this->KennelModel->add_kennels($kennel_data);
-				$data['log_kennel_id'] = $kennel['ken_id'];
-			}
-			else
-				$data['log_kennel_id'] = $this->input->post('mem_ken_id');
-
-			$this->logmemberModel->add_log($data);
-			$this->db->trans_complete();
-			echo json_encode(array('data' => '1'));
 		}
 
 		public function ubah_password(){
