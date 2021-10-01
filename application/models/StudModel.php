@@ -17,13 +17,15 @@ class StudModel extends CI_Model {
     }
 
     public function get_studs($where = null){
-        $this->db->select('*');
+        $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo');
         $this->db->from('studs');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->join('users','users.use_id = studs.stu_app_user');
         $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
+        $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
+        $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_mom_id');
         $this->db->order_by('studs.stu_date', 'desc');
         return $this->db->get();
     }
@@ -124,8 +126,8 @@ class StudModel extends CI_Model {
     public function approve($id){
         $user = $this->session->userdata('user_data');
         $data = array(
-            'stu_sire_id' => $this->input->post('stu_sire_id'),
-            'stu_mom_id' => $this->input->post('stu_mom_id'),
+            // 'stu_sire_id' => $this->input->post('stu_sire_id'),
+            // 'stu_mom_id' => $this->input->post('stu_mom_id'),
             'stu_note' => $this->input->post('stu_note'),
             'stu_app_user' => $user['use_id'],
             'stu_app_date' => date('Y-m-d H:i:s'),

@@ -30,7 +30,7 @@ class Studs extends CI_Controller {
 			$cek = true;
 			$this->db->trans_strict(FALSE);
 			$this->db->trans_start();
-			$res = $this->studModel->check_date($id, $this->input->post('stu_mom_id'), $stud->stu_stud_date);
+			$res = $this->studModel->check_date($id, $stud->stu_mom_id, $stud->stu_stud_date);
 			if (!$res){
 				$this->studModel->approve($id);
 				if ($stud->stu_member){
@@ -133,7 +133,7 @@ class Studs extends CI_Controller {
 						$stud = $this->studModel->get_studs($where)->row();
 						echo json_encode($stud);
 				}else{
-						$aColumns = array('stu_id', 'stu_photo', 'stu_sire_photo', 'stu_mom_photo', 'stu_stud_date', 'stu_stat', 'mem_name');
+						$aColumns = array('stu_id', 'stu_photo', 'stu_sire_photo', 'stu_mom_photo', 'stu_stud_date', 'stu_stat', 'mem_name', 'can_sire.can_photo AS sire_photo', 'can_dam.can_photo AS dam_photo');
 						$sTable = 'studs';
 
 						$iDisplayStart = $this->input->get_post('start', true);
@@ -189,6 +189,8 @@ class Studs extends CI_Controller {
 						// Select Data
 						$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
 						$this->db->join('members','members.mem_id = studs.stu_member');
+						$this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
+						$this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_mom_id');
 						$this->db->where('stu_stat', 0);
 						$this->db->order_by('stu_date', 'DESC');
 						$rResult = $this->db->get($sTable);

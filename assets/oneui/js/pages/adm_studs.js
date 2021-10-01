@@ -41,6 +41,28 @@ var BaseTableDatatables = function() {
                       },
                     },
                     { data: 'mem_name'},
+                    { data: 'sire_photo',
+                      render: function(data, type, row) {
+                        if (data == '-') {
+                          var str = '<img src="'+base_url+'assets/oneui/img/avatars/image.png" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }else{
+                          var str = '<img src="'+base_url+'uploads/canine/'+ data + '" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }
+                      },
+                    },
+                    { data: 'dam_photo',
+                      render: function(data, type, row) {
+                        if (data == '-') {
+                          var str = '<img src="'+base_url+'assets/oneui/img/avatars/image.png" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }else{
+                          var str = '<img src="'+base_url+'uploads/canine/'+ data + '" width="100" class="img img-thumbnail" style="border-radius:5%">';
+                          return str;
+                        }
+                      },
+                    },
                     { data: 'stu_sire_photo',
                       render: function(data, type, row) {
                         if (data == '-') {
@@ -407,14 +429,24 @@ function openModal(target, type, id) {
             $('img#imgStud').attr('src', base_url+'uploads/stud/'+res.stu_photo);
         
         if (res.stu_sire_photo == '-')
-            $('img#imgSire').attr('src', base_url+'assets/oneui/img/avatars/image.png');
+            $('img#imgSire2').attr('src', base_url+'assets/oneui/img/avatars/image.png');
         else
-            $('img#imgSire').attr('src', base_url+'uploads/stud/'+res.stu_sire_photo);
+            $('img#imgSire2').attr('src', base_url+'uploads/stud/'+res.stu_sire_photo);
 
         if (res.stu_mom_photo == '-')
+            $('img#imgDam2').attr('src', base_url+'assets/oneui/img/avatars/image.png');
+        else
+            $('img#imgDam2').attr('src', base_url+'uploads/stud/'+res.stu_mom_photo);
+        
+        if (res.sire_photo == '-')
+            $('img#imgSire').attr('src', base_url+'assets/oneui/img/avatars/image.png');
+        else
+            $('img#imgSire').attr('src', base_url+'uploads/canine/'+res.sire_photo);
+
+        if (res.dam_photo == '-')
             $('img#imgDam').attr('src', base_url+'assets/oneui/img/avatars/image.png');
         else
-            $('img#imgDam').attr('src', base_url+'uploads/stud/'+res.stu_mom_photo);
+            $('img#imgDam').attr('src', base_url+'uploads/canine/'+res.dam_photo);
     });
 
     $(target).modal('show');
