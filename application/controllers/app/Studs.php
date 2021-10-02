@@ -102,6 +102,22 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
+			if (!$err && empty($this->input->post('stu_sire_id'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id sire wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('stu_mom_id'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id dam wajib diisi'
+				]); 
+			}
+
 			if (!$err && empty($this->input->post('stu_stud_date'))){
 				$err++;
 				echo json_encode([
@@ -207,6 +223,8 @@ class Studs extends CI_Controller {
 				if ($cek){
 					$data = array(
 						'stu_photo' => $photo,
+						'stu_sire_id' => $this->input->post('stu_sire_id'),
+						'stu_mom_id' => $this->input->post('stu_mom_id'),
 						'stu_sire_photo' => $sire,
 						'stu_mom_photo' => $dam,
 						'stu_stud_date' => $date,
@@ -233,6 +251,22 @@ class Studs extends CI_Controller {
 				echo json_encode([
 					'status' => false,
 					'message' => 'Id pacak wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('stu_sire_id'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id sire wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('stu_mom_id'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id dam wajib diisi'
 				]); 
 			}
 
@@ -349,6 +383,8 @@ class Studs extends CI_Controller {
 						$data['stu_sire_photo'] = $sire;
 					if ($dam)
 						$data['stu_mom_photo'] = $dam;
+					$data['stu_sire_id'] = $this->input->post('stu_sire_id');
+					$data['stu_mom_id'] = $this->input->post('stu_mom_id');
 					$res = $this->studModel->update_studs($data, $where);
 					echo json_encode([
 						'status' => true
