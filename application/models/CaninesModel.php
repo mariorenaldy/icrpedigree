@@ -19,6 +19,22 @@ class CaninesModel extends CI_Model {
       return $this->db->get('canines');
     }
 
+    public function sire_search($q = null){
+
+        $this->db->select('can_id as id, can_a_s as text');
+        if (isset($q)) {
+          $this->db->like('can_a_s', $q);
+        }
+        // $this->db->or_like('std_full_name', $q);
+        $this->db->where('can_gender','Male');
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get('canines');
+  
+        // $query = $this->db->query('SELECT std_nrp , std_full_name, std_photo
+        //                         FROM silp_students WHERE std_nrp like %'+$q+'%
+        //                         OR std_full_name like %'+$q+'%');
+        // return $query;
+      }
 
     public function sire_search_by_id($q = null, $id){
 
