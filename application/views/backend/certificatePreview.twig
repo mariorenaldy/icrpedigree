@@ -166,7 +166,7 @@
                   <div class="konten_surat"style="margin-left: 175px;">
                   <!-- <div  style="margin-left: 208px;" > -->
                     <img class="pull-right" style=" margin-right: 70px; margin-top: -15px;" src="{{base_url()}}uploads/canine/{{canine[0].can_photo}}" width="400px" alt="" />
-                    {% if canine[0].can_as_count > 28 %}
+                    {# {% if canine[0].can_as_count > 28 %}
 
                       {% if canine[0].can_icr_number != '-' %}
                         <p class="as" style="color:red; width: 310px;" >{{canine[0].can_a_s}}</p>
@@ -179,7 +179,7 @@
                         <p class="white" style="margin-top:-3px;">
                           {{canine[0].can_icr_number}}
                         </p>
-                    {% else %}
+                    {% else %} #}
 
                     {% if canine[0].can_icr_number != '-' %}
                         <p class="as" style="color:red;" >{{canine[0].can_a_s}}</p>
@@ -192,7 +192,7 @@
                         <p class="white" style="margin-top:34px;">
                           {{canine[0].can_icr_number}}
                         </p>
-                    {% endif %}
+                    {# {% endif %} #}
                     <p class="white" style="margin-top: -13px;
                                             margin-bottom: 6px;">{{canine[0].can_breed}}</p>
                     <p  class="white"  >
