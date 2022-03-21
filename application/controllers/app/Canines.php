@@ -6,7 +6,7 @@ class Canines extends CI_Controller {
 		public function __construct(){
 				// Call the CI_Controller constructor
 				parent::__construct();
-				$this->load->model(array('caninesModel', 'memberModel', 'requestModel'));
+				$this->load->model(array('caninesModel', 'memberModel', 'requestModel', 'pedigreesModel'));
 				$this->load->library('upload', $this->config->item('upload_canine'));
 		}
 
@@ -235,5 +235,130 @@ class Canines extends CI_Controller {
 				'status' => true,
 				'data' => $req
 			]);
+		}
+
+		public function add(){
+			$err = 0;
+			if (empty($this->input->post('can_a_s'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Nama canine wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_date_of_birth'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Tanggal lahir wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_color'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Warna wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_owner_name'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Breeder wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_cage'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Kennel wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_owner'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Pemilik wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_address'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Alamat wajib diisi'
+				]); 
+			}
+
+			$photo = '-';
+			if (!$err && isset($_FILES['attachment_canine']) && !empty($_FILES['attachment_canine']['tmp_name'])){
+				if (is_uploaded_file($_FILES['attachment_canine']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_canine'));
+					if ($this->upload->do_upload('attachment_canine')){
+						$uploadData = $this->upload->data();
+						$photo = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						echo json_encode([
+							'status' => false,
+							'message' => $this->upload->display_errors()
+						]);
+					}
+				}
+			}
+			
+			if (!$err){
+				$piece = explode("-", $this->input->post('can_date_of_birth'));
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
+				$data = array(
+					'can_a_s' => $this->input->post('can_a_s'),
+					'can_current_reg_number' => $this->input->post('can_current_reg_number'),
+					'can_icr_number' => $this->input->post('can_icr_number'),
+					'can_breed' => $this->input->post('can_breed'),
+					'can_gender' => $this->input->post('can_gender'),
+					'can_date_of_birth' => $date,
+					'can_color' => $this->input->post('can_color'),
+					'can_icr_moc_number' => $this->input->post('can_icr_moc_number'),
+					'can_owner_name' => $this->input->post('can_owner_name'),
+					'can_cage' => $this->input->post('can_cage'),
+					'can_owner' => $this->input->post('can_owner'),
+					'can_address' => $this->input->post('can_address'),
+					'can_reg_date' => date("Y/m/d"),
+					'can_photo' => $photo
+				);
+
+				$cek = true;
+                $res = $this->caninesModel->check_can_a_s('', $data['can_a_s']);
+                if ($res){
+                  $cek = false;
+                }
+
+				if ($cek){
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$canines = $this->caninesModel->add_canines($data);
+					$pedigree = array('ped_canine_id' => $canines,
+                                      'ped_sire_id' => 86,
+                                      'ped_mom_id' => 87 );
+					$pedigree = $this->pedigreesModel->add_pedigrees($pedigree);
+					$this->db->trans_complete();
+					echo json_encode([
+						'status' => true
+					]);
+				}
+				else{
+					echo json_encode([
+						'status' => false,
+						'message' => 'Nama canine tidak boleh sama'
+					]); 
+				}
+			}
 		}
 }
