@@ -79,12 +79,11 @@ class Canines extends CI_Controller {
 
 		public function get_by_id(){
 			if ($this->uri->segment(4)){
-				$where['can_id'] = $this->uri->segment(4);
-				$canine = $this->caninesModel->get_canines($where);
+				$canine = $this->caninesModel->get_by_id_app($this->uri->segment(4));
 				if ($canine){
 					echo json_encode([
 						'status' => true,
-						'data' => $canine->row()
+						'data' => $canine[0]
 					]);
 				}
 				else
@@ -239,7 +238,15 @@ class Canines extends CI_Controller {
 
 		public function add(){
 			$err = 0;
-			if (empty($this->input->post('can_a_s'))){
+			if (empty($this->input->post('can_member'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id member wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_a_s'))){
 				$err++;
 				echo json_encode([
 					'status' => false,
@@ -260,6 +267,14 @@ class Canines extends CI_Controller {
 				echo json_encode([
 					'status' => false,
 					'message' => 'Warna wajib diisi'
+				]); 
+			}
+
+			if (!$err && empty($this->input->post('can_current_reg_number'))){
+				$err++;
+				echo json_encode([
+					'status' => false,
+					'message' => 'No. registrasi wajib diisi'
 				]); 
 			}
 
@@ -318,20 +333,19 @@ class Canines extends CI_Controller {
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
 				$data = array(
+					'can_member' => $this->input->post('can_member'),
 					'can_a_s' => $this->input->post('can_a_s'),
 					'can_current_reg_number' => $this->input->post('can_current_reg_number'),
-					'can_icr_number' => $this->input->post('can_icr_number'),
 					'can_breed' => $this->input->post('can_breed'),
 					'can_gender' => $this->input->post('can_gender'),
 					'can_date_of_birth' => $date,
 					'can_color' => $this->input->post('can_color'),
-					'can_icr_moc_number' => $this->input->post('can_icr_moc_number'),
 					'can_owner_name' => $this->input->post('can_owner_name'),
 					'can_cage' => $this->input->post('can_cage'),
 					'can_owner' => $this->input->post('can_owner'),
 					'can_address' => $this->input->post('can_address'),
 					'can_reg_date' => date("Y/m/d"),
-					'can_photo' => $photo
+					'can_photo' => $photo,
 				);
 
 				$cek = true;

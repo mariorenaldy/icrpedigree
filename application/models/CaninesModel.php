@@ -440,6 +440,12 @@ class CaninesModel extends CI_Model {
         return $query->result();  
 	}
 
+    public function get_by_id_app($id){ 
+        $sql = "SELECT * FROM canines c, members m, kennels k, users u, approval_status a WHERE m.mem_id = c.can_member AND m.mem_ken_id = k.ken_id AND c.can_stat = 1 AND c.can_app_stat = a.stat_id AND c.can_app_user = u.use_id AND c.can_id = ".$id;
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
     public function search_app($q){
         $date = '';
         $piece = explode("-", $q);
@@ -456,6 +462,21 @@ class CaninesModel extends CI_Model {
         $query = $this->db->query($sql);
         
         return $query->result();
+    }
+
+    public function update_status($id, $stat){
+        $user = $this->session->userdata('user_data');
+        $data = array(
+            'can_app_user' => $user['use_id'],
+            'can_app_date' => date('Y-m-d H:i:s'),
+            'can_app_stat' => $stat,
+            'can_app_note' => $this->input->post('can_app_note')
+        );
+        $this->db->where('can_id', $id);
+
+        $edit = $this->db->update('canines', $data);
+
+		return $edit; 
     }
     // ARTechnology
 }
