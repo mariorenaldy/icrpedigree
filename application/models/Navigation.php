@@ -36,6 +36,13 @@ class Navigation extends CI_Model {
                 'icon' => 'si-doc'
               ),
               array(
+                'url' => 'backend/canines/approve_index',
+                'displayName' => 'Approve Canines',
+                'child' => false,
+                'heading' => false,
+                'icon' => 'fa fa-check'
+              ),
+              array(
                 'url' => 'backend/users',
                 'displayName' => 'Pengguna',
                 'child' => false,

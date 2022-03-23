@@ -1,0 +1,309 @@
+{# ARTechnology #}
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/search.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{ base_url() }}/assets/select2/css/select2.min.css" />
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Approve Data Canine</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <h4>Approve Data Canine</h4>
+        </div>
+        <div class="block-content">
+            <div class="table-responsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/employee.js -->
+                <table class="table table-borderless table-striped data-canines">
+                    <thead>
+                        <tr>
+                            <th width="5%">Foto</th>
+                            <th>No. Registrasi</th>
+                            <th>Nama</th>
+                            <th>Breed</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Warna</th>
+                            <th>Tanggal Lahir</th>
+                            <th>Breeder</th>
+                            <th>Kennel</th>
+                            <th>Pemilik</th>
+                            <th>Alamat</th>
+                            <th class="text-center" width="1%">#</th>
+                            <th class="text-center" width="1%">#</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modals -->
+<div class="modal fade" id="modal-approve-canine" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <form action="" class="form-approve-canine form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Approve Canine</h3>
+                </div>
+                <div class="block-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-xs-4 col-xs-offset-4">
+                                    <label for="imgCanine_approve">Foto</label>
+                                    <img id="imgCanine_approve" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_a_s_approve">Nama</label>
+                                    <div id="can_a_s_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_current_reg_number_approve">No. Registrasi</label>
+                                    <div id="can_current_reg_number_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_breed_approve">Breed</label>
+                                    <div id="can_breed_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_gender_approve">Jenis Kelamin</label>
+                                    <div id="can_gender_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_color_approve">Warna</label>
+                                    <div id="can_color_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_date_of_birth_approve">Tanggal Lahir</label>
+                                    <div id="can_date_of_birth_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_owner_name_approve">Breeder</label>
+                                    <div id="can_owner_name_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_cage_approve">Kennel</label>
+                                    <div id="can_cage_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_owner_approve">Pemilik</label>
+                                    <div id="bir_owner_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_address_approve">Alamat</label>
+                                    <div id="can_address_approve"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <label for="can_app_note_approve">Keterangan</label>
+                                <textarea class="form-control" name="can_app_note" id="can_app_note_approve"  rows="4" cols="20"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary submit-approve-canine">Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal approve-->
+
+<div class="modal fade" id="modal-reject-canine" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <form action="" class="form-reject-canine form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Tolak Canine</h3>
+                </div>
+                <div class="block-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-4 col-xs-offset-4">
+                                    <label for="imgCanine_reject">Foto</label>
+                                    <img id="imgCanine_reject" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_a_s_reject">Nama</label>
+                                    <div id="can_a_s_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_current_reg_number_reject">No. Registrasi</label>
+                                    <div id="can_current_reg_number_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_breed_reject">Breed</label>
+                                    <div id="can_breed_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_gender_reject">Jenis Kelamin</label>
+                                    <div id="can_gender_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_color_reject">Warna</label>
+                                    <div id="can_color_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_date_of_birth_reject">Tanggal Lahir</label>
+                                    <div id="can_date_of_birth_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_owner_name_reject">Breeder</label>
+                                    <div id="can_owner_name_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_cage_reject">Kennel</label>
+                                    <div id="can_cage_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_owner_reject">Pemilik</label>
+                                    <div id="bir_owner_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="can_address_reject">Alamat</label>
+                                    <div id="can_address_reject"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <label for="can_app_note_reject">Keterangan</label>
+                                <textarea class="form-control" name="can_app_note" id="can_app_note_reject"  rows="4" cols="20"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary submit-reject-canine">Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal reject-->
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/approve_canine.js"></script>
+{% endblock %}

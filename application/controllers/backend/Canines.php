@@ -671,6 +671,7 @@ class Canines extends CI_Controller {
             $this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
             $this->db->join('members','members.mem_id = canines.can_member');
             $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
+            $this->db->where('can_app_stat', 1);
             $this->db->order_by('can_id', 'desc');
             $rResult = $this->db->get($sTable);
             
@@ -1259,5 +1260,233 @@ class Canines extends CI_Controller {
 
       echo json_encode($output);
     }
+
+    public function approve_index(){
+      $session = self::_is_logged_in();
+      if(!$session) {
+      		redirect('backend');
+      }else {
+        $where['set_id'] = 1;
+        $setting = $this->settingModel->get_settings($where)->row();
+        $data['setting'] = $setting;
+        $data['trahs'] = $this->trahModel->get_trah()->result();
+
+        // print_r($data['trahs']);
+        $user = $this->session->userdata('user_data');
+        $data['users'] = $user;
+        if ($user['use_akses'] != 3) {
+          $data['navigations'] = $this->navigations;
+          $this->twig->display('backend/approve_canine', $data);
+        }else {
+          redirect('backend/dashboard');
+        }
+
+      }
+    }
+
+    public function approve_data($id = null){
+      if ($id != null) {
+          $where['can_id'] = $id;
+          $canines = $this->caninesModel->get_can_pedigrees($where)->row();
+          // $canines = $this->caninesModel->get_canines($where)->row();
+          echo json_encode($canines);
+      }else{
+          // ARTechnology
+          $aColumns = array('can_id', 'can_current_reg_number', 'can_icr_moc_number', 'can_icr_number','can_a_s', 'can_owner','can_gender', 'can_score' , 'can_photo', 'can_remaining_payment', 'can_created_at', 'can_updated_at', 'can_stat', 'can_note', 'can_address', 'can_member', 'mem_name', 'can_print', 'ken_type_id', 'ken_name', 'can_app_stat', 'can_color', 'can_date_of_birth', 'can_owner_name', 'can_cage', 'can_breed');
+          // ARTechnology
+          $sTable = 'canines';
+
+          $iDisplayStart = $this->input->get_post('start', true);
+          $iDisplayLength = $this->input->get_post('length', true);
+          $sSearch = $this->input->post('search', true);
+          $sEcho = $this->input->get_post('sEcho', true);
+          $columns = $this->input->get_post('columns', true);
+          $orders = $this->input->get_post('order', true);
+
+          // Paging
+          if(isset($iDisplayStart) && $iDisplayLength != '-1'){
+              $this->db->limit($this->db->escape_str($iDisplayLength), $this->db->escape_str($iDisplayStart));
+          }
+
+          // Ordering
+          if(isset($orders[0]['column'])){
+              // for($i=0; $i<intval($columns); $i++){
+                  // $iSortCol = $this->input->get_post('iSortCol_'.$i, true);
+                  // $bSortable = $this->input->get_post('bSortable_'.intval($iSortCol), true);
+                  $bSortable = $columns[$orders[0]['column']]['orderable'];
+                  // $sSortDir = $this->input->get_post('sSortDir_'.$i, true);
+
+                  if($bSortable == 'true')
+                  {
+                      $this->db->order_by($columns[$orders[0]['column']]['data'], $orders[0]['dir']);
+                      // $this->db->order_by($aColumns[intval($this->db->escape_str($iSortCol))], $this->db->escape_str($sSortDir));
+                  }
+              // }
+          }
+
+          /*
+           * Filtering
+           * NOTE this does not match the built-in DataTables filtering which does it
+           * word by word on any field. It's possible to do here, but concerned about efficiency
+           * on very large tables, and MySQL's regex functionality is very limited
+           */
+          if(isset($sSearch['value']) && !empty($sSearch['value'])){
+              // ARTechnology
+              for($i=0; $i<count($columns); $i++){
+              // ARTechnology
+
+                  // $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
+                  $bSearchable = $columns[$i]['searchable'];
+
+                  // Individual column filtering
+                  if(isset($bSearchable) && $bSearchable == 'true')
+                  {
+                      for($j=0; $j<count($aColumns); $j++){
+                        $this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
+                      }
+                  }
+              }
+          }
+
+          // Select Data
+          $this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
+          $this->db->join('members','members.mem_id = canines.can_member');
+          $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
+          $this->db->where('can_app_stat', 0);
+          $this->db->order_by('can_id', 'desc');
+          $rResult = $this->db->get($sTable);
+          
+          // Data set length after filtering
+          $this->db->select('FOUND_ROWS() AS found_rows');
+          $iFilteredTotal = $this->db->get()->row()->found_rows;
+
+          // Total data set length
+          $iTotal = $this->db->count_all($sTable);
+
+          // Output
+          $output = array(
+              'sEcho' => intval($sEcho),
+              'iTotalRecords' => $iTotal,
+              'iTotalDisplayRecords' => $iFilteredTotal,
+              'aaData' => array()
+          );
+
+          foreach($rResult->result_array() as $i => $aRow){
+              $row = array();
+
+              // foreach($aColumns as $col){
+              // 		if($col == 'stock')
+              //     $row[$col] = $aRow[$col];
+              // }
+              $output['aaData'][] = $aRow;
+          }
+
+          echo json_encode($output);
+      }
+  }
+
+  public function approve_canine($id = null){
+    if ($id){
+      $where['can_id'] = $id;
+      $can = $this->caninesModel->get_can_pedigrees($where)->row();
+
+      $res = $this->caninesModel->update_status($id, 1);
+      if ($res){
+        if ($can->mem_id){
+          $res3 = $this->notification_model->add(11, $id, $can->mem_id);
+
+          $whe_can['mem_id'] = $can->mem_id;
+          $member = $this->memberModel->get_members($whe_can)->row();
+          if ($member->mem_firebase_token){
+            $notif = $this->notificationtype_model->get_by_id(11);
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+            $fields = array (
+              'to' => $member->mem_firebase_token,
+              'notification' => array(
+                "channelId" => "ICRPedigree",
+                'title' => $notif[0]->title,
+                'body' => $notif[0]->description
+              )
+            );
+            $fields = json_encode ( $fields );
+
+            $headers = array (
+                'Authorization: key=' . $key,
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init ();
+            curl_setopt ( $ch, CURLOPT_URL, $url );
+            curl_setopt ( $ch, CURLOPT_POST, true );
+            curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+            curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+            $result = curl_exec ( $ch );
+            // echo $result;
+            curl_close ( $ch );
+          }
+        }
+        echo json_encode(array('data' => '1'));
+      }
+      else{
+        echo json_encode(array('data' => 'Canine dengan id = '.$id.' tidak dapat di-approve'));
+      }
+    }
+  }
+
+  public function reject_canine($id = null){
+    if ($id){
+      $where['can_id'] = $id;
+      $can = $this->caninesModel->get_can_pedigrees($where)->row();
+
+      $res = $this->caninesModel->update_status($id, 2);
+      if ($res){
+        if ($can->mem_id){
+          $res3 = $this->notification_model->add(12, $id, $can->mem_id);
+
+          $whe_can['mem_id'] = $can->mem_id;
+          $member = $this->memberModel->get_members($whe_can)->row();
+          if ($member->mem_firebase_token){
+            $notif = $this->notificationtype_model->get_by_id(12);
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+            $fields = array (
+              'to' => $member->mem_firebase_token,
+              'notification' => array(
+                "channelId" => "ICRPedigree",
+                'title' => $notif[0]->title,
+                'body' => $notif[0]->description
+              )
+            );
+            $fields = json_encode ( $fields );
+
+            $headers = array (
+                'Authorization: key=' . $key,
+                'Content-Type: application/json'
+            );
+
+            $ch = curl_init ();
+            curl_setopt ( $ch, CURLOPT_URL, $url );
+            curl_setopt ( $ch, CURLOPT_POST, true );
+            curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+            curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+            $result = curl_exec ( $ch );
+            // echo $result;
+            curl_close ( $ch );
+          }
+        }
+        echo json_encode(array('data' => '1'));
+      }
+      else{
+        echo json_encode(array('data' => 'Canine dengan id = '.$id.' tidak dapat di-reject'));
+      }
+    }
+  }
     // ARTechnology
 }
