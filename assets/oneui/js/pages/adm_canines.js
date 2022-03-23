@@ -58,6 +58,27 @@ var BaseTableDatatables = function() {
                         }
                       },
                     },
+                    { data: 'use_username',
+                      render: function(data, type, row) {
+                        if (row.can_app_stat > 0) {
+                          return data;
+                        }
+                        else{
+                          return '';
+                        }
+                      },
+                    },
+                    { data: 'can_app_date',
+                      render: function(data, type, row) {
+                        if (row.can_app_stat > 0) {
+                            var parts = data.split('-');
+                            return parts[2].substring(0, 2) + '-' + parts[1] + '-'+ parts[0];
+                        }
+                        else{
+                          return '';
+                        }
+                      },
+                    },
                     // ARTechnology 2
                     { data: 'can_id',
                       render: function(data, type, row) {

@@ -611,7 +611,7 @@ class Canines extends CI_Controller {
             echo json_encode($canines);
         }else{
             // ARTechnology
-            $aColumns = array('can_id', 'can_current_reg_number', 'can_icr_moc_number', 'can_icr_number','can_a_s', 'can_owner','can_gender', 'can_score' , 'can_photo', 'can_remaining_payment', 'can_created_at', 'can_updated_at', 'can_stat', 'can_note', 'can_address', 'can_member', 'mem_name', 'can_print', 'ken_type_id', 'ken_name');
+            $aColumns = array('can_id', 'can_current_reg_number', 'can_icr_moc_number', 'can_icr_number','can_a_s', 'can_owner','can_gender', 'can_score' , 'can_photo', 'can_remaining_payment', 'can_created_at', 'can_updated_at', 'can_stat', 'can_note', 'can_address', 'can_member', 'mem_name', 'can_print', 'ken_type_id', 'ken_name', 'can_app_stat', 'use_username', 'can_app_date');
             // ARTechnology
             $sTable = 'canines';
 
@@ -671,6 +671,7 @@ class Canines extends CI_Controller {
             $this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
             $this->db->join('members','members.mem_id = canines.can_member');
             $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
+            $this->db->join('users','users.use_id = canines.can_app_user');
             $this->db->where('can_app_stat', 1);
             $this->db->order_by('can_id', 'desc');
             $rResult = $this->db->get($sTable);

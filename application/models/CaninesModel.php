@@ -472,6 +472,8 @@ class CaninesModel extends CI_Model {
             'can_app_stat' => $stat,
             'can_app_note' => $this->input->post('can_app_note')
         );
+        if ($stat == 1)
+            $data['can_stat'] = 1;
         $this->db->where('can_id', $id);
 
         $edit = $this->db->update('canines', $data);
