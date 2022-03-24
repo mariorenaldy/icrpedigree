@@ -392,7 +392,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function check_can_a_s($id, $name){
-        $sql = "select * from canines where can_a_s = '".$name."'";
+        $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = 1";
         if ($id){
             $sql .= ' AND can_id <> '.$id;
         }
