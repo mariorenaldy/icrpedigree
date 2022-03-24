@@ -15,7 +15,7 @@ class Canines extends CI_Controller {
 				$this->canines = array();
 				$this->load->model('productModel');
 				// $this->load->model('employeeCredentialModel');
-				$this->load->model(array('memberModel', 'requestModel'));
+				$this->load->model(array('memberModel', 'requestModel', 'trahModel'));
 				$this->load->model('navigation');
 				
 				$this->navigations = $this->navigation->get_navigation();
@@ -42,6 +42,8 @@ class Canines extends CI_Controller {
 				$data['users'] = $user;
 
 				$data['navigations'] = $this->navigations;
+
+				$data['trahs'] = $this->trahModel->get_trah()->result();
 
 				if (isset($_GET['q']) && $_GET['q'] != '+') {
 					$canines = $this->caninesModel->search_by_member($_GET['q']);
@@ -88,6 +90,18 @@ class Canines extends CI_Controller {
 		public function kennel(){
 			$q = $_GET['q'];
 			$canines = $this->caninesModel->kennel_search($q)->result();
+			echo json_encode($canines);
+		}
+
+		public function owner(){
+			$q = $_GET['q'];
+			$canines = $this->caninesModel->owner_search($q)->result();
+			echo json_encode($canines);
+		}
+
+		public function address(){
+			$q = $_GET['q'];
+			$canines = $this->caninesModel->address_search($q)->result();
 			echo json_encode($canines);
 		}
 
@@ -159,6 +173,35 @@ class Canines extends CI_Controller {
 			$where['req_can_id'] = $id;
 			$data['reqs'] = $this->requestModel->get_requests($where)->result();
 			$this->twig->display('front/requests', $data);
+		}
+
+		public function add(){
+			$res = $this->caninesModel->check_can_a_s('', $this->input->post('can_a_s'));
+			if (!$res){
+				$img = $this->input->post('srcDataCrop');
+				$title = self::_clean_text('canine');
+				if ($img)
+					$_POST['can_photo'] = self::_upload_base64($img, $title);
+				else
+					$_POST['can_photo'] = '-';
+
+				unset($_POST['srcDataCrop']);
+				
+				$data = $this->input->post(null,false);
+
+				$piece = explode("-", $this->input->post('can_date_of_birth'));
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+				$data['can_date_of_birth'] = $date;
+
+				$member = $this->session->userdata('member_data');
+				$data['can_member'] = $member['mem_id'];
+
+				$canine = $this->caninesModel->add_canines($data);
+
+				echo json_encode(array('data' => '1'));
+			}
+			else
+				echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
 		}
 
     //  PHP Helper

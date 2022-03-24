@@ -9,6 +9,7 @@
 <link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="{{ base_url() }}/assets/coco/css/search.css" media="screen" title="no title" charset="utf-8">
 <link rel="stylesheet" id="css-main" href="{{ base_url() }}assets/typeahead.js/css/typeaheadjs.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
 
 <style>
     .bg-info{
@@ -19,6 +20,18 @@
     }
     th{
         color: white !important;
+    }
+    th.picker-switch{
+        color: gray !important;
+    }
+    .datepicker table tr td.today,
+    .datepicker table tr td.today:hover,
+    .datepicker table tr td.today.disabled,
+    .datepicker table tr td.today.disabled:hover {
+        background-color: gray;
+    }
+    .text-gray{
+        color: gray !important;
     }
 </style>
 {% endblock %}
@@ -66,6 +79,9 @@
             </form>
         </div>
         <div class="table-responsive">
+            <div class="block-header text-center bg-gray-lighter">
+                <button class="btn btn-primary btn-add-canines pull-right" onClick="openModal('#modal-add-canine', 'add-canine')" data-toggle="tooltip" title="Tambah Canine"><i class="fa fa-plus"></i></button>
+            </div>
             <table class="table table-borderless">
                 <thead>
                     <tr>
@@ -169,6 +185,112 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal update-->
 
+<div class="modal fade" id="modal-add-canine" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="" class="form-add-canine form-horizontal" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="myModalLabel">Request Penambahan Data Canine</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-xs-4 col-xs-offset-4">
+                            <img id="imgPreview" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                            <div class="fileUpload btn btn-default btn-flat btn-block text-center">
+                                <label for="imageInputCanine" class="btn">Gambar Canine</label>
+                                <input type="file" class="upload hidden" name="can_photo" id="imageInputCanine" />
+                                <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="as-add-canines">Nama</label>
+                          <input class="form-control" id="as-add-canines" name="can_a_s" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="as-add-canines">No. Registrasi</label>
+                          <input class="form-control" id="reg-number-add-canines" name="can_current_reg_number" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="breed-add-canines">Breed</label>
+                          <select class="form-control" id="breed-add-canines" name="can_breed" required>
+                            {% for trah in trahs %}
+                                <option value="{{trah.tra_name}}">{{trah.tra_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="gender-add-canines">Gender</label>
+                          <br>
+                          <input id="gender-add-canines" name="can_gender" type="radio" value="Male" checked>Male&nbsp;&nbsp;
+                          <input id="gender-add-canines" name="can_gender" type="radio" value="Female" />Female
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="color-add-canines">Color</label>
+                          <input class="form-control" id="color-add-canines" name="can_color" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="date-add-canine">Tanggal Lahir</label>
+                            <input class="form-control" id="date-add-canine" name="can_date_of_birth" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="breeder-canines">
+                          <label for="breeder">Breeder</label>
+                          <input class="form-control typeahead" id="breeder" name="can_owner_name" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="kennel-canines">
+                          <label for="kennel">Kennel</label>
+                          <input class="form-control typeahead" id="kennel" name="can_cage" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="owner-canines">
+                          <label for="owner">Pemilik</label>
+                          <input class="form-control typeahead" id="owner" name="can_owner" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12" id="address-canines">
+                          <label for="address">Address</label>
+                          <input class="form-control typeahead" id="address" name="can_address" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary submit-add-canine">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="cropper-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" >
     <div class="modal-dialog">
         <div class="modal-content">
@@ -189,12 +311,16 @@
     </div>
 </div>
 <input type="hidden" value="{{ base_url() }}" class="base_url" />
+<input type="hidden" value="" id="imgPreview" />
+<input type="hidden" value="" id="srcDataCrop" />
 {% endblock %}
 
 {% block scripts %}
 <!-- Page JS Plugins -->
 <script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 
 <!-- search engine -->
 <script src="{{ base_url() }}assets/typeahead.js/dist/bloodhound.min.js"></script>
@@ -242,6 +368,130 @@ $('#prefetch .typeahead').typeahead(null, {
             }
         }
     }
+});
+
+// breeder
+var breeder = new Bloodhound({
+    identify: function(o) { return o.can_owner_name; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_owner_name'),
+    dupDetector: function(a, b) { return a.can_owner_name === b.can_owner_name; },
+    remote: {
+      url: base_url+'canines/breeder?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+breeder.initialize();
+$('#breeder-canines .typeahead').typeahead(null, {
+name: 'breeder',
+display: 'can_owner_name',
+placeholder: false,
+source: breeder.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+     return '<a style="color:black;" href="#"><div style="margin-bottom:10px;padding-left:10px;">'+ data.can_owner_name + '</div></a><br><hr>';
+ }
+}
+});
+
+// kennel
+var kennel = new Bloodhound({
+    identify: function(o) { return o.can_cage; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_cage'),
+    dupDetector: function(a, b) { return a.can_cage === b.can_cage; },
+    remote: {
+      url: base_url+'canines/kennel?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+kennel.initialize();
+$('#kennel-canines .typeahead').typeahead(null, {
+name: 'kennel',
+display: 'can_cage',
+placeholder: false,
+source: kennel.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+     return '<a style="color:black;" href="#"><div style="margin-bottom:10px;padding-left:10px;">'+ data.can_cage + '</div></a><br><hr>';
+ }
+}
+});
+
+// pemilik
+var owner = new Bloodhound({
+    identify: function(o) { return o.can_owner; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_owner'),
+    dupDetector: function(a, b) { return a.can_owner === b.can_owner; },
+    remote: {
+      url: base_url+'canines/owner?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+owner.initialize();
+$('#owner-canines .typeahead').typeahead(null, {
+name: 'owner',
+display: 'can_owner',
+placeholder: false,
+source: owner.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+     return '<a style="color:black;" href="#"><div style="margin-bottom:10px;padding-left:10px;">'+ data.can_owner + '</div></a><br><hr>';
+ }
+}
+});
+
+// address
+var address = new Bloodhound({
+    identify: function(o) { return o.can_owner; },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('can_address'),
+    dupDetector: function(a, b) { return a.can_address === b.can_address; },
+    remote: {
+      url: base_url+'canines/address?q=%QUERY',
+      wildcard: '%QUERY',
+      cache: false
+    }
+  });
+
+address.initialize();
+$('#address-canines .typeahead').typeahead(null, {
+name: 'address',
+display: 'can_address',
+placeholder: false,
+source: address.ttAdapter(),
+templates: {
+  empty: [
+    '<div class="empty-message">',
+      '<h6><strong>Maaf Data Tidak Ditemukan</strong></h6>',
+    '</div>'
+  ].join('\n'),
+  suggestion: function (data) {
+     return '<a style="color:black;" href="#"><div style="margin-bottom:10px;padding-left:10px;">'+ data.can_address + '</div></a><br><hr>';
+ }
+}
 });
 </script>
 {% endblock %}
