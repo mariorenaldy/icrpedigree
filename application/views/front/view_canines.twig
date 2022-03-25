@@ -96,6 +96,9 @@
                         <th>Breeder</th>
                         <th>Kennel</th>
                         <th>Owner</th>
+                        <th>Status</th>
+                        <th>Approver</th>
+                        <th>Tanggal Approve</th>
                         <th class="text-center" width="1%"></th>
                         <th class="text-center" width="1%"></th>
                     </tr>
@@ -124,6 +127,13 @@
                             <td class="text-white-1">{{row.can_owner_name}}</td>
                             <td class="text-white-1">{{row.can_cage}}</td>
                             <td class="text-white-1">{{row.can_owner}}</td>
+                            <td class="text-white-1">{{row.stat_name}}</td>
+                            <td class="text-white-1">{{row.use_username}}</td>
+                            {% if row.can_app_date %}
+                                <td class="text-white-1">{{row.can_app_date|date("d-m-Y")}}</td>
+                            {% else %}
+                                <td class="text-white-1"></td>
+                            {% endif %}
                             <td><button class="btn btn-default" onClick="openModal('#modal-update-canines', 'update', {{row.can_id}})" data-toggle="tooltip" title="Ubah Data"><i class="fa fa-pencil"></i></button></td>
                             <td><a href="{{base_url}}canines/logs/{{row.can_id}}" class="btn btn-primary" data-toggle="tooltip" title="Lihat Request"><i class="fa fa-file"></i></a></td>
                         </tr>

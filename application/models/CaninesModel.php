@@ -327,6 +327,8 @@ class CaninesModel extends CI_Model {
         $this->db->select('*');
         $this->db->from('canines');
         $this->db->join('members','members.mem_id = canines.can_member');
+        $this->db->join('users','users.use_id = canines.can_app_user');
+        $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
         $this->db->where('members.mem_id', $member['mem_id']);
         $this->db->where('canines.can_stat', 1);
         $this->db->order_by('can_id', 'desc');
