@@ -199,7 +199,7 @@ class Canines extends CI_Controller {
 				$this->db->trans_strict(FALSE);
 				$this->db->trans_start();
 				$canine = $this->caninesModel->add_canines($data);
-				$pedigree = array('ped_canine_id' => $canines,
+				$pedigree = array('ped_canine_id' => $canine,
 								  'ped_sire_id' => 86,
 								  'ped_mom_id' => 87 );
 				$pedigree = $this->pedigreesModel->add_pedigrees($pedigree);
