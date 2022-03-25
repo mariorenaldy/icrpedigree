@@ -196,8 +196,14 @@ class Canines extends CI_Controller {
 				$member = $this->session->userdata('member_data');
 				$data['can_member'] = $member['mem_id'];
 
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
 				$canine = $this->caninesModel->add_canines($data);
-
+				$pedigree = array('ped_canine_id' => $canines,
+								  'ped_sire_id' => 86,
+								  'ped_mom_id' => 87 );
+				$pedigree = $this->pedigreesModel->add_pedigrees($pedigree);
+				$this->db->trans_complete();
 				echo json_encode(array('data' => '1'));
 			}
 			else
