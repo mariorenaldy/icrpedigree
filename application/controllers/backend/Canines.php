@@ -238,6 +238,10 @@ class Canines extends CI_Controller {
                 }
 
                 if ($cek5){
+                  $user = $this->session->userdata('user_data');
+                  $data['can_app_stat'] = 1;
+                  $data['can_app_user'] = $user['use_id'];
+                  $data['can_app_date'] = date("Y/m/d");
                   $this->db->trans_strict(FALSE);
                   $this->db->trans_start();
                   // ARTechnology
