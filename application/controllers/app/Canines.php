@@ -36,7 +36,7 @@ class Canines extends CI_Controller {
 			else
 				echo json_encode([
 					'status' => false,
-					'message' => 'Id canine wajib diisi'
+					'message' => 'Id Member wajib diisi'
 				]);
 		}
 
