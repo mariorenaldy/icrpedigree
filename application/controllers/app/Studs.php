@@ -80,14 +80,23 @@ class Studs extends CI_Controller {
 			if ($this->uri->segment(4)){
 				$where['stu_id'] = $this->uri->segment(4);
 				$stud = $this->studModel->get_non_approved_studs($where)->row();
+				
+				$sireName = '';
 				$sire = $this->caninesModel->get_by_id_app($stud->stu_sire_id);
+				if ($sire)
+					$sireName = $sire[0]->can_a_s;
+				
+				$damName = '';
 				$dam = $this->caninesModel->get_by_id_app($stud->stu_mom_id);
+				if ($dam)
+					$damName = $dam[0]->can_a_s;
+
 				echo json_encode([
 					'status' => true,
 					'data' => [
 						'stud' => $stud,
-						'sire' => $sire[0]->can_a_s,
-						'dam' => $dam[0]->can_a_s
+						'sire' => $sireName,
+						'dam' => $damName
 					]
 				]);
 			}
