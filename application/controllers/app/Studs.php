@@ -93,11 +93,9 @@ class Studs extends CI_Controller {
 
 				echo json_encode([
 					'status' => true,
-					'data' => [
-						'stud' => $stud,
-						'sire' => $sireName,
-						'dam' => $damName
-					]
+					'data' => $stud,
+					'sire' => $sireName,
+					'dam' => $damName
 				]);
 			}
 			else
