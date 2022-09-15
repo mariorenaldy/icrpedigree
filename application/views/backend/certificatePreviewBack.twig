@@ -28,7 +28,7 @@
         color: #FFFFFF !important;
     }
     .parent_name span{
-        color: #FFFFFF !important;
+        color: #FFFFFF;
     }
     .parent_number span{
         color: #FFFFFF !important;
@@ -42,10 +42,13 @@
     .white{
         color: #FFFFFF !important;
     }
+    .parent_name span .icr{
+        color: #FF0000 !important;
+    }
     @media print{
-        .cert {
+        {#.cert {
             margin: 0px !important;
-        }
+        }#}
         body{
             {% for trah in trahs %}
                 {% if trah.tra_name == canine[0].can_breed  %}
@@ -56,8 +59,8 @@
             background-size: contain !important;
             padding: 0px !important;
             margin: 0px !important;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
+            -webkit-print-color-adjust: economy;
+            color-adjust: economy;
         }
     }
     @page {
