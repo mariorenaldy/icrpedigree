@@ -1,6 +1,6 @@
 <?php
 
-class Beranda extends CI_Controller {
+class Register extends CI_Controller {
     public function __construct()
     {
 		parent::__construct();
@@ -8,7 +8,7 @@ class Beranda extends CI_Controller {
 
 	public function index()
 	{
-		$this->data['content'] = 'beranda';
+		$this->data['content'] = 'register';
         $this->load->view("frontend/layout/page_layout", $this->data);
 	}
 }
