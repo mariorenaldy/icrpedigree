@@ -5,7 +5,7 @@
                 <h2 id="article-heading" class="fw-bold">Pastikan anjing kesayangan anda tersertifikasi</h2>
             </header>
             <p id="article-paragraph">Kami siap melayani!</p>
-            <button id="article-button" class="btn">Hubungi Kami</button>
+            <button id="article-button" class="btn"><a href="#contact" class="text-decoration-none text-reset">Hubungi Kami</a></button>
         </div>
 
         <aside class="col-md-auto">
