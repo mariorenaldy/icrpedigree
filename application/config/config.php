@@ -524,7 +524,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-// ARTechnology
 $config['email'] = Array(
     'protocol' => 'smtp',
     'smtp_host' => 'ssl://smtp.hostinger.com',
@@ -534,16 +533,6 @@ $config['email'] = Array(
     'mailtype'  => 'html', 
     'charset'   => 'iso-8859-1'
 );
-
-// $config['email'] = Array(
-//     'protocol' => 'smtp',
-//     'smtp_host' => 'ssl://smtp.googlemail.com',
-//     'smtp_port' => 465,
-//     'smtp_user' => 'erteerwe2020@gmail.com',
-//     'smtp_pass' => 'ngakpenting',
-//     'mailtype'  => 'html', 
-//     'charset'   => 'iso-8859-1'
-// );
 
 $config['forgot_password'] = 'app/Email/forgotpassword/';
 
@@ -595,6 +584,15 @@ $config['upload_stud_dam'] = Array(
     'file_name' => 'dam_'.time()
 );
 
+$config['upload_path_birth'] = realpath(APPPATH.'../uploads/births/');
+$config['path_birth'] = 'uploads/births/';
+$config['upload_birth'] = Array(
+    'upload_path' => $config['upload_path_birth'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'birth_'.time()
+);
+
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
 $config['stud_count'] = 5;
@@ -603,4 +601,3 @@ $config['trah_count'] = 5;
 $config['event_count'] = 5;
 $config['product_count'] = 5;
 $config['notif_count'] = 5;
-// ARTechnology

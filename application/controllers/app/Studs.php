@@ -1,4 +1,4 @@
-<?php // ARTechnology
+<?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Studs extends CI_Controller {
@@ -6,7 +6,7 @@ class Studs extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->library('upload', $this->config->item('upload_stud'));
-			$this->load->model(array('caninesModel', 'pedigreesModel', 'studModel', 'trahModel'));
+			$this->load->model(array('caninesModel', 'studModel'));
 		}
 
 		public function get(){

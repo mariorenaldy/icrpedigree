@@ -350,15 +350,15 @@ class CaninesModel extends CI_Model {
 	// 	return $result; 
     // }
 
-    // public function check_can_a_s($id, $name){
-    //     $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = 1";
-    //     if ($id){
-    //         $sql .= ' AND can_id <> '.$id;
-    //     }
-    //     $query = $this->db->query($sql);
+    public function check_can_a_s($id, $name){
+        $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = 1";
+        if ($id){
+            $sql .= ' AND can_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
         
-    //     return count($query->result());
-    // }
+        return count($query->result());
+    }
 
     public function search_by_member_app($q, $can_member, $offset){ 
         $date = '';
