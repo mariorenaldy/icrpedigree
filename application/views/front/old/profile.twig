@@ -1,0 +1,132 @@
+
+{% extends "template/frontend.twig" %}
+{% block title %}Profil
+{% endblock %}
+{% block styles %}
+<link href="{{base_url()}}assets/coco/libs/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/libs/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/libs/owl-carousel/owl.transitions.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block header %}
+<section class="main-slider" data-stellar-background-ratio="0.5" style="background-image: url({{base_url()}}assets/coco/images/headers/about.jpg)">
+    <div class="slider-caption">
+        <h2 data-animate="fadeInDown" data-delay="1000" data-duration="2s" style="color: yellow;">
+            Bergabunglah bersama kami
+            <br> <span class="invert bg-info">ICR</span> Indonesian Canine Registry<br>
+        </h2>
+        <!--<a data-animate="fadeInUp" data-duration="2s" data-delay="1300" href="#theteam" class="btn btn-primary btn-lg">MEET THE TEAM</a>	</div>-->
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="hero-banner bg-grey-1">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h2 class="text-primary">
+                    <!-- <b>I</b>NDONESIAN
+                    <b>C</b>ANINE
+                    <b>R</b>EGISTRY -->
+                    {{profile.prof_company_name}}
+                  </h2><hr>
+                <div class="row text-justify">
+                    <div class="col-sm-12">
+                        {{profile.prof_desc}}
+                    </div>
+                    <!-- <div class="col-sm-6">
+                                                                                </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="video-block text-center">
+    <div class="video-overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h1 class="text-success">Mengapa Bergabung Dengan ICR?</h1>
+
+                <div class="row">
+                    <div class="col-sm-12 text-left">
+                        <p>{{profile.prof_review}}</p><br>
+                        <!-- <p>
+                            <a href="javascript:;" class="btn btn-default btn-bordered btn-pill">SEE DETAILS</a>
+                        </p> -->
+                    </div>
+                    <!-- <div class="col-sm-6 text-left">
+                        <ul class="list-unstyled whyuslist">
+                            <li><i class="icon-checkmark2 text-default"></i> 40 years of experience on Web development</li>
+                            <li><i class="icon-checkmark2 text-default"></i> 10 billion happy clients</li>
+                            <li><i class="icon-checkmark2 text-default"></i> HTML6 & CSS4 web design</li>
+                            <li><i class="icon-checkmark2 text-default"></i> 50 years guarantee with unlimited support</li>
+                            <li><i class="icon-checkmark2 text-default"></i> Headquarters in Silicon Valley</li>
+                            <li>and more...</li>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <video loop="" muted="" autoplay="" data-src="{{base_url()}}assets/coco/images/video/Site_Map_Drawing_from_LIFEOFVIDS_on_296353493.mp4">
+    </video> -->
+</section>
+
+<section id="theteam" class="team-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Manajemen ICR</h2>
+            </div>
+        </div>
+        <div class="row zoom-gallery" data-animate="zoomIn" data-delay="0">
+          {% for management in managements %}
+          <div class="col-sm-3">
+              <a href="{{base_url()}}{{management.man_photo}}" data-source="{{base_url()}}{{management.man_photo}}" title="{{management.man_position}}" class="gallery-item effect-milo">
+                  <img src="{{base_url()}}{{management.man_photo}}">
+              </a>
+              <div class="btn-group pull-right">
+                  <a class="btn btn-link"><i class="icon-facebook4"></i></a>
+                  <a class="btn btn-link"><i class="icon-twitter4"></i></a>
+                  <a class="btn btn-link"><i class="icon-linkedin3"></i></a>
+                  <a class="btn btn-link"><i class="icon-envelope"></i></a>
+              </div>
+              <a href="javascript:;" class="gallery-item-title">{{management.man_name}}</a>
+              <b>{{management.man_position}}</b>
+          </div>
+          {% endfor %}
+
+            <!-- <div class="col-sm-3" data-animate="zoomIn" data-delay="300">
+                <a href="{{base_url()}}assets/coco/images/users/user11.jpg" data-source="{{base_url()}}assets/coco/images/users/user11.jpg" title="Team Member Info" class="gallery-item effect-milo">
+                    <img src="{{base_url()}}assets/coco/images/users/user11.jpg">
+                </a>
+                <div class="btn-group pull-right"><a class="btn btn-link"><i class="icon-facebook4"></i></a><a class="btn btn-link"><i class="icon-twitter4"></i></a><a class="btn btn-link"><i class="icon-linkedin3"></i></a><a class="btn btn-link"><i class="icon-envelope"></i></a></div>
+                <a href="javascript:;" class="gallery-item-title">KRIS JOHAN</a>
+                <b>Presiden Indonesian Canine Registry</b>
+            </div>
+            <div class="col-sm-3" data-animate="zoomIn" data-delay="600">
+                <a href="{{base_url()}}assets/coco/images/users/user13.jpg" data-source="{{base_url()}}assets/coco/images/users/user13.jpg" title="Team Member Info" class="gallery-item effect-milo">
+                    <img src="{{base_url()}}assets/coco/images/users/user13.jpg">
+                </a>
+                <div class="btn-group pull-right"><a class="btn btn-link"><i class="icon-facebook4"></i></a><a class="btn btn-link"><i class="icon-twitter4"></i></a><a class="btn btn-link"><i class="icon-linkedin3"></i></a><a class="btn btn-link"><i class="icon-envelope"></i></a></div>
+                <a href="javascript:;" class="gallery-item-title">KRIS JOHAN</a>
+                <b>Presiden Indonesian Canine Registry</b>
+            </div>
+            <div class="col-sm-3" data-animate="zoomIn" data-delay="600">
+                <a href="{{base_url()}}assets/coco/images/users/user7.jpg" data-source="{{base_url()}}assets/coco/images/users/user7.jpg" title="Team Member Info" class="gallery-item effect-milo">
+                    <img src="{{base_url()}}assets/coco/images/users/user7.jpg">
+                </a>
+                <div class="btn-group pull-right"><a class="btn btn-link"><i class="icon-facebook4"></i></a><a class="btn btn-link"><i class="icon-twitter4"></i></a><a class="btn btn-link"><i class="icon-linkedin3"></i></a><a class="btn btn-link"><i class="icon-envelope"></i></a></div>
+                <a href="javascript:;" class="gallery-item-title">KRIS JOHAN</a>
+                <b>Presiden Indonesian Canine Registry</b>
+            </div> -->
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}{% endblock %}

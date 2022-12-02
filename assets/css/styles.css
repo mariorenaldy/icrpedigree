@@ -1,0 +1,41 @@
+body{
+    background: linear-gradient(246.14deg, #373737 1.68%, #121212 81.94%) no-repeat;
+    font-family: 'Poppins', sans-serif;
+}
+.flex-container{
+    height: 10vh;
+}
+.navbar a{
+    font-weight: 500;
+    font-size: 1.2em;
+}
+#article-paragraph{
+    color: #FFD600;
+    font-weight: 600;
+}
+#article-button{
+    background-color: #FF0000;
+    color: white;
+    font-weight: 700;
+}
+#mengerti{
+    color: #00FF19;
+}
+.logo-icr{
+    max-width: 30vw;
+}
+.logo-img{
+    min-width: 80px;
+    width: 25%;
+}
+#beranda-main{
+    margin-top: 11vh;
+    margin-bottom: 11vh;
+}
+hr{
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    border-top: 3px solid white;
+    opacity: 1;
+}

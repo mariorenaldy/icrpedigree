@@ -52,7 +52,8 @@ var BasePagesLogin = function() {
                             form.reset();
                             window.location.reload();
                         } else {
-                            swal("Oops...", res.data, "error");
+                            // swal("Oops...", res.data, "error");
+                            alert(res.data);
                         }
 
                         button.removeAttr('disabled');

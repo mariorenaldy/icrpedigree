@@ -36,7 +36,7 @@ class CaninesModel extends CI_Model {
         // return $query;
       }
 
-    public function sire_search_by_id($q = null, $id){
+    public function sire_search_by_id($id, $q = null){
 
         $this->db->select('can_id as id, can_a_s as text');
         if (isset($q)) {

@@ -1,0 +1,79 @@
+
+
+{% extends "template/frontend.twig" %}
+{% block title %}Produk
+{% endblock %}
+{% block styles %}
+
+<link href="{{base_url()}}assets/coco/libs/jquery-magnific/magnific-popup.css" rel="stylesheet" type="text/css" />
+<link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+<style media="screen">
+.bg-info{
+  background-color: #000000 !important;
+}
+</style>
+{% endblock %}
+
+{% block inverted %}inverted{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-banner bg-info">
+                <div class="container text-center">
+
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <h2 class="text-white-1">Sponsor <b>ICR</b></h2><hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+
+                                      {% for sponsor in sponsorsPr %}
+                                        <div class="col-md-12">
+                                          <a href="{{sponsor.spo_website}}" target="_blank">
+                                            <div class="thumbnail">
+                                                <img alt="Bootstrap Thumbnail First" src="{{base_url()}}{{sponsor.spo_logo}}" />
+                                            </div>
+                                        </div>
+                                        </a>
+                                      {% endfor %}
+
+                                        {% for sponsor in sponsorsSekunder %}
+                                          <div class="col-md-3">
+                                            <a href="{{sponsor.spo_website}}" target="_blank">
+                                              <div class="thumbnail">
+                                                  <img alt="Bootstrap Thumbnail First" src="{{base_url()}}{{sponsor.spo_logo}}" />
+                                                  <div class="caption">
+                                                      <h4>
+                                                          {{sponsor.spo_name}}
+                                                      </h4>
+                                                      <p>
+                                                          {{sponsor.spo_desc}}
+                                                      </p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          </a>
+                                        {% endfor %}
+
+
+                          </div>
+                          <center>
+                            <nav>
+                              {{links|raw}}
+                            </nav>
+
+                          </center>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+{% endblock %}
+
+{% block scripts %}{% endblock %}

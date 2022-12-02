@@ -1,0 +1,98 @@
+{# By: ARTechnology #}
+{% extends "template/frontend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link href="{{base_url()}}assets/coco/css/style.css" rel="stylesheet" type="text/css" />
+
+<style>
+    .bg-info{
+        background-color: #000000 !important;
+    }
+    #imgPreview, #imgPreview-update{
+        margin-bottom: 15px;
+    }
+    th{
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
+{% block inverted %}inverted{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+
+<section class="hero-banner bg-info">
+    <div class="container">
+        <div class="row text-center">
+            <h3 class="text-white-1">List Request Pengubahan Data {{logs[0].mem_name}}</h3>
+            <br/>
+        </div>
+        <div class="block-content table-responsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/employee.js -->
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th width="1%">KTP</th>
+                        <th>Tanggal Request</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>No. Telp</th>
+                        <th>Kota</th>
+                        <th>Kode Pos</th>
+                        <th>email</th>
+                        <th width="1%">Logo</th>
+                        <th>Nama Kennel</th>
+                        <th>Status</th>
+                        <th>Approver</th>
+                        <th>Tanggal Approve</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in logs %}
+                        <tr>
+                            {% if row.log_photo == '' %}
+                                <td><img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="100" class="img img-thumbnail" style="border-radius:5%"></td>
+                            {% else %}
+                                <td><img src="{{base_url()}}uploads/members/{{row.log_photo}}" width="100" class="img img-thumbnail" style="border-radius:5%"></td>
+                            {% endif %}
+                            <td class="text-white-1">{{row.log_tanggal|date("d-m-Y")}}</td>
+                            <td class="text-white-1">{{row.log_name}}</td>
+                            <td class="text-white-1">{{row.log_address}}</td>
+                            <td class="text-white-1">{{row.log_hp}}</td>
+                            <td class="text-white-1">{{row.log_kota}}</td>
+                            <td class="text-white-1">{{row.log_kode_pos}}</td>
+                            <td class="text-white-1">{{row.log_email}}</td>
+                            {% if row.log_kennel_photo == '' %}
+                                <td><img src="{{base_url()}}assets/oneui/img/avatars/image.png" width="100" class="img img-thumbnail" style="border-radius:5%"></td>
+                            {% else %}
+                                <td><img src="{{base_url()}}uploads/kennels/{{row.log_kennel_photo}}" width="100" class="img img-thumbnail" style="border-radius:5%"></td>
+                            {% endif %}
+                            <td class="text-white-1">{{row.log_kennel_name}}</td>
+                            <td class="text-white-1">{{row.stat_name}}</td>
+                            <td class="text-white-1">{{row.use_username}}</td>
+                            {% if row.log_app_date %}
+                                <td class="text-white-1">{{row.log_app_date|date("d-m-Y")}}</td>
+                            {% else %}
+                                <td class="text-white-1"></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<!-- Page JS Code -->
+
+{% endblock %}
