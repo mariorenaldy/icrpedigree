@@ -8,7 +8,7 @@ class Beranda extends CI_Controller {
 
 	public function index()
 	{
-		$this->data['content'] = 'beranda';
-        $this->load->view("frontend/layout/page_layout", $this->data);
+		$data['content'] = 'beranda';
+		$this->load->view("frontend/layout/page_layout", $data);
 	}
 }
