@@ -1,24 +1,24 @@
 <?php
-// ARTechnology
 
 class KennelModel extends CI_Model {
     public function record_count() {
-      return $this->db->count_all("kennels");
+        return $this->db->count_all("kennels");
     }
 
     public function fetch_data($num, $offset) {
-      $this->db->order_by('ken_id', 'desc');
-      $data = $this->db->get('kennels', $num, $offset);
-      return $data;
+        $this->db->order_by('ken_id', 'desc');
+        $data = $this->db->get('kennels', $num, $offset);
+        return $data;
     }
 
     public function get_kennels($where = null){
-        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_type_id, kennels_type.ken_type_name');
+        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->from('kennels');
         $this->db->join('kennels_type','kennels_type.ken_type_id = kennels.ken_type_id');
+        $this->db->join('members','members.mem_id = kennels.ken_member_id');
         $this->db->order_by('ken_id', 'desc');
         return $this->db->get();
     }
