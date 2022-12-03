@@ -39,17 +39,17 @@ class RequestModel extends CI_Model {
         return $result;
     }
 
-    // public function update_status($id, $stat){
-    //     $user = $this->session->userdata('user_data');
-    //     $data = array(
-    //         'req_app_user' => $user['use_id'],
-    //         'req_app_date' => date('Y-m-d H:i:s'),
-    //         'req_stat' => $stat
-    //     );
-    //     $this->db->where('req_id', $id);
+    public function update_status($id, $stat){
+        $user = $this->session->userdata('user_data');
+        $data = array(
+            'req_app_user' => $user['use_id'],
+            'req_app_date' => date('Y-m-d H:i:s'),
+            'req_stat' => $stat
+        );
+        $this->db->where('req_id', $id);
 
-    //     $edit = $this->db->update('requests', $data);
+        $edit = $this->db->update('requests', $data);
 
-	// 	return $edit; 
-    // }
+		return $edit; 
+    }
 }
