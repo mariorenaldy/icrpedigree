@@ -601,3 +601,6 @@ $config['trah_count'] = 5;
 $config['event_count'] = 5;
 $config['product_count'] = 5;
 $config['notif_count'] = 5;
+
+$config['dam_id'] = 0;
+$config['sire_id'] = 1;

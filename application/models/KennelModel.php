@@ -28,7 +28,7 @@ class KennelModel extends CI_Model {
             $this->db->where('ken_name', $name);
         $this->db->order_by('ken_id', 'desc');
         return $this->db->get('kennels');
-      }
+    }
 
     public function add_kennels($data = null){
         $result = false;
