@@ -3,18 +3,18 @@
 
 class RequestModel extends CI_Model {
     public function __construct(){
-        parent::__construct();
+        date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function record_count() {
-      return $this->db->count_all("requests");
-    }
+    // public function record_count() {
+    //     return $this->db->count_all("requests");
+    // }
 
-    public function fetch_data($num, $offset) {
-      $this->db->order_by('req_id', 'desc');
-      $data = $this->db->get('requests', $num, $offset);
-      return $data;
-    }
+    // public function fetch_data($num, $offset) {
+    //     $this->db->order_by('req_id', 'desc');
+    //     $data = $this->db->get('requests', $num, $offset);
+    //     return $data;
+    // }
 
     public function get_requests($where = null){
         $this->db->select('*');
@@ -39,17 +39,17 @@ class RequestModel extends CI_Model {
         return $result;
     }
 
-    public function update_status($id, $stat){
-        $user = $this->session->userdata('user_data');
-        $data = array(
-            'req_app_user' => $user['use_id'],
-            'req_app_date' => date('Y-m-d H:i:s'),
-            'req_stat' => $stat
-        );
-        $this->db->where('req_id', $id);
+    // public function update_status($id, $stat){
+    //     $user = $this->session->userdata('user_data');
+    //     $data = array(
+    //         'req_app_user' => $user['use_id'],
+    //         'req_app_date' => date('Y-m-d H:i:s'),
+    //         'req_stat' => $stat
+    //     );
+    //     $this->db->where('req_id', $id);
 
-        $edit = $this->db->update('requests', $data);
+    //     $edit = $this->db->update('requests', $data);
 
-		return $edit; 
-    }
+	// 	return $edit; 
+    // }
 }
