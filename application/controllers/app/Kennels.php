@@ -31,7 +31,7 @@ class Kennels extends CI_Controller {
 		public function get_kennel_by_member(){
 			if ($this->uri->segment(4)){
 				$where['ken_member_id'] = $this->uri->segment(4);
-				$kennel = $this->KennelModel->get_kennels_simple($where)->row();
+				$kennel = $this->KennelModel->get_kennels_simple($where)->result();
 				echo json_encode([
 					'status' => true,
 					'data' => $kennel
