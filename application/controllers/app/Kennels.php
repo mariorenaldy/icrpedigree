@@ -28,6 +28,22 @@ class Kennels extends CI_Controller {
 				]);
 		}
 
+		public function get_kennel_by_member(){
+			if ($this->uri->segment(4)){
+				$where['ken_member_id'] = $this->uri->segment(4);
+				$kennel = $this->KennelModel->get_kennels_simple($where)->row();
+				echo json_encode([
+					'status' => true,
+					'data' => $kennel
+				]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id Kennel wajib diisi'
+				]);
+		}
+
 		public function update(){
 			$err = 0;
 			if (empty($this->input->post('ken_id'))){
