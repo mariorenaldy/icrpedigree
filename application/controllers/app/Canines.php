@@ -234,22 +234,6 @@ class Canines extends CI_Controller {
 			]); 
 		}
 
-		if (!$err && empty($this->input->post('can_sire'))){
-			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Id sire wajib diisi'
-			]); 
-		}
-
-		if (!$err && $this->input->post('can_dam') == ''){
-			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Id dam wajib diisi'
-			]); 
-		}
-
 		if (!$err && empty($this->input->post('can_kennel_id'))){
 			$err++;
 			echo json_encode([
@@ -311,56 +295,7 @@ class Canines extends CI_Controller {
 		if (!$err){
 			$piece = explode("-", $this->input->post('can_date_of_birth'));
 			$dob = $piece[2]."-".$piece[1]."-".$piece[0];
-			$sire = $this->input->post('can_sire');
-			$dam = $this->input->post('can_dam');
 			
-			// Sire & Dam harus 14 bulan
-			if ($sire != null && $dam != null && $sire != $this->config->item('sire_id') && $dam != $this->config->item('dam_id')) {
-				$sire_dob = $this->caninesModel->get_dob_by_id($sire)[0]->can_date_of_birth;
-				$dam_dob = $this->caninesModel->get_dob_by_id($dam)[0]->can_date_of_birth;
-		
-				$tssire = strtotime($sire_dob);
-				$tsdam = strtotime($dam_dob);
-				$ts = strtotime($dob);
-		
-				$yearsire = date('Y', $tssire);
-				$yeardam = date('Y', $tsdam);
-				$year = date('Y', $ts);
-		
-				$monthsire = date('m', $tssire);
-				$monthdam = date('m', $tsdam);
-				$month = date('m', $ts);
-		
-				$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
-				$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
-		
-				if (abs($diffsire) < 14 || abs($diffdam) < 14){
-					$err++;
-					echo json_encode([
-						'status' => false,
-						'message' => 'Sire & Dam harus 14 bulan'
-					]);
-				}
-			}
-
-			// Dam belum 100 hari
-			if (!$err){
-				if ($sire != null && $dam != null && $sire != $this->config->item('sire_id') && $dam != $this->config->item('dam_id')){
-					$res = $this->caninesModel->get_date_compare_sibling($dam, $dob);
-					if ($res){
-						foreach($res as $row){
-							if ($row->diff != 0 && abs($row->diff) < 100){
-								$err++;
-								echo json_encode([
-									'status' => false,
-									'message' => 'Dam belum 100 hari'
-								]);
-							}
-						}
-					}
-				}
-			}
-
 			$data = array(
 				'can_member_id' => $this->input->post('can_member_id'),
 				'can_reg_number' => $this->input->post('can_reg_number'),
