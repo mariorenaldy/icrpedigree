@@ -359,7 +359,7 @@ class CaninesModel extends CI_Model {
 
     public function search_by_member_app($q, $can_member, $offset){ 
         $date = '';
-        $sql = "SELECT * FROM canines c, members m, kennels k WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1";
+        $sql = "SELECT * FROM canines c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
         if ($can_member)
             $sql .= " AND m.mem_id = ".$can_member;
         if ($q){
@@ -379,7 +379,7 @@ class CaninesModel extends CI_Model {
 
     function search_count_by_member_app($q, $can_member){
         $date = '';
-		$sql = "SELECT COUNT(*) AS count FROM canines c, members m, kennels k WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1";
+		$sql = "SELECT COUNT(*) AS count FROM canines c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
 		if ($can_member)
             $sql .= " AND m.mem_id = ".$can_member;
         if ($q){
