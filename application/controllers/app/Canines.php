@@ -124,25 +124,19 @@ class Canines extends CI_Controller {
 	}
 
 	public function get_dam(){
-		if ($this->uri->segment(4)){
-			$canine = $this->caninesModel->get_dam_simple($this->uri->segment(4));
-			if ($canine){
-				echo json_encode([
-					'status' => true,
-					'data' => $canine->result()
-				]);
-			}
-			else
-				echo json_encode([
-					'status' => false,
-					'message' => 'Canine tidak ditemukan'
-				]);
+		$where['can_gender'] = 'Female';
+		$canine = $this->caninesModel->get_canines_simple($where);
+		if ($canine){
+			echo json_encode([
+				'status' => true,
+				'data' => $canine->result()
+			]);
 		}
 		else
 			echo json_encode([
 				'status' => false,
-				'message' => 'Dam wajib diisi'
-			]); 
+				'message' => 'Canine tidak ditemukan'
+			]);
 	}
 
 	public function update(){
