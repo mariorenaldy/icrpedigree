@@ -7,7 +7,7 @@
                         <h2 class="fw-bold">Sign In</h2>
                     </header>
 
-                    <form action="<?= base_url('backend/auth') ?>" method="post" class="form-login d-flex flex-column gap-3" style="margin-top: 5%;">
+                    <form action="<?= base_url() ?>" method="post" class="form-login d-flex flex-column gap-3" style="margin-top: 5%;">
                         <input type="text" placeholder="Username" id="username">
                         <input type="password" placeholder="Password" id="password">
 

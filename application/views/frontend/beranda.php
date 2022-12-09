@@ -10,7 +10,7 @@
 
         <aside class="col-md-auto">
             <figure>
-                <img src="<?= base_url('assets/img/Dog.svg') ?>" class="center-block text-center">
+                <img src="<?= base_url('assets/img/icr_logo.png') ?>" class="center-block text-center" style="width: 30vw;">
             </figure>
         </aside>
     </article>

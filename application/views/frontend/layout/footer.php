@@ -46,7 +46,7 @@
                     <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="bi bi-facebook"></i> Facebook</a>
                 </div>
                 <div class="row">
-                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/icr_indonesia/"><i class="bi bi-instagram"></i> Instagram</a>
+                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/Icrindo_official/"><i class="bi bi-instagram"></i> Instagram</a>
                 </div>
             </section>
             
