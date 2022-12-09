@@ -9,9 +9,17 @@ if($this->session->userdata('username')) : ?>
                     <a href="<?= site_url('frontend/canines') ?>" class="text-decoration-none text-reset link-primary">List Anjing</a>
                     <a href="<?= site_url('frontend/studs') ?>" class="text-decoration-none text-reset link-primary">List Pacak</a>
                     <a href="<?= site_url('frontend/births') ?>" class="text-decoration-none text-reset link-primary">List Lahir</a>
-                    <a href="<?= site_url('frontend/logout') ?>" class="text-decoration-none text-reset link-primary">User</a>
+                    <div class="dropdown">
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            User
+                        </span>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="<?= site_url('frontend/logout') ?>">Logout</a></li>
+                        </ul>
+                    </div>
                     <a href="<?= site_url('frontend/marketplace') ?>" class="text-decoration-none text-reset link-primary">Marketplace</a>
                 </div>
+                    
             </nav>
             <hr>
 <?php else : ?>

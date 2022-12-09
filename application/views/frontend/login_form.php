@@ -4,7 +4,7 @@
     <title>Login</title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
-<body style="background-color: #E2E2E2;" class="text-white text-break">
+<body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">

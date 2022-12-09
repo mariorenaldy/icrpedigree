@@ -12,6 +12,10 @@ body{
     font-weight: 500;
     font-size: 1.2em;
 }
+.navbar span{
+    font-weight: 500;
+    font-size: 1.2em;
+}
 #article-paragraph{
     color: #FFD600;
     font-weight: 600;

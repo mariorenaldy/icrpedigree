@@ -8,7 +8,6 @@ class Births extends CI_Controller {
 
 	public function index()
 	{
-		$this->data['content'] = 'view_births';
-        $this->load->view("frontend/layout/page_layout", $this->data);
+        $this->load->view("frontend/view_births");
 	}
 }

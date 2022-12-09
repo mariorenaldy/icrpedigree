@@ -1,6 +1,6 @@
 <?php
 
-class Rules extends CI_Controller {
+class Marketplace extends CI_Controller {
     public function __construct()
     {
 		parent::__construct();
@@ -8,6 +8,6 @@ class Rules extends CI_Controller {
 
 	public function index()
 	{
-        $this->load->view("frontend/rules");
+        $this->load->view("frontend/marketplace");
 	}
 }
