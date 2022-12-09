@@ -9,26 +9,47 @@ class Studs extends CI_Controller {
 			$this->load->model(array('caninesModel', 'studModel'));
 		}
 
+		// get by member id
 		public function get(){
 			if ($this->uri->segment(4)){
 				if ($this->uri->segment(5)){
 					$stud = $this->studModel->search_by_member_app('', $this->uri->segment(4), $this->uri->segment(5));
 					$count = $this->studModel->search_count_by_member_app('', $this->uri->segment(4));
+					$sire = array();
+					$dam = array();
+					foreach ($stud as $s){
+						$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+						$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+					}
 					echo json_encode([
 						'status' => true,
 						'count_data' => $count[0]->count,
 						'count_stud' => $this->config->item('stud_count'),
-						'data' => $stud
+						'data' => [
+							'stud' => $stud,
+							'sire' => $sire,
+							'dam' => $dam
+						]
 					]);
 				}
 				else{
 					$stud = $this->studModel->search_by_member_app('', $this->uri->segment(4), 0);
 					$count = $this->studModel->search_count_by_member_app('', $this->uri->segment(4));
+					$sire = array();
+					$dam = array();
+					foreach ($stud as $s){
+						$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+						$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+					}
 					echo json_encode([
 						'status' => true,
 						'count_data' => $count[0]->count,
 						'count_stud' => $this->config->item('stud_count'),
-						'data' => $stud
+						'data' => [
+							'stud' => $stud,
+							'sire' => $sire,
+							'dam' => $dam
+						]
 					]);
 				}
 			}
@@ -39,27 +60,48 @@ class Studs extends CI_Controller {
 				]);
 		}
 
+		// search by member id
 		public function search(){
 			if ($this->uri->segment(4)){
 				if ($this->uri->segment(5)){
 					if ($this->uri->segment(6)){
 						$stud = $this->studModel->search_by_member_app($this->uri->segment(5), $this->uri->segment(4), $this->uri->segment(6));
 						$count = $this->studModel->search_count_by_member_app($this->uri->segment(5), $this->uri->segment(4));
+						$sire = array();
+						$dam = array();
+						foreach ($stud as $s){
+							$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+							$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+						}
 						echo json_encode([
 							'status' => true,
 							'count_data' => $count[0]->count,
 							'count_stud' => $this->config->item('stud_count'),
-							'data' => $stud
+							'data' => [
+								'stud' => $stud,
+								'sire' => $sire,
+								'dam' => $dam
+							]
 						]);
 					}
 					else{
 						$stud = $this->studModel->search_by_member_app($this->uri->segment(5), $this->uri->segment(4), 0);
 						$count = $this->studModel->search_count_by_member_app($this->uri->segment(5), $this->uri->segment(4));
+						$sire = array();
+						$dam = array();
+						foreach ($stud as $s){
+							$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+							$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+						}
 						echo json_encode([
 							'status' => true,
 							'count_data' => $count[0]->count,
 							'count_stud' => $this->config->item('stud_count'),
-							'data' => $stud
+							'data' => [
+								'stud' => $stud,
+								'sire' => $sire,
+								'dam' => $dam,
+							]
 						]);
 					}
 				}

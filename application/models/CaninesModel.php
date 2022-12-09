@@ -88,21 +88,27 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get('canines');
     //   }
 
-    // public function get_canines($where = null){
-    //     $this->db->select('*');
-    //     if ($where != null) {
-    //         $this->db->where($where);
-    //     }
-    //     $this->db->order_by('can_id', 'desc');
-    //     return $this->db->get('canines');
-    // }
+    public function get_canines($where = null){
+        $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get('canines');
+    }
 
-    public function get_canines_simple($where = null){
+    public function get_canines_simple($where){
         $this->db->select('can_a_s AS name, can_id AS id');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->order_by('can_id', 'desc');
+        return $this->db->get('canines');
+    }
+
+    public function get_canines_gender($id){
+        $this->db->select('can_gender');
+        $this->db->where('can_id', $id);
         return $this->db->get('canines');
     }
 
@@ -159,26 +165,26 @@ class CaninesModel extends CI_Model {
     //     return $this->db->delete('canines', $where);
     // }
 
-    // public function get_dob_by_id($id){
-    //     $sql = "SELECT DATE_FORMAT(can_date_of_birth, '%Y-%m-%d') as can_date_of_birth FROM canines WHERE can_id = ".$id;
-    //     $query = $this->db->query($sql);
+    public function get_dob_by_id($id){
+        $sql = "SELECT DATE_FORMAT(can_date_of_birth, '%Y-%m-%d') as can_date_of_birth FROM canines WHERE can_id = ".$id;
+        $query = $this->db->query($sql);
         
-    //     return $query->result();
-    // } 
+        return $query->result();
+    } 
 
-    // public function get_date_compare_sibling($damId, $dob){
-    //     $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_mom_id = ".$damId;
-    //     $query = $this->db->query($sql);
+    public function get_date_compare_sibling($damId, $dob){
+        $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_dam_id = ".$damId;
+        $query = $this->db->query($sql);
         
-    //     return $query->result();
-    // }
+        return $query->result();
+    }
 
-    // public function get_date_compare_sibling_by_id($damId, $dob, $id){
-    //     $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_mom_id = ".$damId." AND c.can_id <> ".$id;
-    //     $query = $this->db->query($sql);
+    public function get_date_compare_sibling_by_id($damId, $dob, $id){
+        $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_dam_id = ".$damId." AND c.can_id <> ".$id;
+        $query = $this->db->query($sql);
         
-    //     return $query->result();
-    // }
+        return $query->result();
+    }
 
     // public function is_sire($id){
     //     $sql = "SELECT can_gender FROM canines WHERE can_id = ".$id;
@@ -188,8 +194,8 @@ class CaninesModel extends CI_Model {
     // }
 
     // public function get_dam_sibling($sireId){
-    //     if ($sireId != 86){
-    //         $sql = "SELECT (SELECT ca.can_a_s FROM canines ca WHERE ca.can_id = p.ped_mom_id) AS spouse, p.ped_mom_id AS spouseId, c.can_id AS siblingId, c.can_a_s AS sibling, DATE_FORMAT(c.can_date_of_birth, '%d-%m-%Y') AS dob FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_sire_id = ".$sireId." ORDER BY c.can_date_of_birth DESC, p.ped_mom_id";
+    //     if ($sireId != $this->config->item('sireId')){
+    //         $sql = "SELECT (SELECT ca.can_a_s FROM canines ca WHERE ca.can_id = p.ped_dam_id) AS spouse, p.ped_dam_id AS spouseId, c.can_id AS siblingId, c.can_a_s AS sibling, DATE_FORMAT(c.can_date_of_birth, '%d-%m-%Y') AS dob FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_sire_id = ".$sireId." ORDER BY c.can_date_of_birth DESC, p.ped_dam_id";
     //         $query = $this->db->query($sql);
             
     //         return $query->result();
@@ -200,8 +206,8 @@ class CaninesModel extends CI_Model {
     // }
 
     // public function get_sire_sibling($damId){
-    //     if ($damId != 87){
-    //         $sql = "SELECT (SELECT ca.can_a_s FROM canines ca WHERE ca.can_id = p.ped_sire_id) AS spouse, p.ped_sire_id AS spouseId, c.can_id AS siblingId, c.can_a_s AS sibling, DATE_FORMAT(c.can_date_of_birth, '%d-%m-%Y') AS dob FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND  p.ped_mom_id = ".$damId." ORDER BY c.can_date_of_birth DESC, p.ped_sire_id";
+    //     if ($damId != $this->config->item('damId')){
+    //         $sql = "SELECT (SELECT ca.can_a_s FROM canines ca WHERE ca.can_id = p.ped_sire_id) AS spouse, p.ped_sire_id AS spouseId, c.can_id AS siblingId, c.can_a_s AS sibling, DATE_FORMAT(c.can_date_of_birth, '%d-%m-%Y') AS dob FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND  p.ped_dam_id = ".$damId." ORDER BY c.can_date_of_birth DESC, p.ped_sire_id";
     //         $query = $this->db->query($sql);
             
     //         return $query->result();
