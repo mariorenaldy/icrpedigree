@@ -5,7 +5,7 @@ class Kennels extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('KennelModel', 'logkennelModel'));
+			$this->load->model(array('KennelModel', 'logkennelModel', 'studModel', 'caninesModel'));
 			$this->load->library('upload', $this->config->item('upload_kennel'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url'));
@@ -41,6 +41,36 @@ class Kennels extends CI_Controller {
 				echo json_encode([
 					'status' => false,
 					'message' => 'Id Kennel wajib diisi'
+				]);
+		}
+
+		public function get_kennel_by_stud(){
+			if ($this->uri->segment(4)){
+				$where['stu_id'] = $this->uri->segment(4);
+				$stud = $this->studModel->get_studs($where)->row();
+				if ($stud){
+					$whereSire['can_id'] = $stud->stu_sire_id;
+					$sireMember = $this->caninesModel->get_canines($whereSire)->row();
+
+					$whereDam['can_id'] = $stud->stu_dam_id;
+					$damMember = $this->caninesModel->get_canines($whereDam)->row();
+
+					$kennel = $this->KennelModel->get_stud_kennels($sireMember->can_member_id, $damMember->can_member_id)->result();
+					echo json_encode([
+						'status' => true,
+						'data' => $kennel
+					]);
+				}
+				else
+					echo json_encode([
+						'status' => false,
+						'message' => 'Id pacak tidak valid'
+					]);
+			}
+			else
+				echo json_encode([
+					'status' => false,
+					'message' => 'Id pacak wajib diisi'
 				]);
 		}
 

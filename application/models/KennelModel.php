@@ -39,6 +39,15 @@ class KennelModel extends CI_Model {
         return $this->db->get('kennels');
     }
 
+    public function get_stud_kennels($sireId, $damId){
+        $this->db->distinct();
+        $this->db->select('ken_name AS name, ken_id AS id');
+        $this->db->where('ken_member_id', $sireId);
+        $this->db->or_where('ken_member_id', $damId);
+        $this->db->order_by('ken_id', 'desc');
+        return $this->db->get('kennels');
+    }
+
     public function add_kennels($data = null){
         $result = false;
         if ($data != null) {
