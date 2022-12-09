@@ -7,7 +7,7 @@ class Births extends CI_Controller {
 				// Call the CI_Controller constructor
 				parent::__construct();
 				$this->load->library('upload', $this->config->item('upload_canine'));
-				$this->load->model(array('birthModel', 'caninesModel'));
+				$this->load->model(array('birthModel', 'caninesModel', 'studModel', 'kennelModel'));
 		}
 
 		public function get(){
@@ -136,110 +136,207 @@ class Births extends CI_Controller {
 			}
 
 			if (!$err){
-				$res = $this->caninesModel->check_can_a_s('', $this->input->post('bir_a_s'));
 				$photo = '-';
+				if (isset($_FILES['attachment_canine']) && !empty($_FILES['attachment_canine']['tmp_name']) && is_uploaded_file($_FILES['attachment_canine']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_canine'));
+					if ($this->upload->do_upload('attachment_canine')){
+						$uploadData = $this->upload->data();
+						$photo = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						echo json_encode([
+							'status' => false,
+							'message' => $this->upload->display_errors()
+						]);
+					}
+				}
+
+				if (!$err && $photo == "-"){
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Foto canine wajib diisi'
+					]); 
+				}
+
 				$damPhoto = '-';
-				if (!$res){
-					if (isset($_FILES['attachment_canine']) && !empty($_FILES['attachment_canine']['tmp_name']) && is_uploaded_file($_FILES['attachment_canine']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_canine'));
-						if ($this->upload->do_upload('attachment_canine')){
-							$uploadData = $this->upload->data();
-							$photo = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							echo json_encode([
-								'status' => false,
-								'message' => $this->upload->display_errors()
-							]);
-						}
+				if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_birth'));
+					if ($this->upload->do_upload('attachment_dam')){
+						$uploadData = $this->upload->data();
+						$damPhoto = $uploadData['file_name'];
 					}
-
-					if (!$err && $photo == "-"){
+					else{
 						$err++;
 						echo json_encode([
 							'status' => false,
-							'message' => 'Foto canine wajib diisi'
-						]); 
+							'message' => $this->upload->display_errors()
+						]);
 					}
+				}
 
-					if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_birth'));
-						if ($this->upload->do_upload('attachment_dam')){
-							$uploadData = $this->upload->data();
-							$damPhoto = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							echo json_encode([
-								'status' => false,
-								'message' => $this->upload->display_errors()
-							]);
-						}
-					}
-
-					if (!$err && $photo == "-"){
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => 'Foto canine wajib diisi'
-						]); 
-					}
-
-					if (!$err && $damPhoto == "-"){
-						$err++;
-						echo json_encode([
-							'status' => false,
-							'message' => 'Foto dam wajib diisi'
-						]); 
-					}
+				if (!$err && $damPhoto == "-"){
+					$err++;
+					echo json_encode([
+						'status' => false,
+						'message' => 'Foto dam wajib diisi'
+					]); 
+				}
 					
-					if (!$err){
-						$cek = true;
-						$piece = explode("-", $this->input->post('bir_date_of_birth'));
-						$date = $piece[2]."-".$piece[1]."-".$piece[0];
-				
-						$ts = new DateTime($date);
-						$ts_now = new DateTime();
-						
-						if ($ts > $ts_now)
-							$cek = false;
+				if (!$err){
+					$piece = explode("-", $this->input->post('bir_date_of_birth'));
+					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+			
+					$ts = new DateTime($dob);
+					$ts_now = new DateTime();
+
+					$sire = $this->config->item('sire_id');
+					$dam = $this->config->item('dam_id');
+
+					// syarat maksimal 75 hari dari lapor pacak
+					$whereStud['stu_id'] = $this->input->post('bir_stu_id');
+					$stud = $this->studModel->get_studs($whereStud)->row();
+					if ($stud){
+						$ts_stud = new DateTime($stud->stu_stud_date);
+						if ($ts_stud > $ts_now){
+							$err++;
+							echo json_encode([
+								'status' => false,
+								'message' => 'Pelaporan lahir harus kurang dari 75 hari dari waktu pacak'
+							]); 
+						}
 						else{
-							$diff = floor($ts->diff($ts_now)->days/7);
-							if ($diff > 1)
-								$cek = false;
+							$diff = floor($ts->diff($ts_now)->days/75);
+							if ($diff > 1){
+								$err++;
+								echo json_encode([
+									'status' => false,
+									'message' => 'Pelaporan lahir harus kurang dari 75 hari dari waktu pacak'
+								]);
+							}
+						}
+					}
+					else{
+						$err++;
+						echo json_encode([
+							'status' => false,
+							'message' => 'Id pacak tidak valid'
+						]); 
+					}
+
+					// Pelaporan lahir harus kurang dari 100 hari
+					if (!$err){
+						if ($ts > $ts_now){
+							$err++;
+							echo json_encode([
+								'status' => false,
+								'message' => 'Pelaporan lahir harus kurang dari 100 hari'
+							]); 
+						}
+						else{
+							$diff = floor($ts->diff($ts_now)->days/100);
+							if ($diff > 1){
+								$err++;
+								echo json_encode([
+									'status' => false,
+									'message' => 'Pelaporan lahir harus kurang dari 100 hari'
+								]);
+							}
+						}
+					}
+
+					// copas dari canine (harus diubah lg)
+					if (!$err){ 
+						$sire = $stud->stu_sire_id;
+						$dam = $stud->stu_dam_id;
+
+						// Sire & Dam harus 14 bulan
+						if ($sire != null && $dam != null && $sire != $this->config->item('sire_id') && $dam != $this->config->item('dam_id')) {
+							$sire_dob = $this->caninesModel->get_dob_by_id($sire)[0]->can_date_of_birth;
+							$dam_dob = $this->caninesModel->get_dob_by_id($dam)[0]->can_date_of_birth;
+					
+							$tssire = strtotime($sire_dob);
+							$tsdam = strtotime($dam_dob);
+							$ts = strtotime($dob);
+					
+							$yearsire = date('Y', $tssire);
+							$yeardam = date('Y', $tsdam);
+							$year = date('Y', $ts);
+					
+							$monthsire = date('m', $tssire);
+							$monthdam = date('m', $tsdam);
+							$month = date('m', $ts);
+					
+							$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
+							$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+					
+							if (abs($diffsire) < 14 || abs($diffdam) < 14){
+								$err++;
+								echo json_encode([
+									'status' => false,
+									'message' => 'Sire & Dam harus 14 bulan'
+								]);
+							}
 						}
 
-						if ($cek){
-							$data = array(
-								'bir_stu_id' => $this->input->post('bir_stu_id'),
-								'bir_member_id' => $this->input->post('bir_member_id'),
-								'bir_a_s' => $this->input->post('bir_a_s'),
-								'bir_breed' => $this->input->post('bir_breed'),
-								'bir_gender' => $this->input->post('bir_gender'),
-								'bir_color' => $this->input->post('bir_color'),
-								'bir_date_of_birth' => $date,
-								'bir_photo' => $photo,
-								'bir_kennel_id' => $this->input->post('bir_kennel_id'),
-								'bir_dam_photo' => $damPhoto
-							);
-							$births = $this->birthModel->add_births($data);
+						// Dam belum 100 hari
+						if (!$err){
+							if ($sire != null && $dam != null && $sire != $this->config->item('sire_id') && $dam != $this->config->item('dam_id')){
+								$res = $this->caninesModel->get_date_compare_sibling($dam, $dob);
+								if ($res){
+									foreach($res as $row){
+										if ($row->diff != 0 && abs($row->diff) < 100){
+											$err++;
+											echo json_encode([
+												'status' => false,
+												'message' => 'Dam belum 100 hari'
+											]);
+										}
+									}
+								}
+							}
+						}
+					}
+
+					// copas dari canine
+					if (!$err){
+						$data = array(
+							'bir_stu_id' => $this->input->post('bir_stu_id'),
+							'bir_member_id' => $this->input->post('bir_member_id'),
+							'bir_breed' => $this->input->post('bir_breed'),
+							'bir_gender' => $this->input->post('bir_gender'),
+							'bir_color' => $this->input->post('bir_color'),
+							'bir_date_of_birth' => $dob,
+							'bir_photo' => $photo,
+							'bir_kennel_id' => $this->input->post('bir_kennel_id'),
+							'bir_dam_photo' => $damPhoto
+						);
+
+						// nama diubah berdasarkan kennel
+						$whereKennel['mem_id'] = $this->input->post('bir_member_id');
+						$kennel = $this->kennelModel->get_kennels($whereKennel)->result();
+						if ($kennel){
+							if ($kennel[0]->ken_type_id == 1)
+								$data['bir_a_s'] = $this->input->post('bir_a_s')." VON ".$kennel[0]->ken_name;
+							else if ($kennel[0]->ken_type_id == 2)
+								$data['bir_a_s'] = $kennel[0]->ken_name."` ".$this->input->post('bir_a_s');
+						}
+						
+						$births = $this->birthModel->add_births($data);
+						if ($births){
 							echo json_encode([
 								'status' => true
 							]);
 						}
-						else
+						else{
 							echo json_encode([
 								'status' => false,
-								'message' => 'Pelaporan lahir harus kurang dari 1 minggu'
+								'message' => 'Gagal menyimpan lahir'
 							]);
+						}
 					}
 				}
-				else
-					echo json_encode([
-						'status' => false,
-						'message' => 'Nama canine tidak boleh sama'
-					]);
 			}
 		}
 
