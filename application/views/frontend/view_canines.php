@@ -24,7 +24,7 @@
         </thead>
         <tbody>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/husky.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/husky.png') ?>"></th>
             <th scope="col">121</th>
             <th scope="col">Snow</th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>
@@ -32,7 +32,7 @@
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-file-earmark"></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/poodle.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/poodle.png') ?>"></th>
             <th scope="col">122</th>
             <th scope="col">Sera</th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>
@@ -40,7 +40,7 @@
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-file-earmark"></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/bulldog.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/bulldog.png') ?>"></th>
             <th scope="col">123</th>
             <th scope="col">Bobby</th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>

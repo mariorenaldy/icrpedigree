@@ -29,30 +29,30 @@
         </thead>
         <tbody>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/terrier.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/terrier.png') ?>"></th>
             <th scope="col">08-09-2021</th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/bulldog.png') ?>"></th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/poodle.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/bulldog.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/poodle.png') ?>"></th>
             <th scope="col">Dalam Pemrosesan</th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/pom.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/pom.png') ?>"></th>
             <th scope="col">15-10-2021</th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/husky.png') ?>"></th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/rottweiler.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/husky.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/rottweiler.png') ?>"></th>
             <th scope="col">Disetujui</th>
             <th scope="col">Admin</th>
             <th scope="col">15-11-2021</th>
             <th scope="col"><a href="edit_canine" class="btn btn-success"><i class="bi bi-plus-lg "></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/swiss-shepherd.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/swiss-shepherd.png') ?>"></th>
             <th scope="col">21-12-2021</th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/pharaoh-hound.png') ?>"></th>
-            <th scope="col"><img src="<?= base_url('uploads/canines/wolfdog.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/pharaoh-hound.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/wolfdog.png') ?>"></th>
             <th scope="col">Ditolak</th>
             <th scope="col">Admin</th>
             <th scope="col">02-01-2022</th>

@@ -22,19 +22,19 @@
         </thead>
         <tbody>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/rottweiler.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/rottweiler.png') ?>"></th>
             <th scope="col">Chop</th>
             <th scope="col"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/pharaoh-hound.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/pharaoh-hound.png') ?>"></th>
             <th scope="col">Terry</th>
             <th scope="col"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>
             </tr>
             <tr>
-            <th scope="col"><img src="<?= base_url('uploads/canines/wolfdog.png') ?>"></th>
+            <th scope="col"><img src="<?= base_url('assets/img/canines/wolfdog.png') ?>"></th>
             <th scope="col">Rain</th>
             <th scope="col"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></th>
             <th scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></th>

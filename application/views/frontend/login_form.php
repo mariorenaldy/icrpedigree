@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html class="min-vh-100">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <?php $this->load->view('frontend/layout/head'); ?>
 </head>
-<body style="background-color: #E2E2E2;">
+<body style="background-color: #E2E2E2;" class="text-white text-break">
+    <?php $this->load->view('frontend/layout/header'); ?>  
+    <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
-        <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">                          
                 <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Login/validate_login" method="post">
@@ -38,14 +36,14 @@
                     </div>
                 </form>
             </div>                           
-        </div> 
-        <?php $this->load->view('templates/footer'); ?>      
+        </div>
     </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
-<script>
-    $(document).ready(function(){
-        $('#username').focus();
-    });
-</script>
+    <?php $this->load->view('frontend/layout/footer'); ?>      
+    <script>
+        $(document).ready(function(){
+            $('#username').focus();
+        });
+    </script>
+    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
 </body>
 </html>

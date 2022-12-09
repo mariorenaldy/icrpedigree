@@ -17,7 +17,8 @@ class Login extends CI_Controller {
             $this->load->view("frontend/login_form", $data);
         }
         else{
-            redirect("frontend/Dashboard");
+            // redirect("frontend/Dashboard");
+            redirect("frontend/beranda");
         }
     }
 
@@ -48,7 +49,8 @@ class Login extends CI_Controller {
 
         if (!$err){
             $this->session->set_userdata('username', $this->input->post('username'));
-            redirect("frontend/Dashboard");
+            // redirect("frontend/Dashboard");
+            redirect("frontend/beranda");
         }
         else{
             $data['content'] = 'login';
