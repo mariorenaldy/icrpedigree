@@ -7,6 +7,13 @@
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+<?php
+    if (!$this->session->userdata('use_username')){
+        echo '<script type="text/javascript">';
+        echo 'window.location = "'.base_url().'backend/Users/login";';
+        echo '</script>';
+    }
+?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
