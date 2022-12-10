@@ -604,3 +604,5 @@ $config['notif_count'] = 5;
 
 $config['dam_id'] = 0;
 $config['sire_id'] = 1;
+
+$config['canine_img'] = 'Dog.svg';
