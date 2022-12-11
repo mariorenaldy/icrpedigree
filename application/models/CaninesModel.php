@@ -142,6 +142,20 @@ class CaninesModel extends CI_Model {
         return $this->db->get();
     }
 
+    // public function get_non_approve_canines(){
+    //     $this->db->select('*');
+    //     $this->db->join('canines','canines.can_id = logs_canine.log_id');
+    //     $this->db->join('requests','requests.req_id = logs_canine.log_req');
+    //     $this->db->join('users','users.use_id = requests.req_app_user');
+    //     $this->db->join('approval_status','approval_status.stat_id = requests.req_stat');
+    //     $this->db->join('members','members.mem_id = canines.can_member');
+    //     $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
+    //     $this->db->where('log_stat', 1);
+    //     $this->db->where('req_stat <> ', 0);
+    //     $this->db->order_by('log_tanggal', 'desc');
+    //     return $this->db->get();
+    // }
+
     public function add_canines($data = null){
         $result = false;
         if ($data != null) {
