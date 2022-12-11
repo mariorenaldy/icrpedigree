@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Login</title>
+    <title>Rules</title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -57,7 +57,6 @@
     </main>
     
     <?php $this->load->view('frontend/layout/footer'); ?>
-    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
 </body>
 </html>
 
