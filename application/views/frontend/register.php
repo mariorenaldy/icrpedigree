@@ -18,10 +18,10 @@
                         </header>
 
                         <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= site_url('') ?>" class="btn" style="background-color:#FAFF00;">Upload KTP</a>
+                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#FAFF00;">Upload KTP</a>
 
                         <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= site_url('') ?>" class="btn" style="background-color:#61FF00;">Upload Profile Picture</a>
+                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#61FF00;">Upload Profile Picture</a>
 
                         <input type="number" placeholder="No. KTP">
                         <input type="text" placeholder="Nama Sesuai KTP">
@@ -36,7 +36,7 @@
                         <input type="password" placeholder="Konfirmasi Password">
 
                         <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= site_url('') ?>" class="btn" style="background-color:#00D1FF;">Upload Logo</a>
+                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#00D1FF;">Upload Logo</a>
 
                         <input type="text" placeholder="Nama Kennel">
                         <select>
@@ -45,7 +45,7 @@
                             <option value="xxx + von + kennel">xxx + von + kennel</option>
                         </select>
 
-                        <a href="<?= site_url('') ?>" class="btn" style="background-color:#B897FF;">Simpan</a>
+                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#B897FF;">Simpan</a>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="min-vh-100">
+<html>
 <head>
     <title>Login</title>
     <?php $this->load->view('frontend/layout/head'); ?>
@@ -7,7 +7,7 @@
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
-    <div class="container">
+    <div class="container" style="margin-bottom: 10vh; margin-top: 5vh;">
         <div class="row">            
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">                          
                 <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Login/validate_login" method="post">

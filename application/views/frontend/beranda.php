@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="min-vh-100">
+<html>
 <head>
     <title>Beranda</title>
     <?php $this->load->view('frontend/layout/head'); ?>

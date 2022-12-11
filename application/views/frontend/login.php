@@ -13,7 +13,7 @@
 
                         <div>
                             <button id="btn-masuk" class="btn">Masuk</button>
-                            <a href="<?= site_url('frontend/register') ?>" id="btn-daftar" class="btn">Daftar</a>
+                            <a href="<?= base_url('frontend/register') ?>" id="btn-daftar" class="btn">Daftar</a>
                         </div>
                     </form>
                 </div>

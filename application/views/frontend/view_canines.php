@@ -1,68 +1,72 @@
 <!DOCTYPE html>
-<html class="min-vh-100">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>List Anjing</title>
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
     <?php $this->load->view('frontend/layout/head'); ?>
-    <script src="<?= base_url('assets/js/datatables/jquery.dataTables.min.js') ?>" type="text/javascript"></script>
-    <script src="<?= base_url('assets/js/datatables/dataTables.bootstrap5.min.js') ?>" type="text/javascript"></script>
 </head>
 <body class="text-white text-break">
-    <?php $this->load->view('frontend/layout/header'); ?>  
-    <?php $this->load->view('frontend/layout/navbar'); ?>
+<!-- <?php
+    if (!$this->session->userdata('use_username')){
+        echo '<script type="text/javascript">';
+        echo 'window.location = "'.base_url().'backend/Users/login";';
+        echo '</script>';
+    }
+?> -->
+<?php $this->load->view('frontend/layout/header'); ?>  
+<?php $this->load->view('frontend/layout/navbar'); ?>
+    <div class="container mt-5" style="margin-bottom: 10vh;">
+        
+        <!-- <?php $this->load->view('templates/header'); ?>   -->
+        <div class="row">            
+            <div class="col-md-12">                          
+                <h3>List Anjing</h3>
+                <div class="search-container">
+                    <form action="/action_page.php">
+                        <input type="text" placeholder="No. ICR/Nama" name="search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4"><b>Foto</b></div>
+                    <div class="col-md-3"><b>Nomor ICR</b></div>
+                    <div class="col-md-3"><b>Nama</b></div>
+                    <div class="col-md-2"></div>
+                </div>
 
-    <main class="container" id="beranda-main">
-        <article class="row align-items-center justify-content-around">
-            <header class="mb-5">
-                <h2 class="text-center fw-bold">List Anjing</h2>
-            </header>
-
-            <!-- <div class="search-container">
-                <form action="/action_page.php">
-                <input type="text" placeholder="No. ICR/Nama" name="search">
-                <button type="submit"><i class="bi bi-search"></i></button>
-                </form>
-            </div> -->
-            
-            <table id="tabel_list_anjing" class="table text-white">
-                <thead>
-                    <tr>
-                        <th scope="col">Foto</th>
-                        <th scope="col">Nomor ICR</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    foreach ($canines as $canine) 
-                    {
-                        echo "<tr>";
-                        echo '<td scope="col">' . $canine->can_photo . '</td>';
-                        echo '<td scope="col">' . $canine->can_icr_number . '</td>';
-                        echo '<td scope="col">' . $canine->can_a_s . '</td>';
-                        echo '<td scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></td>';
-                        echo '<td scope="col"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></td>';
-                        echo '<td scope="col"><a href="canine_detail" class="btn btn-light"><i class="bi bi-file-earmark"></i></a></td>';
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </article>
-    </main>
-    
+                <?php foreach ($canines AS $c){ ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php if ($c->can_photo != '-'){ ?>
+                                <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                            <?php } else{ ?>
+                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                            <?php } ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?php echo $c->can_icr_number; ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?php echo $c->can_a_s; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></button>
+                            <button type="button"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></button>
+                            <button type="button"><a href="canine_detail" class="btn btn-light"><i class="bi bi-file-earmark"></i></a></button>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>                           
+        </div> 
+    </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
-    <script type="text/javascript">
-    $(function() {
-        $("#tabel_list_anjing").dataTable({
-            "iDisplayLength": 10,
-            "aLengthMenu": [[10, 25, 50, 100,  -1], [10, 25, 50, 100, "All"]],
-            "aaSorting": []
-        });
-    });
-    </script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.slim.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

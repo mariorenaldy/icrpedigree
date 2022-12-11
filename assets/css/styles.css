@@ -1,3 +1,6 @@
+html{
+    min-height: 100vh;
+}
 body{
     background: linear-gradient(246.14deg, #373737 1.68%, #121212 81.94%) no-repeat;
     font-family: 'Poppins', sans-serif;

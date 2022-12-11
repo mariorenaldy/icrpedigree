@@ -53,7 +53,7 @@
             <section  class="col-auto">
                 <div class="row">
                     <div class="col text-center logo-icr">
-                        <a href="<?= site_url() ?>" class="text-decoration-none text-reset">
+                        <a href="<?= base_url() ?>" class="text-decoration-none text-reset">
                             <img src="<?= base_url('assets/img/icr_logo.png') ?>" class="img-fluid logo-img mb-2"><br>
                             <span>Indonesian Canine Registry</span>
                         </a>
