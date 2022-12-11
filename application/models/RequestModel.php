@@ -6,16 +6,6 @@ class RequestModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    // public function record_count() {
-    //     return $this->db->count_all("requests");
-    // }
-
-    // public function fetch_data($num, $offset) {
-    //     $this->db->order_by('req_id', 'desc');
-    //     $data = $this->db->get('requests', $num, $offset);
-    //     return $data;
-    // }
-
     public function get_requests($where = null){
         $this->db->select('*');
         $this->db->from('requests');

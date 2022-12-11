@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Approve Canine</title>
+    <title>Approve Member</title>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
 </head>
@@ -19,37 +19,37 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3>Approve Canine</h3>
+                <h3>Approve Member</h3>
                 <div class="search-container">
                     <form action="/action_page.php">
-                        <input type="text" placeholder="No. ICR/Nama" name="search">
+                        <input type="text" placeholder="Nama/Alamat/No Telp." name="search">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
                 <div class="row">
-                    <div class="col-md-4"><b>Foto</b></div>
-                    <div class="col-md-3"><b>Nomor ICR</b></div>
-                    <div class="col-md-3"><b>Nama</b></div>
+                    <div class="col-md-3"><b>KTP</b></div>
+                    <div class="col-md-2"><b>Nama</b></div>
+                    <div class="col-md-3"><b>Alamat</b></div>
+                    <div class="col-md-2"><b>No. Telp</b></div>
                     <div class="col-md-2"></div>
                 </div>
-                <?php foreach ($canine AS $c){ ?>
+                <?php foreach ($member AS $m){ ?>
                     <div class="row">
-                        <div class="col-md-4">
-                            <?php if ($c->can_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                            <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
-                            <?php } ?>
-                        </div>
                         <div class="col-md-3">
-                            <?php echo $c->can_icr_number; ?>
-                        </div>
-                        <div class="col-md-3">
-                            <?php echo $c->can_a_s; ?>
+                            <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve($c->can_id)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject($c->can_id)"><i class="fa fa-close"></i></button>
+                            <?php echo $m->mem_name; ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?php echo $m->mem_address; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?php echo $m->mem_hp; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success" onclick="approve($m->mem_id)"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="reject($m->mem_id)"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
