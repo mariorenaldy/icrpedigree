@@ -16,7 +16,7 @@ class BirthModel extends CI_Model {
     // }
 
     public function get_births($where = null){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
         $this->db->from('births');
         if ($where != null) {
             $this->db->where($where);
