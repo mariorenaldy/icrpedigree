@@ -23,8 +23,7 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.slim.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
 </body>

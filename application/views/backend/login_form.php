@@ -44,7 +44,7 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.slim.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
 <script>
     $(document).ready(function(){
         $('#username').focus();

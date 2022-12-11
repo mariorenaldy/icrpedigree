@@ -26,14 +26,12 @@
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
-                
                 <div class="row">
                     <div class="col-md-4"><b>Foto</b></div>
                     <div class="col-md-3"><b>Nomor ICR</b></div>
                     <div class="col-md-3"><b>Nama</b></div>
                     <div class="col-md-2"></div>
                 </div>
-
                 <?php foreach ($canine AS $c){ ?>
                     <div class="row">
                         <div class="col-md-4">
@@ -59,8 +57,7 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.slim.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
 </body>
