@@ -106,6 +106,16 @@ class CaninesModel extends CI_Model {
         return $this->db->get('canines');
     }
 
+    public function search_canines_simple($like, $where){
+        $this->db->select('can_a_s AS name, can_id AS id');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->like($like);
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get('canines');
+    }
+
     public function get_canines_gender($id){
         $this->db->select('can_gender');
         $this->db->where('can_id', $id);
