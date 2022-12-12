@@ -33,6 +33,7 @@
 
                     <div class="form-group input-group">
                         <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                        <a href="<?= base_url('frontend/register') ?>" id="btn-daftar" class="btn btn-primary btn-lg">Daftar</a>
                     </div>
                 </form>
             </div>                           

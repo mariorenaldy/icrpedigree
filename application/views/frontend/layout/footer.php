@@ -21,14 +21,14 @@
                 </div>
                 <div class="row">
                     <div class="col-auto">
-                        <span><i class="bi bi-geo-alt"></i> Jl. Cisatu 2 No. 12 Bandung</span>
+                        <span><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12 Bandung</span>
                     </div>
                     <div class="col-auto">
-                        <span><i class="bi bi-telephone"></i> 087777802288</span>
+                        <span><i class="fa fa-phone" aria-hidden="true"></i> 087777802288</span>
                     </div>
                     <div class="col-auto d-flex">
                         <div>
-                            <i class="bi bi-clock me-2"></i>
+                            <i class="fa fa-clock-o me-2" aria-hidden="true"></i>
                         </div>
                         <div class="d-flex flex-column">
                             <span>Selasa jam 21.00-23.00</span>
@@ -43,10 +43,10 @@
                     <h4>Sosial Media</h4>
                 </div>
                 <div class="row mb-3">
-                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="bi bi-facebook"></i> Facebook</a>
+                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
                 </div>
                 <div class="row">
-                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/Icrindo_official/"><i class="bi bi-instagram"></i> Instagram</a>
+                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/Icrindo_official/"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
                 </div>
             </section>
             

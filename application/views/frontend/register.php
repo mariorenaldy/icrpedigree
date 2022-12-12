@@ -17,35 +17,81 @@
                             <h2>Sign Up</h2>
                         </header>
 
-                        <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#FAFF00;">Upload KTP</a>
+                        <form action="<?= base_url('frontend/register/signup') ?>" method="post">
+                        <div>
+                            <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
+                            <!-- <a href="<?= base_url('') ?>" class="btn" style="background-color:#FAFF00;">Upload KTP</a> -->
+                            <input type="file" class="upload" name="attachment_member" id="imageInput"/>
 
-                        <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#61FF00;">Upload Profile Picture</a>
+                            <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
+                            <!-- <a href="<?= base_url('') ?>" class="btn" style="background-color:#61FF00;">Upload Profile Picture</a> -->
+                            <input type="file" class="upload" name="attachment_pp" id="imageInputPP"/>
+                        </div>
+                            
+                        <div>
+                            <input type="number" placeholder="No. KTP" name="mem_ktp">
+                        </div>
+                        
+                        <div>
+                            <input type="text" placeholder="Nama Sesuai KTP" name="mem_name">
+                        </div>
+                        
+                        <div>
+                            <input type="text" placeholder="Alamat Sesuai KTP" name="mem_address">
+                        </div>
 
-                        <input type="number" placeholder="No. KTP">
-                        <input type="text" placeholder="Nama Sesuai KTP">
-                        <input type="text" placeholder="Alamat Sesuai KTP">
-                        <input type="text" placeholder="Alamat Surat Menyurat">
-                        <input type="tel" placeholder="No. Telp">
-                        <input type="text" placeholder="Kota">
-                        <input type="number" placeholder="Kode Pos">
-                        <input type="email" placeholder="Email">
-                        <input type="text" placeholder="Username">
-                        <input type="password" placeholder="Password">
-                        <input type="password" placeholder="Konfirmasi Password">
+                        <div>
+                            <input type="text" placeholder="Alamat Surat Menyurat" name="mem_mail_address">
+                        </div>
+                        
+                        <div>
+                            <input type="number" placeholder="No. Telp" name="mem_hp">
+                        </div>
+                            
+                        <div>
+                            <input type="text" placeholder="Kota" name="mem_kota">
+                        </div>
+                            
+                        <div>
+                            <input type="number" placeholder="Kode Pos" name="mem_kode_pos">
+                        </div>
 
-                        <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
-                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#00D1FF;">Upload Logo</a>
+                        <div>
+                            <input type="email" placeholder="Email" name="mem_email">
+                        </div>
 
-                        <input type="text" placeholder="Nama Kennel">
-                        <select>
-                            <option value="" disabled selected>Format Penamaan Canine</option>
-                            <option value="kennel + ' + xxx">kennel + ' + xxx</option>
-                            <option value="xxx + von + kennel">xxx + von + kennel</option>
-                        </select>
+                        <div>
+                            <input type="text" placeholder="Username" name="mem_username">
+                        </div>
 
-                        <a href="<?= base_url('') ?>" class="btn" style="background-color:#B897FF;">Simpan</a>
+                        <div>
+                            <input type="password" placeholder="Password" name="password">
+                        </div>
+
+                        <div>
+                            <input type="password" placeholder="Konfirmasi Password" name="repass">
+                        </div>
+
+                        <div>
+                            <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
+                            <!-- <a href="<?= base_url('') ?>" class="btn" style="background-color:#00D1FF;">Upload Logo</a> -->
+                            <input type="file" class="upload" name="ken_photo" id="imageInputLogo"/>
+                        </div>
+                        
+                        <div>
+                            <input type="text" placeholder="Nama Kennel" name="ken_name">
+                        </div>
+                        
+                        <div>
+                            <select name="ken_type_id">
+                                <option value="" disabled selected>Format Penamaan Canine</option>
+                                <option value="kennel + ' + xxx">kennel + ' + xxx</option>
+                                <option value="xxx + von + kennel">xxx + von + kennel</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn" style="background-color:#B897FF;">Simpan</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -54,9 +54,9 @@
                             <?php echo $c->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button"><a href="canine_detail" class="btn btn-light"><i class="bi bi-list"></i></a></button>
-                            <button type="button"><a href="edit_canine" class="btn btn-light"><i class="bi bi-pencil-square"></i></a></button>
-                            <button type="button"><a href="canine_detail" class="btn btn-light"><i class="bi bi-file-earmark"></i></a></button>
+                            <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-light"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button>
                         </div>
                     </div>
                 <?php } ?>
