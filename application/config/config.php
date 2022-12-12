@@ -606,3 +606,7 @@ $config['dam_id'] = 0;
 $config['sire_id'] = 1;
 
 $config['canine_img'] = 'Dog.svg';
+
+$config['deactivated_member_status'] = 0;
+$config['paid_member_status'] = 1;
+$config['non_paid_member_status'] = 2;

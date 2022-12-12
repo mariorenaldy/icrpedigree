@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Approve Member</title>
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
 </head>
 <body>
 <?php
@@ -39,17 +39,17 @@
                             <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
                         </div>
                         <div class="col-md-2">
-                            <?php echo $m->mem_name; ?>
+                            <?= $m->mem_name; ?>
                         </div>
                         <div class="col-md-3">
-                            <?php echo $m->mem_address; ?>
+                            <?= $m->mem_address; ?>
                         </div>
                         <div class="col-md-2">
-                            <?php echo $m->mem_hp; ?>
+                            <?= $m->mem_hp; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve($m->mem_id)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject($m->mem_id)"><i class="fa fa-close"></i></button>
+                            <button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -57,8 +57,22 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
+<script>
+    function approve(id, nama){
+        var proceed = confirm("Approve "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Members/approve/"+id;
+        }
+    }
+    function reject(id, nama){
+        var proceed = confirm("Reject "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Members/reject/"+id;
+        }
+    }
+</script>
 </body>
 </html>

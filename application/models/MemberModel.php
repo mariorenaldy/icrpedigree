@@ -63,39 +63,34 @@ class MemberModel extends CI_Model {
         return $result;
     }
 
-    public function update_members($data = null, $where = null){
-        $result = false;
-        if($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $this->db->update('members');
-        }
-        return $result;
+    public function update_members($data, $where){
+        $this->db->set($data);
+        $this->db->where($where);
+        $this->db->update('members');
     }
 
-    public function set_active($id, $status){
-        $data = array(
-            'mem_stat' => $status
-        );
-        $this->db->where('mem_id', $id);
+    // public function set_active($id, $status){
+    //     $data = array(
+    //         'mem_stat' => $status
+    //     );
+    //     $this->db->where('mem_id', $id);
 
-        $edit = $this->db->update('members', $data);
+    //     $edit = $this->db->update('members', $data);
 
-		return $edit; 
-    }
+	// 	return $edit; 
+    // }
 
-    public function approve($id){
-        $user = $this->session->userdata('user_data');
-        $data = array(
-            'mem_app_user' => $user['use_id'],
-            'mem_app_date' => date('Y-m-d H:i:s')
-        );
-        $this->db->where('mem_id', $id);
+    // public function approve($id){
+    //     $data = array(
+    //         'mem_app_user' => $this->session->userdata('use_username'),
+    //         'mem_app_date' => date('Y-m-d H:i:s')
+    //     );
+    //     $this->db->where('mem_id', $id);
 
-        $edit = $this->db->update('members', $data);
+    //     $edit = $this->db->update('members', $data);
 
-		return $edit; 
-    }
+	// 	return $edit; 
+    // }
 
     public function member_search($q = null){
         $this->db->select('mem_id as id, mem_name as text');

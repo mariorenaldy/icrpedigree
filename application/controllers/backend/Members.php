@@ -2,15 +2,17 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Members extends CI_Controller {
-		private $navigations;
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->model(array('memberModel', 'KennelModel', 'LogmemberModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
+			$this->load->library('email', $this->config->item('email'));
+			$this->email->set_newline("\r\n");
 			$this->load->helper(array('url'));
 			$this->load->database();
+			date_default_timezone_set("Asia/Bangkok");
 		}
 
 		public function index(){
@@ -22,9 +24,66 @@ class Members extends CI_Controller {
 		}
 
 		public function view_approve(){
-			$where['log_stat'] = 0;
-			$data['member'] = $this->LogmemberModel->get_logs($where)->result();
+			$where['mem_app_user'] = 0;
+			$where['mem_stat'] = $this->config->item('non_paid_member_status');
+			$data['member'] = $this->memberModel->get_members($where)->result();
 			$this->load->view('backend/approve_members', $data);
+		}
+
+		public function approve(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$where['mem_id'] = $this->uri->segment(4);
+					$data['mem_app_user'] = $this->session->userdata('use_id');
+					$data['mem_app_date'] = date('Y-m-d H:i:s');
+					$this->memberModel->update_members($data, $where);
+
+					$member = $this->memberModel->get_members($where)->row();
+					$this->email->set_mailtype('html');
+					$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+					$this->email->to($member->email);
+					$this->email->subject('Ubah Password');
+
+					$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+					$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+					$message .= '<div>Salam </div>';
+					$message .= '<div>ICR Pedigree Customer Service</div>';
+					$message .= '<div><br/><hr/></div>';
+
+					$this->email->message($message);
+					$res = $this->email->send();
+
+					$this->session->set_flashdata('approve', TRUE);
+					redirect('backend/Members/view_approve');
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members/view_approve');
+			}
+		}
+
+		public function reject(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$where['mem_id'] = $this->uri->segment(4);
+					$data['mem_stat'] = $this->config->item('deactivated_member_status');
+					$data['mem_app_user'] = $this->session->userdata('use_username');
+					$data['mem_app_date'] = date('Y-m-d H:i:s');
+					$this->memberModel->update_members($data, $where);
+
+					$this->session->set_flashdata('reject', TRUE);
+					redirect('backend/Members/view_approve');
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members/view_approve');
+			}
 		}
 
 		public function add(){
@@ -701,17 +760,5 @@ class Members extends CI_Controller {
       else{
         echo json_encode(array('data' => 'Member dengan id = '.$err.' tidak dapat dideaktivasi'));
       }
-  }
-
-  	public function approve($id = null){
-		if ($id){
-			$res = $this->memberModel->approve($id);
-			if ($res){
-				echo json_encode(array('data' => '1'));
-			}
-			else{
-				echo json_encode(array('data' => 'Member dengan id = '.$id.' tidak dapat di-approve'));
-			}
-		}
-	}
+  	}
 }
