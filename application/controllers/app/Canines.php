@@ -124,9 +124,10 @@ class Canines extends CI_Controller {
 	}
 
 	public function get_dam(){
-		if ($this->uri->segment(4)){ // search data by name
+		if ($this->uri->segment(4)){ // search data by can_a_s
 			$like['can_a_s'] = $this->uri->segment(4);
 			$where['can_gender'] = 'Female';
+			$where['can_id !='] = $this->config->item('dam_id');
 			$canine = $this->caninesModel->search_canines_simple($like, $where);
 			if ($canine){
 				echo json_encode([
@@ -142,6 +143,7 @@ class Canines extends CI_Controller {
 		}
 		else{ // all data
 			$where['can_gender'] = 'Female';
+			$where['can_id !='] = $this->config->item('dam_id');
 			$canine = $this->caninesModel->get_canines_simple($where);
 			if ($canine){
 				echo json_encode([
