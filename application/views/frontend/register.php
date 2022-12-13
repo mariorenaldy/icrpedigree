@@ -17,7 +17,7 @@
                             <h2>Sign Up</h2>
                         </header>
 
-                        <form action="<?= base_url('frontend/register/signup') ?>" method="post">
+                        <form action="<?= base_url('frontend/register/signup') ?>" method="post" enctype="multipart/form-data">
                         <div>
                             <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
                             <!-- <a href="<?= base_url('') ?>" class="btn" style="background-color:#FAFF00;">Upload KTP</a> -->
@@ -75,7 +75,7 @@
                         <div>
                             <img id="imgPreview" width="15%" src="<?= base_url('assets/oneui/img/avatars/avatar1.jpg') ?>">
                             <!-- <a href="<?= base_url('') ?>" class="btn" style="background-color:#00D1FF;">Upload Logo</a> -->
-                            <input type="file" class="upload" name="ken_photo" id="imageInputLogo"/>
+                            <input type="file" class="upload" name="attachment_logo" id="imageInputLogo"/>
                         </div>
                         
                         <div>

@@ -5,6 +5,7 @@ class Register extends CI_Controller {
     {
 		parent::__construct();
 		$this->load->model(array('MemberModel','KennelModel'));
+		$this->load->library('upload', $this->config->item('upload_member'));
 	}
 
 	public function index()
@@ -16,100 +17,64 @@ class Register extends CI_Controller {
 		$err = 0;
 		if (empty($this->input->post('mem_name'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Nama sesuai KTP wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Nama sesuai KTP wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_address'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Alamat sesuai KTP wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Alamat sesuai KTP wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_mail_address'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Alamat surat menyurat wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Alamat surat menyurat wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_hp'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'No. telp member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'No. telp member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_kota'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Kota member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Kota member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_kode_pos'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Kode pos member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Kode pos member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_email'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Email member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Email member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_ktp'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'No. KTP member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'No. KTP member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('mem_username'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Username member wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Username member wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('password'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Password wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Password wajib diisi');
 		}
 
 		if (!$err && empty($this->input->post('ken_name'))){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Nama kennel wajib diisi'
-			]); 
+			$this->session->set_flashdata('error_message', 'Nama kennel wajib diisi');
 		}
 
 		if (!$err){
 			$member = $this->MemberModel->daftar_users($this->input->post('mem_username'))->result();
 			if ($member) {
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Username sudah ada'
-				]);
+				$this->session->set_flashdata('error_message', 'Username sudah ada');
 			}
 		}
 
@@ -117,10 +82,7 @@ class Register extends CI_Controller {
 			$member = $this->MemberModel->get_ktp($this->input->post('mem_ktp'))->result();
 			if ($member) {
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'No. KTP sudah ada'
-				]);
+				$this->session->set_flashdata('error_message', 'No. KTP sudah ada');
 			}
 		}
 
@@ -128,10 +90,7 @@ class Register extends CI_Controller {
 			$kennel = $this->KennelModel->daftar_kennels($this->input->post('ken_name'))->result();
 			if ($kennel) {
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => 'Nama kennel sudah ada'
-				]);
+				$this->session->set_flashdata('error_message', 'Nama kennel sudah ada');
 			}
 		}			
 
@@ -144,10 +103,7 @@ class Register extends CI_Controller {
 			}
 			else{
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => $this->upload->display_errors()
-				]);
+				$this->session->set_flashdata('error_message', $this->upload->display_errors());
 			}
 		}
 
@@ -160,10 +116,7 @@ class Register extends CI_Controller {
 			}
 			else{
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => $this->upload->display_errors()
-				]);
+				$this->session->set_flashdata('error_message', $this->upload->display_errors());
 			}
 		}
 
@@ -176,27 +129,18 @@ class Register extends CI_Controller {
 			}
 			else{
 				$err++;
-				echo json_encode([
-					'status' => false,
-					'message' => $this->upload->display_errors()
-				]);
+				$this->session->set_flashdata('error_message', $this->upload->display_errors());
 			}
 		}
 
 		if (!$err && $photo == "-"){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Foto KTP wajib diisi'
-			]);
+			$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
 		}
 
 		if (!$err && $logo == "-"){
 			$err++;
-			echo json_encode([
-				'status' => false,
-				'message' => 'Foto kennel wajib diisi'
-			]);
+			$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
 		}
 
 		if (!$err){
@@ -233,24 +177,16 @@ class Register extends CI_Controller {
 				$res = $this->KennelModel->add_kennels($kennel_data);
 				if ($res){
 					$this->db->trans_complete();
-					echo json_encode([
-						'status' => true
-					]);
+					$this->session->set_flashdata('register', TRUE);
 				}
 				else{
 					$this->db->trans_rollback();
-					echo json_encode([
-						'status' => false,
-						'message' => 'Failed to save account sign up data'
-					]);
+					$this->session->set_flashdata('error_message', 'Failed to save account sign up data');
 				}
 			}
 			else {
 				$this->db->trans_rollback();
-				echo json_encode([
-					'status' => false,
-					'message' => 'Failed to save account sign up data'
-				]);
+				$this->session->set_flashdata('error_message', 'Failed to save account sign up data');
 			}
 		}
 	}
