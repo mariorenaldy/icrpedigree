@@ -5,8 +5,12 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'notification_model', 'notificationtype_model'));
+        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'notification_model', 'notificationtype_model', 'pedigreesModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
+        $this->load->library(array('session', 'form_validation'));
+        $this->load->helper(array('url'));
+        $this->load->database();
+        date_default_timezone_set("Asia/Bangkok");
     }
 
     public function index(){
@@ -14,82 +18,89 @@ class Canines extends CI_Controller {
     }
 
     public function view_approve(){
-        $data['canine'] = $this->requestModel->get_requests()->result();
+        $where['can_app_user'] = 0;
+        $data['canine'] = $this->caninesModel->get_canines($where)->result();
         $this->load->view('backend/approve_canines', $data);
-    } 
-
-    public function search(){
-			$q = $_GET['q'];
-			$canines = $this->caninesModel->get_search($q)->result();
-			echo json_encode($canines);
-		}
-
-    public function sire(){
-        if (isset($_GET['q'])) {
-          $q = $_GET['q'];
-          $canines = $this->caninesModel->sire_search($q)->result();
-        }else {
-          $canines = $this->caninesModel->sire_search()->result();
-        }
-        echo json_encode($canines);
-		}
-
-    public function dam(){
-        if (isset($_GET['q'])) {
-          $q = $_GET['q'];
-          $canines = $this->caninesModel->dam_search($q)->result();
-        }else {
-          $canines = $this->caninesModel->dam_search()->result();
-        }
-        echo json_encode($canines);
-		}
-
-    public function breeder(){
-					$q = $_GET['q'];
-					$canines = $this->caninesModel->breeder_search($q)->result();
-					echo json_encode($canines);
-		}
-
-    public function kennel(){
-					$q = $_GET['q'];
-					$canines = $this->caninesModel->kennel_search($q)->result();
-					echo json_encode($canines);
-		}
-
-    public function address(){
-          $q = $_GET['q'];
-          $canines = $this->caninesModel->address_search($q)->result();
-          echo json_encode($canines);
     }
+    
+    public function search_approve(){
+        $like['can_a_s'] = $this->input->post('keywords');
+        $like['can_reg_number'] = $this->input->post('keywords');
+        $where['can_app_user'] = 0;
+        $data['canine'] = $this->caninesModel->search_canines($like, $where)->result();
+        $this->load->view('backend/approve_canines', $data);
+		}
 
-    public function owner(){
-          $q = $_GET['q'];
-          $canines = $this->caninesModel->owner_search($q)->result();
-          echo json_encode($canines);
-    }
+    // public function search(){
+		// 	$q = $_GET['q'];
+		// 	$canines = $this->caninesModel->get_search($q)->result();
+		// 	echo json_encode($canines);
+		// }
 
-    // ARTechnology
-    public function member(){
-      if (isset($_GET['q'])) {
-        $q = $_GET['q'];
-        $member = $this->memberModel->member_search($q)->result();
-      }else {
-        $member = $this->memberModel->member_search()->result();
-      }
-      echo json_encode($member);
-    }
+    // public function sire(){
+    //     if (isset($_GET['q'])) {
+    //       $q = $_GET['q'];
+    //       $canines = $this->caninesModel->sire_search($q)->result();
+    //     }else {
+    //       $canines = $this->caninesModel->sire_search()->result();
+    //     }
+    //     echo json_encode($canines);
+		// }
 
-    public function owner_name(){
-      if (isset($_GET['q'])) {
-        $q = $_GET['q'];
-        $canines = $this->caninesModel->owner_name_search($q)->result();
-      } else{
-        $canines = $this->caninesModel->owner_name_search()->result();
-      }
-      echo json_encode($canines);
-    }
-    // ARTechnology
+    // public function dam(){
+    //     if (isset($_GET['q'])) {
+    //       $q = $_GET['q'];
+    //       $canines = $this->caninesModel->dam_search($q)->result();
+    //     }else {
+    //       $canines = $this->caninesModel->dam_search()->result();
+    //     }
+    //     echo json_encode($canines);
+		// }
 
+    // public function breeder(){
+		// 			$q = $_GET['q'];
+		// 			$canines = $this->caninesModel->breeder_search($q)->result();
+		// 			echo json_encode($canines);
+		// }
+
+    // public function kennel(){
+		// 			$q = $_GET['q'];
+		// 			$canines = $this->caninesModel->kennel_search($q)->result();
+		// 			echo json_encode($canines);
+		// }
+
+    // public function address(){
+    //       $q = $_GET['q'];
+    //       $canines = $this->caninesModel->address_search($q)->result();
+    //       echo json_encode($canines);
+    // }
+
+    // public function owner(){
+    //       $q = $_GET['q'];
+    //       $canines = $this->caninesModel->owner_search($q)->result();
+    //       echo json_encode($canines);
+    // }
+
+    // public function member(){
+    //   if (isset($_GET['q'])) {
+    //     $q = $_GET['q'];
+    //     $member = $this->memberModel->member_search($q)->result();
+    //   }else {
+    //     $member = $this->memberModel->member_search()->result();
+    //   }
+    //   echo json_encode($member);
+    // }
+
+    // public function owner_name(){
+    //   if (isset($_GET['q'])) {
+    //     $q = $_GET['q'];
+    //     $canines = $this->caninesModel->owner_name_search($q)->result();
+    //   } else{
+    //     $canines = $this->caninesModel->owner_name_search()->result();
+    //   }
+    //   echo json_encode($canines);
+    // }
+    
     public function add(){
         $sire = $this->input->post('can_sire');
         $dam = $this->input->post('can_dam');
@@ -116,7 +127,6 @@ class Canines extends CI_Controller {
         $_POST['can_reg_date'] = date("Y/m/d");
         // $_POST['can_icr_number'] = '-';
 
-        // ARTechnology
         $cek = true;
         $piece = explode("-", $this->input->post('can_date_of_birth'));
         $dob = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -159,11 +169,7 @@ class Canines extends CI_Controller {
           }
 
           if ($cek2){
-        // ARTechnology
-
             $data = $this->input->post(null,false);
-
-            // ARTechnology
             $data['can_date_of_birth'] = $dob;
 
             $cek3 = true;
@@ -208,10 +214,8 @@ class Canines extends CI_Controller {
                   $data['can_app_date'] = date("Y/m/d");
                   $this->db->trans_strict(FALSE);
                   $this->db->trans_start();
-                  // ARTechnology
                   $canines = $this->caninesModel->add_canines($data);
-                  // ARTechnology
-
+                  
                   if ($sire != null && $dam != null) {
                     $pedigree = array('ped_canine_id' => $canines,
                                       'ped_sire_id' => $sire,
@@ -234,8 +238,7 @@ class Canines extends CI_Controller {
                   }
 
                   $pedigree = $this->pedigreesModel->add_pedigrees($pedigree);
-                  // ARTechnology
-
+                  
                   $this->db->trans_complete();
                   echo json_encode(array('data' => '1'));
                 }
@@ -249,7 +252,6 @@ class Canines extends CI_Controller {
             else{
               echo json_encode(array('data' => 'No. ICR tidak boleh sama'));
             }
-          // ARTechnology
           }
           else{
             echo json_encode(array('data' => 'Dam belum 100 hari'));
@@ -258,7 +260,6 @@ class Canines extends CI_Controller {
         else{
           echo json_encode(array('data' => 'Sire & Dam harus 14 bulan'));
         }
-        // ARTechnology
     }
 
     public function update($id = null){
@@ -281,7 +282,6 @@ class Canines extends CI_Controller {
 				$data = $this->input->post(null, false);
 				$where['can_id'] = $id;
 
-        // ARTechnology
         $cek = true;
         $piece = explode("-", $this->input->post('can_date_of_birth'));
         $dob = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -450,7 +450,6 @@ class Canines extends CI_Controller {
       else{
         echo json_encode(array('data' => 'Sire & Dam harus 14 bulan'));
       }
-      // ARTechnology
 		}
 
     public function update2($id = null){
@@ -466,7 +465,6 @@ class Canines extends CI_Controller {
 				// $where['can_id'] = $id;
 				// $this->caninesModel->update_canines($data, $where);
 
-        // ARTechnology
         $where['can_id'] = $id;
         $canine = $this->caninesModel->get_canines($where)->row();
         $dob = $canine->can_date_of_birth;
@@ -510,8 +508,6 @@ class Canines extends CI_Controller {
           }
 
           if ($cek2){
-        // ARTechnology
-
             if ($sire != null && $dam != null) {
               $wherePed['ped_canine_id'] = $id;
               $pedigree = array('ped_sire_id' => $sire,
@@ -519,7 +515,6 @@ class Canines extends CI_Controller {
 
               $pedigree = $this->pedigreesModel->update_pedigrees($pedigree, $wherePed);
             }
-            // ARTechnology
             else if ($sire != null) {
               $wherePed['ped_canine_id'] = $id;
               $pedigree = array('ped_sire_id' => $sire );
@@ -532,12 +527,7 @@ class Canines extends CI_Controller {
 
               $pedigree = $this->pedigreesModel->update_pedigrees($pedigree, $wherePed);
             }
-            // ARTechnology 
-
-            // $data['pro_id'] = $id;
-            // self::_is_write_log('update', $data, 'aris');
             echo json_encode(array('data' => '1'));
-      // ARTechnology
         }
         else{
           echo json_encode(array('data' => 'Dam belum 100 hari'));
@@ -546,10 +536,8 @@ class Canines extends CI_Controller {
       else{
         echo json_encode(array('data' => 'Sire & Dam harus 14 bulan'));
       }
-      // ARTechnology
     }
     
-    // ARTechnology
     public function payment($id = null){
       $data = $this->input->post(null, false);
       $where['can_id'] = $id;
@@ -563,8 +551,7 @@ class Canines extends CI_Controller {
       $member = $this->memberModel->get_members($where)->row();
       echo json_encode($member);
     }
-    // ARTechnology
-
+    
     public function parentId($id = null)
     {
       $where['can_id'] = $id;
@@ -578,9 +565,7 @@ class Canines extends CI_Controller {
             // $canines = $this->caninesModel->get_canines($where)->row();
             echo json_encode($canines);
         }else{
-            // ARTechnology
             $aColumns = array('can_id', 'can_current_reg_number', 'can_icr_moc_number', 'can_icr_number','can_a_s', 'can_owner','can_gender', 'can_score' , 'can_photo', 'can_remaining_payment', 'can_created_at', 'can_updated_at', 'can_stat', 'can_note', 'can_address', 'can_member', 'mem_name', 'can_print', 'ken_type_id', 'ken_name', 'can_app_stat', 'use_username', 'can_app_date');
-            // ARTechnology
             $sTable = 'canines';
 
             $iDisplayStart = $this->input->get_post('start', true);
@@ -618,10 +603,8 @@ class Canines extends CI_Controller {
              * on very large tables, and MySQL's regex functionality is very limited
              */
             if(isset($sSearch['value']) && !empty($sSearch['value'])){
-                // ARTechnology
                 for($i=0; $i<count($columns); $i++){
-                // ARTechnology
-
+                
                     // $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
                     $bSearchable = $columns[$i]['searchable'];
 
@@ -685,7 +668,6 @@ class Canines extends CI_Controller {
   					}
             // $where['can_id'] = $id;
             
-            // ARTechnology
             if ($canine->can_gender == "Male"){
               $res = $this->pedigreesModel->unlink_parent($id, 86);
             }
@@ -694,26 +676,19 @@ class Canines extends CI_Controller {
             }
 
             if ($res){
-            // ARTechnology
               $this->caninesModel->remove_canines($where);
-            // ARTechnology
             }
             else{
               $err = $id;
               break;
             }
-            // ARTechnology
         }
-        // ARTechnology
         if (!$err){
-        // ARTechnology
           echo json_encode(array('data' => '1'));
-        // ARTechnology
         }
         else{
           echo json_encode(array('data' => 'Canine dengan id = '.$err.' tidak dapat dihapus'));
         }
-        // ARTechnology
   	}
 
 
@@ -774,7 +749,6 @@ class Canines extends CI_Controller {
         $this->logModel->add_log($data);
     }
 
-    // ARTechnology
     public function getFamily($id = null){
       $user = $this->session->userdata('user_data');
 			$data['users'] = $user;
@@ -886,10 +860,8 @@ class Canines extends CI_Controller {
         * on very large tables, and MySQL's regex functionality is very limited
         */
       if(isset($sSearch['value']) && !empty($sSearch['value'])){
-          // ARTechnology
           for($i=0; $i<count($columns); $i++){
-          // ARTechnology
-
+          
               // $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
               $bSearchable = $columns[$i]['searchable'];
 
@@ -942,7 +914,7 @@ class Canines extends CI_Controller {
       echo json_encode($output);
     }
 
-    public function approve($id){
+    public function approve_update($id){
         if ($id){
             $whe['req_id'] = $id;
             $req = $this->requestModel->get_requests($whe)->row();
@@ -1066,7 +1038,7 @@ class Canines extends CI_Controller {
         }
     }
 
-    public function reject($id = null){
+    public function reject_update($id = null){
       if ($id){
         $this->db->trans_strict(FALSE);
         $this->db->trans_start();
@@ -1172,10 +1144,8 @@ class Canines extends CI_Controller {
         * on very large tables, and MySQL's regex functionality is very limited
         */
       if(isset($sSearch['value']) && !empty($sSearch['value'])){
-          // ARTechnology
           for($i=0; $i<count($columns); $i++){
-          // ARTechnology
-
+          
               // $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
               $bSearchable = $columns[$i]['searchable'];
 
@@ -1260,9 +1230,7 @@ class Canines extends CI_Controller {
           // $canines = $this->caninesModel->get_canines($where)->row();
           echo json_encode($canines);
       }else{
-          // ARTechnology
           $aColumns = array('can_id', 'can_current_reg_number', 'can_icr_moc_number', 'can_icr_number','can_a_s', 'can_owner','can_gender', 'can_score' , 'can_photo', 'can_remaining_payment', 'can_created_at', 'can_updated_at', 'can_stat', 'can_note', 'can_address', 'can_member', 'mem_name', 'can_print', 'ken_type_id', 'ken_name', 'can_app_stat', 'can_color', 'can_date_of_birth', 'can_owner_name', 'can_cage', 'can_breed');
-          // ARTechnology
           $sTable = 'canines';
 
           $iDisplayStart = $this->input->get_post('start', true);
@@ -1300,10 +1268,8 @@ class Canines extends CI_Controller {
            * on very large tables, and MySQL's regex functionality is very limited
            */
           if(isset($sSearch['value']) && !empty($sSearch['value'])){
-              // ARTechnology
               for($i=0; $i<count($columns); $i++){
-              // ARTechnology
-
+              
                   // $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
                   $bSearchable = $columns[$i]['searchable'];
 
@@ -1354,69 +1320,102 @@ class Canines extends CI_Controller {
       }
   }
 
-  public function approve_canine($id = null){
-    if ($id){
-      $where['can_id'] = $id;
-      $can = $this->caninesModel->get_can_pedigrees($where)->row();
+  public function approve_canine(){
+    if ($this->uri->segment(4)){
+      $where['can_id'] = $this->uri->segment(4);
+      $can = $this->caninesModel->get_canines($where)->row();
 
-      $res = $this->caninesModel->update_status($id, 1);
+      $this->db->trans_strict(FALSE);
+      $this->db->trans_start();
+      $where['can_id'] = $this->uri->segment(4);
+      $data['can_app_user'] = $this->session->userdata('use_id');
+      $data['can_app_date'] = date('Y-m-d H:i:s');
+      $data['can_app_stat'] = 1;
+      $res = $this->caninesModel->update_canines($data, $where);
       if ($res){
-        if ($can->mem_id){
-          $res3 = $this->notification_model->add(11, $id, $can->mem_id);
+        $wherePed['ped_canine_id'] = $this->uri->segment(4);
+        $dataPed['ped_stat'] = 1;
+        $res2 = $this->pedigreesModel->update_pedigrees($dataPed, $wherePed);
+        if ($res2){
+          $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id);
+          if ($res3){
+            $this->db->trans_complete();
+            $whe_can['mem_id'] = $can->can_member_id;
+            $member = $this->memberModel->get_members($whe_can)->row();
+            if ($member->mem_firebase_token){
+              $notif = $this->notificationtype_model->get_by_id(11);
+              $url = 'https://fcm.googleapis.com/fcm/send';
+              $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 
-          $whe_can['mem_id'] = $can->mem_id;
-          $member = $this->memberModel->get_members($whe_can)->row();
-          if ($member->mem_firebase_token){
-            $notif = $this->notificationtype_model->get_by_id(11);
-            $url = 'https://fcm.googleapis.com/fcm/send';
-            $key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+              $fields = array (
+                'to' => $member->mem_firebase_token,
+                'notification' => array(
+                  "channelId" => "ICRPedigree",
+                  'title' => $notif[0]->title,
+                  'body' => $notif[0]->description
+                )
+              );
+              $fields = json_encode ( $fields );
 
-            $fields = array (
-              'to' => $member->mem_firebase_token,
-              'notification' => array(
-                "channelId" => "ICRPedigree",
-                'title' => $notif[0]->title,
-                'body' => $notif[0]->description
-              )
-            );
-            $fields = json_encode ( $fields );
+              $headers = array (
+                  'Authorization: key=' . $key,
+                  'Content-Type: application/json'
+              );
 
-            $headers = array (
-                'Authorization: key=' . $key,
-                'Content-Type: application/json'
-            );
+              $ch = curl_init ();
+              curl_setopt ( $ch, CURLOPT_URL, $url );
+              curl_setopt ( $ch, CURLOPT_POST, true );
+              curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+              curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+              curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
 
-            $ch = curl_init ();
-            curl_setopt ( $ch, CURLOPT_URL, $url );
-            curl_setopt ( $ch, CURLOPT_POST, true );
-            curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-            curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-            curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-
-            $result = curl_exec ( $ch );
-            // echo $result;
-            curl_close ( $ch );
+              $result = curl_exec ( $ch );
+              // echo $result;
+              curl_close ( $ch );
+            }
+            $this->session->set_flashdata('approve', TRUE);
+            redirect('backend/Canines/view_approve');
+          }
+          else{
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+            redirect('backend/Canines/view_approve');
           }
         }
-        echo json_encode(array('data' => '1'));
+        else{
+          $this->db->trans_rollback();
+          $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+          redirect('backend/Canines/view_approve');
+        }
       }
       else{
-        echo json_encode(array('data' => 'Canine dengan id = '.$id.' tidak dapat di-approve'));
+        $this->db->trans_rollback();
+        $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+				redirect('backend/Canines/view_approve');
       }
+    }
+    else{
+      redirect("backend/Canines/view_approve");
     }
   }
 
-  public function reject_canine($id = null){
-    if ($id){
-      $where['can_id'] = $id;
-      $can = $this->caninesModel->get_can_pedigrees($where)->row();
+  public function reject_canine(){
+    if ($this->uri->segment(4)){
+      $where['can_id'] = $this->uri->segment(4);
+      $can = $this->caninesModel->get_canines($where)->row();
 
-      $res = $this->caninesModel->update_status($id, 2);
+      $this->db->trans_strict(FALSE);
+      $this->db->trans_start();
+      $where['can_id'] = $this->uri->segment(4);
+      $data['can_app_user'] = $this->session->userdata('use_id');
+      $data['can_app_date'] = date('Y-m-d H:i:s');
+      $data['can_app_stat'] = 2;
+      $res = $this->caninesModel->update_canines($data, $where);
       if ($res){
-        if ($can->mem_id){
-          $res3 = $this->notification_model->add(12, $id, $can->mem_id);
-
-          $whe_can['mem_id'] = $can->mem_id;
+        $res2 = $this->notification_model->add(12, $this->uri->segment(4), $can->can_member_id);
+        if ($res2){
+          $this->db->trans_complete();
+          $whe_can['mem_id'] = $can->can_member_id;
           $member = $this->memberModel->get_members($whe_can)->row();
           if ($member->mem_firebase_token){
             $notif = $this->notificationtype_model->get_by_id(12);
@@ -1449,13 +1448,23 @@ class Canines extends CI_Controller {
             // echo $result;
             curl_close ( $ch );
           }
+          $this->session->set_flashdata('reject', TRUE);
+          redirect('backend/Canines/view_approve');
         }
-        echo json_encode(array('data' => '1'));
+        else{
+          $this->db->trans_rollback();
+          $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+          redirect('backend/Canines/view_approve');
+        }
       }
       else{
-        echo json_encode(array('data' => 'Canine dengan id = '.$id.' tidak dapat di-reject'));
+        $this->db->trans_rollback();
+        $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+				redirect('backend/Canines/view_approve');
       }
     }
+    else{
+      redirect("backend/Canines/view_approve");
+    }
   }
-    // ARTechnology
 }

@@ -88,8 +88,20 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get('canines');
     //   }
 
-    public function get_canines($where = null){
+    public function get_canines($where){
         $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get('canines');
+    }
+
+    public function search_canines($like, $where){
+        $this->db->select('*');
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
         if ($where != null) {
             $this->db->where($where);
         }
@@ -108,10 +120,12 @@ class CaninesModel extends CI_Model {
 
     public function search_canines_simple($like, $where){
         $this->db->select('can_a_s AS name, can_id AS id');
+        if ($like != null) {
+            $this->db->like($like);
+        }
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->like($like);
         $this->db->order_by('can_id', 'desc');
         return $this->db->get('canines');
     }
@@ -139,7 +153,7 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function get_can_pedigrees($where = null){
+    public function get_can_pedigrees(){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
             $this->db->where($where);
@@ -166,7 +180,7 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function add_canines($data = null){
+    public function add_canines($data){
         $result = false;
         if ($data != null) {
             $this->db->insert('canines', $data);
@@ -175,19 +189,15 @@ class CaninesModel extends CI_Model {
         return $result;
     }
 
-    // public function update_canines($data = null, $where = null){
-    //     $result = false;
-    //     if($data != null && $where != null){
-    //         $this->db->set($data);
-    //         $this->db->where($where);
-    //         $this->db->update('canines');
-    //     }
-    //     return $result;
-    // }
-
-    // public function remove_canines($where = null){
-    //     return $this->db->delete('canines', $where);
-    // }
+    public function update_canines($data, $where){
+        $result = false;
+        if ($data != null && $where != null){
+            $this->db->set($data);
+            $this->db->where($where);
+            $result = $this->db->update('canines');
+        }
+        return $result;
+    }
 
     public function get_dob_by_id($id){
         $sql = "SELECT DATE_FORMAT(can_date_of_birth, '%Y-%m-%d') as can_date_of_birth FROM canines WHERE can_id = ".$id;
@@ -451,9 +461,8 @@ class CaninesModel extends CI_Model {
     }
 
     // public function update_status($id, $stat){
-    //     $user = $this->session->userdata('user_data');
     //     $data = array(
-    //         'can_app_user' => $user['use_id'],
+    //         'can_app_user' => $this->session->userdata('use_id');,
     //         'can_app_date' => date('Y-m-d H:i:s'),
     //         'can_app_stat' => $stat,
     //         'can_app_note' => $this->input->post('can_app_note')

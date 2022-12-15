@@ -41,15 +41,15 @@ class PedigreesModel extends CI_Model {
 		return $insert;
     }
 
-    // public function update_pedigrees($data = null, $where = null){
-    //     $result = false;
-    //     if($data != null && $where != null){
-    //         $this->db->set($data);
-    //         $this->db->where($where);
-    //         $this->db->update('pedigrees');
-    //     }
-    //     return $result;
-    // }
+    public function update_pedigrees($data, $where){
+        $result = false;
+        if($data != null && $where != null){
+            $this->db->set($data);
+            $this->db->where($where);
+            $result = $this->db->update('pedigrees');
+        }
+        return $result;
+    }
 
     // public function remove_pedigrees($where = null){
     //     if($where != null){
