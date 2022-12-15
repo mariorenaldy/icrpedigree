@@ -15,7 +15,7 @@ class MemberModel extends CI_Model {
       return $data;
     }
 
-    public function get_members($where = null){
+    public function get_members($where){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);
@@ -26,9 +26,23 @@ class MemberModel extends CI_Model {
         return $this->db->get();
     }
 
-    public function daftar_users($username = null){
+    public function search_members($like, $where){
         $this->db->select('*');
-        if ($username != null ) {
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->from('members');
+        $this->db->join('users','users.use_id = members.mem_app_user');
+        $this->db->order_by('mem_id', 'desc');
+        return $this->db->get();
+    }
+
+    public function daftar_users($username){
+        $this->db->select('*');
+        if ($username != null) {
             $this->db->where('mem_username', $username);
         }
         $this->db->from('members');

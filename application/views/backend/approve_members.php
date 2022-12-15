@@ -20,9 +20,23 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3>Approve Member</h3>
+                <div class="text-success">
+                    <?php		
+                        if ($this->session->flashdata('approve')){
+                            echo 'Member berhasil di-approve<br/>';
+                        }
+                    ?>
+                </div>
+                <div class="text-danger">
+                    <?php		
+                        if ($this->session->flashdata('reject')){
+                            echo 'Member berhasil ditolak<br/>';
+                        }
+                    ?>
+                </div>
                 <div class="search-container">
-                    <form action="/action_page.php">
-                        <input type="text" placeholder="Nama/Alamat/No Telp." name="search">
+                    <form action="<?= base_url().'backend/Members/search_approve'?>">
+                        <input type="text" placeholder="Nama/Alamat/No Telp." name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>

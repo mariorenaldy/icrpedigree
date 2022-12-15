@@ -30,6 +30,16 @@ class Members extends CI_Controller {
 			$this->load->view('backend/approve_members', $data);
 		}
 
+		public function search_approve(){
+			$like['mem_name'] = $this->input->post('keywords');
+			$like['mem_address'] = $this->input->post('keywords');
+			$like['mem_hp'] = $this->input->post('keywords');
+			$where['mem_app_user'] = 0;
+			$where['mem_stat'] = $this->config->item('non_paid_member_status');
+			$data['member'] = $this->memberModel->search_members($like, $where)->result();
+			$this->load->view('backend/approve_members', $data);
+		}
+
 		public function approve(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
