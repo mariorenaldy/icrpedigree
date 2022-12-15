@@ -82,7 +82,7 @@
         }
     }
     function reject(id, nama){
-        var proceed = confirm("Reject "+nama+" ?");
+        var proceed = confirm("Tolak "+nama+" ?");
         if (proceed){             
             window.location = "<?= base_url(); ?>backend/Members/reject/"+id;
         }
