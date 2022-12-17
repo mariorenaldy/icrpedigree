@@ -20,9 +20,26 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3>Approve Birth</h3>
+                <div class="text-success">
+                    <?php		
+                        if ($this->session->flashdata('approve')){
+                            echo 'Lahir berhasil di-approve<br/>';
+                        }
+                    ?>
+                </div>
+                <div class="text-danger">
+                    <?php		
+                        if ($this->session->flashdata('error')){
+                            echo $this->session->flashdata('error').'<br/>';
+                        }
+                        if ($this->session->flashdata('reject')){
+                            echo 'Lahir berhasil ditolak<br/>';
+                        }
+                    ?>
+                </div>
                 <div class="search-container">
-                    <form action="/action_page.php">
-                        <input type="text" placeholder="No. ICR/Nama" name="keywords">
+                    <form action="<?= base_url().'backend/Births/search_approve'?>" method="post">
+                        <input type="text" placeholder="Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
@@ -42,14 +59,14 @@
                             <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                         </div>
                         <div class="col-md-2">
-                            <?php echo $b->bir_a_s; ?>
+                            <?= $b->bir_a_s; ?>
                         </div>
                         <div class="col-md-2">
-                            <?php echo $b->bir_date_of_birth; ?>
+                            <?= $b->bir_date_of_birth; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve($b->bir_id)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject($b->bir_id)"><i class="fa fa-close"></i></button>
+                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -60,5 +77,19 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
+<script>
+    function approve(id, nama){
+        var proceed = confirm("Approve "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Births/approve/"+id;
+        }
+    }
+    function reject(id, nama){
+        var proceed = confirm("Tolak "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Births/reject/"+id;
+        }
+    }
+</script>
 </body>
 </html>

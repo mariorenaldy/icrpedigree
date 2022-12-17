@@ -15,7 +15,7 @@ class BirthModel extends CI_Model {
     //   return $data;
     // }
 
-    public function get_births($where = null){
+    public function get_births($where){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
         $this->db->from('births');
         if ($where != null) {
@@ -23,8 +23,25 @@ class BirthModel extends CI_Model {
         }
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
-        $this->db->join('members','members.mem_id = births.bir_member_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_id = births.bir_kennel_id');
+        $this->db->join('members','members.mem_id = births.bir_member_id AND members.mem_id = kennels.ken_member_id');
+        $this->db->order_by('births.bir_date', 'desc');
+        return $this->db->get();
+    }
+
+    public function search_births($like, $where){
+        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
+        $this->db->from('births');
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->join('users','users.use_id = births.bir_app_user');
+        $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
+        $this->db->join('kennels','kennels.ken_id = births.bir_kennel_id');
+        $this->db->join('members','members.mem_id = births.bir_member_id AND members.mem_id = kennels.ken_member_id');
         $this->db->order_by('births.bir_date', 'desc');
         return $this->db->get();
     }
@@ -44,16 +61,16 @@ class BirthModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function get_non_approved_births($where = null){
-        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
-        $this->db->from('births');
-        if ($where != null) {
-            $this->db->where($where);
-        }
-        $this->db->join('users','users.use_id = births.bir_app_user');
-        $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
-        return $this->db->get();
-    }
+    // public function get_non_approved_births($where = null){
+    //     $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
+    //     $this->db->from('births');
+    //     if ($where != null) {
+    //         $this->db->where($where);
+    //     }
+    //     $this->db->join('users','users.use_id = births.bir_app_user');
+    //     $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
+    //     return $this->db->get();
+    // }
 
     // public function search_by_member($q){
     //     $user = $this->session->userdata('member_data');
@@ -91,7 +108,6 @@ class BirthModel extends CI_Model {
             $sql .= ")";
         $sql .= " ORDER BY s.bir_date DESC LIMIT ".$offset.", ".$this->config->item('birth_count');
         $query = $this->db->query($sql);
-        
         return $query->result();
     }
 
@@ -110,7 +126,6 @@ class BirthModel extends CI_Model {
         else
             $sql .= ")";
         $query = $this->db->query($sql);
-        
         return $query->result();
     }
 

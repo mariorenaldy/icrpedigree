@@ -20,14 +20,11 @@ class PedigreesModel extends CI_Model {
     //     return $this->db->get('pedigrees');
     // }
     
-    // public function add_pedigrees($data = null){
-    //     $result = false;
-    //     if ($data != null) {
-    //         $this->db->insert('pedigrees', $data);
-    //         $result = $this->db->insert_id();
-    //     }
-    //     return $result;
-    // }
+    public function add_pedigrees($data){
+        $this->db->insert('pedigrees', $data);
+        $result = $this->db->insert_id();
+        return $result;
+    }
 
     public function insert_pedigree($id){
         $data = array(
@@ -35,20 +32,15 @@ class PedigreesModel extends CI_Model {
             'ped_dam_id' => $this->config->item('dam_id'),
             'ped_canine_id' => $id
         );
-
         $insert = $this->db->insert('pedigrees', $data);
-
 		return $insert;
     }
 
     public function update_pedigrees($data, $where){
-        $result = false;
-        if($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $result = $this->db->update('pedigrees');
-        }
-        return $result;
+        $this->db->set($data);
+        $this->db->where($where);
+        $this->db->update('pedigrees');
+        return $this->db->affected_rows();
     }
 
     // public function remove_pedigrees($where = null){

@@ -80,7 +80,7 @@ class Births extends CI_Controller {
 		public function get_by_id(){
 			if ($this->uri->segment(4)){
 				$where['bir_id'] = $this->uri->segment(4);
-				$birth = $this->birthModel->get_non_approved_births($where)->row();
+				$birth = $this->birthModel->get_births($where)->row();
 				echo json_encode([
 					'status' => true,
 					'data' => $birth
@@ -246,7 +246,6 @@ class Births extends CI_Controller {
 						}
 					}
 
-					// copas dari canine (harus diubah lg)
 					if (!$err){ 
 						$sire = $stud->stu_sire_id;
 						$dam = $stud->stu_dam_id;
@@ -299,7 +298,6 @@ class Births extends CI_Controller {
 						}
 					}
 
-					// copas dari canine
 					if (!$err){
 						$data = array(
 							'bir_stu_id' => $this->input->post('bir_stu_id'),
@@ -322,18 +320,29 @@ class Births extends CI_Controller {
 							else if ($kennel[0]->ken_type_id == 2)
 								$data['bir_a_s'] = $kennel[0]->ken_name."` ".$this->input->post('bir_a_s');
 						}
-						
-						$births = $this->birthModel->add_births($data);
-						if ($births){
-							echo json_encode([
-								'status' => true
-							]);
-						}
-						else{
+
+						$res = $this->caninesModel->check_can_a_s('', $data['bir_a_s']);
+						if ($res){
+							$err++;
 							echo json_encode([
 								'status' => false,
-								'message' => 'Gagal menyimpan lahir'
+								'message' => 'Nama tidak boleh sama'
 							]);
+						}
+						
+						if (!$err){
+							$births = $this->birthModel->add_births($data);
+							if ($births){
+								echo json_encode([
+									'status' => true
+								]);
+							}
+							else{
+								echo json_encode([
+									'status' => false,
+									'message' => 'Gagal menyimpan lahir'
+								]);
+							}
 						}
 					}
 				}

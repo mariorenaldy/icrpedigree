@@ -1,8 +1,7 @@
-<?php // ARTechnology
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Births extends CI_Controller {
-		private $navigations;
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
@@ -26,146 +25,181 @@ class Births extends CI_Controller {
 			$this->load->view('backend/approve_births', $data);
 		}
 
-		public function approve($id = null){
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			// approve
-			$res = $this->birthModel->approve($id);
-			if ($res){
-				// add canine data
-				$whe['bir_id'] = $id;
-				$birth = $this->birthModel->get_births($whe)->row();
+		public function search_approve(){
+			$like['bir_a_s'] = $this->input->post('keywords');
+			$where['bir_stat'] = 0;
+			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
+			$this->load->view('backend/approve_births', $data);
+		}
 
-				$can = $this->caninesModel->check_can_a_s(0, $birth->bir_a_s);
-				if ($can){
-					$this->db->trans_rollback();
-					echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
-				}
-				else{
-					$canine = $this->caninesModel->add_canine($birth->bir_photo, $birth->bir_a_s, $birth->bir_breed, $birth->bir_gender, $birth->bir_color, $birth->bir_date_of_birth, $birth->bir_cage, $birth->bir_owner_name, $birth->bir_member);
-					
-					// add pedigree data
-					$where['stu_id'] = $birth->bir_stu_id;
-					$stud = $this->studModel->get_studs($where)->row();
-					
-					if ($stud->stu_sire_id && $stud->stu_mom_id){
-						$pedigree = array('ped_canine_id' => $canine,
-									'ped_sire_id' => $stud->stu_sire_id,
-									'ped_mom_id' => $stud->stu_mom_id );
+		public function approve(){
+			if ($this->uri->segment(4)){
+				$err = 0;
+				$where['bir_id'] = $this->uri->segment(4);
+				$birth = $this->birthModel->get_births($where)->row();
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$data['bir_app_user'] = $this->session->userdata('use_id');
+				$data['bir_app_date'] = date('Y-m-d H:i:s');
+				$data['bir_stat'] = 1;
+				$res = $this->birthModel->update_births($data, $where);
+				if ($res){
+					$dataCanine = array(
+						'can_member_id' => $birth->bir_member_id,
+						'can_a_s' => $birth->bir_a_s,
+						'can_breed' => $birth->bir_breed,
+						'can_gender' => $birth->bir_gender,
+						'can_date_of_birth' => $birth->bir_date_of_birth,
+						'can_color' => $birth->bir_color,
+						'can_kennel_id' => $birth->bir_kennel_id,
+						'can_photo' => $birth->bir_photo
+					);
+					$canine = $this->caninesModel->add_canines($dataCanine);
+					if ($canine){
+						$whe['stu_id'] = $birth->bir_stu_id;
+						$stud = $this->studModel->get_studs($whe)->row();
+						if ($stud && $stud->stu_sire_id && $stud->stu_dam_id){
+							$pedigree = array(
+								'ped_canine_id' => $canine,
+								'ped_sire_id' => $stud->stu_sire_id,
+								'ped_dam_id' => $stud->stu_dam_id);
+							$result = $this->pedigreesModel->add_pedigrees($pedigree);
+							if ($result){
+								$res = $this->notification_model->add(2, $this->uri->segment(4), $birth->bir_member_id);
+								if ($res){
+									$this->db->trans_complete();
+									$wheBirth['mem_id'] = $birth->bir_member_id;
+									$member = $this->memberModel->get_members($wheBirth)->row();
+									if ($member->mem_firebase_token){
+										$notif = $this->notificationtype_model->get_by_id(2);
+										$url = 'https://fcm.googleapis.com/fcm/send';
+										$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 
-						$res = $this->pedigreesModel->add_pedigrees($pedigree);
+										$fields = array (
+											'to' => $member->mem_firebase_token,
+											'notification' => array(
+												"channelId" => "ICRPedigree",
+												'title' => $notif[0]->title,
+												'body' => $notif[0]->description
+											)
+										);
+										$fields = json_encode ( $fields );
 
-						if ($res){
-							if ($birth->bir_member){
-								$result = $this->notification_model->add(2, $id, $birth->bir_member);
+										$headers = array (
+												'Authorization: key=' . $key,
+												'Content-Type: application/json'
+										);
 
-								$whe_birth['mem_id'] = $birth->bir_member;
-								$member = $this->memberModel->get_members($whe_birth)->row();
-								if ($member->mem_firebase_token){
-									$notif = $this->notificationtype_model->get_by_id(2);
-									$url = 'https://fcm.googleapis.com/fcm/send';
-									$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+										$ch = curl_init ();
+										curl_setopt ( $ch, CURLOPT_URL, $url );
+										curl_setopt ( $ch, CURLOPT_POST, true );
+										curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+										curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+										curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
 
-									$fields = array (
-										'to' => $member->mem_firebase_token,
-										'notification' => array(
-											"channelId" => "ICRPedigree",
-											'title' => $notif[0]->title,
-											'body' => $notif[0]->description
-										)
-									);
-									$fields = json_encode ( $fields );
-
-									$headers = array (
-											'Authorization: key=' . $key,
-											'Content-Type: application/json'
-									);
-
-									$ch = curl_init ();
-									curl_setopt ( $ch, CURLOPT_URL, $url );
-									curl_setopt ( $ch, CURLOPT_POST, true );
-									curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-									curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-									curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-
-									$result = curl_exec ( $ch );
-									// echo $result;
-									curl_close ( $ch );
+										$result = curl_exec ( $ch );
+										// echo $result;
+										curl_close ( $ch );
+									}
+									$this->session->set_flashdata('approve', TRUE);
+									redirect('backend/Births/view_approve');
+								}
+								else{
+									$err = 1;
 								}
 							}
-
-							$this->db->trans_complete();
-							echo json_encode(array('data' => '1'));
+							else{
+								$err = 1;
+							}	
 						}
 						else{
-							$this->db->trans_rollback();
-							echo json_encode(array('data' => 'Data lahir gagal di-approve'));
+							$err = 1;
 						}
 					}
 					else{
-						$this->db->trans_rollback();
-						echo json_encode(array('data' => 'Data pacak belum di-approve'));
+						$err = 1;
 					}
+				}
+				else{
+					$err = 1;
+				}
+				if ($err){
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error', 'Lahir dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+					redirect('backend/Births/view_approve');
 				}
 			}
 			else{
-				$this->db->trans_rollback();
-				echo json_encode(array('data' => 'Data lahir gagal di-approve'));
+				redirect('backend/Births/view_approve');
 			}
 		}
 
-		public function reject($id = null){
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			$res = $this->birthModel->reject($id);
-			if ($res){
-				$whe['bir_id'] = $id;
-				$birth = $this->birthModel->get_births($whe)->row();
+		public function reject(){
+			if ($this->uri->segment(4)){
+				$err = 0;
+				$where['bir_id'] = $this->uri->segment(4);
+				$birth = $this->birthModel->get_births($where)->row();
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$data['bir_app_user'] = $this->session->userdata('use_id');
+				$data['bir_app_date'] = date('Y-m-d H:i:s');
+				$data['bir_stat'] = 2;
+				$res = $this->birthModel->update_births($data, $where);
+				if ($res){
+					$result = $this->notification_model->add(7, $this->uri->segment(4), $birth->bir_member_id);
+					if ($result){
+						$this->db->trans_complete();
+						$wheBirth['mem_id'] = $birth->bir_member_id;
+						$member = $this->memberModel->get_members($wheBirth)->row();
+						if ($member->mem_firebase_token){
+							$notif = $this->notificationtype_model->get_by_id(7);
+							$url = 'https://fcm.googleapis.com/fcm/send';
+							$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 
-				if ($birth->bir_member){
-					$result = $this->notification_model->add(7, $id, $birth->bir_member);
+							$fields = array (
+								'to' => $member->mem_firebase_token,
+								'notification' => array(
+									"channelId" => "ICRPedigree",
+									'title' => $notif[0]->title,
+									'body' => $notif[0]->description
+								)
+							);
+							$fields = json_encode ( $fields );
 
-					$whe_birth['mem_id'] = $birth->bir_member;
-					$member = $this->memberModel->get_members($whe_birth)->row();
-					if ($member->mem_firebase_token){
-						$notif = $this->notificationtype_model->get_by_id(7);
-						$url = 'https://fcm.googleapis.com/fcm/send';
-						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+							$headers = array (
+									'Authorization: key=' . $key,
+									'Content-Type: application/json'
+							);
 
-						$fields = array (
-							'to' => $member->mem_firebase_token,
-							'notification' => array(
-								"channelId" => "ICRPedigree",
-								'title' => $notif[0]->title,
-								'body' => $notif[0]->description
-							)
-						);
-						$fields = json_encode ( $fields );
+							$ch = curl_init ();
+							curl_setopt ( $ch, CURLOPT_URL, $url );
+							curl_setopt ( $ch, CURLOPT_POST, true );
+							curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+							curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+							curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
 
-						$headers = array (
-								'Authorization: key=' . $key,
-								'Content-Type: application/json'
-						);
-
-						$ch = curl_init ();
-						curl_setopt ( $ch, CURLOPT_URL, $url );
-						curl_setopt ( $ch, CURLOPT_POST, true );
-						curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-						curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-						curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-
-						$result = curl_exec ( $ch );
-						// echo $result;
-						curl_close ( $ch );
+							$result = curl_exec ( $ch );
+							// echo $result;
+							curl_close ( $ch );
+						}
+						$this->session->set_flashdata('reject', TRUE);
+						redirect('backend/Births/view_approve');
+					}
+					else{
+						$err = 1;
 					}
 				}
-
-				$this->db->trans_complete();
-				echo json_encode(array('data' => '1'));
+				else{
+					$err = 1;
+				}
+				if ($err){
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error', 'Lahir dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+					redirect('backend/Births/view_approve');
+				}
 			}
 			else{
-				$this->db->trans_rollback();
-				echo json_encode(array('data' => 'Data lahir gagal ditolak'));
+				redirect('backend/Births/view_approve');
 			}
 		}
 
