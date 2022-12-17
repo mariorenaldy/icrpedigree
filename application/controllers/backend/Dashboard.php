@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
-		private $navigations;
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
