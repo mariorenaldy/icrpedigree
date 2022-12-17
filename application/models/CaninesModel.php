@@ -1,7 +1,7 @@
 <?php
 class CaninesModel extends CI_Model {
     public function __construct(){
-        parent::__construct();
+        date_default_timezone_set("Asia/Bangkok");
     }
 
     // public function get_search($q){
@@ -89,7 +89,7 @@ class CaninesModel extends CI_Model {
     //   }
 
     public function get_canines($where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -181,42 +181,33 @@ class CaninesModel extends CI_Model {
     // }
 
     public function add_canines($data){
-        $result = false;
-        if ($data != null) {
-            $this->db->insert('canines', $data);
-            $result = $this->db->insert_id();
-        }
+        $this->db->insert('canines', $data);
+        $result = $this->db->insert_id();
         return $result;
     }
 
     public function update_canines($data, $where){
-        $result = false;
-        if ($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $result = $this->db->update('canines');
-        }
-        return $result;
+        $this->db->set($data);
+        $this->db->where($where);
+        $this->db->update('canines');
+        return $this->db->affected_rows();
     }
 
     public function get_dob_by_id($id){
         $sql = "SELECT DATE_FORMAT(can_date_of_birth, '%Y-%m-%d') as can_date_of_birth FROM canines WHERE can_id = ".$id;
         $query = $this->db->query($sql);
-        
         return $query->result();
     } 
 
     public function get_date_compare_sibling($damId, $dob){
         $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_dam_id = ".$damId;
         $query = $this->db->query($sql);
-        
         return $query->result();
     }
 
     public function get_date_compare_sibling_by_id($damId, $dob, $id){
         $sql = "SELECT datediff(DATE_FORMAT(c.can_date_of_birth, '%Y-%m-%d'), '".$dob."') as diff FROM canines c, pedigrees p WHERE c.can_id = p.ped_canine_id AND p.ped_dam_id = ".$damId." AND c.can_id <> ".$id;
         $query = $this->db->query($sql);
-        
         return $query->result();
     }
 
@@ -393,7 +384,6 @@ class CaninesModel extends CI_Model {
             $sql .= ' AND can_id <> '.$id;
         }
         $query = $this->db->query($sql);
-        
         return count($query->result());
     }
 
@@ -448,7 +438,6 @@ class CaninesModel extends CI_Model {
         if (count($piece) == 3){
             $date = $piece[2]."-".$piece[1]."-".$piece[0];
         }
-
         $sql = "select * from canines c, members m, kennels k where c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
         if ($date)
             $sql .= " OR c.can_date_of_birth LIKE '%".$date."%')";
@@ -456,7 +445,6 @@ class CaninesModel extends CI_Model {
             $sql .= ")";
         $sql .= " ORDER BY c.can_icr_number";
         $query = $this->db->query($sql);
-        
         return $query->result();
     }
 

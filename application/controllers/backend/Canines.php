@@ -1322,12 +1322,11 @@ class Canines extends CI_Controller {
 
   public function approve_canine(){
     if ($this->uri->segment(4)){
+      $err = 0;
       $where['can_id'] = $this->uri->segment(4);
       $can = $this->caninesModel->get_canines($where)->row();
-
       $this->db->trans_strict(FALSE);
       $this->db->trans_start();
-      $where['can_id'] = $this->uri->segment(4);
       $data['can_app_user'] = $this->session->userdata('use_id');
       $data['can_app_date'] = date('Y-m-d H:i:s');
       $data['can_app_stat'] = 1;
@@ -1377,18 +1376,17 @@ class Canines extends CI_Controller {
             redirect('backend/Canines/view_approve');
           }
           else{
-            $this->db->trans_rollback();
-            $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
-            redirect('backend/Canines/view_approve');
+            $err = 1;
           }
         }
         else{
-          $this->db->trans_rollback();
-          $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
-          redirect('backend/Canines/view_approve');
+          $err = 1;
         }
       }
       else{
+        $err = 1;
+      }
+      if ($err){
         $this->db->trans_rollback();
         $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
 				redirect('backend/Canines/view_approve');
@@ -1403,15 +1401,14 @@ class Canines extends CI_Controller {
     if ($this->uri->segment(4)){
       $where['can_id'] = $this->uri->segment(4);
       $can = $this->caninesModel->get_canines($where)->row();
-
       $this->db->trans_strict(FALSE);
       $this->db->trans_start();
-      $where['can_id'] = $this->uri->segment(4);
       $data['can_app_user'] = $this->session->userdata('use_id');
       $data['can_app_date'] = date('Y-m-d H:i:s');
       $data['can_app_stat'] = 2;
       $res = $this->caninesModel->update_canines($data, $where);
       if ($res){
+        $err = 0;
         $res2 = $this->notification_model->add(12, $this->uri->segment(4), $can->can_member_id);
         if ($res2){
           $this->db->trans_complete();
@@ -1452,12 +1449,13 @@ class Canines extends CI_Controller {
           redirect('backend/Canines/view_approve');
         }
         else{
-          $this->db->trans_rollback();
-          $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
-          redirect('backend/Canines/view_approve');
+          $err = 1;
         }
       }
       else{
+        $err = 1;
+      }
+      if ($err){
         $this->db->trans_rollback();
         $this->session->set_flashdata('error', 'Canine dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
 				redirect('backend/Canines/view_approve');

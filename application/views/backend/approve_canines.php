@@ -38,7 +38,7 @@
                     ?>
                 </div>
                 <div class="search-container">
-                    <form action="<?= base_url().'backend/Canines/search_approve'?>">
+                    <form action="<?= base_url().'backend/Canines/search_approve'?>" method="post">
                         <input type="text" placeholder="No. Registrasi/Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
