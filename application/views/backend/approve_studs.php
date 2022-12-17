@@ -21,8 +21,25 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3>Approve Stud</h3>
+                <div class="text-success">
+                    <?php		
+                        if ($this->session->flashdata('approve')){
+                            echo 'Pacak berhasil di-approve<br/>';
+                        }
+                    ?>
+                </div>
+                <div class="text-danger">
+                    <?php		
+                        if ($this->session->flashdata('error')){
+                            echo $this->session->flashdata('error').'<br/>';
+                        }
+                        if ($this->session->flashdata('reject')){
+                            echo 'Pacak berhasil ditolak<br/>';
+                        }
+                    ?>
+                </div>
                 <div class="search-container">
-                    <form action="/action_page.php">
+                    <form action="<?= base_url().'backend/Studs/search_approve'?>" method="post">
                         <input type="text" placeholder="Tanggal Pacak" name="keywords" id="keywords" autocomplete="off">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
@@ -49,8 +66,8 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve($s->stud_id)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject($s->stud_id)"><i class="fa fa-close"></i></button>
+                            <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -68,6 +85,18 @@
         $(id).readOnly = true;
     }
     setDatePicker('#keywords');
+    function approve(id){
+        var proceed = confirm("Approve pacak ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Studs/approve/"+id;
+        }
+    }
+    function reject(id){
+        var proceed = confirm("Reject pacak ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Studs/reject/"+id;
+        }
+    }
 </script>
 </body>
 </html>

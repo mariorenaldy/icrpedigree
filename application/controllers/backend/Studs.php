@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Studs extends CI_Controller {
-		private $navigations;
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
@@ -21,111 +20,161 @@ class Studs extends CI_Controller {
 		}
 
 		public function view_approve(){
-			$data['stud'] = $this->studModel->get_non_approved_studs()->result();
+			$where['stu_app_user'] = 0;
+			$data['stud'] = $this->studModel->get_studs($where)->result();
 			$this->load->view('backend/approve_studs', $data);
 		}
 
-		public function approve($id = null){
-			$where['stu_id'] = $id;
-			$stud = $this->studModel->get_studs($where)->row();
-			$cek = true;
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			$res = $this->studModel->check_date($id, $stud->stu_mom_id, $stud->stu_stud_date);
-			if (!$res){
-				$this->studModel->approve($id);
-				if ($stud->stu_member){
-					$result = $this->notification_model->add(1, $id, $stud->stu_member);
+		public function search_approve(){
+			$date = '';
+			$piece = explode("-", $this->input->post('keywords'));
+            if (count($piece) == 3){
+                $date = $piece[2]."-".$piece[1]."-".$piece[0];
+            }
+			if ($date){
+				$where['stu_stud_date'] = $date;
+			}
+			$where['stu_app_user'] = 0;
+			$data['stud'] = $this->studModel->get_studs($where)->result();
+			$this->load->view('backend/approve_studs', $data);
+		}
 
-					$whe['mem_id'] = $stud->stu_member;
-					$member = $this->memberModel->get_members($whe)->row();
-					if ($member->mem_firebase_token){
-						$notif = $this->notificationtype_model->get_by_id(1);
-						$url = 'https://fcm.googleapis.com/fcm/send';
-						$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+		public function approve(){
+			if ($this->uri->segment(4)){
+				$where['stu_id'] = $this->uri->segment(4);
+				$stud = $this->studModel->get_studs($where)->row();
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$data['stu_app_user'] = $this->session->userdata('use_id');
+				$data['stu_app_date'] = date('Y-m-d H:i:s');
+				$data['stu_stat'] = 1;
+				$res = $this->studModel->update_studs($data, $where);
+				if ($res){
+					$err = 0;
+					$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id);
+					if ($result){
+						$this->db->trans_complete();
+						$whe['mem_id'] = $stud->stu_member;
+						$member = $this->memberModel->get_members($whe)->row();
+						if ($member->mem_firebase_token){
+							$notif = $this->notificationtype_model->get_by_id(1);
+							$url = 'https://fcm.googleapis.com/fcm/send';
+							$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 
-						$fields = array (
-							'to' => $member->mem_firebase_token,
-							'notification' => array(
-								"channelId" => "ICRPedigree",
-								'title' => $notif[0]->title,
-								'body' => $notif[0]->description
-							)
-						);
-						$fields = json_encode ( $fields );
+							$fields = array (
+								'to' => $member->mem_firebase_token,
+								'notification' => array(
+									"channelId" => "ICRPedigree",
+									'title' => $notif[0]->title,
+									'body' => $notif[0]->description
+								)
+							);
+							$fields = json_encode ( $fields );
 
-						$headers = array (
-								'Authorization: key=' . $key,
-								'Content-Type: application/json'
-						);
+							$headers = array (
+									'Authorization: key=' . $key,
+									'Content-Type: application/json'
+							);
 
-						$ch = curl_init ();
-						curl_setopt ( $ch, CURLOPT_URL, $url );
-						curl_setopt ( $ch, CURLOPT_POST, true );
-						curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-						curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-						curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+							$ch = curl_init ();
+							curl_setopt ( $ch, CURLOPT_URL, $url );
+							curl_setopt ( $ch, CURLOPT_POST, true );
+							curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+							curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+							curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
 
-						$result = curl_exec ( $ch );
-						// echo $result;
-						curl_close ( $ch );
+							$result = curl_exec ( $ch );
+							// echo $result;
+							curl_close ( $ch );
+						}
+						$this->session->set_flashdata('approve', TRUE);
+						redirect('backend/Studs/view_approve');
+					}
+					else{
+						$err = 1;
 					}
 				}
-				$this->db->trans_complete();
-				echo json_encode(array('data' => '1'));
+				else{
+					$err = 1;
+				}
+				if ($err){
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error', 'Pacak dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+					redirect('backend/Studs/view_approve');
+				}
 			}
 			else{
-				$this->db->trans_rollback();
-				echo json_encode(array('data' => 'Pacak interval harus lebih dari 120 hari'));
+				redirect('backend/Studs/view_approve');
 			}
 		}
 
-		public function reject($id = null){
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			$this->studModel->reject($id);
-
-			$where['stu_id'] = $id;
-			$stud = $this->studModel->get_studs($where)->row();
-			if ($stud->stu_member){
-				$result = $this->notification_model->add(6, $id, $stud->stu_member);
-
-				$whe['mem_id'] = $stud->stu_member;
-				$member = $this->memberModel->get_members($whe)->row();
-				if ($member->mem_firebase_token){
-					$notif = $this->notificationtype_model->get_by_id(6);
-					$url = 'https://fcm.googleapis.com/fcm/send';
-					$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
-
-					$fields = array (
-						'to' => $member->mem_firebase_token,
-						'notification' => array(
-							"channelId" => "ICRPedigree",
-							'title' => $notif[0]->title,
-							'body' => $notif[0]->description
-						)
-					);
-					$fields = json_encode ( $fields );
-
-					$headers = array (
-							'Authorization: key=' . $key,
-							'Content-Type: application/json'
-					);
-
-					$ch = curl_init ();
-					curl_setopt ( $ch, CURLOPT_URL, $url );
-					curl_setopt ( $ch, CURLOPT_POST, true );
-					curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-					curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-					curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-
-					$result = curl_exec ( $ch );
-					// echo $result;
-					curl_close ( $ch );
+		public function reject(){
+			if ($this->uri->segment(4)){
+				$where['stu_id'] = $this->uri->segment(4);
+				$stud = $this->studModel->get_studs($where)->row();
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$data['stu_app_user'] = $this->session->userdata('use_id');
+				$data['stu_app_date'] = date('Y-m-d H:i:s');
+				$data['stu_stat'] = 2;
+				$res = $this->studModel->update_studs($data, $where);
+				if ($res){
+					$err = 0;
+					$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id);
+					if ($result){
+						$this->db->trans_complete();
+						$whe['mem_id'] = $stud->stu_member;
+						$member = $this->memberModel->get_members($whe)->row();
+						if ($member->mem_firebase_token){
+							$notif = $this->notificationtype_model->get_by_id(6);
+							$url = 'https://fcm.googleapis.com/fcm/send';
+							$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+		
+							$fields = array (
+								'to' => $member->mem_firebase_token,
+								'notification' => array(
+									"channelId" => "ICRPedigree",
+									'title' => $notif[0]->title,
+									'body' => $notif[0]->description
+								)
+							);
+							$fields = json_encode ( $fields );
+		
+							$headers = array (
+									'Authorization: key=' . $key,
+									'Content-Type: application/json'
+							);
+		
+							$ch = curl_init ();
+							curl_setopt ( $ch, CURLOPT_URL, $url );
+							curl_setopt ( $ch, CURLOPT_POST, true );
+							curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+							curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+							curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+							$result = curl_exec ( $ch );
+							// echo $result;
+							curl_close ( $ch );
+						}
+						$this->session->set_flashdata('reject', TRUE);
+						redirect('backend/Studs/view_approve');
+					}
+					else{
+						$err = 1;
+					}
+				}
+				else{
+					$err = 1;
+				}
+				if ($err){
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error', 'Pacak dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+					redirect('backend/Studs/view_approve');
 				}
 			}
-			$this->db->trans_complete();
-			echo json_encode(array('data' => '1'));
+			else{
+				redirect('backend/Studs/view_approve');
+			}
 		}
 
 		public function data($id = null){

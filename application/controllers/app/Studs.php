@@ -121,7 +121,7 @@ class Studs extends CI_Controller {
 		public function get_by_id(){
 			if ($this->uri->segment(4)){
 				$where['stu_id'] = $this->uri->segment(4);
-				$stud = $this->studModel->get_non_approved_studs($where)->row();
+				$stud = $this->studModel->get_studs($where)->row();
 				
 				$sireName = '';
 				$sire = $this->caninesModel->get_by_id_app($stud->stu_sire_id);
@@ -276,19 +276,28 @@ class Studs extends CI_Controller {
 				}
 
 				if ($cek){
-					$data = array(
-						'stu_photo' => $photo,
-						'stu_sire_id' => $this->input->post('stu_sire_id'),
-						'stu_dam_id' => $this->input->post('stu_dam_id'),
-						'stu_sire_photo' => $sire,
-						'stu_dam_photo' => $dam,
-						'stu_stud_date' => $date,
-						'stu_member_id' => $this->input->post('stu_member_id')
-					);
-					$stud = $this->studModel->add_studs($data);
-					echo json_encode([
-						'status' => true
-					]);
+					$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+					if (!$res){
+						$data = array(
+							'stu_photo' => $photo,
+							'stu_sire_id' => $this->input->post('stu_sire_id'),
+							'stu_dam_id' => $this->input->post('stu_dam_id'),
+							'stu_sire_photo' => $sire,
+							'stu_dam_photo' => $dam,
+							'stu_stud_date' => $date,
+							'stu_member_id' => $this->input->post('stu_member_id')
+						);
+						$stud = $this->studModel->add_studs($data);
+						echo json_encode([
+							'status' => true
+						]);
+					}
+					else{
+						echo json_encode([
+							'status' => false,
+							'message' => 'Pacak interval harus lebih dari 120 hari'
+						]);
+					}
 				}
 				else{
 					echo json_encode([
