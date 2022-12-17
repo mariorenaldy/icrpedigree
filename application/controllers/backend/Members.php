@@ -46,25 +46,30 @@ class Members extends CI_Controller {
 					$where['mem_id'] = $this->uri->segment(4);
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$this->memberModel->update_members($data, $where);
+					$res = $this->memberModel->update_members($data, $where);
+					if ($res){
+						$member = $this->memberModel->get_members($where)->row();
+						$this->email->set_mailtype('html');
+						$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+						$this->email->to($member->email);
+						$this->email->subject('Ubah Password');
 
-					$member = $this->memberModel->get_members($where)->row();
-					$this->email->set_mailtype('html');
-					$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
-					$this->email->to($member->email);
-					$this->email->subject('Ubah Password');
+						$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+						$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+						$message .= '<div>Salam </div>';
+						$message .= '<div>ICR Pedigree Customer Service</div>';
+						$message .= '<div><br/><hr/></div>';
 
-					$message = '<div>Kepada pengguna ICR Pedigree,</div>';
-					$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
-					$message .= '<div>Salam </div>';
-					$message .= '<div>ICR Pedigree Customer Service</div>';
-					$message .= '<div><br/><hr/></div>';
+						$this->email->message($message);
+						$res = $this->email->send();
 
-					$this->email->message($message);
-					$res = $this->email->send();
-
-					$this->session->set_flashdata('approve', TRUE);
-					redirect('backend/Members/view_approve');
+						$this->session->set_flashdata('approve', TRUE);
+						redirect('backend/Members/view_approve');
+					}
+					else{
+						$this->session->set_flashdata('error', 'Member dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+						redirect('backend/Members/view_approve');
+					}
 				}
 				else{
 					redirect('backend/Users/login');
@@ -82,10 +87,15 @@ class Members extends CI_Controller {
 					$data['mem_stat'] = $this->config->item('deactivated_member_status');
 					$data['mem_app_user'] = $this->session->userdata('use_username');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$this->memberModel->update_members($data, $where);
-
-					$this->session->set_flashdata('reject', TRUE);
-					redirect('backend/Members/view_approve');
+					$res = $this->memberModel->update_members($data, $where);
+					if ($res){
+						$this->session->set_flashdata('reject', TRUE);
+						redirect('backend/Members/view_approve');
+					}
+					else{
+						$this->session->set_flashdata('error', 'Member dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+						redirect('backend/Members/view_approve');
+					}
 				}
 				else{
 					redirect('backend/Users/login');
@@ -258,7 +268,9 @@ class Members extends CI_Controller {
 				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
 				return false;
 			}
-			$member = $this->memberModel->get_ktp_update($this->input->post('mem_ktp'), $id)->result();
+			$whe['mem_id != '] = $id;
+			$whe['mem_ktp'] = $this->input->post('mem_ktp');
+			$member = $this->memberModel->get_members($whe)->result();
 			if (count($member) > 1){
 				echo json_encode(array('data' => 'No. KTP sudah ada'));
 				return false;
@@ -712,24 +724,6 @@ class Members extends CI_Controller {
         $coordinator = $this->session->userdata('user_data');
         return isset($coordinator);
     }
-
-    private function _is_write_log($action, $description, $user){
-        $data['log_action'] = $action;
-        $data['log_description'] = json_encode($description);
-        $data['log_user'] = $user;
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        $data['log_ip'] = $ip;
-        $data['log_browser'] = $_SERVER['HTTP_USER_AGENT'];
-
-        $this->load->model('logModel');
-        $this->logModel->add_log($data);
-	}
 
 	public function _same_user($username) {
 		$user = $this->memberModel->daftar_users($username)->row_array();

@@ -233,7 +233,9 @@ class Members extends CI_Controller {
 				}
 				
 				if (!$err) {
-					$res = $this->memberModel->edit_password($obj['mem_id'], sha1($obj['newpass']));
+					$data['mem_password'] = sha1($obj['newpass']);
+					$where['mem_id'] = $obj['mem_id'];
+					$res = $this->memberModel->update_members($data, $where);
 					if ($res){
 						echo json_encode([
 							'status' => true
@@ -283,7 +285,7 @@ class Members extends CI_Controller {
 			}
 			
 			if (!$err){
-				$where['members.mem_username'] = $obj['username'];
+				$where['mem_username'] = $obj['username'];
 				$member = $this->memberModel->get_members($where)->row_array();
 				if ($member) {
 					if (!$member['mem_stat']){
@@ -310,7 +312,8 @@ class Members extends CI_Controller {
 						return false;
 					}
 
-					$res = $this->memberModel->edit_token($member['mem_id'], $obj['token']);
+					$data['mem_firebase_token'] = $obj['token'];
+					$res = $this->memberModel->update_members($data, $where);
 					if ($res){
 						echo json_encode([
 							'status' => true,
@@ -459,7 +462,8 @@ class Members extends CI_Controller {
 			}
 
 			if (!$err){
-				$member = $this->memberModel->daftar_users($this->input->post('mem_username'))->result();
+				$where['mem_username'] = $this->input->post('mem_username');
+				$member = $this->memberModel->get_members($where)->result();
 				if ($member) {
 					$err++;
 					echo json_encode([
@@ -470,7 +474,8 @@ class Members extends CI_Controller {
 			}
 
 			if (!$err){
-				$member = $this->memberModel->get_ktp($this->input->post('mem_ktp'))->result();
+				$whe['mem_ktp'] = $this->input->post('mem_ktp');
+				$member = $this->memberModel->get_members($whe)->result();
 				if ($member) {
 					$err++;
 					echo json_encode([

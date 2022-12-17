@@ -29,13 +29,16 @@
                 </div>
                 <div class="text-danger">
                     <?php		
+                        if ($this->session->flashdata('error')){
+                            echo $this->session->flashdata('error').'<br/>';
+                        }
                         if ($this->session->flashdata('reject')){
                             echo 'Member berhasil ditolak<br/>';
                         }
                     ?>
                 </div>
                 <div class="search-container">
-                    <form action="<?= base_url().'backend/Members/search_approve'?>">
+                    <form action="<?= base_url().'backend/Members/search_approve'?>" method="post">
                         <input type="text" placeholder="Nama/Alamat/No Telp." name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
