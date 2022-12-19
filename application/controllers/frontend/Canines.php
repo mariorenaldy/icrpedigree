@@ -6,10 +6,13 @@ class Canines extends CI_Controller {
 		parent::__construct();
 		$this->load->model('CaninesModel');
 		$this->load->model('MemberModel');
+		$this->load->model('trahModel');
 	}
 
 	public function index()
 	{
+		$data['trahs'] = $this->trahModel->get_trah()->result();
+		
 		$q1['mem_username'] = $this->session->userdata('username');
 		$memberid = $this->MemberModel->get_members($q1)->row()->mem_id;
 

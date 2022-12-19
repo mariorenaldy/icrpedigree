@@ -15,7 +15,7 @@
             </header>
 
             <div class="search-container">
-                <form action="/action_page.php">
+                <form action="/action_page.php" method="post">
                 <input type="text" placeholder="Tanggal Pacak" name="search">
                 <button type="submit"><i class="bi bi-search"></i></button>
                 </form>
