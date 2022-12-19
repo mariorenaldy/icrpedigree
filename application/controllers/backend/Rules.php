@@ -24,6 +24,7 @@ class Rules extends CI_Controller {
 		public function validate_add(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
+			$this->form_validation->set_rules('title', 'Judul ', 'trim|required');
 			$this->form_validation->set_rules('rule', 'Rule ', 'trim|required');
 
 			if ($this->form_validation->run() == FALSE){
@@ -31,6 +32,7 @@ class Rules extends CI_Controller {
 			}
 			else{
 				$data = array(
+					'ru_title' => $this->input->post('title'),
 					'ru_desc' => $this->input->post('rule'),
 				);
 				$rule = $this->rulesModel->add($data);
@@ -60,19 +62,25 @@ class Rules extends CI_Controller {
 		public function validate_edit(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
+			$this->form_validation->set_rules('title', 'Judul ', 'trim|required');
 			$this->form_validation->set_rules('rule', 'Rule ', 'trim|required');
 
 			$where['ru_rule_id'] = $this->input->post('rule_id');
 			$data['rule'] = $this->rulesModel->get_rules($where)->row();
+			$data['mode'] = 1;
 
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('backend/edit_rule', $data);
 			}
 			else{
-				$data = array(
+				// $trimedTitle = str_replace($this->input->post('title'), '', '::marker') ;
+				// $trimmedRule = str_replace('::marker', '', $this->input->post('rule')) ;
+				$dataRule = array(
+					'ru_title' => $this->input->post('title'),
 					'ru_desc' => $this->input->post('rule'),
 				);
-				$rule = $this->rulesModel->update($data, $where);
+				// echo $this->input->post('rule');
+				$rule = $this->rulesModel->update($dataRule, $where);
 				if ($rule){
 					$this->session->set_flashdata('edit_success', TRUE);
 					redirect('backend/Rules');

@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rules Management</title>
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
 </head>
 <body>
 <?php
@@ -43,16 +43,16 @@
                     <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i></button>
                 </form>
                 <div class="row">
-                    <div class="col-md-2"><b>Id</b></div>
-                    <div class="col-md-8"><b>Rule</b></div>
+                    <div class="col-md-3"><b>Judul</b></div>
+                    <div class="col-md-7"><b>Rule</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($rules AS $r){ ?>
                     <div class="row">
-                        <div class="col-md-2">
-                            <?= $r->ru_rule_id; ?>
+                        <div class="col-md-3">
+                            <?= $r->ru_title; ?>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <?= $r->ru_desc; ?>
                         </div>
                         <div class="col-md-2">
