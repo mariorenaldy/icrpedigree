@@ -34,6 +34,14 @@
                      </div>
                      <div class="dropdown">
                            <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Config
+                           </span>
+                           <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
+                           </ul>
+                     </div>
+                     <div class="dropdown">
+                           <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               <?= $this->session->userdata('use_username'); ?>
                            </span>
                            <ul class="dropdown-menu">
