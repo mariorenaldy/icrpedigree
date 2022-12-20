@@ -11,9 +11,11 @@
     <main class="container">
         <header class="d-flex flex-column align-items-center">
             <h2 class="fw-bold">Marketplace</h2>
+            <br/>
+            <h1>Under Heavy Construction</h1>
         </header>
         <div style="height: 500px;">
-
+            
         </div>
     </main>
     
