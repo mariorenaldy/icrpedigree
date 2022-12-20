@@ -90,11 +90,6 @@
                                 <button type="button" class="btn btn-light"><i class="fa fa-plus" aria-hidden="true"></i></button>
                             <?php } ?>
                         </div>
-                        <!-- <div class="col-md">
-                            <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
-                            <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button>
-                        </div> -->
                     </div>
                 <?php } ?>
             </div>                           
