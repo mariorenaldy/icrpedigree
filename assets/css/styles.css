@@ -48,10 +48,13 @@ hr{
     border-top: 3px solid white;
     opacity: 1;
 }
-
 #btn-masuk{
     background-color: #87FF4F;
 }
 #btn-daftar{
     background-color: #6BE4FF;
+}
+div.container{
+    margin-bottom: 10vh; 
+    margin-top: 5vh;
 }
