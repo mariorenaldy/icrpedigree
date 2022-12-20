@@ -4,8 +4,8 @@ class KenneltypeModel extends CI_Model{
 	public function __construct(){
 	}
 
-	public function get_kennel_types($where = null){
-        if ($where != null) {
+	public function get_kennel_types($where){
+        if ($where) {
             $this->db->where($where);
         }
         $this->db->where('ken_type_id > 0');
