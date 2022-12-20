@@ -1,21 +1,19 @@
 <?php
 
 class KennelModel extends CI_Model {
-    public function record_count() {
-        return $this->db->count_all("kennels");
-    }
+    // public function record_count() {
+    //     return $this->db->count_all("kennels");
+    // }
 
-    public function fetch_data($num, $offset) {
-        $this->db->order_by('ken_id', 'desc');
-        $data = $this->db->get('kennels', $num, $offset);
-        return $data;
-    }
+    // public function fetch_data($num, $offset) {
+    //     $this->db->order_by('ken_id', 'desc');
+    //     $data = $this->db->get('kennels', $num, $offset);
+    //     return $data;
+    // }
 
-    public function get_kennels($where = null){
+    public function get_kennels($where){
         $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name');
-        if ($where != null) {
-            $this->db->where($where);
-        }
+        $this->db->where($where);
         $this->db->from('kennels');
         $this->db->join('kennels_type','kennels_type.ken_type_id = kennels.ken_type_id');
         $this->db->join('members','members.mem_id = kennels.ken_member_id');
@@ -23,12 +21,12 @@ class KennelModel extends CI_Model {
         return $this->db->get();
     }
 
-    public function daftar_kennels($name = null){
-        if ($name)
-            $this->db->where('ken_name', $name);
-        $this->db->order_by('ken_id', 'desc');
-        return $this->db->get('kennels');
-    }
+    // public function daftar_kennels($name = null){
+    //     if ($name)
+    //         $this->db->where('ken_name', $name);
+    //     $this->db->order_by('ken_id', 'desc');
+    //     return $this->db->get('kennels');
+    // }
 
     public function get_kennels_simple($where = null){
         $this->db->select('ken_name AS name, ken_id AS id');
@@ -48,51 +46,46 @@ class KennelModel extends CI_Model {
         return $this->db->get('kennels');
     }
 
-    public function add_kennels($data = null){
-        $result = false;
-        if ($data != null) {
-            $result = $this->db->insert('kennels', $data);
-        }
+    public function add_kennels($data){
+        $this->db->insert('kennels', $data);
+        $result = $this->db->insert_id();
         return $result;
     }
 
-    public function update_kennels($data = null, $where = null){
-        $result = false;
-        if ($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $this->db->update('kennels');
-        }
-        return $result;
+    public function update_kennels($data, $where){
+        $this->db->set($data);
+        $this->db->where($where);
+        $this->db->update('kennels');
+        return $this->db->affected_rows();
     }
 
-    public function edit_kennels($data, $id){
-        $result = false;
-        if ($data != null && $id != null){
-            $this->db->where('ken_id', $id);
-            $result = $this->db->update('kennels', $data);
-        }
-        return $result;
-    }
+    // public function edit_kennels($data, $id){
+    //     $result = false;
+    //     if ($data != null && $id != null){
+    //         $this->db->where('ken_id', $id);
+    //         $result = $this->db->update('kennels', $data);
+    //     }
+    //     return $result;
+    // }
 
-    public function kennel_search($q = null){
-        $this->db->select('ken_id as id, ken_name as text');
-        if (isset($q)) {
-            $this->db->like('ken_name', $q);
-        }
-        $this->db->from('kennels');
-        $this->db->order_by('ken_id');
-        return $this->db->get();
-    }
+    // public function kennel_search($q = null){
+    //     $this->db->select('ken_id as id, ken_name as text');
+    //     if (isset($q)) {
+    //         $this->db->like('ken_name', $q);
+    //     }
+    //     $this->db->from('kennels');
+    //     $this->db->order_by('ken_id');
+    //     return $this->db->get();
+    // }
 
-    public function set_active($id, $status){
-        $data = array(
-            'ken_stat' => $status
-        );
-        $this->db->where('ken_id', $id);
+    // public function set_active($id, $status){
+    //     $data = array(
+    //         'ken_stat' => $status
+    //     );
+    //     $this->db->where('ken_id', $id);
 
-        $edit = $this->db->update('kennels', $data);
+    //     $edit = $this->db->update('kennels', $data);
 
-		return $edit; 
-    }
+	// 	return $edit; 
+    // }
 }

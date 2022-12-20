@@ -14,7 +14,7 @@ if($this->session->userdata('username')) : ?>
                             User
                         </span>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= base_url('frontend/logout') ?>">Logout</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('frontend/Members/logout') ?>">Logout</a></li>
                         </ul>
                     </div>
                     <a href="<?= base_url('frontend/marketplace') ?>" class="text-decoration-none text-reset link-primary">Marketplace</a>
@@ -25,9 +25,9 @@ if($this->session->userdata('username')) : ?>
 <?php else : ?>
             <nav class="navbar">
                 <div class="flex-container d-flex justify-content-around align-items-end container-fluid fs-5">
-                    <a href="<?= base_url('frontend/rules') ?>" class="text-decoration-none text-reset link-primary">Rules</a>
-                    <a href="<?= base_url('frontend/login') ?>" class="text-decoration-none text-reset link-primary">Member</a>
-                    <a href="<?= base_url('frontend/marketplace') ?>" class="text-decoration-none text-reset link-primary">Marketplace</a>
+                    <a href="<?= base_url('frontend/Rules') ?>" class="text-decoration-none text-reset link-primary">Rules</a>
+                    <a href="<?= base_url('frontend/Members') ?>" class="text-decoration-none text-reset link-primary">Member</a>
+                    <a href="<?= base_url('frontend/Marketplace') ?>" class="text-decoration-none text-reset link-primary">Marketplace</a>
                 </div>
             </nav>
             <hr>

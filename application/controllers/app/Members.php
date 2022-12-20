@@ -223,8 +223,8 @@ class Members extends CI_Controller {
 	
 			if (!$err){
 				$where['mem_id'] = $obj['mem_id'];
-				$member = $this->memberModel->get_members($where);
-				if (sha1($obj['password']) != $member->result()[0]->mem_password){
+				$member = $this->memberModel->get_members($where)->row();
+				if (sha1($obj['password']) != $member->mem_password){
 					$err++;
 					echo json_encode([
 						'status' => false,
@@ -286,7 +286,7 @@ class Members extends CI_Controller {
 			
 			if (!$err){
 				$where['mem_username'] = $obj['username'];
-				$member = $this->memberModel->get_members($where)->row_array();
+				$member = $this->memberModel->get_members($where)->row();
 				if ($member) {
 					if (!$member['mem_stat']){
 						echo json_encode([
@@ -356,7 +356,7 @@ class Members extends CI_Controller {
 			}
 	
 			if (!$err){
-				$where['members.mem_username'] = $obj['username'];
+				$where['mem_username'] = $obj['username'];
 				$member = $this->memberModel->get_members($where)->row_array();
 				if ($member){
 					echo json_encode([
@@ -463,7 +463,7 @@ class Members extends CI_Controller {
 
 			if (!$err){
 				$where['mem_username'] = $this->input->post('mem_username');
-				$member = $this->memberModel->get_members($where)->result();
+				$member = $this->memberModel->get_members($where)->num_rows();
 				if ($member) {
 					$err++;
 					echo json_encode([
@@ -475,7 +475,7 @@ class Members extends CI_Controller {
 
 			if (!$err){
 				$whe['mem_ktp'] = $this->input->post('mem_ktp');
-				$member = $this->memberModel->get_members($whe)->result();
+				$member = $this->memberModel->get_members($whe)->num_rows();
 				if ($member) {
 					$err++;
 					echo json_encode([
@@ -486,7 +486,8 @@ class Members extends CI_Controller {
 			}
 
 			if (!$err){
-				$kennel = $this->KennelModel->daftar_kennels($this->input->post('ken_name'))->result();
+				$whereKennel['ken_name'] = $this->input->post('ken_name');
+				$kennel = $this->KennelModel->get_kennels($whereKennel)->num_rows();
 				if ($kennel) {
 					$err++;
 					echo json_encode([
@@ -578,15 +579,14 @@ class Members extends CI_Controller {
 					'mem_password' => sha1($this->input->post('password'))
 				);
 
-				$ken_id = $this->KennelModel->record_count() + 1;
 				$kennel_data = array(
-					'ken_id' => $ken_id,
 					'ken_name' => $this->input->post('ken_name'),
 					'ken_type_id' => $this->input->post('ken_type_id'),
 					'ken_photo' => $logo,
 					'ken_member_id' => $mem_id
 				);
 
+				$err = 0;
 				$this->db->trans_strict(FALSE);
 				$this->db->trans_start();
 				$id = $this->memberModel->add_members($data);
@@ -599,14 +599,13 @@ class Members extends CI_Controller {
 						]);
 					}
 					else{
-						$this->db->trans_rollback();
-						echo json_encode([
-							'status' => false,
-							'message' => 'Failed to save account sign up data'
-						]);
+						$err = 1;
 					}
 				}
 				else {
+					$err = 2;
+				}
+				if ($err){
 					$this->db->trans_rollback();
 					echo json_encode([
 						'status' => false,
@@ -639,7 +638,7 @@ class Members extends CI_Controller {
 
 			if (!$err){
 				$where['mem_id'] = $obj['mem_id'];
-				$user = $this->memberModel->get_members($where)->row_array();
+				$user = $this->memberModel->get_members($where)->row();
 				if ($user == null) {
 					$err++;
 					echo json_encode([

@@ -5,9 +5,9 @@ class MemberModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    // public function record_count() {
-    //     return $this->db->count_all("members");
-    // }
+    public function record_count() {
+        return $this->db->count_all("members");
+    }
 
     // public function fetch_data($num, $offset) {
     //     $this->db->order_by('mem_id', 'desc');
