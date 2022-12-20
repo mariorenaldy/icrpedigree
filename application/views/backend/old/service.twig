@@ -1,0 +1,123 @@
+
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+
+
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+    }
+    .fileUpload input.upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    #imgPreview, #imgPreview-update{
+        /*border-radius:50%;*/
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Layanan</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+<div class="block">
+    <div class="block-header">
+        <h3 class="block-title text-center">Layanan</h3>
+    </div>
+    <div class="block-content">
+      <form class="form-horizontal push-30-t push-30" action="{{base_url()}}backend/services/update/{{service.ser_id}}" method="post" >
+          <div class="form-group">
+              <div class="col-xs-10 col-md-offset-1 push-10">
+                  <!-- CKEditor Container -->
+                  <label for="">Deskripsi Layanan</label>
+                  <textarea name="ser_desc" class="form-control" id="content1" rows="8" cols="80">{{service.ser_desc}}</textarea>
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-xs-10 col-md-offset-1 push-10">
+                  <!-- CKEditor Container -->
+                  <label for="">Aturan (Dalam Bahasa Indonesia)</label>
+                  <textarea id="content2" class="form-control" name="rule_ind" >{{service.ser_reg_rule_ind}}</textarea>
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-xs-10 col-md-offset-1 push-10">
+                  <!-- CKEditor Container -->
+                  <label for="">Aturan (Dalam Bahasa Ingris)</label>
+                  <textarea id="content3" class="form-control" name="rule_eng" >{{service.ser_reg_rule_eng}}</textarea>
+              </div>
+          </div>
+           <div class="form-group">
+              <div class="col-xs-10 col-md-offset-1">
+                  <button class="btn btn-sm btn-success pull-right" type="submit"><i class="fa fa-save" ></i> Simpan Perubahan</button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- <script src="{{ base_url() }}/assets/oneui/js/plugins/ckeditor/ckeditor.js"></script> -->
+<!-- Page JS Code -->
+
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_service.js"></script>
+<script>
+    jQuery(function () {
+      $('#content1, #content2, #content3').summernote({
+        height: 100,
+        minHeight: null,
+        maxHeight: null,
+        toolbar: [
+          // [groupName, [list of button]]
+          ['style', ['bold', 'italic', 'underline', 'clear']],
+          // ['font', ['strikethrough', 'superscript', 'subscript']],
+          ['fontsize', ['fontsize']],
+          // ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          // ['height', ['height']]
+        ]
+      });
+    });
+</script>
+{% endblock %}

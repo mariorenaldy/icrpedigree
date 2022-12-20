@@ -9,13 +9,13 @@
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
-<!-- <?php
-    if (!$this->session->userdata('use_username')){
+<?php
+    if (!$this->session->userdata('username')){
         echo '<script type="text/javascript">';
-        echo 'window.location = "'.base_url().'backend/Users/login";';
+        echo 'window.location = "'.base_url().'frontend/login";';
         echo '</script>';
     }
-?> -->
+?>
 <?php $this->load->view('frontend/layout/header'); ?>  
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container mt-5" style="margin-bottom: 10vh;">

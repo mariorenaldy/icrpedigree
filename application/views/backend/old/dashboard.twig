@@ -1,0 +1,231 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+	<div class="col-sm-12 text-right hidden-xs">
+		<ol class="breadcrumb">
+			<li>Dashboard</li>
+		</ol>
+	</div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+	<!-- Dynamic Table Full -->
+	<div class="block">
+		<div class="block-header text-center bg-gray-lighter">
+
+			<h4> <small>Dashboard</small></h4>
+		</div>
+		<div class="block-content table-requonsive">
+			{% if users.use_akses == 1 %}
+			<div class="row">
+				<div class="col-md-4">
+					<a class="block block-link-hover3" href="{{base_url()}}backend/canines">
+						<div class="block-content block-content-full text-center bg-danger ribbon ribbon-bookmark ribbon-crystal">
+							<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+								<i class="text-white-op">{{canine}}</i>
+							</div>
+							<div class="text-white-op">
+								<em>Canine</em>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4">
+					<!-- ARTechnology -->
+					<a class="block block-link-hover3" href="{{base_url()}}backend/members">
+					<!-- ARTechnology -->
+						<div class="block-content block-content-full text-center bg-amethyst ribbon ribbon-bookmark ribbon-crystal">
+							<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+								<i class="text-white-op">
+									<!-- ARTechnology -->
+									{{member}}
+									<!-- ARTechnology -->
+								</i>
+							</div>
+							<div class="text-white-op">
+								<em>
+									<!-- ARTechnology -->
+									Member
+									<!-- ARTechnology -->
+								</em>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4">
+					<!-- ARTechnology -->
+					<a class="block block-link-hover3" href="{{base_url()}}backend/studs/view">
+					<!-- ARTechnology -->
+						<div class="block-content block-content-full text-center bg-success ribbon ribbon-bookmark ribbon-crystal">
+							<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+								<i class="text-white-op"><!-- ARTechnology -->
+									{{stud}}
+									<!-- ARTechnology --></i>
+							</div>
+							<div class="text-white-op">
+								<em>
+									<!-- ARTechnology -->
+									Pacak
+									<!-- ARTechnology -->
+								</em>
+							</div>
+						</div>
+					</a>
+				</div>
+				</div>
+				<div class="row">
+					<!-- ARTechnology -->
+					<div class="col-md-4">
+						<a class="block block-link-hover3" href="{{base_url()}}backend/births/view">
+							<div class="block-content block-content-full text-center bg-primary-dark ribbon ribbon-bookmark ribbon-crystal">
+								<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+									<i class="text-white-op">{{birth}}</i>
+								</div>
+								<div class="text-white-op">
+									<em>Birth</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-4">
+						<a class="block block-link-hover3" href="{{base_url()}}backend/events">
+							<div class="block-content block-content-full text-center bg-warning ribbon ribbon-bookmark ribbon-crystal">
+
+								<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+									<i class="text-white-op">{{event}}</i>
+								</div>
+								<div class="text-white-op">
+									<em>Event</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="col-md-4">
+						<a class="block block-link-hover3" href="{{base_url()}}backend/products">
+							<div class="block-content block-content-full text-center bg-info ribbon ribbon-bookmark ribbon-crystal">
+
+								<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+									<i class="text-white-op">{{product}}</i>
+								</div>
+								<div class="text-white-op">
+									<em>Produk</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- ARTechnology -->
+				</div>
+				{% elseif users.use_akses == 2 %}
+				<div class="row">
+					<div class="col-md-3">
+						<a class="block block-link-hover3" href="{{base_url()}}backend/canines">
+							<div class="block-content block-content-full text-center bg-danger ribbon ribbon-bookmark ribbon-crystal">
+								<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+									<i class="text-white-op">{{canine}}</i>
+								</div>
+								<div class="text-white-op">
+									<em>Canine</em>
+								</div>
+							</div>
+						</a>
+					</div>
+
+					<div class="col-md-3">
+						<a class="block block-link-hover3" href="#">
+							<div class="block-content block-content-full text-center bg-success ribbon ribbon-bookmark ribbon-crystal">
+
+								<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+									<i class="text-white-op">{{pegawai|length}}</i>
+								</div>
+								<div class="text-white-op">
+									<em>Pegawai</em>
+								</div>
+							</div>
+						</a>
+					</div>
+
+						<div class="col-md-3">
+							<a class="block block-link-hover3" href="{{base_url()}}backend/events">
+								<div class="block-content block-content-full text-center bg-warning ribbon ribbon-bookmark ribbon-crystal">
+
+									<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+										<i class="text-white-op">{{event}}</i>
+									</div>
+									<div class="text-white-op">
+										<em>Event</em>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-3">
+							<a class="block block-link-hover3" href="{{base_url()}}backend/products">
+								<div class="block-content block-content-full text-center bg-info ribbon ribbon-bookmark ribbon-crystal">
+
+									<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+										<i class="text-white-op">{{product}}</i>
+									</div>
+									<div class="text-white-op">
+										<em>Produk</em>
+									</div>
+								</div>
+							</a>
+						</div>
+
+					</div>
+					{% elseif users.use_akses == 3 %}
+
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-4">
+							<a class="block block-link-hover3" href="{{base_url()}}backend/events">
+								<div class="block-content block-content-full text-center bg-warning ribbon ribbon-bookmark ribbon-crystal">
+
+									<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+										<i class="text-white-op">{{event}}</i>
+									</div>
+									<div class="text-white-op">
+										<em>Event</em>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-4">
+							<a class="block block-link-hover3" href="{{base_url()}}backend/products">
+								<div class="block-content block-content-full text-center bg-info ribbon ribbon-bookmark ribbon-crystal">
+
+									<div class="item item-2x item-circle bg-crystal-op push-20-t push-20">
+										<i class="text-white-op">{{product}}</i>
+									</div>
+									<div class="text-white-op">
+										<em>Produk</em>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+
+			{% endif %}
+
+
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+{% endblock %}

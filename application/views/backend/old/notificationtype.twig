@@ -1,0 +1,97 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Notifikasi</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <h4> <small>Daftar</small> Notifikasi</h4>
+        </div>
+        <div class="block-content table-responsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/notif.js -->
+            <table class="table table-borderless table-striped data-notif">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Deskripsi</th>
+                        <th class="text-center" width="1%">#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-update-notif" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top modal-lg">
+        <div class="modal-content">
+            <form action="" class="form-update-notif form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Ubah Notifikasi</h3>
+                </div>
+                <div class="block-content">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label for="title-update-notif">Judul</label>
+                          <input class="form-control" id="title-update-notif" name="title" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12" id="description-update">
+                          <label for="description-update-notif">Deskripsi</label>
+                          <textarea class="form-control" name="description" id="description-update-notif"  rows="4" cols="20" required></textarea>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary submit-update-notif">Save</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal update-->
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_notif.js"></script>
+{% endblock %}

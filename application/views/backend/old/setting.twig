@@ -1,0 +1,117 @@
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ base_url() }}assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{{ base_url() }}assets/oneui/js/plugins/summernote/summernote.min.css">
+<link rel="stylesheet" href="{{base_url()}}assets/sweetalert/dist/sweetalert.css" >
+<link rel="stylesheet" href="{{base_url()}}assets/oneui/css/bootstrap-editable.css" >
+
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrum" style="margin-top:-10px">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="{{base_url()}}" class="link-effect">Dashboard</a></li>
+            <li>Pengaturan</li>
+        </ol>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div class="content content-boxed">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="block">
+            <div class="block-content block-content-full" style="text-align:justify !important;">
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                   <table class="table">
+                      <tr>
+                        <th colspan="3">
+                            <center>
+                                Pengaturan
+                            </center>
+                        </th>
+                      </tr>
+                        <tr>
+                            <td width="20%">Harga Sertifikat</td>
+                            <td width="1">:</td>
+                            <td>RP &nbsp;
+                              <a id="set_certificate_price" href="#" data-type="number" data-pk="1" data-title="Nama Perusahaan" class="editable editable-click">{{setting.set_certificate_price}}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="20%">Poin Juara 1</td>
+                            <td width="1% ">:</td>
+                            <td>
+                              <a id="set_first_champion_score" href="#" data-type="number" data-pk="1" data-title="Nama Perusahaan" class="editable editable-click">{{setting.set_first_champion_score}}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="20%">Poin Juara 2</td>
+                            <td width="1">:</td>
+                            <td>
+                              <a id="set_second_champion_score" href="#" data-type="number" data-pk="1" data-title="Nama Perusahaan" class="editable editable-click">{{setting.set_second_champion_score}}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="20%">Poin Juara 3</td>
+                            <td width="1">:</td>
+                            <td>
+                              <a id="set_third_champion_score" href="#" data-type="number" data-pk="1" data-title="Nama Perusahaan" class="editable editable-click">{{setting.set_third_champion_score}}</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="20%">Term & Condition</td>
+                            <td width="1">:</td>
+                            <td>
+                              <a id="set_tc" href="#" data-type="textarea" data-pk="1" data-title="Term & Condition" class="editable editable-click">{{setting.set_tc}}</a>
+                            </td>
+                        </tr>
+
+                        <!-- <tr>
+                            <td>Status</td>
+                            <td>:</td>
+                            {# <td>{{setting.set_status}}</td> #}
+                        </tr> -->
+
+                    </table>
+                </div>
+
+            </div>
+            </div></div>
+        </div>
+    </div>
+
+</div>
+
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<input type="hidden" value="{{setting.set_id}}" class="studentId" />
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ base_url() }}assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<!-- Page JS Code -->
+<script src="{{ base_url() }}assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/pages/base_forms_wizard.js"></script>
+<script src="{{base_url()}}assets/sweetalert/dist/sweetalert.min.js"></script>
+<!-- <script src="{{ base_url() }}assets/oneui/js/pages/set_password.js"></script> -->
+
+<script src="{{ base_url() }}assets/oneui/js/bootstrap-editable.js"></script>
+<script src="{{ base_url() }}assets/oneui/js/pages/adm_setting.js"></script>
+
+{% endblock %}

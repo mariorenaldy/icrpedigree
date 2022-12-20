@@ -1,0 +1,222 @@
+{# ARTechnology #}
+{% extends "template/backend.twig" %}
+
+{% block styles %}
+<!-- Page JS Plugins CSS -->
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.css">
+<link rel="stylesheet" href="{{ base_url() }}/assets/oneui/css/search.css" media="screen" title="no title" charset="utf-8">
+
+<style>
+    .fileUpload {
+        position: relative;
+        overflow: hidden;
+    }
+    .fileUpload input.upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    #imgPreview, #imgPreview-update{
+        /*border-radius:50%;*/
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content wrap-breadcrumb">
+    <div class="col-sm-12 text-right hidden-xs">
+        <ol class="breadcrumb">
+            <li><a href="/dashboard" class="link-effect">Dashboard</a></li>
+            <li>Kennels</li>
+        </ol>
+    </div>
+</div>
+<!-- Page Content -->
+
+<div class="content">
+<!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header text-center bg-gray-lighter">
+            <button class="btn btn-success btn-activate-kennel pull-left"  data-toggle="tooltip" title="Aktivasi yang dipilih" disabled><i class="si si-check"></i></button>
+            <button class="btn btn-danger btn-deactivate-kennel pull-left"  data-toggle="tooltip" title="Deaktivasi yang dipilih" disabled><i class="si si-close"></i></button>
+
+            <button class="btn btn-primary btn-add-kennel pull-right" onClick="openModal('#modal-add-kennel', 'add')" data-toggle="tooltip" title="Tambah Kennel"><i class="si si-note"></i></button>
+            <h4>Daftar Kennel</h4>
+        </div>
+        <div class="block-content">
+            <div class="table-responsive">
+            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/employee.js -->
+                <table class="table table-borderless table-striped data-kennels">
+                    <thead>
+                        <tr>
+                            <th width="5">
+                                <div class="checkbox-kennel-all">
+                                <input type="checkbox" data-toggle="tooltip" title="Select all">
+                                </div>
+                            </th>
+                            <th width="1%">Foto</th>
+                            <th>Nama</th>
+                            <th>Format Penamaan Canine</th>
+                            <th>Status</th>
+                            <th class="text-center" width="1%">#</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modals -->
+<div class="modal fade" id="modal-add-kennel" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <form action="{{base_url()}}backend/kennels/add" class="form-add-kennel form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Tambah Kennel</h3>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                      <div class="col-xs-4 col-xs-offset-4">
+                          <img id="imgPreview-update" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                          <div class="fileUpload btn btn-default btn-flat btn-block">
+                              <span>Upload Logo</span>
+                              <input type="file" class="upload" name="photo" id="imageInput" />
+                              <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop-update" />
+                          </div>
+                          <!-- <small class="text-muted">Ratio 1:1</small> -->
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="name-add-kennel">Nama Kennel</label>
+                            <input class="form-control" id="name-add-kennel" name="ken_name" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="format-add-kennel">Format Penamaan Canine</label>
+                            <select class="form-control" id="format-add-kennel" name="ken_type_id" required>
+                                {% for ken_type in ken_types %}
+                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_type_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary submit-add-kennel">Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal add-->
+
+<div class="modal fade" id="modal-update-kennel" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top modal-md">
+        <div class="modal-content">
+            <form action="" class="form-update-kennel form-horizontal" method="post">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">Ubah Kennel</h3>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <div class="col-xs-4 col-xs-offset-4">
+                            <img id="imgPreview-update" width="100%" src="{{base_url()}}assets/oneui/img/avatars/avatar1.jpg">
+                            <div class="fileUpload btn btn-default btn-flat btn-block">
+                                <span>Upload Logo</span>
+                                <input type="file" class="upload" name="photo" id="imageInput" />
+                                <input type="hidden" class="" name="srcDataCrop" id="srcDataCrop" />
+                            </div>
+                            <!-- <small class="text-muted">Ratio 1:1</small> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="name-update-kennel">Nama Kennel</label>
+                            <input class="form-control" id="name-update-kennel" name="ken_name" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="format-update-kennel">Format Penamaan Canine</label>
+                            <select class="form-control" id="format-update-kennel" name="ken_type_id" required>
+                                {% for ken_type in ken_types %}
+                                    <option value="{{ken_type.ken_type_id}}">{{ken_type.ken_type_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary submit-update-kennel">Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal update-->
+
+<div class="modal fade" id="cropper-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-popout modal-dialog-top">
+    <div class="modal-content">
+        <div class="block block-themed block-transparent remove-margin-b">
+            <div class="block-header bg-primary-dark">
+                <ul class="block-options">
+                    <li>
+                        <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                    </li>
+                </ul>
+                <h3 class="block-title">Image Cropper</h3>
+            </div>
+            <div class="block-content">
+                <div id="cropper-wrap-img">
+                    <img width="100%" src="/img/default.png" alt="Picture">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
+            <button type="button" class="btn btn-primary btn-crop">Crop</button>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Page JS Plugins -->
+<script src="{{ base_url() }}/assets/oneui/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/shiftcheckbox/jquery.shiftcheckbox.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/cropper/dist/cropper.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{ base_url() }}/assets/oneui/js/plugins/summernote/summernote.min.js"></script>
+<!-- Page JS Code -->
+<input type="hidden" value="{{ base_url() }}" class="base_url" />
+<script src="{{ base_url() }}/assets/oneui/js/pages/adm_kennel.js"></script>
+{% endblock %}
