@@ -182,8 +182,7 @@ class CaninesModel extends CI_Model {
 
     public function add_canines($data){
         $this->db->insert('canines', $data);
-        $result = $this->db->insert_id();
-        return $result;
+        return $this->db->insert_id();
     }
 
     public function update_canines($data, $where){

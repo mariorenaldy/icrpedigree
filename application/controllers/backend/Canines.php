@@ -14,7 +14,17 @@ class Canines extends CI_Controller {
     }
 
     public function index(){
+        $where['can_app_user'] = 1;
+        $data['canine'] = $this->caninesModel->get_canines($where)->result();
+        $this->load->view('backend/view_canines', $data);
+    }
 
+    public function search(){
+        $like['can_a_s'] = $this->input->post('keywords');
+        $like['can_icr_number'] = $this->input->post('keywords');
+        $where['can_app_user'] = 1;
+        $data['canine'] = $this->caninesModel->search_canines($like, $where)->result();
+        $this->load->view('backend/view_canines', $data);
     }
 
     public function view_approve(){
@@ -1334,8 +1344,6 @@ class Canines extends CI_Controller {
       if ($res){
         $wherePed['ped_canine_id'] = $this->uri->segment(4);
         $dataPed['ped_stat'] = 1;
-        // echo $wherePed['ped_canine_id'].'<br/>';
-        // echo $dataPed['ped_stat'].'<br/>';
         $res2 = $this->pedigreesModel->update_pedigrees($dataPed, $wherePed);
         if ($res2){
           $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id);
@@ -1390,7 +1398,7 @@ class Canines extends CI_Controller {
       }
       if ($err){
         $this->db->trans_rollback();
-        $this->session->set_flashdata('error', 'Canine dengan nama = '.$can->can_a_s.' tidak dapat di-approve.'.$err);
+        $this->session->set_flashdata('error', 'Canine dengan nama = '.$can->can_a_s.' tidak dapat di-approve.');
 				redirect('backend/Canines/view_approve');
       }
     }
