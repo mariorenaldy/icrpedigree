@@ -579,7 +579,9 @@ class Members extends CI_Controller {
 					'mem_password' => sha1($this->input->post('password'))
 				);
 
+				$ken_id = $this->KennelModel->record_count() + 1;
 				$kennel_data = array(
+					'ken_id' => $ken_id,
 					'ken_name' => $this->input->post('ken_name'),
 					'ken_type_id' => $this->input->post('ken_type_id'),
 					'ken_photo' => $logo,
