@@ -5,7 +5,8 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KenneltypeModel'));
+			$this->load->model(array('MemberModel', 'KenneltypeModel', 'KennelModel'));
+			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
@@ -13,8 +14,7 @@ class Members extends CI_Controller {
 
 		public function index(){
             if (!$this->session->userdata('username')){
-                $data['content'] = 'login';
-                $this->load->view("frontend/login_form", $data);
+                $this->load->view("frontend/login_form");
             }
             else{
                 redirect("frontend/Beranda");
@@ -46,8 +46,7 @@ class Members extends CI_Controller {
 				redirect("frontend/Beranda");
 			}
 			else{
-				$data['content'] = 'login';
-				$this->load->view("frontend/login_form", $data);
+				$this->load->view("frontend/login_form");
 			}
 		}
 
@@ -57,12 +56,12 @@ class Members extends CI_Controller {
 		}
 
 		public function register(){
-			$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
-			$this->load->view("frontend/register", $data);
+			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+			$this->load->view("frontend/register", $dataReg);
 		}
 
 		public function validate_register(){
-			$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 
 			$err = 0;
 			if (empty($this->input->post('mem_name'))){
@@ -122,7 +121,7 @@ class Members extends CI_Controller {
 	
 			if (!$err){
 				$where['mem_username'] = $this->input->post('mem_username');
-				$member = $this->memberModel->get_members($where)->num_rows();
+				$member = $this->MemberModel->get_members($where)->num_rows();
 				if ($member) {
 					$err++;
 					$this->session->set_flashdata('error_message', 'Username sudah ada');
@@ -131,7 +130,7 @@ class Members extends CI_Controller {
 	
 			if (!$err){
 				$whe['mem_ktp'] = $this->input->post('mem_ktp');
-				$member = $this->memberModel->get_members($whe)->num_rows();
+				$member = $this->MemberModel->get_members($whe)->num_rows();
 				if ($member) {
 					$err++;
 					$this->session->set_flashdata('error_message', 'No. KTP sudah ada');
@@ -149,40 +148,46 @@ class Members extends CI_Controller {
 	
 			$photo = '-';
 			if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-				$this->upload->initialize($this->config->item('upload_member'));
-				if ($this->upload->do_upload('attachment_member')){
-					$uploadData = $this->upload->data();
-					$photo = $uploadData['file_name'];
-				}
-				else{
-					$err++;
-					$this->session->set_flashdata('error_message', $this->upload->display_errors());
+				if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_member'));
+					if ($this->upload->do_upload('attachment_member')){
+						$uploadData = $this->upload->data();
+						$photo = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					}
 				}
 			}
 	
 			$pp = '-';
 			if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-				$this->upload->initialize($this->config->item('upload_member'));
-				if ($this->upload->do_upload('attachment_pp')){
-					$uploadData = $this->upload->data();
-					$pp = $uploadData['file_name'];
-				}
-				else{
-					$err++;
-					$this->session->set_flashdata('error_message', $this->upload->display_errors());
+				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_member'));
+					if ($this->upload->do_upload('attachment_pp')){
+						$uploadData = $this->upload->data();
+						$pp = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					}
 				}
 			}
 	
 			$logo = '-';
 			if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-				$this->upload->initialize($this->config->item('upload_kennel'));
-				if ($this->upload->do_upload('attachment_logo')){
-					$uploadData = $this->upload->data();
-					$logo = $uploadData['file_name'];
-				}
-				else{
-					$err++;
-					$this->session->set_flashdata('error_message', $this->upload->display_errors());
+				if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+					$this->upload->initialize($this->config->item('upload_kennel'));
+					if ($this->upload->do_upload('attachment_logo')){
+						$uploadData = $this->upload->data();
+						$logo = $uploadData['file_name'];
+					}
+					else{
+						$err++;
+						$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					}
 				}
 			}
 	
@@ -214,7 +219,9 @@ class Members extends CI_Controller {
 					'mem_password' => sha1($this->input->post('password'))
 				);
 	
+				$ken_id = $this->KennelModel->record_count() + 1;
 				$kennel_data = array(
+					'ken_id' => $ken_id,
 					'ken_name' => $this->input->post('ken_name'),
 					'ken_type_id' => $this->input->post('ken_type_id'),
 					'ken_photo' => $logo,
@@ -242,8 +249,11 @@ class Members extends CI_Controller {
 				if ($err){
 					$this->db->trans_rollback();
 					$this->session->set_flashdata('error_message', 'Failed to save account sign up data');
-					$this->load->view("frontend/register", $data);
+					$this->load->view("frontend/register", $dataReg);
 				}
+			}
+			else{
+				$this->load->view("frontend/register", $dataReg);
 			}
 		}
 }

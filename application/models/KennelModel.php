@@ -1,9 +1,9 @@
 <?php
 
 class KennelModel extends CI_Model {
-    // public function record_count() {
-    //     return $this->db->count_all("kennels");
-    // }
+    public function record_count() {
+        return $this->db->count_all("kennels");
+    }
 
     // public function fetch_data($num, $offset) {
     //     $this->db->order_by('ken_id', 'desc');
@@ -48,8 +48,7 @@ class KennelModel extends CI_Model {
 
     public function add_kennels($data){
         $this->db->insert('kennels', $data);
-        $result = $this->db->insert_id();
-        return $result;
+        return $this->db->affected_rows();
     }
 
     public function update_kennels($data, $where){

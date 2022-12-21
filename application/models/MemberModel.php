@@ -68,13 +68,9 @@ class MemberModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function add_members($data = null){
-        $result = false;
-        if ($data != null) {
-            $this->db->insert('members', $data);
-            $result = $this->db->insert_id();
-        }
-        return $result;
+    public function add_members($data){
+        $this->db->insert('members', $data);
+        return $this->db->affected_rows();
     }
 
     public function update_members($data, $where){
