@@ -23,8 +23,7 @@ class BirthModel extends CI_Model {
         }
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
-        $this->db->join('kennels','kennels.ken_id = births.bir_kennel_id');
-        $this->db->join('members','members.mem_id = births.bir_member_id AND members.mem_id = kennels.ken_member_id');
+        $this->db->join('members','members.mem_id = births.bir_member_id');
         $this->db->order_by('births.bir_date', 'desc');
         return $this->db->get();
     }
@@ -40,8 +39,7 @@ class BirthModel extends CI_Model {
         }
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
-        $this->db->join('kennels','kennels.ken_id = births.bir_kennel_id');
-        $this->db->join('members','members.mem_id = births.bir_member_id AND members.mem_id = kennels.ken_member_id');
+        $this->db->join('members','members.mem_id = births.bir_member_id');
         $this->db->order_by('births.bir_date', 'desc');
         return $this->db->get();
     }
@@ -101,11 +99,9 @@ class BirthModel extends CI_Model {
             }
         }
 
-        $sql = "SELECT * FROM births s, users u, members m, approval_status a, kennels k WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member_id AND k.ken_member_id = s.bir_member_id AND k.ken_id = s.bir_kennel_id AND m.mem_id = ".$bir_member." AND (s.bir_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
+        $sql = "SELECT * FROM births s, users u, members m, approval_status a WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member_id AND m.mem_id = ".$bir_member;
         if ($date)
-            $sql .= " OR s.bir_date_of_birth LIKE '%".$date."%')";
-        else
-            $sql .= ")";
+            $sql .= " AND s.bir_date_of_birth LIKE '%".$date."%'";
         $sql .= " ORDER BY s.bir_date DESC LIMIT ".$offset.", ".$this->config->item('birth_count');
         $query = $this->db->query($sql);
         return $query->result();
@@ -120,11 +116,9 @@ class BirthModel extends CI_Model {
             }
         }
 
-        $sql = "SELECT COUNT(*) AS count FROM births s, users u, members m, approval_status a, kennels k WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member_id AND k.ken_member_id = s.bir_member_id AND k.ken_id = s.bir_kennel_id AND m.mem_id = ".$bir_member." AND (s.bir_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
+        $sql = "SELECT COUNT(*) AS count FROM births s, users u, members m, approval_status a WHERE u.use_id = s.bir_app_user AND a.stat_id = s.bir_stat AND m.mem_id = s.bir_member_id AND m.mem_id = ".$bir_member;
         if ($date)
             $sql .= " OR s.bir_date_of_birth LIKE '%".$date."%')";
-        else
-            $sql .= ")";
         $query = $this->db->query($sql);
         return $query->result();
     }
