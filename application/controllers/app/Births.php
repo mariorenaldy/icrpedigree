@@ -111,7 +111,7 @@ class Births extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && $this->input->post('bir_male') == 0){
+			if (!$err && $this->input->post('bir_male') == ''){
 				$err++;
 				echo json_encode([
 					'status' => false,
@@ -119,7 +119,7 @@ class Births extends CI_Controller {
 				]); 
 			}
 
-			if (!$err && $this->input->post('bir_female') == 0){
+			if (!$err && $this->input->post('bir_female') == ''){
 				$err++;
 				echo json_encode([
 					'status' => false,
@@ -170,8 +170,7 @@ class Births extends CI_Controller {
 		
 						$ts = new DateTime($date);
 						$ts_stud = new DateTime($stud->stu_stud_date);
-						$ts_now = new DateTime();
-						if ($ts_stud > $ts_now){
+						if ($ts_stud > $ts){
 							$err++;
 							echo json_encode([
 								'status' => false,
@@ -179,7 +178,7 @@ class Births extends CI_Controller {
 							]); 
 						}
 						else{
-							$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_lahir'));
+							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
 							if ($diff > 1){
 								$err++;
 								echo json_encode([
@@ -204,6 +203,7 @@ class Births extends CI_Controller {
 							'bir_dam_photo' => $damPhoto,
 							'bir_male' => $this->input->post('bir_male'),
 							'bir_female' => $this->input->post('bir_female'),
+							'bir_date_of_birth' => $date,
 						);
 						$births = $this->birthModel->add_births($data);
 						if ($births){
@@ -310,43 +310,21 @@ class Births extends CI_Controller {
 				}
 
 				if (!$err){
-					$cek = true;
-					$piece = explode("-", $this->input->post('bir_date_of_birth'));
-					$date = $piece[2]."-".$piece[1]."-".$piece[0];
-			
-					$ts = new DateTime($date);
-					$ts_now = new DateTime();
-					
-					if ($ts > $ts_now)
-						$cek = false;
-					else{
-						$diff = floor($ts->diff($ts_now)->days/7);
-						if ($diff > 1)
-							$cek = false;
-					}
-
-					if ($cek){
-						$data = array(
-							'bir_a_s' => $this->input->post('bir_a_s'),
-							'bir_breed' => $this->input->post('bir_breed'),
-							'bir_gender' => $this->input->post('bir_gender'),
-							'bir_color' => $this->input->post('bir_color'),
-							'bir_date_of_birth' => $date
-						);
-						if ($photo)
-							$data['bir_photo'] = $photo;
-						if ($damPhoto)
-							$data['bir_dam_photo'] = $damPhoto;
-						$this->birthModel->update_births($data, $where);
-						echo json_encode([
-							'status' => true
-						]);
-					}
-					else
-						echo json_encode([
-							'status' => false,
-							'message' => 'Pelaporan lahir harus kurang dari 1 minggu'
-						]);
+					$data = array(
+						'bir_a_s' => $this->input->post('bir_a_s'),
+						'bir_breed' => $this->input->post('bir_breed'),
+						'bir_gender' => $this->input->post('bir_gender'),
+						'bir_color' => $this->input->post('bir_color'),
+						'bir_date_of_birth' => $date
+					);
+					if ($photo)
+						$data['bir_photo'] = $photo;
+					if ($damPhoto)
+						$data['bir_dam_photo'] = $damPhoto;
+					$this->birthModel->update_births($data, $where);
+					echo json_encode([
+						'status' => true
+					]);
 				}
 				else
 					echo json_encode([
