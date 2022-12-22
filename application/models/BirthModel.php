@@ -131,8 +131,7 @@ class BirthModel extends CI_Model {
 
     public function add_births($data){
         $this->db->insert('births', $data);
-        $result = $this->db->insert_id();
-        return $result;
+        return $this->db->insert_id();
     }
 
     public function update_births($data, $where){
