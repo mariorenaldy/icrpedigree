@@ -14,7 +14,7 @@ class Canines extends CI_Controller {
     }
 
     public function index(){
-        $where['can_app_user'] = 1;
+        $where['can_app_user'] = 0;
         $data['canine'] = $this->caninesModel->get_canines($where)->result();
         $this->load->view('backend/view_canines', $data);
     }

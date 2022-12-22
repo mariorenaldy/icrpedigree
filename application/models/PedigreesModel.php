@@ -9,16 +9,16 @@ class PedigreesModel extends CI_Model {
     //     return $this->db->get('pedigrees');
     // }
 
-    // public function get_sibling($where = null){
-    //     $this->db->select('ped_id, ped_canine_id, can_a_s');
-    //     if ($where != null) {
-    //         $this->db->where($where);
-    //     }
-    //     $this->db->join('canines','canines.can_id = pedigrees.ped_canine_id');
-    //     $this->db->limit(10);
-    //     $this->db->order_by('ped_id', 'desc');
-    //     return $this->db->get('pedigrees');
-    // }
+    public function get_sibling($where = null){
+        $this->db->select('ped_id, ped_canine_id, can_a_s');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->join('canines','canines.can_id = pedigrees.ped_canine_id');
+        $this->db->limit(10);
+        $this->db->order_by('ped_id', 'desc');
+        return $this->db->get('pedigrees');
+    }
     
     public function add_pedigrees($data){
         $this->db->insert('pedigrees', $data);

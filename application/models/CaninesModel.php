@@ -153,15 +153,15 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function get_can_pedigrees(){
+    public function get_can_pedigrees($where = null){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
-        $this->db->join('members','members.mem_id = canines.can_member_id');
-        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        // $this->db->join('members','members.mem_id = canines.can_member_id');
+        // $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get();
     }
