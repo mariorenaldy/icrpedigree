@@ -106,8 +106,7 @@ class StudModel extends CI_Model {
 
     public function add_studs($data){
         $this->db->insert('studs', $data);
-        $result = $this->db->insert_id();
-        return $result;
+        return $this->db->insert_id();
     }
 
     public function update_studs($data, $where){
@@ -150,7 +149,7 @@ class StudModel extends CI_Model {
     // }
 
     public function check_date($stu_dam_id, $date){
-        $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= 120";
+        $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= ".$this->config->item('jarak_pacak');
         $query = $this->db->query($sql);
         return $query->result();
     }

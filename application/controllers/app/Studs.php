@@ -259,6 +259,7 @@ class Studs extends CI_Controller {
 				]); 
 			}
 
+			// Lapor pacak harus kurang dari 7 hari
 			if (!$err){
 				$cek = true;
 				$piece = explode("-", $this->input->post('stu_stud_date'));
@@ -270,12 +271,13 @@ class Studs extends CI_Controller {
 				if ($ts > $ts_now)
 					$cek = false;
 				else{
-					$diff = floor($ts->diff($ts_now)->days/7);
+					$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
 					if ($diff > 2)
 						$cek = false;
 				}
 
 				if ($cek){
+					// jarak pacak utk dam yg sama adalah 120 hari
 					$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
 					if (!$res){
 						$data = array(
@@ -295,14 +297,14 @@ class Studs extends CI_Controller {
 					else{
 						echo json_encode([
 							'status' => false,
-							'message' => 'Pacak interval harus lebih dari 120 hari'
+							'message' => 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari'
 						]);
 					}
 				}
 				else{
 					echo json_encode([
 						'status' => false,
-						'message' => 'Pelaporan pacak harus kurang dari 2 minggu'
+						'message' => 'Pelaporan pacak harus kurang dari '.$this->config->item('jarak_lapor_pacak').' hari'
 					]);
 				}
 			}
@@ -423,6 +425,7 @@ class Studs extends CI_Controller {
 				}
 			}
 
+			// syarat maksimal 7 hari dari pacak
 			if (!$err){
 				$cek = true;
 				$piece = explode("-", $this->input->post('stu_stud_date'));
@@ -434,7 +437,7 @@ class Studs extends CI_Controller {
 				if ($ts > $ts_now)
 					$cek = false;
 				else{
-					$diff = floor($ts->diff($ts_now)->days/7);
+					$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
 					if ($diff > 2)
 						$cek = false;
 				}
@@ -457,7 +460,7 @@ class Studs extends CI_Controller {
 				else{
 					echo json_encode([
 						'status' => false,
-						'message' => 'Pelaporan pacak harus kurang dari 2 minggu'
+						'message' => 'Pelaporan pacak harus kurang dari '.$this->config->item('jarak_lapor_pacak').' hari'
 					]);
 				}
 			}
