@@ -195,7 +195,7 @@ class CaninesModel extends CI_Model {
     public function get_dob_by_id($id){
         $sql = "SELECT DATE_FORMAT(can_date_of_birth, '%Y-%m-%d') as can_date_of_birth FROM canines WHERE can_id = ".$id;
         $query = $this->db->query($sql);
-        return $query->result();
+        return $query->row();
     } 
 
     public function get_date_compare_sibling($damId, $dob){

@@ -103,11 +103,41 @@ class Canines extends CI_Controller {
 		if ($this->uri->segment(4)){
 			$where['can_member_id'] = $this->uri->segment(4);
 			$where['can_gender'] = 'Male';
-			$canine = $this->caninesModel->get_canines_simple($where);
+			$where['can_app_stat'] = 1;
+			$canine = $this->caninesModel->get_canines_simple($where)->result();
+
+			// Sire harus 12 bulan
+			$stat = Array();
+			foreach ($canine as $c){
+				$can = $this->caninesModel->get_dob_by_id($c->id);
+				$sire_dob = $can->can_date_of_birth;
+				
+				$ts_now = date('Y-m-d');
+				$ts = strtotime($ts_now);
+				$tssire = strtotime($sire_dob);
+				
+				$year = date('Y', $ts);
+				$yearsire = date('Y', $tssire);
+
+				$month = date('m', $ts);
+				$monthsire = date('m', $tssire);
+
+				$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
+				if (abs($diffsire) < $this->config->item('umur_canine')) {
+					$stat[] = 0;
+				}
+				else{
+					$stat[] = 1;
+				}
+			}
+
 			if ($canine){
 				echo json_encode([
 					'status' => true,
-					'data' => $canine->result()
+					'data' => [
+						'canine' => $canine,
+						'stat' => $stat
+					]
 				]);
 			}
 			else
@@ -127,12 +157,42 @@ class Canines extends CI_Controller {
 		if ($this->uri->segment(4)){ // search data by can_a_s
 			$like['can_a_s'] = $this->uri->segment(4);
 			$where['can_gender'] = 'Female';
+			$where['can_app_stat'] = 1;
 			$where['can_id !='] = $this->config->item('dam_id');
-			$canine = $this->caninesModel->search_canines_simple($like, $where);
+			$canine = $this->caninesModel->search_canines_simple($like, $where)->result();
+
+			// Dam harus 12 bulan
+			$stat = Array();
+			foreach ($canine as $c){
+				$can = $this->caninesModel->get_dob_by_id($c->id);
+				$dam_dob = $can->can_date_of_birth;
+				
+				$ts_now = date('Y-m-d');
+				$ts = strtotime($ts_now);
+				$tsdam = strtotime($dam_dob);
+				
+				$year = date('Y', $ts);
+				$yeardam = date('Y', $tsdam);
+
+				$month = date('m', $ts);
+				$monthdam = date('m', $tsdam);
+
+				$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+				if (abs($diffdam) < $this->config->item('umur_canine')) {
+					$stat[] = 0;
+				}
+				else{
+					$stat[] = 1;
+				}
+			}
+
 			if ($canine){
 				echo json_encode([
 					'status' => true,
-					'data' => $canine->result()
+					'data' => [
+						'canine' => $canine,
+						'stat' => $stat
+					]
 				]);
 			}
 			else
@@ -144,11 +204,40 @@ class Canines extends CI_Controller {
 		else{ // all data
 			$where['can_gender'] = 'Female';
 			$where['can_id !='] = $this->config->item('dam_id');
-			$canine = $this->caninesModel->get_canines_simple($where);
+			$canine = $this->caninesModel->get_canines_simple($where)->result();
+
+			// Dam harus 12 bulan
+			$stat = Array();
+			foreach ($canine as $c){
+				$can = $this->caninesModel->get_dob_by_id($c->can_id);
+				$dam_dob = $can->can_date_of_birth;
+				
+				$ts_now = new DateTime();
+				$ts = strtotime($ts_now);
+				$tsdam = strtotime($dam_dob);
+				
+				$year = date('Y', $ts);
+				$yeardam = date('Y', $tsdam);
+
+				$month = date('m', $ts);
+				$monthdam = date('m', $tsdam);
+
+				$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+				if (abs($diffdam) < $this->config->item('umur_canine')) {
+					$stat[] = 0;
+				}
+				else{
+					$stat[] = 1;
+				}
+			}
+
 			if ($canine){
 				echo json_encode([
 					'status' => true,
-					'data' => $canine->result()
+					'data' => [
+						'canine' => $canine,
+						'stat' => $stat
+					]
 				]);
 			}
 			else
