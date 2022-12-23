@@ -610,3 +610,9 @@ $config['canine_img'] = 'Dog.svg';
 $config['deactivated_member_status'] = 0;
 $config['paid_member_status'] = 1;
 $config['non_paid_member_status'] = 2;
+
+$config['jarak_lapor_pacak'] = 7;
+$config['jarak_pacak'] = 120;
+$config['jarak_lapor_lahir'] = 75;
+$config['umur_canine'] = 12;
+$config['jarak_lapor_stb'] = 100;
