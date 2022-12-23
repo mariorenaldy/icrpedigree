@@ -6,6 +6,7 @@ class Trah extends CI_Controller {
 				// Call the CI_Controller constructor
 				parent::__construct();
 				$this->load->model('trahModel');
+				$this->load->database();
 		}
 
 		public function get(){
