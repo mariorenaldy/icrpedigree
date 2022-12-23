@@ -288,7 +288,7 @@ class Members extends CI_Controller {
 				$where['mem_username'] = $obj['username'];
 				$member = $this->memberModel->get_members($where)->row();
 				if ($member) {
-					if (!$member['mem_stat']){
+					if (!$member->mem_stat){
 						echo json_encode([
 							'status' => false,
 							'message' => 'Masa berlaku member telah habis. Harap melakukan pembayaran'
@@ -296,7 +296,7 @@ class Members extends CI_Controller {
 						return false;
 					}
 
-					if (!$member['mem_app_user']){
+					if (!$member->mem_app_user){
 						echo json_encode([
 							'status' => false,
 							'message' => 'Data member belum di-approve. Harap menghubungi customer service'
@@ -304,7 +304,7 @@ class Members extends CI_Controller {
 						return false;
 					}
 
-					if (sha1($obj['password']) != $member['mem_password']){
+					if (sha1($obj['password']) != $member->mem_password){
 						echo json_encode([
 							'status' => false,
 							'message' => 'Password salah'
@@ -313,24 +313,15 @@ class Members extends CI_Controller {
 					}
 
 					$data['mem_firebase_token'] = $obj['token'];
-					$res = $this->memberModel->update_members($data, $where);
-					if ($res){
-						echo json_encode([
-							'status' => true,
-							'data' => [ 
-								'username' => $obj['username'],
-								'userid' => $member['mem_id']
-							]
-						]);
-						return true;
-					}
-					else{
-						echo json_encode([
-							'status' => false,
-							'message' => 'Gagal login'
-						]);
-						return false;
-					}
+					$this->memberModel->update_members($data, $where);
+					echo json_encode([
+						'status' => true,
+						'data' => [ 
+							'username' => $obj['username'],
+							'userid' => $member->mem_id
+						]
+					]);
+					return true;
 				}
 				else{
 					echo json_encode([
@@ -357,7 +348,7 @@ class Members extends CI_Controller {
 	
 			if (!$err){
 				$where['mem_username'] = $obj['username'];
-				$member = $this->memberModel->get_members($where)->row_array();
+				$member = $this->memberModel->get_members($where)->row();
 				if ($member){
 					echo json_encode([
 						'status' => true
