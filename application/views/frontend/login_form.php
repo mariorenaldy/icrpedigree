@@ -15,6 +15,13 @@
             <div class="row">            
                 <div class="col-md-6 col-md-offset-3">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
+                        <div class="text-success">
+                            <?php		
+                                if ($this->session->flashdata('register')){
+                                    echo 'Register berhasil. Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                                }
+                            ?>
+                        </div>
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('login_error')){

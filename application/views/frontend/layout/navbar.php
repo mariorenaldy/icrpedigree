@@ -3,9 +3,9 @@ if ($this->session->userdata('username')) : ?>
     <nav class="navbar">
         <div class="flex-container d-flex justify-content-around align-items-end container-fluid fs-5">
             <a href="<?= base_url('frontend/rules') ?>" class="text-decoration-none text-reset link-primary">Rules</a>
-            <a href="<?= base_url('frontend/beranda') ?>" class="text-decoration-none text-reset link-primary">Beranda</a>
+            <!-- <a href="<?= base_url('frontend/beranda') ?>" class="text-decoration-none text-reset link-primary">Beranda</a> -->
             <!-- <a href="<?= base_url('frontend/acara') ?>" class="text-decoration-none text-reset link-primary">Acara</a> -->
-            <a href="<?= base_url('frontend/Pedigree') ?>" class="text-decoration-none text-reset link-primary">Cari Silsilah</a>
+            <!-- <a href="<?= base_url('frontend/Pedigree') ?>" class="text-decoration-none text-reset link-primary">Cari Silsilah</a> -->
             <a href="<?= base_url('frontend/Canines') ?>" class="text-decoration-none text-reset link-primary">List Anjing</a>
             <a href="<?= base_url('frontend/Studs') ?>" class="text-decoration-none text-reset link-primary">List Pacak</a>
             <a href="<?= base_url('frontend/Births') ?>" class="text-decoration-none text-reset link-primary">List Lahir</a>

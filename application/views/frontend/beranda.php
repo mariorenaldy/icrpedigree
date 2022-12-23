@@ -5,6 +5,13 @@
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
+<?php
+    if (!$this->session->userdata('username')){
+        echo '<script type="text/javascript">';
+        echo 'window.location = "'.base_url().'frontend/Members";';
+        echo '</script>';
+    }
+?>
     <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
 
