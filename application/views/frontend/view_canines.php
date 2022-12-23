@@ -24,43 +24,49 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3>List Anjing</h3>
-                <div class="search-container">
-                    <form action="/action_page.php" method="post">
-                        <input type="text" placeholder="No. ICR/Nama" name="search">
+                <div class="search-container mb-3">
+                    <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
+                        <input type="text" placeholder="No. ICR/Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
                 
-                <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-canine"><i class="fa fa-plus"></i></button>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+                    </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4"><b>Foto</b></div>
-                    <div class="col-md-3"><b>Nomor ICR</b></div>
+                <div class="row mb-1">
+                    <div class="col-md-3"><b>Foto</b></div>
+                    <div class="col-md-2"><b>Nomor ICR</b></div>
                     <div class="col-md-3"><b>Nama</b></div>
+                    <div class="col-md-2"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
 
                 <?php foreach ($canines AS $c){ ?>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } else{ ?>
                                 <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?php echo $c->can_icr_number; ?>
                         </div>
                         <div class="col-md-3">
                             <?php echo $c->can_a_s; ?>
                         </div>
+                        <div class="col-md-3">
+                            <?php echo $c->stat_name; ?>
+                        </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                            <!-- <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
-                            <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->
                         </div>
                     </div>
                 <?php } ?>
