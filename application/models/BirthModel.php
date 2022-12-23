@@ -31,12 +31,14 @@ class BirthModel extends CI_Model {
     public function search_births($like, $where){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth');
         $this->db->from('births');
-        if ($like != null) {
-            $this->db->or_like($like);
-        }
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->group_start();
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        $this->db->group_end();
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
         $this->db->join('members','members.mem_id = births.bir_member_id');

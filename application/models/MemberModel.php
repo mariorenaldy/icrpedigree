@@ -28,13 +28,15 @@ class MemberModel extends CI_Model {
 
     public function search_members($like, $where){
         $this->db->select('*');
-        if ($like != null) {
-            $this->db->or_like($like);
-        }
+        $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->from('members');
+        $this->db->group_start();
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        $this->db->group_end();
         $this->db->join('users','users.use_id = members.mem_app_user');
         $this->db->order_by('mem_id', 'desc');
         return $this->db->get();
