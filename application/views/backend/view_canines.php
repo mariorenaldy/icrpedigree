@@ -67,7 +67,7 @@
                         <div class="col-md-2">
                             <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")'><i class="fa fa-check"></i></button>
                             <button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")'><i class="fa fa-close"></i></button> -->
-                            <!-- <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button> -->
+                            <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button>
                         </div>
                     </div>
                 <?php } ?>
