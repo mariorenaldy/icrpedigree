@@ -58,9 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('Twig', 'database', 'session');
-
-$autoload['sparks']=array('curl/1.2.1');
+// $autoload['libraries'] = array('database', 'session');
 
 /*
 | -------------------------------------------------------------------
@@ -91,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url');
+// $autoload['helper'] = array('url');
 
 /*
 | -------------------------------------------------------------------
