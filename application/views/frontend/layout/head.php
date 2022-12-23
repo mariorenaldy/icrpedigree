@@ -7,5 +7,3 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 <link href="<?= base_url('assets/css/font-awesome.css') ?>" rel="stylesheet" />
 <link rel="stylesheet" href="<?= base_url('assets/css/styles.css') ?>">
-<script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/jquery-3.6.1.slim.min.js') ?>"></script>
