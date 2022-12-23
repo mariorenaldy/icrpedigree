@@ -7,7 +7,7 @@
   <title>List Canine</title>
   <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
-  <link href="<?php echo base_url(); ?>assets/css/tree-style.css" rel="stylesheet" />
+  <link href="<?php echo base_url(); ?>assets/css/tree-styles.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -20,80 +20,125 @@
   ?>
   <div>
     <?php $this->load->view('templates/header'); ?>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="tree">
-          <ul>
-            <li>
-              <?php if (isset($canine[0]['can_a_s'])){ ?>
-              <a href="#"><?= $canine[0]['can_a_s'] ?></a>
-              <ul>
-                <li>
-                  <a href="#"><?= $canine[0]['sire'][0]['can_a_s'] ?></a>
-                  <ul>
-                    <li>
-                      <a href="#"><?= $canine[0]['sire'][0]['sire'][0]['can_a_s'] ?></a>
-                      <ul>
-                        <li>
-                          <a href="#"><?= $canine[0]['sire'][0]['sire'][0]['sire'][0]['can_a_s'] ?></a>
-                        </li>
-                        <li>
-                          <a href="#"><?= $canine[0]['sire'][0]['sire'][0]['dam'][0]['can_a_s'] ?></a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#"><?= $canine[0]['sire'][0]['dam'][0]['can_a_s'] ?></a>
-                      <ul>
-                        <li>
-                          <a href="#"><?= $canine[0]['sire'][0]['dam'][0]['sire'][0]['can_a_s'] ?></a>
-                        </li>
-                        <li>
-                          <a href="#"><?= $canine[0]['sire'][0]['dam'][0]['dam'][0]['can_a_s'] ?></a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#"><?= $canine[0]['dam'][0]['can_a_s'] ?></a>
-                  <ul>
-                    <li>
-                      <a href="#"><?= $canine[0]['dam'][0]['sire'][0]['can_a_s'] ?></a>
-                      <ul>
-                        <li>
-                          <a href="#"><?= $canine[0]['dam'][0]['sire'][0]['sire'][0]['can_a_s'] ?></a>
-                        </li>
-                        <li>
-                          <a href="#"><?= $canine[0]['dam'][0]['sire'][0]['dam'][0]['can_a_s'] ?></a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#"><?= $canine[0]['dam'][0]['dam'][0]['can_a_s'] ?></a>
-                      <ul>
-                        <li>
-                          <a href="#"><?= $canine[0]['dam'][0]['dam'][0]['sire'][0]['can_a_s'] ?></a>
-                        </li>
-                        <li>
-                          <a href="#"><?= $canine[0]['dam'][0]['dam'][0]['dam'][0]['can_a_s'] ?></a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              <?php } ?>
-            </li>
-          </ul>
+    <div id="wrapper"><span class="label">
+        <p>Anak</p>
+        <p>Breeder: Adam</p>
+        <p>Siblings: </p>
+        <p>Saudara laki-laki</p>
+        <p>Saudara perempuan</p>
+      </span>
+      <div class="branch lv1">
+        <div class="entry"><span class="label">
+            <p>Sire: Ayah</p>
+            <p>Current Reg. Number: UKC A266,984</p>
+            <p>Current ICR Number: 13-D-05-033-M</p>
+            <p>Fawn white</p>
+          </span>
+          <div class="branch lv2">
+            <div class="entry"><span class="label">
+                <p>Sire: Kakek</p>
+                <p>Current Reg. Number: UKC A266,984</p>
+                <p>Current ICR Number: 13-D-05-033-M</p>
+                <p>Fawn white</p>
+              </span>
+              <div class="branch lv3">
+                <div class="entry"><span class="label">
+                    <p>Sire: Kakek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+                <div class="entry"><span class="label">
+                    <p>Dam: Nenek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+              </div>
+            </div>
+            <div class="entry"><span class="label">
+                <p>Dam: Nenek</p>
+                <p>Current Reg. Number: UKC A266,984</p>
+                <p>Current ICR Number: 13-D-05-033-M</p>
+                <p>Fawn white</p>
+              </span>
+              <div class="branch lv3">
+                <div class="entry"><span class="label">
+                    <p>Sire: Kakek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+                <div class="entry"><span class="label">
+                    <p>Dam: Nenek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="entry"><span class="label">
+            <p>Dam: Ibu</p>
+            <p>Current Reg. Number: UKC A266,984</p>
+            <p>Current ICR Number: 13-D-05-033-M</p>
+            <p>Fawn white</p>
+          </span>
+          <div class="branch lv2">
+            <div class="entry"><span class="label">
+                <p>Sire: Kakek</p>
+                <p>Current Reg. Number: UKC A266,984</p>
+                <p>Current ICR Number: 13-D-05-033-M</p>
+                <p>Fawn white</p>
+              </span>
+              <div class="branch lv3">
+                <div class="entry"><span class="label">
+                    <p>Sire: Kakek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+                <div class="entry"><span class="label">
+                    <p>Dam: Nenek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+              </div>
+            </div>
+            <div class="entry"><span class="label">
+                <p>Dam: Nenek</p>
+                <p>Current Reg. Number: UKC A266,984</p>
+                <p>Current ICR Number: 13-D-05-033-M</p>
+                <p>Fawn white</p>
+              </span>
+              <div class="branch lv3">
+                <div class="entry"><span class="label">
+                    <p>Sire: Kakek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+                <div class="entry"><span class="label">
+                    <p>Dam: Nenek Buyut</p>
+                    <p>Current Reg. Number: UKC A266,984</p>
+                    <p>Current ICR Number: 13-D-05-033-M</p>
+                    <p>Fawn white</p>
+                  </span></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    
+    <div style="margin-bottom: 100px;"></div>
+    <button class="btn btn-primary" onclick="window.print();">Cetak Sertifikat</button>
     <?php $this->load->view('templates/footer'); ?>
   </div>
   <script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
   <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
   <script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
