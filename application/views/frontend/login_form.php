@@ -18,7 +18,7 @@
                         <div class="text-success">
                             <?php		
                                 if ($this->session->flashdata('register')){
-                                    echo 'Register berhasil. Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                                    echo 'Register berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
                                 }
                             ?>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="input-group mb-3">
                             <label for="username" class="control-label col-md-1"><span class="input-group-addon"><i class="fa fa-tag"></i></span></label>
                             <div class="col-md-6">
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Nama pengguna" value="<?php echo set_value('username'); ?>">
+                                <input class="form-control" type="text" id="username" name="username" placeholder="Nama pengguna" value="<?= set_value('username'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">

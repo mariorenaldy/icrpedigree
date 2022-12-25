@@ -31,49 +31,49 @@
                         <div class="input-group mb-3">
                             <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?php echo set_value('mem_ktp'); ?>">
+                                <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Nama Sesuai KTP</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= set_value('mem_name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_address" class="control-label col-md-2">Alamat Sesuai KTP</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Alamat Sesuai KTP" name="mem_address" value="<?php echo set_value('mem_address'); ?>">
+                                <input class="form-control" type="text" placeholder="Alamat Sesuai KTP" name="mem_address" value="<?= set_value('mem_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_mail_address" class="control-label col-md-2">Alamat Surat Menyurat</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_mail_address" value="<?php echo set_value('mem_mail_address'); ?>">
+                                <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_hp" class="control-label col-md-2">No. Telp</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. Telp" name="mem_hp" value="<?php echo set_value('mem_hp'); ?>">
+                                <input class="form-control" type="number" placeholder="No. Telp" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_kota" class="control-label col-md-2">Kota</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?php echo set_value('mem_kota'); ?>">
+                                <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_kode_pos" class="control-label col-md-2">Kode Pos</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?php echo set_value('mem_kode_pos'); ?>">
+                                <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_email" class="control-label col-md-2">email</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?php echo set_value('mem_email'); ?>">
+                                <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= set_value('mem_email'); ?>">
                             </div>
                         </div>
                         <hr/>
@@ -85,19 +85,19 @@
                         <div class="input-group mb-3">
                             <label for="mem_username" class="control-label col-md-2">Username</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?php echo set_value('mem_username'); ?>">
+                                <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?= set_value('mem_username'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="password" class="control-label col-md-2">Password</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="password" placeholder="Password" name="password" value="<?php echo set_value('password'); ?>">
+                                <input class="form-control" type="password" placeholder="Password" name="password" value="<?= set_value('password'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="repass" class="control-label col-md-2">Konfirmasi Password</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?php echo set_value('repass'); ?>">
+                                <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?= set_value('repass'); ?>">
                             </div>
                         </div>
                         <hr/>
@@ -109,7 +109,7 @@
                         <div class="input-group mb-3">
                             <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?php echo set_value('ken_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
