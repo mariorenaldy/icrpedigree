@@ -20,7 +20,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3>Approve Stud</h3>
+                <h3 class="text-center">Approve Stud</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
@@ -38,13 +38,13 @@
                         }
                     ?>
                 </div>
-                <div class="search-container">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Studs/search_approve'?>" method="post">
                         <input type="text" placeholder="Tanggal Pacak" name="keywords" id="keywords" autocomplete="off">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row mb-1">
                     <div class="col-md-2"><b>Foto</b></div>
                     <div class="col-md-2"><b>Sire</b></div>
                     <div class="col-md-2"><b>Dam</b></div>
@@ -53,14 +53,16 @@
                 </div>
                 <?php foreach ($stud AS $s){ ?>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire">
+                            <br/><?= $s->sire_a_s ?>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam">
+                            <br/><?= $s->dam_a_s ?>
                         </div>
                         <div class="col-md-2">
                             <?= $s->stu_stud_date; ?>

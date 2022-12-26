@@ -19,7 +19,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3>Approve Birth</h3>
+                <h3 class="text-center">Approve Birth</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
@@ -37,13 +37,13 @@
                         }
                     ?>
                 </div>
-                <div class="search-container">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Births/search_approve'?>" method="post">
                         <input type="text" placeholder="Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row mb-1">
                     <div class="col-md-3"><b>Foto</b></div>
                     <div class="col-md-3"><b>DOB</b></div>
                     <div class="col-md-2" align="center"><b>Jumlah Jantan</b></div>
@@ -52,7 +52,7 @@
                 </div>
                 <?php foreach ($birth AS $b){ ?>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 mb-1">
                             <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                         </div>
                         <div class="col-md-3">

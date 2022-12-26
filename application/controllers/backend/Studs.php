@@ -13,10 +13,10 @@ class Studs extends CI_Controller {
 		}
 
 		public function index(){
-			$user = $this->session->userdata('user_data');
-			$data['users'] = $user;
-			$data['navigations'] = $this->navigations;
-			$this->twig->display('backend/studs', $data);
+			// $user = $this->session->userdata('user_data');
+			// $data['users'] = $user;
+			// $data['navigations'] = $this->navigations;
+			// $this->twig->display('backend/studs', $data);
 		}
 
 		public function view_approve(){

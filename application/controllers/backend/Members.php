@@ -16,11 +16,10 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
-			$user = $this->session->userdata('user_data');
-			$data['users'] = $user;
-			$data['navigations'] = $this->navigations;
-			$data['kennels'] = $this->KennelModel->daftar_kennels();
-			$this->twig->display('backend/members', $data);
+			// $user = $this->session->userdata('user_data');
+			// $data['users'] = $user;
+			// $data['kennels'] = $this->KennelModel->daftar_kennels();
+			// $this->twig->display('backend/members', $data);
 		}
 
 		public function view_approve(){

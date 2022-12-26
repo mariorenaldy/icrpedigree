@@ -19,7 +19,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3>Approve Canine</h3>
+                <h3 class="text-center">Approve Canine</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
@@ -37,13 +37,13 @@
                         }
                     ?>
                 </div>
-                <div class="search-container">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Canines/search_approve'?>" method="post">
                         <input type="text" placeholder="No. Registrasi/Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row mb-1">
                     <div class="col-md-4"><b>Foto</b></div>
                     <div class="col-md-3"><b>Nomor Registrasi</b></div>
                     <div class="col-md-3"><b>Nama</b></div>
@@ -51,7 +51,7 @@
                 </div>
                 <?php foreach ($canine AS $c){ ?>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } else{ ?>

@@ -80,6 +80,7 @@
                             <label for="mem_hp" class="control-label col-md-2">Kennel</label>
                             <div class="col-md-10">
                                 <?php
+                                    $ken = [];
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
