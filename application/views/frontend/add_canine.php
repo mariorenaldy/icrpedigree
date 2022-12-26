@@ -25,9 +25,11 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <div>Foto</div>
-                            <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                            <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Pacak</label>
+                            <div class="col-md-12 text-center">
+                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                            </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Nama</label>
@@ -85,8 +87,14 @@
                                 ?>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
-                        <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>

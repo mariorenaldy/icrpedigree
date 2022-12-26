@@ -12,8 +12,9 @@
             <h2 class="fw-bold">Login</h2>
         </header>
         <div class="container">
-            <div class="row">            
-                <div class="col-md-6 col-md-offset-3">                          
+            <div class="row">   
+                <div class="col-md-3"></div>    
+                <div class="col-md-6 text-center">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
                         <div class="text-success">
                             <?php		
@@ -31,14 +32,16 @@
                             ?>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="username" class="control-label col-md-1"><span class="input-group-addon"><i class="fa fa-tag"></i></span></label>
-                            <div class="col-md-6">
+                            <div class="col-md-1"></div>  
+                            <label for="username" class="control-label col-md-3"><span class="input-group-addon"><i class="fa fa-tag"></i> Username:</span></label>
+                            <div class="col-md-7">
                                 <input class="form-control" type="text" id="username" name="username" placeholder="Nama pengguna" value="<?= set_value('username'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                        <label for="username" class="control-label col-md-1"><span class="input-group-addon"><i class="fa fa-lock"></i></span></label>
-                            <div class="col-md-6">
+                            <div class="col-md-1"></div> 
+                            <label for="username" class="control-label col-md-3"><span class="input-group-addon"><i class="fa fa-lock"></i></span> Password:</label>
+                            <div class="col-md-7">
                                 <input class="form-control" type="password" id="password" name="password" placeholder="Kata Sandi">
                             </div>
                         </div>

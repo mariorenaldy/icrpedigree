@@ -37,7 +37,6 @@
                     </div>
                 </div>
             </section>
-
             <section class="col-auto">
                 <div class="row mb-3">
                     <h4>Sosial Media</h4>
@@ -49,7 +48,6 @@
                     <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/Icrindo_official/"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
                 </div>
             </section>
-            
             <section  class="col-auto">
                 <div class="row">
                     <div class="col text-center logo-icr">
@@ -60,10 +58,19 @@
                     </div>
                 </div>
             </section>
+            <div class="container">
+                <hr/>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 text-center fs-6">
+                        Copyright &copy; 2021 <a href="" class="text-decoration-none text-reset"><span class="text-danger">ART</span>echnology</a><br/>All rights reserved
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
 
 <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
-<script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/jquery-3.6.1.min.js') ?>"></script>
+<script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>

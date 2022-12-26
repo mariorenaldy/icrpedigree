@@ -12,7 +12,7 @@
     <div class="container mt-5" style="margin-bottom: 10vh;">
         <div class="row">            
             <div class="col-md-12">                          
-                <h3>List Anjing</h3>
+                <h3 class="text-center">List Anjing</h3>
                 <div class="text-success mb-3">
                     <?php		
                         if ($this->session->flashdata('add_success')){
@@ -20,13 +20,13 @@
                         }
                     ?>
                 </div>
-                <div class="search-container mb-3">
+                <div class="search-container">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <input type="text" placeholder="No. ICR/Nama" name="keywords">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
-                <div class="row mb-3">
+                <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
@@ -67,7 +67,6 @@
         </div> 
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
-    <script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         function add(){
             window.location = "<?= base_url(); ?>frontend/Canines/add";

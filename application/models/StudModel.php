@@ -16,7 +16,7 @@ class StudModel extends CI_Model {
     // }
 
     public function get_studs($where){
-        $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
+        $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         $this->db->from('studs');
         if ($where != null)
             $this->db->where($where);

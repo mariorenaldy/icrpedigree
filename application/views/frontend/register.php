@@ -24,9 +24,11 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <div>Foto KTP</div>
-                            <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                            <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                            <label for="imageInput" class="control-label col-md-12 text-center">Foto KTP</label>
+                            <div class="col-md-12 text-center">
+                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                            </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
@@ -78,9 +80,11 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <div>PP</div>
-                            <img id="imgPreviewPP" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                            <input type="file" class="upload" name="attachment_pp" id="imageInputPP"/>
+                            <label for="imageInputPP" class="control-label col-md-12 text-center">PP</label>
+                            <div class="col-md-12 text-center">
+                                <img id="imgPreviewPP" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <input type="file" class="upload" name="attachment_pp" id="imageInputPP"/>
+                            </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_username" class="control-label col-md-2">Username</label>
@@ -102,9 +106,11 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <div>Foto Kennel</div>
-                            <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                            <input type="file" class="upload" name="attachment_logo" id="imageInputLogo"/>
+                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Foto Kennel</label>
+                            <div class="col-md-12 text-center">
+                                <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <input type="file" class="upload" name="attachment_logo" id="imageInputLogo"/>
+                            </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
@@ -121,8 +127,10 @@
                                 echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
                             ?>
                         </div>
-                        <button class="btn btn-primary btn-lg" type="submit">Register</button>
-                        <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-lg" type="submit">Register</button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
+                        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
