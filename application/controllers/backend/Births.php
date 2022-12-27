@@ -26,6 +26,10 @@ class Births extends CI_Controller {
 			$this->load->view('backend/approve_births', $data);
 		}
 
+		public function view_add(){
+			$this->load->view('backend/add_birth');
+		}
+
 		public function search_approve(){
 			$like['bir_a_s'] = $this->input->post('keywords');
 			$where['bir_stat'] = 0;

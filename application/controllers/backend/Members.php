@@ -29,6 +29,10 @@ class Members extends CI_Controller {
 			$this->load->view('backend/approve_members', $data);
 		}
 
+		public function view_add(){
+			$this->load->view('backend/add_member');
+		}
+
 		public function search_approve(){
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
