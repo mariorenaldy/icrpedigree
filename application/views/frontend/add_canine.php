@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -34,13 +34,13 @@
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Nama</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?php echo set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_address" class="control-label col-md-2">No. Registrasi</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="No. Registrasi" name="can_reg_number" value="<?php echo set_value('can_reg_number'); ?>">
+                                <input class="form-control" type="text" placeholder="No. Registrasi" name="can_reg_number" value="<?= set_value('can_reg_number'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -67,13 +67,13 @@
                         <div class="input-group mb-3">
                             <label for="mem_mail_address" class="control-label col-md-2">Warna</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Warna" name="can_color" value="<?php echo set_value('can_color'); ?>">
+                                <input class="form-control" type="text" placeholder="Warna" name="can_color" value="<?= set_value('can_color'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_mail_address" class="control-label col-md-2">Tanggal Lahir</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="can_date_of_birth" name="can_date_of_birth" value="<?php echo set_value('can_date_of_birth'); ?>" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="can_date_of_birth" name="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" autocomplete="off">
                             </div>
                         </div>
                         <div class="input-group mb-3">

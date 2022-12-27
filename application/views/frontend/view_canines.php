@@ -22,13 +22,19 @@
                 </div>
                 <div class="search-container">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
-                        <input type="text" placeholder="No. ICR/Nama" name="keywords">
-                        <button type="submit"><i class="fa fa-search"></i></button>
+                        <div class="input-group my-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords">
+                            </div>
+                            <div class="col-md-1 ms-1">
+                                <button type="submit" class="btn btn-light"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-light" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">

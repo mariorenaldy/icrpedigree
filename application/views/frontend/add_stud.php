@@ -42,7 +42,7 @@
                         <div class="input-group mb-3">
                             <label for="can_a_s" class="control-label col-md-2">Nama Dam</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?php echo set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="buttonSearch" class="btn btn-primary btn-lg" type="button"><i class="fa fa-search"></i></button>
@@ -87,7 +87,7 @@
                         <div class="input-group mb-3">
                             <label for="stu_stud_date" class="control-label col-md-2">Tanggal Pacak</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?php echo set_value('stu_stud_date'); ?>" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" autocomplete="off">
                             </div>
                         </div>
                         <div class="text-center">
@@ -110,12 +110,12 @@
 
         $('#buttonSearch').on("click", function(e){
             e.preventDefault();
-            $('#formStud').attr('action', "<?php echo base_url(); ?>frontend/Studs/search_dam").submit();
+            $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/search_dam").submit();
         });
 
         $('#buttonSubmit').on("click", function(e){
             e.preventDefault();
-            $('#formStud').attr('action', "<?php echo base_url(); ?>frontend/Studs/validate_add").submit();
+            $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/validate_add").submit();
         });
 
         $(document).ready(function(){

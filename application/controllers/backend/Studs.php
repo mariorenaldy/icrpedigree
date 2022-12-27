@@ -10,6 +10,7 @@ class Studs extends CI_Controller {
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url'));
 			$this->load->database();
+			date_default_timezone_set("Asia/Bangkok");
 		}
 
 		public function index(){
