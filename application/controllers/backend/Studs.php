@@ -26,10 +26,6 @@ class Studs extends CI_Controller {
 			$this->load->view('backend/approve_studs', $data);
 		}
 
-		public function view_add(){
-			$this->load->view('backend/add_stud');
-		}
-
 		public function search_approve(){
 			$date = '';
 			$piece = explode("-", $this->input->post('keywords'));

@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah Anjing</title>
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <title>Add Canine</title>
+    <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
-
 <body>
-    <?php
-    if (!$this->session->userdata('use_username')) {
-        echo '<script type="text/javascript">';
-        echo 'window.location = "' . base_url() . 'backend/Users/login";';
-        echo '</script>';
-    }
-    ?>
+    <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Tambah Anjing</h2>
+            <h2 class="fw-bold">Add Canine</h2>
         </header>
         <div class="container">
             <div class="row">
@@ -35,27 +24,63 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Foto Pacak</label>
+                        <div class="input-group my-3">
+                            <label class="control-label col-md-2">Member Name</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
+                            </div>
+                            <div class="col-md-1 text-end">
+                                <button id="buttonSearch" class="btn btn-primary btn-lg" type="button"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Member</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $i = 0;
+                                    $mem = [];
+                                    foreach($member as $row){
+                                        $mem[$row->mem_id] = $row->mem_name;
+                                    }
+                                    echo form_dropdown('can_member_id', $mem, set_value('can_member_id'), 'class="form-control", id="can_member_id"');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-5">
+                            <label class="control-label col-md-2">Kennel</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $i = 0;
+                                    $ken = [];
+                                    foreach($kennel as $row){
+                                        $ken[$row->ken_id] = $row->ken_name;
+                                    }
+                                    echo form_dropdown('can_kennel_id', $mem, set_value('can_kennel_id'), 'class="form-control"');
+                                ?>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="input-group mt-3 mb-3 gap-3">
+                            <label class="control-label col-md-12 text-center">Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Nama</label>
+                            <label class="control-label col-md-2">Name</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?php echo set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Name" name="can_a_s" value="<?php echo set_value('can_a_s'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">No. Registrasi</label>
+                            <label class="control-label col-md-2">No. Registration</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="No. Registrasi" name="can_reg_number" value="<?php echo set_value('can_reg_number'); ?>">
+                                <input class="form-control" type="text" placeholder="No. Registration" name="can_reg_number" value="<?php echo set_value('can_reg_number'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Trah</label>
+                            <label class="control-label col-md-2">Breed</label>
                             <div class="col-md-10">
                                 <?php
                                 foreach ($trah as $row) {
@@ -66,7 +91,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Jenis Kelamin</label>
+                            <label class="control-label col-md-2">Gender</label>
                             <div class="col-md-10">
                                 <?php
                                 $gender['Male'] = 'Male';
@@ -76,33 +101,20 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Warna</label>
+                            <label class="control-label col-md-2">Color</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" placeholder="Warna" name="can_color" value="<?php echo set_value('can_color'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Tanggal Lahir</label>
+                            <label class="control-label col-md-2">Date of Birth</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="can_date_of_birth" name="can_date_of_birth" value="<?php echo set_value('can_date_of_birth'); ?>" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">ID Member</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="ID Member" id="can_member_id" name="can_member_id" value="<?php echo set_value('can_member_id'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Kennel</label>
-                            <div class="col-md-10">
-                                <select id="kendrop" name="can_kennel_id" class="form-control">
-                                </select>
+                                <input class="form-control" type="text" placeholder="Date of Birth" id="can_date_of_birth" name="can_date_of_birth" value="<?php echo set_value('can_date_of_birth'); ?>" autocomplete="off">
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Kembali</button>
+                            <button id="buttonSubmit" class="btn btn-primary btn-lg" type="submit">Save</button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Back</button>
                         </div>
                     </form>
                 </div>
@@ -110,9 +122,7 @@
         </div>
         <?php $this->load->view('templates/footer'); ?>
     </main>
-    <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
+    <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         function setDatePicker(id) {
@@ -123,6 +133,20 @@
         }
         setDatePicker('#can_date_of_birth');
 
+        $('#buttonSearch').on("click", function(e){
+            e.preventDefault();
+            $('#formCanine').attr('action', "<?= base_url(); ?>backend/Canines/search_member").submit();
+        });
+
+        $('#can_member_id').on("change", function(){
+            $('#formCanine').attr('action', "<?= base_url(); ?>backend/Canines/search_kennel").submit();
+        });
+
+        $('#buttonSubmit').on("click", function(e){
+            e.preventDefault();
+            $('#formCanine').attr('action', "<?= base_url(); ?>backend/Canines/validate_add").submit();
+        });
+
         $(document).ready(function() {
             const imageInput = document.querySelector("#imageInput");
             imageInput.addEventListener("change", function() {
@@ -132,36 +156,16 @@
                 })
                 reader.readAsDataURL(this.files[0])
             })
+
+            const dropDown = document.querySelector("#can_member_id");
+            dropDown.addEventListener("change", function() {
+                const reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    document.querySelector("#imgPreview").src = reader.result
+                })
+                reader.readAsDataURL(this.files[0])
+            })
         });
-
-        $(document).ready(function() {
-            $('#can_member_id').on("change", setKennelOptions);
-        });
-
-        $(document).ready(setKennelOptions);
-
-        function setKennelOptions() {
-            let id = $("#can_member_id").val();
-            $.ajax({
-                type: "GET",
-                url: "<?= base_url('backend/Canines/search_kennels'); ?>",
-                data: {
-                    id: id
-                },
-                dataType: "json",
-                success: function(response) {
-                    var $kendrop = $("#kendrop");
-                    $kendrop.empty();
-                    $.each(response[0], function(key, value) {
-                        $kendrop.append($("<option></option>")
-                            .attr("value", 'can_kennel_id').text(value.name));
-                    });
-                },
-                error: function() {
-                    // alert("An error occurred.");
-                }
-            });
-        }
     </script>
 </body>
 

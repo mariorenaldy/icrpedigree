@@ -4,6 +4,7 @@
          if ($this->session->userdata('use_username')){ ?>
             <nav class="navbar">
                 <div class="container-fluid">
+                  <a href="<?= base_url('backend/Dashboard') ?>" class="text-decoration-none text-reset link-primary">Dashboard</a>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Members</span>
                         <ul class="dropdown-menu">
@@ -51,7 +52,7 @@
                 </div>
             </nav>
       <?php } else { ?>
-         <h1>ICR Pedigree</h1>
+         <h1 class="text-center">ICR Pedigree</h1>
       <?php } ?>
    </div>
    <hr/>

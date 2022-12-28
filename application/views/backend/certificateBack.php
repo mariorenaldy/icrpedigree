@@ -7,7 +7,6 @@
 <body>
   <?php $this->load->view('templates/redirect'); ?>
   <div>
-    <?php $this->load->view('templates/header'); ?>
     <div id="wrapper"><span class="label">
         <figure>
           <img src="<?= base_url().$this->config->item('path_canine').$canine->can_photo ?>" class="img-fluid img-thumbnail" alt="canine" style="width: 15vw;">
@@ -98,22 +97,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-5">
-      <div class="col text-center">
-        <button class="btn btn-primary" onclick="print();"><i class="fa fa-print"></i></button>
-        </div>
-    </div>
-    <?php $this->load->view('templates/footer'); ?>
   </div>
   <?php $this->load->view('templates/script'); ?>
-  <script>
-    function print() {
-      w = window.open("<?= base_url(); ?>backend/Certificate/back/<?= $canine->can_id ?>/print", "_blank");
-      w.print();
-      w.onafterprint = function(){ 
-        w.close();
-      };
-    }
-  </script>
 </body>
 </html>

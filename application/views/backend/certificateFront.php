@@ -7,14 +7,6 @@
 <body>
   <?php $this->load->view('templates/redirect'); ?>
   <div class="container">
-    <?php $this->load->view('templates/header'); ?>
-    <div class="text-danger">
-        <?php		
-            if ($this->session->flashdata('error')){
-                echo $this->session->flashdata('error').'<br/>';
-            }
-        ?>
-    </div>
     <div class="row">
       <div class="col text-center">
         <figure>
@@ -46,26 +38,7 @@
         </ol>
       </div>
     </div>
-    <div class="row">
-      <div class="col text-center">
-        <button class="btn btn-primary" onclick="print()"><i class="fa fa-print"></i></button>
-        <button type="button" class="btn btn-primary" onclick=view_back()>Sertifikat Belakang</button>
-      </div>
-    </div>
-    <?php $this->load->view('templates/footer'); ?>
   </div>
   <?php $this->load->view('templates/script'); ?>
-  <script>
-    function view_back() {
-      window.location = "<?= base_url(); ?>backend/Certificate/back/<?= $canine->can_id ?>";
-    }
-    function print() {
-      w = window.open("<?= base_url(); ?>backend/Certificate/front/<?= $canine->can_id ?>/print", "_blank");
-      w.print();
-      w.onafterprint = function(){ 
-        w.close();
-      };
-    }
-  </script>
 </body>
 </html>

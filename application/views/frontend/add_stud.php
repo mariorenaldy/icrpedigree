@@ -127,22 +127,18 @@
                 })
                 reader.readAsDataURL(this.files[0])
             })
-        });
-
-        $(document).ready(function(){
-            const imageInput = document.querySelector("#imageInputSire");
-            imageInput.addEventListener("change", function() {
+        
+            const imageInputSire = document.querySelector("#imageInputSire");
+            imageInputSire.addEventListener("change", function() {
                 const reader = new FileReader();
                 reader.addEventListener("load", () => {
                     document.querySelector("#imgPreviewSire").src = reader.result
                 })
                 reader.readAsDataURL(this.files[0])
             })
-        });
-
-        $(document).ready(function(){
-            const imageInput = document.querySelector("#imageInputDam");
-            imageInput.addEventListener("change", function() {
+        
+            const imageInputDam = document.querySelector("#imageInputDam");
+            imageInputDam.addEventListener("change", function() {
                 const reader = new FileReader();
                 reader.addEventListener("load", () => {
                     document.querySelector("#imgPreviewDam").src = reader.result

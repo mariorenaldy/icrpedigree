@@ -25,7 +25,7 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Pacak</label>
+                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />

@@ -38,7 +38,7 @@ class Canines extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata('username')){
-			$data['trah'] = $this->trahModel->get_all_trah()->result();
+			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
 			$this->load->view('frontend/add_canine', $data);

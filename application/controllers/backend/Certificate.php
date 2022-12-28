@@ -1,113 +1,136 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Certificate extends CI_Controller
-{
-    public function __construct()
-    {
+class Certificate extends CI_Controller{
+    public function __construct(){
         parent::__construct();
         $this->load->model(array('caninesModel'));
-        $this->load->model(array('caninesModel', 'memberModel', 'pedigreesModel'));
+        $this->load->library(array('session'));
+        $this->load->helper(array('url'));
+        $this->load->database();
     }
 
-    public function print($id)
-    {
-        $where1['can_id'] = $id;
-        $data['canine'] = $this->caninesModel->get_canines($where1)->result();
-        $where2['mem_id'] = $data['canine'][0]->can_member_id;
-        $data['member'] = $this->memberModel->get_members($where2)->result();
-        $this->load->view('backend/certificatePreview', $data);
+    public function front(){
+        if ($this->uri->segment(4)){
+            $where['can_id'] = $this->uri->segment(4);
+            $data['canine'] = $this->caninesModel->get_canines($where)->row();
+            if ($data['canine']) {
+                if ($this->uri->segment(5)){
+                    $this->load->view('backend/certificateFront', $data);
+                }
+                else{
+                    $dataPrint['can_print'] = $data['canine']->can_print + 1;
+                    $res = $this->caninesModel->update_canines($dataPrint, $where);
+                    if ($res){
+                        $this->load->view('backend/certificatePreview', $data);
+                    }
+                    else{
+                        $this->session->set_flashdata('error', 'Gagal menyimpan data');
+                        redirect('backend/Canines');
+                    }
+                }
+            } else {
+                $this->session->set_flashdata('error', 'Id anjing tidak valid');
+                redirect('backend/Canines');
+            }
+        } else {
+            redirect('backend/Canines');
+        }
     }
 
-    // public function view_back()
-    // {
-    //     $this->load->view('backend/certificatePreviewBack');
-    // }
+    public function back(){
+        if ($this->uri->segment(4)){
+            $where['can_id'] = $this->uri->segment(4);
+            $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->row();
+            if ($data['canine'] && $data['canine']->ped_canine_id != $this->config->item('sire_id') &&
+                $data['canine']->ped_canine_id != $this->config->item('dam_id')) {
+                // level 1
+                $sire['can_id'] = $data['canine']->ped_sire_id;
+                $data['sire'] = $this->caninesModel->get_can_pedigrees($sire)->row();
+                $dam['can_id'] = $data['canine']->ped_dam_id;
+                $data['dam'] = $this->caninesModel->get_can_pedigrees($dam)->row();
 
-    // public function view_back($id)
-    // {
-    //     $where['can_id'] = $id;
-    //     $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->result_array();
-    //     if (!empty($data['canine'])) {
-    //         $sire['can_id'] = $data['canine'][0]['ped_sire_id'];
-    //         $dam['can_id'] = $data['canine'][0]['ped_dam_id'];
-    //         // sire & dam level 1
-    //         $data['canine'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire)->result_array();
-    //         $data['canine'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam)->result_array();
+                // level 2
+                if ($data['sire'] && $data['sire']->ped_canine_id != $this->config->item('sire_id')){
+                    $sire21['can_id'] = $data['sire']->ped_sire_id;
+                    $data['sire21'] = $this->caninesModel->get_can_pedigrees($sire21)->row();
+                    $dam21['can_id'] = $data['sire']->ped_dam_id;
+                    $data['dam21'] = $this->caninesModel->get_can_pedigrees($dam21)->row();
+                }
+                else{
+                    $data['sire21'] = [];
+                    $data['dam21'] = [];
+                }
 
-    //         if ($data['canine'][0]['sire']) {
-    //             $data['canine'][0]['sire'][0]['sire_as_count'] = strlen($data['canine'][0]['sire'][0]['can_a_s']);
-    //         }
+                if ($data['dam'] && $data['dam']->ped_canine_id != $this->config->item('dam_id')){
+                    $sire22['can_id'] = $data['dam']->ped_sire_id;
+                    $data['sire22'] = $this->caninesModel->get_can_pedigrees($sire22)->row();
+                    $dam22['can_id'] = $data['dam']->ped_dam_id;
+                    $data['dam22'] = $this->caninesModel->get_can_pedigrees($dam22)->row();
+                }
+                else{
+                    $data['sire22'] = [];
+                    $data['dam22'] = [];
+                }
 
-    //         if ($data['canine'][0]['dam']) {
-    //             $data['canine'][0]['dam'][0]['dam_as_count'] = strlen($data['canine'][0]['dam'][0]['can_a_s']);
-    //         }
+                // level 3
+                if ($data['sire21'] && $data['sire21']->ped_canine_id != $this->config->item('sire_id')){
+                    $sire31['can_id'] = $data['sire21']->ped_sire_id;
+                    $data['sire31'] = $this->caninesModel->get_can_pedigrees($sire31)->row();
+                    $dam31['can_id'] = $data['sire21']->ped_dam_id;
+                    $data['dam31'] = $this->caninesModel->get_can_pedigrees($dam31)->row();
+                }
+                else{
+                    $data['sire31'] = [];
+                    $data['dam31'] = [];
+                }
 
-    //         // sire & dam level 2
-    //         if ($data['canine'][0]['sire']) {
-    //             $sire1['can_id'] = $data['canine'][0]['sire'][0]['ped_sire_id'];
-    //             $dam1['can_id'] = $data['canine'][0]['sire'][0]['ped_dam_id'];
-    //             $data['canine'][0]['sire'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire1)->result_array();
-    //             $data['canine'][0]['sire'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam1)->result_array();
+                if ($data['dam21'] && $data['dam21']->ped_canine_id != $this->config->item('dam_id')){
+                    $sire32['can_id'] = $data['dam21']->ped_sire_id;
+                    $data['sire32'] = $this->caninesModel->get_can_pedigrees($sire32)->row();
+                    $dam32['can_id'] = $data['dam21']->ped_dam_id;
+                    $data['dam32'] = $this->caninesModel->get_can_pedigrees($dam32)->row();
+                }
+                else{
+                    $data['sire32'] = [];
+                    $data['dam32'] = [];
+                }
 
-    //             $sire2['can_id'] = $data['canine'][0]['dam'][0]['ped_sire_id'];
-    //             $dam2['can_id'] = $data['canine'][0]['dam'][0]['ped_dam_id'];
-    //             $data['canine'][0]['dam'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire2)->result_array();
-    //             $data['canine'][0]['dam'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam2)->result_array();
+                if ($data['sire22'] && $data['sire22']->ped_canine_id != $this->config->item('sire_id')){
+                    $sire33['can_id'] = $data['sire22']->ped_sire_id;
+                    $data['sire33'] = $this->caninesModel->get_can_pedigrees($sire33)->row();
+                    $dam33['can_id'] = $data['sire22']->ped_dam_id;
+                    $data['dam33'] = $this->caninesModel->get_can_pedigrees($dam33)->row();
+                }
+                else{
+                    $data['sire33'] = [];
+                    $data['dam33'] = [];
+                }
 
-    //             // sire level 3
-    //             if ($data['canine'][0]['sire'][0]['sire']) {
-    //                 $sire12['can_id'] = $data['canine'][0]['sire'][0]['sire'][0]['ped_sire_id'];
-    //                 $dam12['can_id'] = $data['canine'][0]['sire'][0]['sire'][0]['ped_dam_id'];
-    //                 $data['canine'][0]['sire'][0]['sire'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire12)->result_array();
-    //                 $data['canine'][0]['sire'][0]['sire'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam12)->result_array();
-    //             }
+                if ($data['dam22'] && $data['dam22']->ped_canine_id != $this->config->item('dam_id')){
+                    $sire34['can_id'] = $data['dam22']->ped_sire_id;
+                    $data['sire34'] = $this->caninesModel->get_can_pedigrees($sire34)->row();
+                    $dam34['can_id'] = $data['dam22']->ped_dam_id;
+                    $data['dam34'] = $this->caninesModel->get_can_pedigrees($dam34)->row();
+                }
+                else{
+                    $data['sire34'] = [];
+                    $data['dam34'] = [];
+                }
 
-    //             if ($data['canine'][0]['sire'][0]['dam']) {
-    //                 $sire22['can_id'] = $data['canine'][0]['sire'][0]['dam'][0]['ped_sire_id'];
-    //                 $dam22['can_id'] = $data['canine'][0]['sire'][0]['dam'][0]['ped_dam_id'];
-    //                 $data['canine'][0]['sire'][0]['dam'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire22)->result_array();
-    //                 $data['canine'][0]['sire'][0]['dam'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam22)->result_array();
-    //             }
-
-    //             if ($data['canine'][0]['dam'][0]['sire']) {
-    //                 $sire12['can_id'] = $data['canine'][0]['dam'][0]['sire'][0]['ped_sire_id'];
-    //                 $dam12['can_id'] = $data['canine'][0]['dam'][0]['sire'][0]['ped_dam_id'];
-    //                 $data['canine'][0]['dam'][0]['sire'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire12)->result_array();
-    //                 $data['canine'][0]['dam'][0]['sire'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam12)->result_array();
-    //             }
-
-    //             if ($data['canine'][0]['dam'][0]['dam']) {
-    //                 $sire22['can_id'] = $data['canine'][0]['dam'][0]['dam'][0]['ped_sire_id'];
-    //                 $dam22['can_id'] = $data['canine'][0]['dam'][0]['dam'][0]['ped_dam_id'];
-    //                 $data['canine'][0]['dam'][0]['dam'][0]['sire'] = $this->caninesModel->get_can_pedigrees($sire22)->result_array();
-    //                 $data['canine'][0]['dam'][0]['dam'][0]['dam'] = $this->caninesModel->get_can_pedigrees($dam22)->result_array();
-    //             }
-    //         }
-
-    //         if ($data['canine'][0]['ped_sire_id'] != '86' && $data['canine'][0]['ped_dam_id'] != '87') {
-    //             // sibling male
-    //             $whereMale['can_gender'] = 'Male';
-    //             $whereMale['DATE_FORMAT(can_date_of_birth, "%d-%m-%Y") = '] = $data['canine'][0]['can_date_of_birth'];
-    //             $whereMale['ped_canine_id !='] = $data['canine'][0]['can_id'];
-    //             $whereMale['ped_sire_id'] = $data['canine'][0]['ped_sire_id'];
-    //             $whereMale['ped_dam_id'] = $data['canine'][0]['ped_dam_id'];
-    //             $data['sibling_male'] = $this->pedigreesModel->get_sibling($whereMale)->result();
-
-    //             // sibling Female
-    //             $whereFamale['can_gender'] = 'Female';
-    //             $whereFamale['DATE_FORMAT(can_date_of_birth, "%d-%m-%Y") = '] = $data['canine'][0]['can_date_of_birth'];
-    //             $whereFamale['ped_canine_id !='] = $data['canine'][0]['can_id'];
-    //             $whereFamale['ped_sire_id'] = $data['canine'][0]['ped_sire_id'];
-    //             $whereFamale['ped_dam_id'] = $data['canine'][0]['ped_dam_id'];
-    //             $data['sibling_female'] = $this->pedigreesModel->get_sibling($whereFamale)->result();
-    //         }
-    //     }
-
-    //     $this->load->view('backend/certificatePreviewBack', $data);
-    // }
-
-    public function view_back(){
-        $this->load->view('backend/certificatePreviewBack');
+                if ($this->uri->segment(5)){
+                    $this->load->view('backend/certificateBack', $data);
+                }
+                else{
+                    $this->load->view('backend/certificatePreviewBack', $data);
+                }
+            }
+            else{
+                $this->session->set_flashdata('error', 'Id anjing tidak valid');
+                redirect('backend/Canines');
+            }
+        } else {
+            redirect('backend/Canines');
+        }
     }
 }
