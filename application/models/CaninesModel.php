@@ -157,7 +157,7 @@ class CaninesModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    public function get_can_pedigrees(){
+    public function get_can_pedigrees($where){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
             $this->db->where($where);

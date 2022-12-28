@@ -3,6 +3,7 @@
 <head>
   <title>Back Certificate</title>
   <?php $this->load->view('templates/head'); ?>
+  <link href="<?php echo base_url(); ?>assets/css/tree-styles.css" rel="stylesheet" />
 </head>
 <body>
   <?php $this->load->view('templates/redirect'); ?>
