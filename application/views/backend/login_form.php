@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
+    <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
-        <div class="row">            
-            <div class="col-md-6 col-md-offset-3">  
+        <div class="row">       
+            <div class="col-md-3"></div>     
+            <div class="col-md-6">  
                 <h3>Login</h3>                        
-                <form class="form-horizontal" align="center" action="<?= base_url(); ?>backend/Users/validate_login" method="post">
+                <form class="form-horizontal" action="<?= base_url(); ?>backend/Users/validate_login" method="post">
                     <div class="text-danger">
                         <?php		
                         if ($this->session->flashdata('login_error')){
@@ -41,11 +40,11 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $('#username').focus();
-    });
-</script>
+    <?php $this->load->view('templates/script'); ?>
+    <script>
+        $(document).ready(function(){
+            $('#username').focus();
+        });
+    </script>
 </body>
 </html>

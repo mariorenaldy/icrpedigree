@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Tambah Anjing</title>
+    <title>Tambah Canine</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -10,7 +10,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Tambah Anjing</h2>
+            <h2 class="fw-bold">Tambah Canine</h2>
         </header>
         <div class="container">
             <div class="row">            
@@ -89,8 +89,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
+                            <button class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
                         </div>
                     </form>
                 </div>

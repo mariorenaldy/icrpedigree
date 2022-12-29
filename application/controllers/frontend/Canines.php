@@ -139,7 +139,7 @@ class Canines extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan data canine');
 							$this->load->view('frontend/add_canine', $data);
 						}
 					}

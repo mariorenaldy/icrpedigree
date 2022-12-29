@@ -126,7 +126,7 @@ class Births extends CI_Controller {
 				}
 				if ($err){
 					$this->db->trans_rollback();
-					$this->session->set_flashdata('error', 'Lahir dengan id = '.$this->uri->segment(4).' tidak dapat di-approve');
+					$this->session->set_flashdata('error', 'Failed to approve birth id = '.$this->uri->segment(4));
 					redirect('backend/Births/view_approve');
 				}
 			}
@@ -195,109 +195,13 @@ class Births extends CI_Controller {
 				}
 				if ($err){
 					$this->db->trans_rollback();
-					$this->session->set_flashdata('error', 'Lahir dengan id = '.$this->uri->segment(4).' tidak dapat ditolak');
+					$this->session->set_flashdata('error', 'Failed to reject birth id = '.$this->uri->segment(4));
 					redirect('backend/Births/view_approve');
 				}
 			}
 			else{
 				redirect('backend/Births/view_approve');
 			}
-		}
-
-		public function data($id = null){
-				if ($id != null) {
-						$where['bir_id'] = $id;
-						$birth = $this->birthModel->get_births($where)->row();
-						echo json_encode($birth);
-				}else{
-						$aColumns = array('bir_id', 'bir_stu_id', 'bir_photo', 'bir_a_s', 'bir_breed', 'bir_gender', 'bir_color', 'bir_date_of_birth', 'bir_cage', 'bir_owner_name', 'bir_stat', 'mem_name', 'kennels.ken_name', 'kennels.ken_type_id');
-						$sTable = 'births';
-
-						$iDisplayStart = $this->input->get_post('start', true);
-						$iDisplayLength = $this->input->get_post('length', true);
-						$sSearch = $this->input->post('search', true);
-						$sEcho = $this->input->get_post('sEcho', true);
-						$columns = $this->input->get_post('columns', true);
-						$orders = $this->input->get_post('order', true);
-
-						// Paging
-						if(isset($iDisplayStart) && $iDisplayLength != '-1'){
-								$this->db->limit($this->db->escape_str($iDisplayLength), $this->db->escape_str($iDisplayStart));
-						}
-
-						// Ordering
-						if(isset($orders[0]['column'])){
-								// for($i=0; $i<intval($columns); $i++){
-										// $iSortCol = $this->input->get_post('iSortCol_'.$i, true);
-										// $bSortable = $this->input->get_post('bSortable_'.intval($iSortCol), true);
-										$bSortable = $columns[$orders[0]['column']]['orderable'];
-										// $sSortDir = $this->input->get_post('sSortDir_'.$i, true);
-
-										if($bSortable == 'true')
-										{
-												$this->db->order_by($columns[$orders[0]['column']]['data'], $orders[0]['dir']);
-												// $this->db->order_by($aColumns[intval($this->db->escape_str($iSortCol))], $this->db->escape_str($sSortDir));
-										}
-								// }
-						}
-
-						/*
-						 * Filtering
-						 * NOTE this does not match the built-in DataTables filtering which does it
-						 * word by word on any field. It's possible to do here, but concerned about efficiency
-						 * on very large tables, and MySQL's regex functionality is very limited
-						 */
-						if(isset($sSearch['value']) && !empty($sSearch['value'])){
-								for($i=0; $i<count($columns); $i++){
-										// $bSearchable = $this->input->get_post('bSearchable_'.$i, true);
-										$bSearchable = $columns[$i]['searchable'];
-
-										// Individual column filtering
-										if(isset($bSearchable) && $bSearchable == 'true')
-										{
-												for($j=0; $j<count($aColumns); $j++){
-													$this->db->or_like($aColumns[$j], $this->db->escape_like_str($sSearch['value']));
-												}
-										}
-								}
-						}
-
-
-						// Select Data
-						$this->db->select('SQL_CALC_FOUND_ROWS '.str_replace(' , ', ' ', implode(', ', $aColumns)), false);
-						$this->db->join('members','members.mem_id = births.bir_member');
-						$this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
-						$this->db->where('bir_stat', 0);
-						$this->db->order_by('bir_date', 'DESC');
-						$rResult = $this->db->get($sTable);
-
-						// Data set length after filtering
-						$this->db->select('FOUND_ROWS() AS found_rows');
-						$iFilteredTotal = $this->db->get()->row()->found_rows;
-
-						// Total data set length
-						$iTotal = $this->db->count_all($sTable);
-
-						// Output
-						$output = array(
-								'sEcho' => intval($sEcho),
-								'iTotalRecords' => $iTotal,
-								'iTotalDisplayRecords' => $iFilteredTotal,
-								'aaData' => array()
-						);
-
-						foreach($rResult->result_array() as $i => $aRow){
-								$row = array();
-
-								// foreach($aColumns as $col){
-								// 		if($col == 'stock')
-								//     $row[$col] = $aRow[$col];
-								// }
-								$output['aaData'][] = $aRow;
-						}
-
-						echo json_encode($output);
-				}
 		}
 
 		public function view(){

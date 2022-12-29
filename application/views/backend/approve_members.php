@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Approve Member</title>
-    <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?= base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
-<?php
-    if (!$this->session->userdata('use_username')){
-        echo '<script type="text/javascript">';
-        echo 'window.location = "'.base_url().'backend/Users/login";';
-        echo '</script>';
-    }
-?>
+    <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
@@ -23,7 +14,7 @@
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Member berhasil di-approve<br/>';
+                            echo 'Member has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -33,32 +24,38 @@
                             echo $this->session->flashdata('error').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Member berhasil ditolak<br/>';
+                            echo 'Member has been rejected<br/>';
                         }
                     ?>
                 </div>
                 <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Members/search_approve'?>" method="post">
-                        <input type="text" placeholder="Nama/Alamat/No Telp." name="keywords">
-                        <button type="submit"><i class="fa fa-search"></i></button>
+                        <div class="input-group">
+                            <div class="col-md-6">    
+                                <input type="text" class="form-control" placeholder="Name/Address/Phone number" name="keywords">
+                            </div>
+                            <div class="col-md-1 ms-1">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md-3"><b>KTP</b></div>
-                    <div class="col-md-2"><b>Nama</b></div>
-                    <div class="col-md-3"><b>Alamat</b></div>
-                    <div class="col-md-2"><b>No. Telp</b></div>
+                    <div class="col-md-2"><b>KTP</b></div>
+                    <div class="col-md-2"><b>Name</b></div>
+                    <div class="col-md-2"><b>Address</b></div>
+                    <div class="col-md-2"><b>Phone Number</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($member AS $m){ ?>
                     <div class="row">
-                        <div class="col-md-3 mb-1">
+                        <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
                         </div>
                         <div class="col-md-2">
                             <?= $m->mem_name; ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?= $m->mem_address; ?>
                         </div>
                         <div class="col-md-2">
@@ -74,22 +71,20 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
-<script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
-<script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
-<script>
-    function approve(id, nama){
-        var proceed = confirm("Approve "+nama+" ?");
-        if (proceed){             
-            window.location = "<?= base_url(); ?>backend/Members/approve/"+id;
+    <?php $this->load->view('templates/script'); ?>
+    <script>
+        function approve(id, nama){
+            var proceed = confirm("Approve "+nama+" ?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Members/approve/"+id;
+            }
         }
-    }
-    function reject(id, nama){
-        var proceed = confirm("Tolak "+nama+" ?");
-        if (proceed){             
-            window.location = "<?= base_url(); ?>backend/Members/reject/"+id;
+        function reject(id, nama){
+            var proceed = confirm("Reject "+nama+" ?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Members/reject/"+id;
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>

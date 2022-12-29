@@ -94,3 +94,11 @@
     margin-top: -15px;
   }
   
+  .red{
+    font-weight:700; 
+    color: #e62225 !important;
+  }
+  .black{
+    font-weight:700; 
+    color: black !important;
+  }

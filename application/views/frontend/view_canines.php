@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Anjing</title>
+    <title>List Canine</title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -12,11 +12,11 @@
     <div class="container mt-5" style="margin-bottom: 10vh;">
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">List Anjing</h3>
+                <h3 class="text-center">List Canine</h3>
                 <div class="text-success mb-3">
                     <?php		
                         if ($this->session->flashdata('add_success')){
-                            echo 'Anjing berhasil disimpan<br/>';
+                            echo 'Canine berhasil disimpan<br/>';
                         }
                     ?>
                 </div>

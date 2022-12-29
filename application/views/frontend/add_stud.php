@@ -45,7 +45,7 @@
                                 <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
-                                <button id="buttonSearch" class="btn btn-primary btn-lg" type="button"><i class="fa fa-search"></i></button>
+                                <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -91,8 +91,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary btn-lg" type="submit">Simpan</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Studs'">Kembali</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Studs'">Kembali</button>
                         </div>
                     </form>
                 </div>

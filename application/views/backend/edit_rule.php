@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Rule</title>
-    <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?= base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>assets/css/suneditor.min.css" rel="stylesheet" />
 </head>
 <body>
-<?php
-    if (!$this->session->userdata('use_username')){
-        echo '<script type="text/javascript">';
-        echo 'window.location = "'.base_url().'backend/Users/login";';
-        echo '</script>';
-    }
-?>
+    <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">  
-                <h3>Edit Rule</h3>                        
+                <h3 class="text-center">Edit Rule</h3>                        
                 <form class="form-horizontal" action="<?= base_url(); ?>backend/Rules/validate_edit" method="post" onsubmit="save();">
                     <div class="text-danger">
                         <?php		
@@ -31,12 +22,12 @@
                         ?>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="title" class="control-label col-md-1">Judul: </label>
+                        <label for="title" class="control-label col-md-1">Title: </label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input type="text" class="form-control" name="title" value="<?= $rule->ru_title ?>" placeholder="Judul" aria-label="title" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="title" value="<?= $rule->ru_title ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
                             <?php } else { ?>
-                                <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Judul" aria-label="title" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
                             <?php } ?>
                         </div>
                     </div>
@@ -59,24 +50,24 @@
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
-<script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
-<script src="<?= base_url(); ?>assets/js/suneditor.min.js"></script>
-<script>
-    var suneditor = SUNEDITOR.create('rule', {
-        mode: 'inline',
-        display: 'block',
-        width: '100%',
-        height: '162',
-        popupDisplay: 'full',
-        buttonList: [
-            ['bold', 'underline', 'list']
-        ],
-        placeholder: 'Start typing something...'
-    });
+    <?php $this->load->view('templates/script'); ?>
+    <script src="<?= base_url(); ?>assets/js/suneditor.min.js"></script>
+    <script>
+        var suneditor = SUNEDITOR.create('rule', {
+            mode: 'inline',
+            display: 'block',
+            width: '100%',
+            height: '162',
+            popupDisplay: 'full',
+            buttonList: [
+                ['bold', 'underline', 'list']
+            ],
+            placeholder: 'Start typing something...'
+        });
 
-    function save(){
-        suneditor.save();
-    }
-</script>
+        function save(){
+            suneditor.save();
+        }
+    </script>
 </body>
 </html>

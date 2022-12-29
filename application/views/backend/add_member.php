@@ -1,32 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah Member</title>
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome.css" rel="stylesheet" />
+    <title>Add Member</title>
+    <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
-
 <body>
-    <?php
-    if (!$this->session->userdata('use_username')) {
-        echo '<script type="text/javascript">';
-        echo 'window.location = "' . base_url() . 'backend/Users/login";';
-        echo '</script>';
-    }
-    ?>
+    <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Tambah Member</h2>
+            <h2 class="fw-bold">Add Member</h2>
         </header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 align-items-center">
-                    <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?php echo base_url(); ?>backend/Members/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
                             if ($this->session->flashdata('error_message')) {
@@ -36,52 +25,52 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInput" class="control-label col-md-12 text-center">Foto KTP</label>
+                            <label for="imageInput" class="control-label col-md-12 text-center">KTP Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
+                            <label for="mem_ktp" class="control-label col-md-2">KTP Number</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
+                                <input class="form-control" type="number" placeholder="KTP Number" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Nama Sesuai KTP</label>
+                            <label for="mem_name" class="control-label col-md-2">KTP Name</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="KTP Name" name="mem_name" value="<?= set_value('mem_name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-md-2">Alamat Sesuai KTP</label>
+                            <label for="mem_address" class="control-label col-md-2">KTP Address</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Alamat Sesuai KTP" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                <input class="form-control" type="text" placeholder="KTP Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-md-2">Alamat Surat Menyurat</label>
+                            <label for="mem_mail_address" class="control-label col-md-2">Mail Address</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-md-2">No. Telp</label>
+                            <label for="mem_hp" class="control-label col-md-2">Phone Number</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. Telp" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
+                                <input class="form-control" type="number" placeholder="Phone Number" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kota" class="control-label col-md-2">Kota</label>
+                            <label for="mem_kota" class="control-label col-md-2">City</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
+                                <input class="form-control" type="text" placeholder="City" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kode_pos" class="control-label col-md-2">Kode Pos</label>
+                            <label for="mem_kode_pos" class="control-label col-md-2">Postal Code</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
+                                <input class="form-control" type="number" placeholder="Postal Code" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -111,38 +100,37 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="repass" class="control-label col-md-2">Konfirmasi Password</label>
+                            <label for="repass" class="control-label col-md-2">Confirmation Password</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?= set_value('repass'); ?>">
+                                <input class="form-control" type="password" placeholder="Confirmation Password" name="repass" value="<?= set_value('repass'); ?>">
                             </div>
                         </div>
                         <hr />
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Foto Kennel</label>
+                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Kennel Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_logo" id="imageInputLogo" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
+                            <label for="ken_name" class="control-label col-md-2">Kennel Name</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">Format Penamaan Canine</label>
-                            <!-- <?php
-                            foreach ($kennelType as $row) {
-                                $pil[$row->ken_type_id] = $row->ken_type_name;
-                            }
-                            echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
-                            ?> -->
-                            <select id="ken_type_id" name="ken_type_id" class="form-control"></select>
+                            <label for="mem_ktp" class="control-label col-md-2">Canine Name Format</label>
+                            <?php
+                                foreach ($kennelType as $row) {
+                                    $pil[$row->ken_type_id] = $row->ken_type_name;
+                                }
+                                echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
+                            ?>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Register</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Members'">Back</button>
                         </div>
                     </form>
                 </div>
@@ -150,9 +138,7 @@
         </div>
         <?php $this->load->view('templates/footer'); ?>
     </main>
-    <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?= base_url(); ?>assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= base_url(); ?>assets/js/jquery-3.6.1.min.js"></script>
+    <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -185,5 +171,4 @@
         });
     </script>
 </body>
-
 </html>

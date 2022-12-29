@@ -55,8 +55,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
+                            <button class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
                         </div>
                     </form>
                 </div>

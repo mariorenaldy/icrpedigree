@@ -30,7 +30,7 @@
                                 <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
-                                <button id="buttonSearch" class="btn btn-primary btn-lg" type="button"><i class="fa fa-search"></i></button>
+                                <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -113,8 +113,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary btn-lg" type="submit">Save</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Back</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Back</button>
                         </div>
                     </form>
                 </div>

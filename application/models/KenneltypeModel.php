@@ -1,9 +1,6 @@
 <?php
 
 class KenneltypeModel extends CI_Model{
-	public function __construct(){
-	}
-
 	public function get_kennel_types($where){
         if ($where) {
             $this->db->where($where);

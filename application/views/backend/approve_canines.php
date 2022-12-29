@@ -41,24 +41,24 @@
                     </form>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md-4"><b>Photo</b></div>
-                    <div class="col-md-3"><b>ICR Number</b></div>
-                    <div class="col-md-3"><b>Name</b></div>
+                    <div class="col-md-2"><b>Photo</b></div>
+                    <div class="col-md-2"><b>ICR Number</b></div>
+                    <div class="col-md-2"><b>Name</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($canine AS $c){ ?>
                     <div class="row">
-                        <div class="col-md-4 mb-1">
+                        <div class="col-md-2 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } else{ ?>
                                 <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?= $c->can_reg_number; ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?= $c->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
