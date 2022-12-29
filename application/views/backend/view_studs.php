@@ -48,9 +48,12 @@
                     <div class="col-md-2"><b>Sire</b></div>
                     <div class="col-md-2"><b>Dam</b></div>
                     <div class="col-md-2"><b>Date</b></div>
+                    <div class="col-md-2"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
-                <?php foreach ($stud AS $s){ ?>
+                <?php
+                    $i = 0; 
+                    foreach ($stud AS $s){ ?>
                     <div class="row">
                         <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
@@ -67,11 +70,19 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-md-2">
+                            <?= $s->stat_name; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?php if ($s->stu_stat == 1 && !$birth[$i] && $dam[$i] == "Female"){ ?>
+                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)"><i class="fa fa-plus"></i> Lahir</button>
+                            <?php } ?>
                             <!-- <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)"><i class="fa fa-check"></i></button>
                             <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)"><i class="fa fa-close"></i></button> -->
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+                    $i++; 
+                } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
@@ -86,6 +97,9 @@
         setDatePicker('#keywords');
         function add(){
             window.location = "<?= base_url(); ?>backend/Studs/add";
+        }
+        function addBirth(studId){
+            window.location = "<?= base_url(); ?>backend/Births/add/"+studId;
         }
     </script>
 </body>

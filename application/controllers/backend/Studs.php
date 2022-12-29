@@ -5,7 +5,7 @@ class Studs extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('studModel', 'caninesModel', 'trahModel', 'notification_model', 'notificationtype_model', 'memberModel'));
+			$this->load->model(array('studModel', 'caninesModel', 'trahModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel'));
 			$this->load->library('upload', $this->config->item('upload_stud'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url'));
@@ -16,6 +16,20 @@ class Studs extends CI_Controller {
 		public function index(){
 			$where['stu_app_user != '] = 0;
 			$data['stud'] = $this->studModel->get_studs($where)->result();
+
+			$birth = array();
+			$sire = array();
+			$dam = array();
+			foreach ($data['stud'] as $s){
+				$whereBirth = [];
+				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
+				$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+				$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+			}
+			$data['birth'] = $birth;
+			$data['sire'] = $sire;
+			$data['dam'] = $dam;
 			$this->load->view('backend/view_studs', $data);
 		}
 
@@ -30,6 +44,20 @@ class Studs extends CI_Controller {
 			}
 			$where['stu_app_user != '] = 0;
 			$data['stud'] = $this->studModel->get_studs($where)->result();
+
+			$birth = array();
+			$sire = array();
+			$dam = array();
+			foreach ($data['stud'] as $s){
+				$whereBirth = [];
+				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
+				$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+				$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+			}
+			$data['birth'] = $birth;
+			$data['sire'] = $sire;
+			$data['dam'] = $dam;
 			$this->load->view('backend/view_studs', $data);
 		}
 

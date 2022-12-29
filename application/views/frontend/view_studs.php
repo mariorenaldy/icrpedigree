@@ -89,11 +89,9 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
-
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/add";
         }
-
         function addBirth(studId){
             window.location = "<?= base_url(); ?>frontend/Births/add/"+studId;
         }

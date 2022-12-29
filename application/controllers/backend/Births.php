@@ -14,10 +14,132 @@ class Births extends CI_Controller {
 		}
 
 		public function index(){
-			$user = $this->session->userdata('user_data');
-			$data['users'] = $user;
-			$data['navigations'] = $this->navigations;
-			$this->twig->display('backend/births', $data);
+			$where['bir_stat != '] = 0;
+			$data['birth'] = $this->birthModel->get_births($where)->result();
+			$this->load->view('backend/view_births', $data);
+		}
+
+		public function search(){
+			$date = '';
+			$piece = explode("-", $this->input->post('keywords'));
+			if (count($piece) == 3){
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+			}
+			if ($date){
+				$where['bir_date_of_birth'] = $date;
+			}
+			$where['bir_stat != '] = 0;
+			$data['birth'] = $this->birthModel->get_births($where)->result();
+			$this->load->view('backend/view_births', $data);
+		}
+
+		public function add(){
+			if ($this->uri->segment(4)){
+				$data['bir_stu_id'] = $this->uri->segment(4);
+				$data['mode'] = 0;
+				$this->load->view('backend/add_birth', $data);
+			}
+			else{
+				redirect('backend/Studs');
+			}
+		}
+
+		public function validate_add(){
+			if ($this->session->userdata('use_username')){
+				$this->form_validation->set_error_delimiters('<div>','</div>');
+				$this->form_validation->set_rules('bir_stu_id', 'Stud id ', 'trim|required');
+				$this->form_validation->set_rules('bir_male', 'Male ', 'trim|required');
+				$this->form_validation->set_rules('bir_female', 'Female ', 'trim|required');
+				$this->form_validation->set_rules('bir_date_of_birth', 'Date of Birth ', 'trim|required');
+	
+				$data['mode'] = 1;
+	
+				if ($this->form_validation->run() == FALSE){
+					$this->load->view('backend/add_birth', $data);
+				}
+				else{
+					$err = 0;
+					$damPhoto = '-';
+					if (!$err){
+						if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_birth'));
+							if ($this->upload->do_upload('attachment_dam')){
+								$uploadData = $this->upload->data();
+								$damPhoto = $uploadData['file_name'];
+							}
+							else{
+								$err++;
+								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+							}
+						}
+					}
+	
+					if (!$err && $damPhoto == "-"){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi'); 
+					}
+						
+					if (!$err){
+						// syarat maksimal 75 hari dari lapor pacak
+						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
+						$stud = $this->studModel->get_studs($whereStud)->row();
+						if ($stud){
+							$piece = explode("-", $this->input->post('bir_date_of_birth'));
+							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+			
+							$ts = new DateTime($date);
+							$ts_stud = new DateTime($stud->stu_stud_date);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+							}
+							else{
+								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+								if ($diff > 1){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+								}
+							}
+						}
+						else{
+							$err++;
+							$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
+						}
+	
+						if (!$err){
+							$data = array(
+								'bir_stu_id' => $this->input->post('bir_stu_id'),
+								'bir_member_id' => $stud->stu_member_id,
+								'bir_dam_photo' => $damPhoto,
+								'bir_male' => $this->input->post('bir_male'),
+								'bir_female' => $this->input->post('bir_female'),
+								'bir_date_of_birth' => $date,
+								'bir_app_user' => $this->session->userdata('use_id'),
+								'bir_app_date' => date('Y-m-d H:i:s'),
+								'bir_stat' => 1,
+							);
+							$births = $this->birthModel->add_births($data);
+							if ($births){
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Births");
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan data lahir');
+								$this->load->view('backend/add_birth', $data);
+							}
+						}
+						else{
+							$this->load->view('backend/add_birth', $data);
+						}
+					}
+					else{
+						$this->load->view('backend/add_birth', $data);
+					}
+				}
+			}
+			else{
+				redirect("frontend/Members");
+			}
 		}
 
 		public function view_approve(){
@@ -27,9 +149,16 @@ class Births extends CI_Controller {
 		}
 
 		public function search_approve(){
-			$like['bir_a_s'] = $this->input->post('keywords');
+			$date = '';
+			$piece = explode("-", $this->input->post('keywords'));
+			if (count($piece) == 3){
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+			}
+			if ($date){
+				$where['bir_date_of_birth'] = $date;
+			}
 			$where['bir_stat'] = 0;
-			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
+			$data['birth'] = $this->birthModel->get_births($where)->result();
 			$this->load->view('backend/approve_births', $data);
 		}
 
@@ -307,86 +436,6 @@ class Births extends CI_Controller {
 
 				echo json_encode($output);
 			}
-	}
-
-	public function add(){
-		$res = $this->caninesModel->check_can_a_s('', $this->input->post('bir_a_s'));
-		if (!$res){
-			$img = $this->input->post('srcDataCrop');
-			$title = self::_clean_text('canine');
-			if ($img)
-				$_POST['bir_photo'] = self::_upload_base64($img, $title);
-			else
-				$_POST['bir_photo'] = '-';
-
-			unset($_POST['srcDataCrop']);
-			
-			$data = $this->input->post(null,false);
-
-			$piece = explode("-", $this->input->post('bir_date_of_birth'));
-			$date = $piece[2]."-".$piece[1]."-".$piece[0];
-			$data['bir_date_of_birth'] = $date;
-
-			$user = $this->session->userdata('user_data');
-			$data['bir_app_user'] = $user['use_id'];
-
-			$data['bir_app_date'] = date('Y-m-d H:i:s');
-			$data['bir_stat'] = 1;
-
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			// add birth data
-			$births = $this->birthModel->add_births($data);
-			if ($births){
-				// add canine data
-				$canine = $this->caninesModel->add_canine($data['bir_photo'], $data['bir_a_s'], $data['bir_breed'], $data['bir_gender'], $data['bir_color'], $data['bir_date_of_birth'], $data['bir_cage'], $data['bir_owner_name'], $data['bir_member']);
-				
-				// add pedigree data
-				$where['stu_id'] = $data['bir_stu_id'];
-				$stud = $this->studModel->get_studs($where)->row();
-				
-				$pedigree = array('ped_canine_id' => $canine,
-								'ped_sire_id' => $stud->stu_sire_id,
-								'ped_mom_id' => $stud->stu_mom_id );
-				
-				$res = $this->pedigreesModel->add_pedigrees($pedigree);
-
-				$this->db->trans_complete();
-				echo json_encode(array('data' => '1'));
-			}
-			else{
-				$this->db->trans_rollback();
-				echo json_encode(array('data' => 'Data lahir gagal disimpan'));
-			}
-		}
-		else
-			echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
-	}
-
-	public function update($id = null){
-		$res = $this->caninesModel->check_can_a_s($id, $this->input->post('bir_a_s'));
-		if (!$res){
-			$img = $this->input->post('srcDataCrop');
-			if($img){
-				$title = self::_clean_text('canine');
-				$_POST['bir_photo'] = self::_upload_base64($img, $title, true, $id);
-			}
-				
-			unset($_POST['srcDataCrop']);
-
-			$data = $this->input->post(null,false);
-
-			$piece = explode("-", $this->input->post('bir_date_of_birth'));
-			$data['bir_date_of_birth'] = $piece[2]."-".$piece[1]."-".$piece[0];
-			
-			$where['bir_id'] = $id;
-
-			$this->birthModel->update_births($data, $where);
-
-			echo json_encode(array('data' => '1'));
-		}
-		else
-			echo json_encode(array('data' => 'Nama canine tidak boleh sama'));
 	}
 
 	//  PHP Helper

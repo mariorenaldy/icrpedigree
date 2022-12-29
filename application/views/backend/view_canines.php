@@ -46,6 +46,7 @@
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>ICR Number</b></div>
                     <div class="col-md-2"><b>Name</b></div>
+                    <div class="col-md-2"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($canine AS $c){ ?>
@@ -62,6 +63,9 @@
                         </div>
                         <div class="col-md-2">
                             <?= $c->can_a_s; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?= $s->stat_name; ?>
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button>

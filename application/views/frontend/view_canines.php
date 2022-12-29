@@ -38,15 +38,15 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md-3"><b>Foto</b></div>
+                    <div class="col-md-2"><b>Foto</b></div>
                     <div class="col-md-2"><b>Nomor ICR</b></div>
-                    <div class="col-md-3"><b>Nama</b></div>
+                    <div class="col-md-2"><b>Nama</b></div>
                     <div class="col-md-2"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
                     <div class="row">
-                        <div class="col-md-3 mb-1">
+                        <div class="col-md-2 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } else{ ?>
@@ -56,10 +56,10 @@
                         <div class="col-md-2">
                             <?php echo $c->can_icr_number; ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?php echo $c->can_a_s; ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?php echo $c->stat_name; ?>
                         </div>
                         <div class="col-md-2">

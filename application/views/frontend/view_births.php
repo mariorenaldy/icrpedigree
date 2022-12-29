@@ -33,8 +33,13 @@
                         </div>
                     </form>
                 </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
                 <div class="row mb-1">
-                    <div class="col-md-3"><b>Foto</b></div>
+                    <div class="col-md-2"><b>Foto</b></div>
                     <div class="col-md-2"><b>DOB</b></div>
                     <div class="col-md-1" align="center"><b>Jumlah Jantan</b></div>
                     <div class="col-md-1" align="center"><b>Jumlah Betina</b></div>
@@ -43,7 +48,7 @@
                 </div>
                 <?php foreach ($births AS $b){ ?>
                     <div class="row">
-                        <div class="col-md-3 mb-1">
+                        <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                         </div>
                         <div class="col-md-2">
@@ -75,6 +80,9 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
+        function add(){
+            window.location = "<?= base_url(); ?>frontend/Studs";
+        }
     </script>
 </body>
 </html>

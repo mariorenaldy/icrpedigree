@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Approve Birth</title>
+    <title>Birth List</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -11,26 +11,23 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">Approve Birth</h3>
+                <h3 class="text-center">Birth List</h3>
                 <div class="text-success">
                     <?php		
-                        if ($this->session->flashdata('approve')){
-                            echo 'Birth has been approved<br/>';
+                        if ($this->session->flashdata('add_success')){
+                            echo 'Birth has been saved<br/>';
                         }
                     ?>
                 </div>
                 <div class="text-danger">
                     <?php		
-                        if ($this->session->flashdata('error')){
-                            echo $this->session->flashdata('error').'<br/>';
-                        }
-                        if ($this->session->flashdata('reject')){
-                            echo 'Birth has been rejected<br/>';
+                        if ($this->session->flashdata('error_message')){
+                            echo $this->session->flashdata('error_message').'<br/>';
                         }
                     ?>
                 </div>
                 <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Births/search_approve'?>" method="post">
+                    <form action="<?= base_url().'backend/Births/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
                                 <input type="text" class="form-control" placeholder="Date of Birth" name="keywords" id="keywords" autocomplete="off">
@@ -41,11 +38,17 @@
                         </div>
                     </form>
                 </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
                 <div class="row mb-1">
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>Date of Birth</b></div>
                     <div class="col-md-1" align="center"><b>Male</b></div>
                     <div class="col-md-1" align="center"><b>Female</b></div>
+                    <div class="col-md-2"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($birth AS $b){ ?>
@@ -63,8 +66,11 @@
                             <?= $b->bir_female; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button>
+                            <?= $s->stat_name; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button> -->
                         </div>
                     </div>
                 <?php } ?>
@@ -80,17 +86,8 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
-        function approve(id, nama){
-            var proceed = confirm("Approve "+nama+" ?");
-            if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/approve/"+id;
-            }
-        }
-        function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
-            if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/reject/"+id;
-            }
+        function add(){
+            window.location = "<?= base_url(); ?>backend/Studs";
         }
     </script>
 </body>
