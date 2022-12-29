@@ -5,8 +5,11 @@
   body {
     min-width: 1200px;
     margin: 0;
-    padding: 50px;
     user-select: none;
+  }
+
+  body p {
+    margin: 0;
   }
   
   #wrapper {
@@ -15,7 +18,7 @@
   
   .branch {
     position: relative;
-    margin-left: 400px;
+    margin-left: 320px;
   }
   .branch:before {
     content: "";
@@ -29,7 +32,8 @@
   
   .entry {
     position: relative;
-    min-height: 200px;
+    min-height: 100px;
+    /* max-height: 200px; */
   }
   .entry:before {
     content: "";
@@ -82,9 +86,10 @@
   
   .label {
     display: block;
-    min-width: 150px;
+    /* min-width: 150px; */
+    max-width: 13em;
     padding: 5px 10px;
-    line-height: 20px;
+    line-height: 1.2;
     /* text-align: center; */
     /* border: 2px solid black; */
     border-radius: 5px;

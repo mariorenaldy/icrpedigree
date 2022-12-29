@@ -215,7 +215,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-5">
+    <div class="row mb-5 mt-5">
       <div class="col text-center">
         <button class="btn btn-primary" onclick="print();"><i class="fa fa-print"></i></button>
         </div>
