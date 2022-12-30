@@ -32,7 +32,7 @@
   
   .entry {
     position: relative;
-    min-height: 100px;
+    min-height: 97px;
     /* max-height: 200px; */
   }
   .entry:before {
@@ -87,7 +87,7 @@
   .label {
     display: block;
     /* min-width: 150px; */
-    max-width: 13em;
+    max-width: 14em;
     padding: 5px 10px;
     line-height: 1.2;
     /* text-align: center; */
@@ -106,4 +106,19 @@
   .black{
     font-weight:700; 
     color: black !important;
+  }
+
+  @media print {
+
+    html, body {
+      height:100%; 
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: hidden;
+    }
+  
+  }
+
+  #main{
+    top: 40%;
   }
