@@ -53,6 +53,7 @@ class Members extends CI_Controller {
 				if (!$err){
 					$this->session->set_userdata('username', $this->input->post('username'));
 					$this->session->set_userdata('mem_id', $member->mem_id);
+					$this->session->set_userdata('mem_stat', $member->mem_stat);
 					redirect("frontend/Beranda");
 				}
 				else{

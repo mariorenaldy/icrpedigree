@@ -93,8 +93,11 @@ class CaninesModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('can_id != ', $this->config->item('sire_id'));
+        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
         $this->db->order_by('can_id', 'desc');
+        $this->db->limit($this->config->item('backend_canine_count'), 0);
         return $this->db->get('canines');
     }
 

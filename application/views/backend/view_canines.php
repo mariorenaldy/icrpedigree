@@ -65,7 +65,7 @@
                             <?= $c->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $s->stat_name; ?>
+                            <?= $c->stat_name; ?>
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button>

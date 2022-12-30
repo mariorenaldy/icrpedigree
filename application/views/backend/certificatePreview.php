@@ -49,7 +49,7 @@
     <div class="row">
       <div class="col text-center">
         <button class="btn btn-primary" onclick="print()"><i class="fa fa-print"></i></button>
-        <button type="button" class="btn btn-primary" onclick=view_back()>Sertifikat Belakang</button>
+        <button type="button" class="btn btn-primary" onclick=view_back()>Back Certificate</button>
       </div>
     </div>
     <?php $this->load->view('templates/footer'); ?>

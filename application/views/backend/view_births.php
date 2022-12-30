@@ -66,7 +66,7 @@
                             <?= $b->bir_female; ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $s->stat_name; ?>
+                            <?= $b->stat_name; ?>
                         </div>
                         <div class="col-md-2">
                             <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>

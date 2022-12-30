@@ -5,7 +5,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
-    <?php $this->load->view('frontend/layout/header_member'); ?>  
+    <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
@@ -16,13 +16,10 @@
                 <div class="row">
                     <div class="col"><?= $r->ru_title ?></div>
                 </div>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col"><?= $r->ru_desc ?></div>
                 </div>
-            <?php } ?>    
-            <div class="row">
-                <div class="col">Laporan langsung ke email icr_indonesia@yahoo.com atau ke aplikasi</div>
-            </div>
+            <?php } ?> 
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>

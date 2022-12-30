@@ -36,6 +36,7 @@ class Births extends CI_Controller {
 		public function add(){
 			if ($this->uri->segment(4)){
 				$data['bir_stu_id'] = $this->uri->segment(4);
+				$data['member'] = [];
 				$data['mode'] = 0;
 				$this->load->view('backend/add_birth', $data);
 			}
@@ -44,16 +45,38 @@ class Births extends CI_Controller {
 			}
 		}
 
+		public function search_member(){
+			if ($this->session->userdata('use_username')){
+				$data['bir_stu_id'] = $this->input->post('bir_stu_id');
+
+				$like['mem_name'] = $this->input->post('mem_name');
+				$where['mem_stat'] =  1;
+				$data['member'] = $this->memberModel->search_members($like, $where)->result();
+
+				$data['mode'] = 1;
+				$this->load->view('backend/add_birth', $data);
+			}
+			else{
+				redirect("backend/Users/login");
+			}
+		}
+
 		public function validate_add(){
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_rules('bir_stu_id', 'Stud id ', 'trim|required');
+				$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
 				$this->form_validation->set_rules('bir_male', 'Male ', 'trim|required');
 				$this->form_validation->set_rules('bir_female', 'Female ', 'trim|required');
 				$this->form_validation->set_rules('bir_date_of_birth', 'Date of Birth ', 'trim|required');
 	
+				$data['bir_stu_id'] = $this->input->post('bir_stu_id');
+
+				$like['mem_name'] = $this->input->post('mem_name');
+				$where['mem_stat'] =  1;
+				$data['member'] = $this->memberModel->search_members($like, $where)->result();
+
 				$data['mode'] = 1;
-	
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('backend/add_birth', $data);
 				}
@@ -76,7 +99,7 @@ class Births extends CI_Controller {
 	
 					if (!$err && $damPhoto == "-"){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi'); 
+						$this->session->set_flashdata('error_message', 'Dam photo is required'); 
 					}
 						
 					if (!$err){
@@ -87,29 +110,9 @@ class Births extends CI_Controller {
 							$piece = explode("-", $this->input->post('bir_date_of_birth'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			
-							$ts = new DateTime($date);
-							$ts_stud = new DateTime($stud->stu_stud_date);
-							if ($ts_stud > $ts){
-								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
-							}
-							else{
-								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
-								if ($diff > 1){
-									$err++;
-									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
-								}
-							}
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
-						}
-	
-						if (!$err){
 							$data = array(
 								'bir_stu_id' => $this->input->post('bir_stu_id'),
-								'bir_member_id' => $stud->stu_member_id,
+								'bir_member_id' => $this->input->post('can_member_id'),
 								'bir_dam_photo' => $damPhoto,
 								'bir_male' => $this->input->post('bir_male'),
 								'bir_female' => $this->input->post('bir_female'),
@@ -124,21 +127,22 @@ class Births extends CI_Controller {
 								redirect("backend/Births");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan data lahir');
-								$this->load->view('backend/add_birth', $data);
+								$err++;
+								$this->session->set_flashdata('error_message', 'Failed to save birth');
 							}
 						}
 						else{
-							$this->load->view('backend/add_birth', $data);
+							$err++;
+							$this->session->set_flashdata('error_message', 'Stud id is invalid'); 
 						}
 					}
-					else{
+					if ($err){
 						$this->load->view('backend/add_birth', $data);
 					}
 				}
 			}
 			else{
-				redirect("frontend/Members");
+				redirect("backend/Users/login");
 			}
 		}
 

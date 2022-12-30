@@ -218,7 +218,8 @@
     <div class="row mb-5 mt-5">
       <div class="col text-center">
         <button class="btn btn-primary" onclick="print();"><i class="fa fa-print"></i></button>
-        </div>
+        <button class="btn btn-primary" onclick="back();"><i class="fa fa-close"></i></button>
+      </div>
     </div>
     <?php $this->load->view('templates/footer'); ?>
   </div>
@@ -230,6 +231,9 @@
       w.onafterprint = function(){ 
         w.close();
       };
+    }
+    function back(){
+      window.location = "<?= base_url(); ?>backend/Canines";
     }
   </script>
 </body>

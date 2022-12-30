@@ -25,6 +25,7 @@ class BirthModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
         $this->db->join('members','members.mem_id = births.bir_member_id');
         $this->db->order_by('births.bir_date', 'desc');
+        $this->db->limit($this->config->item('backend_birth_count'), 0);
         return $this->db->get();
     }
 

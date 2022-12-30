@@ -23,6 +23,7 @@ class MemberModel extends CI_Model {
         $this->db->from('members');
         $this->db->join('users','users.use_id = members.mem_app_user');
         $this->db->order_by('mem_id', 'desc');
+        $this->db->limit($this->config->item('backend_member_count'), 0);
         return $this->db->get();
     }
 

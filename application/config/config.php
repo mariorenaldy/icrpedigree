@@ -602,6 +602,11 @@ $config['event_count'] = 5;
 $config['product_count'] = 5;
 $config['notif_count'] = 5;
 
+$config['backend_member_count'] = 20;
+$config['backend_canine_count'] = 20;
+$config['backend_stud_count'] = 20;
+$config['backend_birth_count'] = 20;
+
 $config['dam_id'] = 0;
 $config['sire_id'] = 1;
 
