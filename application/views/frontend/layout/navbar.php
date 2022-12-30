@@ -16,6 +16,7 @@ if ($this->session->userdata('username')) : ?>
                     <?= $this->session->userdata('username') ?>
                 </span>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="<?= base_url('frontend/Members/profile') ?>">Profile</a></li>
                     <li><a class="dropdown-item" href="<?= base_url('frontend/Members/logout') ?>">Logout</a></li>
                 </ul>
             </div>

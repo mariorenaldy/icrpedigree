@@ -231,4 +231,26 @@ class Members extends CI_Controller {
 				}
 			}
 		}
+
+		public function profile(){
+			if ($this->session->userdata('username')){
+				$where['mem_username'] = $this->session->userdata('username');
+				$data['member'] = $this->MemberModel->get_members($where)->row();
+				if (!$data['member']){
+					redirect("frontend/Members");
+				}
+				else{
+					if ($this->session->userdata('mem_stat') == '1'){
+						$this->load->view("frontend/profile", $data);
+						// $this->load->view("frontend/edit_profile", $data);
+					}
+					else{
+						$this->load->view("frontend/profile", $data);
+					}
+				}
+			}
+			else{
+				redirect("frontend/Members");
+			}
+		}
 }
