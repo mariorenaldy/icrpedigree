@@ -1,3 +1,7 @@
+<?php 
+$mode = [];
+$bir_stu_id = null;
+?>
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
@@ -6,7 +10,7 @@
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
-    <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
+    <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
@@ -16,11 +20,11 @@
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_edit" method="post" enctype="multipart/form-data">
-                        <!-- <?php if (!$mode){ ?>
+                        <?php if (!$mode){ ?>
                             <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
                         <?php } else { ?>
                             <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
-                        <?php } ?> -->
+                        <?php } ?>
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -30,69 +34,28 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="bir_photo" class="control-label col-md-12 text-center">Foto Lahir</label>
+                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Dam</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" name="bir_photo" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                                <input type="file" class="upload" name="attachment_dam" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_a_s" class="control-label col-md-2">Nama</label>
+                            <label for="bir_male" class="control-label col-md-2">Jumlah Jantan</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama" name="bir_a_s" value="<?= set_value('bir_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_breed" class="control-label col-md-2">Breed</label>
+                            <label for="bir_female" class="control-label col-md-2">Jumlah Betina</label>
                             <div class="col-md-10">
-                                <!-- <?php
-                                    foreach($trah as $row){
-                                        $pil[$row->tra_name] = $row->tra_name;
-                                    }
-                                    echo form_dropdown('can_breed', $pil, set_value('bir_breed'), 'class="form-control"');
-                                ?> -->
-                                <select id="bir_breed" name="bir_breed" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_gender" class="control-label col-md-2">Jenis Kelamin</label>
-                            <div class="col-md-10">
-                                <?php
-                                    $gender['Male'] = 'Male';
-                                    $gender['Female'] = 'Female';
-                                    echo form_dropdown('bir_gender', $gender, set_value('bir_gender'), 'class="form-control"');
-                                ?>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_color" class="control-label col-md-2">Warna</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Warna" name="bir_color" value="<?= set_value('bir_color'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="bir_date_of_birth" class="control-label col-md-2">Tanggal Lahir</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_member_id" class="control-label col-md-2">Breeder</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Breeder" name="bir_member_id" value="<?= set_value('bir_member_id'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_kennel_id" class="control-label col-md-2">Kennel</label>
-                            <div class="col-md-10">
-                                <!-- <?php
-                                    $ken = [];
-                                    foreach($kennel as $row){
-                                        $ken[$row->ken_id] = $row->ken_name;
-                                    }
-                                    echo form_dropdown('bir_kennel_id', $ken, set_value('bir_kennel_id'), 'class="form-control"');
-                                ?> -->
-                                <select id="bir_kennel_id" name="bir_kennel_id" class="form-control"></select>
                             </div>
                         </div>
                         <div class="text-center">
