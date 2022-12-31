@@ -76,6 +76,7 @@ class Members extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
+			$this->form_validation->set_message('is_unique', '%s tidak boleh sama');
 			$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
 			$this->form_validation->set_rules('mem_address', 'Alamat sesuai KTP ', 'trim|required');
 			$this->form_validation->set_rules('mem_mail_address', 'Alamat surat menyurat ', 'trim|required');
@@ -83,11 +84,11 @@ class Members extends CI_Controller {
 			$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 			$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
 			$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-			$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
-			$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+			$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required|is_unique[members.mem_ktp]');
+			$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required|is_unique[members.mem_username]');
 			$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 			$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
-			$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
+			$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required|is_unique[kennels.ken_name]');
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 			if ($this->form_validation->run() == FALSE){
@@ -95,33 +96,8 @@ class Members extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				$where['mem_username'] = $this->input->post('mem_username');
-				$member = $this->MemberModel->get_members($where)->num_rows();
-				if ($member) {
-					$err++;
-					$this->session->set_flashdata('error_message', 'Username sudah ada');
-				}
-	
-				if (!$err){
-					$whe['mem_ktp'] = $this->input->post('mem_ktp');
-					$member = $this->MemberModel->get_members($whe)->num_rows();
-					if ($member) {
-						$err++;
-						$this->session->set_flashdata('error_message', 'No. KTP sudah ada');
-					}
-				}
-		
-				if (!$err){
-					$whereKennel['ken_name'] = $this->input->post('ken_name');
-					$kennel = $this->KennelModel->get_kennels($whereKennel)->num_rows();
-					if ($kennel) {
-						$err++;
-						$this->session->set_flashdata('error_message', 'Nama kennel sudah ada');
-					}
-				}			
-	
 				$photo = '-';
-				if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+				if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 					if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 						$this->upload->initialize($this->config->item('upload_member'));
 						if ($this->upload->do_upload('attachment_member')){
@@ -175,7 +151,6 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
 				}
 	
-			
 				if (!$err){
 					$mem_id = $this->MemberModel->record_count() + 1;
 					$data = array(
@@ -200,7 +175,7 @@ class Members extends CI_Controller {
 						'ken_name' => $this->input->post('ken_name'),
 						'ken_type_id' => $this->input->post('ken_type_id'),
 						'ken_photo' => $logo,
-						'ken_member_id' => $mem_id
+						'ken_member_id' => $mem_id,
 					);
 		
 					$this->db->trans_strict(FALSE);

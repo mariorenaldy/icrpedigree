@@ -4,7 +4,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'KennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -40,6 +40,7 @@ class Canines extends CI_Controller {
 		if ($this->session->userdata('username')){
 			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
+			$whe['ken_stat'] = 1;
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
 			$this->load->view('frontend/add_canine', $data);
 		}
@@ -57,8 +58,9 @@ class Canines extends CI_Controller {
 			$this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			
-			$data['trah'] = $this->trahModel->get_all_trah()->result();
+			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
+			$whe['ken_stat'] = 1;
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('frontend/add_canine', $data);
@@ -102,7 +104,7 @@ class Canines extends CI_Controller {
 					);
 		
 					// nama diubah berdasarkan kennel
-					$whereKennel['mem_id'] = $this->session->userdata('mem_id');
+					$whereKennel['ken_id'] = $this->input->post('can_kennel_id');
 					$kennel = $this->KennelModel->get_kennels($whereKennel)->result();
 					if ($kennel){
 						if ($kennel[0]->ken_type_id == 1)

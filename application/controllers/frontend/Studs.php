@@ -3,7 +3,7 @@
 class Studs extends CI_Controller {
     public function __construct(){
 		parent::__construct();
-		$this->load->model(array('studModel', 'caninesModel', 'trahModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel'));
+		$this->load->model(array('studModel', 'caninesModel', 'trahModel', 'memberModel', 'birthModel'));
 		$this->load->library('upload', $this->config->item('upload_stud'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('url'));

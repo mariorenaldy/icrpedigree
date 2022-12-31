@@ -1,4 +1,4 @@
-<?php // ARTechnology
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Members extends CI_Controller {
@@ -50,30 +50,51 @@ class Members extends CI_Controller {
 		public function approve(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
+					$err = 0;
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					$res = $this->memberModel->update_members($data, $where);
 					if ($res){
-						$member = $this->memberModel->get_members($where)->row();
-						$this->email->set_mailtype('html');
-						$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
-						$this->email->to($member->email);
-						$this->email->subject('Register Berhasil');
+						$kennel_data = array(
+							'ken_stat' => 1,
+							'ken_app_user' => $this->session->userdata('use_id'),
+							'ken_app_date' => date('Y-m-d H:i:s'),
+						);
+						$where_kennel['ken_member_id'] = $this->uri->segment(4);
+						$res2 = $this->KennelModel->update_kennels($kennel_data, $where_kennel);
+						if ($res2){
+							$this->db->trans_complete();
+							
+							$member = $this->memberModel->get_members($where)->row();
+							$this->email->set_mailtype('html');
+							$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+							$this->email->to($member->email);
+							$this->email->subject('Register Berhasil');
 
-						$message = '<div>Kepada pengguna ICR Pedigree,</div>';
-						$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
-						$message .= '<div>Salam </div>';
-						$message .= '<div>ICR Pedigree Customer Service</div>';
-						$message .= '<div><br/><hr/></div>';
+							$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+							$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+							$message .= '<div>Salam </div>';
+							$message .= '<div>ICR Pedigree Customer Service</div>';
+							$message .= '<div><br/><hr/></div>';
 
-						$this->email->message($message);
-						$res = $this->email->send();
+							$this->email->message($message);
+							$res = $this->email->send();
 
-						$this->session->set_flashdata('approve', TRUE);
-						redirect('backend/Members/view_approve');
+							$this->session->set_flashdata('approve', TRUE);
+							redirect('backend/Members/view_approve');
+						}
+						else{
+							$err = 1;
+						}
 					}
 					else{
+						$err = 2;
+					}
+					if ($err){
+						$this->db->trans_rollback();
 						$this->session->set_flashdata('error', 'Failed to approve member id = '.$this->uri->segment(4));
 						redirect('backend/Members/view_approve');
 					}
@@ -113,8 +134,78 @@ class Members extends CI_Controller {
 			}
 		}
 
+		public function payment(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$where['mem_id'] = $this->uri->segment(4);
+					$data['mem_stat'] = 1;
+					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
+					$res = $this->memberModel->update_members($data, $where);
+					if ($res){
+						$err = 0;
+						$res2 = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
+						if ($res2){
+							$this->db->trans_complete();
+							$member = $this->memberModel->get_members($where)->row();
+							if ($member->mem_firebase_token){
+								$notif = $this->notificationtype_model->get_by_id(19);
+								$url = 'https://fcm.googleapis.com/fcm/send';
+								$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+
+								$fields = array (
+									'to' => $member->mem_firebase_token,
+									'notification' => array(
+									"channelId" => "ICRPedigree",
+									'title' => $notif[0]->title,
+									'body' => $notif[0]->description
+									)
+								);
+								$fields = json_encode ( $fields );
+
+								$headers = array (
+									'Authorization: key=' . $key,
+									'Content-Type: application/json'
+								);
+
+								$ch = curl_init ();
+								curl_setopt ( $ch, CURLOPT_URL, $url );
+								curl_setopt ( $ch, CURLOPT_POST, true );
+								curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+								curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+								curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+								$result = curl_exec ( $ch );
+								// echo $result;
+								curl_close ( $ch );
+							}
+							$this->session->set_flashdata('payment_success', TRUE);
+							redirect('backend/Members');
+						}
+						else{
+							$err = 1;
+						}
+					}
+					else{
+						$err = 2;
+					}
+					if ($err){
+						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4));
+						redirect('backend/Members');
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members');
+			}
+		}
+
 		public function add(){
-			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
 			$this->load->view("backend/add_member", $dataReg);
 		}
 
@@ -128,45 +219,20 @@ class Members extends CI_Controller {
 				$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-				$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required');
-				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+				$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required|is_unique[members.mem_ktp]');
+				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required|is_unique[members.mem_username]');
 				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 				$this->form_validation->set_rules('repass', 'Confirmation Password ', 'trim|matches[password]');
-				$this->form_validation->set_rules('ken_name', 'Kennel Name', 'trim|required');
+				$this->form_validation->set_rules('ken_name', 'Kennel Name', 'trim|required|is_unique[kennels.ken_name]');
 
-				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("backend/add_member", $dataReg);
 				}
 				else{
 					$err = 0;
-					$where['mem_username'] = $this->input->post('mem_username');
-					$member = $this->memberModel->get_members($where)->num_rows();
-					if ($member) {
-						$err++;
-						$this->session->set_flashdata('error_message', 'Username sudah ada');
-					}
-	
-					if (!$err){
-						$whe['mem_ktp'] = $this->input->post('mem_ktp');
-						$member = $this->memberModel->get_members($whe)->num_rows();
-						if ($member) {
-							$err++;
-							$this->session->set_flashdata('error_message', 'No. KTP sudah ada');
-						}
-					}
-		
-					if (!$err){
-						$whereKennel['ken_name'] = $this->input->post('ken_name');
-						$kennel = $this->KennelModel->get_kennels($whereKennel)->num_rows();
-						if ($kennel) {
-							$err++;
-							$this->session->set_flashdata('error_message', 'Nama kennel sudah ada');
-						}
-					}			
-	
 					$photo = '-';
-					if (!$err && isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 						if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
 							$this->upload->initialize($this->config->item('upload_member'));
 							if ($this->upload->do_upload('attachment_member')){
@@ -246,7 +312,10 @@ class Members extends CI_Controller {
 							'ken_name' => $this->input->post('ken_name'),
 							'ken_type_id' => $this->input->post('ken_type_id'),
 							'ken_photo' => $logo,
-							'ken_member_id' => $mem_id
+							'ken_member_id' => $mem_id,
+							'ken_stat' => 1,
+							'ken_app_user' => $this->session->userdata('use_id'),
+							'ken_app_date' => date('Y-m-d H:i:s')
 						);
 		
 						$this->db->trans_strict(FALSE);

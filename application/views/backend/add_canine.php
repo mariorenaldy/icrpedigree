@@ -55,7 +55,7 @@
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
-                                    echo form_dropdown('can_kennel_id', $mem, set_value('can_kennel_id'), 'class="form-control"');
+                                    echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control"');
                                 ?>
                             </div>
                         </div>

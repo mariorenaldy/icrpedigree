@@ -73,6 +73,7 @@ class Canines extends CI_Controller {
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
+          $whe['ken_stat'] = 1;
           $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
           $this->load->view('backend/add_canine', $data);
         }
@@ -96,6 +97,7 @@ class Canines extends CI_Controller {
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
+          $whe['ken_stat'] = 1;
           $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
 
           if ($this->form_validation->run() == FALSE) {
@@ -141,7 +143,7 @@ class Canines extends CI_Controller {
               );
 
               // nama diubah berdasarkan kennel
-              $whereKennel['mem_id'] = $this->session->userdata('mem_id');
+              $whereKennel['ken_id'] = $this->input->post('can_kennel_id');
               $kennel = $this->kennelModel->get_kennels($whereKennel)->result();
               if ($kennel) {
                 if ($kennel[0]->ken_type_id == 1)

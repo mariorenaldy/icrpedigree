@@ -4,7 +4,7 @@ class Births extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'trahModel', 'pedigreesModel', 'notification_model', 'notificationtype_model'));
+        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'trahModel', 'pedigreesModel'));
 		$this->load->library('upload', $this->config->item('upload_birth'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));

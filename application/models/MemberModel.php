@@ -9,11 +9,15 @@ class MemberModel extends CI_Model {
         return $this->db->count_all("members");
     }
 
-    // public function fetch_data($num, $offset) {
-    //     $this->db->order_by('mem_id', 'desc');
-    //     $data = $this->db->get('members', $num, $offset);
-    //     return $data;
-    // }
+    public function get_all_members($where) {
+        $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->from('members');
+        $this->db->order_by('mem_id', 'desc');
+        return $this->db->get();
+    }
 
     public function get_members($where){
         $this->db->select('*');

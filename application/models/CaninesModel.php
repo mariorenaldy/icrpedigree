@@ -106,6 +106,8 @@ class CaninesModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('can_id != ', $this->config->item('sire_id'));
+        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->group_start();
         if ($like != null) {
             $this->db->or_like($like);
@@ -121,6 +123,8 @@ class CaninesModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('can_id != ', $this->config->item('sire_id'));
+        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->order_by('can_id', 'desc');
         return $this->db->get('canines');
     }
@@ -133,6 +137,8 @@ class CaninesModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('can_id != ', $this->config->item('sire_id'));
+        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->order_by('can_id', 'desc');
         return $this->db->get('canines');
     }
