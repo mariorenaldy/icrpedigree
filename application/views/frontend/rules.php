@@ -9,7 +9,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Rules</h2>
+            <h2 class="fw-bold text-warning">Rules</h2>
         </header>
         <?php foreach ($rules AS $r){ ?>
             <div class="row">

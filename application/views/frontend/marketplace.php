@@ -10,7 +10,7 @@
 
     <main class="container">
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Marketplace</h2>
+            <h2 class="fw-bold text-warning">Marketplace</h2>
         </header>
         <aside class="col-md-auto text-center my-3">
             <figure>

@@ -14,7 +14,7 @@ $bir_stu_id = null;
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Request Pengubahan Data Lahir</h2>
+            <h2 class="fw-bold text-warning">Request Pengubahan Data Lahir</h2>
         </header>
         <div class="container">
             <div class="row">            

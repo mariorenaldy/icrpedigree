@@ -12,7 +12,7 @@
     <div class="container mt-5" style="margin-bottom: 10vh;">
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">List Canine</h3>
+                <h3 class="text-center text-warning">List Canine</h3>
                 <div class="text-success mb-3">
                     <?php		
                         if ($this->session->flashdata('add_success')){
