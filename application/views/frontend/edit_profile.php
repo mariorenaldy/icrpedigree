@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Profile</title>
+    <title>Ubah Profil</title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -9,7 +9,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Profile</h2>
+            <h2 class="fw-bold text-warning">Ubah Profil</h2>
         </header>
         <div class="container">
             <div class="row">            
