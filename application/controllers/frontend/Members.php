@@ -228,4 +228,71 @@ class Members extends CI_Controller {
 				redirect("frontend/Members");
 			}
 		}
+
+		public function view_edit_password(){
+			if ($this->session->userdata('username')){
+				$where['mem_username'] = $this->session->userdata('username');
+				$data['member'] = $this->MemberModel->get_members($where)->row();
+				if (!$data['member']){
+					redirect("frontend/Members");
+				}
+				else{
+					$this->load->view("frontend/edit_password");
+				}
+			}
+			else{
+				redirect("frontend/Members");
+			}
+		}
+
+		public function validate_edit_password(){
+			$this->form_validation->set_error_delimiters('<div>','</div>');
+			$this->form_validation->set_message('required', '%s wajib diisi');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+			$this->form_validation->set_rules('newpass', 'Password Baru', 'trim|required');
+			$this->form_validation->set_rules('repass', 'Konfirmasi Password', 'trim|required');
+		
+			if ($this->form_validation->run() == FALSE){
+				$this->load->view('frontend/edit_password');
+			}
+			else{
+				$this->change_password($this->session->userdata('mem_id'));
+			}
+		}
+
+		public function change_password($id = null){
+			$where['mem_id'] = $id;
+			$user = $this->MemberModel->get_members($where)->row_array();
+			if ($user == null) {
+				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
+				return false;
+			}
+
+			if ($this->input->post('newpass') == $this->input->post('repass')) {
+				if (sha1($this->input->post('password')) == $user['mem_password']) {
+					$res = $this->MemberModel->edit_password($id, sha1($this->input->post('newpass')));
+					if ($res){
+						// echo json_encode(array('data' => '1'));
+						$this->session->set_flashdata('edit_password', TRUE);
+						redirect("frontend/Members/view_edit_password");
+					}
+					else{
+						// echo json_encode(array('data' => 'Gagal menyimpan password'));
+						$this->session->set_flashdata('edit_password_error', 'Gagal menyimpan password');
+						redirect("frontend/Members/view_edit_password");
+					}
+				}
+				else {
+					// echo json_encode(array('data' => 'Password salah'));
+					// return false;
+					$this->session->set_flashdata('edit_password_error', 'Password salah');
+					redirect("frontend/Members/view_edit_password");
+				}
+			} else {
+				// echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
+				// return false;
+				$this->session->set_flashdata('edit_password_error', 'Password baru harus sama dengan konfirmasi password');
+				redirect("frontend/Members/view_edit_password");
+			}
+		}
 }

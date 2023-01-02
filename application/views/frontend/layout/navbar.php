@@ -27,6 +27,7 @@ if ($this->session->userdata('username')) : ?>
                         <li><a class="dropdown-item" href="<?= base_url('frontend/Kennels') ?>">List Kennel</a></li>
                     <?php } ?>
                     <li><a class="dropdown-item" href="<?= base_url('frontend/Members/profile') ?>">Profile</a></li>
+                    <li><a class="dropdown-item" href="<?= base_url('frontend/Members/view_edit_password') ?>">Ubah Password</a></li>
                     <li><a class="dropdown-item" href="<?= base_url('frontend/Members/logout') ?>">Logout</a></li>
                 </ul>
             </div>
