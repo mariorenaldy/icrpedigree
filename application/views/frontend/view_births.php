@@ -25,7 +25,7 @@
                     <form action="<?= base_url().'frontend/Births/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off">
+                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-light"><i class="fa fa-search"></i></button>

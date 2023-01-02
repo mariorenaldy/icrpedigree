@@ -8,8 +8,10 @@
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Members</span>
                         <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve Member</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage Member</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Kennels/view_approve') ?>">Approve Kennel</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Kennels/') ?>">Manage Kennel</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">

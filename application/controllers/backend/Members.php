@@ -54,6 +54,8 @@ class Members extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->memberModel->get_members($where)->row();
+
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					$res = $this->memberModel->update_members($data, $where);
@@ -68,7 +70,6 @@ class Members extends CI_Controller {
 						if ($res2){
 							$this->db->trans_complete();
 							
-							$member = $this->memberModel->get_members($where)->row();
 							$this->email->set_mailtype('html');
 							$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 							$this->email->to($member->email);
@@ -95,7 +96,7 @@ class Members extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error', 'Failed to approve member id = '.$this->uri->segment(4));
+						$this->session->set_flashdata('error', 'Failed to approve member name = '.$member->mem_name);
 						redirect('backend/Members/view_approve');
 					}
 				}
@@ -112,6 +113,8 @@ class Members extends CI_Controller {
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
 					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->memberModel->get_members($where)->row();
+					
 					$data['mem_stat'] = $this->config->item('deactivated_member_status');
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
@@ -121,7 +124,7 @@ class Members extends CI_Controller {
 						redirect('backend/Members/view_approve');
 					}
 					else{
-						$this->session->set_flashdata('error', 'Failed to approve member id = '.$this->uri->segment(4));
+						$this->session->set_flashdata('error', 'Failed to approve member name = '.$member->mem_name);
 						redirect('backend/Members/view_approve');
 					}
 				}

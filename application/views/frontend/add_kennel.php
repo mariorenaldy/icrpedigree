@@ -49,6 +49,10 @@
                             <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
                             <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Kennels'">Kembali</button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>

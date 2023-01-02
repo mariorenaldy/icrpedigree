@@ -24,7 +24,7 @@
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords">
+                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-light"><i class="fa fa-search"></i></button>

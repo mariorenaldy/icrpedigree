@@ -12,21 +12,33 @@ class KennelModel extends CI_Model {
     // }
 
     public function get_kennels($where){
-        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name');
+        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_member_id, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name, approval_status.stat_name');
         $this->db->where($where);
+        $this->db->where('ken_id != ', 0);
         $this->db->from('kennels');
         $this->db->join('kennels_type','kennels_type.ken_type_id = kennels.ken_type_id');
         $this->db->join('members','members.mem_id = kennels.ken_member_id');
+        $this->db->join('approval_status','approval_status.stat_id = kennels.ken_stat');
         $this->db->order_by('ken_id', 'desc');
         return $this->db->get();
     }
 
-    // public function daftar_kennels($name = null){
-    //     if ($name)
-    //         $this->db->where('ken_name', $name);
-    //     $this->db->order_by('ken_id', 'desc');
-    //     return $this->db->get('kennels');
-    // }
+    public function search_kennels($like, $where){
+        $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_member_id, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name, approval_status.stat_name');
+        $this->db->where($where);
+        $this->db->where('ken_id != ', 0);
+        $this->db->group_start();
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        $this->db->group_end();
+        $this->db->from('kennels');
+        $this->db->join('kennels_type','kennels_type.ken_type_id = kennels.ken_type_id');
+        $this->db->join('members','members.mem_id = kennels.ken_member_id');
+        $this->db->join('approval_status','approval_status.stat_id = kennels.ken_stat');
+        $this->db->order_by('ken_id', 'desc');
+        return $this->db->get();
+    }
 
     public function get_kennels_simple($where = null){
         $this->db->select('ken_name AS name, ken_id AS id');
@@ -40,8 +52,11 @@ class KennelModel extends CI_Model {
     public function get_stud_kennels($sireId, $damId){
         $this->db->distinct();
         $this->db->select('ken_name AS name, ken_id AS id');
-        $this->db->where('ken_member_id', $sireId);
+        $this->db->where('ken_stat', 1);
+        $this->db->group_start();
+        $this->db->or_where('ken_member_id', $sireId);
         $this->db->or_where('ken_member_id', $damId);
+        $this->db->group_end();
         $this->db->order_by('ken_id', 'desc');
         return $this->db->get('kennels');
     }

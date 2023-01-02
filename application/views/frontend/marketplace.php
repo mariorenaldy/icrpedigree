@@ -11,12 +11,13 @@
     <main class="container">
         <header class="d-flex flex-column align-items-center">
             <h2 class="fw-bold">Marketplace</h2>
-            <br/>
-            <h1>Under Heavy Construction</h1>
         </header>
-        <div style="height: 500px;">
-            
-        </div>
+        <aside class="col-md-auto text-center my-3">
+            <figure>
+                <img src="<?= base_url('assets/img/Dog.svg') ?>" class="center-block text-center" style="width: 20vw;">
+            </figure>
+            <h1 class="text-warning">Under Heavy Construction</h1>
+        </aside>
     </main>
     
     <?php $this->load->view('frontend/layout/footer'); ?>

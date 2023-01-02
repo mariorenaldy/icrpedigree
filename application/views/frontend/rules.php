@@ -11,16 +11,14 @@
         <header class="d-flex flex-column align-items-center">
             <h2 class="fw-bold">Rules</h2>
         </header>
-        <div class="container">
-            <?php foreach ($rules AS $r){ ?>
-                <div class="row">
-                    <div class="col"><?= $r->ru_title ?></div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col"><?= $r->ru_desc ?></div>
-                </div>
-            <?php } ?> 
-        </div>
+        <?php foreach ($rules AS $r){ ?>
+            <div class="row">
+                <div class="col"><?= $r->ru_title ?></div>
+            </div>
+            <div class="row mb-5">
+                <div class="col"><?= $r->ru_desc ?></div>
+            </div>
+        <?php } ?> 
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>

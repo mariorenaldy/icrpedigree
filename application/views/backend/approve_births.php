@@ -33,7 +33,7 @@
                     <form action="<?= base_url().'backend/Births/search_approve'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Date of Birth" name="keywords" id="keywords" autocomplete="off">
+                                <input type="text" class="form-control" placeholder="Date of Birth" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>

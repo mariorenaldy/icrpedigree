@@ -131,6 +131,10 @@
                             <button class="btn btn-primary btn-lg" type="submit">Register</button>
                             <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
