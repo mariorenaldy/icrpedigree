@@ -46,4 +46,16 @@ class UserModel extends CI_Model {
             return $this->db->delete('users', $where);
         }
     }
+
+    public function search_users($like){
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->group_start();
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        $this->db->group_end();
+        $this->db->order_by('use_id', 'desc');
+        return $this->db->get();
+    }
 }

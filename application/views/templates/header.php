@@ -6,6 +6,12 @@
                 <div class="container-fluid">
                   <a href="<?= base_url('backend/Dashboard') ?>" class="text-decoration-none text-reset link-primary">Dashboard</a>
                      <div class="dropdown">
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Users</span>
+                        <ul class="dropdown-menu">
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Users/') ?>">Manage User</a></li>
+                        </ul>
+                     </div>
+                     <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Members</span>
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve Member</a></li>

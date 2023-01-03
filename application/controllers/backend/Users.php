@@ -12,7 +12,8 @@ class Users extends CI_Controller {
 		}
 
 		public function index(){
-			$this->load->view('backend/view_user', $data);
+			$data['user'] = $this->userModel->get_users()->result();
+			$this->load->view('backend/view_users', $data);
 		}
 
 		public function login(){
@@ -246,5 +247,11 @@ class Users extends CI_Controller {
 			$this->session->unset_userdata('use_username');
 			$this->session->unset_userdata('use_akses');
 			redirect('/backend');
+		}
+
+		public function search(){
+			$like['use_name'] = $this->input->post('keywords');
+			$data['user'] = $this->userModel->search_users($like)->result();
+			$this->load->view('backend/view_users', $data);
 		}
 }
