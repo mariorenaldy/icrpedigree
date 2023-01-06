@@ -8,6 +8,13 @@
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
+        <div class="text-success">
+            <?php		
+                if ($this->session->flashdata('edit_profile')){
+                    echo 'Edit Profile berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                }
+            ?>
+        </div>
         <div class="container">
             <h3 class="text-center text-warning">Profile</h3>
             <div class="row mb-1 mt-3">            
@@ -53,6 +60,11 @@
             <div class="row mb-1">
                 <div class="col-md-3">email</div>
                 <div class="col-md-9"><?= $member->mem_email ?></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-warning" onclick="window.location = '<?= base_url() ?>frontend/Members/edit_profile'">Edit</button>
+                </div>
             </div>
         </div>
     </main>

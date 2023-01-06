@@ -14,7 +14,7 @@
         <div class="container">
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/update" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -28,12 +28,6 @@
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -86,50 +80,9 @@
                                 <input type="file" class="upload" name="attachment_pp" id="imageInputPP"/>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_username" class="control-label col-md-2">Username</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?= set_value('mem_username'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="password" class="control-label col-md-2">Password</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="password" placeholder="Password" name="password" value="<?= set_value('password'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="repass" class="control-label col-md-2">Konfirmasi Password</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?= set_value('repass'); ?>">
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="input-group mb-3 gap-3">
-                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Foto Kennel</label>
-                            <div class="col-md-12 text-center">
-                                <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" name="attachment_logo" id="imageInputLogo"/>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">Format Penamaan Canine</label>
-                            <?php
-                                foreach($kennelType as $row){
-                                    $pil[$row->ken_type_id] = $row->ken_type_name;
-                                }
-                                echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
-                            ?>
-                        </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Register</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
+                            <button class="btn btn-primary btn-lg" type="submit">Simpan</button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/profile'">Kembali</button>
                         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
@@ -149,15 +102,6 @@
                 const reader = new FileReader();
                 reader.addEventListener("load", () => {
                     document.querySelector("#imgPreviewPP").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
-            })
-
-            const imageInputLogo = document.querySelector("#imageInputLogo");
-            imageInputLogo.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreviewLogo").src = reader.result
                 })
                 reader.readAsDataURL(this.files[0])
             })
