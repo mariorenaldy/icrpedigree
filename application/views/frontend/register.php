@@ -8,10 +8,8 @@
     <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Register</h2>
-        </header>
         <div class="container">
+            <h2 class="text-center text-warning">Register</h2>
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
@@ -23,7 +21,7 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3 gap-3">
+                        <div class="input-group my-3 gap-3">
                             <label for="imageInput" class="control-label col-md-12 text-center">Foto KTP</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">

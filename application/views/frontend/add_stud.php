@@ -9,10 +9,8 @@
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Tambah Pacak</h2>
-        </header>
         <div class="container">
+            <h3 class="text-center text-warning">Tambah Pacak</h3>
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -24,7 +22,7 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group my-3">
                             <label for="stu_sire_id" class="control-label col-md-2">Sire</label>
                             <div class="col-md-10">
                                 <?php
@@ -45,7 +43,7 @@
                                 <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
-                                <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+                                <button id="buttonSearch" class="btn btn-warning" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">

@@ -9,10 +9,8 @@
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Tambah Lahir</h2>
-        </header>
         <div class="container">
+            <h3 class="text-center text-warning">Tambah Lahir</h3>
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
@@ -29,7 +27,7 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3 gap-3">
+                        <div class="input-group my-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Dam</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">

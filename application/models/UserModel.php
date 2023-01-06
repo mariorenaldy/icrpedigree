@@ -1,61 +1,23 @@
 <?php
 class UserModel extends CI_Model {
-    public function __construct(){
-        parent::__construct();
-    }
-
-    public function get_users($where = null){
+    public function get_users($where){
         $this->db->select('*');
-        if ($where != null) {
+        if ($where) {
             $this->db->where($where);
         }
         $this->db->order_by('use_id', 'desc');
         return $this->db->get('users');
     }
 
-    public function daftar_users($username = null){
-      $this->db->select('*');
-        if ($username != null ) {
-            $user['use_username'] = $username;
-            $this->db->where($user);
-        }
-        return $this->db->get('users');
+    public function add_users($data){
+        $this->db->insert('users', $data);
+        return $this->db->insert_id();
     }
 
-    public function add_users($data = null){
-        $result = false;
-        if ($data != null) {
-            $this->db->insert('users', $data);
-            $result = $this->db->insert_id();
-        }
-        return $result;
-    }
-
-    public function update_users($data = null, $where = null){
-        $result = false;
-        if($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $this->db->update('users');
-        }
-        return $result;
-    }
-
-    public function remove_users($where = null){
-        if($where != null){
-            return $this->db->delete('users', $where);
-        }
-    }
-
-    public function search_users($like){
-        $this->db->select('*');
-        $this->db->from('users');
-        $this->db->group_start();
-        if ($like != null) {
-            $this->db->or_like($like);
-        }
-        $this->db->group_end();
-        $this->db->order_by('use_id', 'desc');
-        return $this->db->get();
+    public function update_users($data, $where){
+        $this->db->set($data);
+        $this->db->where($where);
+        $this->db->update('users');
+        return $this->db->affected_rows();
     }
 }

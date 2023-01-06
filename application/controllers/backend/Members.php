@@ -425,22 +425,56 @@ class Members extends CI_Controller {
 			echo json_encode(array('data' => '1'));
 		}
 
-		public function reset($id = null){
-			$where['mem_id'] = $id;
-			$user = $this->memberModel->get_members($where)->row_array();
-			if ($user == null) {
-				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
-				return false;
+		public function view_reset(){
+			if ($this->uri->segment(4)){
+				$where['mem_id'] = $this->uri->segment(4);
+				$data['member'] = $this->memberModel->get_members($where)->row();
+				if (!$data['member']) {
+					$this->session->set_flashdata('error_message', 'Not found');
+					redirect("backend/Members");
+				}
+				else{
+					$this->load->view("backend/reset_password", $data);
+				}
 			}
-			
-			if ($this->input->post('newpass') == $this->input->post('repass')) {
-				$data['mem_password'] = sha1($this->input->post('newpass'));
-				$this->memberModel->update_members($data, $where);
-				echo json_encode(array('data' => '1'));
-				return true;
-			} else {
-				echo json_encode(array('data' => 'Password baru harus sama dengan konfirmasi password.'));
-				return false;
+			else{
+				redirect("backend/Members");
+			}
+		}
+
+		public function reset(){
+			if ($this->session->userdata('use_username')){
+				$where['mem_id'] = $this->input->post('mem_id');
+				$data['member'] = $this->memberModel->get_members($where)->row();
+				if (!$data['member']) {
+					$err = 1;
+					$this->session->set_flashdata('error_message', 'Not found');
+					redirect("backend/Members");
+				}
+				else{
+					$this->form_validation->set_error_delimiters('<div>','</div>');
+					$this->form_validation->set_rules('newpass', 'New Password ', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Confirmation password ', 'trim|matches[newpass]');
+
+					if ($this->form_validation->run() == FALSE){
+						$this->load->view("backend/reset_password", $data);
+					}
+					else{
+						$dataMember['mem_password'] = sha1($this->input->post('newpass'));
+						$res = $this->memberModel->update_members($dataMember, $where);
+						if ($res){
+							$this->session->set_flashdata('reset_password', TRUE);
+							redirect("backend/Members");
+						}
+						else{
+							$err = 2;
+							$this->session->set_flashdata('error_message', 'Failed to reset password');
+						}
+						if ($err){
+							$this->load->view('backend/reset_password', $data);
+						}
+					}
+				}
 			}
 		}
 

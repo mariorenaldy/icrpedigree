@@ -19,6 +19,9 @@
                         if ($this->session->flashdata('payment_success')){
                             echo 'Member\'s payment has been saved<br/>';
                         }
+                        if ($this->session->flashdata('reset_password')){
+                            echo 'Password has been reset<br/>';
+                        }
                     ?>
                 </div>
                 <div class="text-danger">
@@ -72,10 +75,10 @@
                                 <?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; ?>
                             </div>
                             <div class="col-md-2">
+                                <button type="button" class="btn btn-warning" onclick="resetPass(<?= $m->mem_id ?>)"><i class="fa fa-refresh"></i></button>
                                 <?php if ($m->mem_stat == 2){ ?>
                                     <button type="button" class="btn btn-primary" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-money"></i></button>
                                 <?php } ?>
-                                <!-- <button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button> -->
                             </div>
                         </div>
                 <?php 
@@ -95,6 +98,9 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Members/payment/"+id;
             }
+        }
+        function resetPass(id){
+            window.location = "<?= base_url(); ?>backend/Members/view_reset/"+id;
         }
     </script>
 </body>

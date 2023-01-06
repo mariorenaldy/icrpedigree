@@ -4,7 +4,7 @@
             <div class="col">
                 <hr>
             </div>
-            <div class="col-auto fs-5">
+            <div class="col-auto fs-3">
                 Kami <span id="mengerti">mengerti</span> apa yang anda butuhkan!
             </div>
             <div class="col">
@@ -16,12 +16,12 @@
     <div id="contact" class="container-fluid">
         <div class="row justify-content-between m-2">
             <section class="col-auto">
-                <div class="row mb-3 fs-6">
+                <div class="row mb-3 fs-5">
                     <div class="col">Hubungi Kami</div>
                 </div>
-                <div class="row">
+                <div class="row fs-6">
                     <div class="col-auto text-left">
-                        <span style="font-size:0.8em;"><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12 Bandung</span>
+                        <span><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12 Bandung</span>
                     </div>
                     <div class="col-auto">
                         <span><i class="fa fa-phone" aria-hidden="true"></i> 087777802288</span>
@@ -38,7 +38,7 @@
                 </div>
             </section>
             <section class="col-auto">
-                <div class="row mb-3 fs-6">
+                <div class="row mb-3 fs-5">
                     <div class="col">Social Media</div>
                 </div>
                 <div class="row mb-1">
@@ -59,10 +59,10 @@
                 </div>
             </section>
             <hr class="mt-3" />    
-            <div class="row">
+            <div class="row footer">
                 <div class="col-md-4"></div>
-                <div class="col-md-4 text-center">
-                    Copyright &copy; 2021 <a href="" class="text-decoration-none text-reset"><span class="text-danger">ART</span>echnology</a><br/>All rights reserved
+                <div class="col-md-4 text-center copyright">
+                    Copyright &copy; 2021 <a href="" class="text-decoration-none text-reset"><span class="text-danger">ART</span>echnology</a>. All rights reserved
                 </div>
             </div>
         </div>

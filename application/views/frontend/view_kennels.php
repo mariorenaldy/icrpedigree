@@ -9,7 +9,7 @@
 <body class="text-white text-break">
 <?php $this->load->view('frontend/layout/header_member'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
-    <div class="container mt-5" style="margin-bottom: 10vh;">
+    <div class="container">
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-warning">List Kennel</h3>
@@ -22,11 +22,11 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-light" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md-2"><b>Foto</b></div>
+                    <div class="col-md-2 text-center"><b>Foto</b></div>
                     <div class="col-md-2"><b>Format Penamaan</b></div>
                     <div class="col-md-2"><b>Kennel</b></div>
                     <div class="col-md-2"></div>

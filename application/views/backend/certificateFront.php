@@ -3,31 +3,27 @@
 <head>
   <title>Certificate</title>
   <?php $this->load->view('templates/head'); ?>
+  <link href="<?php echo base_url(); ?>assets/css/backend-styles.css" rel="stylesheet" media='all' />
 </head>
 <body>
   <?php $this->load->view('templates/redirect'); ?>
   <div class="container">
     <div class="row">
-      <div class="col text-center">
-        <figure>
+      <div class="col md-4">
+        <figure class="text-center">
           <img src="<?= base_url('assets/img/icr_logo.png') ?>" class="center-block text-center" style="width: 20vw;">
         </figure>
-        <h5 class="mb-3" style="color: #d09724; font-weight: 700;">INDONESIAN CANINE REGISTRY</h5>
+        <h5 class="gold mb-3 text-center" style="color: #d09724; font-weight: 700;">INDONESIAN CANINE REGISTRY</h5>
         <p>Lorem ipsum dolor sit arnet consectetur adipi-scing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam-co lebons nisi ut aliquip ex ea commodo conse-quat. </p>
       </div>
-      <div class="col">
-        <h5 class="mb-3" style="color: #d09724; font-weight: 700;">Registry Rules:</h5>
-        <ol class="p-0" style="list-style-position: inside;">
-          <li>Lorem ipso dolor sit amet consectetur adipiscing elit. </li>
-          <li>Nam hendrerit nisi sed sollicitudin pellen-tesque. </li>
-          <li>Nunc posuere purus rhoncus pulvinar ali-quam. </li>
-          <li>Ut aliquet tristique nisi vitae volutpat. </li>
-          <li>Nulls aliquet porttitor venenatis. </li>
-          <li>Donec a dui et dui fringilla consectetur id nec massa. </li>
-        </ol>
-      </div>
-      <div class="col">
-        <h5 class="mb-3" style="color: #d09724; font-weight: 700;">Awards & Appreciation:</h5>
+      <?php foreach ($rules AS $r){ ?>
+        <div class="col-md-4">
+          <?= $r->ru_title; ?>
+          <span class="desc"><?= $r->ru_desc; ?></span>  
+        </div>
+      <?php } ?>
+      <div class="col md-4">
+        <h5 class="gold mb-3 text-center">Awards & Appreciation:</h5>
         <ol class="p-0" style="list-style-position: inside;">
           <li>July 4, 1969: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
           <li>20 July, 1969: Nam hendrerit nisi sed sollicitu-din pellentesque. </li>

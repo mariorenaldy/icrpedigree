@@ -8,10 +8,8 @@
     <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Login</h2>
-        </header>
         <div class="container">
+            <h3 class="text-center text-warning">Login</h3>
             <div class="row">   
                 <div class="col-md-3"></div>    
                 <div class="col-md-6 text-center">                          
@@ -31,7 +29,7 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group my-3">
                             <div class="col-md-1"></div>  
                             <label for="username" class="control-label col-md-3"><span class="input-group-addon"><i class="fa fa-tag"></i> Username:</span></label>
                             <div class="col-md-7">
@@ -45,8 +43,13 @@
                                 <input class="form-control" type="password" id="password" name="password" placeholder="Kata Sandi">
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-lg" type="submit">Login</button>
-                        <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'">Daftar</button>
+                        <div class="input-group mb-3">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-5 text-start">
+                                <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'">Daftar</button>
+                            </div>
+                        </div>
                     </form>
                 </div>                           
             </div>

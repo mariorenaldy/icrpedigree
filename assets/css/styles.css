@@ -121,6 +121,12 @@ div.container{
     margin-bottom: 10vh; 
     margin-top: 5vh;
 }
-footer{
-    font-size: 0.8em;
+.container .row .col a:link {
+    color: orange !important;
+}
+.container .row .col a:hover {
+    color: yellow !important;
+}
+.row.footer .col-md-4.text-center.copyright{
+    font-size: 0.8em !important;
 }

@@ -1,0 +1,13 @@
+.container .row .col.md-4 .gold.mb-3.text-center {
+    color: #d09724 !important; 
+    font-weight: 700; 
+}
+.footer .row .col-md-4.text-center.copyright{
+    font-size: 0.8em !important;
+}
+.container .row .col-md-6 .desc{
+    font-size: 0.7em !important;
+}
+.container .row .col-md-4 .desc{
+    font-size: 0.7em !important;
+}

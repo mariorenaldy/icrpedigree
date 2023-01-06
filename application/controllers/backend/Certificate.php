@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Certificate extends CI_Controller{
     public function __construct(){
         parent::__construct();
-        $this->load->model(array('caninesModel'));
+        $this->load->model(array('caninesModel', 'RulesModel'));
         $this->load->library(array('session'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -14,6 +14,7 @@ class Certificate extends CI_Controller{
         if ($this->uri->segment(4)){
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
+            $data['rules'] = $this->RulesModel->get_rules(null)->result();
             if ($data['canine']) {
                 if ($this->uri->segment(5)){
                     $this->load->view('backend/certificateFront', $data);

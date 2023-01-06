@@ -8,10 +8,8 @@
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Ubah Password</h2>
-        </header>
         <div class="container">
+        <h3 class="text-center text-warning">Ubah Password</h3>
             <div class="row">            
                 <div class="col-md-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Members/validate_edit_password" method="post" enctype="multipart/form-data">
@@ -23,14 +21,7 @@
                             ?>
                         </div>
                         <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('edit_password_error')){
-                                echo $this->session->flashdata('edit_password_error').'<br/>';
-                            }
-                            ?>
-                        </div>
-                        <div class="text-danger">
-                            <?php		
+                            <?php	
                             if ($this->session->flashdata('error_message')){
                                 echo $this->session->flashdata('error_message').'<br/>';
                             }
@@ -39,9 +30,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Username</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?= $this->session->userdata('username'); ?>" disabled>
-                            </div>
+                            <div class="col-md-10"><?= $this->session->userdata('username'); ?></div>
                         </div>
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Password</label>

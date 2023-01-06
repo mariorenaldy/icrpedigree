@@ -8,11 +8,9 @@
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Profile</h2>
-        </header>
         <div class="container">
-            <div class="row mb-1">            
+            <h3 class="text-center text-warning">Profile</h3>
+            <div class="row mb-1 mt-3">            
                 <div class="col-md-3">Foto KTP</div>
                 <div class="col-md-2">
                     <img src="<?= base_url('uploads/members/'.$member->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
