@@ -44,9 +44,11 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md-2"><b>Photo</b></div>
-                    <div class="col-md-2"><b>ICR Number</b></div>
+                    <div class="col-md-1"><b>ICR Number</b></div>
                     <div class="col-md-2"><b>Name</b></div>
-                    <div class="col-md-2"><b>Status</b></div>
+                    <div class="col-md-2"><b>Kennel</b></div>
+                    <div class="col-md-2"><b>Owner</b></div>
+                    <div class="col-md-1"><b>Status</b></div>
                     <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($canine AS $c){ ?>
@@ -58,13 +60,19 @@
                                 <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
                             <?php } ?>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <?= $c->can_icr_number; ?>
                         </div>
                         <div class="col-md-2">
                             <?= $c->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
+                            <?= $c->ken_name; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?= $c->mem_name; ?>
+                        </div>
+                        <div class="col-md-1">
                             <?= $c->stat_name; ?>
                         </div>
                         <div class="col-md-2">

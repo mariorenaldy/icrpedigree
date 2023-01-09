@@ -4,90 +4,6 @@ class CaninesModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    // public function get_search($q){
-
-    //   $this->db->select('can_photo , can_id, can_a_s, can_icr_number, can_chip_number ');
-    //   $this->db->like('can_a_s', $q);
-    //   $this->db->or_like('can_icr_number', $q);
-    //   $this->db->or_like('can_chip_number', $q);
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function sire_search($q = null){
-
-    //     $this->db->select('can_id as id, can_a_s as text');
-    //     if (isset($q)) {
-    //       $this->db->like('can_a_s', $q);
-    //     }
-    //     $this->db->where('can_gender','Male');
-    //     $this->db->order_by('can_id', 'desc');
-    //     return $this->db->get('canines');
-    //   }
-
-    // public function sire_search_by_id($q = null, $id){
-
-    //     $this->db->select('can_id as id, can_a_s as text');
-    //     if (isset($q)) {
-    //       $this->db->like('can_a_s', $q);
-    //     }
-    //     $this->db->where('can_gender','Male');
-    //     $this->db->where('can_member_id',$id);
-    //     $this->db->order_by('can_id', 'desc');
-    //     return $this->db->get('canines');
-    //   }
-
-    // public function dam_search($q = null){
-
-    //   $this->db->select('can_id as id, can_a_s as text');
-    //   if (isset($q)) {
-    //       $this->db->like('can_a_s', $q);
-    //   }
-    //   $this->db->where('can_gender','Female');
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function breeder_search($q){
-
-    //   $this->db->select('can_owner_name');
-    //   $this->db->like('can_owner_name', $q);
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function kennel_search($q){
-
-    //   $this->db->select('can_cage');
-    //   $this->db->like('can_cage', $q);
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function address_search($q){
-
-    //   $this->db->select('can_address');
-    //   $this->db->like('can_address', $q);
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function owner_search($q){
-
-    //   $this->db->select('can_owner');
-    //   $this->db->like('can_owner', $q);
-    //   $this->db->order_by('can_id', 'desc');
-    //   return $this->db->get('canines');
-    // }
-
-    // public function owner_name_search($q){
-
-    //     $this->db->select('can_owner_name');
-    //     $this->db->like('can_owner_name', $q);
-    //     $this->db->order_by('can_id', 'desc');
-    //     return $this->db->get('canines');
-    //   }
-
     public function get_canines($where){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
@@ -96,6 +12,9 @@ class CaninesModel extends CI_Model {
         $this->db->where('can_id != ', $this->config->item('sire_id'));
         $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
+        $this->db->join('members','members.mem_id = canines.can_member_id');
+        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by('can_id', 'desc');
         $this->db->limit($this->config->item('backend_canine_count'), 0);
         return $this->db->get('canines');
@@ -114,6 +33,9 @@ class CaninesModel extends CI_Model {
         }
         $this->db->group_end();
         $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
+        $this->db->join('members','members.mem_id = canines.can_member_id');
+        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get('canines');
     }
@@ -149,23 +71,6 @@ class CaninesModel extends CI_Model {
         return $this->db->get('canines');
     }
 
-    // public function get_parent($where = null){
-    //     $this->db->select('can_a_s, can_id');
-    //     if ($where != null) {
-    //         $this->db->where($where);
-    //     }
-    //     $this->db->order_by('can_id', 'desc');
-    //     return $this->db->get('canines');
-    // }
-
-    // public function get_champions(){
-    //     $this->db->select('can_a_s, can_breed, 	can_photo, can_score');
-    //     $this->db->from('canines');
-    //     $this->db->limit(3);
-    //     $this->db->order_by('can_score', 'desc');
-    //     return $this->db->get();
-    // }
-
     public function get_can_pedigrees($where){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
@@ -178,20 +83,6 @@ class CaninesModel extends CI_Model {
         $this->db->order_by('can_id', 'desc');
         return $this->db->get();
     }
-
-    // public function get_non_approve_canines(){
-    //     $this->db->select('*');
-    //     $this->db->join('canines','canines.can_id = logs_canine.log_id');
-    //     $this->db->join('requests','requests.req_id = logs_canine.log_req');
-    //     $this->db->join('users','users.use_id = requests.req_app_user');
-    //     $this->db->join('approval_status','approval_status.stat_id = requests.req_stat');
-    //     $this->db->join('members','members.mem_id = canines.can_member');
-    //     $this->db->join('kennels','kennels.ken_id = members.mem_ken_id');
-    //     $this->db->where('log_stat', 1);
-    //     $this->db->where('req_stat <> ', 0);
-    //     $this->db->order_by('log_tanggal', 'desc');
-    //     return $this->db->get();
-    // }
 
     public function add_canines($data){
         $this->db->insert('canines', $data);
@@ -261,17 +152,6 @@ class CaninesModel extends CI_Model {
     //     return $query->result();
     // }
 
-    // public function set_active($id, $status){
-    //     $data = array(
-    //         'can_stat' => $status
-    //     );
-    //     $this->db->where('can_id', $id);
-
-    //     $edit = $this->db->update('canines', $data);
-
-	// 	return $edit; 
-    // }
-
     // public function search_by_icr_number($q){
     //     $date = '';
     //     $piece = explode("-", $q);
@@ -308,17 +188,6 @@ class CaninesModel extends CI_Model {
     //     $query = $this->db->query($sql);
         
     //     return count($query->result());
-    // }
-
-    // public function set_print($id, $count){
-    //     $data = array(
-    //         'can_print' => $count
-    //     );
-    //     $this->db->where('can_id', $id);
-
-    //     $edit = $this->db->update('canines', $data);
-
-	// 	return $edit; 
     // }
 
     // public function get_members_canines(){
@@ -368,28 +237,6 @@ class CaninesModel extends CI_Model {
     //     return $query->result();
     // }
 
-    // public function add_canine($bir_photo, $bir_a_s, $bir_breed, $bir_gender, $bir_color, $bir_date_of_birth, $bir_kennel_id, $bir_member_id){
-    //     $data = array(
-    //         'can_member_id' => $bir_member_id,
-    //         'can_photo' => $bir_photo,
-    //         'can_a_s' => $bir_a_s,
-    //         'can_breed' => $bir_breed,
-    //         'can_gender' => $bir_gender,
-    //         'can_color' => $bir_color,
-    //         'can_date_of_birth' => $bir_date_of_birth,
-    //         'can_kennel_id' => $bir_kennel_id,
-    //         'can_reg_date' => date('Y-m-d H:i:s'),
-    //         'can_reg_number' => '-',
-    //         'can_icr_number' => '-',
-    //         'can_chip_number' => '-'
-    //     );
-
-    //     $this->db->insert('canines', $data);
-    //     $result = $this->db->insert_id();
-
-	// 	return $result; 
-    // }
-
     public function check_can_a_s($id, $name){
         $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = 1";
         if ($id){
@@ -437,42 +284,4 @@ class CaninesModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();  
 	}
-
-    public function get_by_id_app($id){ 
-        $sql = "SELECT * FROM canines c, members m, kennels k, users u, approval_status a WHERE m.mem_id = c.can_member_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND c.can_app_stat = a.stat_id AND c.can_app_user = u.use_id AND c.can_id = ".$id;
-        $query = $this->db->query($sql);
-        return $query->result();
-    }
-
-    public function search_app($q){
-        $date = '';
-        $piece = explode("-", $q);
-        if (count($piece) == 3){
-            $date = $piece[2]."-".$piece[1]."-".$piece[0];
-        }
-        $sql = "select * from canines c, members m, kennels k where c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
-        if ($date)
-            $sql .= " OR c.can_date_of_birth LIKE '%".$date."%')";
-        else
-            $sql .= ")";
-        $sql .= " ORDER BY c.can_icr_number";
-        $query = $this->db->query($sql);
-        return $query->result();
-    }
-
-    // public function update_status($id, $stat){
-    //     $data = array(
-    //         'can_app_user' => $this->session->userdata('use_id');,
-    //         'can_app_date' => date('Y-m-d H:i:s'),
-    //         'can_app_stat' => $stat,
-    //         'can_app_note' => $this->input->post('can_app_note')
-    //     );
-    //     if ($stat == 1)
-    //         $data['can_stat'] = 1;
-    //     $this->db->where('can_id', $id);
-
-    //     $edit = $this->db->update('canines', $data);
-
-	// 	return $edit; 
-    // }
 }

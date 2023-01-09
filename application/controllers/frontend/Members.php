@@ -215,13 +215,7 @@ class Members extends CI_Controller {
 					redirect("frontend/Members");
 				}
 				else{
-					if ($this->session->userdata('mem_stat') == '1'){
-						$this->load->view("frontend/profile", $data);
-						// $this->load->view("frontend/edit_profile", $data);
-					}
-					else{
-						$this->load->view("frontend/profile", $data);
-					}
+					$this->load->view("frontend/profile", $data);
 				}
 			}
 			else{
@@ -366,7 +360,7 @@ class Members extends CI_Controller {
 				redirect("frontend/Members");
 			}
 		}
-
+	
 		public function validate_edit_password(){
 			if ($this->session->userdata('username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');

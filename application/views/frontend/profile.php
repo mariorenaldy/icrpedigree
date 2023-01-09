@@ -8,25 +8,25 @@
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <div class="text-success">
-            <?php		
-                if ($this->session->flashdata('edit_profile')){
-                    echo 'Edit Profile berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
-                }
-            ?>
-        </div>
         <div class="container">
-            <h3 class="text-center text-warning">Profile</h3>
+            <h3 class="text-center text-warning">Profile <?php if ($this->session->userdata('mem_stat') == '1') ?><!-- <button type="button" class="btn btn-warning" onclick="window.location = '<?= base_url() ?>frontend/Members/edit_profile'">Edit</button> --></h3>
+            <div class="text-success">
+                <?php		
+                    if ($this->session->flashdata('edit_profile')){
+                        echo 'Edit Profile berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                    }
+                ?>
+            </div>
             <div class="row mb-1 mt-3">            
                 <div class="col-md-3">Foto KTP</div>
                 <div class="col-md-2">
-                    <img src="<?= base_url('uploads/members/'.$member->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
+                    <img src="<?php if ($member->mem_photo != '-') echo base_url().'uploads/members/'.$member->mem_photo; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail" alt="KTP">
                 </div>
             </div>
             <div class="row mb-1">            
                 <div class="col-md-3">PP</div>
                 <div class="col-md-2">
-                    <img src="<?= base_url('uploads/members/'.$member->mem_pp) ?>" class="img-fluid img-thumbnail" alt="KTP">
+                    <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail" alt="KTP">
                 </div>
             </div>
             <div class="row mb-1">
@@ -60,11 +60,6 @@
             <div class="row mb-1">
                 <div class="col-md-3">email</div>
                 <div class="col-md-9"><?= $member->mem_email ?></div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-3">
-                    <button type="button" class="btn btn-warning" onclick="window.location = '<?= base_url() ?>frontend/Members/edit_profile'">Edit</button>
-                </div>
             </div>
         </div>
     </main>
