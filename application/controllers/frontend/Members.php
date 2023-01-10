@@ -249,6 +249,7 @@ class Members extends CI_Controller {
 			else{
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_message('is_unique', '%s tidak boleh sama');
 				$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
 				$this->form_validation->set_rules('mem_address', 'Alamat sesuai KTP ', 'trim|required');
 				$this->form_validation->set_rules('mem_mail_address', 'Alamat surat menyurat ', 'trim|required');
@@ -256,6 +257,16 @@ class Members extends CI_Controller {
 				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
 				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
+
+				$memID['mem_id'] = $id;
+				$original_value = $this->MemberModel->get_members($memID)->result()[0]->mem_ktp;
+				if($this->input->post('mem_ktp') != $original_value) {
+					$is_unique = '|is_unique[members.mem_ktp]';
+				} 
+				else {
+					$is_unique = '';
+				}
+				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required'.$is_unique);
 
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("frontend/edit_profile");
@@ -311,6 +322,7 @@ class Members extends CI_Controller {
 							'log_kota' => $this->input->post('mem_kota'),
 							'log_kode_pos' => $this->input->post('mem_kode_pos'),
 							'log_email' => $this->input->post('mem_email'),
+							'log_ktp' => $this->input->post('mem_ktp'),
 							'log_pp' => $pp,
 							'log_stat' => 0
 						);
