@@ -48,42 +48,74 @@
                         <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2"><b>KTP</b></div>
-                    <div class="col-md-2"><b>Name</b></div>
-                    <div class="col-md-2"><b>Address</b></div>
-                    <div class="col-md-2"><b>Phone Number</b></div>
-                    <div class="col-md-2"><b>Type</b></div>
-                    <div class="col-md-2"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>KTP</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Phone Number</th>
+                                <th>Type</th>
+                                <th></th>
+                                <th>id</th>
+                                <th>mail_address</th>
+                                <th>photo</th>
+                                <th>created_at</th>
+                                <th>app_user</th>
+                                <th>app_date</th>
+                                <th>username</th>
+                                <th>password</th>
+                                <th>email</th>
+                                <th>pp</th>
+                                <th>kota</th>
+                                <th>kode_pos</th>
+                                <th>firebase_token</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($member AS $m){
+                                if ($m->mem_stat){ ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
+                                    </td>
+                                    <td><?= $m->mem_name; ?></td>
+                                    <td><?= $m->mem_address; ?></td>
+                                    <td><?= $m->mem_hp; ?></td>
+                                    <td><?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; ?></td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" onclick="resetPass(<?= $m->mem_id ?>)"><i class="fa fa-refresh"></i></button>
+                                        <?php if ($m->mem_stat == 2){ ?>
+                                            <button type="button" class="btn btn-primary" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-money"></i></button>
+                                        <?php } ?>
+                                    </td>
+                                    <td><?= $m->mem_id; ?></td>
+                                    <td><?= $m->mem_mail_address; ?></td>
+                                    <td>
+                                        <?php if ($m->mem_photo != '-'){ ?>
+                                            <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="member">
+                                        <?php } else{ ?>
+                                            -
+                                        <?php } ?>
+                                    </td>
+                                    <td><?= $m->mem_created_at; ?></td>
+                                    <td><?= $m->mem_app_user; ?></td>
+                                    <td><?= $m->mem_app_date; ?></td>
+                                    <td><?= $m->mem_username; ?></td>
+                                    <td><?= $m->mem_password; ?></td>
+                                    <td><?= $m->mem_email; ?></td>
+                                    <td><?= $m->mem_pp; ?></td>
+                                    <td><?= $m->mem_kota; ?></td>
+                                    <td><?= $m->mem_kode_pos; ?></td>
+                                    <td><?= $m->mem_firebase_token; ?></td>
+                                </tr>
+                                <?php 
+                                } 
+                            } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php foreach ($member AS $m){ 
-                    if ($m->mem_stat){ ?>
-                        <div class="row">
-                            <div class="col-md-2 mb-1">
-                                <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
-                            </div>
-                            <div class="col-md-2">
-                                <?= $m->mem_name; ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?= $m->mem_address; ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?= $m->mem_hp; ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; ?>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-warning" onclick="resetPass(<?= $m->mem_id ?>)"><i class="fa fa-refresh"></i></button>
-                                <?php if ($m->mem_stat == 2){ ?>
-                                    <button type="button" class="btn btn-primary" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-money"></i></button>
-                                <?php } ?>
-                            </div>
-                        </div>
-                <?php 
-                        } 
-                    } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

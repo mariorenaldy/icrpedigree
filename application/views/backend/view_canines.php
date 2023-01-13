@@ -42,44 +42,88 @@
                         <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2"><b>Photo</b></div>
-                    <div class="col-md-1"><b>ICR Number</b></div>
-                    <div class="col-md-2"><b>Name</b></div>
-                    <div class="col-md-2"><b>Kennel</b></div>
-                    <div class="col-md-2"><b>Owner</b></div>
-                    <div class="col-md-1"><b>Status</b></div>
-                    <div class="col-md-2"></div>
-                </div>
-                <?php foreach ($canine AS $c){ ?>
-                    <div class="row">
-                        <div class="col-md-2 mb-1">
-                            <?php if ($c->can_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                            <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>ICR Number</th>
+                                <th>Name</th>
+                                <th>Kennel</th>
+                                <th>Owner</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th>id</th>
+                                <th>reg_number</th>
+                                <th>breed</th>
+                                <th>gender</th>
+                                <th>color</th>
+                                <th>date_of_birth</th>
+                                <th>chip_number</th>
+                                <th>reg_date</th>
+                                <th>desc</th>
+                                <th>stat</th>
+                                <th>note</th>
+                                <th>print</th>
+                                <th>app_stat</th>
+                                <th>app_user</th>
+                                <th>app_date</th>
+                                <th>app_note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($canine AS $c){ ?>
+                                <tr>
+                                    <td>
+                                        <?php if ($c->can_photo != '-'){ ?>
+                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                        <?php } else{ ?>
+                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                        <?php } ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->can_icr_number; ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->can_a_s; ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->ken_name; ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->mem_name; ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->stat_name; ?>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button>
+                                    </td>
+                                    <td>
+                                        <?= $c->can_id; ?>
+                                    </td>
+                                    <td>
+                                        <?= $c->can_reg_number; ?>
+                                    </td>
+                                    <td><?= $c->can_breed; ?></td>
+                                    <td><?= $c->can_gender; ?></td>
+                                    <td><?= $c->can_color; ?></td>
+                                    <td><?= $c->can_date_of_birth; ?></td>
+                                    <td><?= $c->can_chip_number; ?></td>
+                                    <td><?= $c->can_reg_date; ?></td>
+                                    <td><?= $c->can_desc; ?></td>
+                                    <td><?= $c->can_stat; ?></td>
+                                    <td><?= $c->can_note; ?></td>
+                                    <td><?= $c->can_print; ?></td>
+                                    <td><?= $c->can_app_stat; ?></td>
+                                    <td><?= $c->can_app_user; ?></td>
+                                    <td><?= $c->can_app_date; ?></td>
+                                    <td><?= $c->can_app_note; ?></td>
+                                </tr>
                             <?php } ?>
-                        </div>
-                        <div class="col-md-1">
-                            <?= $c->can_icr_number; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $c->can_a_s; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $c->ken_name; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $c->mem_name; ?>
-                        </div>
-                        <div class="col-md-1">
-                            <?= $c->stat_name; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-primary" onclick='print(<?= $c->can_id; ?>)'><i class="fa fa-print"></i></button>
-                        </div>
-                    </div>
-                <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
