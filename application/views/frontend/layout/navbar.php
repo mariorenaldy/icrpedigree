@@ -20,6 +20,7 @@ if ($this->session->userdata('username')) : ?>
             <?php } ?>
             <div class="dropdown">
                 <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="<?= base_url('uploads/members/'.$this->session->userdata('mem_pp')) ?>" class="img-fluid" style="max-width: 25px;">
                     <?= $this->session->userdata('username') ?>
                 </span>
                 <ul class="dropdown-menu">
