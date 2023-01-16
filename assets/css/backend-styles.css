@@ -11,3 +11,11 @@
 .container .row .col-md-4 .desc{
     font-size: 0.7em !important;
 }
+@font-face {
+    font-family: "Cen725c";
+    src: url("../font/Cen725c.ttf") format("truetype");
+}
+@font-face {
+    font-family: "baskerville";
+    src: url("../font/baskervi.ttf") format("truetype");
+}

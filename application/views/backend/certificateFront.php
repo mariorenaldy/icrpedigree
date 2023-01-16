@@ -9,29 +9,29 @@
   <?php $this->load->view('templates/redirect'); ?>
   <div class="container">
     <div class="row">
-      <div class="col md-4">
+      <div class="col md-4" style="font-family:Cen725c;">
         <figure class="text-center">
-          <img src="<?= base_url('assets/img/icr_logo.png') ?>" class="center-block text-center" style="width: 20vw;">
+          <img src="<?= base_url('assets/img/icr_logo_hitam.png') ?>" class="center-block text-center" style="width: 20vw;">
         </figure>
-        <h5 class="gold mb-3 text-center" style="color: #d09724; font-weight: 700;">INDONESIAN CANINE REGISTRY</h5>
-        <p>Lorem ipsum dolor sit arnet consectetur adipi-scing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam-co lebons nisi ut aliquip ex ea commodo conse-quat. </p>
+        <h5 class="mb-3 text-center fs-3">INDONESIAN CANINE REGISTRY</h5>
+        <p class="text-center">Sertifikat ini hanya diterbitkan oleh Indonesian Canine Registry. Harap membaca ketentuan dan peraturan pada sertifikat ini
+        <br>Silsilah yg ada di dalam sertifikat ini dapat di akses secara online melalui website www.icrpedigree.com</p>
       </div>
-      <?php foreach ($rules AS $r){ ?>
-        <div class="col-md-4">
-          <?= $r->ru_title; ?>
-          <span class="desc"><?= $r->ru_desc; ?></span>  
-        </div>
-      <?php } ?>
-      <div class="col md-4">
-        <h5 class="gold mb-3 text-center">Awards & Appreciation:</h5>
-        <ol class="p-0" style="list-style-position: inside;">
-          <li>July 4, 1969: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-          <li>20 July, 1969: Nam hendrerit nisi sed sollicitu-din pellentesque. </li>
-          <li>January 4, 1996: Nunc posuere purus rhon-Cols pulvinar aliquam. </li>
-          <li>August 6, 1945: Ut aliquet tristique nisi vitae volutpat. </li>
-          <li>April 13, 1961: Nulls aliquet porttitor venena-tis. </li>
-          <li>October 12, 1942: Donee a dui et dui fringilla consectetur id nec massa. </li>
-        </ol>
+      <div class="col-md-5" style="font-family: baskerville;">
+        <span>Peraturan:</span>
+        <ul style="list-style-type: none; padding-left: 0;">
+          <li>- Apabila Stambum hilang dapat melakukan pengajuan pembuatan stambum baru (duplikat)</li>
+          <li>- Angota ICR dapat mengajukan pergantian nama kennel</li>
+          <li>- Anggota ICR dapat mengajukan pergantian nama, alamat kepemilikan serta update foto terbaru</li>
+          <li>- Syarat, ketentuan serta biaya dapat di lihat melalui web www.icrpedigree.com</li>
+        </ul>
+
+        <span>Catatan:</span><br>
+        <span>Pihak ICR berhak melakukan pembatalan pengajuan apabila salah satu syarat dan ketentuan tidak dipenuhi.</span><br>
+        <span>Syarat dan ketentuan dapat berubah sewaktu waktu dan akan di informasikan melalui website www.icrpedigree.com</span>
+      </div>
+      <div class="col-md" style="font-family: baskerville;">
+        <span>Catatan:</span><br>
       </div>
     </div>
   </div>
