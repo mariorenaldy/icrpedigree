@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Edit Rule</title>
+    <title>Edit Setting</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>assets/css/suneditor.min.css" rel="stylesheet" />
 </head>
@@ -11,41 +11,46 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">  
-                <h3 class="text-center text-primary">Edit Rule</h3>                        
-                <form class="form-horizontal" action="<?= base_url(); ?>backend/Rules/validate_edit" method="post" onsubmit="save();">
+                <h3 class="text-center text-primary">Edit Setting</h3>                        
+                <form class="form-horizontal" action="<?= base_url(); ?>backend/Setting/validate" method="post" onsubmit="save();">
+                    <div class="text-success">
+                        <?php		
+                            if ($this->session->flashdata('edit_success')){
+                                echo 'Setting has been saved.<br/>';
+                            }
+                        ?>
+                    </div>
                     <div class="text-danger">
                         <?php		
-                            if ($this->session->flashdata('edit_error')){
-                                echo $this->session->flashdata('edit_error').'<br/>';
+                            if ($this->session->flashdata('error_message')){
+                                echo $this->session->flashdata('error_message').'<br/>';
                             }
                             echo validation_errors().'<br/>';
                         ?>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="title" class="control-label col-md-1">Title </label>
+                        <label for="title" class="control-label col-md-2">Term & Condition: </label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input type="text" class="form-control" name="title" value="<?= $rule->ru_title ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
+                                <textarea class="form-control" rows="10" name="set_tc"><?= $setting->set_tc ?></textarea>
                             <?php } else { ?>
-                                <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
+                                <textarea class="form-control" rows="10" name="set_tc"><?= set_value('set_tc') ?></textarea>
                             <?php } ?>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="password" class="control-label col-md-1">Rule </label>
+                        <label for="password" class="control-label col-md-2">Certificate Rules: </label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input type="hidden" name="rule_id" value="<?= $rule->ru_rule_id ?>" />
-                                <textarea class="form-control" rows="10" name="rule" id="rule" style="display:none;"><?= $rule->ru_desc ?></textarea>
+                                <textarea class="form-control" rows="10" name="set_rule" id="rule" style="display:none;"><?= $setting->set_rule ?></textarea>
                             <?php } else { ?>
-                                <input type="hidden" name="rule_id" value="<?= set_value('rule_id') ?>" />
-                                <textarea class="form-control" rows="10" name="rule" id="rule" style="display:none;"><?= set_value('rule') ?></textarea>
+                                <textarea class="form-control" rows="10" name="set_rule" id="rule" style="display:none;"><?= set_value('set_rule') ?></textarea>
                             <?php } ?>
                         </div>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-danger" onclick="window.location = '<?= base_url() ?>backend/Rules'">Back</button>
+                        <button type="button" class="btn btn-danger" onclick="window.location = '<?= base_url() ?>backend/Setting'">Back</button>
                     </div>
                 </form>
             </div>                           

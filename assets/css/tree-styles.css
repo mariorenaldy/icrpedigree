@@ -3,27 +3,21 @@
 *:after {
   box-sizing: border-box;
 }
-
 body {
-  min-width: 1200px;
+  min-width: 1300px;
   margin: 0;
   user-select: none;
 }
-
 body p {
   margin: 0;
 }
-
 #wrapper {
   position: relative;
 }
-
 .branch {
   /* border: 2px solid black; */
   position: relative;
-  /* margin-left: 300px; */
 }
-
 .branch:before {
   content: "";
   width: 50px;
@@ -33,12 +27,19 @@ body p {
   top: 50%;
   margin-top: 1px;
 }
-
+.branch.lv1 {
+  margin-left: 400px;
+}
+.branch.lv2 {
+  margin-left: 300px;
+}
+.branch.lv3 {
+  margin-left: 300px;
+}
 .entry {
   position: relative;
-  min-height: 97px;
+  min-height: 70px;
 }
-
 .entry:before {
   content: "";
   height: 100%;
@@ -46,7 +47,6 @@ body p {
   position: absolute;
   left: -50px;
 }
-
 .entry:after {
   content: "";
   width: 50px;
@@ -56,7 +56,6 @@ body p {
   top: 50%;
   margin-top: 1px;
 }
-
 .entry:first-child:before {
   width: 10px;
   height: 50%;
@@ -64,98 +63,112 @@ body p {
   margin-top: 2px;
   border-radius: 10px 0 0 0;
 }
-
 .entry:first-child:after {
   height: 10px;
   border-radius: 10px 0 0 0;
 }
-
 .entry:last-child:before {
   width: 10px;
   height: 50%;
   border-radius: 0 0 0 10px;
 }
-
 .entry:last-child:after {
   height: 10px;
   border-top: none;
   /* border-bottom: 5px solid black; */
   border-radius: 0 0 0 10px;
-  margin-top: -9px;
+  margin-top: -10px;
 }
-
 .entry.sole:before {
   display: none;
 }
-
 .entry.sole:after {
   width: 50px;
   height: 0;
   margin-top: 1px;
   border-radius: 0;
 }
-
 .label {
   display: block;
-  max-width: 16em;
-  padding: 5px 10px;
+  max-width: 20em;
+  padding: 0px 10px;
   line-height: 1.2;
-  top: 50%;
   border-radius: 5px;
   position: absolute;
   left: 0;
   margin-top: -15px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.8em !important;
 }
-
+.label .fs-6{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1em !important;
+}
+.label .fs-5{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.4em !important;
+}
+.label .fs-4{
+  font-family: Impact;
+  font-size: 1.6em !important;
+  margin-bottom: 10px;
+}
+.container{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.2em !important;
+  margin-left: 20px;
+}
 .lv1 .entry .label {
   top: 40%;
 }
-
 .lv2 .entry .label {
   top: 20%;
 }
-
 .lv3 .entry .label {
   top: 5%;
 }
-
 .red {
   font-weight: 700;
   color: #e62225 !important;
 }
-
 .black {
   font-weight: 700;
   color: black !important;
 }
-
-@media print {
-
-  html,
-  body {
-    height: 100%;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden;
-  }
+.canine{
+  width: 250px;
+  margin-top: 2px;
 }
-
 #main {
-  top: 10%;
-  /* left: 2%; */
+  top: 7%;
+  min-width: 350px;
 }
-
 .bg-container {
   position: absolute;
-  /* border: 2px solid red;  */
-  height: 700px;
-  width: 700px;
+  height: 610px;
+  width: 800px;
   background-image: url('../img/icr_logo_abu.png');
+  background-repeat: no-repeat;
   pointer-events: none;
-  background-size: 700px;
-  left: 430px;
-  top: 50px;
-  /* transform: rotate(-10deg); */
+  background-size: 100%;
+  left: 400px;
+  top: 0px;
+  opacity: 0.5;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
+}
+.imgReplacement{
+  height: 150px;
+}
+.president{
+  bottom:12%; 
+  left:40px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.1em !important;
+}
+.president-name{
+  bottom:2%; 
+  left:120px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.1em !important;
 }

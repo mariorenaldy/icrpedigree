@@ -4,14 +4,16 @@ class CaninesModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
+    public function record_count() {
+        return $this->db->count_all("canines");
+    }
+
     public function get_canines($where){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->where('can_id != ', $this->config->item('sire_id'));
-        $this->db->where('can_id != ', $this->config->item('dam_id'));
-        $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
+        $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
@@ -21,20 +23,18 @@ class CaninesModel extends CI_Model {
     }
 
     public function search_canines($like, $where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->where('can_id != ', $this->config->item('sire_id'));
-        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->group_start();
         if ($like != null) {
             $this->db->or_like($like);
         }
         $this->db->group_end();
-        $this->db->join('approval_status','approval_status.stat_id = canines.can_app_stat');
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get('canines');
@@ -72,10 +72,12 @@ class CaninesModel extends CI_Model {
     }
 
     public function get_can_pedigrees($where){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('can_id != ', $this->config->item('sire_id'));
+        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
         $this->db->join('members','members.mem_id = canines.can_member_id');
@@ -85,15 +87,13 @@ class CaninesModel extends CI_Model {
     }
 
     public function add_canines($data){
-        $this->db->insert('canines', $data);
-        return $this->db->insert_id();
+        return $this->db->insert('canines', $data);
     }
 
     public function update_canines($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('canines');
-        return $this->db->affected_rows();
+        return $this->db->update('canines');
     }
 
     public function get_dob_by_id($id){
@@ -238,7 +238,7 @@ class CaninesModel extends CI_Model {
     // }
 
     public function check_can_a_s($id, $name){
-        $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = 1";
+        $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = ".$this->config->item('accepted');
         if ($id){
             $sql .= ' AND can_id <> '.$id;
         }

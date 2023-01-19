@@ -21,13 +21,13 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group my-3 gap-3">
+                        <!-- <div class="input-group my-3 gap-3">
                             <label for="imageInput" class="control-label col-md-12 text-center">Foto KTP</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
-                        </div>
+                        </div> -->
                         <div class="input-group mb-3">
                             <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
                             <div class="col-md-10">
@@ -53,9 +53,9 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-md-2">No. Telp</label>
+                            <label for="mem_hp" class="control-label col-md-2">No. HP WA Aktif</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. Telp" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
+                                <input class="form-control" type="number" placeholder="No. HP WA Aktif" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -137,14 +137,14 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         $(document).ready(function(){
-            const imageInput = document.querySelector("#imageInput");
-            imageInput.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreview").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
-            })
+            // const imageInput = document.querySelector("#imageInput");
+            // imageInput.addEventListener("change", function() {
+            //     const reader = new FileReader();
+            //     reader.addEventListener("load", () => {
+            //         document.querySelector("#imgPreview").src = reader.result
+            //     })
+            //     reader.readAsDataURL(this.files[0])
+            // })
 
             const imageInputPP = document.querySelector("#imageInputPP");
             imageInputPP.addEventListener("change", function() {

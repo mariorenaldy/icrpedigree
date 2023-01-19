@@ -54,7 +54,10 @@ class Members extends CI_Controller {
 					$this->session->set_userdata('username', $this->input->post('username'));
 					$this->session->set_userdata('mem_id', $member->mem_id);
 					$this->session->set_userdata('mem_stat', $member->mem_stat);
-					$this->session->set_userdata('mem_pp', $member->mem_pp);
+					if ($member->mem_pp && $member->mem_pp != '-')
+						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
+					else
+						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
 					redirect("frontend/Beranda");
 				}
 				else{
@@ -97,20 +100,20 @@ class Members extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				$photo = '-';
-				if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-					if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_member'));
-						if ($this->upload->do_upload('attachment_member')){
-							$uploadData = $this->upload->data();
-							$photo = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', $this->upload->display_errors());
-						}
-					}
-				}
+				// $photo = '-';
+				// if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+				// 	if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+				// 		$this->upload->initialize($this->config->item('upload_member'));
+				// 		if ($this->upload->do_upload('attachment_member')){
+				// 			$uploadData = $this->upload->data();
+				// 			$photo = $uploadData['file_name'];
+				// 		}
+				// 		else{
+				// 			$err++;
+				// 			$this->session->set_flashdata('error_message', $this->upload->display_errors());
+				// 		}
+				// 	}
+				// }
 	
 				$pp = '-';
 				if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
@@ -142,15 +145,15 @@ class Members extends CI_Controller {
 					}
 				}
 	
-				if (!$err && $photo == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
-				}
+				// if (!$err && $photo == "-"){
+				// 	$err++;
+				// 	$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
+				// }
 		
-				if (!$err && $logo == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
-				}
+				// if (!$err && $logo == "-"){
+				// 	$err++;
+				// 	$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
+				// }
 	
 				if (!$err){
 					$mem_id = $this->MemberModel->record_count() + 1;
@@ -160,23 +163,25 @@ class Members extends CI_Controller {
 						'mem_address' => $this->input->post('mem_address'),
 						'mem_mail_address' => $this->input->post('mem_mail_address'),
 						'mem_hp' => $this->input->post('mem_hp'),
-						'mem_photo' => $photo,
+						// 'mem_photo' => $photo,
 						'mem_kota' => $this->input->post('mem_kota'),
 						'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 						'mem_email' => $this->input->post('mem_email'),
 						'mem_ktp' => $this->input->post('mem_ktp'),
 						'mem_pp' => $pp,
 						'mem_username' => $this->input->post('mem_username'),
-						'mem_password' => sha1($this->input->post('password'))
+						'mem_password' => sha1($this->input->post('password')),
+						'mem_stat' => $this->config->item('saved_member_status'),
 					);
 		
 					$ken_id = $this->KennelModel->record_count() + 1;
 					$kennel_data = array(
 						'ken_id' => $ken_id,
-						'ken_name' => $this->input->post('ken_name'),
+						'ken_name' => strtoupper($this->input->post('ken_name')),
 						'ken_type_id' => $this->input->post('ken_type_id'),
 						'ken_photo' => $logo,
 						'ken_member_id' => $mem_id,
+						'ken_stat' => $this->config->item('saved')
 					);
 		
 					$this->db->trans_strict(FALSE);
@@ -250,7 +255,6 @@ class Members extends CI_Controller {
 			else{
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_message('required', '%s wajib diisi');
-				$this->form_validation->set_message('is_unique', '%s tidak boleh sama');
 				$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
 				$this->form_validation->set_rules('mem_address', 'Alamat sesuai KTP ', 'trim|required');
 				$this->form_validation->set_rules('mem_mail_address', 'Alamat surat menyurat ', 'trim|required');
@@ -258,16 +262,6 @@ class Members extends CI_Controller {
 				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
 				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-
-				$memID['mem_id'] = $id;
-				$original_value = $this->MemberModel->get_members($memID)->result()[0]->mem_ktp;
-				if($this->input->post('mem_ktp') != $original_value) {
-					$is_unique = '|is_unique[members.mem_ktp]';
-				} 
-				else {
-					$is_unique = '';
-				}
-				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required'.$is_unique);
 
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("frontend/edit_profile");
@@ -323,7 +317,6 @@ class Members extends CI_Controller {
 							'log_kota' => $this->input->post('mem_kota'),
 							'log_kode_pos' => $this->input->post('mem_kode_pos'),
 							'log_email' => $this->input->post('mem_email'),
-							'log_ktp' => $this->input->post('mem_ktp'),
 							'log_pp' => $pp,
 							'log_stat' => 0
 						);

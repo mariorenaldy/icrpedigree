@@ -5,7 +5,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('memberModel', 'KennelModel', 'LogmemberModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->library('email', $this->config->item('email'));
@@ -16,8 +16,15 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
-			$where['mem_app_user != '] = 0;
-			$data['member'] = $this->memberModel->get_members($where)->result();
+			$where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+			$data['member'] = $this->MemberModel->get_members($where)->result();
+			$data['kennel'] = Array();
+			foreach($data['member'] AS $m){
+				$wheKennel = [];
+				$wheKennel['ken_member_id'] = $m->mem_id;
+				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
+				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
+			}
 			$this->load->view('backend/view_members', $data);
 		}
 
@@ -25,15 +32,28 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
-			$where['mem_app_user != '] = 0;
-			$data['member'] = $this->memberModel->search_members($like, $where)->result();
+			$where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
+			$data['kennel'] = Array();
+			foreach($data['member'] AS $m){
+				$wheKennel = [];
+				$wheKennel['ken_member_id'] = $m->mem_id;
+				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
+				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
+			}
 			$this->load->view('backend/view_members', $data);
 		}
 
 		public function view_approve(){
-			$where['mem_app_user'] = 0;
-			$where['mem_stat'] = $this->config->item('non_paid_member_status');
-			$data['member'] = $this->memberModel->get_members($where)->result();
+			$where['mem_stat'] = $this->config->item('saved_member_status');
+			$data['member'] = $this->MemberModel->get_members($where)->result();
+			$data['kennel'] = Array();
+			foreach($data['member'] AS $m){
+				$wheKennel = [];
+				$wheKennel['ken_member_id'] = $m->mem_id;
+				$wheKennel['ken_stat'] = $this->config->item('saved'); 
+				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
+			}
 			$this->load->view('backend/approve_members', $data);
 		}
 
@@ -41,9 +61,15 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
-			$where['mem_app_user'] = 0;
-			$where['mem_stat'] = $this->config->item('non_paid_member_status');
-			$data['member'] = $this->memberModel->search_members($like, $where)->result();
+			$where['mem_stat'] = $this->config->item('saved_member_status');
+			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
+			$data['kennel'] = Array();
+			foreach($data['member'] AS $m){
+				$wheKennel = [];
+				$wheKennel['ken_member_id'] = $m->mem_id;
+				$wheKennel['ken_stat'] = $this->config->item('saved'); 
+				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
+			}
 			$this->load->view('backend/approve_members', $data);
 		}
 
@@ -54,49 +80,87 @@ class Members extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
-					$member = $this->memberModel->get_members($where)->row();
+					$member = $this->MemberModel->get_members($where)->row();
 
+					$data['mem_stat'] = $this->config->item('non_paid_member_status');
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$res = $this->memberModel->update_members($data, $where);
+					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$kennel_data = array(
-							'ken_stat' => 1,
+							'ken_stat' => $this->config->item('accepted'),
 							'ken_app_user' => $this->session->userdata('use_id'),
 							'ken_app_date' => date('Y-m-d H:i:s'),
 						);
 						$where_kennel['ken_member_id'] = $this->uri->segment(4);
 						$res2 = $this->KennelModel->update_kennels($kennel_data, $where_kennel);
 						if ($res2){
-							$this->db->trans_complete();
-							
-							$this->email->set_mailtype('html');
-							$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
-							$this->email->to($member->email);
-							$this->email->subject('Register Berhasil');
+							$dataLog = array(
+								'log_member_id' => $member->mem_id,
+								'log_name' => $member->mem_name,
+								'log_address' => $member->mem_address,
+								'log_mail_address' => $member->mem_mail_address,
+								'log_hp' => $member->mem_hp,
+								// 'log_photo' => $member->mem_photo,
+								'log_kota' => $member->mem_kota,
+								'log_kode_pos' => $member->mem_kode_pos,
+								'log_email' => $member->mem_email,
+								'log_ktp' => $member->mem_ktp,
+								'log_pp' => $member->mem_pp,
+								'log_app_user' => $this->session->userdata('use_id'),
+								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_stat' => $this->config->item('accepted'),
+							);
+							$log = $this->LogmemberModel->add_log($dataLog);
+							if ($log){
+								$dataKennelLog = array(
+									'log_kennel_id' => $member->ken_id,
+									'log_kennel_name' => $member->ken_name,
+									'log_kennel_type_id' => $member->ken_type_id,
+									'log_kennel_photo' => $member->ken_photo,
+									'log_stat' => $this->config->item('accepted'),
+									'log_app_user' => $this->session->userdata('use_id'),
+									'log_app_date' => date('Y-m-d H:i:s')
+								);
+								$res = $this->LogkennelModel->add_log($dataKennelLog);
+								if ($res){
+									$this->db->trans_complete();
+									
+									$this->email->set_mailtype('html');
+									$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+									$this->email->to($member->email);
+									$this->email->subject('Register Berhasil');
 
-							$message = '<div>Kepada pengguna ICR Pedigree,</div>';
-							$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
-							$message .= '<div>Salam </div>';
-							$message .= '<div>ICR Pedigree Customer Service</div>';
-							$message .= '<div><br/><hr/></div>';
+									$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+									$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+									$message .= '<div>Salam </div>';
+									$message .= '<div>ICR Pedigree Customer Service</div>';
+									$message .= '<div><br/><hr/></div>';
 
-							$this->email->message($message);
-							$res = $this->email->send();
+									$this->email->message($message);
+									$res = $this->email->send();
 
-							$this->session->set_flashdata('approve', TRUE);
-							redirect('backend/Members/view_approve');
+									$this->session->set_flashdata('approve', TRUE);
+									redirect('backend/Members/view_approve');
+								}
+								else{
+									$err = 1;
+								}
+							}
+							else{
+								$err = 2;
+							}
 						}
 						else{
-							$err = 1;
+							$err = 3;
 						}
 					}
 					else{
-						$err = 2;
+						$err = 4;
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error', 'Failed to approve member name = '.$member->mem_name);
+						$this->session->set_flashdata('error_message', 'Failed to approve member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members/view_approve');
 					}
 				}
@@ -112,19 +176,64 @@ class Members extends CI_Controller {
 		public function reject(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
+					$err = 0;
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
-					$member = $this->memberModel->get_members($where)->row();
+					$member = $this->MemberModel->get_members($where)->row();
 					
 					$data['mem_stat'] = $this->config->item('deactivated_member_status');
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$res = $this->memberModel->update_members($data, $where);
+					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
-						$this->session->set_flashdata('reject', TRUE);
-						redirect('backend/Members/view_approve');
+						$dataLog = array(
+							'log_member_id' => $member->mem_id,
+							'log_name' => $member->mem_name,
+							'log_address' => $member->mem_address,
+							'log_mail_address' => $member->mem_mail_address,
+							'log_hp' => $member->mem_hp,
+							// 'log_photo' => $member->mem_photo,
+							'log_kota' => $member->mem_kota,
+							'log_kode_pos' => $member->mem_kode_pos,
+							'log_email' => $member->mem_email,
+							'log_ktp' => $member->mem_ktp,
+							'log_pp' => $member->mem_pp,
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('deactivated_member_status'),
+						);
+						$log = $this->LogmemberModel->add_log($dataLog);
+						if ($log){
+							$dataKennelLog = array(
+								'log_kennel_id' => $member->ken_id,
+								'log_kennel_name' => $member->ken_name,
+								'log_kennel_type_id' => $member->ken_type_id,
+								'log_kennel_photo' => $member->ken_photo,
+								'log_stat' => $this->config->item('rejected'),
+								'log_app_user' => $this->session->userdata('use_id'),
+								'log_app_date' => date('Y-m-d H:i:s')
+							);
+							$res = $this->LogkennelModel->add_log($dataKennelLog);
+							if ($res){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('reject', TRUE);
+								redirect('backend/Members/view_approve');
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$err = 2;
+						}
 					}
 					else{
-						$this->session->set_flashdata('error', 'Failed to approve member name = '.$member->mem_name);
+						$err = 3;
+					}
+					if ($err){
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to approve member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members/view_approve');
 					}
 				}
@@ -143,15 +252,15 @@ class Members extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
-					$data['mem_stat'] = 1;
+					$data['mem_stat'] = $this->config->item('paid_member_status');
 					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
-					$res = $this->memberModel->update_members($data, $where);
+					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$err = 0;
 						$res2 = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
 						if ($res2){
 							$this->db->trans_complete();
-							$member = $this->memberModel->get_members($where)->row();
+							$member = $this->MemberModel->get_members($where)->row();
 							if ($member->mem_firebase_token){
 								$notif = $this->notificationtype_model->get_by_id(19);
 								$url = 'https://fcm.googleapis.com/fcm/send';
@@ -194,7 +303,7 @@ class Members extends CI_Controller {
 						$err = 2;
 					}
 					if ($err){
-						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4));
+						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members');
 					}
 				}
@@ -212,7 +321,7 @@ class Members extends CI_Controller {
 			$this->load->view("backend/add_member", $dataReg);
 		}
 
-		public function validate_add(){
+		public function validate_add(){ // butuh cek ktp, nama kennel
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_rules('mem_name', 'KTP Name ', 'trim|required');
@@ -222,11 +331,11 @@ class Members extends CI_Controller {
 				$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-				$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required|is_unique[members.mem_ktp]');
+				$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required'); //|is_unique[members.mem_ktp]');
 				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required|is_unique[members.mem_username]');
 				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 				$this->form_validation->set_rules('repass', 'Confirmation Password ', 'trim|matches[password]');
-				$this->form_validation->set_rules('ken_name', 'Kennel Name', 'trim|required|is_unique[kennels.ken_name]');
+				$this->form_validation->set_rules('ken_name', 'Kennel Name', 'trim|required'); //|is_unique[kennels.ken_name]');
 
 				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
 				if ($this->form_validation->run() == FALSE){
@@ -234,20 +343,20 @@ class Members extends CI_Controller {
 				}
 				else{
 					$err = 0;
-					$photo = '-';
-					if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-						if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_member'));
-							if ($this->upload->do_upload('attachment_member')){
-								$uploadData = $this->upload->data();
-								$photo = $uploadData['file_name'];
-							}
-							else{
-								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
-							}
-						}
-					}
+					// $photo = '-';
+					// if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					// 	if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					// 		$this->upload->initialize($this->config->item('upload_member'));
+					// 		if ($this->upload->do_upload('attachment_member')){
+					// 			$uploadData = $this->upload->data();
+					// 			$photo = $uploadData['file_name'];
+					// 		}
+					// 		else{
+					// 			$err++;
+					// 			$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					// 		}
+					// 	}
+					// }
 	
 					$pp = '-';
 					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
@@ -279,25 +388,25 @@ class Members extends CI_Controller {
 						}
 					}
 	
-					if (!$err && $photo == "-"){
-						$err++;
-						$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
-					}
+					// if (!$err && $photo == "-"){
+					// 	$err++;
+					// 	$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
+					// }
 			
-					if (!$err && $logo == "-"){
-						$err++;
-						$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
-					}
+					// if (!$err && $logo == "-"){
+					// 	$err++;
+					// 	$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
+					// }
 	
 					if (!$err){
-						$mem_id = $this->memberModel->record_count() + 1;
+						$mem_id = $this->MemberModel->record_count() + 1;
 						$data = array(
 							'mem_id' => $mem_id,
 							'mem_name' => $this->input->post('mem_name'),
 							'mem_address' => $this->input->post('mem_address'),
 							'mem_mail_address' => $this->input->post('mem_mail_address'),
 							'mem_hp' => $this->input->post('mem_hp'),
-							'mem_photo' => $photo,
+							// 'mem_photo' => $photo,
 							'mem_kota' => $this->input->post('mem_kota'),
 							'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 							'mem_email' => $this->input->post('mem_email'),
@@ -306,56 +415,96 @@ class Members extends CI_Controller {
 							'mem_username' => $this->input->post('mem_username'),
 							'mem_password' => sha1($this->input->post('password')),
 							'mem_app_user' => $this->session->userdata('use_id'),
-							'mem_app_date' => date('Y-m-d H:i:s')
+							'mem_app_date' => date('Y-m-d H:i:s'),
+							'mem_stat' => $this->config->item('non_paid_member_status'),
 						);
 		
 						$ken_id = $this->KennelModel->record_count() + 1;
 						$kennel_data = array(
 							'ken_id' => $ken_id,
-							'ken_name' => $this->input->post('ken_name'),
+							'ken_name' => strtoupper($this->input->post('ken_name')),
 							'ken_type_id' => $this->input->post('ken_type_id'),
 							'ken_photo' => $logo,
 							'ken_member_id' => $mem_id,
-							'ken_stat' => 1,
+							'ken_stat' => $this->config->item('accepted'),
 							'ken_app_user' => $this->session->userdata('use_id'),
 							'ken_app_date' => date('Y-m-d H:i:s')
+						);
+
+						$dataLog = array(
+							'log_member_id' => $mem_id,
+							'log_name' => $this->input->post('mem_name'),
+							'log_address' => $this->input->post('mem_address'),
+							'log_mail_address' => $this->input->post('mem_mail_address'),
+							'log_hp' => $this->input->post('mem_hp'),
+							// 'log_photo' => $photo,
+							'log_kota' => $this->input->post('mem_kota'),
+							'log_kode_pos' => $this->input->post('mem_kode_pos'),
+							'log_email' => $this->input->post('mem_email'),
+							'log_ktp' => $this->input->post('mem_ktp'),
+							'log_pp' => $pp,
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('accepted'),
+						);
+
+						$dataKennelLog = array(
+							'log_kennel_id' => $ken_id,
+							'log_kennel_name' => strtoupper($this->input->post('ken_name')),
+							'log_kennel_type_id' => $this->input->post('ken_type_id'),
+							'log_kennel_photo' => $logo,
+							'log_stat' => $this->config->item('accepted'),
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s')
 						);
 		
 						$this->db->trans_strict(FALSE);
 						$this->db->trans_start();
-						$id = $this->memberModel->add_members($data);
+						$id = $this->MemberModel->add_members($data);
 						if ($id){
 							$res = $this->KennelModel->add_kennels($kennel_data);
 							if ($res){
-								$this->db->trans_complete();
+								$log = $this->LogmemberModel->add_log($dataLog);
+								if ($log){
+									$res = $this->LogkennelModel->add_log($dataKennelLog);
+									if ($res){
+										$this->db->trans_complete();
 
-								$this->email->set_mailtype('html');
-								$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
-								$this->email->to($this->input->post('mem_email'));
-								$this->email->subject('Register Berhasil');
+										$this->email->set_mailtype('html');
+										$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+										$this->email->to($this->input->post('mem_email'));
+										$this->email->subject('Register Berhasil');
 
-								$message = '<div>Kepada pengguna ICR Pedigree,</div>';
-								$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
-								$message .= '<div>Salam </div>';
-								$message .= '<div>ICR Pedigree Customer Service</div>';
-								$message .= '<div><br/><hr/></div>';
+										$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+										$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+										$message .= '<div>Salam </div>';
+										$message .= '<div>ICR Pedigree Customer Service</div>';
+										$message .= '<div><br/><hr/></div>';
 
-								$this->email->message($message);
-								$res = $this->email->send();
+										$this->email->message($message);
+										$res = $this->email->send();
 
-								$this->session->set_flashdata('add_success', TRUE);
-								redirect("backend/Members");
+										$this->session->set_flashdata('add_success', TRUE);
+										redirect("backend/Members");
+									}
+									else{
+										$err = 1;
+									}
+								}
+								else{
+									$err = 2;
+								}
 							}
 							else{
-								$err = 1;
+								$err = 3;
 							}
 						}
 						else {
-							$err = 2;
+							$err = 4;
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Failed to save member');
+							$this->session->set_flashdata('error_message', 'Failed to save member. Error code: '.$err);
 							$this->load->view("backend/add_member", $dataReg);
 						}
 					}
@@ -369,31 +518,269 @@ class Members extends CI_Controller {
 			}
 		}
 
-		public function update($id = null){
-			$img = $this->input->post('srcDataCrop');
-			if ($img){
-				$title = self::_clean_text('member');
-				$_POST['mem_photo'] = self::_upload_base64($img, $title, true, $id);
+		public function edit(){
+			if ($this->uri->segment(4)){
+				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
+				$where['mem_id'] = $this->uri->segment(4);
+				$dataReg['member'] = $this->MemberModel->get_members($where)->row();
+				$dataReg['mode'] = 0;
+				$this->load->view("backend/edit_member", $dataReg);
 			}
-			unset($_POST['srcDataCrop']);
-
-			$imgPP = $this->input->post('srcDataCropPP');
-			if ($imgPP){
-				$titlePP = self::_clean_text('pp');
-				$_POST['mem_pp'] = self::_upload_base64($imgPP, $titlePP, true, $id);
+			else{
+				redirect('backend/Members');
 			}
-			unset($_POST['srcDataCropPP']);
+		}
 
+		public function validate_edit(){ // butuh cek ktp, nama kennel
+			if ($this->session->userdata('use_username')){
+				$this->form_validation->set_error_delimiters('<div>','</div>');
+				$this->form_validation->set_rules('mem_name', 'KTP Name ', 'trim|required');
+				$this->form_validation->set_rules('mem_address', 'KTP Address ', 'trim|required');
+				$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
+				$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
+				$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+				$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
+				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
+				$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required'); //|is_unique[members.mem_ktp]');
+				$this->form_validation->set_rules('ken_name', 'Kennel Name', 'trim|required'); //|is_unique[kennels.ken_name]');
+
+				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
+				$where['mem_id'] = $this->input->post('mem_id');
+				$dataReg['member'] = $this->MemberModel->get_members($where)->row();
+				$dataReg['mode'] = 1;
+				if ($this->form_validation->run() == FALSE){
+					$this->load->view("backend/edit_member", $dataReg);
+				}
+				else{
+					$err = 0;
+					// $photo = '-';
+					// if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					// 	if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
+					// 		$this->upload->initialize($this->config->item('upload_member'));
+					// 		if ($this->upload->do_upload('attachment_member')){
+					// 			$uploadData = $this->upload->data();
+					// 			$photo = $uploadData['file_name'];
+					// 		}
+					// 		else{
+					// 			$err++;
+					// 			$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					// 		}
+					// 	}
+					// }
+	
+					$pp = '-';
+					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+						if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_member'));
+							if ($this->upload->do_upload('attachment_pp')){
+								$uploadData = $this->upload->data();
+								$pp = $uploadData['file_name'];
+							}
+							else{
+								$err++;
+								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+							}
+						}
+					}
+	
+					$logo = '-';
+					if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+						if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_kennel'));
+							if ($this->upload->do_upload('attachment_logo')){
+								$uploadData = $this->upload->data();
+								$logo = $uploadData['file_name'];
+							}
+							else{
+								$err++;
+								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+							}
+						}
+					}
+
+					if (!$err){
+						$data = array(
+							'mem_name' => $this->input->post('mem_name'),
+							'mem_address' => $this->input->post('mem_address'),
+							'mem_mail_address' => $this->input->post('mem_mail_address'),
+							'mem_hp' => $this->input->post('mem_hp'),
+							'mem_kota' => $this->input->post('mem_kota'),
+							'mem_kode_pos' => $this->input->post('mem_kode_pos'),
+							'mem_email' => $this->input->post('mem_email'),
+							'mem_ktp' => $this->input->post('mem_ktp'),
+						);
+						// if ($photo != '-')
+						// 	$data['mem_photo'] = $photo;
+						if ($pp != '-')
+							$data['mem_pp'] = $pp;
+		
+						$kennel_data = array(
+							'ken_name' => strtoupper($this->input->post('ken_name')),
+							'ken_type_id' => $this->input->post('ken_type_id'),
+						);
+						if ($logo != '-')
+							$kennel_data['ken_photo'] = $logo;
+						
+						$dataLog = array(
+							'log_member_id' => $this->input->post('mem_id'),
+							'log_name' => $this->input->post('mem_name'),
+							'log_address' => $this->input->post('mem_address'),
+							'log_mail_address' => $this->input->post('mem_mail_address'),
+							'log_hp' => $this->input->post('mem_hp'),
+							// 'log_photo' => $photo,
+							'log_kota' => $this->input->post('mem_kota'),
+							'log_kode_pos' => $this->input->post('mem_kode_pos'),
+							'log_email' => $this->input->post('mem_email'),
+							'log_ktp' => $this->input->post('mem_ktp'),
+							'log_pp' => $pp,
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('accepted'),
+						);
+
+						$dataKennelLog = array(
+							'log_kennel_id' => $this->input->post('ken_id'),
+							'log_kennel_name' => strtoupper($this->input->post('ken_name')),
+							'log_kennel_type_id' => $this->input->post('ken_type_id'),
+							'log_kennel_photo' => $logo,
+							'log_stat' => $this->config->item('accepted'),
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s')
+						);
+		
+						$this->db->trans_strict(FALSE);
+						$this->db->trans_start();
+						$mem = $this->MemberModel->update_members($data, $where);
+						if ($mem){
+							$wheKen['ken_id'] = $this->input->post('ken_id');
+							$ken = $this->KennelModel->update_kennels($kennel_data, $wheKen);
+							if ($ken){
+								$log = $this->LogmemberModel->add_log($dataLog);
+								if ($log){
+									$res = $this->LogkennelModel->add_log($dataKennelLog);
+									if ($res){
+										$this->db->trans_complete();
+										$this->session->set_flashdata('edit_success', TRUE);
+										redirect("backend/Members");
+									}
+									else{
+										$err = 1;
+									}
+								}
+								else{
+									$err = 2;
+								}
+							}
+							else{
+								$err = 3;
+							}
+						}
+						else {
+							$err = 4;
+						}
+						if ($err){
+							$this->db->trans_rollback();
+							$this->session->set_flashdata('error_message', 'Failed to edit member id = '.$this->input->post('mem_id').'. Error code: '.$err);
+							$this->load->view("backend/edit_member", $dataReg);
+						}
+					}
+					else{
+						$this->load->view("backend/edit_member", $dataReg);
+					}
+				}
+			}
+			else{
+				redirect('backend/Users/login');
+			}
+		}
+
+		public function delete(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$err = 0;
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->MemberModel->get_members($where)->row();
+
+					$data = array(
+						'mem_app_user' => $this->session->userdata('use_id'),
+						'mem_app_date' => date('Y-m-d H:i:s'),
+						'mem_stat' => $this->config->item('deactivated_member_status'),
+					);
+					$where['mem_id'] = $this->uri->segment(4);
+					$res = $this->MemberModel->update_members($data, $where);
+					if ($res){
+						$dataLog = array(
+							'log_member_id' => $member->mem_id,
+							'log_name' => $member->mem_name,
+							'log_address' => $member->mem_address,
+							'log_mail_address' => $member->mem_mail_address,
+							'log_hp' => $member->mem_hp,
+							// 'log_photo' => $member->mem_photo,
+							'log_kota' => $member->mem_kota,
+							'log_kode_pos' => $member->mem_kode_pos,
+							'log_email' => $member->mem_email,
+							'log_ktp' => $member->mem_ktp,
+							'log_pp' => $member->mem_pp,
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('deactivated_member_status'),
+						);
+						$log = $this->LogmemberModel->add_log($dataLog);
+						if ($log){
+							$dataKennelLog = array(
+								'log_kennel_id' => $member->ken_id,
+								'log_kennel_name' => $member->ken_name,
+								'log_kennel_type_id' => $member->ken_type_id,
+								'log_kennel_photo' => $member->ken_photo,
+								'log_stat' => $this->config->item('rejected'),
+								'log_app_user' => $this->session->userdata('use_id'),
+								'log_app_date' => date('Y-m-d H:i:s')
+							);
+							$res = $this->LogkennelModel->add_log($dataKennelLog);
+							if ($res){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('delete_success', TRUE);
+								redirect("backend/Members");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$err = 2;
+						}
+					}
+					else{
+						$err = 3;
+					}
+					if ($err){ 
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to delete member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						redirect("backend/Members");
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members');
+			}
+		}
+
+		public function update(){
 			$data = $this->input->post(null, true);
 			$where['mem_id'] = $id;
-			$user = $this->memberModel->get_members($where)->row_array();
+			$user = $this->MemberModel->get_members($where)->row_array();
 			if ($user == null) {
 				echo json_encode(array('data' => 'Data Tidak Ditemukan'));
 				return false;
 			}
 			$whe['mem_id != '] = $id;
 			$whe['mem_ktp'] = $this->input->post('mem_ktp');
-			$member = $this->memberModel->get_members($whe)->result();
+			$member = $this->MemberModel->get_members($whe)->result();
 			if (count($member) > 1){
 				echo json_encode(array('data' => 'No. KTP sudah ada'));
 				return false;
@@ -419,7 +806,7 @@ class Members extends CI_Controller {
 			unset($data['password']);
 			unset($data['newpass']);
 			unset($data['repass']);
-			$this->memberModel->update_members($data, $where);
+			$this->MemberModel->update_members($data, $where);
 
 			unset($data['mem_password']);
 			echo json_encode(array('data' => '1'));
@@ -428,7 +815,7 @@ class Members extends CI_Controller {
 		public function view_reset(){
 			if ($this->uri->segment(4)){
 				$where['mem_id'] = $this->uri->segment(4);
-				$data['member'] = $this->memberModel->get_members($where)->row();
+				$data['member'] = $this->MemberModel->get_members($where)->row();
 				if (!$data['member']) {
 					$this->session->set_flashdata('error_message', 'Not found');
 					redirect("backend/Members");
@@ -445,7 +832,7 @@ class Members extends CI_Controller {
 		public function reset(){
 			if ($this->session->userdata('use_username')){
 				$where['mem_id'] = $this->input->post('mem_id');
-				$data['member'] = $this->memberModel->get_members($where)->row();
+				$data['member'] = $this->MemberModel->get_members($where)->row();
 				if (!$data['member']) {
 					$err = 1;
 					$this->session->set_flashdata('error_message', 'Not found');
@@ -461,7 +848,7 @@ class Members extends CI_Controller {
 					}
 					else{
 						$dataMember['mem_password'] = sha1($this->input->post('newpass'));
-						$res = $this->memberModel->update_members($dataMember, $where);
+						$res = $this->MemberModel->update_members($dataMember, $where);
 						if ($res){
 							$this->session->set_flashdata('reset_password', TRUE);
 							redirect("backend/Members");
@@ -586,7 +973,7 @@ class Members extends CI_Controller {
 				$req = $this->LogmemberModel->get_logs($whe)->row();
 		
 				$where['mem_id'] = $req->log_member_id;
-				$member = $this->memberModel->get_members($where)->row();
+				$member = $this->MemberModel->get_members($where)->row();
 	  
 				$whe_ken['ken_id'] = $req->log_kennel_id;
 				$kennel = $this->KennelModel->get_kennels($whe_ken)->row();
@@ -632,7 +1019,7 @@ class Members extends CI_Controller {
 	  
 				$this->db->trans_strict(FALSE);
 				$this->db->trans_start();
-				$this->memberModel->update_members($data, $where);
+				$this->MemberModel->update_members($data, $where);
 				$this->KennelModel->update_kennels($data_kennel, $whe_ken);
 				$res2 = $this->LogmemberModel->update_status($id, 1);
 				if ($res2){
@@ -694,7 +1081,7 @@ class Members extends CI_Controller {
 				  $result = $this->notification_model->add(10, $id, $req->log_member_id);
 	  
 				  $whe_can['mem_id'] = $req->log_member_id;
-				  $member = $this->memberModel->get_members($whe_can)->row();
+				  $member = $this->MemberModel->get_members($whe_can)->row();
 				  if ($member->mem_firebase_token){
 					$notif = $this->notificationtype_model->get_by_id(10);
 					$url = 'https://fcm.googleapis.com/fcm/send';
@@ -856,7 +1243,7 @@ class Members extends CI_Controller {
 
 				if ($update && $id != null){
 					$where['mem_id'] = $id;
-					$member = $this->memberModel->get_members($where)->row();
+					$member = $this->MemberModel->get_members($where)->row();
 					if ($name == "member")
 						$curr_image = $this->path_upload.basename($member->mem_photo);
 					else
@@ -883,7 +1270,7 @@ class Members extends CI_Controller {
     }
 
 	public function _same_user($username) {
-		$user = $this->memberModel->daftar_users($username)->row_array();
+		$user = $this->MemberModel->daftar_users($username)->row_array();
 		return isset($user);
 	}
 	
@@ -891,7 +1278,7 @@ class Members extends CI_Controller {
         $memberId = $this->input->post('memberId', true);
         $err = 0;
         foreach ($memberId as $id) {
-            $res = $this->memberModel->set_active($id, 1);
+            $res = $this->MemberModel->set_active($id, 1);
             if (!$res){
               $err = $id;
               break;
@@ -909,7 +1296,7 @@ class Members extends CI_Controller {
       $memberId = $this->input->post('memberId', true);
       $err = 0;
       foreach ($memberId as $id) {
-          $res = $this->memberModel->set_active($id, 0);
+          $res = $this->MemberModel->set_active($id, 0);
           if (!$res){
             $err = $id;
             break;

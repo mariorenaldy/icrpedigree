@@ -21,12 +21,12 @@
                 </div>
                 <div class="row fs-6">
                     <div class="col-auto text-left">
-                        <span><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12 Bandung</span>
+                        <span><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12b<br/> Ciumbuleuit Bandung</span>
                     </div>
                     <div class="col-auto">
                         <span><i class="fa fa-phone" aria-hidden="true"></i> 087777802288</span>
                     </div>
-                    <div class="col-auto d-flex">
+                    <!-- <div class="col-auto d-flex">
                         <div>
                             <i class="fa fa-clock-o me-2" aria-hidden="true"></i>
                         </div>
@@ -34,7 +34,7 @@
                             <span>Selasa jam 21.00-23.00</span>
                             <span>Jumat jam 21.00-23.00</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </section>
             <section class="col-auto">

@@ -23,7 +23,7 @@
                             ?>
                         </div>
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto</label>
+                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Canine</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
@@ -42,6 +42,18 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
+                            <label class="control-label col-md-2">No. ICR</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" placeholder="No. ICR" name="can_icr_number" value="<?php echo set_value('can_icr_number'); ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">No. Microchip</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" placeholder="No. Microchip" name="can_chip_number" value="<?php echo set_value('can_chip_number'); ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
                             <label for="mem_hp" class="control-label col-md-2">Trah</label>
                             <div class="col-md-10">
                                 <?php
@@ -56,8 +68,8 @@
                             <label for="mem_hp" class="control-label col-md-2">Jenis Kelamin</label>
                             <div class="col-md-10">
                                 <?php
-                                    $gender['Male'] = 'Male';
-                                    $gender['Female'] = 'Female';
+                                    $gender['MALE'] = 'MALE';
+                                    $gender['FEMALE'] = 'FEMALE';
                                     echo form_dropdown('can_gender', $gender, set_value('can_gender'), 'class="form-control"');
                                 ?>
                             </div>

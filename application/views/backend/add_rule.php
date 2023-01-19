@@ -22,20 +22,20 @@
                         ?>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="title" class="control-label col-md-1">Title: </label>
+                        <label for="title" class="control-label col-md-1">Title </label>
                         <div class="col-md-10">
                             <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="password" class="control-label col-md-1">Rule: </label>
+                        <label for="password" class="control-label col-md-1">Rule </label>
                         <div class="col-md-10">
                             <textarea class="form-control" rows="10" name="rule" id="rule"><?= set_value('rule'); ?></textarea>
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-danger" onclick="window.location = '<?= base_url() ?>backend/Rules'"><i class="fa fa-close"></i></button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger" onclick="window.location = '<?= base_url() ?>backend/Rules'">Back</button>
                     </div>
                 </form>
             </div>                           

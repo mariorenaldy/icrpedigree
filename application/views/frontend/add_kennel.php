@@ -8,9 +8,6 @@
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            
-        </header>
         <div class="container">
             <h3 class="text-center text-warning">Tambah Kennel</h3>
             <div class="row">            

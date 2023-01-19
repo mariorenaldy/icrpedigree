@@ -9,12 +9,10 @@
     <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Add Stud</h2>
-        </header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 align-items-center">
+                    <h3 class="text-center text-primary">Add Stud</h3>  
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
@@ -62,16 +60,16 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="can_a_s" class="control-label col-md-2">Dam Name</label>
+                            <label for="can_a_s" class="control-label col-md-2">Search Dam</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Dam Name" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="buttonDamSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_dam_id" class="control-label col-md-2">Dam</label>
+                            <label for="stu_dam_id" class="control-label col-md-2">Dam Name</label>
                             <div class="col-md-10">
                                 <?php
                                     $i = 0;

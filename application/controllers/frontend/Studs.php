@@ -72,8 +72,8 @@ class Studs extends CI_Controller {
 	public function add(){
 		if ($this->session->userdata('username')){
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
-			$whereSire['can_gender'] = 'Male';
-			$whereSire['can_app_stat'] = 1;
+			$whereSire['can_gender'] = 'MALE';
+			$whereSire['can_stat'] = $this->config->item('accepted');
 			$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 
 			// Sire harus 12 bulan
@@ -113,8 +113,8 @@ class Studs extends CI_Controller {
 	public function search_dam(){
 		if ($this->session->userdata('username')){
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
-			$whereSire['can_gender'] = 'Male';
-			$whereSire['can_app_stat'] = 1;
+			$whereSire['can_gender'] = 'MALE';
+			$whereSire['can_stat'] = $this->config->item('accepted');;
 			$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 
 			// Sire harus 12 bulan
@@ -144,8 +144,8 @@ class Studs extends CI_Controller {
 			$data['sireStat'] = $stat;
 
 			$like['can_a_s'] = $this->input->post('can_a_s');
-			$whereDam['can_gender'] = 'Female';
-			$whereDam['can_app_stat'] = 1;
+			$whereDam['can_gender'] = 'FEMALE';
+			$whereDam['can_stat'] = $this->config->item('accepted');
 			$whereDam['can_id !='] = $this->config->item('dam_id');
 			$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 
@@ -189,8 +189,8 @@ class Studs extends CI_Controller {
 			$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
 			
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
-			$whereSire['can_gender'] = 'Male';
-			$whereSire['can_app_stat'] = 1;
+			$whereSire['can_gender'] = 'MALE';
+			$whereSire['can_stat'] = $this->config->item('accepted');
 			$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 
 			// Sire harus 12 bulan
@@ -220,8 +220,8 @@ class Studs extends CI_Controller {
 			$data['sireStat'] = $stat;
 
 			$like['can_a_s'] = $this->input->post('can_a_s');
-			$whereDam['can_gender'] = 'Female';
-			$whereDam['can_app_stat'] = 1;
+			$whereDam['can_gender'] = 'FEMALE';
+			$whereDam['can_stat'] = $this->config->item('accepted');
 			$whereDam['can_id !='] = $this->config->item('dam_id');
 			$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 
@@ -348,8 +348,10 @@ class Studs extends CI_Controller {
 							);
 							$stud = $this->studModel->add_studs($data);
 							if ($stud){
-								$this->session->set_flashdata('add_success', true);
-								redirect("frontend/Studs");
+								// $this->session->set_flashdata('add_success', true);
+								// redirect("frontend/Studs");
+								$this->session->set_flashdata('add_stud_success', true);
+								redirect("frontend/Beranda");
 							}
 							else{
 								$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Approve Member</title>
+    <title>Approve Kennel</title>
     <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
@@ -10,11 +10,11 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">Approve Member</h3>
+                <h3 class="text-center text-primary">Approve Kennel</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Member has been approved<br/>';
+                            echo 'Kennel has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -24,7 +24,7 @@
                             echo $this->session->flashdata('error').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Member has been rejected<br/>';
+                            echo 'Kennel has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -40,34 +40,54 @@
                         </div>
                     </form>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2"><b>KTP</b></div>
-                    <div class="col-md-2"><b>Name</b></div>
-                    <div class="col-md-2"><b>Address</b></div>
-                    <div class="col-md-2"><b>Phone Number</b></div>
-                    <div class="col-md-2"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>KTP</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Mail Address</th>
+                                <th>City</th>
+                                <th>Postal Code</th>
+                                <th>Phone Number</th>
+                                <th>Kennel</th>
+                                <th>email</th>
+                                <th>Reg. Date</th>
+                                <th colspan="4"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $i = 0;  
+                                foreach ($member AS $m){
+                                if ($m->mem_stat){ ?>
+                                <tr>
+                                    <td><?= $m->mem_ktp; ?></td>
+                                    <td><?= $m->mem_name; ?></td>
+                                    <td><?= $m->mem_address; ?></td>
+                                    <td><?= $m->mem_mail_address; ?></td>
+                                    <td><?= $m->mem_kota; ?></td>
+                                    <td><?= $m->mem_kode_pos; ?></td>
+                                    <td><?= $m->mem_hp; ?></td>
+                                    <td><?php
+                                    foreach ($kennel[$i] AS $k){
+                                        echo '<div>'.$k->ken_name.'</div>';
+                                    }  
+                                    ?></td>
+                                    <td><?= $m->mem_email; ?></td>
+                                    <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
+                                    <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button></td>
+                                </tr>
+                                <?php
+                                    $i++; 
+                                } 
+                            } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php foreach ($member AS $m){ ?>
-                    <div class="row">
-                        <div class="col-md-2 mb-1">
-                            <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
-                        </div>
-                        <div class="col-md-2">
-                            <?= $m->mem_name; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $m->mem_address; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $m->mem_hp; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>                           
+            </div>                         
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

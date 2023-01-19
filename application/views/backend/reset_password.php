@@ -10,7 +10,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">  
-                <h3 class="text-center">Reset Password</h3>  
+                <h3 class="text-center text-primary">Reset Password</h3>  
                 <form class="form-horizontal" action="<?= base_url(); ?>backend/Members/reset" method="post">
                     <div class="text-danger">
                         <?php	

@@ -9,7 +9,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                           
-                <h3 class="text-center">Dashboard</h3>
+                <h3 class="text-center text-primary">Dashboard</h3>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

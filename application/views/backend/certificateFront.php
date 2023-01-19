@@ -3,35 +3,29 @@
 <head>
   <title>Certificate</title>
   <?php $this->load->view('templates/head'); ?>
-  <link href="<?php echo base_url(); ?>assets/css/backend-styles.css" rel="stylesheet" media='all' />
 </head>
 <body>
   <?php $this->load->view('templates/redirect'); ?>
-  <div class="container">
+  <div class="marginCertificate">
     <div class="row">
-      <div class="col md-4" style="font-family:Cen725c;">
+      <div class="col md-4">
         <figure class="text-center">
           <img src="<?= base_url('assets/img/icr_logo_hitam.png') ?>" class="center-block text-center" style="width: 20vw;">
         </figure>
-        <h5 class="mb-3 text-center fs-3">INDONESIAN CANINE REGISTRY</h5>
-        <p class="text-center">Sertifikat ini hanya diterbitkan oleh Indonesian Canine Registry. Harap membaca ketentuan dan peraturan pada sertifikat ini
-        <br>Silsilah yg ada di dalam sertifikat ini dapat di akses secara online melalui website www.icrpedigree.com</p>
+        <div class="icr-title mb-3 text-center">INDONESIAN CANINE REGISTRY</div>
+        <div class="icr-desc text-center">Sertifikat ini hanya diterbitkan oleh Indonesian Canine Registry. Silsilah yang ada di dalam sertifikat ini dapat diakses secara online melalui website www.icrpedigree.com</div>
       </div>
-      <div class="col-md-5" style="font-family: baskerville;">
-        <span>Peraturan:</span>
-        <ul style="list-style-type: none; padding-left: 0;">
-          <li>- Apabila Stambum hilang dapat melakukan pengajuan pembuatan stambum baru (duplikat)</li>
-          <li>- Angota ICR dapat mengajukan pergantian nama kennel</li>
-          <li>- Anggota ICR dapat mengajukan pergantian nama, alamat kepemilikan serta update foto terbaru</li>
-          <li>- Syarat, ketentuan serta biaya dapat di lihat melalui web www.icrpedigree.com</li>
-        </ul>
-
-        <span>Catatan:</span><br>
-        <span>Pihak ICR berhak melakukan pembatalan pengajuan apabila salah satu syarat dan ketentuan tidak dipenuhi.</span><br>
-        <span>Syarat dan ketentuan dapat berubah sewaktu waktu dan akan di informasikan melalui website www.icrpedigree.com</span>
-      </div>
-      <div class="col-md" style="font-family: baskerville;">
-        <span>Catatan:</span><br>
+      <div class="col md-4 baskerville"><span class="desc"><?= $rules->set_rule; ?></span></div>
+      <div class="col md-4 baskerville">
+        <div class="notes-title mb-3">NOTES:</div>
+        <!-- <ol class="p-0" style="list-style-position: inside;">
+          <li>July 4, 1969: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+          <li>20 July, 1969: Nam hendrerit nisi sed sollicitu-din pellentesque. </li>
+          <li>January 4, 1996: Nunc posuere purus rhon-Cols pulvinar aliquam. </li>
+          <li>August 6, 1945: Ut aliquet tristique nisi vitae volutpat. </li>
+          <li>April 13, 1961: Nulls aliquet porttitor venena-tis. </li>
+          <li>October 12, 1942: Donee a dui et dui fringilla consectetur id nec massa. </li>
+        </ol> -->
       </div>
     </div>
   </div>

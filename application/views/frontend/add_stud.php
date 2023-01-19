@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="can_a_s" class="control-label col-md-2">Nama Dam</label>
+                            <label for="can_a_s" class="control-label col-md-2">Cari Dam</label>
                             <div class="col-md-9">
                                 <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_dam_id" class="control-label col-md-2">Dam</label>
+                            <label for="stu_dam_id" class="control-label col-md-2">Nama Dam</label>
                             <div class="col-md-10">
                                 <?php
                                     $i = 0;

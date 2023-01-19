@@ -14,7 +14,7 @@ class Studs extends CI_Controller {
 		}
 
 		public function index(){
-			$where['stu_app_user != '] = 0;
+			$where['stu_stat'] = $this->config->item('accepted');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$birth = array();
@@ -42,7 +42,7 @@ class Studs extends CI_Controller {
 			if ($date){
 				$where['stu_stud_date'] = $date;
 			}
-			$where['stu_app_user != '] = 0;
+			$where['stu_stat'] = $this->config->item('accepted');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$birth = array();
@@ -62,7 +62,7 @@ class Studs extends CI_Controller {
 		}
 
 		public function view_approve(){
-			$where['stu_app_user'] = 0;
+			$where['stu_stat'] = $this->config->item('saved');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 			$this->load->view('backend/approve_studs', $data);
 		}
@@ -76,7 +76,7 @@ class Studs extends CI_Controller {
 			if ($date){
 				$where['stu_stud_date'] = $date;
 			}
-			$where['stu_app_user'] = 0;
+			$where['stu_stat'] = $this->config->item('saved');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 			$this->load->view('backend/approve_studs', $data);
 		}
@@ -93,7 +93,7 @@ class Studs extends CI_Controller {
 		public function search_member(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_app_user != '] = 0;
+				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				$data['sire'] = [];
@@ -110,12 +110,12 @@ class Studs extends CI_Controller {
 		public function search_sire(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_app_user != '] = 0;
+				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
-				$whereSire['can_gender'] = 'Male';
-				$whereSire['can_app_stat'] = 1;
+				$whereSire['can_gender'] = 'MALE';
+				$whereSire['can_stat'] = $this->config->item('accepted');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -156,12 +156,12 @@ class Studs extends CI_Controller {
 		public function search_dam(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_app_user != '] = 0;
+				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
-				$whereSire['can_gender'] = 'Male';
-				$whereSire['can_app_stat'] = 1;
+				$whereSire['can_gender'] = 'MALE';
+				$whereSire['can_stat'] = $this->config->item('accepted');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -191,8 +191,8 @@ class Studs extends CI_Controller {
 				$data['sireStat'] = $stat;
 	
 				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'Female';
-				$whereDam['can_app_stat'] = 1;
+				$whereDam['can_gender'] = 'FEMALE';
+				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
@@ -237,12 +237,12 @@ class Studs extends CI_Controller {
 				$this->form_validation->set_rules('stu_stud_date', 'Stud date ', 'trim|required');
 				
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_app_user != '] = 0;
+				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
-				$whereSire['can_gender'] = 'Male';
-				$whereSire['can_app_stat'] = 1;
+				$whereSire['can_gender'] = 'MALE';
+				$whereSire['can_stat'] = $this->config->item('accepted');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -272,8 +272,8 @@ class Studs extends CI_Controller {
 				$data['sireStat'] = $stat;
 	
 				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'Female';
-				$whereDam['can_app_stat'] = 1;
+				$whereDam['can_gender'] = 'FEMALE';
+				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
@@ -382,7 +382,7 @@ class Studs extends CI_Controller {
 							'stu_member_id' => $this->input->post('can_member_id'),
 							'stu_app_user' => $this->session->userdata('use_id'),
 							'stu_app_date' => date('Y-m-d H:i:s'),
-							'stu_stat' => 1
+							'stu_stat' => $this->config->item('saved'),
 						);
 						$stud = $this->studModel->add_studs($data);
 						if ($stud){
@@ -413,7 +413,7 @@ class Studs extends CI_Controller {
 					$this->db->trans_start();
 					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
-					$data['stu_stat'] = 1;
+					$data['stu_stat'] = $this->config->item('accepted');
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;
@@ -487,7 +487,7 @@ class Studs extends CI_Controller {
 					$this->db->trans_start();
 					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
-					$data['stu_stat'] = 2;
+					$data['stu_stat'] = $this->config->item('rejected');
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;

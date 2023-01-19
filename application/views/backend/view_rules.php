@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Rules Management</title>
+    <title>Rules List</title>
     <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
@@ -10,7 +10,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                         
-                <h3 class="text-center">Rules Management</h3>
+                <h3 class="text-center text-primary">Rules List</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('add_success')){

@@ -11,7 +11,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">Birth List</h3>
+                <h3 class="text-center text-primary">Birth List</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('add_success')){

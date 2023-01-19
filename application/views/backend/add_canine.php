@@ -9,12 +9,10 @@
     <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Add Canine</h2>
-        </header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 align-items-center">
+                    <h3 class="text-center text-primary">Add Canine</h3>  
                     <form id="formCanine" class="form-horizontal" action="<?php echo base_url(); ?>backend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
@@ -37,7 +35,6 @@
                             <label class="control-label col-md-2">Member</label>
                             <div class="col-md-10">
                                 <?php
-                                    $i = 0;
                                     $mem = [];
                                     foreach($member as $row){
                                         $mem[$row->mem_id] = $row->mem_name;
@@ -50,7 +47,6 @@
                             <label class="control-label col-md-2">Kennel</label>
                             <div class="col-md-10">
                                 <?php
-                                    $i = 0;
                                     $ken = [];
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
@@ -61,7 +57,7 @@
                         </div>
                         <hr/>
                         <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Photo</label>
+                            <label class="control-label col-md-12 text-center">Canine Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
@@ -74,9 +70,21 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">No. Registration</label>
+                            <label class="control-label col-md-2">Current Registration Number</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="No. Registration" name="can_reg_number" value="<?php echo set_value('can_reg_number'); ?>">
+                                <input class="form-control" type="text" placeholder="Current Registration Number" name="can_reg_number" value="<?php echo set_value('can_reg_number'); ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">ICR Number</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?php echo set_value('can_icr_number'); ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Microchip Number</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" placeholder="Microchip Number" name="can_chip_number" value="<?php echo set_value('can_chip_number'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -94,8 +102,8 @@
                             <label class="control-label col-md-2">Gender</label>
                             <div class="col-md-10">
                                 <?php
-                                $gender['Male'] = 'Male';
-                                $gender['Female'] = 'Female';
+                                $gender['MALE'] = 'MALE';
+                                $gender['FEMALE'] = 'FEMALE';
                                 echo form_dropdown('can_gender', $gender, set_value('can_gender'), 'class="form-control"');
                                 ?>
                             </div>
@@ -110,6 +118,12 @@
                             <label class="control-label col-md-2">Date of Birth</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" placeholder="Date of Birth" id="can_date_of_birth" name="can_date_of_birth" value="<?php echo set_value('can_date_of_birth'); ?>" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="password" class="control-label col-md-2">Note </label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" rows="10" name="can_note"><?= set_value('can_note') ?></textarea>
                             </div>
                         </div>
                         <div class="text-center">

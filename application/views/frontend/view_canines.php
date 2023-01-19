@@ -41,8 +41,10 @@
                     <div class="col-md-2"><b>Foto</b></div>
                     <div class="col-md-2"><b>Nomor ICR</b></div>
                     <div class="col-md-2"><b>Nama</b></div>
-                    <div class="col-md-2"><b>Status</b></div>
-                    <div class="col-md-2"></div>
+                    <div class="col-md-2"><b>Kennel</b></div>
+                    <div class="col-md-2"><b>Owner</b></div>
+                    <div class="col-md-1"><b>Status</b></div>
+                    <div class="col-md-1"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
                     <div class="row">
@@ -60,9 +62,15 @@
                             <?php echo $c->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
-                            <?php echo $c->stat_name; ?>
+                            <?= $c->ken_name; ?>
                         </div>
                         <div class="col-md-2">
+                            <?= $c->mem_name; ?>
+                        </div>
+                        <div class="col-md-1">
+                            <?php echo $c->stat_name; ?>
+                        </div>
+                        <div class="col-md-1">
                             <!-- <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
                             <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->

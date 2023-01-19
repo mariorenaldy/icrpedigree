@@ -10,7 +10,7 @@
         <div class="row">       
             <div class="col-md-3"></div>     
             <div class="col-md-6">  
-                <h3>Login</h3>                        
+                <h3 class="text-center text-primary">Login</h3>                        
                 <form class="form-horizontal" action="<?= base_url(); ?>backend/Users/validate_login" method="post">
                     <div class="text-danger">
                         <?php		
@@ -33,7 +33,10 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                        </div>
                     </div>
                 </form>
             </div>                           

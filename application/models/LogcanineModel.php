@@ -1,15 +1,19 @@
 <?php
 class LogcanineModel extends CI_Model {
     public function __construct(){
-        parent::__construct();
+        date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_logs($where = null){
+    public function get_logs($where){
         $this->db->select('*, DATE_FORMAT(logs_canine.log_tanggal, "%d-%m-%Y") as log_tanggal');
         $this->db->from('logs_canine');
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('members','members.mem_id = logs_canine.log_member_id');
+        $this->db->join('kennels','kennels.ken_id = logs_canine.log_kennel_id');
+        $this->db->join('users','users.use_id = logs_canine.log_app_user');
+        $this->db->join('approval_status','approval_status.stat_id = logs_canine.log_stat');
         $this->db->order_by('log_tanggal', 'desc');
         return $this->db->get();
     }

@@ -31,12 +31,6 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-md-2">Nama Sesuai KTP</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= set_value('mem_name'); ?>">

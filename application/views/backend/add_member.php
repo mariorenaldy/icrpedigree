@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add Member</title>
+    <title>Add Kennel</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -9,12 +9,10 @@
     <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Add Member</h2>
-        </header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 align-items-center">
+                    <h3 class="text-center text-primary">Add Kennel</h3>  
                     <form class="form-horizontal" action="<?php echo base_url(); ?>backend/Members/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
@@ -24,13 +22,13 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3 gap-3">
+                        <!-- <div class="input-group mb-3 gap-3">
                             <label for="imageInput" class="control-label col-md-12 text-center">KTP Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_member" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
-                        </div>
+                        </div> -->
                         <div class="input-group mb-3">
                             <label for="mem_ktp" class="control-label col-md-2">KTP Number</label>
                             <div class="col-md-10">
@@ -142,14 +140,14 @@
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function(){
-            const imageInput = document.querySelector("#imageInput");
-            imageInput.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreview").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
-            })
+            // const imageInput = document.querySelector("#imageInput");
+            // imageInput.addEventListener("change", function() {
+            //     const reader = new FileReader();
+            //     reader.addEventListener("load", () => {
+            //         document.querySelector("#imgPreview").src = reader.result
+            //     })
+            //     reader.readAsDataURL(this.files[0])
+            // })
 
             const imageInputPP = document.querySelector("#imageInputPP");
             imageInputPP.addEventListener("change", function() {

@@ -14,11 +14,10 @@ class KennelModel extends CI_Model {
     public function get_kennels($where){
         $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_member_id, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name, approval_status.stat_name');
         $this->db->where($where);
-        $this->db->where('ken_id != ', 0);
         $this->db->from('kennels');
-        $this->db->join('kennels_type','kennels_type.ken_type_id = kennels.ken_type_id');
-        $this->db->join('members','members.mem_id = kennels.ken_member_id');
-        $this->db->join('approval_status','approval_status.stat_id = kennels.ken_stat');
+        $this->db->join('kennels_type','kennels.ken_type_id = kennels_type.ken_type_id');
+        $this->db->join('members','kennels.ken_member_id = members.mem_id');
+        $this->db->join('approval_status','kennels.ken_stat = approval_status.stat_id');
         $this->db->order_by('ken_id', 'desc');
         return $this->db->get();
     }
@@ -26,7 +25,6 @@ class KennelModel extends CI_Model {
     public function search_kennels($like, $where){
         $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_member_id, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name, approval_status.stat_name');
         $this->db->where($where);
-        $this->db->where('ken_id != ', 0);
         $this->db->group_start();
         if ($like != null) {
             $this->db->or_like($like);
@@ -62,15 +60,13 @@ class KennelModel extends CI_Model {
     }
 
     public function add_kennels($data){
-        $this->db->insert('kennels', $data);
-        return $this->db->affected_rows();
+        return $this->db->insert('kennels', $data);
     }
 
     public function update_kennels($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('kennels');
-        return $this->db->affected_rows();
+        return $this->db->update('kennels');
     }
 
     // public function edit_kennels($data, $id){

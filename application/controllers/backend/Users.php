@@ -194,7 +194,7 @@ class Users extends CI_Controller {
 			if (!$err){
 				$this->session->set_userdata('use_username', $this->input->post('username'));
 				$this->session->set_userdata('use_id', $user->use_id);
-				// $this->session->set_userdata('use_akses', $user->use_akses);
+				$this->session->set_userdata('use_akses', $user->use_akses);
 				redirect("backend/Dashboard");
 			}
 			else{

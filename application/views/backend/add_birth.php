@@ -9,12 +9,10 @@
     <?php $this->load->view('templates/redirect'); ?>
     <main class="container">
         <?php $this->load->view('templates/header'); ?>
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold">Add Birth</h2>
-        </header>
         <div class="container">
             <div class="row">            
-                <div class="col-md-12 align-items-center">                          
+                <div class="col-md-12 align-items-center">
+                    <h3 class="text-center text-primary">Add Birth</h3>                         
                     <form id="formBirth" class="form-horizontal" action="<?= base_url(); ?>backend/Births/validate_add" method="post" enctype="multipart/form-data">
                         <?php if (!$mode){ ?>
                             <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />

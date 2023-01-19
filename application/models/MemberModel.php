@@ -9,30 +9,31 @@ class MemberModel extends CI_Model {
         return $this->db->count_all("members");
     }
 
-    public function get_all_members($where) {
-        $this->db->select('*');
-        if ($where != null) {
-            $this->db->where($where);
-        }
-        $this->db->from('members');
-        $this->db->order_by('mem_id', 'desc');
-        return $this->db->get();
-    }
+    // public function get_all_members($where) {
+    //     $this->db->select('*');
+    //     if ($where != null) {
+    //         $this->db->where($where);
+    //     }
+    //     $this->db->from('members');
+    //     $this->db->order_by('mem_id', 'desc');
+    //     return $this->db->get();
+    // }
 
     public function get_members($where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->from('members');
-        $this->db->join('users','users.use_id = members.mem_app_user');
+        $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
+        $this->db->join('users','members.mem_app_user = users.use_id');
         $this->db->order_by('mem_id', 'desc');
         $this->db->limit($this->config->item('backend_member_count'), 0);
         return $this->db->get();
     }
 
     public function search_members($like, $where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
@@ -42,7 +43,8 @@ class MemberModel extends CI_Model {
             $this->db->or_like($like);
         }
         $this->db->group_end();
-        $this->db->join('users','users.use_id = members.mem_app_user');
+        $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
+        $this->db->join('users','members.mem_app_user = users.use_id');
         $this->db->order_by('mem_id', 'desc');
         return $this->db->get();
     }
@@ -76,14 +78,12 @@ class MemberModel extends CI_Model {
     // }
 
     public function add_members($data){
-        $this->db->insert('members', $data);
-        return $this->db->affected_rows();
+        return $this->db->insert('members', $data);
     }
 
     public function update_members($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('members');
-        return $this->db->affected_rows();
+        return $this->db->update('members');
     }
 }

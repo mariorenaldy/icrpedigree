@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Member List</title>
+    <title>Kennel List</title>
     <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
@@ -10,14 +10,20 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center">Member List</h3>
+                <h3 class="text-center text-primary">Kennel List</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('add_success')){
-                            echo 'Member has been saved<br/>';
+                            echo 'Kennel has been saved<br/>';
+                        }
+                        if ($this->session->flashdata('edit_success')){
+                            echo 'Kennel has been edited<br/>';
+                        }
+                        if ($this->session->flashdata('delete_success')){
+                            echo 'Kennel has been deleted<br/>';
                         }
                         if ($this->session->flashdata('payment_success')){
-                            echo 'Member\'s payment has been saved<br/>';
+                            echo 'Kennel\'s payment has been saved<br/>';
                         }
                         if ($this->session->flashdata('reset_password')){
                             echo 'Password has been reset<br/>';
@@ -55,68 +61,56 @@
                                 <th>KTP</th>
                                 <th>Name</th>
                                 <th>Address</th>
+                                <th>Mail Address</th>
+                                <th>City</th>
+                                <th>Postal Code</th>
                                 <th>Phone Number</th>
+                                <th>Kennel</th>
                                 <th>Type</th>
-                                <th></th>
-                                <th>id</th>
-                                <th>mail_address</th>
-                                <th>photo</th>
-                                <th>created_at</th>
-                                <th>app_user</th>
-                                <th>app_date</th>
-                                <th>username</th>
-                                <th>password</th>
                                 <th>email</th>
-                                <th>pp</th>
-                                <th>kota</th>
-                                <th>kode_pos</th>
-                                <th>firebase_token</th>
+                                <th>Reg. Date</th>
+                                <th>Username</th>
+                                <th colspan="4"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($member AS $m){
+                            <?php
+                                $i = 0;  
+                                foreach ($member AS $m){
                                 if ($m->mem_stat){ ?>
                                 <tr>
-                                    <td>
-                                        <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="KTP">
-                                    </td>
+                                    <td><?= $m->mem_ktp; ?></td>
                                     <td><?= $m->mem_name; ?></td>
                                     <td><?= $m->mem_address; ?></td>
-                                    <td><?= $m->mem_hp; ?></td>
-                                    <td><?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning" onclick="resetPass(<?= $m->mem_id ?>)"><i class="fa fa-refresh"></i></button>
-                                        <?php if ($m->mem_stat == 2){ ?>
-                                            <button type="button" class="btn btn-primary" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-money"></i></button>
-                                        <?php } ?>
-                                    </td>
-                                    <td><?= $m->mem_id; ?></td>
                                     <td><?= $m->mem_mail_address; ?></td>
-                                    <td>
-                                        <?php if ($m->mem_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/members/'.$m->mem_photo) ?>" class="img-fluid img-thumbnail" alt="member">
-                                        <?php } else{ ?>
-                                            -
-                                        <?php } ?>
-                                    </td>
-                                    <td><?= $m->mem_created_at; ?></td>
-                                    <td><?= $m->mem_app_user; ?></td>
-                                    <td><?= $m->mem_app_date; ?></td>
-                                    <td><?= $m->mem_username; ?></td>
-                                    <td><?= $m->mem_password; ?></td>
-                                    <td><?= $m->mem_email; ?></td>
-                                    <td><?= $m->mem_pp; ?></td>
                                     <td><?= $m->mem_kota; ?></td>
                                     <td><?= $m->mem_kode_pos; ?></td>
-                                    <td><?= $m->mem_firebase_token; ?></td>
+                                    <td><?= $m->mem_hp; ?></td>
+                                    <td><?php
+                                    foreach ($kennel[$i] AS $k){
+                                        echo '<div>'.$k->ken_name.'</div>';
+                                    }  
+                                    ?></td>
+                                    <td><?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; echo '<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)'; ?></td>
+                                    <td><?= $m->mem_email; ?></td>
+                                    <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
+                                    <td><?= $m->mem_username; ?></td>
+                                    <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
+                                    <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>
+                                    <td><?php if ($m->mem_stat == $this->config->item('non_paid_member_status')){ ?>
+                                        <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fa fa-money"></i></button>
+                                        <?php } ?>
+                                    </td>
                                 </tr>
-                                <?php 
+                                <?php
+                                    $i++; 
                                 } 
                             } ?>
                         </tbody>
                     </table>
                 </div>
-            </div>                           
+            </div>                       
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
@@ -124,6 +118,15 @@
     <script>
         function add(){
             window.location = "<?= base_url(); ?>backend/Members/add";
+        }
+        function edit(id){
+            window.location = "<?= base_url(); ?>backend/Members/edit/"+id;
+        }
+        function del(id, nama){
+            var proceed = confirm("Delete "+nama+" ?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Members/delete/"+id;
+            }
         }
         function payment(id, nama){
             var proceed = confirm("Set payment for "+nama+" ?");

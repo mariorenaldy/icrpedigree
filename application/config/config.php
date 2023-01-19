@@ -542,7 +542,7 @@ $config['upload_member'] = Array(
     'upload_path' => $config['upload_path_member'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'member_'.time()
+    'file_name' => 'member_'.time(),
 );
 
 $config['upload_path_kennel'] = realpath(APPPATH.'../uploads/kennels/');
@@ -551,7 +551,7 @@ $config['upload_kennel'] = Array(
     'upload_path' => $config['upload_path_kennel'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'kennel_'.time()
+    'file_name' => 'kennel_'.time(),
 );
 
 $config['upload_path_canine'] = realpath(APPPATH.'../uploads/canine/');
@@ -560,7 +560,7 @@ $config['upload_canine'] = Array(
     'upload_path' => $config['upload_path_canine'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'canines_'.time()
+    'file_name' => 'canines_'.time(),
 );
 
 $config['upload_path_stud'] = realpath(APPPATH.'../uploads/stud/');
@@ -569,19 +569,19 @@ $config['upload_stud'] = Array(
     'upload_path' => $config['upload_path_stud'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'stud_'.time()
+    'file_name' => 'stud_'.time(),
 );
 $config['upload_stud_sire'] = Array(
     'upload_path' => $config['upload_path_stud'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'sire_'.time()
+    'file_name' => 'sire_'.time(),
 );
 $config['upload_stud_dam'] = Array(
     'upload_path' => $config['upload_path_stud'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'dam_'.time()
+    'file_name' => 'dam_'.time(),
 );
 
 $config['upload_path_birth'] = realpath(APPPATH.'../uploads/births/');
@@ -590,7 +590,7 @@ $config['upload_birth'] = Array(
     'upload_path' => $config['upload_path_birth'],
     'allowed_types' => 'jpg|jpeg|png',
     'file_ext_tolower' => TRUE,
-    'file_name' => 'birth_'.time()
+    'file_name' => 'birth_'.time(),
 );
 
 $config['canine_count'] = 5;
@@ -607,17 +607,29 @@ $config['backend_canine_count'] = 20;
 $config['backend_stud_count'] = 20;
 $config['backend_birth_count'] = 20;
 
-$config['dam_id'] = 0;
-$config['sire_id'] = 1;
-
 $config['canine_img'] = 'Dog.svg';
+$config['default_img'] = 'avatar.jpg';
+
+$config['dam_id'] = 87;
+$config['sire_id'] = 86;
+
+$config['saved'] = 0;
+$config['accepted'] = 1;
+$config['rejected'] = 2;
 
 $config['deactivated_member_status'] = 0;
 $config['paid_member_status'] = 1;
 $config['non_paid_member_status'] = 2;
+$config['saved_member_status'] = 3;
+
+$config['canine_rip'] = 0;
+$config['canine_alive'] = 1;
 
 $config['jarak_lapor_pacak'] = 7;
 $config['jarak_pacak'] = 120;
 $config['jarak_lapor_lahir'] = 75;
 $config['umur_canine'] = 12;
 $config['jarak_lapor_stb'] = 100;
+
+$config['admin'] = 0;
+$config['user'] = 1;
