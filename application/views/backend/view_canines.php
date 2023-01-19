@@ -3,6 +3,7 @@
 <head>
     <title>Canine List</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -52,24 +53,27 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table id="datatable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Photo</th>
-                                <th>Current Reg. Number</th>
+                                <th class="no-sort">Photo</th>
+                                <th class="no-sort">Current Reg. Number</th>
                                 <th>ICR Number</th>
                                 <th>Chip Number</th>
                                 <th>Name</th>
-                                <th>Breed</th>
-                                <th>Gender</th>
-                                <th>Color</th>
-                                <th>Date of Birth</th>
-                                <th>Kennel</th>
-                                <th>Owner</th>
-                                <th>Note</th>
-                                <th>Reg. Date</th>
-                                <th>Status</th>
-                                <th colspan="4"></th>
+                                <th class="no-sort">Breed</th>
+                                <th class="no-sort">Gender</th>
+                                <th class="no-sort">Color</th>
+                                <th class="no-sort">Date of Birth</th>
+                                <th class="no-sort">Kennel</th>
+                                <th class="no-sort">Owner</th>
+                                <th class="no-sort">Note</th>
+                                <th class="no-sort">Reg. Date</th>
+                                <th class="no-sort">Status</th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,6 +132,15 @@
         function print(id){
             window.location = "<?= base_url(); ?>backend/Certificate/front/"+id;
         }
+        $(document).ready(function () {
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[4, 'asc']],
+                columnDefs: [{
+                    orderable: false,
+                    targets: "no-sort"
+                }]
+            });
+        });
     </script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
 </body>
 </html>
