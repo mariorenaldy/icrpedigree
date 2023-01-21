@@ -1542,4 +1542,26 @@ class Canines extends CI_Controller {
       redirect("backend/Canines/view_approve");
     }
   }
+
+  public function view_detail(){
+    if ($this->uri->segment(4)){
+      $where['can_id'] = $this->uri->segment(4);
+      $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->row();
+      $wheMember['mem_id'] = $data['canine']->can_member_id;
+      $data['member'] = $this->memberModel->get_members($wheMember)->result();
+      $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
+      $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
+
+      $sire['can_id'] = $data['canine']->ped_sire_id;
+      $data['sire'] = $this->caninesModel->get_can_pedigrees($sire)->row();
+      $dam['can_id'] = $data['canine']->ped_dam_id;
+      $data['dam'] = $this->caninesModel->get_can_pedigrees($dam)->row();
+
+      $data['siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $data['canine']->ped_dam_id, $data['canine']->ped_sire_id)->result();
+      $this->load->view("backend/view_canine_detail", $data);
+    }
+    else{
+      redirect('backend/Canines');
+    }
+  }
 }

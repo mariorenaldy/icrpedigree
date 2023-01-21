@@ -284,4 +284,17 @@ class CaninesModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();  
 	}
+
+    public function get_siblings($canineId, $damId, $sireId){
+        $this->db->select('can_a_s');
+        $this->db->where('ped_sire_id != ', $this->config->item('sire_id'));
+        $this->db->where('ped_dam_id != ', $this->config->item('dam_id'));
+        $this->db->where('ped_sire_id = ', $sireId);
+        $this->db->where('ped_dam_id = ', $damId);
+        $this->db->where('ped_canine_id != ', $canineId);
+        $this->db->from('pedigrees');
+        $this->db->join('canines','canines.can_id = pedigrees.ped_canine_id');
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get();
+    }
 }

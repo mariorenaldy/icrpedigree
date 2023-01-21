@@ -79,6 +79,7 @@
                                 <th style="display: none;"></th>
                                 <th style="display: none;"></th>
                                 <th style="display: none;"></th>
+                                <th style="display: none;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,6 +109,7 @@
                                     <td><button type="button" class="btn btn-warning mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Pedigree"><i class="fa fa-edit"></i></button></td>
                                     <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $c->can_id ?>, '<?= $c->can_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Canine"><i class="fa fa-close"></i></button></td>
                                     <td><button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button></td>
+                                    <td><button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file-o"></i></button></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -136,6 +138,9 @@
         }
         function print(id){
             window.location = "<?= base_url(); ?>backend/Certificate/front/"+id;
+        }
+        function detail(id){
+            window.location = "<?= base_url(); ?>backend/Canines/view_detail/"+id;
         }
 
         //modal script
