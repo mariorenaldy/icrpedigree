@@ -91,14 +91,18 @@
                                         echo '<div>'.$k->ken_name.'</div>';
                                     }  
                                     ?></td>
-                                    <td><?php if ($m->mem_stat == 1) echo 'Paid'; else echo 'Non Paid'; echo '<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)'; ?></td>
+                                    <td><?php if ($m->mem_type == $this->config->item('pro_member')) 
+                                            echo 'Pro<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)';
+                                        else 
+                                            echo 'Free'; 
+                                        ?></td>
                                     <td><?= $m->mem_email; ?></td>
                                     <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
                                     <td><?= $m->mem_username; ?></td>
                                     <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
                                     <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
                                     <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>
-                                    <td><?php if ($m->mem_stat == $this->config->item('non_paid_member_status')){ ?>
+                                    <td><?php if ($m->mem_type == $this->config->item('free_member')){ ?>
                                         <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fa fa-money"></i></button>
                                         <?php } ?>
                                     </td>

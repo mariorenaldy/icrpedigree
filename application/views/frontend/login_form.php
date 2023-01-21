@@ -16,8 +16,11 @@
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
                         <div class="text-success">
                             <?php		
-                                if ($this->session->flashdata('register')){
+                                if ($this->session->flashdata('pro')){
                                     echo 'Register berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                                }
+                                else{
+                                    echo 'Register berhasil.<br/>Gunakan email sebagai username & no. hp sebagai password.<br/>';
                                 }
                             ?>
                         </div>

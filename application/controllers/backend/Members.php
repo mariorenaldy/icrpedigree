@@ -16,13 +16,13 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
-			$where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+			$where['mem_stat'] = $this->config->item('accepted');
 			$data['member'] = $this->MemberModel->get_members($where)->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
 				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
+				// $wheKennel['ken_stat'] = $this->config->item('accepted'); 
 				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
 			}
 			$this->load->view('backend/view_members', $data);
@@ -32,26 +32,26 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
-			$where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+			$where['mem_stat'] = $this->config->item('accepted');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
 				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
+				// $wheKennel['ken_stat'] = $this->config->item('accepted'); 
 				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
 			}
 			$this->load->view('backend/view_members', $data);
 		}
 
 		public function view_approve(){
-			$where['mem_stat'] = $this->config->item('saved_member_status');
+			$where['mem_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->get_members($where)->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
 				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('saved'); 
+				// $wheKennel['ken_stat'] = $this->config->item('saved'); 
 				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
 			}
 			$this->load->view('backend/approve_members', $data);
@@ -61,13 +61,13 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
-			$where['mem_stat'] = $this->config->item('saved_member_status');
+			$where['mem_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
 				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('saved'); 
+				// $wheKennel['ken_stat'] = $this->config->item('saved'); 
 				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
 			}
 			$this->load->view('backend/approve_members', $data);
@@ -82,7 +82,8 @@ class Members extends CI_Controller {
 					$where['mem_id'] = $this->uri->segment(4);
 					$member = $this->MemberModel->get_members($where)->row();
 
-					$data['mem_stat'] = $this->config->item('non_paid_member_status');
+					$data['mem_stat'] = $this->config->item('accepted');
+					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
 					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					$res = $this->MemberModel->update_members($data, $where);
@@ -252,7 +253,6 @@ class Members extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
-					$data['mem_stat'] = $this->config->item('paid_member_status');
 					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){

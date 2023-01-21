@@ -130,3 +130,6 @@ div.container{
 .row.footer .col-md-4.text-center.copyright{
     font-size: 0.8em !important;
 }
+.img-fluid.pp{
+    max-width: 25px;
+}

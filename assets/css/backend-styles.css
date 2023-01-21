@@ -1,18 +1,21 @@
 .row .col.md-4 .icr-title {
-    color: #d09724 !important; 
+    color: #ff0000 !important; 
     font-weight: 700; 
     font-size: 1.6em !important;
     font-family: "Cen725c" !important;
 }
 .row .col.md-4 .icr-desc {
-    font-size: 1em !important;
+    font-size: 0.8em !important;
     font-family: "Cen725c" !important;
     padding: 5px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 .row .col.md-4 .notes-title.mb-3 {
-    color: #d09724 !important; 
+    color: #ff0000 !important; 
     font-weight: 700; 
     font-size: 1.1em !important;
+    font-family: "Times New Roman", Times, serif;
 }
 .footer .row .col-md-4.text-center.copyright{
     font-size: 0.8em !important;
@@ -31,6 +34,9 @@
 }
 .marginCertificate{
     margin-top: 40px;
+}
+.marginCertificate .row .col.md-4 .desc{
+    font-family: "Times New Roman", Times, serif;
 }
 @font-face {
     font-family: "Cen725c";

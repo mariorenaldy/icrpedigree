@@ -39,6 +39,7 @@ body p {
 .entry {
   position: relative;
   min-height: 70px;
+  margin-left: 40px;
 }
 .entry:before {
   content: "";
@@ -91,7 +92,7 @@ body p {
 .label {
   display: block;
   max-width: 20em;
-  padding: 0px 10px;
+  padding: 0px;
   line-height: 1.2;
   border-radius: 5px;
   position: absolute;
@@ -113,10 +114,15 @@ body p {
   font-size: 1.6em !important;
   margin-bottom: 10px;
 }
+.label .fs-7{
+  font-family: "Times New Roman", Times, serif;
+  font-size: .8em !important;
+}
 .container{
   font-family: "Times New Roman", Times, serif;
   font-size: 1.2em !important;
   margin-left: 20px;
+  width:310px;
 }
 .lv1 .entry .label {
   top: 40%;
@@ -141,19 +147,20 @@ body p {
 }
 #main {
   top: 7%;
-  min-width: 350px;
+  min-width: 400px;
+  margin-left: 0px;
 }
 .bg-container {
   position: absolute;
   height: 610px;
   width: 800px;
-  background-image: url('../img/icr_logo_abu.png');
+  background-image: url('../img/certificatebackgroundlogo.png');
   background-repeat: no-repeat;
   pointer-events: none;
   background-size: 100%;
-  left: 400px;
+  left: 450px;
   top: 0px;
-  opacity: 0.5;
+  opacity: 0.3;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
@@ -161,14 +168,16 @@ body p {
   height: 150px;
 }
 .president{
-  bottom:12%; 
-  left:40px;
+  bottom: 20%; 
+  left: 40px;
   font-family: "Times New Roman", Times, serif;
   font-size: 1.1em !important;
+  margin-left: 40px;
 }
 .president-name{
-  bottom:2%; 
-  left:120px;
+  bottom: 4%; 
+  left: 120px;
   font-family: "Times New Roman", Times, serif;
   font-size: 1.1em !important;
+  margin-left: 40px;
 }
