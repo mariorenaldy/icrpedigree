@@ -25,8 +25,8 @@ class MemberModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->from('members');
-        $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
-        $this->db->join('users','members.mem_app_user = users.use_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('users','users.use_id = members.mem_app_user');
         $this->db->order_by('mem_id', 'desc');
         $this->db->limit($this->config->item('backend_member_count'), 0);
         return $this->db->get();
@@ -85,5 +85,14 @@ class MemberModel extends CI_Model {
         $this->db->set($data);
         $this->db->where($where);
         return $this->db->update('members');
+    }
+
+    public function check_for_duplicate($id, $field, $val){
+        $sql = "select mem_id from members where ".$field." = '".$val."' AND mem_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').")";
+        if ($id){
+            $sql .= ' AND mem_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
+        return count($query->result());
     }
 }

@@ -3,6 +3,7 @@
 <head>
     <title>Kennel List</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -43,6 +44,17 @@
                             <div class="col-md-6">    
                                 <input type="text" class="form-control" placeholder="Name/Address/Phone number" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
+                            <div class="col-md-1 my-1 text-end">
+                                <label for="mem_type">Type:</label>
+                            </div>
+                            <div class="col-md-1 ms-1">
+                            <?php
+                                $type[$this->config->item('all_member')] = 'All'; 
+                                $type[$this->config->item('free_member')] = 'Free'; 
+                                $type[$this->config->item('pro_member')] = 'Pro'; 
+                                echo form_dropdown('mem_type', $type, set_value('mem_type'), 'class="form-control"');
+                            ?>
+                            </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                             </div>
@@ -55,29 +67,31 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table id="datatable" class="table table-hover">
                         <thead>
                             <tr>
                                 <th>KTP</th>
                                 <th>Name</th>
-                                <th>Address</th>
-                                <th>Mail Address</th>
-                                <th>City</th>
-                                <th>Postal Code</th>
-                                <th>Phone Number</th>
+                                <th class="no-sort">Address</th>
+                                <th class="no-sort">Mail Address</th>
+                                <th class="no-sort">City</th>
+                                <th class="no-sort">Postal Code</th>
+                                <th class="no-sort">Phone Number</th>
                                 <th>Kennel</th>
-                                <th>Type</th>
-                                <th>email</th>
-                                <th>Reg. Date</th>
-                                <th>Username</th>
-                                <th colspan="4"></th>
+                                <th class="no-sort">Type</th>
+                                <th class="no-sort">email</th>
+                                <th class="no-sort">Reg. Date</th>
+                                <th class="no-sort">Username</th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
+                                <th style="display: none;"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                                 $i = 0;  
-                                foreach ($member AS $m){
-                                if ($m->mem_stat){ ?>
+                                foreach ($member AS $m){ ?>
                                 <tr>
                                     <td><?= $m->mem_ktp; ?></td>
                                     <td><?= $m->mem_name; ?></td>
@@ -107,9 +121,7 @@
                                         <?php } ?>
                                     </td>
                                 </tr>
-                                <?php
-                                    $i++; 
-                                } 
+                                <?php $i++; 
                             } ?>
                         </tbody>
                     </table>
@@ -141,6 +153,15 @@
         function resetPass(id){
             window.location = "<?= base_url(); ?>backend/Members/view_reset/"+id;
         }
+        $(document).ready(function () {
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[1, 'asc']],
+                columnDefs: [{
+                    orderable: false,
+                    targets: "no-sort"
+                }]
+            });
+        });
     </script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
 </body>
 </html>

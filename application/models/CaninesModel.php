@@ -76,8 +76,6 @@ class CaninesModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->where('can_id != ', $this->config->item('sire_id'));
-        $this->db->where('can_id != ', $this->config->item('dam_id'));
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
         $this->db->join('members','members.mem_id = canines.can_member_id');
@@ -170,25 +168,26 @@ class CaninesModel extends CI_Model {
     //     return $query->result();
     // }
 
-    // public function check_icr_number($id, $num){
-    //     $sql = "select * from canines where can_icr_number = '".$num."'";
-    //     if ($id){
-    //         $sql .= ' AND can_id <> '.$id;
-    //     }
-    //     $query = $this->db->query($sql);
-        
-    //     return count($query->result());
-    // }
+    public function check_for_duplicate($id, $field, $val){
+        $sql = "SELECT can_id from canines where ".$field." = '".$val."' AND can_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').")";
+        if ($id){
+            $sql .= ' AND can_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
+        return count($query->result());
+    }
 
-    // public function check_microchip_number($id, $num){
-    //     $sql = "select * from canines where can_chip_number = '".$num."'";
-    //     if ($id){
-    //         $sql .= ' AND can_id <> '.$id;
-    //     }
-    //     $query = $this->db->query($sql);
-        
-    //     return count($query->result());
-    // }
+    public function get_siblings($canineId, $sireId, $damId, $gender){
+        $this->db->select('can_a_s');
+        $this->db->from('pedigrees');
+        $this->db->join('canines','pedigrees.ped_canine_id = canines.can_id');
+        $this->db->where('ped_sire_id', $sireId);
+        $this->db->where('ped_dam_id', $damId);
+        $this->db->where('ped_canine_id != ', $canineId);
+        $this->db->where('can_gender', $gender);
+        $this->db->order_by('can_id');
+        return $this->db->get();
+    }
 
     // public function get_members_canines(){
     //     $member = $this->session->userdata('member_data');
@@ -237,15 +236,6 @@ class CaninesModel extends CI_Model {
     //     return $query->result();
     // }
 
-    public function check_can_a_s($id, $name){
-        $sql = "select * from canines where can_a_s = '".$name."' AND can_app_stat = ".$this->config->item('accepted');
-        if ($id){
-            $sql .= ' AND can_id <> '.$id;
-        }
-        $query = $this->db->query($sql);
-        return count($query->result());
-    }
-
     public function search_by_member_app($q, $can_member, $offset){ 
         $date = '';
         $sql = "SELECT * FROM canines c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
@@ -284,17 +274,4 @@ class CaninesModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();  
 	}
-
-    public function get_siblings($canineId, $damId, $sireId){
-        $this->db->select('can_a_s');
-        $this->db->where('ped_sire_id != ', $this->config->item('sire_id'));
-        $this->db->where('ped_dam_id != ', $this->config->item('dam_id'));
-        $this->db->where('ped_sire_id = ', $sireId);
-        $this->db->where('ped_dam_id = ', $damId);
-        $this->db->where('ped_canine_id != ', $canineId);
-        $this->db->from('pedigrees');
-        $this->db->join('canines','canines.can_id = pedigrees.ped_canine_id');
-        $this->db->order_by('can_id', 'desc');
-        return $this->db->get();
-    }
 }

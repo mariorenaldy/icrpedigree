@@ -43,8 +43,8 @@ class Certificate extends CI_Controller{
         if ($this->uri->segment(4)){
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->row();
-            if ($data['canine'] && $data['canine']->ped_canine_id != $this->config->item('sire_id') &&
-                $data['canine']->ped_canine_id != $this->config->item('dam_id')) {
+            if ($data['canine']){ //&& $data['canine']->ped_canine_id != $this->config->item('sire_id') &&
+                // $data['canine']->ped_canine_id != $this->config->item('dam_id')) {
                 // level 1
                 $sire['can_id'] = $data['canine']->ped_sire_id;
                 $data['sire'] = $this->caninesModel->get_can_pedigrees($sire)->row();
@@ -52,7 +52,7 @@ class Certificate extends CI_Controller{
                 $data['dam'] = $this->caninesModel->get_can_pedigrees($dam)->row();
 
                 // level 2
-                if ($data['sire'] && $data['sire']->ped_canine_id != $this->config->item('sire_id')){
+                if ($data['sire']){ //&& $data['sire']->ped_canine_id != $this->config->item('sire_id')){
                     $sire21['can_id'] = $data['sire']->ped_sire_id;
                     $data['sire21'] = $this->caninesModel->get_can_pedigrees($sire21)->row();
                     $dam21['can_id'] = $data['sire']->ped_dam_id;
@@ -63,7 +63,7 @@ class Certificate extends CI_Controller{
                     $data['dam21'] = [];
                 }
 
-                if ($data['dam'] && $data['dam']->ped_canine_id != $this->config->item('dam_id')){
+                if ($data['dam']){ //&& $data['dam']->ped_canine_id != $this->config->item('dam_id')){
                     $sire22['can_id'] = $data['dam']->ped_sire_id;
                     $data['sire22'] = $this->caninesModel->get_can_pedigrees($sire22)->row();
                     $dam22['can_id'] = $data['dam']->ped_dam_id;
@@ -75,7 +75,7 @@ class Certificate extends CI_Controller{
                 }
 
                 // level 3
-                if ($data['sire21'] && $data['sire21']->ped_canine_id != $this->config->item('sire_id')){
+                if ($data['sire21']){ //&& $data['sire21']->ped_canine_id != $this->config->item('sire_id')){
                     $sire31['can_id'] = $data['sire21']->ped_sire_id;
                     $data['sire31'] = $this->caninesModel->get_can_pedigrees($sire31)->row();
                     $dam31['can_id'] = $data['sire21']->ped_dam_id;
@@ -86,7 +86,7 @@ class Certificate extends CI_Controller{
                     $data['dam31'] = [];
                 }
 
-                if ($data['dam21'] && $data['dam21']->ped_canine_id != $this->config->item('dam_id')){
+                if ($data['dam21']){ //&& $data['dam21']->ped_canine_id != $this->config->item('dam_id')){
                     $sire32['can_id'] = $data['dam21']->ped_sire_id;
                     $data['sire32'] = $this->caninesModel->get_can_pedigrees($sire32)->row();
                     $dam32['can_id'] = $data['dam21']->ped_dam_id;
@@ -97,7 +97,7 @@ class Certificate extends CI_Controller{
                     $data['dam32'] = [];
                 }
 
-                if ($data['sire22'] && $data['sire22']->ped_canine_id != $this->config->item('sire_id')){
+                if ($data['sire22']){ //&& $data['sire22']->ped_canine_id != $this->config->item('sire_id')){
                     $sire33['can_id'] = $data['sire22']->ped_sire_id;
                     $data['sire33'] = $this->caninesModel->get_can_pedigrees($sire33)->row();
                     $dam33['can_id'] = $data['sire22']->ped_dam_id;
@@ -108,7 +108,7 @@ class Certificate extends CI_Controller{
                     $data['dam33'] = [];
                 }
 
-                if ($data['dam22'] && $data['dam22']->ped_canine_id != $this->config->item('dam_id')){
+                if ($data['dam22']){ //&& $data['dam22']->ped_canine_id != $this->config->item('dam_id')){
                     $sire34['can_id'] = $data['dam22']->ped_sire_id;
                     $data['sire34'] = $this->caninesModel->get_can_pedigrees($sire34)->row();
                     $dam34['can_id'] = $data['dam22']->ped_dam_id;

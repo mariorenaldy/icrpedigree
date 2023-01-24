@@ -31,7 +31,7 @@
                             ?>
                             </div>
                         </div>
-                        <div id="freeForm">
+                        <div id="freeForm" <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
                             <div class="input-group mb-3">
                                 <label for="mem_name" class="control-label col-md-2">Nama Sesuai KTP</label>
                                 <div class="col-md-10">
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="proForm" style="display: none">
+                        <div id="proForm" <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
                             <div class="input-group mb-3">
                                 <label for="mem_ktp" class="control-label col-md-2">No. KTP</label>
                                 <div class="col-md-10">

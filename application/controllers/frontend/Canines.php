@@ -40,7 +40,7 @@ class Canines extends CI_Controller {
 		if ($this->session->userdata('username')){
 			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
-			$whe['ken_stat'] = 1;
+			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
 			$this->load->view('frontend/add_canine', $data);
 		}
@@ -54,7 +54,7 @@ class Canines extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
-			$this->form_validation->set_rules('can_a_s', 'Name ', 'trim|required');
+			$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
 			$this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
 			$this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
 			$this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
@@ -63,7 +63,7 @@ class Canines extends CI_Controller {
 			
 			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
-			$whe['ken_stat'] = 1;
+			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('frontend/add_canine', $data);
@@ -88,6 +88,21 @@ class Canines extends CI_Controller {
 				if (!$err && $photo == "-"){
 					$err++;
 					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+				}
+
+				if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
+				}
+
+				if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
+				}
+
+				if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $this->input->post('can_a_s'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
 				}
 			
 				if (!$err){

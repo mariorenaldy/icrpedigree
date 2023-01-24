@@ -60,8 +60,7 @@
                         <tbody>
                             <?php
                                 $i = 0;  
-                                foreach ($member AS $m){
-                                if ($m->mem_stat){ ?>
+                                foreach ($member AS $m){ ?>
                                 <tr>
                                     <td><?= $m->mem_ktp; ?></td>
                                     <td><?= $m->mem_name; ?></td>
@@ -80,9 +79,7 @@
                                     <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button></td>
                                     <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button></td>
                                 </tr>
-                                <?php
-                                    $i++; 
-                                } 
+                            <?php $i++; 
                             } ?>
                         </tbody>
                     </table>

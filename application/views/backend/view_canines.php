@@ -9,7 +9,7 @@
 <body>
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
+        <img class="modal-content" id="modalImg">
     </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
@@ -87,9 +87,9 @@
                                 <tr>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" id="myImg" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url().'assets/img/'.$this->config->item('canine_img') ?>" id="myImg" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url().'assets/img/'.$this->config->item('canine_img') ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } ?>
                                     </td>
                                     <td><?= $c->can_reg_number; ?></td>
@@ -142,22 +142,15 @@
         function detail(id){
             window.location = "<?= base_url(); ?>backend/Canines/view_detail/"+id;
         }
-
-        //modal script
         var modal = document.getElementById("myModal");
-
-        // Get the image and insert it inside the modal
-        var img = document.getElementById("myImg");
-        var modalImg = document.getElementById("img01");
-        img.onclick = function(){
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
             modal.style.display = "block";
-            modalImg.src = this.src;
+            modalImg.src = img.src;
         }
 
-        // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
             modal.style.display = "none";
         }

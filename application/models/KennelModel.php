@@ -69,6 +69,15 @@ class KennelModel extends CI_Model {
         return $this->db->update('kennels');
     }
 
+    public function check_for_duplicate($id, $field, $val){
+        $sql = "select ken_id from kennels where ".$field." = '".$val."' AND ken_stat = ".$this->config->item('accepted');
+        if ($id){
+            $sql .= ' AND ken_member_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
+        return count($query->result());
+    }
+
     // public function edit_kennels($data, $id){
     //     $result = false;
     //     if ($data != null && $id != null){

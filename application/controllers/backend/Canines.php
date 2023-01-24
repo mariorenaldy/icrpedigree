@@ -43,6 +43,32 @@ class Canines extends CI_Controller {
         $this->load->view('backend/approve_canines', $data);
 		}
 
+    public function view_detail(){
+        if ($this->uri->segment(4)){
+          $where['can_id'] = $this->uri->segment(4);
+          $data['canine'] = $this->caninesModel->get_canines($where)->row();
+          $whePed['ped_canine_id'] = $this->uri->segment(4);
+          $ped = $this->pedigreesModel->get_pedigrees($whePed)->row();
+          $sire['can_id'] = $ped->ped_sire_id;
+          $data['sire'] = $this->caninesModel->get_canines($sire)->row();
+          $dam['can_id'] = $ped->ped_dam_id;
+          $data['dam'] = $this->caninesModel->get_canines($dam)->row();
+          
+          if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
+            $data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE')->result();
+            $data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE')->result();
+          }
+          else{
+            $data['male_siblings'] = [];
+            $data['female_siblings'] = [];
+          }
+          $this->load->view("backend/view_canine_detail", $data);
+        }
+        else{
+          redirect('backend/Canines');
+        }
+    }
+
     public function add(){
         $data['trah'] = $this->trahModel->get_trah(null)->result();
         $data['member'] = [];
@@ -55,7 +81,7 @@ class Canines extends CI_Controller {
           $data['trah'] = $this->trahModel->get_trah(null)->result();
 
           $like['mem_name'] = $this->input->post('mem_name');
-          $where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+          $where['mem_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           if ($data['member']){
@@ -78,7 +104,7 @@ class Canines extends CI_Controller {
           $data['trah'] = $this->trahModel->get_trah(null)->result();
 
           $like['mem_name'] = $this->input->post('mem_name');
-          $where['mem_stat'] =  1;
+          $where['mem_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -90,7 +116,7 @@ class Canines extends CI_Controller {
         }
     }
   
-    public function validate_add(){ // butuh cek nama canine, no microchip, no icr
+    public function validate_add(){ 
         if ($this->session->userdata('use_username')) {
           $this->form_validation->set_error_delimiters('<div>', '</div>');
           $this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
@@ -105,7 +131,7 @@ class Canines extends CI_Controller {
           $data['trah'] = $this->trahModel->get_trah(null)->result();
 
           $like['mem_name'] = $this->input->post('mem_name');
-          $where['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+          $where['mem_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -133,6 +159,16 @@ class Canines extends CI_Controller {
             if (!$err && $photo == "-") {
               $err++;
               $this->session->set_flashdata('error_message', 'Photo is required');
+            }
+
+            if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
+              $err++;
+              $this->session->set_flashdata('error_message', 'Duplicate ICR number');
+            }
+    
+            if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
+              $err++;
+              $this->session->set_flashdata('error_message', 'Duplicate microchip number');
             }
 
             if (!$err) {
@@ -171,13 +207,10 @@ class Canines extends CI_Controller {
                   $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
               }
 
-              // if (!$err) {
-              //   $res = $this->caninesModel->check_can_a_s('', $data['can_a_s']);
-              //   if ($res) {
-              //     $err++;
-              //     $this->session->set_flashdata('error_message', 'Duplicate canine name');
-              //   }
-              // }
+              if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $this->input->post('can_a_s'))){
+                $err++;
+                $this->session->set_flashdata('error_message', 'Duplicate canine name');
+              }
 
               $dataLog = array(
                 'log_canine_id' => $id,
@@ -283,7 +316,7 @@ class Canines extends CI_Controller {
       $data['canine'] = $this->caninesModel->get_canines($where)->row();
 
       $like['mem_name'] = $this->input->post('mem_name');
-      $wheMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+      $wheMember['mem_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){
@@ -312,7 +345,7 @@ class Canines extends CI_Controller {
       $data['canine'] = $this->caninesModel->get_canines($where)->row();
 
       $like['mem_name'] = $this->input->post('mem_name');
-      $wheMember['mem_stat'] =  1;
+      $wheMember['mem_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){
@@ -333,7 +366,7 @@ class Canines extends CI_Controller {
     }
   }
 
-  public function validate_edit_canine(){ // butuh cek nama canine, no microchip, no icr
+  public function validate_edit_canine(){ 
     if ($this->session->userdata('use_username')) {
       $this->form_validation->set_error_delimiters('<div>', '</div>');
       $this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
@@ -350,7 +383,7 @@ class Canines extends CI_Controller {
       $data['canine'] = $this->caninesModel->get_canines($where)->row();
       
       $like['mem_name'] = $this->input->post('mem_name');
-      $wheMember['mem_stat'] =  1;
+      $wheMember['mem_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){
@@ -381,6 +414,21 @@ class Canines extends CI_Controller {
               $this->session->set_flashdata('error_message', $this->upload->display_errors());
             }
           }
+        }
+
+        if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_icr_number', $this->input->post('can_icr_number'))){
+          $err++;
+          $this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
+        }
+
+        if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_chip_number', $this->input->post('can_chip_number'))){
+          $err++;
+          $this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
+        }
+
+        if (!$err && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_a_s', $this->input->post('can_a_s'))){
+          $err++;
+          $this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
         }
 
         if (!$err) {
@@ -1540,28 +1588,6 @@ class Canines extends CI_Controller {
     }
     else{
       redirect("backend/Canines/view_approve");
-    }
-  }
-
-  public function view_detail(){
-    if ($this->uri->segment(4)){
-      $where['can_id'] = $this->uri->segment(4);
-      $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->row();
-      $wheMember['mem_id'] = $data['canine']->can_member_id;
-      $data['member'] = $this->memberModel->get_members($wheMember)->result();
-      $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
-      $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
-
-      $sire['can_id'] = $data['canine']->ped_sire_id;
-      $data['sire'] = $this->caninesModel->get_can_pedigrees($sire)->row();
-      $dam['can_id'] = $data['canine']->ped_dam_id;
-      $data['dam'] = $this->caninesModel->get_can_pedigrees($dam)->row();
-
-      $data['siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $data['canine']->ped_dam_id, $data['canine']->ped_sire_id)->result();
-      $this->load->view("backend/view_canine_detail", $data);
-    }
-    else{
-      redirect('backend/Canines');
     }
   }
 }

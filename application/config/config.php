@@ -602,10 +602,10 @@ $config['event_count'] = 5;
 $config['product_count'] = 5;
 $config['notif_count'] = 5;
 
-$config['backend_member_count'] = 20;
-$config['backend_canine_count'] = 20;
-$config['backend_stud_count'] = 20;
-$config['backend_birth_count'] = 20;
+$config['backend_member_count'] = 100;
+$config['backend_canine_count'] = 100;
+$config['backend_stud_count'] = 100;
+$config['backend_birth_count'] = 100;
 
 $config['canine_img'] = 'Dog.svg';
 $config['default_img'] = 'avatar.jpg';
@@ -617,10 +617,9 @@ $config['saved'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
 
-$config['deactivated_member_status'] = 0;
-$config['paid_member_status'] = 1;
-$config['non_paid_member_status'] = 2;
-$config['saved_member_status'] = 3;
+$config['free_member'] = 0;
+$config['pro_member'] = 1;
+$config['all_member'] = 2;
 
 $config['canine_rip'] = 0;
 $config['canine_alive'] = 1;
@@ -633,3 +632,5 @@ $config['jarak_lapor_stb'] = 100;
 
 $config['admin'] = 0;
 $config['user'] = 1;
+
+$config['can_name_length'] = 20;

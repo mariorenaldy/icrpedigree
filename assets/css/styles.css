@@ -132,4 +132,5 @@ div.container{
 }
 .img-fluid.pp{
     max-width: 25px;
+    border-radius: 50%;
 }

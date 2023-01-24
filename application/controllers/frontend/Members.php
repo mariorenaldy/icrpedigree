@@ -76,7 +76,7 @@ class Members extends CI_Controller {
 		}
 
 		public function logout(){
-			$this->session->unset_userdata('username');
+			session_destroy();
 			redirect('frontend/Members');
 		}
 
@@ -89,26 +89,25 @@ class Members extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
-			$this->form_validation->set_message('is_unique', '%s tidak boleh sama');
 			if ($this->input->post('mem_type')){
 				$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
-				$this->form_validation->set_rules('mem_hp', 'No. telp ', 'trim|required');
-				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
+				$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
+				$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
 				$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
 				if (!$this->input->post('same'))
 					$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
 				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
-				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required|is_unique[members.mem_ktp]');
-				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required|is_unique[members.mem_username]');
+				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required]');
+				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required]');
 				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 				$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
-				$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required|is_unique[kennels.ken_name]');
+				$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required]');
 			}
 			else{
 				$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
-				$this->form_validation->set_rules('hp', 'No. telp ', 'trim|required');
-				$this->form_validation->set_rules('email', 'Email ', 'trim|required');
+				$this->form_validation->set_rules('hp', 'No. HP Aktif WA ', 'trim|required');
+				$this->form_validation->set_rules('email', 'email ', 'trim|required');
 			}
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
@@ -117,21 +116,6 @@ class Members extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				// $photo = '-';
-				// if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-				// 	if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])){
-				// 		$this->upload->initialize($this->config->item('upload_member'));
-				// 		if ($this->upload->do_upload('attachment_member')){
-				// 			$uploadData = $this->upload->data();
-				// 			$photo = $uploadData['file_name'];
-				// 		}
-				// 		else{
-				// 			$err++;
-				// 			$this->session->set_flashdata('error_message', $this->upload->display_errors());
-				// 		}
-				// 	}
-				// }
-	
 				if ($this->input->post('mem_type')){
 					$pp = '-';
 					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
@@ -184,6 +168,26 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Format email tidak valid');
 				}
 
+				if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+				}
+
+				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+				}
+
+				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+				}
+
+				if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+				}
+
 				if (!$err){
 					$mem_id = $this->MemberModel->record_count() + 1;
 					if ($this->input->post('mem_type')){
@@ -192,7 +196,6 @@ class Members extends CI_Controller {
 							'mem_name' => $this->input->post('mem_name'),
 							'mem_address' => $this->input->post('mem_address'),
 							'mem_hp' => $this->input->post('mem_hp'),
-							// 'mem_photo' => $photo,
 							'mem_kota' => $this->input->post('mem_kota'),
 							'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 							'mem_email' => $this->input->post('mem_email'),

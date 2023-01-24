@@ -22,7 +22,7 @@
         <?php } ?>
         <div class="dropdown">
             <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp" style="border-radius: 50%;">
+                <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp">
                 <?= $this->session->userdata('username') ?>
             </span>
             <ul class="dropdown-menu">
