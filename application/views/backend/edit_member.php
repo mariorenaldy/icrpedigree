@@ -35,7 +35,7 @@
                             ?>
                             </div>
                         </div>
-                        <div id="freeForm" <?php if (($mode && $member->mem_type == $this->config->item('pro_member')) && (!$mode && set_value('mem_type') == $this->config->item('pro_member'))){ ?>style="display: none"<?php } ?>>
+                        <div id="freeForm" <?php if ((!$mode && $member->mem_type == $this->config->item('pro_member')) || ($mode && set_value('mem_type') == $this->config->item('pro_member'))){ ?>style="display: none"<?php } ?>>
                             <div class="input-group mb-3">
                                 <label for="mem_name" class="control-label col-md-2">Name</label>
                                 <div class="col-md-10">
@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="proForm" <?php if (($mode && $member->mem_type == $this->config->item('free_member')) || (!$mode && set_value('mem_type') == $this->config->item('free_member'))){ ?>style="display: none"<?php } ?>>
+                        <div id="proForm" <?php if ((!$mode && $member->mem_type == $this->config->item('free_member')) || ($mode && set_value('mem_type') == $this->config->item('free_member'))){ ?>style="display: none"<?php } ?>>
                             <div class="input-group mb-3">
                                 <label for="mem_ktp" class="control-label col-md-2">KTP Number</label>
                                 <div class="col-md-10">
@@ -93,22 +93,22 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_address" class="control-label col-md-2">KTP Address</label>
+                                <label for="mem_address" class="control-label col-md-2">Mail Address</label>
                                 <div class="col-md-10">
                                     <?php if (!$mode){ ?>
-                                        <input class="form-control" type="text" placeholder="KTP Address" name="mem_address" value="<?= $member->mem_address; ?>">
+                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= $member->mem_address; ?>">
                                     <?php } else { ?>
-                                        <input class="form-control" type="text" placeholder="KTP Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                     <?php } ?>
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_mail_address" class="control-label col-md-2">Mail Address</label>
+                                <label for="mem_mail_address" class="control-label col-md-2">Certificate Address</label>
                                 <div class="col-md-10">
                                     <?php if (!$mode){ ?>
-                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
+                                        <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
                                     <?php } else { ?>
-                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                        <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                     <?php } ?>
                                 </div>
                             </div>
@@ -224,6 +224,18 @@
     <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
+        $('#mem_type').on("change", function(){
+            mem_type = $('#mem_type').val();
+            if (mem_type == <?= $this->config->item('free_member') ?>){
+                $('#proForm').hide();
+                $('#freeForm').show();
+            }
+            else{
+                $('#freeForm').hide();
+                $('#proForm').show();   
+            }
+        });
+
         $(document).ready(function(){
             const imageInputPP = document.querySelector("#imageInputPP");
             imageInputPP.addEventListener("change", function() {

@@ -42,7 +42,7 @@
                     <form action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Address/Phone number" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 my-1 text-end">
                                 <label for="mem_type">Type:</label>
@@ -70,14 +70,14 @@
                     <table id="datatable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>KTP</th>
+                                <th>Kennel</th>
                                 <th>Name</th>
                                 <th class="no-sort">Address</th>
                                 <th class="no-sort">Mail Address</th>
                                 <th class="no-sort">City</th>
                                 <th class="no-sort">Postal Code</th>
                                 <th class="no-sort">Phone Number</th>
-                                <th>Kennel</th>
+                                <th>KTP</th>
                                 <th class="no-sort">Type</th>
                                 <th class="no-sort">email</th>
                                 <th class="no-sort">Reg. Date</th>
@@ -91,38 +91,44 @@
                         <tbody>
                             <?php
                                 $i = 0;  
-                                foreach ($member AS $m){ ?>
-                                <tr>
-                                    <td><?= $m->mem_ktp; ?></td>
-                                    <td><?= $m->mem_name; ?></td>
-                                    <td><?= $m->mem_address; ?></td>
-                                    <td><?= $m->mem_mail_address; ?></td>
-                                    <td><?= $m->mem_kota; ?></td>
-                                    <td><?= $m->mem_kode_pos; ?></td>
-                                    <td><?= $m->mem_hp; ?></td>
-                                    <td><?php
-                                    foreach ($kennel[$i] AS $k){
-                                        echo '<div>'.$k->ken_name.'</div>';
-                                    }  
-                                    ?></td>
-                                    <td><?php if ($m->mem_type == $this->config->item('pro_member')) 
-                                            echo 'Pro<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)';
-                                        else 
-                                            echo 'Free'; 
+                                foreach ($member AS $m){ 
+                                    if ($m->mem_id) { ?>
+                                    <tr>
+                                        <td><?php
+                                        foreach ($kennel[$i] AS $k){
+                                            echo '<div>'.$k->ken_name;
+                                            if ($m->mem_type == $this->config->item('pro_member')){ 
+                                                echo ' <i class="fa fa-check"></i>';
+                                            } 
+                                            echo '</div>';
+                                        }  
                                         ?></td>
-                                    <td><?= $m->mem_email; ?></td>
-                                    <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
-                                    <td><?= $m->mem_username; ?></td>
-                                    <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
-                                    <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
-                                    <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>
-                                    <td><?php if ($m->mem_type == $this->config->item('free_member')){ ?>
-                                        <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fa fa-money"></i></button>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                                <?php $i++; 
-                            } ?>
+                                        <td><?= $m->mem_name; ?></td>
+                                        <td><?= $m->mem_address; ?></td>
+                                        <td><?= $m->mem_mail_address; ?></td>
+                                        <td><?= $m->mem_kota; ?></td>
+                                        <td><?= $m->mem_kode_pos; ?></td>
+                                        <td><?= $m->mem_hp; ?></td>
+                                        <td><?= $m->mem_ktp; ?></td>
+                                        <td><?php if ($m->mem_type == $this->config->item('pro_member')) 
+                                                echo 'Pro<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)';
+                                            else 
+                                                echo 'Free'; 
+                                            ?></td>
+                                        <td><?= $m->mem_email; ?></td>
+                                        <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
+                                        <td><?= $m->mem_username; ?></td>
+                                        <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
+                                        <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>
+                                        <td><?php if ($m->mem_type == $this->config->item('free_member')){ ?>
+                                            <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fa fa-money"></i></button>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                    <?php $i++; 
+                                } 
+                            }?>
                         </tbody>
                     </table>
                 </div>

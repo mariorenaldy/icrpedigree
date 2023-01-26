@@ -39,6 +39,7 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
+			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('accepted');
 			if ($this->input->post('mem_type') == $this->config->item('all_member'))
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
@@ -72,6 +73,7 @@ class Members extends CI_Controller {
 			$like['mem_name'] = $this->input->post('keywords');
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
+			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
 			$data['kennel'] = Array();
@@ -253,7 +255,7 @@ class Members extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to approve member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to reject member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members/view_approve');
 					}
 				}
@@ -273,7 +275,9 @@ class Members extends CI_Controller {
 					$this->db->trans_start();
 					$where['mem_id'] = $this->uri->segment(4);
 					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
-					$data['mem_stat'] = $this->config->item('pro_member');
+					$data['mem_type'] = $this->config->item('pro_member');
+					$data['mem_app_user'] = $this->session->userdata('use_id');
+					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$err = 0;
@@ -434,6 +438,11 @@ class Members extends CI_Controller {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Duplicate email');
 					}
+
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
+					}
 	
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 						$err++;
@@ -445,7 +454,7 @@ class Members extends CI_Controller {
 						if ($this->input->post('mem_type')){
 							$data = array(
 								'mem_id' => $mem_id,
-								'mem_name' => $this->input->post('mem_name'),
+								'mem_name' => strtoupper($this->input->post('mem_name')),
 								'mem_address' => $this->input->post('mem_address'),
 								'mem_hp' => $this->input->post('mem_hp'),
 								'mem_kota' => $this->input->post('mem_kota'),
@@ -475,7 +484,7 @@ class Members extends CI_Controller {
 
 							$dataLog = array(
 								'log_member_id' => $mem_id,
-								'log_name' => $this->input->post('mem_name'),
+								'log_name' => strtoupper($this->input->post('mem_name')),
 								'log_address' => $this->input->post('mem_address'),
 								'log_hp' => $this->input->post('mem_hp'),
 								'log_kota' => $this->input->post('mem_kota'),
@@ -510,7 +519,7 @@ class Members extends CI_Controller {
 						else{
 							$data = array(
 								'mem_id' => $mem_id,
-								'mem_name' => $this->input->post('name'),
+								'mem_name' => strtoupper($this->input->post('name')),
 								'mem_hp' => $this->input->post('hp'),
 								'mem_email' => $this->input->post('email'),
 								'mem_username' => $this->input->post('email'),
@@ -528,26 +537,6 @@ class Members extends CI_Controller {
 								'ken_member_id' => $mem_id,
 								'ken_stat' => $this->config->item('accepted'),
 							);
-
-							$dataLog = array(
-								'log_member_id' => $mem_id,
-								'log_name' => $this->input->post('name'),
-								'log_hp' => $this->input->post('hp'),
-								'log_email' => $this->input->post('email'),
-								'log_pp' => '-',
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('accepted'),
-							);
-
-							$dataKennelLog = array(
-								'log_kennel_id' => $ken_id,
-								'log_kennel_type_id' => 0,
-								'log_kennel_photo' => '-',
-								'log_stat' => $this->config->item('accepted'),
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s')
-							);
 						}
 		
 						$this->db->trans_strict(FALSE);
@@ -556,35 +545,37 @@ class Members extends CI_Controller {
 						if ($id){
 							$res = $this->KennelModel->add_kennels($kennel_data);
 							if ($res){
-								$log = $this->LogmemberModel->add_log($dataLog);
-								if ($log){
-									$res = $this->LogkennelModel->add_log($dataKennelLog);
-									if ($res){
-										$this->db->trans_complete();
-
-										$this->email->set_mailtype('html');
-										$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
-										$this->email->to($this->input->post('mem_email'));
-										$this->email->subject('Register Berhasil');
-
-										$message = '<div>Kepada pengguna ICR Pedigree,</div>';
-										$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
-										$message .= '<div>Salam </div>';
-										$message .= '<div>ICR Pedigree Customer Service</div>';
-										$message .= '<div><br/><hr/></div>';
-
-										$this->email->message($message);
-										$res = $this->email->send();
-
-										$this->session->set_flashdata('add_success', TRUE);
-										redirect("backend/Members");
+								if ($this->input->post('mem_type')){
+									$log = $this->LogmemberModel->add_log($dataLog);
+									if ($log){
+										$res = $this->LogkennelModel->add_log($dataKennelLog);
+										if (!$res){
+											$err = 1;
+										}
 									}
 									else{
-										$err = 1;
+										$err = 2;
 									}
 								}
-								else{
-									$err = 2;
+								if (!$err){
+									$this->db->trans_complete();
+
+									$this->email->set_mailtype('html');
+									$this->email->from($this->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+									$this->email->to($this->input->post('mem_email'));
+									$this->email->subject('Register Berhasil');
+
+									$message = '<div>Kepada pengguna ICR Pedigree,</div>';
+									$message .= '<div>Admin sudah approve keanggotaan anda di ICR Pedigree. Silakan lakukan login untuk mengakses aplikasi ICR Pedigree.</div>';
+									$message .= '<div>Salam </div>';
+									$message .= '<div>ICR Pedigree Customer Service</div>';
+									$message .= '<div><br/><hr/></div>';
+
+									$this->email->message($message);
+									$res = $this->email->send();
+
+									$this->session->set_flashdata('add_success', TRUE);
+									redirect("backend/Members");
 								}
 							}
 							else{
@@ -718,7 +709,7 @@ class Members extends CI_Controller {
 					if (!$err){
 						if ($this->input->post('mem_type')){
 							$data = array(
-								'mem_name' => $this->input->post('mem_name'),
+								'mem_name' => strtoupper($this->input->post('mem_name')),
 								'mem_address' => $this->input->post('mem_address'),
 								'mem_mail_address' => $this->input->post('mem_mail_address'),
 								'mem_hp' => $this->input->post('mem_hp'),
@@ -726,6 +717,10 @@ class Members extends CI_Controller {
 								'mem_kode_pos' => $this->input->post('mem_kode_pos'),
 								'mem_email' => $this->input->post('mem_email'),
 								'mem_ktp' => $this->input->post('mem_ktp'),
+								'mem_type' => $this->input->post('mem_type'),
+								'mem_app_user' => $this->session->userdata('use_id'),
+								'mem_app_date' => date('Y-m-d H:i:s'),
+								'mem_payment_date' => date('Y-m-d', strtotime('+1 year')),
 							);
 							if ($pp != '-')
 								$data['mem_pp'] = $pp;
@@ -739,7 +734,7 @@ class Members extends CI_Controller {
 							
 							$dataLog = array(
 								'log_member_id' => $this->input->post('mem_id'),
-								'log_name' => $this->input->post('mem_name'),
+								'log_name' => strtoupper($this->input->post('mem_name')),
 								'log_address' => $this->input->post('mem_address'),
 								'log_mail_address' => $this->input->post('mem_mail_address'),
 								'log_hp' => $this->input->post('mem_hp'),
@@ -810,9 +805,12 @@ class Members extends CI_Controller {
 						}
 						else{
 							$data = array(
-								'mem_name' => $this->input->post('name'),
+								'mem_name' => strtoupper($this->input->post('name')),
 								'mem_hp' => $this->input->post('hp'),
 								'mem_email' => $this->input->post('email'),
+								'mem_type' => $this->input->post('mem_type'),
+								'mem_app_user' => $this->session->userdata('use_id'),
+								'mem_app_date' => date('Y-m-d H:i:s'),
 							);
 	
 							$mem = $this->MemberModel->update_members($data, $where);

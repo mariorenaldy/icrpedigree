@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_mail_address" class="control-label col-md-2">Certificated Address</label>
+                                <label for="mem_mail_address" class="control-label col-md-2">Certificate Address</label>
                                 <div class="col-md-10">
                                     <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> The same as mail address</label>
                                     <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">

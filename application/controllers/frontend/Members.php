@@ -98,11 +98,11 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
 				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
-				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required]');
-				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required]');
+				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
+				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
 				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 				$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
-				$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required]');
+				$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
 			}
 			else{
 				$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
@@ -183,6 +183,11 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'email tidak boleh sama');
 				}
 
+				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_email'))){
+					$err++;
+					$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+				}
+
 				if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 					$err++;
 					$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
@@ -193,7 +198,7 @@ class Members extends CI_Controller {
 					if ($this->input->post('mem_type')){
 						$data = array(
 							'mem_id' => $mem_id,
-							'mem_name' => $this->input->post('mem_name'),
+							'mem_name' => strtoupper($this->input->post('mem_name')),
 							'mem_address' => $this->input->post('mem_address'),
 							'mem_hp' => $this->input->post('mem_hp'),
 							'mem_kota' => $this->input->post('mem_kota'),
@@ -225,7 +230,7 @@ class Members extends CI_Controller {
 					else{
 						$data = array(
 							'mem_id' => $mem_id,
-							'mem_name' => $this->input->post('name'),
+							'mem_name' => strtoupper($this->input->post('name')),
 							'mem_hp' => $this->input->post('hp'),
 							'mem_email' => $this->input->post('email'),
 							'mem_username' => $this->input->post('email'),
@@ -373,7 +378,7 @@ class Members extends CI_Controller {
 					if (!$err) {
 						$data = array(
 							'log_member_id' => $id,
-							'log_name' => $this->input->post('mem_name'),
+							'log_name' => strtoupper($this->input->post('mem_name')),
 							'log_address' => $this->input->post('mem_address'),
 							'log_mail_address' => $this->input->post('mem_mail_address'),
 							'log_hp' => $this->input->post('mem_hp'),

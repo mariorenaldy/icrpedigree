@@ -32,7 +32,7 @@
                     <form action="<?= base_url().'backend/Members/search_approve'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Address/Phone number" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
@@ -44,14 +44,14 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>KTP</th>
+                                <th>Kennel</th>
                                 <th>Name</th>
                                 <th>Address</th>
                                 <th>Mail Address</th>
                                 <th>City</th>
                                 <th>Postal Code</th>
                                 <th>Phone Number</th>
-                                <th>Kennel</th>
+                                <th>KTP</th>
                                 <th>email</th>
                                 <th>Reg. Date</th>
                                 <th colspan="4"></th>
@@ -60,26 +60,28 @@
                         <tbody>
                             <?php
                                 $i = 0;  
-                                foreach ($member AS $m){ ?>
-                                <tr>
-                                    <td><?= $m->mem_ktp; ?></td>
-                                    <td><?= $m->mem_name; ?></td>
-                                    <td><?= $m->mem_address; ?></td>
-                                    <td><?= $m->mem_mail_address; ?></td>
-                                    <td><?= $m->mem_kota; ?></td>
-                                    <td><?= $m->mem_kode_pos; ?></td>
-                                    <td><?= $m->mem_hp; ?></td>
-                                    <td><?php
-                                    foreach ($kennel[$i] AS $k){
-                                        echo '<div>'.$k->ken_name.'</div>';
-                                    }  
-                                    ?></td>
-                                    <td><?= $m->mem_email; ?></td>
-                                    <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
-                                    <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button></td>
-                                    <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button></td>
-                                </tr>
-                            <?php $i++; 
+                                foreach ($member AS $m){ 
+                                    if ($m->mem_id) { ?>
+                                    <tr>
+                                        <td><?php
+                                        foreach ($kennel[$i] AS $k){
+                                            echo '<div>'.$k->ken_name.'</div>';
+                                        }  
+                                        ?></td>
+                                        <td><?= $m->mem_name; ?></td>
+                                        <td><?= $m->mem_address; ?></td>
+                                        <td><?= $m->mem_mail_address; ?></td>
+                                        <td><?= $m->mem_kota; ?></td>
+                                        <td><?= $m->mem_kode_pos; ?></td>
+                                        <td><?= $m->mem_hp; ?></td>
+                                        <td><?= $m->mem_ktp; ?></td>
+                                        <td><?= $m->mem_email; ?></td>
+                                        <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
+                                        <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button></td>
+                                    </tr>
+                                <?php $i++; 
+                                } 
                             } ?>
                         </tbody>
                     </table>

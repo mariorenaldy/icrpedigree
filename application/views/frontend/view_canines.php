@@ -74,7 +74,6 @@
                             <!-- <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
                             <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->
-                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file-o"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -85,9 +84,6 @@
     <script>
         function add(){
             window.location = "<?= base_url(); ?>frontend/Canines/add";
-        }
-        function detail(id){
-            window.location = "<?= base_url(); ?>frontend/Canines/view_detail/"+id;
         }
     </script>
 </body>

@@ -93,7 +93,7 @@ class Studs extends CI_Controller {
 		public function search_member(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				$data['sire'] = [];
@@ -110,7 +110,7 @@ class Studs extends CI_Controller {
 		public function search_sire(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
@@ -156,7 +156,7 @@ class Studs extends CI_Controller {
 		public function search_dam(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
@@ -237,7 +237,7 @@ class Studs extends CI_Controller {
 				$this->form_validation->set_rules('stu_stud_date', 'Stud date ', 'trim|required');
 				
 				$likeMember['mem_name'] = $this->input->post('mem_name');
-				$whereMember['mem_stat IN ('.$this->config->item('paid_member_status').', '.$this->config->item('non_paid_member_status').') '] = null;
+				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');

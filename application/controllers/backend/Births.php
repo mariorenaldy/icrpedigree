@@ -33,7 +33,7 @@ class Births extends CI_Controller {
 			$this->load->view('backend/view_births', $data);
 		}
 
-		public function add(){
+		public function add(){ 
 			if ($this->uri->segment(4)){
 				$data['bir_stu_id'] = $this->uri->segment(4);
 				$data['member'] = [];
@@ -45,7 +45,7 @@ class Births extends CI_Controller {
 			}
 		}
 
-		public function search_member(){
+		public function search_member(){ // tampilkan juga kennel bds stu_member_id
 			if ($this->session->userdata('use_username')){
 				$data['bir_stu_id'] = $this->input->post('bir_stu_id');
 

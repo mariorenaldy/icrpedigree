@@ -114,7 +114,7 @@ class Studs extends CI_Controller {
 		if ($this->session->userdata('username')){
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
 			$whereSire['can_gender'] = 'MALE';
-			$whereSire['can_stat'] = $this->config->item('accepted');;
+			$whereSire['can_stat'] = $this->config->item('accepted');
 			$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 
 			// Sire harus 12 bulan
