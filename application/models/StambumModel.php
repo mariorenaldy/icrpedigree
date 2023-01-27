@@ -4,6 +4,10 @@ class StambumModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
+    public function record_count() {
+        return $this->db->count_all("stambum");
+    }
+
     public function get_stambum($where){
         $this->db->select('*, DATE_FORMAT(stambum.stb_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
         if ($where != null) {
@@ -93,4 +97,13 @@ class StambumModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();  
 	}
+
+    public function check_for_duplicate($id, $field, $val){
+        $sql = "SELECT stb_id from stambum where ".$field." = '".$val."' AND stb_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').")";
+        if ($id){
+            $sql .= ' AND stb_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
+        return count($query->result());
+    }
 }
