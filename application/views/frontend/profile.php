@@ -17,12 +17,6 @@
                     }
                 ?>
             </div>
-            <div class="row mb-1 mt-3">            
-                <div class="col-md-3">Foto KTP</div>
-                <div class="col-md-2">
-                    <img src="<?php if ($member->mem_photo != '-') echo base_url().'uploads/members/'.$member->mem_photo; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail" alt="KTP">
-                </div>
-            </div>
             <div class="row mb-1">            
                 <div class="col-md-3">PP</div>
                 <div class="col-md-2">

@@ -46,8 +46,8 @@
                             <tr>
                                 <th>Kennel</th>
                                 <th>Name</th>
-                                <th>Address</th>
                                 <th>Mail Address</th>
+                                <th>Certificate Address</th>
                                 <th>City</th>
                                 <th>Postal Code</th>
                                 <th>Phone Number</th>

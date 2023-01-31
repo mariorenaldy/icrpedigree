@@ -322,16 +322,19 @@ class Studs extends CI_Controller {
 					$piece = explode("-", $this->input->post('stu_stud_date'));
 					$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			
-					$ts = new DateTime($date);
-					$ts_now = new DateTime();
+					// $ts = new DateTime($date);
+					// $ts_now = new DateTime();
 					
-					if ($ts > $ts_now)
+					// if ($ts > $ts_now)
+					// 	$cek = false;
+					// else{
+					// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
+					// 	if ($diff > 2)
+					// 		$cek = false;
+					// }
+					$year = $piece[2];
+					if ($year != "2023")
 						$cek = false;
-					else{
-						$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
-						if ($diff > 2)
-							$cek = false;
-					}
 
 					if ($cek){
 						// jarak pacak utk dam yg sama adalah 120 hari

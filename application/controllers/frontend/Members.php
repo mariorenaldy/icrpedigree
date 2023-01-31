@@ -47,11 +47,11 @@ class Members extends CI_Controller {
 					$err++;
 					$this->session->set_flashdata('login_error', 'Maaf nama pengguna tidak terdaftar');
 				}
-				if (!$err && !$member->mem_stat){
+				if (!$err && $member->mem_stat == $this->config->item('rejected')){
 					$err++;
 					$this->session->set_flashdata('login_error', 'Masa berlaku member telah habis. Harap melakukan pembayaran');
 				}
-				if (!$err && !$member->mem_app_user){
+				if (!$err && $member->mem_stat == $this->config->item('saved')){
 					$err++;
 					$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi customer service');
 				}

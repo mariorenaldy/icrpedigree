@@ -203,9 +203,7 @@ class Users extends CI_Controller {
 		}
 
 		public function logout(){
-			// $this->session->sess_destroy();
-			$this->session->unset_userdata('use_username');
-			$this->session->unset_userdata('use_akses');
+			$this->session->sess_destroy();
 			redirect('backend/Users/login');
 		}
 }

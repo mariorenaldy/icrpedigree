@@ -20,7 +20,7 @@ class MemberModel extends CI_Model {
     // }
 
     public function get_members($where){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2');
         if ($where != null) {
             $this->db->where($where);
         }

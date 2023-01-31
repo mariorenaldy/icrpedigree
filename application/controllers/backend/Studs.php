@@ -96,8 +96,37 @@ class Studs extends CI_Controller {
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
-				$data['sire'] = [];
-				$data['sireStat'] = [];
+				$whereSire['can_member_id'] = $data['member'][0]->mem_id;
+				$whereSire['can_gender'] = 'MALE';
+				$whereSire['can_stat'] = $this->config->item('accepted');
+				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
+				
+				// Sire harus 12 bulan
+				$stat = Array();
+				foreach ($data['sire'] as $c){
+					$can = $this->caninesModel->get_dob_by_id($c->id);
+					$sire_dob = $can->can_date_of_birth;
+					
+					$ts_now = date('Y-m-d');
+					$ts = strtotime($ts_now);
+					$tssire = strtotime($sire_dob);
+					
+					$year = date('Y', $ts);
+					$yearsire = date('Y', $tssire);
+	
+					$month = date('m', $ts);
+					$monthsire = date('m', $tssire);
+	
+					$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
+					if (abs($diffsire) < $this->config->item('umur_canine')) {
+						$stat[] = 0;
+					}
+					else{
+						$stat[] = 1;
+					}
+				}
+				$data['sireStat'] = $stat;
+
 				$data['dam'] = [];
 				$data['damStat'] = [];
 				$this->load->view('backend/add_stud', $data);

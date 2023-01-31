@@ -49,9 +49,9 @@
                             </div>
                             <div class="col-md-1 ms-1">
                             <?php
-                                $type[$this->config->item('all_member')] = 'All'; 
-                                $type[$this->config->item('free_member')] = 'Free'; 
-                                $type[$this->config->item('pro_member')] = 'Pro'; 
+                                $type[$this->config->item('all_member')] = 'All';  
+                                $type[$this->config->item('pro_member')] = 'Pro';
+                                $type[$this->config->item('free_member')] = 'Free';
                                 echo form_dropdown('mem_type', $type, set_value('mem_type'), 'class="form-control"');
                             ?>
                             </div>
@@ -72,8 +72,9 @@
                             <tr>
                                 <th>Kennel</th>
                                 <th>Name</th>
-                                <th class="no-sort">Address</th>
                                 <th class="no-sort">Mail Address</th>
+                                <th>Approved Date</th>
+                                <th class="no-sort">Certificate Address</th>
                                 <th class="no-sort">City</th>
                                 <th class="no-sort">Postal Code</th>
                                 <th class="no-sort">Phone Number</th>
@@ -82,6 +83,7 @@
                                 <th class="no-sort">email</th>
                                 <th class="no-sort">Reg. Date</th>
                                 <th class="no-sort">Username</th>
+                                <th style="display: none;"></th>
                                 <th style="display: none;"></th>
                                 <th style="display: none;"></th>
                                 <th style="display: none;"></th>
@@ -105,6 +107,7 @@
                                         ?></td>
                                         <td><?= $m->mem_name; ?></td>
                                         <td><?= $m->mem_address; ?></td>
+                                        <td><?= $m->mem_app_date; ?></td>
                                         <td><?= $m->mem_mail_address; ?></td>
                                         <td><?= $m->mem_kota; ?></td>
                                         <td><?= $m->mem_kode_pos; ?></td>
@@ -118,6 +121,7 @@
                                         <td><?= $m->mem_email; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
                                         <td><?= $m->mem_username; ?></td>
+                                        <td style="display: none;"><?= $m->mem_approved_date2; ?></td>
                                         <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
                                         <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
                                         <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>
@@ -160,7 +164,7 @@
             window.location = "<?= base_url(); ?>backend/Members/view_reset/"+id;
         }
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[1, 'asc']],
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[13, 'desc']],
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

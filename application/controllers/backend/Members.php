@@ -123,6 +123,8 @@ class Members extends CI_Controller {
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
+								'log_mem_type' => $this->config->item('pro_member'),
+								'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
 							);
 							$log = $this->LogmemberModel->add_log($dataLog);
 							if ($log){
@@ -220,6 +222,7 @@ class Members extends CI_Controller {
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('rejected'),
+								'log_mem_type' => $this->config->item('pro_member'),
 							);
 							$log = $this->LogmemberModel->add_log($dataLog);
 							if ($log){
@@ -281,50 +284,64 @@ class Members extends CI_Controller {
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$err = 0;
-						$res2 = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
-						if ($res2){
-							$this->db->trans_complete();
-							$member = $this->MemberModel->get_members($where)->row();
-							if ($member->mem_firebase_token){
-								$notif = $this->notificationtype_model->get_by_id(19);
-								$url = 'https://fcm.googleapis.com/fcm/send';
-								$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
+						$member = $this->member_model->get_members($where)->row();
+						$dataLog = array(
+							'log_member_id' => $this->uri->segment(4),
+							'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
+							'log_app_user' => $this->session->userdata('use_id'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_mem_type' => $this->config->item('pro_member'),
+						);
+						$log = $this->LogmemberModel->add_log($dataLog);
+						if ($log){
+							$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
+							if ($res){
+								$this->db->trans_complete();
+								$member = $this->MemberModel->get_members($where)->row();
+								if ($member->mem_firebase_token){
+									$notif = $this->notificationtype_model->get_by_id(19);
+									$url = 'https://fcm.googleapis.com/fcm/send';
+									$key = 'AAAALe2LeZU:APA91bEqr2n1PRxkOyOfx8IwYO1O_1gjprFkq1AITOGUu3GYp2ZBi-8-AvM4ADI3m94NEv4cq-uKcMBU3pJXBhO21CyuVgPNX2l7VYXj5IllxEr6sika8eaJp1IgXCHALA5_xYw92pXK';
 
-								$fields = array (
-									'to' => $member->mem_firebase_token,
-									'notification' => array(
-									"channelId" => "ICRPedigree",
-									'title' => $notif[0]->title,
-									'body' => $notif[0]->description
-									)
-								);
-								$fields = json_encode ( $fields );
+									$fields = array (
+										'to' => $member->mem_firebase_token,
+										'notification' => array(
+										"channelId" => "ICRPedigree",
+										'title' => $notif[0]->title,
+										'body' => $notif[0]->description
+										)
+									);
+									$fields = json_encode ( $fields );
 
-								$headers = array (
-									'Authorization: key=' . $key,
-									'Content-Type: application/json'
-								);
+									$headers = array (
+										'Authorization: key=' . $key,
+										'Content-Type: application/json'
+									);
 
-								$ch = curl_init ();
-								curl_setopt ( $ch, CURLOPT_URL, $url );
-								curl_setopt ( $ch, CURLOPT_POST, true );
-								curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-								curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-								curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+									$ch = curl_init ();
+									curl_setopt ( $ch, CURLOPT_URL, $url );
+									curl_setopt ( $ch, CURLOPT_POST, true );
+									curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+									curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+									curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
 
-								$result = curl_exec ( $ch );
-								// echo $result;
-								curl_close ( $ch );
+									$result = curl_exec ( $ch );
+									// echo $result;
+									curl_close ( $ch );
+								}
+								$this->session->set_flashdata('payment_success', TRUE);
+								redirect('backend/Members');
 							}
-							$this->session->set_flashdata('payment_success', TRUE);
-							redirect('backend/Members');
+							else{
+								$err = 1;
+							}
 						}
 						else{
-							$err = 1;
+							$err = 2;
 						}
 					}
 					else{
-						$err = 2;
+						$err = 3;
 					}
 					if ($err){
 						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
@@ -495,6 +512,7 @@ class Members extends CI_Controller {
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
+								'log_mem_type' => $this->config->item('pro_member'),
 							);
 
 							$dataKennelLog = array(
@@ -720,7 +738,7 @@ class Members extends CI_Controller {
 								'mem_type' => $this->input->post('mem_type'),
 								'mem_app_user' => $this->session->userdata('use_id'),
 								'mem_app_date' => date('Y-m-d H:i:s'),
-								'mem_payment_date' => date('Y-m-d', strtotime('+1 year')),
+								'mem_payment_date' => date('2023-1-1'),
 							);
 							if ($pp != '-')
 								$data['mem_pp'] = $pp;
@@ -746,6 +764,8 @@ class Members extends CI_Controller {
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
+								'log_mem_type' => $this->input->post('mem_type'),
+								'log_payment_date' => date('2023-1-1'),
 							);
 	
 							$dataKennelLog = array(

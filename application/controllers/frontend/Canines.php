@@ -36,6 +36,33 @@ class Canines extends CI_Controller {
 		}
     }
 
+
+	public function view_detail(){
+        if ($this->uri->segment(4)){
+			$where['can_id'] = $this->uri->segment(4);
+			$data['canine'] = $this->caninesModel->get_canines($where)->row();
+			$whePed['ped_canine_id'] = $this->uri->segment(4);
+			$ped = $this->pedigreesModel->get_pedigrees($whePed)->row();
+			$sire['can_id'] = $ped->ped_sire_id;
+			$data['sire'] = $this->caninesModel->get_canines($sire)->row();
+			$dam['can_id'] = $ped->ped_dam_id;
+			$data['dam'] = $this->caninesModel->get_canines($dam)->row();
+			
+			if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
+				$data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE')->result();
+				$data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE')->result();
+			}
+			else{
+				$data['male_siblings'] = [];
+				$data['female_siblings'] = [];
+			}
+			$this->load->view("frontend/view_canine_detail", $data);
+        }
+        else{
+          	redirect('frontend/Canines');
+        }
+    }
+
 	public function add(){
 		if ($this->session->userdata('username')){
 			$data['trah'] = $this->trahModel->get_trah(null)->result();

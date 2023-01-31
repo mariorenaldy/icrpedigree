@@ -11,15 +11,17 @@
         <div class="container">
             <h3 class="text-center text-warning">Login</h3>
             <div class="row">   
-                <div class="col-md-3"></div>    
+                <div class="col-md-3">
+                    <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail">
+                </div>    
                 <div class="col-md-6 text-center">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
                         <div class="text-success">
                             <?php		
-                                if ($this->session->flashdata('pro')){
+                                if ($this->session->flashdata('pro') && $this->session->flashdata('pro') == true){
                                     echo 'Register berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
                                 }
-                                else{
+                                else if ($this->session->flashdata('pro') && $this->session->flashdata('pro') == false){
                                     echo 'Register berhasil.<br/>Gunakan email sebagai username & no. hp sebagai password.<br/>';
                                 }
                             ?>
@@ -54,7 +56,10 @@
                             </div>
                         </div>
                     </form>
-                </div>                           
+                </div>
+                <div class="col-md-3">
+                    <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail">
+                </div>                  
             </div>
         </div>
     </main>
