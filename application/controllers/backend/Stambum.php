@@ -5,7 +5,7 @@ class Stambum extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('memberModel', 'trahModel', 'kennelModel', 'stambumModel'));
+        $this->load->model(array('memberModel', 'trahModel', 'kennelModel', 'stambumModel', 'birthModel', 'studModel', 'caninesModel', 'logstambumModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -14,13 +14,29 @@ class Stambum extends CI_Controller {
     }
 
     public function add(){
-        $this->load->view('backend/add_stambum');
+        $data['trah'] = $this->trahModel->get_trah(null)->result();
+
+        $whereBir['bir_id'] = $this->uri->segment(4);
+        $data['birth'] = $this->birthModel->get_births($whereBir)->result()[0];
+
+        $whereStu['stu_id'] =  $data['birth']->bir_stu_id;
+        $stud = $this->studModel->get_studs($whereStu)->result()[0];
+
+        $whereSire['can_id'] = $stud->stu_sire_id;
+        $sire = $this->caninesModel->get_canines($whereSire)->result()[0];
+
+        $whereDam['can_id'] = $stud->stu_dam_id;
+        $dam = $this->caninesModel->get_canines($whereDam)->result()[0];
+
+        $data['kennel'][$sire->ken_id] = $sire->ken_name;
+        $data['kennel'][$dam->ken_id] = $dam->ken_name;
+
+        $this->load->view('backend/add_stambum', $data);
     }
 
     public function validate_add(){
         if ($this->session->userdata('use_username')) {
             $this->form_validation->set_error_delimiters('<div>', '</div>');
-            $this->form_validation->set_rules('stb_member_id', 'Member id ', 'trim|required');
             $this->form_validation->set_rules('stb_kennel_id', 'Kennel id ', 'trim|required');
             $this->form_validation->set_rules('stb_a_s', 'Name ', 'trim|required');
             $this->form_validation->set_rules('stb_color', 'Color ', 'trim|required');
@@ -28,13 +44,20 @@ class Stambum extends CI_Controller {
 
             $data['trah'] = $this->trahModel->get_trah(null)->result();
 
-            $like['mem_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
-
-            $whe['ken_member_id'] =  $this->input->post('stb_member_id');
-            $whe['ken_stat'] = $this->config->item('accepted');
-            $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+            $whereBir['bir_id'] = $this->input->post('bir_id');
+            $data['birth'] = $this->birthModel->get_births($whereBir)->result()[0];
+    
+            $whereStu['stu_id'] =  $data['birth']->bir_stu_id;
+            $stud = $this->studModel->get_studs($whereStu)->result()[0];
+    
+            $whereSire['can_id'] = $stud->stu_sire_id;
+            $sire = $this->caninesModel->get_canines($whereSire)->result()[0];
+    
+            $whereDam['can_id'] = $stud->stu_dam_id;
+            $dam = $this->caninesModel->get_canines($whereDam)->result()[0];
+    
+            $data['kennel'][$sire->ken_id] = $sire->ken_name;
+            $data['kennel'][$dam->ken_id] = $dam->ken_name;
 
             if ($this->form_validation->run() == FALSE) {
                 $this->load->view('backend/add_stambum', $data);
@@ -64,9 +87,9 @@ class Stambum extends CI_Controller {
                     $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 
                     $id = $this->stambumModel->record_count() + 1;
-                    $data = array(
+                    $dataRecord = array(
                         'stb_id' => $id,
-                        'stb_member_id' => $this->input->post('stb_member_id'),
+                        'stb_bir_id' => $this->input->post('bir_id'),
                         'stb_breed' => $this->input->post('stb_breed'),
                         'stb_gender' => $this->input->post('stb_gender'),
                         'stb_date_of_birth' => $dob,
@@ -83,12 +106,13 @@ class Stambum extends CI_Controller {
                     $whereKennel['ken_id'] = $this->input->post('stb_kennel_id');
                     $kennel = $this->kennelModel->get_kennels($whereKennel)->result();
                     if ($kennel) {
+                        $dataRecord['stb_member_id'] = $kennel[0]->ken_member_id;
                         if ($kennel[0]->ken_type_id == 1)
-                            $data['stb_a_s'] = strtoupper($this->input->post('stb_a_s')) . " VON " . $kennel[0]->ken_name;
+                            $dataRecord['stb_a_s'] = strtoupper($this->input->post('stb_a_s')) . " VON " . $kennel[0]->ken_name;
                         else if ($kennel[0]->ken_type_id == 2)
-                            $data['stb_a_s'] = $kennel[0]->ken_name . "` " . strtoupper($this->input->post('stb_a_s'));
+                            $dataRecord['stb_a_s'] = $kennel[0]->ken_name . "` " . strtoupper($this->input->post('stb_a_s'));
                         else
-                            $data['stb_a_s'] = strtoupper($this->input->post('stb_a_s'));
+                            $dataRecord['stb_a_s'] = strtoupper($this->input->post('stb_a_s'));
                     }
 
                     if (!$err && $this->stambumModel->check_for_duplicate(0, 'stb_a_s', $this->input->post('stb_a_s'))) {
@@ -98,7 +122,8 @@ class Stambum extends CI_Controller {
 
                     $dataLog = array(
                         'log_stambum_id' => $id,
-                        'log_a_s' => $data['stb_a_s'],
+                        'log_bir_id' => $this->input->post('bir_id'),
+                        'log_a_s' => $dataRecord['stb_a_s'],
                         'log_breed' => $this->input->post('stb_breed'),
                         'log_gender' => $this->input->post('stb_gender'),
                         'log_date_of_birth' => $dob,
@@ -108,14 +133,14 @@ class Stambum extends CI_Controller {
                         'log_stat' => $this->config->item('accepted'),
                         'log_app_user' => $this->session->userdata('use_id'),
                         'log_app_date' => date('Y-m-d H:i:s'),
-                        'log_member_id' => $this->input->post('stb_member_id'),
+                        'log_member_id' => $dataRecord['stb_member_id'],
                         'log_note' => $this->input->post('stb_note'),
                     );
 
                     if (!$err) {
                         $this->db->trans_strict(FALSE);
                         $this->db->trans_start();
-                        $stambum = $this->stambumModel->add_stambum($data);
+                        $stambum = $this->stambumModel->add_stambum($dataRecord);
                         if ($stambum) {
                             $log = $this->logstambumModel->add_log($dataLog);
                             if ($log) {

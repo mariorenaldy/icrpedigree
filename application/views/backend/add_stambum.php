@@ -22,36 +22,11 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group my-3">
-                            <label class="control-label col-md-2">Member Name</label>
-                            <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
-                            </div>
-                            <div class="col-md-1 text-end">
-                                <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Member</label>
-                            <div class="col-md-10">
-                                <?php
-                                    // $mem = [];
-                                    // foreach($member as $row){
-                                    //     $mem[$row->mem_id] = $row->mem_name;
-                                    // }
-                                    // echo form_dropdown('stb_member_id', $mem, set_value('stb_member_id'), 'class="form-control", id="stb_member_id"');
-                                ?>
-                            </div>
-                        </div>
                         <div class="input-group mb-5">
                             <label class="control-label col-md-2">Kennel</label>
                             <div class="col-md-10">
                                 <?php
-                                    // $ken = [];
-                                    // foreach($kennel as $row){
-                                    //     $ken[$row->ken_id] = $row->ken_name;
-                                    // }
-                                    // echo form_dropdown('stb_kennel_id', $ken, set_value('stb_kennel_id'), 'class="form-control"');
+                                    echo form_dropdown('stb_kennel_id', $kennel, set_value('stb_kennel_id'), 'class="form-control"');
                                 ?>
                             </div>
                         </div>
@@ -66,18 +41,19 @@
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Name</label>
                             <div class="col-md-10">
+                                <input type="hidden" name="bir_id" value="<?= $birth->bir_id; ?>">
                                 <input class="form-control" type="text" placeholder="Name" name="stb_a_s" value="<?php echo set_value('stb_a_s'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Breed</label>
                             <div class="col-md-10">
-                                <!-- <?php
+                                <?php
                                 foreach ($trah as $row) {
                                     $pil[$row->tra_name] = $row->tra_name;
                                 }
                                 echo form_dropdown('stb_breed', $pil, set_value('stb_breed'), 'class="form-control"');
-                                ?> -->
+                                ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -129,13 +105,18 @@
         }
         setDatePicker('#stb_date_of_birth');
 
+        $('#buttonSearch').on("click", function(e){
+            e.preventDefault();
+            $('#formStambum').attr('action', "<?= base_url(); ?>backend/Stambum/search_member").submit();
+        });
+
         $('#stb_member_id').on("change", function(){
-            $('#formStambum').attr('action', "<?= base_url(); ?>backend/Canines/search_kennel").submit();
+            $('#formStambum').attr('action', "<?= base_url(); ?>backend/Stambum/search_kennel").submit();
         });
 
         $('#buttonSubmit').on("click", function(e){
             e.preventDefault();
-            $('#formStambum').attr('action', "<?= base_url(); ?>backend/Births/validate_add_stambum").submit();
+            $('#formStambum').attr('action', "<?= base_url(); ?>backend/Stambum/validate_add").submit();
         });
 
         $(document).ready(function() {

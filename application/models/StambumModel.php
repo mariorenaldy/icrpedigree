@@ -39,8 +39,7 @@ class StambumModel extends CI_Model {
     }
 
     public function add_stambum($data){
-        $this->db->insert('stambum', $data);
-        return $this->db->insert_id();
+        return $this->db->insert('stambum', $data);
     }
 
     public function update_stambum($data, $where){

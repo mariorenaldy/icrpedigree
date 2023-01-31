@@ -71,6 +71,7 @@
                         <div class="col-md-2">
                             <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
                             <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button> -->
+                            <button type="button" class="btn btn-info mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Stambum"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -88,6 +89,9 @@
         setDatePicker('#keywords');
         function add(){
             window.location = "<?= base_url(); ?>backend/Studs";
+        }
+        function addStambum(id){
+            window.location = "<?= base_url(); ?>backend/Stambum/add/"+id;
         }
     </script>
 </body>
