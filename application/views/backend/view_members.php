@@ -42,15 +42,15 @@
                     <form action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel/KTP number" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 my-1 text-end">
                                 <label for="mem_type">Type:</label>
                             </div>
                             <div class="col-md-1 ms-1">
                             <?php
-                                $type[$this->config->item('all_member')] = 'All';  
                                 $type[$this->config->item('pro_member')] = 'Pro';
+                                $type[$this->config->item('all_member')] = 'All';  
                                 $type[$this->config->item('free_member')] = 'Free';
                                 echo form_dropdown('mem_type', $type, set_value('mem_type'), 'class="form-control"');
                             ?>
@@ -121,7 +121,7 @@
                                         <td><?= $m->mem_email; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
                                         <td><?= $m->mem_username; ?></td>
-                                        <td style="display: none;"><?= $m->mem_approved_date2; ?></td>
+                                        <td style="display: none;"><?= $m->mem_app_date2; ?></td>
                                         <td><button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button></td>
                                         <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-close"></i></button></td>
                                         <td><button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button></td>

@@ -15,7 +15,7 @@ class Canines extends CI_Controller {
 
     public function index(){
         $where['can_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->get_canines($where)->result();
+        $data['canine'] = $this->caninesModel->get_canines($where, 'can_a_s', 'asc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -24,7 +24,7 @@ class Canines extends CI_Controller {
         $like['can_icr_number'] = $this->input->post('keywords');
         $like['can_chip_number'] = $this->input->post('keywords');
         $where['can_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->search_canines($like, $where)->result();
+        $data['canine'] = $this->caninesModel->search_canines($like, $where, 'can_a_s', 'asc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 

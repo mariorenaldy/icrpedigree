@@ -1,4 +1,4 @@
-<?php // ARTechnology
+<?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Studs extends CI_Controller {
@@ -61,6 +61,54 @@ class Studs extends CI_Controller {
 			$this->load->view('backend/view_studs', $data);
 		}
 
+		// public function index(){
+		// 	$where['stu_stat'] = $this->config->item('accepted');
+		// 	$data['stud'] = $this->studModel->get_studs($where)->result();
+
+		// 	$birth = array();
+		// 	$sire = array();
+		// 	$dam = array();
+		// 	foreach ($data['stud'] as $s){
+		// 		$whereBirth = [];
+		// 		$whereBirth['bir_stu_id'] = $s->stu_id;
+		// 		$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
+		// 		$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+		// 		$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+		// 	}
+		// 	$data['birth'] = $birth;
+		// 	$data['sire'] = $sire;
+		// 	$data['dam'] = $dam;
+		// 	$this->load->view('backend/view_studs', $data);
+		// }
+
+		// public function search(){
+		// 	$date = '';
+		// 	$piece = explode("-", $this->input->post('keywords'));
+        //     if (count($piece) == 3){
+        //         $date = $piece[2]."-".$piece[1]."-".$piece[0];
+        //     }
+		// 	if ($date){
+		// 		$where['stu_stud_date'] = $date;
+		// 	}
+		// 	$where['stu_stat'] = $this->config->item('accepted');
+		// 	$data['stud'] = $this->studModel->get_studs($where)->result();
+
+		// 	$birth = array();
+		// 	$sire = array();
+		// 	$dam = array();
+		// 	foreach ($data['stud'] as $s){
+		// 		$whereBirth = [];
+		// 		$whereBirth['bir_stu_id'] = $s->stu_id;
+		// 		$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
+		// 		$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
+		// 		$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+		// 	}
+		// 	$data['birth'] = $birth;
+		// 	$data['sire'] = $sire;
+		// 	$data['dam'] = $dam;
+		// 	$this->load->view('backend/view_studs', $data);
+		// }
+
 		public function view_approve(){
 			$where['stu_stat'] = $this->config->item('saved');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
@@ -96,10 +144,15 @@ class Studs extends CI_Controller {
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
-				$whereSire['can_member_id'] = $data['member'][0]->mem_id;
-				$whereSire['can_gender'] = 'MALE';
-				$whereSire['can_stat'] = $this->config->item('accepted');
-				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
+				if ($data['member']){
+					$whereSire['can_member_id'] = $data['member'][0]->mem_id;
+					$whereSire['can_gender'] = 'MALE';
+					$whereSire['can_stat'] = $this->config->item('accepted');
+					$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
+				}
+				else{
+					$data['sire'] = [];
+				}
 				
 				// Sire harus 12 bulan
 				$stat = Array();

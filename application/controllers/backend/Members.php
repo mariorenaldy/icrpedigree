@@ -23,8 +23,9 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
+			$where['mem_type'] = $this->config->item('pro_member');
 			$where['mem_stat'] = $this->config->item('accepted');
-			$data['member'] = $this->MemberModel->get_members($where)->result();
+			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date')->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
@@ -40,12 +41,13 @@ class Members extends CI_Controller {
 			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
+			$like['mem_ktp'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('accepted');
 			if ($this->input->post('mem_type') == $this->config->item('all_member'))
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
 			else
 				$where['mem_type'] = $this->input->post('mem_type');
-			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
+			$data['member'] = $this->MemberModel->search_members($like, $where, 'mem_app_date')->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
@@ -284,7 +286,6 @@ class Members extends CI_Controller {
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$err = 0;
-						$member = $this->member_model->get_members($where)->row();
 						$dataLog = array(
 							'log_member_id' => $this->uri->segment(4),
 							'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
