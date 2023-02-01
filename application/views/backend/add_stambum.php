@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-12 align-items-center">
                     <h3 class="text-center text-primary">Add Stambum</h3>  
-                    <form id="formStambum" class="form-horizontal" action="<?php echo base_url(); ?>backend/Births/validate_add_stambum" method="post" enctype="multipart/form-data">
+                    <form id="formStambum" class="form-horizontal" action="<?php echo base_url(); ?>backend/Stambum/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
                             if ($this->session->flashdata('error_message')) {

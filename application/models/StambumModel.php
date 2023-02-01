@@ -9,15 +9,15 @@ class StambumModel extends CI_Model {
     }
 
     public function get_stambum($where){
-        $this->db->select('*, DATE_FORMAT(stambum.stb_date_of_birth, "%d-%m-%Y") as can_date_of_birth');
+        $this->db->select('*, DATE_FORMAT(stambum.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->join('approval_status','approval_status.stat_id = stambum.can_app_stat');
-        $this->db->join('members','members.mem_id = stambum.can_member_id');
-        $this->db->join('kennels','kennels.ken_id = stambum.can_kennel_id AND kennels.ken_member_id = members.mem_id');
-        $this->db->order_by('can_id', 'desc');
-        $this->db->limit($this->config->item('backend_canine_count'), 0);
+        // $this->db->join('approval_status','approval_status.stat_id = stambum.stb_app_stat');
+        $this->db->join('members','members.mem_id = stambum.stb_member_id');
+        $this->db->join('kennels','kennels.ken_id = stambum.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->order_by('stb_id', 'desc');
+        // $this->db->limit($this->config->item('backend_canine_count'), 0);
         return $this->db->get('stambum');
     }
 
