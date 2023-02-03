@@ -6,11 +6,24 @@ class Stambum extends CI_Controller {
         // Call the CI_Controller constructor
         parent::__construct();
         $this->load->model(array('memberModel', 'trahModel', 'kennelModel', 'stambumModel', 'birthModel', 'studModel', 'caninesModel', 'logstambumModel'));
-        $this->load->library('upload', $this->config->item('upload_canine'));
+        $this->load->library('upload', $this->config->item('upload_stambum'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
+    }
+
+    public function index(){
+        $where['stb_stat != '] = 0;
+        $data['stambum'] = $this->stambumModel->get_stambum($where)->result();
+        $this->load->view('backend/view_stambum', $data);
+    }
+
+    public function search(){
+        $like['stb_a_s'] = $this->input->post('keywords');
+        $where['stb_stat'] = $this->config->item('accepted');
+        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', 'asc')->result();
+        $this->load->view('backend/view_stambum', $data);
     }
 
     public function add(){
@@ -86,7 +99,7 @@ class Stambum extends CI_Controller {
                     $photo = '-';
                     if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])) {
                         if (is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-                            $this->upload->initialize($this->config->item('upload_canine'));
+                            $this->upload->initialize($this->config->item('upload_stambum'));
                             if ($this->upload->do_upload('attachment')) {
                                 $uploadData = $this->upload->data();
                                 $photo = $uploadData['file_name'];
@@ -165,7 +178,7 @@ class Stambum extends CI_Controller {
                                 $log = $this->logstambumModel->add_log($dataLog);
                                 if ($log) {
                                     $this->db->trans_complete();
-                                    $this->session->set_flashdata('add_success', true);
+                                    $this->session->set_flashdata('add_stambum_success', true);
                                     redirect("backend/Births");
                                 } else {
                                     $err = 2;

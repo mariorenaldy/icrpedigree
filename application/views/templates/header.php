@@ -36,6 +36,13 @@
                         </ul>
                      </div>
                      <div class="dropdown">
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Stambum</span>
+                        <ul class="dropdown-menu">
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Stambum/view_approve') ?>">Approve</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Stambum/') ?>">Manage</a></li>
+                        </ul>
+                     </div>
+                     <div class="dropdown">
                            <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               Config
                            </span>

@@ -18,6 +18,11 @@
                             echo 'Birth has been saved<br/>';
                         }
                     ?>
+                    <?php		
+                        if ($this->session->flashdata('add_stambum_success')){
+                            echo 'Stambum has been saved<br/>';
+                        }
+                    ?>
                 </div>
                 <div class="text-danger">
                     <?php		

@@ -13,16 +13,17 @@ class StambumModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        // $this->db->join('approval_status','approval_status.stat_id = stambum.stb_app_stat');
+        $this->db->join('approval_status','approval_status.stat_id = stambum.stb_stat');
         $this->db->join('members','members.mem_id = stambum.stb_member_id');
         $this->db->join('kennels','kennels.ken_id = stambum.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('users', 'stambum.stb_app_user = users.use_id');
         $this->db->order_by('stb_id', 'desc');
         // $this->db->limit($this->config->item('backend_canine_count'), 0);
         return $this->db->get('stambum');
     }
 
-    public function search_stambum($like, $where){
-        $this->db->select('*');
+    public function search_stambum($like, $where, $sort = 'stb_id', $method = 'desc'){
+        $this->db->select('*, DATE_FORMAT(stambum.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambum.stb_app_date, "%d-%m-%Y") as stb_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -31,10 +32,11 @@ class StambumModel extends CI_Model {
             $this->db->or_like($like);
         }
         $this->db->group_end();
-        $this->db->join('approval_status','approval_status.stat_id = stambum.can_app_stat');
-        $this->db->join('members','members.mem_id = stambum.can_member_id');
-        $this->db->join('kennels','kennels.ken_id = stambum.can_kennel_id AND kennels.ken_member_id = members.mem_id');
-        $this->db->order_by('can_id', 'desc');
+        $this->db->join('approval_status','approval_status.stat_id = stambum.stb_stat');
+        $this->db->join('members','members.mem_id = stambum.stb_member_id');
+        $this->db->join('kennels','kennels.ken_id = stambum.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('users', 'stambum.stb_app_user = users.use_id');
+        $this->db->order_by($sort, $method);
         return $this->db->get('stambum');
     }
 
