@@ -6,7 +6,7 @@ class Stambum extends CI_Controller {
         // Call the CI_Controller constructor
         parent::__construct();
         $this->load->model(array('memberModel', 'trahModel', 'kennelModel', 'stambumModel', 'birthModel', 'studModel', 'caninesModel', 'logstambumModel'));
-        $this->load->library('upload', $this->config->item('upload_stambum'));
+        $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -101,7 +101,7 @@ class Stambum extends CI_Controller {
                     $photo = '-';
                     if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])) {
                         if (is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-                            $this->upload->initialize($this->config->item('upload_stambum'));
+                            $this->upload->initialize($this->config->item('upload_canine'));
                             if ($this->upload->do_upload('attachment')) {
                                 $uploadData = $this->upload->data();
                                 $photo = $uploadData['file_name'];
@@ -294,7 +294,7 @@ class Stambum extends CI_Controller {
                     $photo = '-';
                     if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])) {
                         if (is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-                            $this->upload->initialize($this->config->item('upload_stambum'));
+                            $this->upload->initialize($this->config->item('upload_canine'));
                             if ($this->upload->do_upload('attachment')) {
                                 $uploadData = $this->upload->data();
                                 $photo = $uploadData['file_name'];
