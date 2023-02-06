@@ -27,29 +27,6 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group my-3">
-                            <label class="control-label col-md-2">Member Name</label>
-                            <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
-                            </div>
-                            <div class="col-md-1 text-end">
-                                <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Member</label>
-                            <div class="col-md-10">
-                                <?php
-                                    $i = 0;
-                                    $mem = [];
-                                    foreach($member as $row){
-                                        $mem[$row->mem_id] = $row->mem_name;
-                                    }
-                                    echo form_dropdown('can_member_id', $mem, set_value('can_member_id'), 'class="form-control", id="can_member_id"');
-                                ?>
-                            </div>
-                        </div>
-                        <hr/>
                         <div class="input-group mb-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Dam Photo</label>
                             <div class="col-md-12 text-center">
@@ -93,16 +70,6 @@
             $(id).readOnly = true;
         }
         setDatePicker('#bir_date_of_birth');
-
-        $('#buttonSearch').on("click", function(e){
-            e.preventDefault();
-            $('#formBirth').attr('action', "<?= base_url(); ?>backend/Births/search_member").submit();
-        });
-
-        $('#buttonSubmit').on("click", function(e){
-            e.preventDefault();
-            $('#formBirth').attr('action', "<?= base_url(); ?>backend/Births/validate_add").submit();
-        });
 
         $(document).ready(function(){
             const imageInput = document.querySelector("#imageInput");

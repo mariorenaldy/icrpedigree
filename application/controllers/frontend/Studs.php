@@ -3,7 +3,7 @@
 class Studs extends CI_Controller {
     public function __construct(){
 		parent::__construct();
-		$this->load->model(array('studModel', 'caninesModel', 'trahModel', 'memberModel', 'birthModel'));
+		$this->load->model(array('studModel', 'caninesModel', 'memberModel', 'birthModel'));
 		$this->load->library('upload', $this->config->item('upload_stud'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('url'));
@@ -16,19 +16,12 @@ class Studs extends CI_Controller {
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
-			$birth = array();
-			$sire = array();
-			$dam = array();
+			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
-				$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
-				$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
-			$data['birth'] = $birth;
-			$data['sire'] = $sire;
-			$data['dam'] = $dam;
 			$this->load->view('frontend/view_studs', $data);
 		}
 		else{
@@ -49,20 +42,32 @@ class Studs extends CI_Controller {
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
-			$birth = array();
-			$sire = array();
-			$dam = array();
+			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$birth[] = $this->birthModel->get_births($whereBirth)->num_rows();
-				$sire[] = $this->caninesModel->get_canines_gender($s->stu_sire_id)->row()->can_gender;
-				$dam[] = $this->caninesModel->get_canines_gender($s->stu_dam_id)->row()->can_gender;
+				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
-			$data['birth'] = $birth;
-			$data['sire'] = $sire;
-			$data['dam'] = $dam;
 			$this->load->view('frontend/view_studs', $data);
+		}
+		else{
+			redirect('frontend/Members');
+		}
+	}
+
+	public function view(){
+		if ($this->session->userdata('mem_id')){
+			$where['stu_partner_id'] = $this->session->userdata('mem_id');
+			$where['stu_stat'] = $this->config->item('accepted');
+			$data['stud'] = $this->studModel->get_studs($where)->result();
+
+			$data['birth'] = array();
+			foreach ($data['stud'] as $s){
+				$whereBirth = [];
+				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
+			}
+			$this->load->view('frontend/view_approved_studs', $data);
 		}
 		else{
 			redirect('frontend/Members');
@@ -185,6 +190,7 @@ class Studs extends CI_Controller {
 		if ($this->session->userdata('username')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
+			$this->form_validation->set_rules('stu_sire_id', 'Sire id ', 'trim|required');
 			$this->form_validation->set_rules('stu_dam_id', 'Id dam ', 'trim|required');
 			$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
 			
@@ -255,123 +261,132 @@ class Studs extends CI_Controller {
 				$this->load->view('frontend/add_stud', $data);
 			}
 			else{
-				$err = 0;
-				$photo = '-';
-				if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-					if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_stud'));
-						if ($this->upload->do_upload('attachment_stud')){
-							$uploadData = $this->upload->data();
-							$photo = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', 'Foto Pacak Error: '.$this->upload->display_errors());
-						}
-					}
-				}
-
-				if (!$err && $photo == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
-				}
-
-				if (!$err){
-					$sire = '-';
-					if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_stud_sire'));
-						if ($this->upload->do_upload('attachment_sire')){
-							$uploadData = $this->upload->data();
-							$sire = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', 'Foto Sire Error: '.$this->upload->display_errors());
-						}
-					}
-				}
-
-				if (!$err && $sire == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
-				}
-	
-				if (!$err){
-					$dam = '-';
-					if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_stud_dam'));
-						if ($this->upload->do_upload('attachment_dam')){
-							$uploadData = $this->upload->data();
-							$dam = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', 'Foto Dam Error: '.$this->upload->display_errors());
-						}
-					}
-				}
-
-				if (!$err && $dam == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
-				}
-
-				// Lapor pacak harus kurang dari 7 hari
-				if (!$err){
-					$cek = true;
-					$piece = explode("-", $this->input->post('stu_stud_date'));
-					$date = $piece[2]."-".$piece[1]."-".$piece[0];
-			
-					// $ts = new DateTime($date);
-					// $ts_now = new DateTime();
-					
-					// if ($ts > $ts_now)
-					// 	$cek = false;
-					// else{
-					// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
-					// 	if ($diff > 2)
-					// 		$cek = false;
-					// }
-					$year = $piece[2];
-					if ($year != "2023")
-						$cek = false;
-
-					if ($cek){
-						// jarak pacak utk dam yg sama adalah 120 hari
-						$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
-						if (!$res){
-							$data = array(
-								'stu_photo' => $photo,
-								'stu_sire_id' => $this->input->post('stu_sire_id'),
-								'stu_dam_id' => $this->input->post('stu_dam_id'),
-								'stu_sire_photo' => $sire,
-								'stu_dam_photo' => $dam,
-								'stu_stud_date' => $date,
-								'stu_member_id' => $this->session->userdata('mem_id')
-							);
-							$stud = $this->studModel->add_studs($data);
-							if ($stud){
-								// $this->session->set_flashdata('add_success', true);
-								// redirect("frontend/Studs");
-								$this->session->set_flashdata('add_stud_success', true);
-								redirect("frontend/Beranda");
+				$wheDam['can_id'] = $this->input->post('stu_dam_id');
+				$can = $this->caninesModel->get_canines($wheDam)->row();
+				if ($can){
+					$err = 0;
+					$photo = '-';
+					if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
+						if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_stud'));
+							if ($this->upload->do_upload('attachment_stud')){
+								$uploadData = $this->upload->data();
+								$photo = $uploadData['file_name'];
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak');
+								$err++;
+								$this->session->set_flashdata('error_message', 'Foto Pacak Error: '.$this->upload->display_errors());
+							}
+						}
+					}
+
+					if (!$err && $photo == "-"){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
+					}
+
+					if (!$err){
+						$sire = '-';
+						if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_stud_sire'));
+							if ($this->upload->do_upload('attachment_sire')){
+								$uploadData = $this->upload->data();
+								$sire = $uploadData['file_name'];
+							}
+							else{
+								$err++;
+								$this->session->set_flashdata('error_message', 'Foto Sire Error: '.$this->upload->display_errors());
+							}
+						}
+					}
+
+					if (!$err && $sire == "-"){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
+					}
+		
+					if (!$err){
+						$dam = '-';
+						if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
+							$this->upload->initialize($this->config->item('upload_stud_dam'));
+							if ($this->upload->do_upload('attachment_dam')){
+								$uploadData = $this->upload->data();
+								$dam = $uploadData['file_name'];
+							}
+							else{
+								$err++;
+								$this->session->set_flashdata('error_message', 'Foto Dam Error: '.$this->upload->display_errors());
+							}
+						}
+					}
+
+					if (!$err && $dam == "-"){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+					}
+
+					// Lapor pacak harus kurang dari 7 hari
+					if (!$err){
+						$cek = true;
+						$piece = explode("-", $this->input->post('stu_stud_date'));
+						$date = $piece[2]."-".$piece[1]."-".$piece[0];
+				
+						// $ts = new DateTime($date);
+						// $ts_now = new DateTime();
+						
+						// if ($ts > $ts_now)
+						// 	$cek = false;
+						// else{
+						// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
+						// 	if ($diff > 2)
+						// 		$cek = false;
+						// }
+						$year = $piece[2];
+						if ($year != "2023")
+							$cek = false;
+
+						if ($cek){
+							// jarak pacak utk dam yg sama adalah 120 hari
+							$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+							if (!$res){
+								$data = array(
+									'stu_photo' => $photo,
+									'stu_sire_id' => $this->input->post('stu_sire_id'),
+									'stu_dam_id' => $this->input->post('stu_dam_id'),
+									'stu_sire_photo' => $sire,
+									'stu_dam_photo' => $dam,
+									'stu_stud_date' => $date,
+									'stu_member_id' => $this->session->userdata('mem_id'),
+									'stu_partner_id' => $can->can_member_id,
+								);
+								$stud = $this->studModel->add_studs($data);
+								if ($stud){
+									// $this->session->set_flashdata('add_success', true);
+									// redirect("frontend/Studs");
+									$this->session->set_flashdata('add_stud_success', true);
+									redirect("frontend/Beranda");
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
+									$this->load->view('frontend/add_stud', $data);
+								}
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari');
 								$this->load->view('frontend/add_stud', $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari');
+							$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('jarak_lapor_pacak').' hari');
 							$this->load->view('frontend/add_stud', $data);
 						}
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('jarak_lapor_pacak').' hari');
 						$this->load->view('frontend/add_stud', $data);
 					}
 				}
 				else{
+					$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 3');
 					$this->load->view('frontend/add_stud', $data);
 				}
 			}

@@ -10,8 +10,6 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve Kennel</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage Kennel</a></li>
-                           <!-- <li><a class="dropdown-item" href="<?= base_url('backend/Kennels/view_approve') ?>">Approve Kennel</a></li> -->
-                           <!-- <li><a class="dropdown-item" href="<?= base_url('backend/Kennels/') ?>">Manage Kennel</a></li> -->
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -35,25 +33,20 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
                         </ul>
                      </div>
-                     <div class="dropdown">
-                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Stambum</span>
-                        <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Stambum/view_approve') ?>">Approve</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Stambum/') ?>">Manage</a></li>
-                        </ul>
-                     </div>
-                     <div class="dropdown">
-                           <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Config
-                           </span>
-                           <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
-                              <?php if (!$this->session->userdata('use_akses')){ ?>
+                     <?php if (!$this->session->userdata('use_akses')){ ?>
+                        <div class="dropdown">
+                              <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Config
+                              </span>
+                              <ul class="dropdown-menu">
+                                 <li><a class="dropdown-item" href="<?= base_url('backend/News') ?>">News</a></li>
+                                 <li><a class="dropdown-item" href="<?= base_url('backend/Notificationtype') ?>">Notification Type</a></li>
+                                 <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
                                  <li><a class="dropdown-item" href="<?= base_url('backend/Setting') ?>">Setting</a></li>
-                              <?php } ?>
-                           </ul>
-                     </div>
+                                 <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
+                              </ul>
+                        </div>
+                     <?php } ?>
                      <div class="dropdown">
                            <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               <?= $this->session->userdata('use_username'); ?>

@@ -593,23 +593,12 @@ $config['upload_birth'] = Array(
     'file_name' => 'birth_'.time(),
 );
 
-$config['upload_path_stambum'] = realpath(APPPATH.'../uploads/stambum/');
-$config['path_stambum'] = 'uploads/stambum/';
-$config['upload_stambum'] = Array(
-    'upload_path' => $config['upload_path_stambum'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'stambum_'.time(),
-);
-
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
 $config['stud_count'] = 5;
 $config['birth_count'] = 5;
-$config['trah_count'] = 5;
-$config['event_count'] = 5;
-$config['product_count'] = 5;
-$config['notif_count'] = 5;
+$config['notif_count'] = 10;
+$config['news_count'] = 10;
 
 $config['backend_member_count'] = 100;
 $config['backend_canine_count'] = 100;

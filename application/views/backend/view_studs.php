@@ -17,6 +17,12 @@
                         if ($this->session->flashdata('add_success')){
                             echo 'Stud has been saved<br/>';
                         }
+                        if ($this->session->flashdata('edit_success')){
+                            echo 'Stud has been edited<br/>';
+                        }
+                        if ($this->session->flashdata('delete')){
+                            echo 'Stud has been deleted<br/>';
+                        }
                     ?>
                 </div>
                 <div class="text-danger">
@@ -55,14 +61,14 @@
                     $i = 0; 
                     foreach ($stud AS $s){ ?>
                     <div class="row">
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
                         </div>
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire">
                             <br/><?= $s->sire_a_s ?>
                         </div>
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam">
                             <br/><?= $s->dam_a_s ?>
                         </div>
@@ -73,11 +79,11 @@
                             <?= $s->stat_name; ?>
                         </div>
                         <div class="col-md-2">
-                            <?php if ($s->stu_stat == 1 && !$birth[$i] && $dam[$i] == "Female"){ ?>
-                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)"><i class="fa fa-plus"></i> Lahir</button>
+                            <?php if (!$birth[$i]){ ?>
+                                <button type="button" class="btn btn-success" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-close"></i></button>
+                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
                             <?php } ?>
-                            <!-- <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)"><i class="fa fa-close"></i></button> -->
                         </div>
                     </div>
                 <?php
@@ -101,6 +107,20 @@
         function addBirth(studId){
             window.location = "<?= base_url(); ?>backend/Births/add/"+studId;
         }
+        function edit(id){
+            window.location = "<?= base_url(); ?>backend/Studs/edit/"+id;
+        }
+        function del(id){
+            var proceed = confirm("Delete stud?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Studs/delete/"+id;
+            }
+        }
+        <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
+			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
+			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
+			window.open(wa, "_blank");
+	    <?php } ?>
     </script>
 </body>
 </html>

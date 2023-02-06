@@ -23,9 +23,9 @@
                             ?>
                         </div>
                         <div class="input-group my-3">
-                            <label class="control-label col-md-2">Member Name</label>
+                            <label class="control-label col-md-2">Member Name/Kennel</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Member Name/Kennel" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
@@ -125,6 +125,9 @@
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="10" name="can_note"><?= set_value('can_note') ?></textarea>
                             </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="checkbox-inline"><input type="checkbox" name="remove" value="1" <?php echo set_checkbox('remove', '1'); ?> /> Remove kennel name</label>
                         </div>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>

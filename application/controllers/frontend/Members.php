@@ -5,11 +5,9 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KenneltypeModel', 'KennelModel', 'LogmemberModel'));
+			$this->load->model(array('MemberModel', 'KenneltypeModel', 'notification_model', 'LogmemberModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->library('email', $this->config->item('email'));
-			$this->email->set_newline("\r\n");
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 		}
@@ -62,11 +60,13 @@ class Members extends CI_Controller {
 				if (!$err){
 					$this->session->set_userdata('username', $this->input->post('username'));
 					$this->session->set_userdata('mem_id', $member->mem_id);
-					$this->session->set_userdata('mem_stat', $member->mem_stat);
+					$this->session->set_userdata('mem_type', $member->mem_type);
 					if ($member->mem_pp && $member->mem_pp != '-')
 						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
 					else
 						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
+					$notif = $this->notification_model->get_count($member->mem_id);
+					$this->session->set_userdata('notif_count', $notif->count);
 					redirect("frontend/Beranda");
 				}
 				else{
@@ -260,7 +260,7 @@ class Members extends CI_Controller {
 							if ($this->input->post('mem_type'))
 								$this->session->set_flashdata('pro', TRUE);
 							else
-								$this->session->set_flashdata('pro', FALSE);
+								$this->session->set_flashdata('free', TRUE);
 							redirect("frontend/Members");
 						}
 						else{

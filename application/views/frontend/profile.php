@@ -17,43 +17,43 @@
                     }
                 ?>
             </div>
-            <div class="row mb-1">            
-                <div class="col-md-3">PP</div>
-                <div class="col-md-2">
-                    <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail" alt="KTP">
+            <div class="row mb-2">            
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                    <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile" alt="PP">
                 </div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-3">No. KTP</div>
-                <div class="col-md-9"><?= $member->mem_ktp ?></div>
+                <div class="col-sm-3">No. KTP</div>
+                <div class="col-sm-9"><?= $member->mem_ktp ?></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-3">Nama Sesuai KTP</div>
-                <div class="col-md-9"><?= $member->mem_name ?></div>
+                <div class="col-sm-3">Nama Sesuai KTP</div>
+                <div class="col-sm-9"><?= $member->mem_name ?></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-3">Alamat Sesuai KTP</div>
-                <div class="col-md-9"><?= $member->mem_address ?></div>
+                <div class="col-sm-3">Alamat Surat Menyurat</div>
+                <div class="col-sm-9"><?= $member->mem_address ?></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-3">Alamat Surat Menyurat</div>
-                <div class="col-md-9"><?= $member->mem_mail_address ?></div>
+                <div class="col-sm-3">Alamat yang Tertera di Sertifikat</div>
+                <div class="col-sm-9"><?= $member->mem_mail_address ?></div>
             </div>      
             <div class="row mb-1">
-                <div class="col-md-3">No. Telp</div>
-                <div class="col-md-9"><?= $member->mem_hp ?></div>
+                <div class="col-sm-3">No. HP WA Aktif</div>
+                <div class="col-sm-9"><?= $member->mem_hp ?></div>
             </div>      
             <div class="row mb-1">
-                <div class="col-md-3">Kota</div>
-                <div class="col-md-9"><?= $member->mem_kota ?></div>
+                <div class="col-sm-3">Kota</div>
+                <div class="col-sm-9"><?= $member->mem_kota ?></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-3">Kode Pos</div>
-                <div class="col-md-9"><?= $member->mem_kode_pos ?></div>
+                <div class="col-sm-3">Kode Pos</div>
+                <div class="col-sm-9"><?= $member->mem_kode_pos ?></div>
             </div>     
             <div class="row mb-1">
-                <div class="col-md-3">email</div>
-                <div class="col-md-9"><?= $member->mem_email ?></div>
+                <div class="col-sm-3">email</div>
+                <div class="col-sm-9"><?= $member->mem_email ?></div>
             </div>
         </div>
     </main>

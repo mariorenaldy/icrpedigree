@@ -21,10 +21,10 @@
                 </div>
                 <div class="row fs-6">
                     <div class="col-auto text-left">
-                        <span><i class="fa fa-map-marker" aria-hidden="true"></i> Jl. Cisatu 2 No. 12b<br/> Ciumbuleuit Bandung</span>
+                        <span class="text-primary"><i class="fa fa-map-marker" aria-hidden="true"></i></span><span> Jl. Cisatu 2 No. 12b<br/>Ciumbuleuit Bandung</span>
                     </div>
                     <div class="col-auto">
-                        <span><i class="fa fa-phone" aria-hidden="true"></i> 087777802288</span>
+                        <span class="text-warning"><i class="fa fa-phone" aria-hidden="true"></i></span><span> 087777802288</span>
                     </div>
                     <!-- <div class="col-auto d-flex">
                         <div>
@@ -42,10 +42,10 @@
                     <div class="col">Social Media</div>
                 </div>
                 <div class="row mb-1">
-                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
+                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="fab fa-facebook-f text-primary" aria-hidden="true"></i> Facebook</a>
                 </div>
                 <div class="row">
-                    <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.instagram.com/Icrindo_official/"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
+                    <a class="social-media-link text-decoration-none text-reset link-danger" href="https://www.instagram.com/Icrindo_official/"><i class="fab fa-instagram text-danger" aria-hidden="true"></i> Instagram</a>
                 </div>
             </section>
             <section class="col-auto">
@@ -60,8 +60,7 @@
             </section>
             <hr class="mt-3" />    
             <div class="row footer">
-                <div class="col-md-4"></div>
-                <div class="col-md-4 text-center copyright">
+                <div class="col-sm-12 text-center copyright">
                     Copyright &copy; 2021 <a href="" class="text-decoration-none text-reset"><span class="text-danger">ART</span>echnology</a>. All rights reserved
                 </div>
             </div>

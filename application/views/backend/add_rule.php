@@ -24,7 +24,7 @@
                     <div class="input-group mb-3">
                         <label for="title" class="control-label col-md-1">Title </label>
                         <div class="col-md-10">
-                            <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
+                            <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title">
                         </div>
                     </div>
                     <div class="input-group mb-3">

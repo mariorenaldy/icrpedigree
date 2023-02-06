@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Rules List</title>
+    <title>Rule List</title>
     <?php $this->load->view('templates/head'); ?>
 </head>
 <body>
@@ -10,7 +10,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                         
-                <h3 class="text-center text-primary">Rules List</h3>
+                <h3 class="text-center text-primary">Rule List</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('add_success')){
@@ -48,8 +48,8 @@
                             <?= $r->ru_desc; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick='update(<?= $r->ru_rule_id; ?>)'><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='del(<?= $r->ru_rule_id; ?>)'><i class="fa fa-close"></i></button>    
+                            <button type="button" class="btn btn-success" onclick='update(<?= $r->ru_rule_id; ?>)' data-toggle="tooltip" data-placement="top" title="Edit Rule"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='del(<?= $r->ru_rule_id; ?>)' data-toggle="tooltip" data-placement="top" title="Delete Rule"><i class="fa fa-close"></i></button>    
                         </div>
                     </div>
                 <?php } ?>
@@ -63,7 +63,7 @@
             window.location = "<?= base_url(); ?>backend/Rules/edit/"+id;
         }
         function del(id){
-            var proceed = confirm("Hapus rule?");
+            var proceed = confirm("Delete rule?");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Rules/delete/"+id;
             }

@@ -63,8 +63,8 @@
                             <?= $b->bir_female; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button>
+                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -80,14 +80,14 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
-        function approve(id, nama){
-            var proceed = confirm("Approve "+nama+" ?");
+        function approve(id){
+            var proceed = confirm("Approve birth?");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Births/approve/"+id;
             }
         }
-        function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
+        function reject(id){
+            var proceed = confirm("Reject birth?");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Births/reject/"+id;
             }

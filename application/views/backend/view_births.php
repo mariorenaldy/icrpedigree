@@ -17,10 +17,11 @@
                         if ($this->session->flashdata('add_success')){
                             echo 'Birth has been saved<br/>';
                         }
-                    ?>
-                    <?php		
-                        if ($this->session->flashdata('add_stambum_success')){
-                            echo 'Stambum has been saved<br/>';
+                        if ($this->session->flashdata('edit_success')){
+                            echo 'Birth has been edited<br/>';
+                        }
+                        if ($this->session->flashdata('delete')){
+                            echo 'Birth has been deleted<br/>';
                         }
                     ?>
                 </div>
@@ -74,9 +75,8 @@
                             <?= $b->stat_name; ?>
                         </div>
                         <div class="col-md-2">
-                            <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button> -->
-                            <button type="button" class="btn btn-info mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Stambum"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-success" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -95,8 +95,14 @@
         function add(){
             window.location = "<?= base_url(); ?>backend/Studs";
         }
-        function addStambum(id){
-            window.location = "<?= base_url(); ?>backend/Stambum/add/"+id;
+        function edit(id){
+            window.location = "<?= base_url(); ?>backend/Births/edit/"+id;
+        }
+        function del(id){
+            var proceed = confirm("Delete birth?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Births/delete/"+id;
+            }
         }
     </script>
 </body>

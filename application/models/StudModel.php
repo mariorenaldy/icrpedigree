@@ -113,41 +113,8 @@ class StudModel extends CI_Model {
     public function update_studs($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('studs');
-        return $this->db->affected_rows();
+        return $this->db->update('studs');
     }
-
-    // public function approve($id){
-    //     $user = $this->session->userdata('user_data');
-    //     $data = array(
-    //         // 'stu_sire_id' => $this->input->post('stu_sire_id'),
-    //         // 'stu_mom_id' => $this->input->post('stu_mom_id'),
-    //         'stu_note' => $this->input->post('stu_note'),
-    //         'stu_app_user' => $user['use_id'],
-    //         'stu_app_date' => date('Y-m-d H:i:s'),
-    //         'stu_stat' => 1
-    //     );
-    //     $this->db->where('stu_id', $id);
-
-    //     $edit = $this->db->update('studs', $data);
-
-	// 	return $edit; 
-    // }
-
-    // public function reject($id){
-    //     $user = $this->session->userdata('user_data');
-    //     $data = array(
-    //         'stu_note' => $this->input->post('stu_note'),
-    //         'stu_app_user' => $user['use_id'],
-    //         'stu_app_date' => date('Y-m-d H:i:s'),
-    //         'stu_stat' => 2
-    //     );
-    //     $this->db->where('stu_id', $id);
-
-    //     $edit = $this->db->update('studs', $data);
-
-	// 	return $edit; 
-    // }
 
     public function check_date($stu_dam_id, $date){
         $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= ".$this->config->item('jarak_pacak');

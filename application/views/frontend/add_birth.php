@@ -12,7 +12,7 @@
         <div class="container">
             <h3 class="text-center text-warning">Tambah Lahir</h3>
             <div class="row">            
-                <div class="col-md-12 align-items-center">                          
+                <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
                         <?php if (!$mode){ ?>
                             <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
@@ -28,27 +28,27 @@
                             ?>
                         </div>
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Dam</label>
-                            <div class="col-md-12 text-center">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Dam</label>
+                            <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_dam" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-md-2">Jumlah Jantan</label>
-                            <div class="col-md-10">
+                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-md-2">Jumlah Betina</label>
-                            <div class="col-md-10">
+                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-md-2">Tanggal Lahir</label>
-                            <div class="col-md-10">
+                            <label for="bir_date_of_birth" class="control-label col-sm-2">Tanggal Lahir</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
                             </div>
                         </div>

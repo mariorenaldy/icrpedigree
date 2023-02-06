@@ -36,7 +36,6 @@ class Canines extends CI_Controller {
 		}
     }
 
-
 	public function view_detail(){
         if ($this->uri->segment(4)){
 			$where['can_id'] = $this->uri->segment(4);
@@ -82,10 +81,10 @@ class Canines extends CI_Controller {
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
 			$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
-			$this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
-			$this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-			$this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
-			$this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
+			// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
+			// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
+			// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
+			// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			
 			$data['trah'] = $this->trahModel->get_trah(null)->result();
@@ -117,21 +116,16 @@ class Canines extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
 				}
 
-				if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
-				}
+				// if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
+				// 	$err++;
+				// 	$this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
+				// }
 
-				if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
-				}
+				// if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
+				// 	$err++;
+				// 	$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
+				// }
 
-				if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $this->input->post('can_a_s'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
-				}
-			
 				if (!$err){
 					$piece = explode("-", $this->input->post('can_date_of_birth'));
 					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -140,16 +134,16 @@ class Canines extends CI_Controller {
 					$data = array(
 						'can_id' => $id,
 						'can_member_id' => $this->session->userdata('mem_id'),
-						'can_reg_number' => strtoupper($this->input->post('can_reg_number')),
+						'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
 						'can_breed' => $this->input->post('can_breed'),
 						'can_gender' => $this->input->post('can_gender'),
 						'can_date_of_birth' => $dob,
-						'can_color' => $this->input->post('can_color'),
+						'can_color' => '-', // $this->input->post('can_color'),
 						'can_kennel_id' => $this->input->post('can_kennel_id'),
 						'can_reg_date' => date("Y/m/d"),
 						'can_photo' => $photo,
-						'can_chip_number' => $this->input->post('can_chip_number'),
-						'can_icr_number' => $this->input->post('can_icr_number'),
+						'can_chip_number' => '-', // $this->input->post('can_chip_number'),
+						'can_icr_number' => '-', // $this->input->post('can_icr_number'),
 					);
 		
 					// nama diubah berdasarkan kennel
@@ -163,22 +157,19 @@ class Canines extends CI_Controller {
 						else 
 							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
 					}
-
-					$dataPed = array(
-						'ped_sire_id' => $this->config->item('sire_id'),
-						'ped_dam_id' => $this->config->item('dam_id'),
-						'ped_canine_id' => $id,
-					);
 		
-					// if (!$err){
-					// 	$res = $this->caninesModel->check_can_a_s('', $data['can_a_s']);
-					// 	if ($res){
-					// 		$err++;
-					// 		$this->session->set_flashdata('error_message', 'Nama tidak boleh sama');
-					// 	}
-					// }
-					
+					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+					}
+
 					if (!$err){
+						$dataPed = array(
+							'ped_sire_id' => $this->config->item('sire_id'),
+							'ped_dam_id' => $this->config->item('dam_id'),
+							'ped_canine_id' => $id,
+						);
+
 						$this->db->trans_strict(FALSE);
 						$this->db->trans_start();
 						$canines = $this->caninesModel->add_canines($data);

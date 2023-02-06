@@ -31,7 +31,7 @@ class Certificate extends CI_Controller{
                     }
                 }
             } else {
-                $this->session->set_flashdata('error', 'Id anjing tidak valid');
+                $this->session->set_flashdata('error', 'Invalid canine id');
                 redirect('backend/Canines');
             }
         } else {
@@ -127,7 +127,7 @@ class Certificate extends CI_Controller{
                 }
             }
             else{
-                $this->session->set_flashdata('error', 'Id anjing tidak valid');
+                $this->session->set_flashdata('error', 'Invalid canine id');
                 redirect('backend/Canines');
             }
         } else {

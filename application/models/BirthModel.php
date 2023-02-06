@@ -21,9 +21,11 @@ class BirthModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('studs','studs.stu_id = births.bir_stu_id');
+        $this->db->join('members','members.mem_id = studs.stu_member_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id AND kennels.ken_member_id = studs.stu_member_id');
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
-        $this->db->join('members','members.mem_id = births.bir_member_id');
         $this->db->order_by('births.bir_date', 'desc');
         $this->db->limit($this->config->item('backend_birth_count'), 0);
         return $this->db->get();
@@ -134,37 +136,6 @@ class BirthModel extends CI_Model {
     public function update_births($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('births');
-        return $this->db->affected_rows();
+        return $this->db->update('births');
     }
-
-    // public function approve($id){
-    //     $user = $this->session->userdata('user_data');
-    //     $data = array(
-    //         'bir_note' => $this->input->post('bir_note'),
-    //         'bir_app_user' => $user['use_id'],
-    //         'bir_app_date' => date('Y-m-d H:i:s'),
-    //         'bir_stat' => 1
-    //     );
-    //     $this->db->where('bir_id', $id);
-
-    //     $edit = $this->db->update('births', $data);
-
-	// 	return $edit; 
-    // }
-
-    // public function reject($id){
-    //     $user = $this->session->userdata('user_data');
-    //     $data = array(
-    //         'bir_note' => $this->input->post('bir_note'),
-    //         'bir_app_user' => $user['use_id'],
-    //         'bir_app_date' => date('Y-m-d H:i:s'),
-    //         'bir_stat' => 2
-    //     );
-    //     $this->db->where('bir_id', $id);
-
-    //     $edit = $this->db->update('births', $data);
-
-	// 	return $edit; 
-    // }
 }

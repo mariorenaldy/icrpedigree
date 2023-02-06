@@ -3,16 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Canine</title>
+    <title>My Canine</title>
     <?php $this->load->view('frontend/layout/head'); ?>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body class="text-white text-break">
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImg">
+</div>
 <?php $this->load->view('frontend/layout/header_member'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <div class="row">            
-            <div class="col-md-12">                          
-                <h3 class="text-center text-warning">List Canine</h3>
+            <div class="col-sm-12">                          
+                <h3 class="text-center text-warning">My Canine</h3>
                 <div class="text-success mb-3">
                     <?php		
                         if ($this->session->flashdata('add_success')){
@@ -23,55 +28,66 @@
                 <div class="search-container">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
-                            <div class="col-md-6">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
-                            <div class="col-md-1 ms-1">
+                            <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
-                    <div class="col-md-12">
+                    <div class="col-sm-12">
                         <button type="button" class="btn btn-warning" onclick="add()"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md-2"><b>Foto</b></div>
-                    <div class="col-md-2"><b>Nomor ICR</b></div>
-                    <div class="col-md-2"><b>Nama</b></div>
-                    <div class="col-md-2"><b>Kennel</b></div>
-                    <div class="col-md-2"><b>Owner</b></div>
-                    <div class="col-md-1"><b>Status</b></div>
-                    <div class="col-md-1"></div>
+                    <div class="col-sm-1"><b>Foto</b></div>
+                    <div class="col-sm-2"><b>Nama</b></div>
+                    <div class="col-sm-2"><b>Deskripsi</b></div>
+                    <div class="col-sm-2"><b>Kennel</b></div>
+                    <div class="col-sm-2"><b>Owner</b></div>
+                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
                     <div class="row">
-                        <div class="col-md-2 mb-1">
+                        <div class="col-sm-1 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                             <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                             <?php } ?>
                         </div>
-                        <div class="col-md-2">
-                            <?php echo $c->can_icr_number; ?>
+                        <div class="col-sm-2">
+                            <?php 
+                                echo $c->can_a_s.'<br/>'; 
+                                if ($c->can_icr_number) 
+                                    echo $c->can_icr_number; 
+                                else 
+                                    echo $c->can_reg_number; 
+                            ?>
                         </div>
-                        <div class="col-md-2">
-                            <?php echo $c->can_a_s; ?>
+                        <div class="col-sm-2">
+                            <?php 
+                                echo $c->can_breed.'<br/>';
+                                echo $c->can_gender.'<br/>';
+                                echo $c->can_color; 
+                            ?>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
                             <?= $c->ken_name; ?>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
                             <?= $c->mem_name; ?>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-sm-1">
                             <?php echo $c->stat_name; ?>
                         </div>
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file-o"></i></button>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil Canine"><i class="fa fa-file"></i></button>
+                            <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fa fa-dog"></i></button>
                             <!-- <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
                             <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->
@@ -88,6 +104,21 @@
         }
         function detail(id){
             window.location = "<?= base_url(); ?>frontend/Canines/view_detail/"+id;
+        }
+        function pedigree(id){
+            window.location = "<?= base_url(); ?>frontend/Certificate/index/"+id;
+        }
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
         }
     </script>
 </body>

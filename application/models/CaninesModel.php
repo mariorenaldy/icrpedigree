@@ -65,11 +65,11 @@ class CaninesModel extends CI_Model {
         return $this->db->get('canines');
     }
 
-    public function get_canines_gender($id){
-        $this->db->select('can_gender');
-        $this->db->where('can_id', $id);
-        return $this->db->get('canines');
-    }
+    // public function get_canines_gender($id){
+    //     $this->db->select('can_gender');
+    //     $this->db->where('can_id', $id);
+    //     return $this->db->get('canines');
+    // }
 
     public function get_can_pedigrees($where){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');

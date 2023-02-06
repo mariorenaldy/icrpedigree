@@ -108,7 +108,7 @@
           <?php } else if ($sire) { ?>
             <p class="fs-7">Sire:</p>
             <?php if (strlen($sire->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire->can_a_s.'</p>'; ?>
-            <p class="fs-7"><?= $sire->can_icr_number; ?></p>
+            <p class="fs-7"><?= $sire->can_reg_number; ?></p>
             <p class="fs-7"><?= $sire->can_color; ?></p>
           <?php } else { ?>
             <p class="fs-7"></p>
@@ -127,7 +127,7 @@
               <?php } else if ($sire21) { ?>
                 <p class="fs-7">Sire:</p>
                 <?php if (strlen($sire21->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire21->can_a_s.'</p>'; ?>
-                <p class="fs-7"><?= $sire21->can_icr_number; ?></p>
+                <p class="fs-7"><?= $sire21->can_reg_number; ?></p>
                 <p class="fs-7"><?= $sire21->can_color; ?></p>
               <?php } else { ?>
                 <p class="fs-7"></p>
@@ -146,7 +146,7 @@
                   <?php } else if ($sire31) { ?>
                     <p class="fs-7">Sire:</p>
                     <?php if (strlen($sire31->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire31->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $sire31->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $sire31->can_reg_number; ?></p>
                     <p class="fs-7"><?= $sire31->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -164,7 +164,7 @@
                   <?php } else if ($dam31) { ?>
                     <p class="fs-7">Dam:</p>
                     <?php if (strlen($dam31->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam31->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $dam31->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $dam31->can_reg_number; ?></p>
                     <p class="fs-7"><?= $dam31->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -184,7 +184,7 @@
               <?php } else if ($dam21) { ?>
                 <p class="fs-7">Dam:</p>
                 <?php if (strlen($dam21->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam21->can_a_s.'</p>'; ?>
-                <p class="fs-7"><?= $dam21->can_icr_number; ?></p>
+                <p class="fs-7"><?= $dam21->can_reg_number; ?></p>
                 <p class="fs-7"><?= $dam21->can_color; ?></p>
               <?php } else { ?>
                 <p class="fs-7"></p>
@@ -203,7 +203,7 @@
                   <?php } else if ($sire32) { ?>
                     <p class="fs-7">Sire:</p>
                     <?php if (strlen($sire32->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire32->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $sire32->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $sire32->can_reg_number; ?></p>
                     <p class="fs-7"><?= $sire32->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -221,7 +221,7 @@
                   <?php } else if ($dam32) { ?>
                     <p class="fs-7">Dam:</p>
                     <?php if (strlen($dam32->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam32->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $dam32->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $dam32->can_reg_number; ?></p>
                     <p class="fs-7"><?= $dam32->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -243,7 +243,7 @@
             <?php } else if ($dam) { ?>
               <p class="fs-7">Dam:</p>
               <?php if (strlen($dam->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam->can_a_s.'</p>'; ?>
-              <p class="fs-7"><?= $dam->can_icr_number; ?></p>
+              <p class="fs-7"><?= $dam->can_reg_number; ?></p>
               <p class="fs-7"><?= $dam->can_color; ?></p>
             <?php } else { ?>
               <p class="fs-7"></p>
@@ -262,7 +262,7 @@
                 <?php } else if ($sire22) { ?>
                   <p class="fs-7">Sire:</p>
                   <?php if (strlen($sire22->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire22->can_a_s.'</p>'; ?>
-                  <p class="fs-7"><?= $sire22->can_icr_number; ?></p>
+                  <p class="fs-7"><?= $sire22->can_reg_number; ?></p>
                   <p class="fs-7"><?= $sire22->can_color; ?></p>
                 <?php } else { ?>
                   <p class="fs-7"></p>
@@ -281,7 +281,7 @@
                   <?php } else if ($sire33) { ?>
                     <p class="fs-7">Sire:</p>
                     <?php if (strlen($sire33->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire33->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $sire33->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $sire33->can_reg_number; ?></p>
                     <p class="fs-7"><?= $sire33->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -299,7 +299,7 @@
                   <?php } else if ($dam33) { ?>
                     <p class="fs-7">Dam:</p>
                     <?php if (strlen($dam33->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam33->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $dam33->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $dam33->can_reg_number; ?></p>
                     <p class="fs-7"><?= $dam33->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -319,7 +319,7 @@
               <?php } else if ($dam22) { ?>
                 <p class="fs-7">Dam:</p>
                 <?php if (strlen($dam22->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam22->can_a_s.'</p>'; ?>
-                <p class="fs-7"><?= $dam22->can_icr_number; ?></p>
+                <p class="fs-7"><?= $dam22->can_reg_number; ?></p>
                 <p class="fs-7"><?= $dam22->can_color; ?></p>
               <?php } else { ?>
                 <p class="fs-7"></p>
@@ -338,7 +338,7 @@
                   <?php } else if ($sire34) { ?>
                     <p class="fs-7">Sire:</p>
                     <?php if (strlen($sire34->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $sire34->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $sire34->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $sire34->can_reg_number; ?></p>
                     <p class="fs-7"><?= $sire34->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>
@@ -356,7 +356,7 @@
                   <?php } else if ($dam34) { ?>
                     <p class="fs-7">Dam:</p>
                     <?php if (strlen($dam34->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 black">'; else echo '<p class="fs-7 black">'; echo $dam34->can_a_s.'</p>'; ?>
-                    <p class="fs-7"><?= $dam34->can_icr_number; ?></p>
+                    <p class="fs-7"><?= $dam34->can_reg_number; ?></p>
                     <p class="fs-7"><?= $dam34->can_color; ?></p>
                   <?php } else { ?>
                     <p class="fs-7"></p>

@@ -149,9 +149,6 @@
                         ?>
                     </div>
                 </div>
-                <div class="mx-auto mt-3 text-center" style="width: 500px;">
-                    <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Back</button>
-                </div>
             </div>
         </div>
         <?php $this->load->view('templates/footer'); ?>

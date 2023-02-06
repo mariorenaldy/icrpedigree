@@ -11,7 +11,7 @@
         <div class="container">
         <h3 class="text-center text-warning">Ubah Password</h3>
             <div class="row">            
-                <div class="col-md-12 align-items-center">                          
+                <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Members/validate_edit_password" method="post" enctype="multipart/form-data">
                         <div class="text-success">
                             <?php		
@@ -29,24 +29,24 @@
                             ?>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Username</label>
-                            <div class="col-md-10"><?= $this->session->userdata('username'); ?></div>
+                            <label for="mem_name" class="control-label col-sm-2">Username</label>
+                            <div class="col-sm-10"><?= $this->session->userdata('username'); ?></div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Password</label>
-                            <div class="col-md-10">
+                            <label for="mem_name" class="control-label col-sm-2">Password</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="password" placeholder="Password" name="password" value="<?= set_value('password'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Password Baru</label>
-                            <div class="col-md-10">
+                            <label for="mem_name" class="control-label col-sm-2">Password Baru</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="password" placeholder="Password Baru" name="newpass" value="<?= set_value('newpass'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Konfirmasi Password</label>
-                            <div class="col-md-10">
+                            <label for="mem_name" class="control-label col-sm-2">Konfirmasi Password</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?= set_value('repass'); ?>">
                             </div>
                         </div>

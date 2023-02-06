@@ -12,7 +12,7 @@
         <div class="container">
             <h3 class="text-center text-warning">Tambah Pacak</h3>
             <div class="row">            
-                <div class="col-md-12 align-items-center">                          
+                <div class="col-sm-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
@@ -23,8 +23,8 @@
                             ?>
                         </div>
                         <div class="input-group my-3">
-                            <label for="stu_sire_id" class="control-label col-md-2">Sire</label>
-                            <div class="col-md-10">
+                            <label for="stu_sire_id" class="control-label col-sm-2">Sire</label>
+                            <div class="col-sm-10">
                                 <?php
                                     $i = 0;
                                     $pil = [];
@@ -38,17 +38,17 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="can_a_s" class="control-label col-md-2">Cari Dam</label>
-                            <div class="col-md-9">
+                            <label for="can_a_s" class="control-label col-sm-2">Cari Dam</label>
+                            <div class="col-sm-9">
                                 <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
-                            <div class="col-md-1 text-end">
+                            <div class="col-sm-1 text-end">
                                 <button id="buttonSearch" class="btn btn-warning" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_dam_id" class="control-label col-md-2">Nama Dam</label>
-                            <div class="col-md-10">
+                            <label for="stu_dam_id" class="control-label col-sm-2">Nama Dam</label>
+                            <div class="col-sm-10">
                                 <?php
                                     $i = 0;
                                     $opt = [];
@@ -62,29 +62,29 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Pacak</label>
-                            <div class="col-md-12 text-center">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Pacak</label>
+                            <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_stud" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Sire</label>
-                            <div class="col-md-12 text-center">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Sire</label>
+                            <div class="col-sm-12 text-center">
                                 <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_sire" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Dam</label>
-                            <div class="col-md-12 text-center">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Dam</label>
+                            <div class="col-sm-12 text-center">
                                 <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" name="attachment_dam" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_stud_date" class="control-label col-md-2">Tanggal Pacak</label>
-                            <div class="col-md-10">
+                            <label for="stu_stud_date" class="control-label col-sm-2">Tanggal Pacak</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" autocomplete="off">
                             </div>
                         </div>

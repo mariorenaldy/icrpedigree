@@ -25,9 +25,9 @@
                         <label for="title" class="control-label col-md-1">Title </label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input type="text" class="form-control" name="title" value="<?= $rule->ru_title ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="title" value="<?= $rule->ru_title ?>" placeholder="Title">
                             <?php } else { ?>
-                                <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title" aria-label="title" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="title" value="<?= set_value('title'); ?>" placeholder="Title">
                             <?php } ?>
                         </div>
                     </div>

@@ -77,8 +77,8 @@
                                         <td><?= $m->mem_ktp; ?></td>
                                         <td><?= $m->mem_email; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
-                                        <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-check"></i></button></td>
-                                        <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')"><i class="fa fa-close"></i></button></td>
+                                        <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button></td>
                                     </tr>
                                 <?php $i++; 
                                 } 

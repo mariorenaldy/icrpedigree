@@ -4,7 +4,7 @@ class Births extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'trahModel', 'pedigreesModel'));
+        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'pedigreesModel'));
 		$this->load->library('upload', $this->config->item('upload_birth'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -14,7 +14,7 @@ class Births extends CI_Controller {
 
 	public function index(){
 		if ($this->session->userdata('mem_id')){
-			$where['bir_member_id'] = $this->session->userdata('mem_id');
+			$where['stu_partner_id'] = $this->session->userdata('mem_id');
 			$data['births'] = $this->birthModel->get_births($where)->result();
 			$this->load->view('frontend/view_births', $data);
 		}
@@ -33,7 +33,7 @@ class Births extends CI_Controller {
 			if ($date){
 				$where['bir_date_of_birth'] = $date;
 			}
-			$where['bir_member_id'] = $this->session->userdata('mem_id');
+			$where['stu_partner_id'] = $this->session->userdata('mem_id');
 			$data['births'] = $this->birthModel->get_births($where)->result();
 			$this->load->view('frontend/view_births', $data);
 		}
@@ -63,7 +63,6 @@ class Births extends CI_Controller {
 			$this->form_validation->set_rules('bir_date_of_birth', 'Tanggal lahir ', 'trim|required');
 
 			$data['mode'] = 1;
-
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('frontend/add_birth', $data);
 			}
@@ -119,7 +118,6 @@ class Births extends CI_Controller {
 					if (!$err){
 						$data = array(
 							'bir_stu_id' => $this->input->post('bir_stu_id'),
-							'bir_member_id' => $this->session->userdata('mem_id'),
 							'bir_dam_photo' => $damPhoto,
 							'bir_male' => $this->input->post('bir_male'),
 							'bir_female' => $this->input->post('bir_female'),

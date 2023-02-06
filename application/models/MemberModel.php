@@ -58,25 +58,6 @@ class MemberModel extends CI_Model {
     //     return $this->db->get();
     // }
 
-    // public function get_ktp($ktp){
-    //     $this->db->select('*');
-    //     if ($ktp != null ) {
-    //         $this->db->where('mem_ktp', $ktp);
-    //     }
-    //     $this->db->from('members');
-    //     return $this->db->get();
-    // }
-
-    // public function get_ktp_update($ktp, $id){
-    //     $this->db->select('*');
-    //     if ($ktp != null && $id != null) {
-    //         $this->db->where('mem_ktp', $ktp);
-    //         $this->db->where('mem_id <> ', $id);
-    //     }
-    //     $this->db->from('members');
-    //     return $this->db->get();
-    // }
-
     public function add_members($data){
         return $this->db->insert('members', $data);
     }

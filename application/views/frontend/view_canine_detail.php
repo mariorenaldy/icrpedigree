@@ -11,11 +11,11 @@
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-12">
                 <h3 class="text-center text-warning">Canine Detail</h3>
                 <div class="row mt-3">
-                    <div class="col-md-5"></div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-2 text-center">
                         <?php if ($canine->can_photo && $canine->can_photo != '-') { ?>
                             <img src="<?= base_url('uploads/canine/'.$canine->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                         <?php } else { ?>
@@ -24,103 +24,98 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
+                    <div class="col-sm-3"></div>
                         <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { ?>
-                            <div class="col-md-6 text-center fs-5 text-danger"><?= $canine->can_a_s ?></div>
+                            <div class="col-sm-6 text-center fs-5 text-danger"><?= $canine->can_a_s ?></div>
                         <?php } else { ?>
-                            <div class="col-md-6 text-center fs-5"><?= $canine->can_a_s ?></div>
+                            <div class="col-sm-6 text-center fs-5"><?= $canine->can_a_s ?></div>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Current Reg. Number</div>
-                    <div class="col-md-4">: <?= $canine->can_reg_number ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Current Reg. Number</div>
+                    <div class="col-sm-4">: <?= $canine->can_reg_number ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">ICR Number</div>
-                    <div class="col-md-4">: <?= $canine->can_icr_number ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">ICR Number</div>
+                    <div class="col-sm-4">: <?= $canine->can_icr_number ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Chip Number</div>
-                    <div class="col-md-4">: <?= $canine->can_chip_number ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Chip Number</div>
+                    <div class="col-sm-4">: <?= $canine->can_chip_number ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Date of Birth</div>
-                    <div class="col-md-4">: <?= $canine->can_date_of_birth ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Date of Birth</div>
+                    <div class="col-sm-4">: <?= $canine->can_date_of_birth ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Breed</div>
-                    <div class="col-md-4">: <?= $canine->can_breed ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Breed</div>
+                    <div class="col-sm-4">: <?= $canine->can_breed ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Gender</div>
-                    <div class="col-md-4">: <?= $canine->can_gender ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Gender</div>
+                    <div class="col-sm-4">: <?= $canine->can_gender ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Color</div>
-                    <div class="col-md-4">: <?= $canine->can_color ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Color</div>
+                    <div class="col-sm-4">: <?= $canine->can_color ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Kennel</div>
-                    <div class="col-md-4">: <?= $canine->ken_name ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Kennel</div>
+                    <div class="col-sm-4">: <?= $canine->ken_name ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Owner</div>
-                    <div class="col-md-4">: <?= $canine->mem_name ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Owner</div>
+                    <div class="col-sm-4">: <?= $canine->mem_name ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Reg. Date</div>
-                    <div class="col-md-4">: <?= $canine->can_reg_date ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Reg. Date</div>
+                    <div class="col-sm-4">: <?= $canine->can_reg_date ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Status</div>
-                    <div class="col-md-4">: <?= $canine->stat_name ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Status</div>
+                    <div class="col-sm-4">: <?= $canine->stat_name ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Approved by</div>
-                    <div class="col-md-4">: <?= $canine->use_name ?></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Approved Date</div>
-                    <div class="col-md-4">: <?= $canine->can_app_date ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Approved by</div>
+                    <div class="col-sm-4">: <?= $canine->use_name ?></div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Note</div>
-                    <div class="col-md-4">: <?= $canine->can_note ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Approved Date</div>
+                    <div class="col-sm-4">: <?= $canine->can_app_date ?></div>
                 </div>
                 <hr/>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Sire</div>
-                    <div class="col-md-6">: <?= $sire->can_a_s ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Sire</div>
+                    <div class="col-sm-6">: <?= $sire->can_a_s ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Dam</div>
-                    <div class="col-md-6">: <?= $dam->can_a_s ?></div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Dam</div>
+                    <div class="col-sm-6">: <?= $dam->can_a_s ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Siblings</div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Siblings</div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Male</div>
-                    <div class="col-md-6">: <?php
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Male</div>
+                    <div class="col-sm-6">: <?php
                             $i = 0; 
                             foreach ($male_siblings as $s) {
                                 if (!$i)
@@ -135,9 +130,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">Female</div>
-                    <div class="col-md-4">: <?php
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Female</div>
+                    <div class="col-sm-4">: <?php
                             $i = 0; 
                             foreach ($female_siblings as $s) {
                                 if (!$i)
@@ -151,9 +146,11 @@
                         ?>
                     </div>
                 </div>
-                <div class="mx-auto mt-3 text-center" style="width: 500px;">
-                    <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Back</button>
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><i class="fa fa-arrow-left"></i></button>
             </div>
         </div>
     </div>

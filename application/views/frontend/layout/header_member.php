@@ -8,7 +8,7 @@
         echo 'window.location = "'.base_url().'frontend/Members";';
         echo '</script>';
     }
-    if ($this->session->userdata('mem_stat') != '1'){
+    if ($this->session->userdata('mem_type') != '1'){
         echo '<script type="text/javascript">';
         echo 'window.location = "'.base_url().'frontend/Beranda";';
         echo '</script>';

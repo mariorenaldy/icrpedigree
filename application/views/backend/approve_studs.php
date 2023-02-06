@@ -50,14 +50,14 @@
                 </div>
                 <?php foreach ($stud AS $s){ ?>
                     <div class="row">
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
                         </div>
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire">
                             <br/><?= $s->sire_a_s ?>
                         </div>
-                        <div class="col-md-2 mb-1">
+                        <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam">
                             <br/><?= $s->dam_a_s ?>
                         </div>
@@ -65,8 +65,8 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)"><i class="fa fa-close"></i></button>
+                            <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -94,6 +94,11 @@
                 window.location = "<?= base_url(); ?>backend/Studs/reject/"+id;
             }
         }
+        <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
+			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
+			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
+			window.open(wa, "_blank");
+	    <?php } ?>
     </script>
 </body>
 </html>
