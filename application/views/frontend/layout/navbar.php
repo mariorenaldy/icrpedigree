@@ -12,11 +12,11 @@
                         <i class="fa fa-file"></i><span class="nav-text"> Canine Registry</span>
                     </span>
                     <ul class="dropdown-menu">
-                        <!-- <li><a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning"><span class="nav-text"> Cari Silsilah</span></a> -->
-                        <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>"><span class="nav-text"> Tambah Canine Generasi Satu</span></a></li>
-                        <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>"><span class="nav-text"> Lapor Pacak</span></a></li>
-                        <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>"><span class="nav-text"> List Pacak</span></a></li> -->
-                        <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>"><span class="nav-text"> List Lahir</span></a></li> -->
+                        <!-- <li><a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning">Cari Silsilah</a> -->
+                        <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>">Tambah Canine Generasi Satu</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>">Lapor Pacak</a></li>
+                        <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li> -->
+                        <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li> -->
                     </ul>
                 </div>
             <?php } ?>
