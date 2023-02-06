@@ -134,3 +134,11 @@ div.container{
     max-width: 25px;
     border-radius: 50%;
 }
+.nav-text{
+    font-size: 1em !important;
+}
+@media (max-width: 1000px) {                  
+    .nav-text {
+       display: none;
+    }
+ }
