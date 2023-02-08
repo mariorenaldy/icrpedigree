@@ -3,6 +3,7 @@
 <head>
     <title>Profile</title>
     <?php $this->load->view('frontend/layout/head'); ?>
+    <link href="<?= base_url('assets/css/pp-styles.css') ?>" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
@@ -17,12 +18,44 @@
                     }
                 ?>
             </div>
-            <div class="row mb-2">            
-                <div class="col-sm-3"></div>
-                <div class="col-sm-2">
-                    <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile" alt="PP">
+            <form action="<?= base_url(); ?>frontend/Members/change_pp" method="post" enctype="multipart/form-data">
+                <div class="text-success">
+                    <?php
+                    if ($this->session->flashdata('change_pp')) {
+                        echo 'PP berhasil diubah <br/>';
+                    }
+                    ?>
                 </div>
-            </div>
+                <div class="text-danger">
+                    <?php
+                    if ($this->session->flashdata('error_message')) {
+                        echo $this->session->flashdata('error_message') . '<br/>';
+                    }
+                    echo validation_errors();
+                    ?>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2 profilepic">
+                        <div class="d-inline-block" style="position: relative;">
+                            <img src="<?php if ($member->mem_pp != '-') echo base_url() . 'uploads/members/' . $member->mem_pp;
+                                        else echo base_url() . 'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile profilepic__image" alt="PP">
+                            <div class="profilepic__content">
+                                <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+                                <span class="profilepic__text">Change PP</span>
+                            </div>
+                            <input type="file" class="upload" name="attachment_pp" id="my_file" style="display: none;" onchange="loadFile(event)" onclick="reset(event)"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-3"></div>
+                    <div class="col edit-buttons" style="display: none;">
+                        <button class="btn btn-primary" type="submit">Simpan</button>
+                        <button class="btn btn-danger" type="button" onclick="revert()">Batal</button>
+                    </div>
+                </div>
+            </form>
             <div class="row mb-1">
                 <div class="col-sm-3">No. KTP</div>
                 <div class="col-sm-9"><?= $member->mem_ktp ?></div>
@@ -38,11 +71,11 @@
             <div class="row mb-1">
                 <div class="col-sm-3">Alamat yang Tertera di Sertifikat</div>
                 <div class="col-sm-9"><?= $member->mem_mail_address ?></div>
-            </div>      
+            </div>
             <div class="row mb-1">
                 <div class="col-sm-3">No. HP WA Aktif</div>
                 <div class="col-sm-9"><?= $member->mem_hp ?></div>
-            </div>      
+            </div>
             <div class="row mb-1">
                 <div class="col-sm-3">Kota</div>
                 <div class="col-sm-9"><?= $member->mem_kota ?></div>
@@ -50,7 +83,7 @@
             <div class="row mb-1">
                 <div class="col-sm-3">Kode Pos</div>
                 <div class="col-sm-9"><?= $member->mem_kode_pos ?></div>
-            </div>     
+            </div>
             <div class="row mb-1">
                 <div class="col-sm-3">email</div>
                 <div class="col-sm-9"><?= $member->mem_email ?></div>
@@ -59,5 +92,26 @@
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>
-</html>
+<script>
+    var imageOri = document.querySelector(".profilepic__image").src;
+    var editBtns = document.querySelector(".edit-buttons");
 
+    document.querySelector('.profilepic').addEventListener('click', function() {
+        document.querySelector('.profilepic input').click();
+    });
+    var loadFile = function(event) {
+        editBtns.style.display = "inline";
+        var image = document.querySelector(".profilepic__image");
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+    var reset = function(event) {
+        event.target.value = null;
+    };
+    var revert = function() {
+        editBtns.style.display = "none";
+        var image = document.querySelector(".profilepic__image");
+        image.src = imageOri;
+    };
+</script>
+
+</html>

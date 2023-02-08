@@ -482,4 +482,48 @@ class Members extends CI_Controller {
 				redirect("frontend/Members");
 			}
 		}
+
+	public function change_pp()
+	{
+		$err = 0;
+		$where['mem_id'] = $this->session->userdata('mem_id');
+		$member = $this->MemberModel->get_members($where)->row_array();
+		$data['member'] = $this->MemberModel->get_members($where)->row();
+		if (!$member) {
+			$err = 1;
+			$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+		} else {
+			$pp = '-';
+			if (isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
+				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
+					$this->upload->initialize($this->config->item('upload_member'));
+					if ($this->upload->do_upload('attachment_pp')) {
+						$uploadData = $this->upload->data();
+						$pp = $uploadData['file_name'];
+					} else {
+						$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					}
+				}
+			}
+
+			if (!$err && $pp == "-") {
+				$err++;
+			}
+
+			if(!$err){
+				$record['mem_pp'] = $pp;
+				$res = $this->MemberModel->update_members($record, $where);
+				if ($res) {
+					$this->session->set_flashdata('change_pp', TRUE);
+					redirect("frontend/Members/profile", $data);
+				} else {
+					$err = 2;
+					$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+				}
+			}
+			else {
+				$this->load->view("frontend/profile", $data);
+			}
+		}
+	}
 }
