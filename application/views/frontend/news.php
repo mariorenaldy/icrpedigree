@@ -9,19 +9,23 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <h3 class="text-center text-warning mb-3">News</h3>
-        <?php foreach ($news AS $r){ ?>
+        <?php $i = 0;
+        foreach ($news AS $r){
+            if($i > 0) { ?>
+                <hr/>
+            <?php } ?>
             <div class="row">
-                <div class="col"><?= $r->date ?></div>
+                <div class="col" style="font-size: 0.9em; color:#BEBEBE;"><?= $r->date ?></div>
             </div>
             <div class="row">
-                <div class="col"><?= $r->title ?></div>
+                <div class="col fw-bold"><?= $r->title ?></div>
             </div>
             <div class="row">
                 <div class="col"><?= $r->description ?></div>
             </div>
-            <hr/>
-        <?php } ?> 
-        </div>
+            <?php $i++;
+        } ?> 
+    </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>
 </html>
