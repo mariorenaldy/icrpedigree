@@ -131,8 +131,9 @@ div.container{
     font-size: 0.8em !important;
 }
 .img-fluid.pp{
-    max-width: 25px;
-    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    clip-path: circle();
 }
 .nav-text{
     font-size: 1em !important;

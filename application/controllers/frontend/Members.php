@@ -496,14 +496,25 @@ class Members extends CI_Controller {
 			$pp = '-';
 			if (isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
 				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
-					$this->upload->initialize($this->config->item('upload_member'));
-					if ($this->upload->do_upload('attachment_pp')) {
-						$uploadData = $this->upload->data();
-						$pp = $uploadData['file_name'];
-					} else {
-						$this->session->set_flashdata('error_message', $this->upload->display_errors());
+					$maxsize = 1048576;
+					if(($_FILES['attachment_pp']['size'] > $maxsize)) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+					}
+					else{
+						$this->upload->initialize($this->config->item('upload_member'));
+						if ($this->upload->do_upload('attachment_pp')) {
+							$uploadData = $this->upload->data();
+							$pp = $uploadData['file_name'];
+						} else {
+							$this->session->set_flashdata('error_message', $this->upload->display_errors());
+						}
 					}
 				}
+			}
+			else{
+				$err++;
+				$this->session->set_flashdata('error_message', 'File kosong atau ukurannya terlalu besar (> 1 MB).');
 			}
 
 			if (!$err && $pp == "-") {
@@ -515,6 +526,12 @@ class Members extends CI_Controller {
 				$res = $this->MemberModel->update_members($record, $where);
 				if ($res) {
 					$this->session->set_flashdata('change_pp', TRUE);
+					$member = $this->MemberModel->get_members($where)->row();
+					$this->session->unset_userdata('mem_pp');
+					if ($member->mem_pp && $member->mem_pp != '-')
+						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
+					else
+						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
 					redirect("frontend/Members/profile", $data);
 				} else {
 					$err = 2;
