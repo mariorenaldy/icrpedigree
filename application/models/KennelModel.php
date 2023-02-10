@@ -5,12 +5,6 @@ class KennelModel extends CI_Model {
         return $this->db->count_all("kennels");
     }
 
-    // public function fetch_data($num, $offset) {
-    //     $this->db->order_by('ken_id', 'desc');
-    //     $data = $this->db->get('kennels', $num, $offset);
-    //     return $data;
-    // }
-
     public function get_kennels($where){
         $this->db->select('kennels.ken_id, kennels.ken_photo, kennels.ken_name, kennels.ken_member_id, kennels.ken_type_id, kennels_type.ken_type_name, members.mem_id, members.mem_name, approval_status.stat_name');
         $this->db->where($where);
@@ -77,34 +71,4 @@ class KennelModel extends CI_Model {
         $query = $this->db->query($sql);
         return count($query->result());
     }
-
-    // public function edit_kennels($data, $id){
-    //     $result = false;
-    //     if ($data != null && $id != null){
-    //         $this->db->where('ken_id', $id);
-    //         $result = $this->db->update('kennels', $data);
-    //     }
-    //     return $result;
-    // }
-
-    // public function kennel_search($q = null){
-    //     $this->db->select('ken_id as id, ken_name as text');
-    //     if (isset($q)) {
-    //         $this->db->like('ken_name', $q);
-    //     }
-    //     $this->db->from('kennels');
-    //     $this->db->order_by('ken_id');
-    //     return $this->db->get();
-    // }
-
-    // public function set_active($id, $status){
-    //     $data = array(
-    //         'ken_stat' => $status
-    //     );
-    //     $this->db->where('ken_id', $id);
-
-    //     $edit = $this->db->update('kennels', $data);
-
-	// 	return $edit; 
-    // }
 }

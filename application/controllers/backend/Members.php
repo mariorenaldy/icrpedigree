@@ -23,7 +23,7 @@ class Members extends CI_Controller {
 		public function index(){
 			$where['mem_type'] = $this->config->item('pro_member');
 			$where['mem_stat'] = $this->config->item('accepted');
-			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date')->result();
+			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2')->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
@@ -45,7 +45,7 @@ class Members extends CI_Controller {
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
 			else
 				$where['mem_type'] = $this->input->post('mem_type');
-			$data['member'] = $this->MemberModel->search_members($like, $where, 'mem_app_date')->result();
+			$data['member'] = $this->MemberModel->search_members($like, $where, 'mem_app_date2')->result();
 			$data['kennel'] = Array();
 			foreach($data['member'] AS $m){
 				$wheKennel = [];
@@ -84,235 +84,6 @@ class Members extends CI_Controller {
 				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
 			}
 			$this->load->view('backend/approve_members', $data);
-		}
-
-		public function approve(){
-			if ($this->uri->segment(4)){
-				if ($this->session->userdata('use_username')){
-					$err = 0;
-					$this->db->trans_strict(FALSE);
-					$this->db->trans_start();
-					$where['mem_id'] = $this->uri->segment(4);
-					$member = $this->MemberModel->get_members($where)->row();
-
-					$data['mem_stat'] = $this->config->item('accepted');
-					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
-					$data['mem_app_user'] = $this->session->userdata('use_id');
-					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$res = $this->MemberModel->update_members($data, $where);
-					if ($res){
-						$kennel_data = array(
-							'ken_stat' => $this->config->item('accepted'),
-							'ken_app_user' => $this->session->userdata('use_id'),
-							'ken_app_date' => date('Y-m-d H:i:s'),
-						);
-						$where_kennel['ken_member_id'] = $this->uri->segment(4);
-						$res2 = $this->KennelModel->update_kennels($kennel_data, $where_kennel);
-						if ($res2){
-							$dataLog = array(
-								'log_member_id' => $member->mem_id,
-								'log_name' => $member->mem_name,
-								'log_address' => $member->mem_address,
-								'log_mail_address' => $member->mem_mail_address,
-								'log_hp' => $member->mem_hp,
-								'log_kota' => $member->mem_kota,
-								'log_kode_pos' => $member->mem_kode_pos,
-								'log_email' => $member->mem_email,
-								'log_ktp' => $member->mem_ktp,
-								'log_pp' => $member->mem_pp,
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('accepted'),
-								'log_mem_type' => $this->config->item('pro_member'),
-								'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
-							);
-							$log = $this->LogmemberModel->add_log($dataLog);
-							if ($log){
-								$dataKennelLog = array(
-									'log_kennel_id' => $member->ken_id,
-									'log_kennel_name' => $member->ken_name,
-									'log_kennel_type_id' => $member->ken_type_id,
-									'log_kennel_photo' => $member->ken_photo,
-									'log_stat' => $this->config->item('accepted'),
-									'log_app_user' => $this->session->userdata('use_id'),
-									'log_app_date' => date('Y-m-d H:i:s')
-								);
-								$res = $this->LogkennelModel->add_log($dataKennelLog);
-								if ($res){
-									$this->db->trans_complete();
-									$mail = send_greeting($member->email);
-									$this->session->set_flashdata('approve', TRUE);
-									redirect('backend/Members/view_approve');
-								}
-								else{
-									$err = 1;
-								}
-							}
-							else{
-								$err = 2;
-							}
-						}
-						else{
-							$err = 3;
-						}
-					}
-					else{
-						$err = 4;
-					}
-					if ($err){
-						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to approve member id = '.$this->uri->segment(4).'. Error code: '.$err);
-						redirect('backend/Members/view_approve');
-					}
-				}
-				else{
-					redirect('backend/Users/login');
-				}
-			}
-			else{
-				redirect('backend/Members/view_approve');
-			}
-		}
-
-		public function reject(){
-			if ($this->uri->segment(4)){
-				if ($this->session->userdata('use_username')){
-					$err = 0;
-					$this->db->trans_strict(FALSE);
-					$this->db->trans_start();
-					$where['mem_id'] = $this->uri->segment(4);
-					$member = $this->MemberModel->get_members($where)->row();
-					
-					$data['mem_stat'] = $this->config->item('rejected');
-					$data['mem_app_user'] = $this->session->userdata('use_id');
-					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$res = $this->MemberModel->update_members($data, $where);
-					if ($res){
-						$dataKennel['ken_stat'] = $this->config->item('rejected');
-						$dataKennel['ken_app_user'] = $this->session->userdata('use_id');
-						$dataKennel['ken_app_date'] = date('Y-m-d H:i:s');
-						$wheKennel['ken_member_id'] = $this->uri->segment(4);
-						$res2 = $this->KennelModel->update_kennels($dataKennel, $wheKennel);
-						if ($res2){
-							$dataLog = array(
-								'log_member_id' => $member->mem_id,
-								'log_name' => $member->mem_name,
-								'log_address' => $member->mem_address,
-								'log_mail_address' => $member->mem_mail_address,
-								'log_hp' => $member->mem_hp,
-								'log_kota' => $member->mem_kota,
-								'log_kode_pos' => $member->mem_kode_pos,
-								'log_email' => $member->mem_email,
-								'log_ktp' => $member->mem_ktp,
-								'log_pp' => $member->mem_pp,
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('rejected'),
-								'log_mem_type' => $this->config->item('pro_member'),
-							);
-							$log = $this->LogmemberModel->add_log($dataLog);
-							if ($log){
-								$dataKennelLog = array(
-									'log_kennel_id' => $member->ken_id,
-									'log_kennel_name' => $member->ken_name,
-									'log_kennel_type_id' => $member->ken_type_id,
-									'log_kennel_photo' => $member->ken_photo,
-									'log_stat' => $this->config->item('rejected'),
-									'log_app_user' => $this->session->userdata('use_id'),
-									'log_app_date' => date('Y-m-d H:i:s')
-								);
-								$res = $this->LogkennelModel->add_log($dataKennelLog);
-								if ($res){
-									$this->db->trans_complete();
-									$this->session->set_flashdata('reject', TRUE);
-									redirect('backend/Members/view_approve');
-								}
-								else{
-									$err = 1;
-								}
-							}
-							else{
-								$err = 2;
-							}
-						}
-						else{
-							$err = 3;
-						}
-					}
-					else{
-						$err = 4;
-					}
-					if ($err){
-						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to reject member id = '.$this->uri->segment(4).'. Error code: '.$err);
-						redirect('backend/Members/view_approve');
-					}
-				}
-				else{
-					redirect('backend/Users/login');
-				}
-			}
-			else{
-				redirect('backend/Members/view_approve');
-			}
-		}
-
-		public function payment(){
-			if ($this->uri->segment(4)){
-				if ($this->session->userdata('use_username')){
-					$this->db->trans_strict(FALSE);
-					$this->db->trans_start();
-					$where['mem_id'] = $this->uri->segment(4);
-					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
-					$data['mem_type'] = $this->config->item('pro_member');
-					$data['mem_app_user'] = $this->session->userdata('use_id');
-					$data['mem_app_date'] = date('Y-m-d H:i:s');
-					$res = $this->MemberModel->update_members($data, $where);
-					if ($res){
-						$err = 0;
-						$dataLog = array(
-							'log_member_id' => $this->uri->segment(4),
-							'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
-							'log_mem_type' => $this->config->item('pro_member'),
-						);
-						$log = $this->LogmemberModel->add_log($dataLog);
-						if ($log){
-							$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
-							if ($res){
-								$this->db->trans_complete();
-								$member = $this->MemberModel->get_members($where)->row();
-								if ($member->mem_firebase_token){
-									$notif = $this->notificationtype_model->get_by_id(19);
-									firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-								}
-								$this->session->set_flashdata('payment_success', TRUE);
-								redirect('backend/Members');
-							}
-							else{
-								$err = 1;
-							}
-						}
-						else{
-							$err = 2;
-						}
-					}
-					else{
-						$err = 3;
-					}
-					if ($err){
-						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
-						redirect('backend/Members');
-					}
-				}
-				else{
-					redirect('backend/Users/login');
-				}
-			}
-			else{
-				redirect('backend/Members');
-			}
 		}
 
 		public function add(){
@@ -443,6 +214,8 @@ class Members extends CI_Controller {
 								'mem_app_date' => date('Y-m-d H:i:s'),
 								'mem_stat' => $this->config->item('accepted'),
 								'mem_type' => $this->config->item('pro_member'),
+								'mem_user' => $this->session->userdata('use_id'),
+								'mem_date' => date('Y-m-d H:i:s'),
 							);
 			
 							$ken_id = $this->KennelModel->record_count() + 1;
@@ -454,7 +227,9 @@ class Members extends CI_Controller {
 								'ken_member_id' => $mem_id,
 								'ken_stat' => $this->config->item('accepted'),
 								'ken_app_user' => $this->session->userdata('use_id'),
-								'ken_app_date' => date('Y-m-d H:i:s')
+								'ken_app_date' => date('Y-m-d H:i:s'),
+								'ken_user' => $this->session->userdata('use_id'),
+								'ken_date' => date('Y-m-d H:i:s'),
 							);
 
 							$dataLog = array(
@@ -471,6 +246,8 @@ class Members extends CI_Controller {
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
 								'log_mem_type' => $this->config->item('pro_member'),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s'),
 							);
 
 							$dataKennelLog = array(
@@ -480,7 +257,9 @@ class Members extends CI_Controller {
 								'log_kennel_photo' => $logo,
 								'log_stat' => $this->config->item('accepted'),
 								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s')
+								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s')
 							);
 
 							if ($this->input->post('same')){
@@ -502,6 +281,8 @@ class Members extends CI_Controller {
 								'mem_password' => sha1($this->input->post('hp')),
 								'mem_stat' => $this->config->item('accepted'),
 								'mem_type' => $this->config->item('free_member'),
+								'mem_user' => $this->session->userdata('use_id'),
+								'mem_date' => date('Y-m-d H:i:s'),
 							);
 	
 							$ken_id = $this->KennelModel->record_count() + 1;
@@ -512,6 +293,8 @@ class Members extends CI_Controller {
 								'ken_photo' => '-',
 								'ken_member_id' => $mem_id,
 								'ken_stat' => $this->config->item('accepted'),
+								'ken_user' => $this->session->userdata('use_id'),
+								'ken_date' => date('Y-m-d H:i:s'),
 							);
 						}
 		
@@ -521,31 +304,37 @@ class Members extends CI_Controller {
 						if ($id){
 							$res = $this->KennelModel->add_kennels($kennel_data);
 							if ($res){
-								if ($this->input->post('mem_type')){
-									$log = $this->LogmemberModel->add_log($dataLog);
-									if ($log){
-										$res = $this->LogkennelModel->add_log($dataKennelLog);
-										if (!$res){
-											$err = 1;
+								$result = $this->notification_model->add(17, $mem_id, $mem_id);
+								if ($result){
+									if ($this->input->post('mem_type')){
+										$log = $this->LogmemberModel->add_log($dataLog);
+										if ($log){
+											$res = $this->LogkennelModel->add_log($dataKennelLog);
+											if (!$res){
+												$err = 1;
+											}
 										}
-									}
-									else{
-										$err = 2;
+										else{
+											$err = 2;
+										}
+									}	
+									if (!$err){
+										$this->db->trans_complete();
+										$mail = send_greeting($this->input->post('mem_email'));
+										$this->session->set_flashdata('add_success', TRUE);
+										redirect("backend/Members");
 									}
 								}
-								if (!$err){
-									$this->db->trans_complete();
-									$mail = send_greeting($this->input->post('mem_email'));
-									$this->session->set_flashdata('add_success', TRUE);
-									redirect("backend/Members");
+								else{
+									$err = 3;
 								}
 							}
 							else{
-								$err = 3;
+								$err = 4;
 							}
 						}
 						else {
-							$err = 4;
+							$err = 5;
 						}
 						if ($err){
 							$this->db->trans_rollback();
@@ -680,9 +469,9 @@ class Members extends CI_Controller {
 								'mem_email' => $this->input->post('mem_email'),
 								'mem_ktp' => $this->input->post('mem_ktp'),
 								'mem_type' => $this->input->post('mem_type'),
-								'mem_app_user' => $this->session->userdata('use_id'),
-								'mem_app_date' => date('Y-m-d H:i:s'),
 								'mem_payment_date' => date('2023-1-1'),
+								'mem_user' => $this->session->userdata('use_id'),
+								'mem_date' => date('Y-m-d H:i:s'),
 							);
 							if ($pp != '-')
 								$data['mem_pp'] = $pp;
@@ -690,6 +479,8 @@ class Members extends CI_Controller {
 							$kennel_data = array(
 								'ken_name' => strtoupper($this->input->post('ken_name')),
 								'ken_type_id' => $this->input->post('ken_type_id'),
+								'ken_user' => $this->session->userdata('use_id'),
+								'ken_date' => date('Y-m-d H:i:s'),
 							);
 							if ($logo != '-')
 								$kennel_data['ken_photo'] = $logo;
@@ -705,8 +496,8 @@ class Members extends CI_Controller {
 								'log_email' => $this->input->post('mem_email'),
 								'log_ktp' => $this->input->post('mem_ktp'),
 								'log_pp' => $pp,
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
 								'log_mem_type' => $this->input->post('mem_type'),
 								'log_payment_date' => date('2023-1-1'),
@@ -718,8 +509,8 @@ class Members extends CI_Controller {
 								'log_kennel_type_id' => $this->input->post('ken_type_id'),
 								'log_kennel_photo' => $logo,
 								'log_stat' => $this->config->item('accepted'),
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s')
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s')
 							);
 
 							if ($this->input->post('same')){
@@ -773,8 +564,8 @@ class Members extends CI_Controller {
 								'mem_hp' => $this->input->post('hp'),
 								'mem_email' => $this->input->post('email'),
 								'mem_type' => $this->input->post('mem_type'),
-								'mem_app_user' => $this->session->userdata('use_id'),
-								'mem_app_date' => date('Y-m-d H:i:s'),
+								'mem_user' => $this->session->userdata('use_id'),
+								'mem_date' => date('Y-m-d H:i:s'),
 							);
 	
 							$mem = $this->MemberModel->update_members($data, $where);
@@ -798,7 +589,7 @@ class Members extends CI_Controller {
 			}
 		}
 
-		public function delete(){
+		public function approve(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
 					$err = 0;
@@ -808,32 +599,135 @@ class Members extends CI_Controller {
 					$member = $this->MemberModel->get_members($where)->row();
 
 					$data = array(
+						'mem_stat' => $this->config->item('accepted'),
+						'mem_payment_date' => date('Y-m-d', strtotime('+1 year')),
 						'mem_app_user' => $this->session->userdata('use_id'),
 						'mem_app_date' => date('Y-m-d H:i:s'),
-						'mem_stat' => $this->config->item('rejected'),
+						'mem_user' => $this->session->userdata('use_id'),
+						'mem_date' => date('Y-m-d H:i:s'),
 					);
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
+						$kennel_data = array(
+							'ken_stat' => $this->config->item('accepted'),
+							'ken_app_user' => $this->session->userdata('use_id'),
+							'ken_app_date' => date('Y-m-d H:i:s'),
+							'ken_user' => $this->session->userdata('use_id'),
+							'ken_date' => date('Y-m-d H:i:s'),
+						);
+						$where_kennel['ken_member_id'] = $this->uri->segment(4);
+						$res2 = $this->KennelModel->update_kennels($kennel_data, $where_kennel);
+						if ($res2){
+							$dataLog = array(
+								'log_member_id' => $member->mem_id,
+								'log_name' => $member->mem_name,
+								'log_address' => $member->mem_address,
+								'log_mail_address' => $member->mem_mail_address,
+								'log_hp' => $member->mem_hp,
+								'log_kota' => $member->mem_kota,
+								'log_kode_pos' => $member->mem_kode_pos,
+								'log_email' => $member->mem_email,
+								'log_ktp' => $member->mem_ktp,
+								'log_pp' => $member->mem_pp,
+								'log_app_user' => $this->session->userdata('use_id'),
+								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_stat' => $this->config->item('accepted'),
+								'log_mem_type' => $this->config->item('pro_member'),
+								'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s')
+							);
+							$log = $this->LogmemberModel->add_log($dataLog);
+							if ($log){
+								$dataKennelLog = array(
+									'log_kennel_id' => $member->ken_id,
+									'log_kennel_name' => $member->ken_name,
+									'log_kennel_type_id' => $member->ken_type_id,
+									'log_kennel_photo' => $member->ken_photo,
+									'log_stat' => $this->config->item('accepted'),
+									'log_app_user' => $this->session->userdata('use_id'),
+									'log_app_date' => date('Y-m-d H:i:s'),
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s')
+								);
+								$res = $this->LogkennelModel->add_log($dataKennelLog);
+								if ($res){
+									$result = $this->notification_model->add(17, $member->mem_id, $member->mem_id);
+									if ($result){
+										$this->db->trans_complete();
+										$mail = send_greeting($member->email);
+										$this->session->set_flashdata('approve', TRUE);
+										redirect('backend/Members/view_approve');
+									}
+									else{
+										$err = 1;
+									}
+								}
+								else{
+									$err = 2;
+								}
+							}
+							else{
+								$err = 3;
+							}
+						}
+						else{
+							$err = 4;
+						}
+					}
+					else{
+						$err = 5;
+					}
+					if ($err){
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to approve member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						redirect('backend/Members/view_approve');
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members/view_approve');
+			}
+		}
+
+		public function reject(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$err = 0;
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->MemberModel->get_members($where)->row();
+					
+					$data['mem_stat'] = $this->config->item('rejected');
+					$data['mem_user'] = $this->session->userdata('use_id');
+					$data['mem_date'] = date('Y-m-d H:i:s');
+					$res = $this->MemberModel->update_members($data, $where);
+					if ($res){
 						$dataKennel['ken_stat'] = $this->config->item('rejected');
-						$dataKennel['ken_app_user'] = $this->session->userdata('use_id');
-						$dataKennel['ken_app_date'] = date('Y-m-d H:i:s');
+						$dataKennel['ken_user'] = $this->session->userdata('use_id');
+						$dataKennel['ken_date'] = date('Y-m-d H:i:s');
 						$wheKennel['ken_member_id'] = $this->uri->segment(4);
 						$res2 = $this->KennelModel->update_kennels($dataKennel, $wheKennel);
 						if ($res2){
 							$dataLog = array(
 								'log_member_id' => $member->mem_id,
-								// 'log_name' => $member->mem_name,
-								// 'log_address' => $member->mem_address,
-								// 'log_mail_address' => $member->mem_mail_address,
-								// 'log_hp' => $member->mem_hp,
-								// 'log_kota' => $member->mem_kota,
-								// 'log_kode_pos' => $member->mem_kode_pos,
-								// 'log_email' => $member->mem_email,
-								// 'log_ktp' => $member->mem_ktp,
-								// 'log_pp' => $member->mem_pp,
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_name' => $member->mem_name,
+								'log_address' => $member->mem_address,
+								'log_mail_address' => $member->mem_mail_address,
+								'log_hp' => $member->mem_hp,
+								'log_kota' => $member->mem_kota,
+								'log_kode_pos' => $member->mem_kode_pos,
+								'log_email' => $member->mem_email,
+								'log_ktp' => $member->mem_ktp,
+								'log_pp' => $member->mem_pp,
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('rejected'),
+								'log_mem_type' => $this->config->item('pro_member'),
 							);
 							$log = $this->LogmemberModel->add_log($dataLog);
 							if ($log){
@@ -843,8 +737,79 @@ class Members extends CI_Controller {
 									'log_kennel_type_id' => $member->ken_type_id,
 									'log_kennel_photo' => $member->ken_photo,
 									'log_stat' => $this->config->item('rejected'),
-									'log_app_user' => $this->session->userdata('use_id'),
-									'log_app_date' => date('Y-m-d H:i:s')
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s')
+								);
+								$res = $this->LogkennelModel->add_log($dataKennelLog);
+								if ($res){
+									$this->db->trans_complete();
+									$this->session->set_flashdata('reject', TRUE);
+									redirect('backend/Members/view_approve');
+								}
+								else{
+									$err = 1;
+								}
+							}
+							else{
+								$err = 2;
+							}
+						}
+						else{
+							$err = 3;
+						}
+					}
+					else{
+						$err = 4;
+					}
+					if ($err){
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to reject member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						redirect('backend/Members/view_approve');
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members/view_approve');
+			}
+		}
+
+		public function delete(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$err = 0;
+					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->MemberModel->get_members($where)->row();
+					$data = array(
+						'mem_user' => $this->session->userdata('use_id'),
+						'mem_date' => date('Y-m-d H:i:s'),
+						'mem_stat' => $this->config->item('rejected'),
+					);
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$res = $this->MemberModel->update_members($data, $where);
+					if ($res){
+						$dataKennel['ken_stat'] = $this->config->item('rejected');
+						$dataKennel['ken_user'] = $this->session->userdata('use_id');
+						$dataKennel['ken_date'] = date('Y-m-d H:i:s');
+						$wheKennel['ken_member_id'] = $this->uri->segment(4);
+						$res2 = $this->KennelModel->update_kennels($dataKennel, $wheKennel);
+						if ($res2){
+							$dataLog = array(
+								'log_member_id' => $this->uri->segment(4),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s'),
+								'log_stat' => $this->config->item('rejected'),
+							);
+							$log = $this->LogmemberModel->add_log($dataLog);
+							if ($log){
+								$dataKennelLog = array(
+									'log_kennel_id' => $member->ken_id,
+									'log_stat' => $this->config->item('rejected'),
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s')
 								);
 								$res = $this->LogkennelModel->add_log($dataKennelLog);
 								if ($res){
@@ -871,6 +836,64 @@ class Members extends CI_Controller {
 						$this->db->trans_rollback();
 						$this->session->set_flashdata('error_message', 'Failed to delete member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect("backend/Members");
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Members');
+			}
+		}
+
+		public function payment(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')){
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$where['mem_id'] = $this->uri->segment(4);
+					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
+					$data['mem_type'] = $this->config->item('pro_member');
+					$data['mem_user'] = $this->session->userdata('use_id');
+					$data['mem_date'] = date('Y-m-d H:i:s');
+					$res = $this->MemberModel->update_members($data, $where);
+					if ($res){
+						$err = 0;
+						$dataLog = array(
+							'log_member_id' => $this->uri->segment(4),
+							'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
+							'log_mem_type' => $this->config->item('pro_member'),
+						);
+						$log = $this->LogmemberModel->add_log($dataLog);
+						if ($log){
+							$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
+							if ($res){
+								$this->db->trans_complete();
+								$member = $this->MemberModel->get_members($where)->row();
+								if ($member->mem_firebase_token){
+									$notif = $this->notificationtype_model->get_by_id(19);
+									firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+								}
+								$this->session->set_flashdata('payment_success', TRUE);
+								redirect('backend/Members');
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$err = 2;
+						}
+					}
+					else{
+						$err = 3;
+					}
+					if ($err){
+						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						redirect('backend/Members');
 					}
 				}
 				else{

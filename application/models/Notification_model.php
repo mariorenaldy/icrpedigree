@@ -29,36 +29,14 @@ class Notification_model extends CI_Model{
 			return false;
 	}
 
-	function update_status($id){
-		$data = array(
-			'is_read' => 1
-		);
-		$this->db->where('notification_id', $id);
-		return $this->db->update('notification', $data);
-	}
-
-	function update_all_status($member){
-		$data = array(
-			'is_read' => 1
-		);
-		$this->db->where('mem_id', $member);
-		return $this->db->update('notification', $data);
-	}
-
 	function get_by_mem_id($member, $offset = 0){
-		$sql = "SELECT n.notification_id, n.transaction_id, DATE_FORMAT(n.created_date, '%d-%m-%Y') AS date, n.notificationtype_id, nt.title, nt.description, n.is_read FROM notification n, notificationtype nt WHERE n.notificationtype_id = nt.notificationtype_id AND n.mem_id = ".$member." ORDER BY n.created_date DESC LIMIT ".$offset.", ".$this->config->item('notif_count');
+		$sql = "SELECT n.notification_id, n.transaction_id, DATE_FORMAT(n.created_date, '%d-%m-%Y') AS date, n.notificationtype_id, nt.title, nt.description FROM notification n, notificationtype nt WHERE n.notificationtype_id = nt.notificationtype_id AND n.mem_id = ".$member." ORDER BY n.created_date DESC LIMIT ".$offset.", ".$this->config->item('notif_count');
 		$query = $this->db->query($sql);
         return $query->result();  		
 	}
 
 	function get_count($member){
-		$sql = "SELECT COUNT(n.is_read) AS count FROM notification n WHERE n.mem_id = ".$member;
-		$query = $this->db->query($sql);
-        return $query->row();  
-	}
-
-	function get_read($member){
-		$sql = "SELECT COUNT(n.is_read) AS count FROM notification n WHERE n.mem_id = ".$member." AND n.is_read = 0";
+		$sql = "SELECT COUNT(notification_id) AS count FROM notification WHERE mem_id = ".$member;
 		$query = $this->db->query($sql);
         return $query->row();  
 	}

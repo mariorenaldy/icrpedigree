@@ -150,6 +150,29 @@
                                     echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
                                 ?>
                             </div>
+                            <hr/>
+                            <div class="input-group mb-3 gap-3">
+                                <label for="imageInputLogo" class="control-label col-md-12 text-center">Foto Kennel</label>
+                                <div class="col-md-12 text-center">
+                                    <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <input type="file" class="upload" name="attachment_logo" id="imageInputLogo"/>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="mem_ktp" class="control-label col-md-2">Format Penamaan Canine</label>
+                                <?php
+                                    foreach($kennelType as $row){
+                                        $pil[$row->ken_type_id] = $row->ken_type_name;
+                                    }
+                                    echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
+                                ?>
+                            </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary btn-lg" type="submit">Register</button>

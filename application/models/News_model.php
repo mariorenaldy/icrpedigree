@@ -15,11 +15,11 @@ class News_model extends CI_Model{
 		$id = $this->get_max_id() + 1;
 		if ($id){
 			$data['news_id'] = $id;
-			$this->db->insert('news', $data);
-			return $this->db->insert_id();
 		}
 		else
-			return false;
+			$data['news_id'] = 1;
+		$this->db->insert('news', $data);
+		return $data['news_id'];
 	}
 
 	public function update($data, $where){

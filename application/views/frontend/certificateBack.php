@@ -7,7 +7,7 @@
   <link href="<?= base_url(); ?>assets/css/backend-styles.css" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
-<?php $this->load->view('frontend/layout/header_member'); ?> 
+<?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
 <h3 class="text-center text-warning">Pedigree</h3> 
 <div id="wrapper"> 

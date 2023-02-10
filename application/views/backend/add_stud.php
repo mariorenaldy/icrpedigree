@@ -23,9 +23,9 @@
                             ?>
                         </div>
                         <div class="input-group my-3">
-                            <label class="control-label col-md-2">Member Name</label>
+                            <label class="control-label col-md-2">Member Name/Kennel</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Member Name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Member Name/Kennel" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="buttonMemberSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>

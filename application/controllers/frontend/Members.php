@@ -5,7 +5,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KenneltypeModel', 'notification_model', 'LogmemberModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'LogmemberModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
@@ -210,6 +210,8 @@ class Members extends CI_Controller {
 							'mem_password' => sha1($this->input->post('password')),
 							'mem_stat' => $this->config->item('saved'),
 							'mem_type' => $this->config->item('pro_member'),
+							'mem_user' => $this->session->userdata('use_id'),
+							'mem_date' => date('Y-m-d H:i:s'),
 						);
 						
 						if ($this->input->post('same'))
@@ -225,6 +227,8 @@ class Members extends CI_Controller {
 							'ken_photo' => $logo,
 							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('saved'),
+							'ken_user' => $this->session->userdata('use_id'),
+							'ken_date' => date('Y-m-d H:i:s'),
 						);
 					}
 					else{
@@ -237,6 +241,8 @@ class Members extends CI_Controller {
 							'mem_password' => sha1($this->input->post('hp')),
 							'mem_stat' => $this->config->item('accepted'),
 							'mem_type' => $this->config->item('free_member'),
+							'mem_user' => 0,
+							'mem_date' => date('Y-m-d H:i:s'),
 						);
 
 						$ken_id = $this->KennelModel->record_count() + 1;
@@ -247,6 +253,8 @@ class Members extends CI_Controller {
 							'ken_photo' => '-',
 							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('accepted'),
+							'ken_user' => 0,
+							'ken_date' => date('Y-m-d H:i:s'),
 						);
 					}
 
@@ -256,19 +264,25 @@ class Members extends CI_Controller {
 					if ($id){
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
-							$this->db->trans_complete();
-							if ($this->input->post('mem_type'))
-								$this->session->set_flashdata('pro', TRUE);
-							else
-								$this->session->set_flashdata('free', TRUE);
-							redirect("frontend/Members");
+							$res = $this->notification_model->add(17, $mem_id, $mem_id);
+							if ($res){
+								$this->db->trans_complete();
+								if ($this->input->post('mem_type'))
+									$this->session->set_flashdata('pro', TRUE);
+								else
+									$this->session->set_flashdata('free', TRUE);
+								redirect("frontend/Members");
+							}
+							else{
+								$err = 1;
+							}
 						}
 						else{
-							$err = 1;
+							$err = 2;
 						}
 					}
 					else {
-						$err = 2;
+						$err = 3;
 					}
 					if ($err){
 						$this->db->trans_rollback();
@@ -483,59 +497,64 @@ class Members extends CI_Controller {
 			}
 		}
 
-	public function change_pp()
-	{
-		$err = 0;
-		$where['mem_id'] = $this->session->userdata('mem_id');
-		$member = $this->MemberModel->get_members($where)->row_array();
-		$data['member'] = $this->MemberModel->get_members($where)->row();
-		if (!$member) {
-			$err = 1;
-			$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
-		} else {
-			$pp = '-';
-			if (isset($_POST['uploaded_image'])) {
-				$uploadedImg = $_POST['uploaded_image'];
-				$image_array_1 = explode(";", $uploadedImg);
-				$image_array_2 = explode(",", $image_array_1[1]);
-				$uploadedImg = base64_decode($image_array_2[1]);
 
-				$maxsize = 1048576;
-				if((strlen($uploadedImg) > $maxsize)) {
-					$err++;
-					$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+	public function change_pp(){
+		if ($this->session->userdata('mem_id')){
+			$err = 0;
+			$where['mem_id'] = $this->session->userdata('mem_id');
+			$data['member'] = $this->MemberModel->get_members($where)->row();
+			if (!$data['member']) {
+				$err++;
+				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+			} else {
+				$pp = '-';
+				if (isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
+					if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
+						if (($_FILES['attachment_pp']['size'] > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{	
+							$this->upload->initialize($this->config->item('upload_member'));
+							if ($this->upload->do_upload('attachment_pp')) {
+								$uploadData = $this->upload->data();
+								$pp = $uploadData['file_name'];
+							} else {
+								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+							}
+						}
+					}
 				}
 				else{
-					$image_name = $this->config->item('path_member') . 'member_'.time() . '.png';
-					file_put_contents($image_name, $uploadedImg);
-					$pp = "member".trim($image_name, $this->config->item('path_member'));
+					$err++;
+					$this->session->set_flashdata('error_message', 'File kosong atau ukurannya terlalu besar (> 1 MB).');
+				}	
+
+				if (!$err && $pp == "-") {
+					$err++;
+					$this->session->set_flashdata('error_message', 'PP wajib diisi');
 				}
-			}
-			else{
-				$err++;
-				$this->session->set_flashdata('error_message', 'File kosong atau ukurannya terlalu besar (> 1 MB).');
-			}
 
-			if (!$err && $pp == "-") {
-				$err++;
-			}
-
-			if(!$err){
-				$record['mem_pp'] = $pp;
-				$res = $this->MemberModel->update_members($record, $where);
-				if ($res) {
-					$this->session->set_flashdata('change_pp', TRUE);
-					$member = $this->MemberModel->get_members($where)->row();
-					$this->session->unset_userdata('mem_pp');
-					if ($member->mem_pp && $member->mem_pp != '-')
-						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
-					else
-						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
-				} else {
-					$err = 2;
-					$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+				if (!$err){
+					$record['mem_pp'] = $pp;
+					$res = $this->MemberModel->update_members($record, $where);
+					if ($res) {
+						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$pp);
+						$this->session->set_flashdata('change_pp', TRUE);
+						redirect("frontend/Members/profile", $data);
+					} else {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+					}
+				}
+				else {
+					$this->load->view("frontend/profile", $data);
 				}
 			}
 		}
+		else{
+			redirect("frontend/Members");
+		}
 	}
+
 }

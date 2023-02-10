@@ -79,6 +79,7 @@ class Studs extends CI_Controller {
 		public function search_member(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
+				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
@@ -130,6 +131,7 @@ class Studs extends CI_Controller {
 		public function search_sire(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
+				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
@@ -176,6 +178,7 @@ class Studs extends CI_Controller {
 		public function search_dam(){
 			if ($this->session->userdata('use_username')){
 				$likeMember['mem_name'] = $this->input->post('mem_name');
+				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
@@ -257,6 +260,7 @@ class Studs extends CI_Controller {
 				$this->form_validation->set_rules('stu_stud_date', 'Stud date ', 'trim|required');
 				
 				$likeMember['mem_name'] = $this->input->post('mem_name');
+				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
@@ -405,26 +409,31 @@ class Studs extends CI_Controller {
 								'stu_app_date' => date('Y-m-d H:i:s'),
 								'stu_stat' => $this->config->item('accepted'),
 								'stu_partner_id' => $can->can_member_id,
-							);
-
-							$dataLog = array(
-								'log_photo' => $photo,
-								'log_sire_id' => $this->input->post('stu_sire_id'),
-								'log_dam_id' => $this->input->post('stu_dam_id'),
-								'log_sire_photo' => $sire,
-								'log_dam_photo' => $dam,
-								'log_stud_date' => $date,
-								'log_member_id' => $this->input->post('can_member_id'),
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('accepted'),
-								'log_partner_id' => $can->can_member_id,
+								'stu_user' => $this->session->userdata('use_id'),
+								'stu_date' => date('Y-m-d H:i:s'),
+								'stu_reg_date' => date('Y-m-d H:i:s'),
 							);
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
 							$stud = $this->studModel->add_studs($data);
 							if ($stud){
+								$dataLog = array(
+									'log_stu_id' => $stud,
+									'log_photo' => $photo,
+									'log_sire_id' => $this->input->post('stu_sire_id'),
+									'log_dam_id' => $this->input->post('stu_dam_id'),
+									'log_sire_photo' => $sire,
+									'log_dam_photo' => $dam,
+									'log_stud_date' => $date,
+									'log_member_id' => $this->input->post('can_member_id'),
+									'log_app_user' => $this->session->userdata('use_id'),
+									'log_app_date' => date('Y-m-d H:i:s'),
+									'log_stat' => $this->config->item('accepted'),
+									'log_partner_id' => $can->can_member_id,
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s'),
+								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
 									$result = $this->notification_model->add(1, $stud, $this->input->post('can_member_id'));
@@ -860,9 +869,8 @@ class Studs extends CI_Controller {
 								'stu_sire_id' => $this->input->post('stu_sire_id'),
 								'stu_dam_id' => $this->input->post('stu_dam_id'),
 								'stu_stud_date' => $date,
-								'stu_app_user' => $this->session->userdata('use_id'),
-								'stu_app_date' => date('Y-m-d H:i:s'),
-								'stu_stat' => $this->config->item('accepted'),
+								'stu_user' => $this->session->userdata('use_id'),
+								'stu_date' => date('Y-m-d H:i:s'),
 								'stu_partner_id' => $can->can_member_id,
 							);
 							if ($photo)
@@ -872,24 +880,22 @@ class Studs extends CI_Controller {
 							if ($dam)
 								$data['stu_dam_photo'] = $dam;
 
-							$dataLog = array(
-								'log_photo' => $photo,
-								'log_sire_id' => $this->input->post('stu_sire_id'),
-								'log_dam_id' => $this->input->post('stu_dam_id'),
-								'log_sire_photo' => $sire,
-								'log_dam_photo' => $dam,
-								'log_stud_date' => $date,
-								//'log_member_id' => $this->input->post('can_member_id'),
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('accepted'),
-								'log_partner_id' => $can->can_member_id,
-							);
-
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
 							$stud = $this->studModel->update_studs($data, $where);
 							if ($stud){
+								$dataLog = array(
+									'log_stu_id' => $stud,
+									'log_photo' => $photo,
+									'log_sire_id' => $this->input->post('stu_sire_id'),
+									'log_dam_id' => $this->input->post('stu_dam_id'),
+									'log_sire_photo' => $sire,
+									'log_dam_photo' => $dam,
+									'log_stud_date' => $date,
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s'),
+									'log_partner_id' => $can->can_member_id,
+								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
 									$result = $this->notification_model->add(18, $this->input->post('stu_id'), $can->can_member_id);
@@ -944,22 +950,30 @@ class Studs extends CI_Controller {
 					$this->db->trans_start();
 					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
+					$data['stu_user'] = $this->session->userdata('use_id');
+					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('accepted');
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;
+						$piece = explode("-", $stud->stu_stud_date);
+						$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
 						$dataLog = array(
+							'log_stu_id' => $this->uri->segment(4),
 							'log_photo' => $stud->stu_photo,
 							'log_sire_id' => $stud->stu_sire_id,
 							'log_dam_id' => $stud->stu_dam_id,
 							'log_sire_photo' => $stud->stu_sire_photo,
 							'log_dam_photo' => $stud->stu_dam_photo,
-							'log_stud_date' => $stud->stu_date,
+							'log_stud_date' => $date,
 							'log_member_id' => $stud->stu_member_id,
 							'log_app_user' => $this->session->userdata('use_id'),
 							'log_app_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('accepted'),
 							'log_partner_id' => $stud->stu_partner_id,
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
@@ -980,7 +994,7 @@ class Studs extends CI_Controller {
 									$c = $this->caninesModel->get_canines($wheSire)->row();
 
 									$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
-									$desc .= ' pada tanggal '.$stud->stu_date;
+									$desc .= ' pada tanggal '.$stud->stu_stud_date;
 									$desc .= ' antara '.$c->can_a_s;
 									$desc .= ' dan '.$can->can_a_s;
 
@@ -1045,13 +1059,14 @@ class Studs extends CI_Controller {
 					$stud = $this->studModel->get_studs($where)->row();
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$data['stu_app_user'] = $this->session->userdata('use_id');
-					$data['stu_app_date'] = date('Y-m-d H:i:s');
+					$data['stu_user'] = $this->session->userdata('use_id');
+					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('rejected');
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;
 						$dataLog = array(
+							'log_stu_id' => $this->uri->segment(4),
 							'log_photo' => $stud->stu_photo,
 							'log_sire_id' => $stud->stu_sire_id,
 							'log_dam_id' => $stud->stu_dam_id,
@@ -1059,8 +1074,8 @@ class Studs extends CI_Controller {
 							'log_dam_photo' => $stud->stu_dam_photo,
 							'log_stud_date' => $stud->stu_date,
 							'log_member_id' => $stud->stu_member_id,
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('rejected'),
 							'log_partner_id' => $stud->stu_partner_id,
 						);
@@ -1108,18 +1123,18 @@ class Studs extends CI_Controller {
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')) {
 					$where['stu_id'] = $this->uri->segment(4);
-					$stud = $this->studModel->get_studs($where)->row();
+					$data['stu_user'] = $this->session->userdata('use_id');
+					$data['stu_date'] = date('Y-m-d H:i:s');
+					$data['stu_stat'] = $this->config->item('rejected');
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$data['stu_app_user'] = $this->session->userdata('use_id');
-					$data['stu_app_date'] = date('Y-m-d H:i:s');
-					$data['stu_stat'] = $this->config->item('rejected');
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;
 						$dataLog = array(
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_stu_id' => $this->uri->segment(4),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('rejected'),
 						);
 						$log = $this->logstudModel->add_log($dataLog);

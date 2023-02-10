@@ -12,7 +12,7 @@
     <span class="close">&times;</span>
     <img class="modal-content" id="modalImg">
 </div>
-<?php $this->load->view('frontend/layout/header_member'); ?> 
+<?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <div class="row">            

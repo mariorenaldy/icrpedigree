@@ -30,26 +30,30 @@
                     ?>
                 </div>
                 <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Studs/search_approve'?>" method="post">
+                    <form id="formStud" action="<?= base_url().'backend/Studs/search_approve'?>" method="post">
                         <div class="input-group">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <input type="text" class="form-control" placeholder="Stud date" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row mb-1">
+                    <div class="col-md-2"></div>
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>Sire</b></div>
                     <div class="col-md-2"><b>Dam</b></div>
                     <div class="col-md-2"><b>Date</b></div>
-                    <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($stud AS $s){ ?>
                     <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
+                        </div>
                         <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
                         </div>
@@ -63,10 +67,6 @@
                         </div>
                         <div class="col-md-2">
                             <?= $s->stu_stud_date; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -99,6 +99,11 @@
 			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
 			window.open(wa, "_blank");
 	    <?php } ?>
+        $(document).ready(function () {
+            $('#keywords').on("change", function(){
+                $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search_approve").submit();
+            });
+        });
     </script>
 </body>
 </html>

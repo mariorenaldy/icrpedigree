@@ -7,7 +7,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
-<?php $this->load->view('frontend/layout/header_member'); ?> 
+<?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <div class="row">

@@ -35,7 +35,7 @@
                                 <input type="text" class="form-control" placeholder="Registration number/Chip number/Name/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
@@ -44,6 +44,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th></th>
+                                <th></th>
                                 <th>Photo</th>
                                 <th>Current Reg. Number</th>
                                 <th>ICR Number</th>
@@ -56,12 +58,13 @@
                                 <th>Kennel</th>
                                 <th>Owner</th>
                                 <th>Reg. Date</th>
-                                <th colspan="2"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($canine AS $c){ ?>
                                 <tr>
+                                    <td><button type="button" class="btn btn-success" onclick='approve(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
@@ -80,8 +83,6 @@
                                     <td><?= $c->ken_name; ?></td>
                                     <td><?= $c->mem_name; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
-                                    <td><button type="button" class="btn btn-success" onclick='approve(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
-                                    <td><button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

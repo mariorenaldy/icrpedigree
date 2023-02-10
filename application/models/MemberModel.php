@@ -9,16 +9,6 @@ class MemberModel extends CI_Model {
         return $this->db->count_all("members");
     }
 
-    // public function get_all_members($where) {
-    //     $this->db->select('*');
-    //     if ($where != null) {
-    //         $this->db->where($where);
-    //     }
-    //     $this->db->from('members');
-    //     $this->db->order_by('mem_id', 'desc');
-    //     return $this->db->get();
-    // }
-
     public function get_members($where, $sort = 'mem_id'){
         $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2');
         if ($where != null) {
@@ -33,7 +23,7 @@ class MemberModel extends CI_Model {
     }
 
     public function search_members($like, $where, $sort = 'mem_id'){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
@@ -48,15 +38,6 @@ class MemberModel extends CI_Model {
         $this->db->order_by($sort, 'desc');
         return $this->db->get();
     }
-
-    // public function daftar_users($username){
-    //     $this->db->select('*');
-    //     if ($username != null) {
-    //         $this->db->where('mem_username', $username);
-    //     }
-    //     $this->db->from('members');
-    //     return $this->db->get();
-    // }
 
     public function add_members($data){
         return $this->db->insert('members', $data);

@@ -593,6 +593,8 @@ $config['upload_birth'] = Array(
     'file_name' => 'birth_'.time(),
 );
 
+$config['file_size'] = 1048576;
+
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
 $config['stud_count'] = 5;

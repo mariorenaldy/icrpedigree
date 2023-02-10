@@ -75,7 +75,7 @@ class Studs extends CI_Controller {
 	}
 
 	public function add(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
 			$whereSire['can_gender'] = 'MALE';
 			$whereSire['can_stat'] = $this->config->item('accepted');
@@ -116,7 +116,7 @@ class Studs extends CI_Controller {
 	}
 
 	public function search_dam(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
 			$whereSire['can_gender'] = 'MALE';
 			$whereSire['can_stat'] = $this->config->item('accepted');
@@ -187,7 +187,7 @@ class Studs extends CI_Controller {
 	}
 
 	public function validate_add(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('stu_sire_id', 'Sire id ', 'trim|required');

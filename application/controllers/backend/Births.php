@@ -5,7 +5,7 @@ class Births extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model'));
+			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url', 'notif'));
@@ -16,6 +16,13 @@ class Births extends CI_Controller {
 		public function index(){
 			$where['bir_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
+
+			$data['stambum'] = array();
+			foreach ($data['birth'] as $r){
+				$whereStambum = [];
+				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+			}
 			$this->load->view('backend/view_births', $data);
 		}
 
@@ -30,6 +37,13 @@ class Births extends CI_Controller {
 			}
 			$where['bir_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
+
+			$data['stambum'] = array();
+			foreach ($data['birth'] as $r){
+				$whereStambum = [];
+				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+			}
 			$this->load->view('backend/view_births', $data);
 		}
 
@@ -106,7 +120,7 @@ class Births extends CI_Controller {
 							$piece = explode("-", $this->input->post('bir_date_of_birth'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			
-							$data = array(
+							$dataBirth = array(
 								'bir_stu_id' => $this->input->post('bir_stu_id'),
 								'bir_dam_photo' => $damPhoto,
 								'bir_male' => $this->input->post('bir_male'),
@@ -114,24 +128,27 @@ class Births extends CI_Controller {
 								'bir_date_of_birth' => $date,
 								'bir_app_user' => $this->session->userdata('use_id'),
 								'bir_app_date' => date('Y-m-d H:i:s'),
+								'bir_user' => $this->session->userdata('use_id'),
+								'bir_date' => date('Y-m-d H:i:s'),
 								'bir_stat' => $this->config->item('accepted'),
-							);
-
-							$dataLog = array(
-								'log_stu_id' => $this->input->post('bir_stu_id'),
-								'log_dam_photo' => $damPhoto,
-								'log_male' => $this->input->post('bir_male'),
-								'log_female' => $this->input->post('bir_female'),
-								'log_date_of_birth' => $date,
-								'log_app_user' => $this->session->userdata('use_id'),
-								'log_app_date' => date('Y-m-d H:i:s'),
-								'log_stat' => $this->config->item('accepted'),
 							);
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
-							$birth = $this->birthModel->add_births($data);
+							$birth = $this->birthModel->add_births($dataBirth);
 							if ($birth){
+								$dataLog = array(
+									'log_bir_id' => $birth,
+									'log_dam_photo' => $damPhoto,
+									'log_male' => $this->input->post('bir_male'),
+									'log_female' => $this->input->post('bir_female'),
+									'log_date_of_birth' => $date,
+									'log_app_user' => $this->session->userdata('use_id'),
+									'log_app_date' => date('Y-m-d H:i:s'),
+									'log_stat' => $this->config->item('accepted'),
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s'),
+								);
 								$log = $this->logbirthModel->add_log($dataLog);
 								if ($log){
 									$result = $this->notification_model->add(21, $birth, $stud->stu_member_id);
@@ -194,7 +211,7 @@ class Births extends CI_Controller {
 								$err = 5;
 							}
 							if ($err){
-								$this->session->set_flashdata('error_message', 'Failed to save birth. Err code: '+$err);
+								$this->session->set_flashdata('error_message', 'Failed to save birth. Err code: '.$err);
 								$this->load->view('backend/add_birth', $data);
 							}	
 						}
@@ -264,8 +281,8 @@ class Births extends CI_Controller {
 							'bir_male' => $this->input->post('bir_male'),
 							'bir_female' => $this->input->post('bir_female'),
 							'bir_date_of_birth' => $date,
-							'bir_app_user' => $this->session->userdata('use_id'),
-							'bir_app_date' => date('Y-m-d H:i:s'),
+							'bir_user' => $this->session->userdata('use_id'),
+							'bir_date' => date('Y-m-d H:i:s'),
 						);
 						
 						if ($damPhoto != '-')
@@ -276,8 +293,8 @@ class Births extends CI_Controller {
 							'log_female' => $this->input->post('bir_female'),
 							'log_dam_photo' => $damPhoto,
 							'log_date_of_birth' => $date,
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 						);
 
 						$this->db->trans_strict(FALSE);
@@ -321,6 +338,8 @@ class Births extends CI_Controller {
 					$this->db->trans_start();
 					$data['bir_app_user'] = $this->session->userdata('use_id');
 					$data['bir_app_date'] = date('Y-m-d H:i:s');
+					$data['bir_user'] = $this->session->userdata('use_id');
+					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('accepted');
 					$res = $this->birthModel->update_births($data, $where);
 					if ($res){
@@ -328,13 +347,15 @@ class Births extends CI_Controller {
 						$piece = explode("-", $birth->bir_date_of_birth);
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						$dataLog = array(
-							'log_stu_id' => $birth->bir_stu_id,
+							'log_bir_id' => $this->uri->segment(4),
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,
 							'log_date_of_birth' => $date,
 							'log_app_user' => $this->session->userdata('use_id'),
 							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('accepted'),
 						);
 						$log = $this->logbirthModel->add_log($dataLog);
@@ -422,8 +443,8 @@ class Births extends CI_Controller {
 					$birth = $this->birthModel->get_births($where)->row();
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$data['bir_app_user'] = $this->session->userdata('use_id');
-					$data['bir_app_date'] = date('Y-m-d H:i:s');
+					$data['bir_user'] = $this->session->userdata('use_id');
+					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
 					$res = $this->birthModel->update_births($data, $where);
 					if ($res){
@@ -431,13 +452,13 @@ class Births extends CI_Controller {
 						$piece = explode("-", $birth->bir_date_of_birth);
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						$dataLog = array(
-							'log_stu_id' => $birth->bir_stu_id,
+							'log_bir_id' => $this->uri->segment(4),
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,
 							'log_date_of_birth' => $date,
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('rejected'),
 						);
 						$log = $this->logbirthModel->add_log($dataLog);
@@ -479,6 +500,52 @@ class Births extends CI_Controller {
 			}
 			else{
 				redirect('backend/Births/view_approve');
+			}
+		}
+
+		public function delete(){
+			if ($this->uri->segment(4)){
+				if ($this->session->userdata('use_username')) {
+					$where['bir_id'] = $this->uri->segment(4);
+					$data['bir_user'] = $this->session->userdata('use_id');
+					$data['bir_date'] = date('Y-m-d H:i:s');
+					$data['bir_stat'] = $this->config->item('rejected');
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$res = $this->birthModel->update_births($data, $where);
+					if ($res){
+						$err = 0;
+						$dataLog = array(
+							'log_bir_id' => $this->uri->segment(4),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('rejected'),
+						);
+						$log = $this->logbirthModel->add_log($dataLog);
+						if ($log){
+							$this->db->trans_complete();
+							$this->session->set_flashdata('delete', TRUE);
+							redirect('backend/Births');
+						}
+						else{
+							$err = 1;
+						}
+					}
+					else{
+						$err = 2;
+					}
+					if ($err){
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error', 'Failed to delete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						redirect('backend/Births');
+					}
+				}
+				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Births');
 			}
 		}
 }

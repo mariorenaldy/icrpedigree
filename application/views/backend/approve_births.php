@@ -30,26 +30,30 @@
                     ?>
                 </div>
                 <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Births/search_approve'?>" method="post">
+                    <form id="formBirth" action="<?= base_url().'backend/Births/search_approve'?>" method="post">
                         <div class="input-group">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <input type="text" class="form-control" placeholder="Date of Birth" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Birth"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row mb-1">
+                    <div class="col-md-2"></div>
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>Date of Birth</b></div>
                     <div class="col-md-1" align="center"><b>Male</b></div>
                     <div class="col-md-1" align="center"><b>Female</b></div>
-                    <div class="col-md-2"></div>
                 </div>
                 <?php foreach ($birth AS $b){ ?>
                     <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve Birth"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject Birth"><i class="fa fa-close"></i></button>
+                        </div>
                         <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                         </div>
@@ -61,10 +65,6 @@
                         </div>
                         <div class="col-md-1" align="right">
                             <?= $b->bir_female; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -92,6 +92,11 @@
                 window.location = "<?= base_url(); ?>backend/Births/reject/"+id;
             }
         }
+        $(document).ready(function () {
+            $('#keywords').on("change", function(){
+                $('#formBirth').attr('action', "<?= base_url(); ?>backend/Births/search_approve").submit();
+            });
+        });
     </script>
 </body>
 </html>

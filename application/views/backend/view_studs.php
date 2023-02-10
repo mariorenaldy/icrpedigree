@@ -33,34 +33,41 @@
                     ?>
                 </div>
                 <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Studs/search'?>" method="post">
+                    <form id="formStud" action="<?= base_url().'backend/Studs/search'?>" method="post">
                         <div class="input-group">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <input type="text" class="form-control" placeholder="Stud date" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Stud"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">
+                    <div class="col-md-2"></div>
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>Sire</b></div>
                     <div class="col-md-2"><b>Dam</b></div>
                     <div class="col-md-2"><b>Date</b></div>
                     <div class="col-md-2"><b>Status</b></div>
-                    <div class="col-md-2"></div>
                 </div>
                 <?php
                     $i = 0; 
                     foreach ($stud AS $s){ ?>
                     <div class="row">
+                        <div class="col-md-2">
+                            <?php if (!$birth[$i]){ ?>
+                                <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button><br/>
+                                <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
+                            <?php } ?>
+                        </div>
                         <div class="col-md-2 mb-1 text-center">
                             <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
                         </div>
@@ -76,14 +83,7 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $s->stat_name; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?php if (!$birth[$i]){ ?>
-                                <button type="button" class="btn btn-success" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-close"></i></button>
-                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
-                            <?php } ?>
+                            <?= $s->stat_name.'<br/>'.$s->use_name.' (<span class="text-nowrap">'.$s->stu_app_date.'</span>)'; ?>
                         </div>
                     </div>
                 <?php
@@ -121,6 +121,11 @@
 			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
 			window.open(wa, "_blank");
 	    <?php } ?>
+        $(document).ready(function () {
+            $('#keywords').on("change", function(){
+                $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search").submit();
+            });
+        });
     </script>
 </body>
 </html>

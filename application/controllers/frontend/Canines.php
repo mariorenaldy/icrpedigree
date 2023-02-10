@@ -63,7 +63,7 @@ class Canines extends CI_Controller {
     }
 
 	public function add(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$data['trah'] = $this->trahModel->get_trah(null)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
@@ -76,7 +76,7 @@ class Canines extends CI_Controller {
 	}
 
 	public function validate_add(){ // butuh cek nama canine, no microchip, no icr
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
@@ -216,7 +216,7 @@ class Canines extends CI_Controller {
     }
 
     public function validate_canine(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$like['can_a_s'] = $this->input->post('can_a_s');
 			$where['can_member_id'] = 0;
 			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
@@ -231,7 +231,7 @@ class Canines extends CI_Controller {
     }
 
 	public function validate_claim_canine(){
-		if ($this->session->userdata('username')){
+		if ($this->session->userdata('mem_id')){
 			$like['can_a_s'] = $this->input->post('can_a_s');
 			$where['can_member_id'] = 0;
 			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();

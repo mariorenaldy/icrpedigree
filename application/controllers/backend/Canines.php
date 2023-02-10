@@ -15,7 +15,7 @@ class Canines extends CI_Controller {
 
     public function index(){
         $where['can_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->get_canines($where, 'can_a_s', 'asc')->result();
+        $data['canine'] = $this->caninesModel->get_canines($where, 'can_id desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -25,7 +25,7 @@ class Canines extends CI_Controller {
         $like['can_chip_number'] = $this->input->post('keywords');
         $like['ken_name'] = $this->input->post('keywords');
         $where['can_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->search_canines($like, $where, 'can_a_s', 'asc')->result();
+        $data['canine'] = $this->caninesModel->search_canines($like, $where, 'can_id desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -198,6 +198,8 @@ class Canines extends CI_Controller {
                 'can_chip_number' => $this->input->post('can_chip_number'),
                 'can_icr_number' => $this->input->post('can_icr_number'),
                 'can_note' => $this->input->post('can_note'),
+                'can_user' => $this->session->userdata('use_id'),
+                'can_date' => date('Y-m-d H:i:s'),
               );
 
               // nama diubah berdasarkan kennel
@@ -238,6 +240,8 @@ class Canines extends CI_Controller {
                 'log_icr_number' => $this->input->post('can_icr_number'),
                 'log_member_id' => $this->input->post('can_member_id'),
                 'log_note' => $this->input->post('can_note'),
+                'log_user' => $this->session->userdata('use_id'),
+                'log_date' => date('Y-m-d H:i:s'),
               );
 
               $dataPed = array(
@@ -250,9 +254,8 @@ class Canines extends CI_Controller {
                 'log_sire_id' => $this->config->item('sire_id'),
                 'log_dam_id' => $this->config->item('dam_id'),
                 'log_canine_id' => $id,
-                'log_stat' => $this->config->item('accepted'),
-                'log_app_user' => $this->session->userdata('use_id'),
-                'log_app_date' => date('Y-m-d H:i:s'),
+                'log_user' => $this->session->userdata('use_id'),
+                'log_date' => date('Y-m-d H:i:s'),
               );
 
               if (!$err) {
@@ -468,8 +471,8 @@ class Canines extends CI_Controller {
             'can_color' => $this->input->post('can_color'),
             'can_kennel_id' => $this->input->post('can_kennel_id'),
             'can_stat' => $this->config->item('accepted'),
-            'can_app_user' => $this->session->userdata('use_id'),
-            'can_app_date' => date('Y-m-d H:i:s'),
+            'can_user' => $this->session->userdata('use_id'),
+            'can_date' => date('Y-m-d H:i:s'),
             'can_chip_number' => $this->input->post('can_chip_number'),
             'can_icr_number' => $this->input->post('can_icr_number'),
             'can_a_s' => strtoupper($this->input->post('can_a_s')),
@@ -490,8 +493,8 @@ class Canines extends CI_Controller {
             'log_kennel_id' => $this->input->post('can_kennel_id'),
             'log_photo' => $photo,
             'log_stat' => $this->config->item('accepted'),
-            'log_app_user' => $this->session->userdata('use_id'),
-            'log_app_date' => date('Y-m-d H:i:s'),
+            'log_user' => $this->session->userdata('use_id'),
+            'log_date' => date('Y-m-d H:i:s'),
             'log_chip_number' => $this->input->post('can_chip_number'),
             'log_icr_number' => $this->input->post('can_icr_number'),
             'log_member_id' => $this->input->post('can_member_id'),
@@ -630,9 +633,8 @@ class Canines extends CI_Controller {
           'log_sire_id' => $this->input->post('ped_sire_id'),
           'log_dam_id' => $this->input->post('ped_dam_id'),
           'log_canine_id' => $this->input->post('ped_canine_id'),
-          'log_stat' => $this->config->item('accepted'),
-          'log_app_user' => $this->session->userdata('use_id'),
-          'log_app_date' => date('Y-m-d H:i:s'),
+          'log_user' => $this->session->userdata('use_id'),
+          'log_date' => date('Y-m-d H:i:s'),
         );
 
         $this->db->trans_strict(FALSE);
@@ -665,71 +667,6 @@ class Canines extends CI_Controller {
     }
   }
 
-  public function delete(){
-    if ($this->uri->segment(4)){
-      if ($this->session->userdata('use_username')){
-        $err = 0;
-        $where['can_id'] = $this->uri->segment(4);
-        $canine = $this->caninesModel->get_canines($where)->row();
-
-        $piece = explode("-", $canine->can_date_of_birth);
-        $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
-
-        $data['can_stat'] = $this->config->item('rejected');
-        $data['can_app_user'] = $this->session->userdata('use_id');
-        $data['can_app_date'] = date('Y-m-d H:i:s');
-
-        $dataLog = array(
-          'log_canine_id' => $canine->can_id,
-          'log_reg_number' => $canine->can_reg_number,
-          'log_a_s' => $canine->can_a_s,
-          'log_breed' => $canine->can_breed,
-          'log_gender' => $canine->can_gender,
-          'log_date_of_birth' => $dob,
-          'log_color' => $canine->can_color,
-          'log_kennel_id' => $canine->can_kennel_id,
-          'log_photo' => $canine->can_photo,
-          'log_stat' => $this->config->item('rejected'),
-          'log_app_user' => $this->session->userdata('use_id'),
-          'log_app_date' => date('Y-m-d H:i:s'),
-          'log_chip_number' => $canine->can_chip_number,
-          'log_icr_number' => $canine->can_icr_number,
-          'log_member_id' => $canine->can_member_id,
-          'log_note' => $canine->can_note,
-        );
-
-        $this->db->trans_strict(FALSE);
-        $this->db->trans_start();
-        $res = $this->caninesModel->update_canines($data, $where);
-        if ($res){
-          $log = $this->logcanineModel->add_log($dataLog);
-          if ($log){
-            $this->db->trans_complete();
-            $this->session->set_flashdata('delete_success', TRUE);
-            redirect("backend/Canines");
-          }
-          else{
-            $err = 1;
-          }
-        }
-        else{
-          $err = 2;
-        }
-        if ($err){
-          $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to delete canine id = '.$this->uri->segment(4).'. Error code: '.$err);
-          redirect('backend/Canines');
-        }
-      }
-      else{
-        redirect("backend/Users/login");
-      }
-    }
-    else{
-      redirect("backend/Canines");
-    }
-  }
-
   public function approve_canine(){
     if ($this->uri->segment(4)){
       if ($this->session->userdata('use_username')){
@@ -740,6 +677,8 @@ class Canines extends CI_Controller {
         $this->db->trans_start();
         $data['can_app_user'] = $this->session->userdata('use_id');
         $data['can_app_date'] = date('Y-m-d H:i:s');
+        $data['can_user'] = $this->session->userdata('use_id');
+        $data['can_date'] = date('Y-m-d H:i:s');
         $data['can_stat'] = $this->config->item('accepted');
         $res = $this->caninesModel->update_canines($data, $where);
         if ($res){
@@ -763,6 +702,8 @@ class Canines extends CI_Controller {
             'log_icr_number' => $can->can_icr_number,
             'log_member_id' => $can->can_member_id,
             'log_note' => $can->can_note,
+            'log_user' => $this->session->userdata('use_id'),
+            'log_date' => date('Y-m-d H:i:s'),
           );
           $log = $this->logcanineModel->add_log($dataLog);
           if ($log){
@@ -770,9 +711,8 @@ class Canines extends CI_Controller {
               'log_sire_id' => $this->config->item('sire_id'),
               'log_dam_id' => $this->config->item('dam_id'),
               'log_canine_id' => $this->uri->segment(4),
-              'log_stat' => $this->config->item('accepted'),
-              'log_app_user' => $this->session->userdata('use_id'),
-              'log_app_date' => date('Y-m-d H:i:s'),
+              'log_user' => $this->session->userdata('use_id'),
+              'log_date' => date('Y-m-d H:i:s'),
             );
             $res = $this->logpedigreeModel->add_log($dataLogPed);
             if ($res){
@@ -825,8 +765,8 @@ class Canines extends CI_Controller {
         $can = $this->caninesModel->get_canines($where)->row();
         $this->db->trans_strict(FALSE);
         $this->db->trans_start();
-        $data['can_app_user'] = $this->session->userdata('use_id');
-        $data['can_app_date'] = date('Y-m-d H:i:s');
+        $data['can_user'] = $this->session->userdata('use_id');
+        $data['can_date'] = date('Y-m-d H:i:s');
         $data['can_stat'] = $this->config->item('rejected');
         $res = $this->caninesModel->update_canines($data, $where);
         if ($res){
@@ -846,8 +786,8 @@ class Canines extends CI_Controller {
               'log_kennel_id' => $can->can_kennel_id,
               'log_photo' => $can->can_photo,
               'log_stat' => $this->config->item('rejected'),
-              'log_app_user' => $this->session->userdata('use_id'),
-              'log_app_date' => date('Y-m-d H:i:s'),
+              'log_user' => $this->session->userdata('use_id'),
+              'log_date' => date('Y-m-d H:i:s'),
               'log_chip_number' => $can->can_chip_number,
               'log_icr_number' => $can->can_icr_number,
               'log_member_id' => $can->can_member_id,
@@ -888,6 +828,54 @@ class Canines extends CI_Controller {
     }
     else{
       redirect("backend/Canines/view_approve");
+    }
+  }
+
+  public function delete(){
+    if ($this->uri->segment(4)){
+      if ($this->session->userdata('use_username')){
+        $err = 0;
+        $where['can_id'] = $this->uri->segment(4);
+        $data['can_stat'] = $this->config->item('rejected');
+        $data['can_user'] = $this->session->userdata('use_id');
+        $data['can_date'] = date('Y-m-d H:i:s');
+
+        $dataLog = array(
+          'log_canine_id' => $this->uri->segment(4),
+          'log_stat' => $this->config->item('rejected'),
+          'log_user' => $this->session->userdata('use_id'),
+          'log_date' => date('Y-m-d H:i:s'),
+        );
+
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+        $res = $this->caninesModel->update_canines($data, $where);
+        if ($res){
+          $log = $this->logcanineModel->add_log($dataLog);
+          if ($log){
+            $this->db->trans_complete();
+            $this->session->set_flashdata('delete_success', TRUE);
+            redirect("backend/Canines");
+          }
+          else{
+            $err = 1;
+          }
+        }
+        else{
+          $err = 2;
+        }
+        if ($err){
+          $this->db->trans_rollback();
+          $this->session->set_flashdata('error_message', 'Failed to delete canine id = '.$this->uri->segment(4).'. Error code: '.$err);
+          redirect('backend/Canines');
+        }
+      }
+      else{
+        redirect("backend/Users/login");
+      }
+    }
+    else{
+      redirect("backend/Canines");
     }
   }
 }
