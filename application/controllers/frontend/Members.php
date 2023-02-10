@@ -494,22 +494,21 @@ class Members extends CI_Controller {
 			$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 		} else {
 			$pp = '-';
-			if (isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
-				if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
-					$maxsize = 1048576;
-					if(($_FILES['attachment_pp']['size'] > $maxsize)) {
-						$err++;
-						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-					}
-					else{
-						$this->upload->initialize($this->config->item('upload_member'));
-						if ($this->upload->do_upload('attachment_pp')) {
-							$uploadData = $this->upload->data();
-							$pp = $uploadData['file_name'];
-						} else {
-							$this->session->set_flashdata('error_message', $this->upload->display_errors());
-						}
-					}
+			if (isset($_POST['uploaded_image'])) {
+				$uploadedImg = $_POST['uploaded_image'];
+				$image_array_1 = explode(";", $uploadedImg);
+				$image_array_2 = explode(",", $image_array_1[1]);
+				$uploadedImg = base64_decode($image_array_2[1]);
+
+				$maxsize = 1048576;
+				if((strlen($uploadedImg) > $maxsize)) {
+					$err++;
+					$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+				}
+				else{
+					$image_name = $this->config->item('path_member') . 'member_'.time() . '.png';
+					file_put_contents($image_name, $uploadedImg);
+					$pp = "member".trim($image_name, $this->config->item('path_member'));
 				}
 			}
 			else{
@@ -532,14 +531,10 @@ class Members extends CI_Controller {
 						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
 					else
 						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
-					redirect("frontend/Members/profile", $data);
 				} else {
 					$err = 2;
 					$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
 				}
-			}
-			else {
-				$this->load->view("frontend/profile", $data);
 			}
 		}
 	}
