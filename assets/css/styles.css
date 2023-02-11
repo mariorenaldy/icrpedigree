@@ -138,8 +138,20 @@ div.container{
 .nav-text{
     font-size: 1em !important;
 }
-@media (max-width: 1000px) {                  
-    .nav-text {
-       display: none;
+@media (max-width: 1000px) {
+    #main-nav-container{
+        align-items: start !important;
+        justify-content: start !important;
+        height: 100%  !important;
+        margin-top: 0  !important;;
+    }
+    #main-nav-container .dropdown-menu {
+        position: absolute !important;
+    }
+    #main-nav-container #notif-nav {
+        align-self: start !important;
+    }
+    #main-nav-container #notif-nav br{
+        display: none;
     }
  }

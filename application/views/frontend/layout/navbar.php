@@ -1,5 +1,9 @@
-<nav class="navbar">
-    <div class="flex-container d-flex justify-content-around align-items-end container-fluid fs-5">
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainCollapse" aria-controls="mainCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainCollapse">
+    <div class="flex-container d-flex justify-content-around align-items-center container-fluid fs-5 navbar-nav mt-5" id="main-nav-container" style="height:70px;">
         <?php if ($this->session->userdata('username')){ ?>
             <a href="<?= base_url().'frontend/Beranda' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-home"></i> <span class="nav-text">Home</span></a>
         <?php } ?>
@@ -21,7 +25,7 @@
                 </div>
             <?php } ?>
             <a href="<?= base_url().'frontend/Canines' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-dog"></i> <span class="nav-text">My Canine</span></a>
-            <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-envelope"></i> <span class="nav-text"><?= $this->session->userdata('notif_count') ?></span></a></li>
+            <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning text-center align-self-end lh-1" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text text-warning" style="font-size: 0.8em !important;"><?= $this->session->userdata('notif_count') ?></span></a></li>
             <div class="dropdown">
                 <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp">
@@ -39,5 +43,6 @@
         <?php endif;?>
             <!-- <a href="<?= base_url().'frontend/marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
     </div> 
+    </div>
 </nav>
 <hr>
