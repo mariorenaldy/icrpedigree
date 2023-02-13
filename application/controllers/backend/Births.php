@@ -18,10 +18,30 @@ class Births extends CI_Controller {
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 
 			$data['stambum'] = array();
+			$data['stambum_stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+				
+				$wheStbMale = [];
+				$wheStbMale['stb_bir_id'] = $r->bir_id;
+				$wheStbMale['stb_gender'] = 'MALE';
+				$wheStbMale['stb_stat'] = $this->config->item('accepted');
+				$male = $this->stambumModel->get_count($wheStbMale);
+
+				$wheStbFemale = [];
+				$wheStbFemale['stb_bir_id'] = $r->bir_id;
+				$wheStbFemale['stb_gender'] = 'FEMALE';
+				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+				$female = $this->stambumModel->get_count($wheStbFemale);
+
+				if ($male == $r->bir_male && $female == $r->bir_female){
+					$data['stambum_stat'][] = 0;
+				}
+				else{
+					$data['stambum_stat'][] = 1;
+				}
 			}
 			$this->load->view('backend/view_births', $data);
 		}
@@ -39,10 +59,30 @@ class Births extends CI_Controller {
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 
 			$data['stambum'] = array();
+			$data['stambum_stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+				
+				$wheStbMale = [];
+				$wheStbMale['stb_bir_id'] = $r->bir_id;
+				$wheStbMale['stb_gender'] = 'MALE';
+				$wheStbMale['stb_stat'] = $this->config->item('accepted');
+				$male = $this->stambumModel->get_count($wheStbMale);
+
+				$wheStbFemale = [];
+				$wheStbFemale['stb_bir_id'] = $r->bir_id;
+				$wheStbFemale['stb_gender'] = 'FEMALE';
+				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+				$female = $this->stambumModel->get_count($wheStbFemale);
+
+				if ($male == $r->bir_male && $female == $r->bir_female){
+					$data['stambum_stat'][] = 0;
+				}
+				else{
+					$data['stambum_stat'][] = 1;
+				}
 			}
 			$this->load->view('backend/view_births', $data);
 		}
@@ -490,7 +530,7 @@ class Births extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error', 'Failed to reject birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to reject birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Births/view_approve');
 					}
 				}
@@ -536,7 +576,7 @@ class Births extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error', 'Failed to delete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to delete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Births');
 					}
 				}

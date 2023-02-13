@@ -112,6 +112,7 @@ class Canines extends CI_Controller {
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
+          $whe['ken_stat'] = $this->config->item('accepted');
           $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
           $this->load->view('backend/add_canine', $data);
         }
@@ -218,7 +219,7 @@ class Canines extends CI_Controller {
               else
                 $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
 
-              if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $this->input->post('can_a_s'))){
+              if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
                 $err++;
                 $this->session->set_flashdata('error_message', 'Duplicate canine name');
               }
@@ -382,6 +383,7 @@ class Canines extends CI_Controller {
         $wheMember['mem_id'] = $data['canine']->can_member_id;
         $data['member'] = $this->memberModel->get_members($wheMember)->result();
         $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
+        $wheKennel['ken_stat'] = $this->config->item('accepted');
         $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
       }
       $data['mode'] = 1;

@@ -22,20 +22,20 @@
                     ?>
                 </div>
                 <div class="search-container">
-                    <form action="<?= base_url().'frontend/Studs/search'?>" method="post">
+                    <form id="formStud" action="<?= base_url().'frontend/Studs/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" placeholder="Tanggal Pacak" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Pacak"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Pacak"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">
@@ -44,7 +44,6 @@
                     <div class="col-sm-2 text-center"><b>Dam</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
                     <div class="col-sm-2"><b>Status</b></div>
-                    <div class="col-sm-2"></div>
                 </div>
                 <?php
                     $i = 0; 
@@ -67,11 +66,6 @@
                         <div class="col-sm-2">
                             <?= $s->stat_name; ?>
                         </div>
-                        <div class="col-sm-2">
-                            <!-- <?php if (!$birth[$i]){ ?>
-                                <button type="button" class="btn btn-success" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                            <?php } ?> -->
-                        </div>
                     </div>
                 <?php
                         $i++; 
@@ -93,6 +87,11 @@
         function addBirth(studId){
             window.location = "<?= base_url(); ?>frontend/Births/add/"+studId;
         }
+        $(document).ready(function () {
+            $('#keywords').on("change", function(){
+                $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/search").submit();
+            });
+        });
     </script>
 </body>
 </html>

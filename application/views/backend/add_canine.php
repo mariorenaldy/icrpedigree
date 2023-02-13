@@ -173,15 +173,6 @@
                 })
                 reader.readAsDataURL(this.files[0])
             })
-
-            const dropDown = document.querySelector("#can_member_id");
-            dropDown.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreview").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
-            })
         });
     </script>
 </body>

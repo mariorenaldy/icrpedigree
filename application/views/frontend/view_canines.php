@@ -32,14 +32,14 @@
                                 <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Canine"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Tambah Canine Generasi Satu"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">

@@ -1,11 +1,7 @@
-<?php 
-$mode = [];
-$bir_stu_id = null;
-?>
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Request Pengubahan Data Lahir</title>
+    <title>Tambah Anak</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -13,18 +9,11 @@ $bir_stu_id = null;
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <header class="d-flex flex-column align-items-center">
-            <h2 class="fw-bold text-warning">Request Pengubahan Data Lahir</h2>
-        </header>
         <div class="container">
+            <h3 class="text-center text-warning">Tambah Anak</h3>
             <div class="row">            
-                <div class="col-md-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_edit" method="post" enctype="multipart/form-data">
-                        <?php if (!$mode){ ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
-                        <?php } else { ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
-                        <?php } ?>
+                <div class="col-sm-12 align-items-center">                          
+                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Stambums/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -33,34 +22,44 @@ $bir_stu_id = null;
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto Dam</label>
-                            <div class="col-md-12 text-center">
+                        <div class="input-group my-3 gap-3">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Canine</label>
+                            <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" name="attachment_dam" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                                <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-md-2">Jumlah Jantan</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
+                            <label for="mem_name" class="control-label col-sm-2">Nama</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-md-2">Jumlah Betina</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
+                            <label for="mem_hp" class="control-label col-sm-2">Jenis Kelamin</label>
+                            <div class="col-sm-10">
+                                <?php
+                                    $gender['MALE'] = 'MALE';
+                                    $gender['FEMALE'] = 'FEMALE';
+                                    echo form_dropdown('can_gender', $gender, set_value('can_gender'), 'class="form-control"');
+                                ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-md-2">Tanggal Lahir</label>
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
+                            <label for="mem_hp" class="control-label col-sm-2">Kennel</label>
+                            <div class="col-sm-10">
+                                <?php
+                                    $ken = [];
+                                    foreach($kennel as $row){
+                                        $ken[$row->ken_id] = $row->ken_name;
+                                    }
+                                    echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control"');
+                                ?>
                             </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary" type="submit">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
                         </div>
                     </form>
                 </div>
@@ -74,7 +73,7 @@ $bir_stu_id = null;
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#bir_date_of_birth');
+        setDatePicker('#can_date_of_birth');
 
         $(document).ready(function(){
             const imageInput = document.querySelector("#imageInput");

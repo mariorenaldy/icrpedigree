@@ -65,8 +65,10 @@
                             <?php if (!$stambum[$i]){ ?>
                                 <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button><br/>
+                            <?php } 
+                                if ($stambum_stat[$i]){ ?>
+                                <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Child Registration"><i class="fa fa-plus"></i></button>
                             <?php } ?>
-                            <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Stambum"><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="col-md-2 mb-1">
                             <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">

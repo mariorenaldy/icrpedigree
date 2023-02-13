@@ -20,8 +20,8 @@
                 </div>
                 <div class="text-danger">
                     <?php		
-                        if ($this->session->flashdata('error')){
-                            echo $this->session->flashdata('error').'<br/>';
+                        if ($this->session->flashdata('error_message')){
+                            echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
                             echo 'Kennel has been rejected<br/>';

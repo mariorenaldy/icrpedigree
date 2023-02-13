@@ -34,7 +34,7 @@
                         </ul>
                      </div>
                      <div class="dropdown">
-                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Stambums</span>
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Child Registration</span>
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/') ?>">Manage</a></li>

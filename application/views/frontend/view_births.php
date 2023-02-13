@@ -22,20 +22,20 @@
                     ?>
                 </div>
                 <div class="search-container">
-                    <form action="<?= base_url().'frontend/Births/search'?>" method="post">
+                    <form id="formBirth" action="<?= base_url().'frontend/Births/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Lahir"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div class="row mb-1">
@@ -46,29 +46,35 @@
                     <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
-                <?php foreach ($births AS $b){ ?>
-                    <div class="row">
-                        <div class="col-sm-2 mb-1">
-                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $b->bir_date_of_birth; ?>
-                        </div>
-                        <div class="col-sm-1" align="right">
-                            <?= $b->bir_male; ?>
-                        </div>
-                        <div class="col-sm-1" align="right">
-                            <?= $b->bir_female; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $b->stat_name; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <!-- <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>, "<?= $b->bir_a_s ?>")'><i class="fa fa-close"></i></button> -->
-                        </div>
-                    </div>
-                <?php } ?>
+                <?php 
+                    $i = 0;
+                    foreach ($births AS $b){ 
+                        if ($b){ ?>
+                            <div class="row">
+                                <div class="col-sm-2 mb-1">
+                                    <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                </div>
+                                <div class="col-sm-2">
+                                    <?= $b->bir_date_of_birth; ?>
+                                </div>
+                                <div class="col-sm-1" align="right">
+                                    <?= $b->bir_male; ?>
+                                </div>
+                                <div class="col-sm-1" align="right">
+                                    <?= $b->bir_female; ?>
+                                </div>
+                                <div class="col-sm-2">
+                                    <?= $b->stat_name; ?>
+                                </div>
+                                <div class="col-sm-2">
+                                <?php if ($stambum_stat[$i]){ ?>
+                                        <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
+                                <?php } ?>
+                                </div>
+                            </div>
+                        <?php }
+                        $i++;
+                    } ?>
             </div>                           
         </div> 
     </div>
@@ -83,6 +89,14 @@
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/view";
         }
+        function addStambum(birthId){
+            window.location = "<?= base_url(); ?>frontend/Stambums/add/"+birthId;
+        }
+        $(document).ready(function () {
+            $('#keywords').on("change", function(){
+                $('#formBirth').attr('action', "<?= base_url(); ?>frontend/Births/search").submit();
+            });
+        });
     </script>
 </body>
 </html>

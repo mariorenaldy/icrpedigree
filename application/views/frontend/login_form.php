@@ -12,7 +12,7 @@
             <h3 class="text-center text-warning">Login</h3>
             <div class="row">   
                 <div class="col-sm-3">
-                    <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail">
+                    <!-- <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail"> -->
                 </div>    
                 <div class="col-sm-6 text-center">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
@@ -58,7 +58,7 @@
                     </form>
                 </div>
                 <div class="col-sm-3">
-                    <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail">
+                    <!-- <img src="<?= base_url('assets/img/ICR_jersey.png') ?>" class="img-fluid img-thumbnail"> -->
                 </div>                  
             </div>
         </div>

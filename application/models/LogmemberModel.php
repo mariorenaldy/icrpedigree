@@ -5,7 +5,7 @@ class LogmemberModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(logs_member.log_date, "%d-%m-%Y") as log_date');
         $this->db->from('logs_member');
         if ($where != null) {
             $this->db->where($where);
@@ -13,7 +13,7 @@ class LogmemberModel extends CI_Model {
         $this->db->join('members','members.mem_id = logs_member.log_member_id');
         $this->db->join('users','users.use_id = logs_member.log_app_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_member.log_stat');
-        $this->db->order_by('logs_member.log_tanggal', 'desc');
+        $this->db->order_by('logs_member.log_date', 'desc');
         return $this->db->get();
     }
 

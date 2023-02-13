@@ -5,12 +5,12 @@ class LogpedigreeModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_pedigree.log_tanggal, "%d-%m-%Y") as log_tanggal');
+        $this->db->select('*, DATE_FORMAT(logs_pedigree.log_date, "%d-%m-%Y") as log_date');
         $this->db->from('logs_pedigree');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->order_by('log_tanggal', 'desc');
+        $this->db->order_by('logs_pedigree.log_date', 'desc');
         return $this->db->get();
     }
 

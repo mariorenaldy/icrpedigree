@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Profile</title>
+    <title>Profil</title>
     <?php $this->load->view('frontend/layout/head'); ?>
-    <link href="<?= base_url('assets/css/cropper.min.css') ?>" rel="stylesheet" />
-    <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
-    <link href="<?= base_url() . 'assets/css/pp-styles.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url().'assets/css/pp-styles.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
 </head>
-
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Profile</h3>
+            <h3 class="text-center text-warning">Profil</h3>
             <div class="text-success">
                 <?php		
                     if ($this->session->flashdata('edit_profile')){
-                        echo 'Edit Profile berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
+                        echo 'Ubah data berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
                     }
                     if ($this->session->flashdata('change_pp')) {
                         echo 'PP berhasil diubah.<br/>';
@@ -32,8 +30,8 @@
                 echo validation_errors();
                 ?>
             </div>
-            <form method="post">
-                <div class="row mb-2">
+            <form action="<?= base_url(); ?>frontend/Members/change_pp" method="post" enctype="multipart/form-data">
+                <div class="row mb-2">            
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 profilepic text-center">
                         <div class="d-inline-block" style="position: relative;">
@@ -42,7 +40,7 @@
                                 <span class="profilepic__icon"><i class="fa-solid fa-file-image"></i></span>
                                 <span class="profilepic__text">Ubah PP</span>
                             </div>
-                            <input type="file" class="upload" name="attachment_pp" id="my_file" style="display: none;" onclick="reset(event)" />
+                            <input type="file" class="upload" name="attachment_pp" id="my_file" style="display: none;" onchange="loadFile(event)" onclick="reset(event)"/>
                         </div>
                     </div>
                 </div>
@@ -94,30 +92,30 @@
                 <div class="col-sm-3">email</div>
                 <div class="col-sm-8"><?= $member->mem_email ?></div>
             </div>
+        </div>
 
-            <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Crop Image</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="img-container">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <img src="" id="sample_image" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="preview"></div>
-                                    </div>
+        <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crop Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="img-container">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="" id="sample_image" />
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="preview"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </div>
             </div>
@@ -125,17 +123,17 @@
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>
+<script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
 <script>
-    var imageOri = document.querySelector(".profilepic__image").src;
-    var editBtns = document.querySelector(".edit-buttons");
     var image = document.querySelector(".profilepic__image");
+    var imageOri = image.src;
     var base64data = null;
-
+    var editBtns = document.querySelector(".edit-buttons");
     document.querySelector('.profilepic').addEventListener('click', function() {
+        editBtns.style.display = "inline";
         document.querySelector('.profilepic input').click();
     });
     var loadFile = function() {
-        editBtns.style.display = "inline";
         image.src = base64data;
     };
     var reset = function(event) {
@@ -147,21 +145,16 @@
     };
 
     $(document).ready(function() {
-
         var $modal = $('#modal');
-
         var image = document.getElementById('sample_image');
-
         var cropper;
-
+        
         $('#my_file').change(function(event) {
             var files = event.target.files;
-
             var done = function(url) {
                 image.src = url;
                 $modal.modal('show');
             };
-
             if (files && files.length > 0) {
                 reader = new FileReader();
                 reader.onload = function(event) {
@@ -187,7 +180,6 @@
                 width: 400,
                 height: 400
             });
-
             canvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
                 var reader = new FileReader();
@@ -206,7 +198,7 @@
                     url: '<?= base_url(); ?>frontend/Members/change_pp',
                     method: 'POST',
                     data: {
-                        uploaded_image: base64data
+                        attachment_pp: base64data
                     },
                     success: function(data) {
                         window.location.href = "<?= base_url(); ?>frontend/Members/profile";

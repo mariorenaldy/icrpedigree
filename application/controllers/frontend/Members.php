@@ -120,10 +120,10 @@ class Members extends CI_Controller {
 					$pp = '-';
 					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
 						if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_member'));
+							$this->upload->initialize($this->config->item('upload_kennel'));
 							if ($this->upload->do_upload('attachment_pp')){
 								$uploadData = $this->upload->data();
-								$pp = $uploadData['file_name'];
+								$logo = $uploadData['file_name'];
 							}
 							else{
 								$err++;
@@ -210,7 +210,7 @@ class Members extends CI_Controller {
 							'mem_password' => sha1($this->input->post('password')),
 							'mem_stat' => $this->config->item('saved'),
 							'mem_type' => $this->config->item('pro_member'),
-							'mem_user' => $this->session->userdata('use_id'),
+							'mem_user' => 0,
 							'mem_date' => date('Y-m-d H:i:s'),
 						);
 						
@@ -508,25 +508,21 @@ class Members extends CI_Controller {
 				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 			} else {
 				$pp = '-';
-				if (isset($_POST['uploaded_image'])) {
-					$uploadedImg = $_POST['uploaded_image'];
+				if (isset($_POST['attachment_pp'])) {
+					$uploadedImg = $_POST['attachment_pp'];
 					$image_array_1 = explode(";", $uploadedImg);
 					$image_array_2 = explode(",", $image_array_1[1]);
 					$uploadedImg = base64_decode($image_array_2[1]);
 
-					if((strlen($uploadedImg) > $this->config->item('file_size'))) {
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
 					}
 					else{
-						$image_name = $this->config->item('path_member') . 'member_'.time() . '.png';
+						$image_name = $this->config->item('path_member').'member_'.time().'.png';
 						file_put_contents($image_name, $uploadedImg);
 						$pp = "member".trim($image_name, $this->config->item('path_member'));
 					}
-				}
-				else{
-					$err++;
-					$this->session->set_flashdata('error_message', 'File kosong atau ukurannya terlalu besar (> 1 MB).');
 				}	
 
 				if (!$err && $pp == "-") {

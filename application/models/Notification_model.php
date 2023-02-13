@@ -19,7 +19,6 @@ class Notification_model extends CI_Model{
 				'notificationtype_id' => $type,
 				'transaction_id' => $trans,
 				'mem_id' => $member,
-				'is_read' => 0,
 				'created_date' => date('Y-m-d H:i:s')
 			);
 			$insert = $this->db->insert('notification', $data);

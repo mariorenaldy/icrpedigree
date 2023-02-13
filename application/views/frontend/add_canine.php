@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Tambah Canine</title>
+    <title>Tambah Canine Generasi Pertama</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -10,7 +10,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Tambah Canine</h3>
+            <h3 class="text-center text-warning">Tambah Canine Generasi Pertama</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">

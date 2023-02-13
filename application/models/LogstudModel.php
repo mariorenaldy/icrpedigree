@@ -5,7 +5,7 @@ class LogstudModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_stud.log_tanggal, "%d-%m-%Y") as log_tanggal');
+        $this->db->select('*, DATE_FORMAT(logs_stud.log_date, "%d-%m-%Y") as log_date');
         $this->db->from('logs_stud');
         if ($where != null) {
             $this->db->where($where);
@@ -18,7 +18,7 @@ class LogstudModel extends CI_Model {
         $this->db->join('canines AS c_dam','c_dam.can_id = logs_stud.log_dam_id');
         $this->db->join('users','users.use_id = logs_stud.log_app_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_stud.log_stat');
-        $this->db->order_by('log_tanggal', 'desc');
+        $this->db->order_by('logs_stud.log_date', 'desc');
         return $this->db->get();
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Tambah Pacak</title>
+    <title>Lapor Pacak</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -10,7 +10,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Tambah Pacak</h3>
+            <h3 class="text-center text-warning">Lapor Pacak</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -29,7 +29,7 @@
                                     $i = 0;
                                     $pil = [];
                                     foreach($sire as $row){
-                                        if ($sireStat[$i])
+                                        // if ($sireStat[$i])
                                             $pil[$row->id] = $row->name;
                                         $i++;
                                     }
