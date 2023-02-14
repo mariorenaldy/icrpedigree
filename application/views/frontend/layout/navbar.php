@@ -42,6 +42,7 @@
                 <a href="<?= base_url().'frontend/Members' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-user"></i> <span class="nav-text">Members</span></a>
             <?php endif;?>
                 <!-- <a href="<?= base_url().'frontend/marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
+                <a href="<?= 'https://wa.me/6287777802288' ?>" class="text-decoration-none text-reset link-warning"><i class="fa-brands fa-whatsapp"></i> <span class="nav-text">Chat to WA</span></a>
         </div>
     </div>
 </nav>
