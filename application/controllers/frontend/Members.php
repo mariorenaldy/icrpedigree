@@ -536,10 +536,14 @@ class Members extends CI_Controller {
 					if ($res) {
 						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$pp);
 						$this->session->set_flashdata('change_pp', TRUE);
+						redirect("frontend/Members/profile", $data);
 					} else {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
 					}
+				}
+				else {
+					$this->load->view("frontend/profile", $data);
 				}
 			}
 		}

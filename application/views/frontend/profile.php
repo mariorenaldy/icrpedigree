@@ -41,14 +41,15 @@
                                 <span class="profilepic__icon"><i class="fa-solid fa-file-image"></i></span>
                                 <span class="profilepic__text">Ubah PP</span>
                             </div>
-                            <input type="file" class="upload" name="attachment_pp" id="my_file" style="display: none;" onchange="loadFile(event)" onclick="reset(event)"/>
+                            <input type="file" class="upload" id="my_file" style="display: none;" onclick="resetImage(event)"/>
+                            <input type="hidden" name="attachment_pp" id="attachment_pp">
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
+                <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 edit-buttons text-center" style="display: none;">
-                        <button class="btn btn-primary" type="button" id="submit_btn">Simpan</button>
+                        <button class="btn btn-primary" type="submit">Simpan</button>
                         <button class="btn btn-danger" type="button" onclick="revert()">Batal</button>
                     </div>
                 </div>
@@ -131,29 +132,30 @@
     var base64data = null;
     var editBtns = document.querySelector(".edit-buttons");
     document.querySelector('.profilepic').addEventListener('click', function() {
-        editBtns.style.display = "inline";
         document.querySelector('.profilepic input').click();
     });
     var loadFile = function() {
         image.src = base64data;
+        $('#attachment_pp').val(base64data);
     };
-    var reset = function(event) {
+    var resetImage = function(event) {
         event.target.value = null;
     };
     var revert = function() {
         editBtns.style.display = "none";
         image.src = imageOri;
+        base64data = null;
     };
 
     $(document).ready(function() {
         var $modal = $('#modal');
-        var image = document.getElementById('sample_image');
+        var sampleImage = document.getElementById('sample_image');
         var cropper;
         
         $('#my_file').change(function(event) {
             var files = event.target.files;
             var done = function(url) {
-                image.src = url;
+                sampleImage.src = url;
                 $modal.modal('show');
             };
             if (files && files.length > 0) {
@@ -166,7 +168,7 @@
         });
 
         $modal.on('shown.bs.modal', function() {
-            cropper = new Cropper(image, {
+            cropper = new Cropper(sampleImage, {
                 aspectRatio: 1,
                 viewMode: 3,
                 preview: '.preview'
@@ -188,24 +190,10 @@
                 reader.onloadend = function() {
                     base64data = reader.result;
                     loadFile();
+                    editBtns.style.display = "block";
                     $modal.modal('hide');
                 };
             });
-        });
-
-        $('#submit_btn').click(function() {
-            if (base64data != null) {
-                $.ajax({
-                    url: '<?= base_url(); ?>frontend/Members/change_pp',
-                    method: 'POST',
-                    data: {
-                        attachment_pp: base64data
-                    },
-                    success: function(data) {
-                        window.location.href = "<?= base_url(); ?>frontend/Members/profile";
-                    }
-                });
-            }
         });
     });
 </script>
