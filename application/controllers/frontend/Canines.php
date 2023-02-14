@@ -91,29 +91,40 @@ class Canines extends CI_Controller {
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
+			$resp['status'] = 'success';
+			header('Content-Type: application/json');
 			if ($this->form_validation->run() == FALSE){
-				$this->load->view('frontend/add_canine', $data);
+				$resp['status'] = 'error';
+				$resp['message'] = validation_errors();
+				echo json_encode($resp);
 			}
 			else{
 				$err = 0;
 				$photo = '-';
-				if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])){
-					if (is_uploaded_file($_FILES['attachment']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_canine'));
-						if ($this->upload->do_upload('attachment')){
-							$uploadData = $this->upload->data();
-							$photo = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', $this->upload->display_errors());
-						}
+				if (isset($_POST['attachment']) && $_POST['attachment'] != null) {
+					$uploadedImg = $_POST['attachment'];
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+						// $this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						$resp['status'] = 'error';
+						$resp['message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+					}
+					else{
+						$image_name = $this->config->item('path_canine').'canines_'.time().'.png';
+						file_put_contents($image_name, $uploadedImg);
+						$photo = "canines".trim($image_name, $this->config->item('path_canine'));
 					}
 				}
 
 				if (!$err && $photo == "-"){
 					$err++;
-					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					// $this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					$resp['status'] = 'error';
+					$resp['message'] = 'Foto wajib diisi<br/>';
 				}
 
 				// if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
@@ -160,7 +171,9 @@ class Canines extends CI_Controller {
 		
 					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+						// $this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+						$resp['status'] = 'error';
+						$resp['message'] = 'Nama canine tidak boleh sama<br/>';
 					}
 
 					if (!$err){
@@ -180,7 +193,8 @@ class Canines extends CI_Controller {
 								// $this->session->set_flashdata('add_success', true);
 								// redirect("frontend/Canines");
 								$this->session->set_flashdata('add_canine_success', true);
-								redirect("frontend/Beranda");
+								// redirect("frontend/Beranda");
+								echo json_encode($resp);
 							}
 							else{
 								$err++;
@@ -191,16 +205,21 @@ class Canines extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data canine');
-							$this->load->view('frontend/add_canine', $data);
+							// $this->session->set_flashdata('error_message', 'Gagal menyimpan data canine');
+							// $this->load->view('frontend/add_canine', $data);
+							$resp['status'] = 'error';
+							$resp['message'] = 'Gagal menyimpan data canine<br/>';
+							echo json_encode($resp);
 						}
 					}
 					else{
-						$this->load->view('frontend/add_canine', $data);
+						// $this->load->view('frontend/add_canine', $data);
+						echo json_encode($resp);
 					}
 				}
 				else{
-					$this->load->view('frontend/add_canine', $data);
+					// $this->load->view('frontend/add_canine', $data);
+					echo json_encode($resp);
 				}
 			}
 		}

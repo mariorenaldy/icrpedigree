@@ -5,6 +5,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url().'assets/css/pp-styles.css' ?>" rel="stylesheet" />
     <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url().'assets/css/crop-modal-styles.css' ?>" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
