@@ -3,8 +3,8 @@
 <head>
     <title>Child Registration List</title>
     <?php $this->load->view('templates/head'); ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -56,7 +56,7 @@
                         <thead>
                             <tr>
                                 <th class="no-sort"></th>
-                                <th class="no-sort">Photo</th>
+                                <th class="no-sort" style="width: 10%">Photo</th>
                                 <th>Name</th>
                                 <th class="no-sort">Breed</th>
                                 <th class="no-sort">Gender</th>
@@ -104,6 +104,7 @@
                 window.location = "<?= base_url(); ?>backend/Stambums/delete/"+id;
             }
         }
+        
         var modal = document.getElementById("myModal");
         function display(id){
             var img = document.getElementById(id);

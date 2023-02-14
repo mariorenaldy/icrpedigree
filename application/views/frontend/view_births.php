@@ -67,7 +67,7 @@
                                     <?= $b->stat_name; ?>
                                 </div>
                                 <div class="col-sm-2">
-                                <?php if ($stambum_stat[$i]){ ?>
+                                <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
                                         <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
                                 <?php } ?>
                                 </div>

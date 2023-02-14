@@ -22,7 +22,6 @@ class Births extends CI_Controller {
 			foreach ($stud AS $r){
 				$wheBirth = [];
 				$wheBirth['bir_stu_id'] = $r->stu_id;
-				$wheBirth['bir_stat'] = $this->config->item('accepted');
 				$data['births'][] = $this->birthModel->get_births($wheBirth)->row();
 			}
 
@@ -70,7 +69,14 @@ class Births extends CI_Controller {
 				$where['bir_date_of_birth'] = $date;
 			}
 			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$data['births'] = $this->birthModel->get_births($where)->result();
+			$stud = $this->studModel->get_studs($wheStud)->result();
+
+			$data['births'] = Array();
+			foreach ($stud AS $r){
+				$wheBirth = [];
+				$wheBirth['bir_stu_id'] = $r->stu_id;
+				$data['births'][] = $this->birthModel->get_births($wheBirth)->row();
+			}
 
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
@@ -170,9 +176,12 @@ class Births extends CI_Controller {
 					if ($stud){
 						$piece = explode("-", $this->input->post('bir_date_of_birth'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
-		
+
+						$piece = explode("-", $stud->stu_stud_date);
+						$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+
 						$ts = new DateTime($date);
-						$ts_stud = new DateTime($stud->stu_stud_date);
+						$ts_stud = new DateTime($studDate);
 						if ($ts_stud > $ts){
 							$err++;
 							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 

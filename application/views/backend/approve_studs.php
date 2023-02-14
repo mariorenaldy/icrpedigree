@@ -4,8 +4,13 @@
     <title>Approve Stud</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
@@ -55,14 +60,14 @@
                             <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
                         </div>
                         <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud">
+                            <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $s->stu_id ?>" onclick="display('stud<?= $s->stu_id ?>')">
                         </div>
                         <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire">
+                            <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $s->stu_id ?>" onclick="display('sire<?= $s->stu_id ?>')">
                             <br/><?= $s->sire_a_s ?>
                         </div>
                         <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam">
+                            <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $s->stu_id ?>" onclick="display('dam<?= $s->stu_id ?>')">
                             <br/><?= $s->dam_a_s ?>
                         </div>
                         <div class="col-md-2">
@@ -82,6 +87,7 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
+
         function approve(id){
             var proceed = confirm("Approve pacak ?");
             if (proceed){             
@@ -94,11 +100,26 @@
                 window.location = "<?= base_url(); ?>backend/Studs/reject/"+id;
             }
         }
+
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
         <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
 			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
 			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
 			window.open(wa, "_blank");
 	    <?php } ?>
+
         $(document).ready(function () {
             $('#keywords').on("change", function(){
                 $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search_approve").submit();

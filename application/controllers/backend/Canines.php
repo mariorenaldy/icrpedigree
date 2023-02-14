@@ -880,4 +880,27 @@ class Canines extends CI_Controller {
       redirect("backend/Canines");
     }
   }
+
+  public function log(){
+    if ($this->uri->segment(4)){
+      $where['log_canine_id'] = $this->uri->segment(4);
+      $data['canine'] = $this->logcanineModel->get_logs($where)->result();
+      $data['ped'] = $this->logpedigreeModel->get_logs($where)->result();
+      $data['sire'] = Array();
+      $data['dam'] = Array();
+      foreach($data['ped'] AS $r){
+        $wheSire = [];
+        $wheSire['can_id'] = $r->log_sire_id;
+        $data['sire'][] = $this->caninesModel->get_canines($wheSire)->row();
+
+        $wheDam = [];
+        $wheDam['can_id'] = $r->log_dam_id;
+        $data['dam'][] = $this->caninesModel->get_canines($wheDam)->row();
+      }
+      $this->load->view('backend/log_canine', $data);
+    }
+    else{
+      redirect('backend/Canines');
+    }
+  }
 }

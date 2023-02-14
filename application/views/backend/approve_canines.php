@@ -3,8 +3,13 @@
 <head>
     <title>Approve Canine</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
@@ -67,9 +72,9 @@
                                     <td><button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } ?>
                                     </td>
                                     <td><?= $c->can_reg_number; ?></td>
@@ -105,6 +110,19 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Canines/reject_canine/"+id;
             }
+        }
+
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
         }
     </script>
 </body>

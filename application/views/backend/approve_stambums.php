@@ -3,8 +3,13 @@
 <head>
     <title>Approve Child Registration</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
@@ -46,7 +51,7 @@
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th>Photo</th>
+                                <th style="width: 10%">Photo</th>
                                 <th>Name</th>
                                 <th>Breed</th>
                                 <th>Gender</th>
@@ -62,9 +67,9 @@
                                     <td><button type="button" class="btn btn-danger" onclick='reject(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">
                                         <?php } ?>
                                     </td>
                                     <td><?= $r->stb_a_s; ?></td>
@@ -95,6 +100,19 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Stambums/reject/"+id;
             }
+        }
+
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
         }
     </script>
 </body>

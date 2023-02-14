@@ -4,8 +4,13 @@
     <title>Birth List</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
@@ -71,7 +76,7 @@
                             <?php } ?>
                         </div>
                         <div class="col-md-2 mb-1">
-                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
                         </div>
                         <div class="col-md-2">
                             <?= $b->bir_date_of_birth; ?>
@@ -100,6 +105,7 @@
             $(id).readOnly = true;
         }
         setDatePicker('#keywords');
+
         function add(){
             window.location = "<?= base_url(); ?>backend/Studs";
         }
@@ -115,6 +121,20 @@
                 window.location = "<?= base_url(); ?>backend/Births/delete/"+id;
             }
         }
+
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
         $(document).ready(function () {
             $('#keywords').on("change", function(){
                 $('#formBirth').attr('action', "<?= base_url(); ?>backend/Births/search").submit();

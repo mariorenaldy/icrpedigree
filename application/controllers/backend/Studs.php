@@ -1164,4 +1164,26 @@ class Studs extends CI_Controller {
 				redirect('backend/Studs/view_approve');
 			}
 		}
+
+		public function log(){
+			if ($this->uri->segment(4)){
+				$where['log_stu_id'] = $this->uri->segment(4);
+				$data['stud'] = $this->logstudModel->get_logs($where)->result();
+				$data['sire'] = Array();
+				$data['dam'] = Array();
+				foreach($data['stud'] AS $r){
+					$wheSire = [];
+					$wheSire['can_id'] = $r->log_sire_id;
+					$data['sire'][] = $this->caninesModel->get_canines($wheSire)->row();
+			
+					$wheDam = [];
+					$wheDam['can_id'] = $r->log_dam_id;
+					$data['dam'][] = $this->caninesModel->get_canines($wheDam)->row();
+				}
+				$this->load->view('backend/log_stud', $data);
+			}
+			else{
+				redirect('backend/Studs');
+			}
+		}
 }

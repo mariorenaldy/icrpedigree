@@ -50,7 +50,7 @@ class Stambums extends CI_Controller {
 
     public function add(){
         if ($this->uri->segment(4)){  
-          if ($this->session->userdata('use_username')){
+          if ($this->session->userdata('use_id')){
             $wheBirth['bir_id'] = $this->uri->segment(4);
             $data['birth'] = $this->birthModel->get_births($wheBirth)->row();
             $wheStud['stu_id'] = $data['birth']->bir_stu_id;
@@ -74,7 +74,7 @@ class Stambums extends CI_Controller {
     }
 
     public function search_member(){
-      if ($this->session->userdata('use_username')) {
+      if ($this->session->userdata('use_id')) {
         $like['mem_name'] = $this->input->post('mem_name');
         $like['ken_name'] = $this->input->post('mem_name');
         $where['mem_stat'] = $this->config->item('accepted');
@@ -102,7 +102,7 @@ class Stambums extends CI_Controller {
     }
 
     public function search_kennel(){
-        if ($this->session->userdata('use_username')) {
+        if ($this->session->userdata('use_id')) {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
@@ -124,7 +124,7 @@ class Stambums extends CI_Controller {
     }
   
     public function validate_add(){ 
-        if ($this->session->userdata('use_username')) {
+        if ($this->session->userdata('use_id')) {
           $this->form_validation->set_error_delimiters('<div>', '</div>');
           $this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
           if ($this->input->post('reg_member')){
@@ -483,9 +483,211 @@ class Stambums extends CI_Controller {
         }
   }
 
+  public function approve(){
+    if ($this->uri->segment(4)){
+      if ($this->session->userdata('use_id')){
+        $err = 0;
+        $whereStb['stb_id'] = $this->uri->segment(4);
+        $stb = $this->stambumModel->get_stambum($whereStb)->row();
+        
+        $piece = explode("-", $stb->stb_date_of_birth);
+        $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
+
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+        $dataStb = array(
+          'stb_stat' => $this->config->item('accepted'),
+          'stb_app_user' => $this->session->userdata('use_id'),
+          'stb_app_date' => date('Y-m-d H:i:s'),
+          'stb_user' => $this->session->userdata('use_id'),
+          'stb_date' => date('Y-m-d H:i:s'),
+        );
+        $res = $this->stambumModel->update_stambum($dataStb, $whereStb);
+        if ($res){
+          $dataLogStb = array(
+            'log_stb_id' => $stb->stb_id,
+            'log_bir_id' => $stb->stb_bir_id,
+            'log_a_s' => $stb->stb_a_s,
+            'log_breed' => $stb->stb_breed,
+            'log_gender' => $stb->stb_gender,
+            'log_date_of_birth' => $dob,
+            'log_photo' => $stb->stb_photo,
+            'log_stat' => $this->config->item('accepted'),
+            'log_app_user' => $this->session->userdata('use_id'),
+            'log_app_date' => date('Y-m-d H:i:s'),
+            'log_user' => $this->session->userdata('use_id'),
+            'log_date' => date('Y-m-d H:i:s'),
+            'log_can_id' => $stb->stb_can_id,
+          );
+          $log = $this->logstambumModel->add_log($dataLogStb);
+          if ($log){
+            $whereCan['can_id'] = $stb->stb_can_id;
+            $can = $this->caninesModel->get_canines($whereCan)->row();
+            
+            $dataCan['can_app_user'] = $this->session->userdata('use_id');
+            $dataCan['can_app_date'] = date('Y-m-d H:i:s');
+            $dataCan['can_user'] = $this->session->userdata('use_id');
+            $dataCan['can_date'] = date('Y-m-d H:i:s');
+            $dataCan['can_stat'] = $this->config->item('accepted');
+            $res = $this->caninesModel->update_canines($dataCan, $whereCan);
+            if ($res){
+              $dataLog = array(
+                'log_canine_id' => $can->can_id,
+                'log_reg_number' => $can->can_reg_number,
+                'log_a_s' => $can->can_a_s,
+                'log_breed' => $can->can_breed,
+                'log_gender' => $can->can_gender,
+                'log_date_of_birth' => $dob,
+                'log_color' => $can->can_color,
+                'log_kennel_id' => $can->can_kennel_id,
+                'log_photo' => $can->can_photo,
+                'log_stat' => $this->config->item('accepted'),
+                'log_app_user' => $this->session->userdata('use_id'),
+                'log_app_date' => date('Y-m-d H:i:s'),
+                'log_chip_number' => $can->can_chip_number,
+                'log_icr_number' => $can->can_icr_number,
+                'log_member_id' => $can->can_member_id,
+                'log_note' => $can->can_note,
+                'log_user' => $this->session->userdata('use_id'),
+                'log_date' => date('Y-m-d H:i:s'),
+              );
+              $log = $this->logcanineModel->add_log($dataLog);
+              if ($log){
+                $whePed['ped_canine_id'] = $can->can_id;
+                $ped = $this->pedigreesModel->get_pedigrees($whePed)->row();
+                $dataLogPed = array(
+                  'log_sire_id' => $ped->ped_sire_id,
+                  'log_dam_id' => $ped->ped_dam_id,
+                  'log_canine_id' => $can->can_id,
+                  'log_user' => $this->session->userdata('use_id'),
+                  'log_date' => date('Y-m-d H:i:s'),
+                );
+                $res = $this->logpedigreeModel->add_log($dataLogPed);
+                if ($res){
+                  $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id);
+                  if ($res){
+                    $this->db->trans_complete();
+                    $whereMember['mem_id'] = $stb->stb_member_id;
+                    $member = $this->memberModel->get_members($whereMember)->row();
+                    if ($member->mem_firebase_token){
+                      $notif = $this->notificationtype_model->get_by_id(4);
+                      firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+                    }
+                    $this->session->set_flashdata('approve', TRUE);
+                    redirect('backend/Stambums/view_approve');
+                  }
+                  else{
+                    $err = 1;
+                  }
+                }
+                else{
+                  $err = 2;
+                }
+              }
+              else{
+                $serr = 3;
+              }
+            }
+            else{
+              $err = 4;
+            }
+          }
+          else{
+            $err = 5;
+          }
+        }
+        else{
+          $err = 6;
+        }
+        if ($err){
+          $this->db->trans_rollback();
+          $this->session->set_flashdata('error_message', 'Failed to approve child registration id = '.$this->uri->segment(4).'. Err code: '.$err);
+          redirect('backend/Stambums/view_approve');
+        }
+      }
+      else{
+        redirect("backend/Users/login");
+      }
+    }
+    else{
+      redirect("backend/Stambums/view_approve");
+    }
+  }
+
+  public function reject(){
+    if ($this->uri->segment(4)){
+      if ($this->session->userdata('use_id')){
+        $whereStb['stb_id'] = $this->uri->segment(4);
+        $stb = $this->stambumModel->get_stambum($whereStb)->row();
+        
+        $piece = explode("-", $stb->stb_date_of_birth);
+        $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
+
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+        $dataStb = array(
+          'stb_stat' => $this->config->item('rejected'),
+          'stb_user' => $this->session->userdata('use_id'),
+          'stb_date' => date('Y-m-d H:i:s'),
+        );
+        $res = $this->stambumModel->update_stambum($dataStb, $whereStb);
+        if ($res){
+          $dataLogStb = array(
+            'log_stb_id' => $stb->stb_id,
+            'log_bir_id' => $stb->stb_bir_id,
+            'log_a_s' => $stb->stb_a_s,
+            'log_breed' => $stb->stb_breed,
+            'log_gender' => $stb->stb_gender,
+            'log_date_of_birth' => $dob,
+            'log_photo' => $stb->stb_photo,
+            'log_stat' => $this->config->item('rejected'),
+            'log_user' => $this->session->userdata('use_id'),
+            'log_date' => date('Y-m-d H:i:s'),
+            'log_can_id' => $stb->stb_can_id,
+          );
+          $log = $this->logstambumModel->add_log($dataLogStb);
+          if ($log){
+            $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id);
+            if ($res){
+                $this->db->trans_complete();
+                $wheMember['mem_id'] = $stb->stb_member_id;
+                $member = $this->memberModel->get_members($wheMember)->row();
+                if ($member->mem_firebase_token){
+                  $notif = $this->notificationtype_model->get_by_id(5);
+                  firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+                }
+                $this->session->set_flashdata('reject', TRUE);
+                redirect('backend/Stambums/view_approve');
+              }
+              else{
+                $err = 1;
+              }
+            }
+            else{
+              $err = 2;
+            }
+        }
+        else{
+          $err = 3;
+        }
+        if ($err){
+          $this->db->trans_rollback();
+          $this->session->set_flashdata('error_message', 'Failed to reject child registration id = '.$this->uri->segment(4));
+          redirect('backend/Stambums/view_approve');
+        }
+      }
+      else{
+        redirect("backend/Users/login");
+      }
+    }
+    else{
+      redirect("backend/Stambums/view_approve");
+    }
+  }
+
   public function delete(){
     if ($this->uri->segment(4)){
-      if ($this->session->userdata('use_username')){
+      if ($this->session->userdata('use_id')){
         $err = 0;
         $where['stb_id'] = $this->uri->segment(4);
         $stb = $this->stambumModel->get_stambum($where)->row();
@@ -557,167 +759,6 @@ class Stambums extends CI_Controller {
     }
     else{
       redirect("backend/Stambums");
-    }
-  }
-
-  public function approve(){
-    if ($this->uri->segment(4)){
-      if ($this->session->userdata('use_username')){
-        $err = 0;
-        $where['can_id'] = $this->uri->segment(4);
-        $can = $this->caninesModel->get_canines($where)->row();
-        $this->db->trans_strict(FALSE);
-        $this->db->trans_start();
-        $data['can_app_user'] = $this->session->userdata('use_id');
-        $data['can_app_date'] = date('Y-m-d H:i:s');
-        $data['can_stat'] = $this->config->item('accepted');
-        $res = $this->caninesModel->update_canines($data, $where);
-        if ($res){
-          $piece = explode("-", $can->can_date_of_birth);
-          $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
-
-          $dataLog = array(
-            'log_canine_id' => $this->uri->segment(4),
-            'log_reg_number' => $can->can_reg_number,
-            'log_a_s' => $can->can_a_s,
-            'log_breed' => $can->can_breed,
-            'log_gender' => $can->can_gender,
-            'log_date_of_birth' => $dob,
-            'log_color' => $can->can_color,
-            'log_kennel_id' => $can->can_kennel_id,
-            'log_photo' => $can->can_photo,
-            'log_stat' => $this->config->item('accepted'),
-            'log_app_user' => $this->session->userdata('use_id'),
-            'log_app_date' => date('Y-m-d H:i:s'),
-            'log_chip_number' => $can->can_chip_number,
-            'log_icr_number' => $can->can_icr_number,
-            'log_member_id' => $can->can_member_id,
-            'log_note' => $can->can_note,
-          );
-          $log = $this->logcanineModel->add_log($dataLog);
-          if ($log){
-            $dataLogPed = array(
-              'log_sire_id' => $this->config->item('sire_id'),
-              'log_dam_id' => $this->config->item('dam_id'),
-              'log_canine_id' => $this->uri->segment(4),
-              'log_stat' => $this->config->item('accepted'),
-              'log_app_user' => $this->session->userdata('use_id'),
-              'log_app_date' => date('Y-m-d H:i:s'),
-            );
-            $res = $this->logpedigreeModel->add_log($dataLogPed);
-            if ($res){
-              $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id);
-              if ($res3){
-                $this->db->trans_complete();
-                $whe_can['mem_id'] = $can->can_member_id;
-                $member = $this->memberModel->get_members($whe_can)->row();
-                if ($member->mem_firebase_token){
-                  $notif = $this->notificationtype_model->get_by_id(11);
-                  firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                }
-                $this->session->set_flashdata('approve', TRUE);
-                redirect('backend/Canines/view_approve');
-              }
-              else{
-                $err = 1;
-              }
-            }
-            else{
-              $err = 2;
-            }
-          }
-          else{
-            $serr = 3;
-          }
-        }
-        else{
-          $err = 4;
-        }
-        if ($err){
-          $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to approve child registration id = '.$this->uri->segment(4).'. Err code: '.$err);
-          redirect('backend/Canines/view_approve');
-        }
-      }
-      else{
-        redirect("backend/Users/login");
-      }
-    }
-    else{
-      redirect("backend/Canines/view_approve");
-    }
-  }
-
-  public function reject(){
-    if ($this->uri->segment(4)){
-      if ($this->session->userdata('use_username')){
-        $where['can_id'] = $this->uri->segment(4);
-        $can = $this->caninesModel->get_canines($where)->row();
-        $this->db->trans_strict(FALSE);
-        $this->db->trans_start();
-        $data['can_app_user'] = $this->session->userdata('use_id');
-        $data['can_app_date'] = date('Y-m-d H:i:s');
-        $data['can_stat'] = $this->config->item('rejected');
-        $res = $this->caninesModel->update_canines($data, $where);
-        if ($res){
-          $err = 0;
-          $res2 = $this->notification_model->add(12, $this->uri->segment(4), $can->can_member_id);
-          if ($res2){
-            $piece = explode("-", $can->can_date_of_birth);
-            $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
-            $dataLog = array(
-              'log_canine_id' => $can->can_id,
-              'log_reg_number' => $can->can_reg_number,
-              'log_a_s' => $can->can_a_s,
-              'log_breed' => $can->can_breed,
-              'log_gender' => $can->can_gender,
-              'log_date_of_birth' => $dob,
-              'log_color' => $can->can_color,
-              'log_kennel_id' => $can->can_kennel_id,
-              'log_photo' => $can->can_photo,
-              'log_stat' => $this->config->item('rejected'),
-              'log_app_user' => $this->session->userdata('use_id'),
-              'log_app_date' => date('Y-m-d H:i:s'),
-              'log_chip_number' => $can->can_chip_number,
-              'log_icr_number' => $can->can_icr_number,
-              'log_member_id' => $can->can_member_id,
-              'log_note' => $can->can_note,
-            );
-            $log = $this->logcanineModel->add_log($dataLog);
-            if ($log){
-              $this->db->trans_complete();
-              $whe_can['mem_id'] = $can->can_member_id;
-              $member = $this->memberModel->get_members($whe_can)->row();
-              if ($member->mem_firebase_token){
-                $notif = $this->notificationtype_model->get_by_id(12);
-                firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-              }
-              $this->session->set_flashdata('reject', TRUE);
-              redirect('backend/Canines/view_approve');
-            }
-            else{
-              $err = 1;
-            }
-          }
-          else{
-            $err = 2;
-          }
-        }
-        else{
-          $err = 3;
-        }
-        if ($err){
-          $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to reject child registration id = '.$this->uri->segment(4));
-          redirect('backend/Canines/view_approve');
-        }
-      }
-      else{
-        redirect("backend/Users/login");
-      }
-    }
-    else{
-      redirect("backend/Canines/view_approve");
     }
   }
 }

@@ -3,8 +3,8 @@
 <head>
     <title>Canine List</title>
     <?php $this->load->view('templates/head'); ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -147,6 +147,7 @@
         function detail(id){
             window.location = "<?= base_url(); ?>backend/Canines/view_detail/"+id;
         }
+
         var modal = document.getElementById("myModal");
         function display(id){
             var img = document.getElementById(id);

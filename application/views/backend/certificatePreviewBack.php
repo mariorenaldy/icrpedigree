@@ -22,11 +22,22 @@
         <?php } else { ?>
           <div class="imgReplacement"></div>
         <?php } ?>
-        <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { ?>
-          <p class="text-center fs-4 red"><?= $canine->can_a_s ?></p>
+        <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { 
+          if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){
+        ?>
+            <p class="text-center fs-4 red"><?= $canine->can_a_s ?></p>
         <?php } else { ?>
-          <p class="text-center fs-4 black"><?= $canine->can_a_s ?></p>
-        <?php } ?>
+            <p class="text-center fs-5 red"><?= $canine->can_a_s ?></p>
+        <?php } 
+        }
+        else { 
+          if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ 
+        ?>
+            <p class="text-center fs-4 black"><?= $canine->can_a_s ?></p>
+        <?php } else { ?>
+            <p class="text-center fs-5 black"><?= $canine->can_a_s ?></p>
+        <?php } 
+        } ?>
         <div class="container">
           <div class="row gx-0">
             <div class="col-4">

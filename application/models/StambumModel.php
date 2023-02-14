@@ -5,7 +5,7 @@ class StambumModel extends CI_Model {
     }
 
     public function get_stambum($where, $sort = 'stb_id desc'){
-        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth');
+        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -19,7 +19,7 @@ class StambumModel extends CI_Model {
     }
 
     public function search_stambum($like, $where, $sort = 'stb_id desc'){
-        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth');
+        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
         if ($where != null) {
             $this->db->where($where);
         }

@@ -14,7 +14,7 @@ class StudModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
         $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_dam_id');
-        $this->db->order_by('studs.stu_date', 'desc');
+        $this->db->order_by('studs.stu_stud_date', 'desc');
         $this->db->limit($this->config->item('backend_stud_count'), 0);
         return $this->db->get();
     }

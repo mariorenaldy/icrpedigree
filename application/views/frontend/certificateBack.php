@@ -20,7 +20,11 @@
     <?php } else { ?>
       <div class="imgReplacement"></div>
     <?php } ?>
-    <p class="text-center fs-4"><?= $canine->can_a_s ?></p>
+    <?php if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ ?>
+      <p class="text-center fs-4"><?= $canine->can_a_s ?></p>
+    <?php } else { ?>
+      <p class="text-center fs-5"><?= $canine->can_a_s ?></p>
+    <?php } ?>
     <div class="container">
       <div class="row gx-0">
         <div class="col-4">

@@ -67,24 +67,55 @@ class Stambums extends CI_Controller {
         }
     }
 
-	public function validate_add(){ // butuh cek nama canine, no microchip, no icr
+	public function search_kennel(){
+        if ($this->session->userdata('mem_id')) {
+			$wheBirth['bir_id'] = $this->input->post('stb_bir_id');
+			$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+			$wheStud['stu_id'] = $data['birth']->bir_stu_id;
+			$data['stud'] = $this->studModel->get_studs($wheStud)->row();
+			$wheMember['mem_id IN ('.$data['stud']->stu_member_id.', '.$data['stud']->stu_partner_id.')'] = null;
+			$data['member'] = $this->memberModel->get_members($wheMember)->result();
+			$whe['ken_member_id'] =  $this->input->post('stb_member_id');
+			$whe['ken_stat'] = $this->config->item('accepted');
+			$data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+			$data['kennel_id'] = $data['kennel'][0]->ken_id;
+			$data['mode'] = 1;
+			$this->load->view('frontend/add_stambum', $data);
+        }
+        else {
+          redirect("frontend/Members");
+        }
+    }
+
+	public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
-			$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
-			// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
-			// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-			// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
-			// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
-			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
+			$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+			if ($this->input->post('reg_member')){
+				$this->form_validation->set_rules('stb_member_id', 'Member id ', 'trim|required');
+				$this->form_validation->set_rules('stb_kennel_id', 'Kennel id ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_rules('name', 'Member name ', 'trim|required');
+				$this->form_validation->set_rules('hp', 'Phone number ', 'trim|required');
+				$this->form_validation->set_rules('email', 'email ', 'trim|required');
+			}
+			$this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
 			
-			$data['trah'] = $this->trahModel->get_trah(null)->result();
-			$whe['ken_member_id'] = $this->session->userdata('mem_id');
+			$wheBirth['bir_id'] = $this->input->post('stb_bir_id');
+			$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+			$wheStud['stu_id'] = $data['birth']->bir_stu_id;
+			$data['stud'] = $this->studModel->get_studs($wheStud)->row();
+			$wheMember['mem_id IN ('.$data['stud']->stu_member_id.', '.$data['stud']->stu_partner_id.')'] = null;
+			$data['member'] = $this->memberModel->get_members($wheMember)->result();
+			$whe['ken_member_id'] =  $this->input->post('stb_member_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
-			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
+			$data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+			$data['kennel_id'] = $data['kennel'][0]->ken_id;
+			$data['mode'] = 1;
 			if ($this->form_validation->run() == FALSE){
-				$this->load->view('frontend/add_canine', $data);
+				$this->load->view('frontend/add_stambum', $data);
 			}
 			else{
 				$err = 0;
@@ -108,91 +139,242 @@ class Stambums extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
 				}
 
-				// if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
-				// }
-
-				// if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
-				// }
-
-				if (!$err){
-					$piece = explode("-", $this->input->post('can_date_of_birth'));
-					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
-					
-					$id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
-					$data = array(
-						'can_id' => $id,
-						'can_member_id' => $this->session->userdata('mem_id'),
-						'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
-						'can_breed' => $this->input->post('can_breed'),
-						'can_gender' => $this->input->post('can_gender'),
-						'can_date_of_birth' => $dob,
-						'can_color' => '-', // $this->input->post('can_color'),
-						'can_kennel_id' => $this->input->post('can_kennel_id'),
-						'can_reg_date' => date("Y/m/d"),
-						'can_photo' => $photo,
-						'can_chip_number' => '-', // $this->input->post('can_chip_number'),
-						'can_icr_number' => '-', // $this->input->post('can_icr_number'),
-					);
-		
-					// nama diubah berdasarkan kennel
-					$whereKennel['ken_id'] = $this->input->post('can_kennel_id');
-					$kennel = $this->KennelModel->get_kennels($whereKennel)->result();
-					if ($kennel){
-						if ($kennel[0]->ken_type_id == 1)
-							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
-						else if ($kennel[0]->ken_type_id == 2)
-							$data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
-						else 
-							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
-					}
-		
-					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
+				// cek jumlah male & female
+				if ($this->input->post('stb_gender') == 'MALE'){
+					$wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
+					$wheStbMale['stb_gender'] = 'MALE';
+					$wheStbMale['stb_stat'] = $this->config->item('accepted');
+					$male = $this->stambumModel->get_count($wheStbMale);
+					if ($male >= $data['birth']->bir_male){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
-					}
-
-					if (!$err){
-						$dataPed = array(
-							'ped_sire_id' => $this->config->item('sire_id'),
-							'ped_dam_id' => $this->config->item('dam_id'),
-							'ped_canine_id' => $id,
-						);
-
-						$this->db->trans_strict(FALSE);
-						$this->db->trans_start();
-						$canines = $this->caninesModel->add_canines($data);
-						if ($canines){
-							$pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
-							if ($pedigree){
-								$this->db->trans_complete();
-								// $this->session->set_flashdata('add_success', true);
-								// redirect("frontend/Canines");
-								$this->session->set_flashdata('add_canine_success', true);
-								redirect("frontend/Beranda");
-							}
-							else{
-								$err++;
-							}
-						}
-						else{
-							$err++;
-						}
-						if ($err){
-							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data canine');
-							$this->load->view('frontend/add_canine', $data);
-						}
-					}
-					else{
-						$this->load->view('frontend/add_canine', $data);
+						$this->session->set_flashdata('error_message', 'Male canine children is full');
 					}
 				}
 				else{
-					$this->load->view('frontend/add_canine', $data);
+					$wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
+					$wheStbFemale['stb_gender'] = 'FEMALE';
+					$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+					$female = $this->stambumModel->get_count($wheStbFemale);
+					if ($female >= $data['birth']->bir_female){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Female canine child is full');
+					}
+				}
+
+				$piece = explode("-", $data['birth']->bir_date_of_birth);
+				$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+
+				$ts = new DateTime();
+				$ts_birth = new DateTime($dob);
+				if ($ts_birth > $ts){
+					$err++;
+					$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_stb').' hari dari waktu lahir'); 
+				}
+				else{
+					$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_stb'));
+					if ($diff > 1){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_stb').' hari dari waktu lahir');
+					}
+				}
+
+				$wheDam['can_id'] = $data['stud']->stu_dam_id;
+				$dam = $this->caninesModel->get_canines($wheDam)->row();
+				$wheKennel['mem_id'] = $data['stud']->stu_partner_id;
+				$kennel = $this->memberModel->get_members($wheKennel)->row();
+
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				if ($this->input->post('reg_member')){
+					$wheMember['mem_id'] = $this->input->post('stb_member_id');
+					$member = $this->memberModel->get_members($wheMember)->row();
+				}
+				else{
+					$email = $this->test_input($this->input->post('email'));
+					if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Invalid email format');
+					}
+
+					if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Duplicate phone number');
+					}
+
+					if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Duplicate email');
+					}
+
+					if (!$err){
+						$mem_id = $this->memberModel->record_count() + 1;
+						$member_data = array(
+							'mem_id' => $mem_id,
+							'mem_name' => strtoupper($this->input->post('name')),
+							'mem_hp' => $this->input->post('hp'),
+							'mem_email' => $this->input->post('email'),
+							'mem_username' => $this->input->post('email'),
+							'mem_password' => sha1($this->input->post('hp')),
+							'mem_stat' => $this->config->item('accepted'),
+							'mem_type' => $this->config->item('free_member'),
+							'mem_user' => $this->session->userdata('use_id'),
+							'mem_date' => date('Y-m-d H:i:s'),
+						);
+		
+						$ken_id = $this->kennelModel->record_count() + 1;
+						$kennel_data = array(
+							'ken_id' => $ken_id,
+							'ken_name' => '',
+							'ken_type_id' => 0,
+							'ken_photo' => '-',
+							'ken_member_id' => $mem_id,
+							'ken_stat' => $this->config->item('accepted'),
+							'ken_user' => $this->session->userdata('use_id'),
+							'ken_date' => date('Y-m-d H:i:s'),
+						);
+							
+						$id = $this->memberModel->add_members($member_data);
+						if ($id){
+							$res = $this->kennelModel->add_kennels($kennel_data);
+							if ($res){
+								$result = $this->notification_model->add(17, $mem_id, $mem_id);
+								if (!$result){
+									$err = 'M1';
+								}
+							}
+							else{
+								$err = 'M2';
+							}
+						}
+						else{
+							$err = 'M3';
+						}
+					}
+				}
+
+				if (!$err){
+					$id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
+					$dataCan = array(
+						'can_id' => $id,
+						'can_reg_number' => '-', 
+						'can_breed' => $dam->can_breed,
+						'can_gender' => $this->input->post('stb_gender'),
+						'can_date_of_birth' => $dob,
+						'can_color' => '-', 
+						'can_reg_date' => date("Y/m/d"),
+						'can_photo' => $photo,
+						'can_chip_number' => '-', 
+						'can_icr_number' => '-', 
+						'can_stat' => $this->config->item('rejected'),
+						'can_note' => '',
+						'can_user' => 0,
+						'can_date' => date('Y-m-d H:i:s'),
+					);
+		
+					// nama diubah berdasarkan kennel
+					if ($kennel->ken_type_id == 1)
+						$dataCan['can_a_s'] = strtoupper($this->input->post('stb_a_s'))." VON ".$kennel->ken_name;
+					else if ($kennel->ken_type_id == 2)
+						$dataCan['can_a_s'] = $kennel->ken_name."` ".strtoupper($this->input->post('stb_a_s'));
+					else 
+						$dataCan['can_a_s'] = strtoupper($this->input->post('stb_a_s'));
+
+					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Duplicate canine name');
+					}
+		
+					if (!$err){
+						$dataStb = array(
+							'stb_bir_id' => $this->input->post('stb_bir_id'),
+							'stb_a_s' => $dataCan['can_a_s'],
+							'stb_breed' => $dam->can_breed,
+							'stb_gender' => $this->input->post('stb_gender'),
+							'stb_date_of_birth' => $dob,
+							'stb_reg_date' => date("Y/m/d"),
+							'stb_photo' => $photo,
+							'stb_stat' => $this->config->item('saved'),
+							'stb_user' => 0,
+							'stb_date' => date('Y-m-d H:i:s'),
+							'stb_can_id' => $id,
+						);
+
+						if ($this->input->post('reg_member')){
+							$dataCan['can_member_id'] = $this->input->post('stb_member_id');
+							$dataCan['can_kennel_id'] = $this->input->post('stb_kennel_id');
+							$dataStb['stb_member_id'] = $this->input->post('stb_member_id');
+							$dataStb['stb_kennel_id'] = $this->input->post('stb_kennel_id');
+						}
+						else{
+							$dataCan['can_member_id'] = $mem_id;
+							$dataCan['can_kennel_id'] = $ken_id;
+							$dataStb['stb_member_id'] = $mem_id;
+							$dataStb['stb_kennel_id'] = $ken_id;
+						}
+
+						$dataPed = array(
+							'ped_sire_id' => $data['stud']->stu_sire_id,
+							'ped_dam_id' => $data['stud']->stu_dam_id,
+							'ped_canine_id' => $id,
+						);
+
+						$canines = $this->caninesModel->add_canines($dataCan);
+						if ($canines){
+							$pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
+							if ($pedigree){
+								$result = $this->stambumModel->add_stambum($dataStb);
+								if ($result){
+									if ($this->input->post('reg_member')){
+										$res = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'));
+										if ($res){
+											$this->db->trans_complete();
+											if ($member->mem_firebase_token){
+												$notif = $this->notificationtype_model->get_by_id(18);
+												firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+											}
+											$this->session->set_flashdata('add_success', true);
+											redirect("frontend/Stambums");
+										}
+										else{
+											$err = 1;
+										}
+									}
+									else{
+										$res = $this->notification_model->add(18, $result, $mem_id);
+										if ($res){
+											$this->db->trans_complete();
+											$mail = send_greeting($this->input->post('email'));
+											$this->session->set_flashdata('add_success', true);
+											redirect("frontend/Stambums");
+										}
+										else{
+											$err = 1;
+										}
+									}
+								}
+								else{
+									$err = 2;
+								}
+							}
+							else{
+								$err = 3;
+							}
+						}
+						else{
+							$err = 4;
+						}
+						if ($err){
+							$this->db->trans_rollback();
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak. Error code: '.$err);
+							$this->load->view('frontend/add_stambum', $data);
+						}
+					}
+					else{
+						$this->load->view('frontend/add_stambum', $data);
+					}
+				}
+				else{
+					$this->load->view('frontend/add_stambum', $data);
 				}
 			}
 		}
@@ -200,56 +382,4 @@ class Stambums extends CI_Controller {
 			redirect("frontend/Members");
 		}
 	}
-
-	public function search_canine(){
-		$data['canines'] = [];
-		$data['kennel'] = [];
-		$this->load->view('frontend/search_canine', $data);
-    }
-
-    public function validate_canine(){
-		if ($this->session->userdata('mem_id')){
-			$like['can_a_s'] = $this->input->post('can_a_s');
-			$where['can_member_id'] = 0;
-			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
-
-			$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-			$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
-			$this->load->view('frontend/search_canine', $data);
-		}
-		else{
-			redirect("frontend/Members");
-		}
-    }
-
-	public function validate_claim_canine(){
-		if ($this->session->userdata('mem_id')){
-			$like['can_a_s'] = $this->input->post('can_a_s');
-			$where['can_member_id'] = 0;
-			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
-
-			$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-			$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
-
-			$dataCanine = array(
-				'can_stat' => $this->config->item('saved'),
-				'can_app_user' => 0,
-				'can_member_id' => $this->session->userdata('mem_id'),
-				'can_kennel_id' => $this->input->post('ken_id'),
-			);
-			$wheCanine['can_id'] = $this->input->post('can_id');
-			$res = $this->caninesModel->update_canines($dataCanine, $wheCanine);
-			if ($res){
-				$this->session->set_flashdata('claim_success', TRUE);
-				redirect("frontend/Canines/search_canine");
-			}
-			else{
-				$this->session->set_flashdata('error_message', 'Gagal menyimpan klaim canine');
-				$this->load->view('frontend/search_canine', $data);
-			}
-		}
-		else{
-			redirect("frontend/Members");
-		}
-    }
 }

@@ -241,7 +241,6 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $this->input->post('mem_kode_pos'),
 								'log_email' => $this->input->post('mem_email'),
 								'log_ktp' => $this->input->post('mem_ktp'),
-								'log_pp' => $pp,
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
@@ -495,7 +494,6 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $this->input->post('mem_kode_pos'),
 								'log_email' => $this->input->post('mem_email'),
 								'log_ktp' => $this->input->post('mem_ktp'),
-								'log_pp' => $pp,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
@@ -628,7 +626,6 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $member->mem_kode_pos,
 								'log_email' => $member->mem_email,
 								'log_ktp' => $member->mem_ktp,
-								'log_pp' => $member->mem_pp,
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
@@ -723,7 +720,6 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $member->mem_kode_pos,
 								'log_email' => $member->mem_email,
 								'log_ktp' => $member->mem_ktp,
-								'log_pp' => $member->mem_pp,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('rejected'),
@@ -955,6 +951,21 @@ class Members extends CI_Controller {
 						}
 					}
 				}
+			}
+		}
+
+		public function log(){
+			if ($this->uri->segment(4)){
+				$where['log_member_id'] = $this->uri->segment(4);
+				$data['member'] = $this->LogmemberModel->get_logs($where)->result();
+				$wheKennel['mem_id'] = $this->uri->segment(4);
+				$kennel = $this->KennelModel->get_kennels($wheKennel)->row();
+				$wheLog['log_kennel_id'] = $kennel->ken_id;
+				$data['kennel'] = $this->LogkennelModel->get_logs($wheLog)->result();
+				$this->load->view('backend/log_member', $data);
+			}
+			else{
+				redirect('backend/Members');
 			}
 		}
 }

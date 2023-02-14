@@ -109,6 +109,18 @@ body p {
   font-family: "Times New Roman", Times, serif;
   font-size: 1.4em !important;
 }
+.text-center.fs-5.red{
+  font-family: Impact;
+  font-size: 1.4em !important;
+  color: #e62225 !important;
+  font-weight: 700;
+}
+.text-center.fs-5.black{
+  font-family: Impact;
+  font-size: 1.4em !important;
+  color: black !important;
+  font-weight: 700;
+}
 .label .fs-4{
   font-family: Impact;
   font-size: 1.6em !important;

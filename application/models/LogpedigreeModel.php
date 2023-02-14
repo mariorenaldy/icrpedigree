@@ -10,6 +10,7 @@ class LogpedigreeModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('users','users.use_id = logs_pedigree.log_user');
         $this->db->order_by('logs_pedigree.log_date', 'desc');
         return $this->db->get();
     }
