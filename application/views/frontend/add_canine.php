@@ -15,7 +15,7 @@
             <h3 class="text-center text-warning">Tambah Canine Generasi Pertama</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form class="form-horizontal" method="post" enctype="multipart/form-data" id="main-form">
+                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger" id="error-messages">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -28,7 +28,8 @@
                             <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Canine</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" name="attachment" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
+                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
+                                <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -197,6 +198,7 @@
                         base64data = reader.result;
                         image.src = base64data;
                         latestImage = base64data;
+                        $('#attachment').val(latestImage);
                         $modal.modal('hide');
                     };
                 });
@@ -204,31 +206,6 @@
 
             $('#cancel-btn').click(function(event) {
                 resetImage();
-            });
-
-            $('#main-form').submit(function(e) {
-                e.preventDefault();
-                var formData = $(this).serializeArray();
-                formData.push({
-                    name: "attachment",
-                    value: latestImage
-                });
-                $.ajax({
-                    url: '<?= base_url(); ?>frontend/Canines/validate_add',
-                    method: 'POST',
-                    data: formData,
-                    success: function(data) {
-                        $('#error-messages').empty();
-                        if(data.status == 'success'){
-                            window.location.href = "<?= base_url(); ?>frontend/Beranda";
-                        }else if(data.status == 'error'){
-                            $('#error-messages').append(data.message);
-                        }
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        $('#error-messages').append(xhr.responseText);
-                    }
-                });
             });
         });
     </script>
