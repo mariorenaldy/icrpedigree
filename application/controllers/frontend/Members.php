@@ -508,7 +508,7 @@ class Members extends CI_Controller {
 				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 			} else {
 				$pp = '-';
-				if (isset($_POST['attachment_pp'])) {
+				if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])) {
 					$uploadedImg = $_POST['attachment_pp'];
 					$image_array_1 = explode(";", $uploadedImg);
 					$image_array_2 = explode(",", $image_array_1[1]);
@@ -521,7 +521,7 @@ class Members extends CI_Controller {
 					else{
 						$image_name = $this->config->item('path_member').'member_'.time().'.png';
 						file_put_contents($image_name, $uploadedImg);
-						$pp = "member".trim($image_name, $this->config->item('path_member'));
+						$pp = str_replace($this->config->item('path_member'), '', $image_name);
 					}
 				}	
 

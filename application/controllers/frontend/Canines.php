@@ -112,7 +112,7 @@ class Canines extends CI_Controller {
 					else{
 						$image_name = $this->config->item('path_canine').'canines_'.time().'.png';
 						file_put_contents($image_name, $uploadedImg);
-						$photo = "canines".trim($image_name, $this->config->item('path_canine'));
+						$photo = str_replace($this->config->item('path_canine'), '', $image_name);
 					}
 				}
 

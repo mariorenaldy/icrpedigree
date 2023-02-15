@@ -266,17 +266,20 @@ class Studs extends CI_Controller {
 				if ($can){
 					$err = 0;
 					$photo = '-';
-					if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-						if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_stud'));
-							if ($this->upload->do_upload('attachment_stud')){
-								$uploadData = $this->upload->data();
-								$photo = $uploadData['file_name'];
-							}
-							else{
-								$err++;
-								$this->session->set_flashdata('error_message', 'Foto Pacak Error: '.$this->upload->display_errors());
-							}
+					if (!$err && isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
+						$uploadedImg = $_POST['attachment_stud'];
+						$image_array_1 = explode(";", $uploadedImg);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedImg = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{
+							$image_name = $this->config->item('path_stud').'stud_'.time().'.png';
+							file_put_contents($image_name, $uploadedImg);
+							$photo = str_replace($this->config->item('path_stud'), '', $image_name);
 						}
 					}
 
@@ -287,15 +290,20 @@ class Studs extends CI_Controller {
 
 					if (!$err){
 						$sire = '-';
-						if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_stud_sire'));
-							if ($this->upload->do_upload('attachment_sire')){
-								$uploadData = $this->upload->data();
-								$sire = $uploadData['file_name'];
+						if (isset($_POST['attachment_sire']) && !empty($_POST['attachment_sire'])) {
+							$uploadedImg = $_POST['attachment_sire'];
+							$image_array_1 = explode(";", $uploadedImg);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedImg = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
 							}
 							else{
-								$err++;
-								$this->session->set_flashdata('error_message', 'Foto Sire Error: '.$this->upload->display_errors());
+								$image_name = $this->config->item('path_stud').'sire_'.time().'.png';
+								file_put_contents($image_name, $uploadedImg);
+								$sire = str_replace($this->config->item('path_stud'), '', $image_name);
 							}
 						}
 					}
@@ -307,15 +315,20 @@ class Studs extends CI_Controller {
 		
 					if (!$err){
 						$dam = '-';
-						if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_stud_dam'));
-							if ($this->upload->do_upload('attachment_dam')){
-								$uploadData = $this->upload->data();
-								$dam = $uploadData['file_name'];
+						if (isset($_POST['attachment_dam']) && !empty($_POST['attachment_dam'])) {
+							$uploadedImg = $_POST['attachment_dam'];
+							$image_array_1 = explode(";", $uploadedImg);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedImg = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
 							}
 							else{
-								$err++;
-								$this->session->set_flashdata('error_message', 'Foto Dam Error: '.$this->upload->display_errors());
+								$image_name = $this->config->item('path_stud').'dam_'.time().'.png';
+								file_put_contents($image_name, $uploadedImg);
+								$dam = str_replace($this->config->item('path_stud'), '', $image_name);
 							}
 						}
 					}
