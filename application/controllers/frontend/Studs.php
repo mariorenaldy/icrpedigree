@@ -267,77 +267,66 @@ class Studs extends CI_Controller {
 				$can = $this->caninesModel->get_canines($wheDam)->row();
 				if ($can){
 					$err = 0;
-					$photo = '-';
-					if (isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
-						$uploadedImg = $_POST['attachment_stud'];
-						$image_array_1 = explode(";", $uploadedImg);
-						$image_array_2 = explode(",", $image_array_1[1]);
-						$uploadedImg = base64_decode($image_array_2[1]);
-	
-						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-							$err++;
-							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-						}
-						else{
-							$image_name = $this->config->item('path_stud').'stud_'.time().'.png';
-							file_put_contents($image_name, $uploadedImg);
-							$photo = str_replace($this->config->item('path_stud'), '', $image_name);
-						}
-					}
-
-					if (!$err && $photo == "-"){
+					if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
 						$err++;
 						$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
 					}
-
-					if (!$err){
-						$sire = '-';
-						if (isset($_POST['attachment_sire']) && !empty($_POST['attachment_sire'])) {
-							$uploadedImg = $_POST['attachment_sire'];
-							$image_array_1 = explode(";", $uploadedImg);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedImg = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-							}
-							else{
-								$image_name = $this->config->item('path_stud').'sire_'.time().'.png';
-								file_put_contents($image_name, $uploadedImg);
-								$sire = str_replace($this->config->item('path_stud'), '', $image_name);
-							}
-						}
-					}
-
-					if (!$err && $sire == "-"){
+					if (!isset($_POST['attachment_sire']) || empty($_POST['attachment_sire'])) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
 					}
-		
-					if (!$err){
-						$dam = '-';
-						if (isset($_POST['attachment_dam']) && !empty($_POST['attachment_dam'])) {
-							$uploadedImg = $_POST['attachment_dam'];
-							$image_array_1 = explode(";", $uploadedImg);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedImg = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-							}
-							else{
-								$image_name = $this->config->item('path_stud').'dam_'.time().'.png';
-								file_put_contents($image_name, $uploadedImg);
-								$dam = str_replace($this->config->item('path_stud'), '', $image_name);
-							}
-						}
-					}
-
-					if (!$err && $dam == "-"){
+					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+					}
+
+					$photo = '-';
+					$sire = '-';
+					$dam = '-';
+					if(!$err){
+						$uploadedStud = $_POST['attachment_stud'];
+						$image_array_1 = explode(";", $uploadedStud);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedStud = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedStud) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Ukuran file stud terlalu besar (> 1 MB).');
+						}
+
+						$uploadedSire = $_POST['attachment_sire'];
+						$image_array_1 = explode(";", $uploadedSire);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedSire = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedSire) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Ukuran file sire terlalu besar (> 1 MB).');
+						}
+
+						$uploadedDam = $_POST['attachment_dam'];
+						$image_array_1 = explode(";", $uploadedDam);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedDam = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedDam) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Ukuran file dam terlalu besar (> 1 MB).');
+						}
+
+						if(!$err){
+							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
+							file_put_contents($stud_name, $uploadedStud);
+							$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
+
+							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
+							file_put_contents($sire_name, $uploadedSire);
+							$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
+
+							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+							file_put_contents($dam_name, $uploadedDam);
+							$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
+						}
 					}
 
 					// Lapor pacak harus kurang dari 7 hari
