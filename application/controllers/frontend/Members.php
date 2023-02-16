@@ -520,10 +520,22 @@ class Members extends CI_Controller {
 					}
 					else{
 						$image_name = $this->config->item('path_member').'member_'.time().'.png';
-						file_put_contents($image_name, $uploadedImg);
-						$pp = str_replace($this->config->item('path_member'), '', $image_name);
+						if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
+						} else{
+							if (is_file($image_name) and !is_writable($image_name)) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+							}
+						}
+
+						if(!$err){
+							file_put_contents($image_name, $uploadedImg);
+							$pp = str_replace($this->config->item('path_member'), '', $image_name);
+						}
 					}
-				}	
+				}
 
 				if (!$err && $pp == "-") {
 					$err++;

@@ -119,24 +119,39 @@ class Stambums extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				$photo = '-';
-				if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])){
-					if (is_uploaded_file($_FILES['attachment']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_canine'));
-						if ($this->upload->do_upload('attachment')){
-							$uploadData = $this->upload->data();
-							$photo = $uploadData['file_name'];
-						}
-						else{
-							$err++;
-							$this->session->set_flashdata('error_message', $this->upload->display_errors());
-						}
-					}
-				}
-
-				if (!$err && $photo == "-"){
+				if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
 					$err++;
 					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+				}
+
+				$photo = '-';
+				if(!$err){
+					$uploadedImg = $_POST['attachment'];
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+					}
+
+					$img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+
+					if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
+					} else{
+						if (is_file($img_name) and !is_writable($img_name)) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+						}
+					}
+
+					if(!$err){
+						file_put_contents($img_name, $uploadedImg);
+						$photo = str_replace($this->config->item('path_canine'), '', $img_name);
+					}
 				}
 
 				// cek jumlah male & female
