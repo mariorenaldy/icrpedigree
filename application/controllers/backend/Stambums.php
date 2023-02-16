@@ -185,7 +185,7 @@ class Stambums extends CI_Controller {
               $male = $this->stambumModel->get_count($wheStbMale);
               if ($male >= $birth->bir_male){
                 $err++;
-                $this->session->set_flashdata('error_message', 'Male canine children is full');
+                $this->session->set_flashdata('error_message', 'Male puppy is full');
               }
             }
             else{
@@ -195,7 +195,7 @@ class Stambums extends CI_Controller {
               $female = $this->stambumModel->get_count($wheStbFemale);
               if ($female >= $birth->bir_female){
                 $err++;
-                $this->session->set_flashdata('error_message', 'Female canine child is full');
+                $this->session->set_flashdata('error_message', 'Female puppy is full');
               }
             }
 
@@ -463,7 +463,7 @@ class Stambums extends CI_Controller {
                   }
                   if ($err) {
                     $this->db->trans_rollback();
-                    $this->session->set_flashdata('error_message', 'Failed to save child registration. Error code: '.$err);
+                    $this->session->set_flashdata('error_message', 'Failed to save puppy. Error code: '.$err);
                     $this->load->view('backend/add_stambum', $data);
                   }
                 } else {
@@ -601,7 +601,7 @@ class Stambums extends CI_Controller {
         }
         if ($err){
           $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to approve child registration id = '.$this->uri->segment(4).'. Err code: '.$err);
+          $this->session->set_flashdata('error_message', 'Failed to approve puppy id = '.$this->uri->segment(4).'. Err code: '.$err);
           redirect('backend/Stambums/view_approve');
         }
       }
@@ -672,7 +672,7 @@ class Stambums extends CI_Controller {
         }
         if ($err){
           $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to reject child registration id = '.$this->uri->segment(4));
+          $this->session->set_flashdata('error_message', 'Failed to reject puppy id = '.$this->uri->segment(4));
           redirect('backend/Stambums/view_approve');
         }
       }
@@ -749,7 +749,7 @@ class Stambums extends CI_Controller {
         }
         if ($err){
           $this->db->trans_rollback();
-          $this->session->set_flashdata('error_message', 'Failed to delete child registration id = '.$this->uri->segment(4).'. Error code: '.$err);
+          $this->session->set_flashdata('error_message', 'Failed to delete puppy id = '.$this->uri->segment(4).'. Error code: '.$err);
           redirect('backend/Stambums');
         }
       }

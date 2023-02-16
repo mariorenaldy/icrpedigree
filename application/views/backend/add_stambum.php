@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add Child Registration</title>
+    <title>Add Puppy</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 align-items-center">
-                    <h3 class="text-center text-primary">Add Child Registration</h3>  
+                    <h3 class="text-center text-primary">Add Puppy</h3>  
                     <form id="formCanine" class="form-horizontal" action="<?php echo base_url(); ?>backend/Stambums/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php

@@ -33,7 +33,7 @@ class News_model extends CI_Model{
 		if ($where != null) {
             $this->db->where($where);
         }
-		$this->db->order_by('news.date', 'DESC');
+		$this->db->order_by('news.date DESC, news.news_id DESC');
 		$this->db->limit($this->config->item('news_count'), 0);
 		return $this->db->get('news'); 		
 	}

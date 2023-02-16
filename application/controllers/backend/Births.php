@@ -218,7 +218,10 @@ class Births extends CI_Controller {
 											
 											$dataNews = array(
 												'title' => 'Lahir '.$can->can_breed,
-												'description' => $desc
+												'description' => $desc,
+												'date' => $date,
+												'type' => $this->config->item('birth'),
+												'photo' => $damPhoto,
 											); 
 											$news = $this->news_model->add($dataNews);
 											if ($news){
@@ -427,9 +430,15 @@ class Births extends CI_Controller {
 									$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
 									$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
 									
+									$piece = explode("-", $birth->bir_date_of_birth);
+									$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
 									$dataNews = array(
 										'title' => 'Lahir '.$can->can_breed,
-										'description' => $desc
+										'description' => $desc,
+										'date' => $date,
+										'type' => $this->config->item('birth'),
+										'photo' => $birth->bir_dam_photo,
 									); 
 									$news = $this->news_model->add($dataNews);
 									if ($news){

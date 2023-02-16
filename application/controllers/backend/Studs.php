@@ -456,7 +456,10 @@ class Studs extends CI_Controller {
 
 											$dataNews = array(
 												'title' => 'Pacak '.$can->can_breed,
-												'description' => $desc
+												'description' => $desc,
+												'date' => $date,
+												'type' => $this->config->item('stud'),
+												'photo' => $photo,
 											); 
 											$news = $this->news_model->add($dataNews);
 											if ($news){
@@ -998,9 +1001,15 @@ class Studs extends CI_Controller {
 									$desc .= ' antara '.$c->can_a_s;
 									$desc .= ' dan '.$can->can_a_s;
 
+									$piece = explode("-", $stud->stu_stud_date);
+									$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
 									$dataNews = array(
 										'title' => 'Pacak '.$can->can_breed,
-										'description' => $desc
+										'description' => $desc,
+										'date' => $date,
+										'type' => $this->config->item('stud'),
+										'photo' => $stud->stu_photo,
 									); 
 									$news = $this->news_model->add($dataNews);
 									if ($news){

@@ -16,7 +16,7 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
-                        <div class="text-danger" id="error-messages">
+                        <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
                                 echo $this->session->flashdata('error_message').'<br/>';
@@ -176,7 +176,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: 2/3,
+                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
                     viewMode: 3,
                     preview: '.preview'
                 });
@@ -187,8 +187,8 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: 400,
-                    height: 600
+                    width: <?= $this->config->item('img_width') ?>,
+                    height: <?= $this->config->item('img_height') ?>
                 });
                 canvas.toBlob(function(blob) {
                     url = URL.createObjectURL(blob);

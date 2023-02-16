@@ -206,7 +206,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: 2/3,
+                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
                     viewMode: 3,
                     preview: '.preview'
                 });
@@ -217,8 +217,8 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: 400,
-                    height: 600
+                    width: <?= $this->config->item('img_width') ?>,
+                    height: <?= $this->config->item('img_height') ?>
                 });
                 canvas.toBlob(function(blob) {
                     url = URL.createObjectURL(blob);

@@ -594,6 +594,10 @@ $config['upload_birth'] = Array(
 );
 
 $config['file_size'] = 1048576;
+$config['img_width'] = 800;
+$config['img_height'] = 600;
+$config['img_width_ratio'] = 4;
+$config['img_height_ratio'] = 3;
 
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
@@ -634,3 +638,8 @@ $config['admin'] = 0;
 $config['user'] = 1;
 
 $config['can_name_length'] = 20;
+
+$config['no_member'] = 0;
+
+$config['stud'] = 1;
+$config['birth'] = 2;

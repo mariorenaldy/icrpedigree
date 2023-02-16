@@ -152,6 +152,7 @@ class Studs extends CI_Controller {
 			$whereDam['can_gender'] = 'FEMALE';
 			$whereDam['can_stat'] = $this->config->item('accepted');
 			$whereDam['can_id !='] = $this->config->item('dam_id');
+			$whereDam['can_member_id !='] = $this->config->item('no_member');
 			$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 
 			// Dam harus 12 bulan
@@ -229,6 +230,7 @@ class Studs extends CI_Controller {
 			$whereDam['can_gender'] = 'FEMALE';
 			$whereDam['can_stat'] = $this->config->item('accepted');
 			$whereDam['can_id !='] = $this->config->item('dam_id');
+			$whereDam['can_member_id !='] = $this->config->item('no_member');
 			$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 
 			// Dam harus 12 bulan
@@ -266,7 +268,7 @@ class Studs extends CI_Controller {
 				if ($can){
 					$err = 0;
 					$photo = '-';
-					if (!$err && isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
+					if (isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
 						$uploadedImg = $_POST['attachment_stud'];
 						$image_array_1 = explode(";", $uploadedImg);
 						$image_array_2 = explode(",", $image_array_1[1]);

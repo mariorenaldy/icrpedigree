@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Child Registration List</title>
+    <title>Puppy List</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
@@ -16,14 +16,14 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Child Registration List</h3>
+                <h3 class="text-center text-primary">Puppy List</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('add_success')){
-                            echo 'Child Registration has been saved<br/>';
+                            echo 'Puppy has been saved<br/>';
                         }
                         if ($this->session->flashdata('delete_success')){
-                            echo 'Child Registration has been deleted<br/>';
+                            echo 'Puppy has been deleted<br/>';
                         }
                     ?>
                 </div>
@@ -69,7 +69,7 @@
                         <tbody>
                             <?php foreach ($stambum AS $r){ ?>
                                 <tr>
-                                    <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->stb_id ?>, '<?= $r->stb_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Child Registration"><i class="fa fa-trash"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->stb_id ?>, '<?= $r->stb_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Puppy"><i class="fa fa-trash"></i></button></td>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">

@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 edit-buttons text-center" style="display: none;">
                         <button class="btn btn-primary" type="submit">Simpan</button>
@@ -138,24 +138,24 @@
         image.src = base64data;
         $('#attachment_pp').val(base64data);
     };
-    var resetImage = function(event) {
+    var reset = function(event) {
         event.target.value = null;
+        base64data = null;
     };
     var revert = function() {
         editBtns.style.display = "none";
         image.src = imageOri;
-        base64data = null;
     };
 
     $(document).ready(function() {
         var $modal = $('#modal');
-        var sampleImage = document.getElementById('sample_image');
+        var image = document.getElementById('sample_image');
         var cropper;
         
         $('#my_file').change(function(event) {
             var files = event.target.files;
             var done = function(url) {
-                sampleImage.src = url;
+                image.src = url;
                 $modal.modal('show');
             };
             if (files && files.length > 0) {
@@ -168,7 +168,7 @@
         });
 
         $modal.on('shown.bs.modal', function() {
-            cropper = new Cropper(sampleImage, {
+            cropper = new Cropper(image, {
                 aspectRatio: 1,
                 viewMode: 3,
                 preview: '.preview'

@@ -75,7 +75,7 @@ class Canines extends CI_Controller {
 		}
 	}
 
-	public function validate_add(){ // butuh cek nama canine, no microchip, no icr
+	public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
@@ -105,9 +105,7 @@ class Canines extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						// $this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-						$resp['status'] = 'error';
-						$resp['message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+						$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
 					}
 					else{
 						$image_name = $this->config->item('path_canine').'canines_'.time().'.png';
@@ -136,7 +134,7 @@ class Canines extends CI_Controller {
 					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
 					
 					$id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
-					$record = array(
+					$data = array(
 						'can_id' => $id,
 						'can_member_id' => $this->session->userdata('mem_id'),
 						'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
@@ -156,14 +154,14 @@ class Canines extends CI_Controller {
 					$kennel = $this->KennelModel->get_kennels($whereKennel)->result();
 					if ($kennel){
 						if ($kennel[0]->ken_type_id == 1)
-							$record['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
+							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
 						else if ($kennel[0]->ken_type_id == 2)
-							$record['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
+							$data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
 						else 
-							$record['can_a_s'] = strtoupper($this->input->post('can_a_s'));
+							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
 					}
 		
-					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $record['can_a_s'])){
+					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
 						$err++;
 						$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
 					}
@@ -177,7 +175,7 @@ class Canines extends CI_Controller {
 
 						$this->db->trans_strict(FALSE);
 						$this->db->trans_start();
-						$canines = $this->caninesModel->add_canines($record);
+						$canines = $this->caninesModel->add_canines($data);
 						if ($canines){
 							$pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
 							if ($pedigree){
