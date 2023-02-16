@@ -314,16 +314,35 @@ class Studs extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Ukuran file dam terlalu besar (> 1 MB).');
 						}
 
+						$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
+						$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
+						$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+
+						if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Folder stud tidak ditemukan atau tidak writeable.');
+						} else{
+							if (is_file($stud_name) and !is_writable($stud_name)) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'File stud sudah ada dan tidak writeable.');
+							}
+							if (is_file($sire_name) and !is_writable($sire_name)) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'File sire sudah ada dan tidak writeable.');
+							}
+							if (is_file($dam_name) and !is_writable($dam_name)) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'File dam sudah ada dan tidak writeable.');
+							}
+						}
+
 						if(!$err){
-							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
 							file_put_contents($stud_name, $uploadedStud);
 							$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
 
-							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
 							file_put_contents($sire_name, $uploadedSire);
 							$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
 
-							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
 							file_put_contents($dam_name, $uploadedDam);
 							$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
 						}
