@@ -148,23 +148,35 @@ class Canines extends CI_Controller {
             $this->load->view('backend/add_canine', $data);
           } else {
             $err = 0;
-            $photo = '-';
-            if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-              if (is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-                $this->upload->initialize($this->config->item('upload_canine'));
-                if ($this->upload->do_upload('attachment')) {
-                  $uploadData = $this->upload->data();
-                  $photo = $uploadData['file_name'];
-                } else {
-                  $err++;
-                  $this->session->set_flashdata('error_message', $this->upload->display_errors());
-                }
-              }
-            }
 
-            if (!$err && $photo == "-") {
+            if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
               $err++;
               $this->session->set_flashdata('error_message', 'Photo is required');
+            }
+    
+            $photo = '-';
+            if(!$err){
+              $uploadedImg = $_POST['attachment'];
+              $image_array_1 = explode(";", $uploadedImg);
+              $image_array_2 = explode(",", $image_array_1[1]);
+              $uploadedImg = base64_decode($image_array_2[1]);
+    
+              if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+                $err++;
+                $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+              }
+    
+              $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+    
+              if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
+                $err++;
+                $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+              } else{
+                if (is_file($img_name) and !is_writable($img_name)) {
+                  $err++;
+                  $this->session->set_flashdata('error_message', 'File already exists and not writeable.');
+                }
+              }
             }
 
             if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
@@ -178,6 +190,9 @@ class Canines extends CI_Controller {
             }
 
             if (!$err) {
+              file_put_contents($img_name, $uploadedImg);
+              $photo = str_replace($this->config->item('path_canine'), '', $img_name);
+
               $piece = explode("-", $this->input->post('can_date_of_birth'));
               $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
     
@@ -431,19 +446,35 @@ class Canines extends CI_Controller {
         $this->load->view('backend/edit_canine', $data);
       } else {
         $err = 0;
-        $photo = '-';
-        if (!$err && isset($_FILES['attachment']) && !empty($_FILES['attachment']['tmp_name']) && is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-          if (is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-            $this->upload->initialize($this->config->item('upload_canine'));
-            if ($this->upload->do_upload('attachment')) {
-              $uploadData = $this->upload->data();
-              $photo = $uploadData['file_name'];
-            } else {
+        if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
+					$err++;
+					$this->session->set_flashdata('error_message', 'Photo is required');
+				}
+
+				$photo = '-';
+				if(!$err){
+					$uploadedImg = $_POST['attachment'];
+          $image_array_1 = explode(";", $uploadedImg);
+          $image_array_2 = explode(",", $image_array_1[1]);
+          $uploadedImg = base64_decode($image_array_2[1]);
+
+          if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+            $err++;
+            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+          }
+
+          $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+
+          if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
+            $err++;
+            $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+          } else{
+            if (is_file($img_name) and !is_writable($img_name)) {
               $err++;
-              $this->session->set_flashdata('error_message', $this->upload->display_errors());
+              $this->session->set_flashdata('error_message', 'File already exists and not writeable.');
             }
           }
-        }
+				}
 
         if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_icr_number', $this->input->post('can_icr_number'))){
           $err++;
@@ -461,6 +492,9 @@ class Canines extends CI_Controller {
         }
 
         if (!$err) {
+          file_put_contents($img_name, $uploadedImg);
+          $photo = str_replace($this->config->item('path_canine'), '', $img_name);
+          
           $piece = explode("-", $this->input->post('can_date_of_birth'));
           $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 

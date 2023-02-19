@@ -124,32 +124,58 @@ class Members extends CI_Controller {
 				else{
 					$err = 0;
 					if ($this->input->post('mem_type')){
+						if (!isset($_POST['attachment_pp']) || empty($_POST['attachment_pp'])){
+							$err++;
+							$this->session->set_flashdata('error_message', 'PP is required');
+						}
+						if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
+						}
+	
 						$pp = '-';
-						if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_member'));
-								if ($this->upload->do_upload('attachment_pp')){
-									$uploadData = $this->upload->data();
-									$pp = $uploadData['file_name'];
-								}
-								else{
+						$logo = '-';
+						if(!$err){
+							$uploadedPP = $_POST['attachment_pp'];
+							$image_array_1 = explode(";", $uploadedPP);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedPP = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
+							}
+	
+							$uploadedLogo = $_POST['attachment_logo'];
+							$image_array_1 = explode(";", $uploadedLogo);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedLogo = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
+							}
+	
+							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+	
+							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
+							} else{
+								if (is_file($pp_name) and !is_writable($pp_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', $this->upload->display_errors());
+									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
 								}
 							}
-						}
-		
-						$logo = '-';
-						if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_kennel'));
-								if ($this->upload->do_upload('attachment_logo')){
-									$uploadData = $this->upload->data();
-									$logo = $uploadData['file_name'];
-								}
-								else{
+
+							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');
+							} else{
+								if (is_file($logo_name) and !is_writable($logo_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', $this->upload->display_errors());
+									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
 								}
 							}
 						}
@@ -196,6 +222,12 @@ class Members extends CI_Controller {
 					}
 	
 					if (!$err){
+						file_put_contents($pp_name, $uploadedPP);
+						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+	
+						file_put_contents($logo_name, $uploadedLogo);
+						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+
 						$mem_id = $this->MemberModel->record_count() + 1;
 						if ($this->input->post('mem_type')){
 							$data = array(
@@ -395,32 +427,58 @@ class Members extends CI_Controller {
 				else{
 					$err = 0;
 					if ($this->input->post('mem_type')){
+						if (!isset($_POST['attachment_pp']) || empty($_POST['attachment_pp'])){
+							$err++;
+							$this->session->set_flashdata('error_message', 'PP is required');
+						}
+						if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
+						}
+	
 						$pp = '-';
-						if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_member'));
-								if ($this->upload->do_upload('attachment_pp')){
-									$uploadData = $this->upload->data();
-									$pp = $uploadData['file_name'];
-								}
-								else{
+						$logo = '-';
+						if(!$err){
+							$uploadedPP = $_POST['attachment_pp'];
+							$image_array_1 = explode(";", $uploadedPP);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedPP = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
+							}
+	
+							$uploadedLogo = $_POST['attachment_logo'];
+							$image_array_1 = explode(";", $uploadedLogo);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedLogo = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
+							}
+	
+							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+	
+							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
+							} else{
+								if (is_file($pp_name) and !is_writable($pp_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', $this->upload->display_errors());
+									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
 								}
 							}
-						}
-		
-						$logo = '-';
-						if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_kennel'));
-								if ($this->upload->do_upload('attachment_logo')){
-									$uploadData = $this->upload->data();
-									$logo = $uploadData['file_name'];
-								}
-								else{
+
+							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');
+							} else{
+								if (is_file($logo_name) and !is_writable($logo_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', $this->upload->display_errors());
+									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
 								}
 							}
 						}
@@ -457,6 +515,12 @@ class Members extends CI_Controller {
 					}
 
 					if (!$err){
+						file_put_contents($pp_name, $uploadedPP);
+						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+	
+						file_put_contents($logo_name, $uploadedLogo);
+						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+						
 						if ($this->input->post('mem_type')){
 							$data = array(
 								'mem_name' => strtoupper($this->input->post('mem_name')),
