@@ -133,27 +133,39 @@ class Births extends CI_Controller {
 				}
 				else{
 					$err = 0;
+					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Dam photo is required');
+					}
+			
 					$damPhoto = '-';
 					if (!$err){
-						if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_birth'));
-							if ($this->upload->do_upload('attachment_dam')){
-								$uploadData = $this->upload->data();
-								$damPhoto = $uploadData['file_name'];
-							}
-							else{
-								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+						$uploadedImg = $_POST['attachment_dam'];
+						$image_array_1 = explode(";", $uploadedImg);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedImg = base64_decode($image_array_2[1]);
+				
+						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+						}
+				
+						$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+						} else{
+							if (is_file($img_name) and !is_writable($img_name)) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
 							}
 						}
 					}
-	
-					if (!$err && $damPhoto == "-"){
-						$err++;
-						$this->session->set_flashdata('error_message', 'Dam photo is required'); 
-					}
 						
 					if (!$err){
+						file_put_contents($img_name, $uploadedImg);
+              			$damPhoto = str_replace($this->config->item('path_birth'), '', $img_name);
+
 						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
 						$stud = $this->studModel->get_studs($whereStud)->row();
 						if ($stud){
@@ -303,21 +315,35 @@ class Births extends CI_Controller {
 				else{
 					$err = 0;
 					$damPhoto = '-';
-					if (!$err){
-						if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_birth'));
-							if ($this->upload->do_upload('attachment_dam')){
-								$uploadData = $this->upload->data();
-								$damPhoto = $uploadData['file_name'];
-							}
-							else{
+					if (isset($_POST['attachment_dam']) && !empty($_POST['attachment_dam'])){
+						$uploadedImg = $_POST['attachment_dam'];
+						$image_array_1 = explode(";", $uploadedImg);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedImg = base64_decode($image_array_2[1]);
+			
+						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+						}
+			
+						$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+						} else{
+							if (is_file($img_name) and !is_writable($img_name)) {
 								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+								$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
 							}
 						}
 					}
 	
 					if (!$err){
+						if($uploadedImg){
+							file_put_contents($img_name, $uploadedImg);
+							$damPhoto = str_replace($this->config->item('path_birth'), '', $img_name);
+						}
+
 						$piece = explode("-", $this->input->post('bir_date_of_birth'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 		
