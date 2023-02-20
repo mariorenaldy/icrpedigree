@@ -9,7 +9,7 @@
 <body class="text-white text-break">
 <?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
-<h3 class="text-center text-warning">Pedigree</h3> 
+<h3 class="text-center text-warning">Silsilah</h3> 
 <div id="wrapper"> 
   <span class="label" id="main">
     <p class="fs-5 text-center"><?= $canine->can_breed ?></p>

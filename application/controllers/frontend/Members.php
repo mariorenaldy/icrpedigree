@@ -60,6 +60,7 @@ class Members extends CI_Controller {
 				if (!$err){
 					$this->session->set_userdata('username', $this->input->post('username'));
 					$this->session->set_userdata('mem_id', $member->mem_id);
+					$this->session->set_userdata('mem_name', $member->mem_name);
 					$this->session->set_userdata('mem_type', $member->mem_type);
 					if ($member->mem_pp && $member->mem_pp != '-')
 						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
@@ -530,12 +531,12 @@ class Members extends CI_Controller {
 							}
 						}
 
-						if(!$err){
+						if (!$err){
 							file_put_contents($image_name, $uploadedImg);
 							$pp = str_replace($this->config->item('path_member'), '', $image_name);
 						}
 					}
-				}
+				}	
 
 				if (!$err && $pp == "-") {
 					$err++;

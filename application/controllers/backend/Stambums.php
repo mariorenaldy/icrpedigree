@@ -761,4 +761,28 @@ class Stambums extends CI_Controller {
       redirect("backend/Stambums");
     }
   }
+
+  public function log(){
+    if ($this->uri->segment(4)){
+      $where['log_stb_id'] = $this->uri->segment(4);
+      $data['stambum'] = $this->logstambumModel->get_logs($where)->result();
+      $whePed['log_canine_id'] = $this->uri->segment(4);
+      $data['ped'] = $this->logpedigreeModel->get_logs($whePed)->result();
+      $data['sire'] = Array();
+      $data['dam'] = Array();
+      foreach($data['ped'] AS $r){
+        $wheSire = [];
+        $wheSire['can_id'] = $r->log_sire_id;
+        $data['sire'][] = $this->caninesModel->get_canines($wheSire)->row();
+
+        $wheDam = [];
+        $wheDam['can_id'] = $r->log_dam_id;
+        $data['dam'][] = $this->caninesModel->get_canines($wheDam)->row();
+      }
+      $this->load->view('backend/log_stambum', $data);
+    }
+    else{
+      redirect('backend/Canines');
+    }
+  }
 }

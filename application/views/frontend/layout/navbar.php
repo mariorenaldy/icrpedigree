@@ -9,6 +9,7 @@
             <?php } ?>
             <a href="<?= base_url().'frontend/Rules' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-list"></i> <span class="nav-text">Aturan</span></a>
             <a href="<?= base_url().'frontend/News' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-newspaper"></i> <span class="nav-text">Berita</span></a>
+            <a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text">Silsilah</span></a>
             <?php if ($this->session->userdata('username')) : ?>
                 <?php if ($this->session->userdata('mem_type') == '1'){ ?>
                     <div class="dropdown">
@@ -25,11 +26,10 @@
                     </div>
                 <?php } ?>
                 <a href="<?= base_url().'frontend/Canines' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-dog"></i> <span class="nav-text">My Canine</span></a>
-                <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text text-warning notif-text"><?= $this->session->userdata('notif_count') ?></span></a></li>
+                <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text notif-text text-warning"><?= $this->session->userdata('notif_count') ?></span></a></li>
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp">
-                        <?= $this->session->userdata('username') ?>
+                        <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp"> <span class="nav-text notif-text"><?= $this->session->userdata('mem_name') ?></span>
                     </span>
                     <ul class="dropdown-menu">
                         <!-- <?php if ($this->session->userdata('mem_type') == $this->config->item('pro_member')){ ?><li><a class="dropdown-item" href="<?= base_url() ?>frontend/Members/edit_profile">Edit Profile</a></li><?php } ?> -->

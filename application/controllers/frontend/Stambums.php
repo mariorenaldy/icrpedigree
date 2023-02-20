@@ -125,7 +125,7 @@ class Stambums extends CI_Controller {
 				}
 
 				$photo = '-';
-				if(!$err){
+				if (!$err){
 					$uploadedImg = $_POST['attachment'];
 					$image_array_1 = explode(";", $uploadedImg);
 					$image_array_2 = explode(",", $image_array_1[1]);
@@ -137,7 +137,6 @@ class Stambums extends CI_Controller {
 					}
 
 					$img_name = $this->config->item('path_canine').'canine_'.time().'.png';
-
 					if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
@@ -148,7 +147,7 @@ class Stambums extends CI_Controller {
 						}
 					}
 
-					if(!$err){
+					if (!$err){
 						file_put_contents($img_name, $uploadedImg);
 						$photo = str_replace($this->config->item('path_canine'), '', $img_name);
 					}

@@ -124,6 +124,7 @@ class Members extends CI_Controller {
 				else{
 					$err = 0;
 					if ($this->input->post('mem_type')){
+						$pp = '-';
 						if (!isset($_POST['attachment_pp']) || empty($_POST['attachment_pp'])){
 							$err++;
 							$this->session->set_flashdata('error_message', 'PP is required');
@@ -132,10 +133,10 @@ class Members extends CI_Controller {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
 						}
-	
+		
 						$pp = '-';
 						$logo = '-';
-						if(!$err){
+						if (!$err){
 							$uploadedPP = $_POST['attachment_pp'];
 							$image_array_1 = explode(";", $uploadedPP);
 							$image_array_2 = explode(",", $image_array_1[1]);

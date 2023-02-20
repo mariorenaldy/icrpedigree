@@ -3,44 +3,33 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Canine</title>
+    <title>Silsilah</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body class="text-white text-break">
-<div id="myModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modalImg">
-</div>
 <?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
+        <div id="myModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modalImg">
+        </div>
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">My Canine</h3>
-                <div class="text-success mb-3">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'Canine berhasil disimpan<br/>';
-                        }
-                    ?>
-                </div>
-                <div class="search-container">
-                    <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
+                <h3 class="text-center text-warning">Silsilah</h3>
+                <div class="search-container mb-5">
+                    <form action="<?= base_url().'frontend/Pedigree/search'?>" method="post">
                         <div class="input-group my-3">
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= set_value('keywords') ?>">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" placeholder="No. ICR/Nama/Kennel/Tanggal Lahir" name="keywords" value="<?= set_value('keywords') ?>"><br/>Format Tanggal Lahir: tgl-bulan-tahun. Contoh: 1-1-2023.
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Canine"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="row my-3">
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Tambah Canine Generasi Satu"><i class="fa fa-plus"></i></button>
-                    </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-sm-1"><b>Foto</b></div>
@@ -86,11 +75,8 @@
                             <?php echo $c->stat_name; ?>
                         </div>
                         <div class="col-sm-2">
-                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil Canine"><i class="fa fa-dog"></i></button>
-                            <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fas fa-book-open"></i></button>
-                            <!-- <button type="button" class="btn btn-light"><i class="fa fa-bars" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-update-canines"><i class="fa fa-pencil-square-o"></i></button>
-                            <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->
+                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil Canine"><i class="fa fa-file"></i></button>
+                            <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fa fa-dog"></i></button>
                         </div>
                     </div>
                 <?php } ?>
@@ -99,15 +85,6 @@
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
-        function add(){
-            window.location = "<?= base_url(); ?>frontend/Canines/add";
-        }
-        function detail(id){
-            window.location = "<?= base_url(); ?>frontend/Canines/view_detail/"+id;
-        }
-        function pedigree(id){
-            window.location = "<?= base_url(); ?>frontend/Certificate/index/"+id;
-        }
         var modal = document.getElementById("myModal");
         function display(id){
             var img = document.getElementById(id);

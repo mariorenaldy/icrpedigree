@@ -179,6 +179,7 @@ class Births extends CI_Controller {
 							if ($birth){
 								$dataLog = array(
 									'log_bir_id' => $birth,
+									'log_stu_id' => $this->input->post('bir_stu_id'),
 									'log_dam_photo' => $damPhoto,
 									'log_male' => $this->input->post('bir_male'),
 									'log_female' => $this->input->post('bir_female'),
@@ -391,6 +392,7 @@ class Births extends CI_Controller {
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
+							'log_stu_id' => $birth->bir_stu_id,
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,
@@ -502,6 +504,7 @@ class Births extends CI_Controller {
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
+							'log_stu_id' => $birth->bir_stu_id,
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,
@@ -592,6 +595,17 @@ class Births extends CI_Controller {
 				else{
 					redirect('backend/Users/login');
 				}
+			}
+			else{
+				redirect('backend/Births');
+			}
+		}
+
+		public function log(){
+			if ($this->uri->segment(4)){
+				$where['log_bir_id'] = $this->uri->segment(4);
+				$data['birth'] = $this->logbirthModel->get_logs($where)->result();
+				$this->load->view('backend/log_birth', $data);
 			}
 			else{
 				redirect('backend/Births');

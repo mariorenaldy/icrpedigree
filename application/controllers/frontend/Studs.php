@@ -336,7 +336,7 @@ class Studs extends CI_Controller {
 							}
 						}
 
-						if(!$err){
+						if (!$err){
 							file_put_contents($stud_name, $uploadedStud);
 							$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
 

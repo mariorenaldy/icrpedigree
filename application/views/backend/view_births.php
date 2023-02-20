@@ -58,8 +58,9 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-2"><b>Photo</b></div>
                     <div class="col-md-2"><b>Date of Birth</b></div>
-                    <div class="col-md-1" align="center"><b>Male</b></div>
-                    <div class="col-md-1" align="center"><b>Female</b></div>
+                    <div class="col-md-1 text-center"><b>Male</b></div>
+                    <div class="col-md-1 text-center"><b>Female</b></div>
+                    <div class="col-md-2"><b>Kennel</b></div>
                     <div class="col-md-2"><b>Status</b></div>
                 </div>
                 <?php
@@ -72,20 +73,23 @@
                                 <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button><br/>
                             <?php } 
                                 if ($stambum_stat[$i]){ ?>
-                                <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Child Registration"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
                             <?php } ?>
                         </div>
-                        <div class="col-md-2 mb-1">
-                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
+                        <div class="col-md-2 mb-1 text-center">
+                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')"><br/><?= $b->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
                             <?= $b->bir_date_of_birth; ?>
                         </div>
-                        <div class="col-md-1" align="right">
+                        <div class="col-md-1 text-end">
                             <?= $b->bir_male; ?>
                         </div>
-                        <div class="col-md-1" align="right">
+                        <div class="col-md-1 text-end">
                             <?= $b->bir_female; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?= $b->ken_name; ?>
                         </div>
                         <div class="col-md-2">
                             <?= $b->stat_name.'<br/>'.$b->use_name.' (<span class="text-nowrap">'.$b->bir_app_date.'</span>)'; ?>

@@ -148,14 +148,13 @@ class Canines extends CI_Controller {
             $this->load->view('backend/add_canine', $data);
           } else {
             $err = 0;
-
             if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
               $err++;
               $this->session->set_flashdata('error_message', 'Photo is required');
             }
     
             $photo = '-';
-            if(!$err){
+            if (!$err){
               $uploadedImg = $_POST['attachment'];
               $image_array_1 = explode(";", $uploadedImg);
               $image_array_2 = explode(",", $image_array_1[1]);
@@ -167,7 +166,6 @@ class Canines extends CI_Controller {
               }
     
               $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
-    
               if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
                 $err++;
                 $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
@@ -197,7 +195,7 @@ class Canines extends CI_Controller {
               $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
     
               $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
-              $data = array(
+              $dataCan = array(
                 'can_id' => $id,
                 'can_member_id' => $this->input->post('can_member_id'),
                 'can_reg_number' => strtoupper($this->input->post('can_reg_number')),
@@ -224,17 +222,17 @@ class Canines extends CI_Controller {
                 $kennel = $this->kennelModel->get_kennels($whereKennel)->result();
                 if ($kennel) {
                   if ($kennel[0]->ken_type_id == 1)
-                    $data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
+                    $dataCan['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
                   else if ($kennel[0]->ken_type_id == 2)
-                    $data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
+                    $dataCan['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
                   else 
-                    $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
+                    $dataCan['can_a_s'] = strtoupper($this->input->post('can_a_s'));
                 }
               }
               else
-                $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
+                $dataCan['can_a_s'] = strtoupper($this->input->post('can_a_s'));
 
-              if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
+              if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
                 $err++;
                 $this->session->set_flashdata('error_message', 'Duplicate canine name');
               }
@@ -242,7 +240,7 @@ class Canines extends CI_Controller {
               $dataLog = array(
                 'log_canine_id' => $id,
                 'log_reg_number' => strtoupper($this->input->post('can_reg_number')),
-                'log_a_s' => $data['can_a_s'],
+                'log_a_s' => $dataCan['can_a_s'],
                 'log_breed' => $this->input->post('can_breed'),
                 'log_gender' => $this->input->post('can_gender'),
                 'log_date_of_birth' => $dob,
@@ -277,7 +275,7 @@ class Canines extends CI_Controller {
               if (!$err) {
                 $this->db->trans_strict(FALSE);
                 $this->db->trans_start();
-                $canines = $this->caninesModel->add_canines($data);
+                $canines = $this->caninesModel->add_canines($dataCan);
                 if ($canines) {
                   $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
                   if ($pedigree) {
@@ -446,13 +444,7 @@ class Canines extends CI_Controller {
         $this->load->view('backend/edit_canine', $data);
       } else {
         $err = 0;
-        if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Photo is required');
-				}
-
-				$photo = '-';
-				if(!$err){
+        if (!$err){
 					$uploadedImg = $_POST['attachment'];
           $image_array_1 = explode(";", $uploadedImg);
           $image_array_2 = explode(",", $image_array_1[1]);
@@ -464,7 +456,6 @@ class Canines extends CI_Controller {
           }
 
           $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
-
           if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
             $err++;
             $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
@@ -494,7 +485,7 @@ class Canines extends CI_Controller {
         if (!$err) {
           file_put_contents($img_name, $uploadedImg);
           $photo = str_replace($this->config->item('path_canine'), '', $img_name);
-          
+
           $piece = explode("-", $this->input->post('can_date_of_birth'));
           $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 

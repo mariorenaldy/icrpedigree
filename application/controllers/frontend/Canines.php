@@ -119,7 +119,7 @@ class Canines extends CI_Controller {
 							}
 						}
 
-						if(!$err){
+						if (!$err){
 							file_put_contents($image_name, $uploadedImg);
 							$photo = str_replace($this->config->item('path_canine'), '', $image_name);
 						}

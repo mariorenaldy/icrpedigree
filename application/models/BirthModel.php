@@ -14,6 +14,7 @@ class BirthModel extends CI_Model {
         $this->db->join('studs','studs.stu_id = births.bir_stu_id');
         $this->db->join('members','members.mem_id = studs.stu_member_id');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id AND kennels.ken_member_id = studs.stu_member_id');
+        $this->db->join('canines','canines.can_id = studs.stu_dam_id');
         $this->db->join('users','users.use_id = births.bir_app_user');
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
         $this->db->order_by('births.bir_date_of_birth', 'desc');
