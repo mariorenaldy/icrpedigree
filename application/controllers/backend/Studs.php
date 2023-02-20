@@ -499,7 +499,7 @@ class Studs extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: '+$err);
+							$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: '.$err);
 							$this->load->view('backend/add_stud', $data);
 						}
 					}
@@ -929,7 +929,7 @@ class Studs extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Failed to edit stud. Err code: '+$err);
+							$this->session->set_flashdata('error_message', 'Failed to edit stud. Err code: '.$err);
 							$this->load->view('backend/edit_stud', $data);
 						}
 					}
