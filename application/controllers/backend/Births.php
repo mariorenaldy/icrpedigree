@@ -333,6 +333,7 @@ class Births extends CI_Controller {
 							$dataBirth['bir_dam_photo'] = $damPhoto;
 
 						$dataLog = array(
+							'log_bir_id' => $this->input->post('bir_id'),
 							'log_male' => $this->input->post('bir_male'),
 							'log_female' => $this->input->post('bir_female'),
 							'log_dam_photo' => $damPhoto,
