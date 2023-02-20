@@ -840,9 +840,9 @@ class Studs extends CI_Controller {
 					$can = $this->caninesModel->get_canines($wheDam)->row();
 					if ($can){
 						$err = 0;
-						$photo = '';
-						$sire = '';
-						$dam = '';
+						$photo = '-';
+						$sire = '-';
+						$dam = '-';
 						if (isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
 							$uploadedStud = $_POST['attachment_stud'];
 							$image_array_1 = explode(";", $uploadedStud);
@@ -928,11 +928,11 @@ class Studs extends CI_Controller {
 								'stu_date' => date('Y-m-d H:i:s'),
 								'stu_partner_id' => $can->can_member_id,
 							);
-							if ($photo)
+							if ($photo != '-')
 								$data['stu_photo'] = $photo;
-							if ($sire)
+							if ($sire != '-')
 								$data['stu_sire_photo'] = $sire;
-							if ($dam)
+							if ($dam != '-')
 								$data['stu_dam_photo'] = $dam;
 
 							$this->db->trans_strict(FALSE);
