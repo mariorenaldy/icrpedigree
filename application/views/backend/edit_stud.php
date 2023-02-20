@@ -4,6 +4,8 @@
     <title>Edit Stud</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url().'assets/css/crop-modal-styles.css' ?>" rel="stylesheet" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -85,7 +87,8 @@
                                 } else { ?>
                                     <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
-                                <input type="file" class="upload" name="attachment_stud" id="imageInput" accept="image/jpeg, image/png, image/jpg" />
+                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stud')"/>
+                                <input type="hidden" name="attachment_stud" id="attachment_stud">
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
@@ -102,7 +105,8 @@
                                 } else { ?>
                                     <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
-                                <input type="file" class="upload" name="attachment_sire" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" />
+                                <input type="file" class="upload" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('sire')"/>
+                                <input type="hidden" name="attachment_sire" id="attachment_sire">
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
@@ -119,7 +123,8 @@
                                 } else { ?>
                                     <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
-                                <input type="file" class="upload" name="attachment_dam" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" />
+                                <input type="file" class="upload" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('dam')"/>
+                                <input type="hidden" name="attachment_dam" id="attachment_dam">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -144,10 +149,37 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crop Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="img-container">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="" id="sample_image" />
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="preview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>
     </main>
     <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
+    <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
         function setDatePicker(id) {
             $(id).datepicker({
@@ -171,33 +203,104 @@
             $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/validate_edit").submit();
         });
 
-        $(document).ready(function() {
-            const imageInput = document.querySelector("#imageInput");
-            imageInput.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreview").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
+        const imageInput = document.querySelector("#imageInput");
+        const imageInputSire = document.querySelector("#imageInputSire");
+        const imageInputDam = document.querySelector("#imageInputDam");
+        var croppingImage = null;
+
+        var resetImage = function(input) {
+            if(input === "stud"){
+                imageInput.value = null;
+            }
+            else if(input === "sire"){
+                imageInputSire.value = null;
+            }
+            else if(input === "dam"){
+                imageInputDam.value = null;
+            }
+        };
+
+        $(document).ready(function(){
+            var $modal = $('#modal');
+            var previewStud = document.getElementById('imgPreview');
+            var previewSire = document.getElementById('imgPreviewSire');
+            var previewDam = document.getElementById('imgPreviewDam');
+            var modalImage = document.getElementById('sample_image');
+            var latestImage = null;
+            var cropper;
+
+            imageInput.addEventListener("change", function(event) {
+                croppingImage = "stud";
+                showModalImg(event);
             })
 
-            const imageInputSire = document.querySelector("#imageInputSire");
-            imageInputSire.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreviewSire").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
+            imageInputSire.addEventListener("change", function(event) {
+                croppingImage = "sire";
+                showModalImg(event);
             })
-        
-            const imageInputDam = document.querySelector("#imageInputDam");
-            imageInputDam.addEventListener("change", function() {
-                const reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    document.querySelector("#imgPreviewDam").src = reader.result
-                })
-                reader.readAsDataURL(this.files[0])
+
+            imageInputDam.addEventListener("change", function(event) {
+                croppingImage = "dam";
+                showModalImg(event);
             })
+
+            function showModalImg(event) {
+                var files = event.target.files;
+                var done = function(url) {
+                    modalImage.src = url;
+                    $modal.modal('show');
+                };
+                if (files && files.length > 0) {
+                    reader = new FileReader();
+                    reader.onload = function(event) {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(files[0]);
+                }
+            }
+
+            $modal.on('shown.bs.modal', function() {
+                cropper = new Cropper(modalImage, {
+                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
+                    viewMode: 3,
+                    preview: '.preview'
+                });
+            }).on('hidden.bs.modal', function() {
+                cropper.destroy();
+                cropper = null;
+            });
+
+            $('#crop').click(function() {
+                canvas = cropper.getCroppedCanvas({
+                    width: <?= $this->config->item('img_width') ?>,
+                    height: <?= $this->config->item('img_height') ?>
+                });
+                canvas.toBlob(function(blob) {
+                    url = URL.createObjectURL(blob);
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function() {
+                        base64data = reader.result;
+                        if(croppingImage === "stud"){
+                            previewStud.src = base64data;
+                            $('#attachment_stud').val(base64data);
+                        }
+                        else if(croppingImage === "sire"){
+                            previewSire.src = base64data;
+                            $('#attachment_sire').val(base64data);
+                        }
+                        else if(croppingImage === "dam"){
+                            previewDam.src = base64data;
+                            $('#attachment_dam').val(base64data);
+                        }
+                        $modal.modal('hide');
+                    };
+                });
+            });
+
+            $('#cancel-btn').click(function() {
+                resetImage(croppingImage);
+            });
         });
     </script>
 </body>

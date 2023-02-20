@@ -333,64 +333,85 @@ class Studs extends CI_Controller {
 					$can = $this->caninesModel->get_canines($wheDam)->row();
 					if ($can){
 						$err = 0;
-						$photo = '-';
-						if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud'));
-								if ($this->upload->do_upload('attachment_stud')){
-									$uploadData = $this->upload->data();
-									$photo = $uploadData['file_name'];
-								}
-								else{
-									$err++;
-									$this->session->set_flashdata('error_message', 'Stud Photo Error: '.$this->upload->display_errors());
-								}
-							}
-						}
-		
-						if (!$err && $photo == "-"){
+						if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Stud Photo is required');
+							$this->session->set_flashdata('error_message', 'Stud photo is required');
 						}
-	
-						if (!$err){
-							$sire = '-';
-							if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud_sire'));
-								if ($this->upload->do_upload('attachment_sire')){
-									$uploadData = $this->upload->data();
-									$sire = $uploadData['file_name'];
-								}
-								else{
-									$err++;
-									$this->session->set_flashdata('error_message', 'Sire Photo Error: '.$this->upload->display_errors());
-								}
-							}
-						}
-		
-						if (!$err && $sire == "-"){
+						if (!isset($_POST['attachment_sire']) || empty($_POST['attachment_sire'])) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Sire photo is required');
 						}
-		
-						if (!$err){
-							$dam = '-';
-							if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud_dam'));
-								if ($this->upload->do_upload('attachment_dam')){
-									$uploadData = $this->upload->data();
-									$dam = $uploadData['file_name'];
-								}
-								else{
-									$err++;
-									$this->session->set_flashdata('error_message', 'Dam Photo Error: '.$this->upload->display_errors());
-								}
-							}
-						}
-		
-						if (!$err && $dam == "-"){
+						if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Dam photo is required');
+						}
+	
+						$photo = '-';
+						$sire = '-';
+						$dam = '-';
+						if(!$err){
+							$uploadedStud = $_POST['attachment_stud'];
+							$image_array_1 = explode(";", $uploadedStud);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedStud = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedStud) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Stud file size is too big (> 1 MB).');
+							}
+	
+							$uploadedSire = $_POST['attachment_sire'];
+							$image_array_1 = explode(";", $uploadedSire);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedSire = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedSire) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Sire file size is too big (> 1 MB).');
+							}
+	
+							$uploadedDam = $_POST['attachment_dam'];
+							$image_array_1 = explode(";", $uploadedDam);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedDam = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedDam) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Dam file size is too big (> 1 MB).');
+							}
+	
+							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
+							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
+							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+	
+							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
+							} else{
+								if (is_file($stud_name) and !is_writable($stud_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'Stud file already exists and not writeable.');
+								}
+								if (is_file($sire_name) and !is_writable($sire_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'Sire file already exists and not writeable.');
+								}
+								if (is_file($dam_name) and !is_writable($dam_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'Dam file already exists and not writeable.');
+								}
+							}
+	
+							if (!$err){
+								file_put_contents($stud_name, $uploadedStud);
+								$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
+	
+								file_put_contents($sire_name, $uploadedSire);
+								$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
+	
+								file_put_contents($dam_name, $uploadedDam);
+								$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
+							}
 						}
 		
 						if (!$err){
@@ -819,52 +840,83 @@ class Studs extends CI_Controller {
 					$can = $this->caninesModel->get_canines($wheDam)->row();
 					if ($can){
 						$err = 0;
-						$photo = '-';
-						if (!$err && isset($_FILES['attachment_stud']) && !empty($_FILES['attachment_stud']['tmp_name']) && is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-							if (is_uploaded_file($_FILES['attachment_stud']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud'));
-								if ($this->upload->do_upload('attachment_stud')){
-									$uploadData = $this->upload->data();
-									$photo = $uploadData['file_name'];
-								}
-								else{
+						$photo = '';
+						$sire = '';
+						$dam = '';
+						if (isset($_POST['attachment_stud']) && !empty($_POST['attachment_stud'])){
+							$uploadedStud = $_POST['attachment_stud'];
+							$image_array_1 = explode(";", $uploadedStud);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedStud = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedStud) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Stud file size is too big (> 1 MB).');
+							}
+
+							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
+						}
+						if (isset($_POST['attachment_sire']) && !empty($_POST['attachment_sire'])) {
+							$uploadedSire = $_POST['attachment_sire'];
+							$image_array_1 = explode(";", $uploadedSire);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedSire = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedSire) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Sire file size is too big (> 1 MB).');
+							}
+
+							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
+						}
+						if (isset($_POST['attachment_dam']) && !empty($_POST['attachment_dam'])) {
+							$uploadedDam = $_POST['attachment_dam'];
+							$image_array_1 = explode(";", $uploadedDam);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedDam = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedDam) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'Dam file size is too big (> 1 MB).');
+							}
+
+							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+						}
+
+						if($uploadedStud || $uploadedSire || $uploadedDam){
+							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
+							} else{
+								if (is_file($stud_name) and !is_writable($stud_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Stud Photo Error: '.$this->upload->display_errors());
+									$this->session->set_flashdata('error_message', 'Stud file already exists and not writeable.');
+								}
+								if (is_file($sire_name) and !is_writable($sire_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'Sire file already exists and not writeable.');
+								}
+								if (is_file($dam_name) and !is_writable($dam_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'Dam file already exists and not writeable.');
 								}
 							}
 						}
 		
 						if (!$err){
-							$sire = '-';
-							if (isset($_FILES['attachment_sire']) && !empty($_FILES['attachment_sire']['tmp_name']) && is_uploaded_file($_FILES['attachment_sire']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud_sire'));
-								if ($this->upload->do_upload('attachment_sire')){
-									$uploadData = $this->upload->data();
-									$sire = $uploadData['file_name'];
-								}
-								else{
-									$err++;
-									$this->session->set_flashdata('error_message', 'Sire Photo Error: '.$this->upload->display_errors());
-								}
+							if($uploadedStud){
+								file_put_contents($stud_name, $uploadedStud);
+								$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
 							}
-						}
-		
-						if (!$err){
-							$dam = '-';
-							if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-								$this->upload->initialize($this->config->item('upload_stud_dam'));
-								if ($this->upload->do_upload('attachment_dam')){
-									$uploadData = $this->upload->data();
-									$dam = $uploadData['file_name'];
-								}
-								else{
-									$err++;
-									$this->session->set_flashdata('error_message', 'Dam Photo Error: '.$this->upload->display_errors());
-								}
+							if($uploadedSire){
+								file_put_contents($sire_name, $uploadedSire);
+								$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
 							}
-						}				
-		
-						if (!$err){
+							if($uploadedDam){
+								file_put_contents($dam_name, $uploadedDam);
+								$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
+							}
+
 							$piece = explode("-", $this->input->post('stu_stud_date'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
