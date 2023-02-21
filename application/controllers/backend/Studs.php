@@ -333,17 +333,17 @@ class Studs extends CI_Controller {
 					$can = $this->caninesModel->get_canines($wheDam)->row();
 					if ($can){
 						$err = 0;
-						if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
+						if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Stud photo is required');
+							$this->session->set_flashdata('error_message', 'Dam photo is required');
 						}
 						if (!isset($_POST['attachment_sire']) || empty($_POST['attachment_sire'])) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Sire photo is required');
 						}
-						if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
+						if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Dam photo is required');
+							$this->session->set_flashdata('error_message', 'Stud photo is required');
 						}
 	
 						$photo = '-';
@@ -517,10 +517,13 @@ class Studs extends CI_Controller {
 							else{
 								$err = 5;
 							}
+							if ($err){
+								$this->db->trans_rollback();
+								$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: '.$err);
+								$this->load->view('backend/add_stud', $data);
+							}
 						}
-						if ($err){
-							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: '.$err);
+						else {
 							$this->load->view('backend/add_stud', $data);
 						}
 					}
