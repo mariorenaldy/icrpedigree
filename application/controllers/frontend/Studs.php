@@ -267,17 +267,17 @@ class Studs extends CI_Controller {
 				$can = $this->caninesModel->get_canines($wheDam)->row();
 				if ($can){
 					$err = 0;
-					if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
+					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
+						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
 					}
 					if (!isset($_POST['attachment_sire']) || empty($_POST['attachment_sire'])) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
 					}
-					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
+					if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+						$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
 					}
 
 					$photo = '-';
