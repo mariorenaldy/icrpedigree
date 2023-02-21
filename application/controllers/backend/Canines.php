@@ -486,7 +486,7 @@ class Canines extends CI_Controller {
         }
 
         if (!$err) {
-          if($uploadedImg){
+          if(isset($uploadedImg)){
             file_put_contents($img_name, $uploadedImg);
             $photo = str_replace($this->config->item('path_canine'), '', $img_name);
           }

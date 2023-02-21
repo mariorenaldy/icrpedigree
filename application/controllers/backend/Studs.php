@@ -886,7 +886,7 @@ class Studs extends CI_Controller {
 							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
 						}
 
-						if($uploadedStud || $uploadedSire || $uploadedDam){
+						if(isset($uploadedStud) || isset($uploadedSire) || isset($uploadedDam)){
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
 								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
@@ -907,15 +907,15 @@ class Studs extends CI_Controller {
 						}
 		
 						if (!$err){
-							if($uploadedStud){
+							if(isset($uploadedStud)){
 								file_put_contents($stud_name, $uploadedStud);
 								$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
 							}
-							if($uploadedSire){
+							if(isset($uploadedSire)){
 								file_put_contents($sire_name, $uploadedSire);
 								$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
 							}
-							if($uploadedDam){
+							if(isset($uploadedDam)){
 								file_put_contents($dam_name, $uploadedDam);
 								$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
 							}
