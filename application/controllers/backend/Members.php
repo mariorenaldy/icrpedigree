@@ -125,10 +125,6 @@ class Members extends CI_Controller {
 					$err = 0;
 					if ($this->input->post('mem_type')){
 						$pp = '-';
-						if (!isset($_POST['attachment_pp']) || empty($_POST['attachment_pp'])){
-							$err++;
-							$this->session->set_flashdata('error_message', 'PP is required');
-						}
 						if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
@@ -137,14 +133,28 @@ class Members extends CI_Controller {
 						$pp = '-';
 						$logo = '-';
 						if (!$err){
-							$uploadedPP = $_POST['attachment_pp'];
-							$image_array_1 = explode(";", $uploadedPP);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedPP = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
-								$err++;
-								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
+							if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
+								$uploadedPP = $_POST['attachment_pp'];
+								$image_array_1 = explode(";", $uploadedPP);
+								$image_array_2 = explode(",", $image_array_1[1]);
+								$uploadedPP = base64_decode($image_array_2[1]);
+			
+								if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
+								}
+
+								$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+
+								if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
+								} else{
+									if (is_file($pp_name) and !is_writable($pp_name)) {
+										$err++;
+										$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
+									}
+								}
 							}
 	
 							$uploadedLogo = $_POST['attachment_logo'];
@@ -156,19 +166,8 @@ class Members extends CI_Controller {
 								$err++;
 								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
 							}
-	
-							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+							
 							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
-	
-							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
-								$err++;
-								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
-							} else{
-								if (is_file($pp_name) and !is_writable($pp_name)) {
-									$err++;
-									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
-								}
-							}
 
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
 								$err++;
@@ -223,8 +222,10 @@ class Members extends CI_Controller {
 					}
 	
 					if (!$err){
-						file_put_contents($pp_name, $uploadedPP);
-						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+						if(isset($uploadedPP)){
+							file_put_contents($pp_name, $uploadedPP);
+							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+						}
 	
 						file_put_contents($logo_name, $uploadedLogo);
 						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
@@ -428,18 +429,9 @@ class Members extends CI_Controller {
 				else{
 					$err = 0;
 					if ($this->input->post('mem_type')){
-						if (!isset($_POST['attachment_pp']) || empty($_POST['attachment_pp'])){
-							$err++;
-							$this->session->set_flashdata('error_message', 'PP is required');
-						}
-						if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
-							$err++;
-							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
-						}
-	
 						$pp = '-';
 						$logo = '-';
-						if(!$err){
+						if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
 							$uploadedPP = $_POST['attachment_pp'];
 							$image_array_1 = explode(";", $uploadedPP);
 							$image_array_2 = explode(",", $image_array_1[1]);
@@ -449,20 +441,9 @@ class Members extends CI_Controller {
 								$err++;
 								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
 							}
-	
-							$uploadedLogo = $_POST['attachment_logo'];
-							$image_array_1 = explode(";", $uploadedLogo);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedLogo = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
-								$err++;
-								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
-							}
-	
+
 							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
-							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
-	
+
 							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
 								$err++;
 								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
@@ -472,6 +453,19 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
 								}
 							}
+						}
+						if (isset($_POST['attachment_logo']) && !empty($_POST['attachment_logo'])){
+							$uploadedLogo = $_POST['attachment_logo'];
+							$image_array_1 = explode(";", $uploadedLogo);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedLogo = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
+							}
+
+							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
 
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
 								$err++;
@@ -516,11 +510,14 @@ class Members extends CI_Controller {
 					}
 
 					if (!$err){
-						file_put_contents($pp_name, $uploadedPP);
-						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
-	
-						file_put_contents($logo_name, $uploadedLogo);
-						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+						if(isset($uploadedPP)){
+							file_put_contents($pp_name, $uploadedPP);
+							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+						}
+						if(isset($uploadedLogo)){
+							file_put_contents($logo_name, $uploadedLogo);
+							$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+						}
 						
 						if ($this->input->post('mem_type')){
 							$data = array(
