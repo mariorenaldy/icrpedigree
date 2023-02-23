@@ -14,7 +14,7 @@
             <h2 class="text-center text-warning">Register</h2>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
+                    <form id="mainForm" class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -156,7 +156,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="submit">Register</button>
+                            <button class="btn btn-primary btn-lg" type="submit" id="submitBtn">Register</button>
                             <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
                         </div>
                     </form>
@@ -288,6 +288,13 @@
             $('#cancel-btn').click(function() {
                 resetImage(croppingImage);
             });
+        });
+
+        let submitBtn = $("#submitBtn");
+        submitBtn.click(function(){
+            event.preventDefault();
+            submitBtn.prop('disabled', true);
+            $('#mainForm').submit();
         });
     </script>
 </body>
