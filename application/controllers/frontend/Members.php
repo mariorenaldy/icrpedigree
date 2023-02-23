@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
+
 class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
@@ -229,7 +231,7 @@ class Members extends CI_Controller {
 							'ken_photo' => $logo,
 							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('saved'),
-							'ken_user' => $this->session->userdata('use_id'),
+							'ken_user' => 0,
 							'ken_date' => date('Y-m-d H:i:s'),
 						);
 					}
