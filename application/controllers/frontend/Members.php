@@ -121,32 +121,55 @@ class Members extends CI_Controller {
 			else{
 				$err = 0;
 				if ($this->input->post('mem_type')){
+					if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Foto Kennel wajib diisi');
+					}
+	
 					$pp = '-';
-					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-						if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_kennel'));
-							if ($this->upload->do_upload('attachment_pp')){
-								$uploadData = $this->upload->data();
-								$logo = $uploadData['file_name'];
-							}
-							else{
+					$logo = '-';
+					if (!$err){
+						if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
+							$uploadedPP = $_POST['attachment_pp'];
+							$image_array_1 = explode(";", $uploadedPP);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedPP = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedPP) > $this->config->item('file_size'))){
 								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+								$this->session->set_flashdata('error_message', 'Ukuran file PP terlalu besar (> 1 MB).<br/>');
+							}
+
+							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writeable.');
+							} else {
+								if (is_file($pp_name) and !is_writable($pp_name)){
+									$err++;
+									$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writeable.');
+								}
 							}
 						}
-					}
-		
-					$logo = '-';
-					if (!$err && isset($_FILES['attachment_logo']) && !empty($_FILES['attachment_logo']['tmp_name']) && is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-						if (is_uploaded_file($_FILES['attachment_logo']['tmp_name'])){
-							$this->upload->initialize($this->config->item('upload_kennel'));
-							if ($this->upload->do_upload('attachment_logo')){
-								$uploadData = $this->upload->data();
-								$logo = $uploadData['file_name'];
-							}
-							else{
+
+						$uploadedLogo = $_POST['attachment_logo'];
+						$image_array_1 = explode(";", $uploadedLogo);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedLogo = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedLogo) > $this->config->item('file_size'))){
+							$err++;
+							$this->session->set_flashdata('error_message', "Ukuran file Foto Kennel terlalu besar (> 1 MB).<br/>");
+						}
+						
+						$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+						if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
+							$err++;
+							$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
+						} else {
+							if (is_file($logo_name) and !is_writable($logo_name)){
 								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
+								$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writeable.');
 							}
 						}
 					}
@@ -198,6 +221,14 @@ class Members extends CI_Controller {
 				}
 
 				if (!$err){
+					if (isset($uploadedPP)){
+						file_put_contents($pp_name, $uploadedPP);
+						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+					}
+
+					file_put_contents($logo_name, $uploadedLogo);
+					$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+					
 					$mem_id = $this->MemberModel->record_count() + 1;
 					if ($this->input->post('mem_type')){
 						$data = array(
