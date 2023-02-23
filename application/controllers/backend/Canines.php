@@ -5,7 +5,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'logpedigreeModel', 'requestModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'kennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'logpedigreeModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'kennelModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url', 'notif'));
@@ -444,9 +444,9 @@ class Canines extends CI_Controller {
         $this->load->view('backend/edit_canine', $data);
       } else {
         $err = 0;
+        $photo = '-';
         if (!$err){
-          $photo = '-';
-          if (isset($_POST['attachment']) && !empty($_POST['attachment'])){
+					if (isset($_POST['attachment']) && !empty($_POST['attachment'])){
             $uploadedImg = $_POST['attachment'];
             $image_array_1 = explode(";", $uploadedImg);
             $image_array_2 = explode(",", $image_array_1[1]);
@@ -468,7 +468,7 @@ class Canines extends CI_Controller {
               }
             }
           }
-				}
+        }
 
         if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_icr_number', $this->input->post('can_icr_number'))){
           $err++;
@@ -486,7 +486,7 @@ class Canines extends CI_Controller {
         }
 
         if (!$err) {
-          if(isset($uploadedImg)){
+          if (isset($uploadedImg)){
             file_put_contents($img_name, $uploadedImg);
             $photo = str_replace($this->config->item('path_canine'), '', $img_name);
           }

@@ -325,8 +325,8 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: 400,
-                    height: 400
+                    width: <?= $this->config->item('pp') ?>,
+                    height: <?= $this->config->item('pp') ?>
                 });
                 canvas.toBlob(function(blob) {
                     url = URL.createObjectURL(blob);

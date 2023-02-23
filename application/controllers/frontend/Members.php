@@ -39,6 +39,7 @@ class Members extends CI_Controller {
 			}
 			else{
 				$where['mem_username'] = $this->input->post('username');
+				$where['mem_stat'] = $this->config->item('accepted');
 				$member = $this->MemberModel->get_members($where)->row();
 				$err = 0;
 				if (!$member){

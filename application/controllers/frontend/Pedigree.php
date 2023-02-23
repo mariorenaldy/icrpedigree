@@ -4,7 +4,7 @@ class Pedigree extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
+        $this->load->model(array('caninesModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));

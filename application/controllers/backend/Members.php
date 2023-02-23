@@ -24,13 +24,6 @@ class Members extends CI_Controller {
 			$where['mem_type'] = $this->config->item('pro_member');
 			$where['mem_stat'] = $this->config->item('accepted');
 			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2')->result();
-			$data['kennel'] = Array();
-			foreach($data['member'] AS $m){
-				$wheKennel = [];
-				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
-				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
-			}
 			$this->load->view('backend/view_members', $data);
 		}
 
@@ -46,26 +39,12 @@ class Members extends CI_Controller {
 			else
 				$where['mem_type'] = $this->input->post('mem_type');
 			$data['member'] = $this->MemberModel->search_members($like, $where, 'mem_app_date2')->result();
-			$data['kennel'] = Array();
-			foreach($data['member'] AS $m){
-				$wheKennel = [];
-				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('accepted'); 
-				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
-			}
 			$this->load->view('backend/view_members', $data);
 		}
 
 		public function view_approve(){
 			$where['mem_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->get_members($where)->result();
-			$data['kennel'] = Array();
-			foreach($data['member'] AS $m){
-				$wheKennel = [];
-				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('saved'); 
-				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
-			}
 			$this->load->view('backend/approve_members', $data);
 		}
 
@@ -76,13 +55,6 @@ class Members extends CI_Controller {
 			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
-			$data['kennel'] = Array();
-			foreach($data['member'] AS $m){
-				$wheKennel = [];
-				$wheKennel['ken_member_id'] = $m->mem_id;
-				$wheKennel['ken_stat'] = $this->config->item('saved'); 
-				$data['kennel'][] = $this->KennelModel->get_kennels($wheKennel)->result();
-			}
 			$this->load->view('backend/approve_members', $data);
 		}
 
@@ -124,7 +96,6 @@ class Members extends CI_Controller {
 				else{
 					$err = 0;
 					if ($this->input->post('mem_type')){
-						$pp = '-';
 						if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
@@ -139,18 +110,17 @@ class Members extends CI_Controller {
 								$image_array_2 = explode(",", $image_array_1[1]);
 								$uploadedPP = base64_decode($image_array_2[1]);
 			
-								if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
+								if ((strlen($uploadedPP) > $this->config->item('file_size'))){
 									$err++;
 									$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
 								}
 
 								$pp_name = $this->config->item('path_member').'member_'.time().'.png';
-
-								if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+								if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 									$err++;
 									$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
-								} else{
-									if (is_file($pp_name) and !is_writable($pp_name)) {
+								} else {
+									if (is_file($pp_name) and !is_writable($pp_name)){
 										$err++;
 										$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
 									}
@@ -162,18 +132,17 @@ class Members extends CI_Controller {
 							$image_array_2 = explode(",", $image_array_1[1]);
 							$uploadedLogo = base64_decode($image_array_2[1]);
 		
-							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
+							if ((strlen($uploadedLogo) > $this->config->item('file_size'))){
 								$err++;
 								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
 							}
 							
 							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
-
-							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
+							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');
-							} else{
-								if (is_file($logo_name) and !is_writable($logo_name)) {
+							} else {
+								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
 									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
 								}
@@ -222,7 +191,7 @@ class Members extends CI_Controller {
 					}
 	
 					if (!$err){
-						if(isset($uploadedPP)){
+						if (isset($uploadedPP)){
 							file_put_contents($pp_name, $uploadedPP);
 							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
 						}
@@ -437,18 +406,17 @@ class Members extends CI_Controller {
 							$image_array_2 = explode(",", $image_array_1[1]);
 							$uploadedPP = base64_decode($image_array_2[1]);
 		
-							if ((strlen($uploadedPP) > $this->config->item('file_size'))) {
+							if ((strlen($uploadedPP) > $this->config->item('file_size'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
 							}
 
 							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
-
-							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
+							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
-							} else{
-								if (is_file($pp_name) and !is_writable($pp_name)) {
+							} else {
+								if (is_file($pp_name) and !is_writable($pp_name)){
 									$err++;
 									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
 								}
@@ -460,18 +428,17 @@ class Members extends CI_Controller {
 							$image_array_2 = explode(",", $image_array_1[1]);
 							$uploadedLogo = base64_decode($image_array_2[1]);
 		
-							if ((strlen($uploadedLogo) > $this->config->item('file_size'))) {
+							if ((strlen($uploadedLogo) > $this->config->item('file_size'))){
 								$err++;
 								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
 							}
 
 							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
-
-							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))) {
+							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');
-							} else{
-								if (is_file($logo_name) and !is_writable($logo_name)) {
+							} else {
+								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
 									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
 								}
@@ -510,11 +477,11 @@ class Members extends CI_Controller {
 					}
 
 					if (!$err){
-						if(isset($uploadedPP)){
+						if (isset($uploadedPP)){
 							file_put_contents($pp_name, $uploadedPP);
 							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
 						}
-						if(isset($uploadedLogo)){
+						if (isset($uploadedLogo)){
 							file_put_contents($logo_name, $uploadedLogo);
 							$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
 						}

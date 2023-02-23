@@ -4,7 +4,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'requestModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -111,7 +111,7 @@ class Canines extends CI_Controller {
 						$image_name = $this->config->item('path_canine').'canines_'.time().'.png';
 						if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
+							$this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writeable.');
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
 								$err++;
@@ -175,7 +175,7 @@ class Canines extends CI_Controller {
 		
 					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+						$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
 					}
 
 					if (!$err){
@@ -206,7 +206,7 @@ class Canines extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data canine');
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
 							$this->load->view('frontend/add_canine', $data);
 						}
 					}

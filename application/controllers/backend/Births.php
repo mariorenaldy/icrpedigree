@@ -339,7 +339,7 @@ class Births extends CI_Controller {
 					}
 	
 					if (!$err){
-						if(isset($uploadedImg)){
+						if (isset($uploadedImg)){
 							file_put_contents($img_name, $uploadedImg);
 							$damPhoto = str_replace($this->config->item('path_birth'), '', $img_name);
 						}

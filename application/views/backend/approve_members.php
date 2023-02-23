@@ -65,11 +65,7 @@
                                     <tr>
                                         <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Approve Kennel"><i class="fa fa-check"></i></button></td>
                                         <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Reject Kennel"><i class="fa fa-close"></i></button></td>
-                                        <td><?php
-                                        foreach ($kennel[$i] AS $k){
-                                            echo '<div>'.$k->ken_name.'</div>';
-                                        }  
-                                        ?></td>
+                                        <td><?= $m->ken_name ?></td>
                                         <td><?= $m->mem_name; ?></td>
                                         <td><?= $m->mem_hp; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>

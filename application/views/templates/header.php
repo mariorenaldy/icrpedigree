@@ -17,6 +17,8 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Change Ownership</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Change Photo</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">

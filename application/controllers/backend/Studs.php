@@ -349,7 +349,7 @@ class Studs extends CI_Controller {
 						$photo = '-';
 						$sire = '-';
 						$dam = '-';
-						if(!$err){
+						if (!$err){
 							$uploadedStud = $_POST['attachment_stud'];
 							$image_array_1 = explode(";", $uploadedStud);
 							$image_array_2 = explode(",", $image_array_1[1]);
@@ -520,10 +520,10 @@ class Studs extends CI_Controller {
 							if ($err){
 								$this->db->trans_rollback();
 								$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: '.$err);
-								$this->load->view('backend/add_stud', $data);
+								$this->load->view('backend/edit_stud', $data);
 							}
 						}
-						else {
+						else{
 							$this->load->view('backend/add_stud', $data);
 						}
 					}
@@ -886,7 +886,7 @@ class Studs extends CI_Controller {
 							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
 						}
 
-						if(isset($uploadedStud) || isset($uploadedSire) || isset($uploadedDam)){
+						if (isset($uploadedStud) || isset($uploadedSire) || isset($uploadedDam)){
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
 								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
@@ -907,15 +907,15 @@ class Studs extends CI_Controller {
 						}
 		
 						if (!$err){
-							if(isset($uploadedStud)){
+							if (isset($uploadedStud)){
 								file_put_contents($stud_name, $uploadedStud);
 								$photo = str_replace($this->config->item('path_stud'), '', $stud_name);
 							}
-							if(isset($uploadedSire)){
+							if (isset($uploadedSire)){
 								file_put_contents($sire_name, $uploadedSire);
 								$sire = str_replace($this->config->item('path_stud'), '', $sire_name);
 							}
-							if(isset($uploadedDam)){
+							if (isset($uploadedDam)){
 								file_put_contents($dam_name, $uploadedDam);
 								$dam = str_replace($this->config->item('path_stud'), '', $dam_name);
 							}
@@ -931,11 +931,11 @@ class Studs extends CI_Controller {
 								'stu_date' => date('Y-m-d H:i:s'),
 								'stu_partner_id' => $can->can_member_id,
 							);
-							if ($photo != '-')
+							if ($photo)
 								$data['stu_photo'] = $photo;
-							if ($sire != '-')
+							if ($sire)
 								$data['stu_sire_photo'] = $sire;
-							if ($dam != '-')
+							if ($dam)
 								$data['stu_dam_photo'] = $dam;
 
 							$this->db->trans_strict(FALSE);
@@ -981,10 +981,13 @@ class Studs extends CI_Controller {
 							else{
 								$err = 3;
 							}
+							if ($err){
+								$this->db->trans_rollback();
+								$this->session->set_flashdata('error_message', 'Failed to edit stud. Err code: '.$err);
+								$this->load->view('backend/edit_stud', $data);
+							}
 						}
-						if ($err){
-							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Failed to edit stud. Err code: '.$err);
+						else{
 							$this->load->view('backend/edit_stud', $data);
 						}
 					}

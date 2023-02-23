@@ -101,14 +101,10 @@
                                                 <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fas fa-money-bill"></i></button>
                                             <?php } ?>
                                         </td>
-                                        <td><?php
-                                        foreach ($kennel[$i] AS $k){
-                                            echo '<div>'.$k->ken_name;
+                                        <td><?php echo $m->ken_name;
                                             if ($m->mem_type == $this->config->item('pro_member')){ 
                                                 echo ' <i class="fa fa-check"></i>';
                                             } 
-                                            echo '</div>';
-                                        }  
                                         ?></td>
                                         <td><?= $m->mem_username; ?></td>
                                         <td><?= $m->mem_name; ?></td>

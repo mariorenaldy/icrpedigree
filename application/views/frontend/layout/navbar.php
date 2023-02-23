@@ -14,18 +14,18 @@
                 <?php if ($this->session->userdata('mem_type') == '1'){ ?>
                     <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-file"></i> <span class="nav-text">Pendaftaran Canine</span>
+                            <i class="fa fa-file"></i> <span class="nav-text">Pendaftaran</span>
                         </span>
                         <ul class="dropdown-menu">
-                            <!-- <li><a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning">Cari Silsilah</a> -->
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>">Tambah Canine Generasi Satu</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>">Tambah Generasi Satu</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>">Lapor Pacak</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view' ?>">Lapor Lahir</a></li>
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li> -->
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li> -->
                         </ul>
                     </div>
                 <?php } ?>
-                <a href="<?= base_url().'frontend/Canines' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-dog"></i> <span class="nav-text">My Canine</span></a>
+                <a href="<?= base_url().'frontend/Canines' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-dog"></i> <span class="nav-text">Anjing Saya</span></a>
                 <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text notif-text text-warning"><?= $this->session->userdata('notif_count') ?></span></a></li>
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

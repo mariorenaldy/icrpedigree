@@ -3,9 +3,9 @@
 <head>
     <title>Add Stud</title>
     <?php $this->load->view('templates/head'); ?>
-    <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
-    <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
-    <link href="<?= base_url().'assets/css/crop-modal-styles.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>

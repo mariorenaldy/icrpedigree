@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Canine</title>
+    <title>Anjing Saya</title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="text-center text-warning">My Canine</h3>
+                <h3 class="text-center text-warning">Anjing Saya</h3>
                 <div class="row mt-3">
                     <div class="col-sm-5"></div>
                     <div class="col-sm-2 text-center">
