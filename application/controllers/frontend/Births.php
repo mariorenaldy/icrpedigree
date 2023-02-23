@@ -149,24 +149,39 @@ class Births extends CI_Controller {
 			}
 			else{
 				$err = 0;
+				if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
+					$err++;
+					$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+				}
+		
 				$damPhoto = '-';
 				if (!$err){
-					if (isset($_FILES['attachment_dam']) && !empty($_FILES['attachment_dam']['tmp_name']) && is_uploaded_file($_FILES['attachment_dam']['tmp_name'])){
-						$this->upload->initialize($this->config->item('upload_birth'));
-						if ($this->upload->do_upload('attachment_dam')){
-							$uploadData = $this->upload->data();
-							$damPhoto = $uploadData['file_name'];
-						}
-						else{
+					$uploadedImg = $_POST['attachment_dam'];
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+						$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+					}
+					else{
+						$image_name = $this->config->item('path_birth').'birth_'.time().'.png';
+						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', $this->upload->display_errors());
+							$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writeable.');
+						} else{
+							if (is_file($image_name) and !is_writable($image_name)) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+							}
+						}
+
+						if (!$err){
+							file_put_contents($image_name, $uploadedImg);
+							$damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
 						}
 					}
-				}
-
-				if (!$err && $damPhoto == "-"){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto dam wajib diisi'); 
 				}
 					
 				if (!$err){
