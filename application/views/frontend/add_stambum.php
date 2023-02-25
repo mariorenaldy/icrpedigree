@@ -171,7 +171,7 @@
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
                     aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
-                    viewMode: 3,
+                    viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
             }).on('hidden.bs.modal', function() {

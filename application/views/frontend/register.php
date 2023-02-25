@@ -200,85 +200,85 @@
                     <div id=freeContainer <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
                         <div class="row">
                             <div class="col-4">Tipe Membership</div>
-                            <div class="col confirm-type"></div>
+                            <div class="col">: <span id="confirm-type_free"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-4">Nama Sesuai KTP</div>
-                            <div class="col confirm-name"></div>
+                            <div class="col">: <span id="confirm-name_free"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-4">No. HP WA Aktif</div>
-                            <div class="col confirm-number"></div>
+                            <div class="col">: <span id="confirm-number_free"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-4">email</div>
-                            <div class="col confirm-email"></div>
+                            <div class="col">: <span id="confirm-email_free"></span></div>
                         </div>
                     </div>
                     <div id=proContainer <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
                         <div class="row">
                             <div class="col-6">Tipe Membership</div>
-                            <div class="col confirm-type"></div>
+                            <div class="col">: <span id="confirm-type"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">No. KTP</div>
-                            <div class="col" id="confirm-ktp"></div>
+                            <div class="col">: <span id="confirm-ktp"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Nama Sesuai KTP</div>
-                            <div class="col confirm-name"></div>
+                            <div class="col">: <span id="confirm-name"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Alamat Surat Menyurat</div>
-                            <div class="col" id="confirm-address"></div>
+                            <div class="col">: <span id="confirm-address"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Alamat yang Tertera di Sertifikat</div>
-                            <div class="col" id="confirm-mail_address"></div>
+                            <div class="col">: <span id="confirm-mail_address"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">No. HP WA Aktif</div>
-                            <div class="col confirm-number"></div>
+                            <div class="col">: <span id="confirm-number"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Kota</div>
-                            <div class="col" id="confirm-kota"></div>
+                            <div class="col">: <span id="confirm-kota"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Kode Pos</div>
-                            <div class="col" id="confirm-kode_pos"></div>
+                            <div class="col">: <span id="confirm-kode_pos"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">email</div>
-                            <div class="col confirm-email"></div>
+                            <div class="col">: <span id="confirm-email"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">PP</div>
-                            <div class="col-auto">:</div>
+                            <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-pp" width="50%"/></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Username</div>
-                            <div class="col" id="confirm-username"></div>
+                            <div class="col">: <span id="confirm-username"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Foto Kennel</div>
-                            <div class="col-auto">:</div>
+                            <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-logo" width="50%"/></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Nama Kennel</div>
-                            <div class="col" id="confirm-ken_name"></div>
+                            <div class="col">: <span id="confirm-ken_name"></span></div>
                         </div>
                         <div class="row">
                             <div class="col-6">Format Penamaan Canine</div>
-                            <div class="col" id="confirm-ken_type"></div>
+                            <div class="col">: <span id="confirm-ken_type"></span></div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="submitBtn">Yes</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
                 </div>
                 </div>
             </div>
@@ -353,7 +353,7 @@
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
                     aspectRatio: 1,
-                    viewMode: 3,
+                    viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
             }).on('hidden.bs.modal', function() {
@@ -392,34 +392,34 @@
 
         let registerBtn = $("#registerBtn");
         registerBtn.click(function(){
-            $('.confirm-type').text(': ' + $('#mem_type option:selected').text());
             if ($('#mem_type').val() == <?= $this->config->item('free_member') ?>){
-                $('.confirm-name').text(': ' + $('input[name="name"]').val());
-                $('.confirm-number').text(': ' + $('input[name="hp"]').val());
-                $('.confirm-email').text(': ' + $('input[name="email"]').val());
+                $('#confirm-type_free').text($('#mem_type option:selected').text());
+                $('#confirm-name_free').text($('input[name="name"]').val());
+                $('#confirm-number_free').text($('input[name="hp"]').val());
+                $('#confirm-email_free').text($('input[name="email"]').val());
             }
             else{
-                $('.confirm-name').text(': ' + $('input[name="mem_name"]').val());
-                $('.confirm-number').text(': ' + $('input[name="mem_hp"]').val());
-                $('.confirm-email').text(': ' + $('input[name="mem_email"]').val());
-
-                $('#confirm-ktp').text(': ' + $('input[name="mem_ktp"]').val());
-                $('#confirm-address').text(': ' + $('input[name="mem_address"]').val());
+                $('#confirm-type').text($('#mem_type option:selected').text());
+                $('#confirm-name').text($('input[name="mem_name"]').val());
+                $('#confirm-number').text($('input[name="mem_hp"]').val());
+                $('#confirm-email').text($('input[name="mem_email"]').val());
+                $('#confirm-ktp').text($('input[name="mem_ktp"]').val());
+                $('#confirm-address').text($('input[name="mem_address"]').val());
 
                 if($('input[name="same"]').is(":checked")){
-                    $('#confirm-mail_address').text(': ' + $('input[name="mem_address"]').val());
+                    $('#confirm-mail_address').text($('input[name="mem_address"]').val());
                 }
                 else{
-                    $('#confirm-mail_address').text(': ' + $('input[name="mem_mail_address"]').val());
+                    $('#confirm-mail_address').text($('input[name="mem_mail_address"]').val());
                 }
 
-                $('#confirm-kota').text(': ' + $('input[name="mem_kota"]').val());
-                $('#confirm-kode_pos').text(': ' + $('input[name="mem_kode_pos"]').val());
+                $('#confirm-kota').text($('input[name="mem_kota"]').val());
+                $('#confirm-kode_pos').text($('input[name="mem_kode_pos"]').val());
                 $('#confirm-pp').attr("src",  $('#imgPreviewPP').attr("src"));
-                $('#confirm-username').text(': ' + $('input[name="mem_username"]').val());
+                $('#confirm-username').text($('input[name="mem_username"]').val());
                 $('#confirm-logo').attr("src",  $('#imgPreviewLogo').attr("src"));
-                $('#confirm-ken_name').text(': ' + $('input[name="ken_name"]').val());
-                $('#confirm-ken_type').text(': ' + $('#ken_type_id option:selected').text());
+                $('#confirm-ken_name').text($('input[name="ken_name"]').val());
+                $('#confirm-ken_type').text($('#ken_type_id option:selected').text());
             }
 
             $('#confirm-modal').modal('show');

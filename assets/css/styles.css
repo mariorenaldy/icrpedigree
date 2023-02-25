@@ -165,3 +165,6 @@ div.container{
     font-size: 0.8em; 
     color:#BEBEBE;
 }
+#confirm-modal .modal-body{
+    word-break:break-all;
+}

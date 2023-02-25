@@ -15,7 +15,7 @@
             <h3 class="text-center text-warning">Tambah Canine Generasi Pertama</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
+                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php		
                             if ($this->session->flashdata('error_message')){
@@ -63,7 +63,7 @@
                                     foreach($trah as $row){
                                         $pil[$row->tra_name] = $row->tra_name;
                                     }
-                                    echo form_dropdown('can_breed', $pil, set_value('can_breed'), 'class="form-control"');
+                                    echo form_dropdown('can_breed', $pil, set_value('can_breed'), 'class="form-control", id="can_breed"');
                                 ?>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                                 <?php
                                     $gender['MALE'] = 'MALE';
                                     $gender['FEMALE'] = 'FEMALE';
-                                    echo form_dropdown('can_gender', $gender, set_value('can_gender'), 'class="form-control"');
+                                    echo form_dropdown('can_gender', $gender, set_value('can_gender'), 'class="form-control", id="can_gender"');
                                 ?>
                             </div>
                         </div>
@@ -97,12 +97,12 @@
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
-                                    echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control"');
+                                    echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control", id="can_kennel_id"');
                                 ?>
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
                         </div>
                     </form>
@@ -132,6 +132,47 @@
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">Foto Canine</div>
+                        <div class="col-auto pe-0">:</div>
+                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Nama</div>
+                        <div class="col">: <span id="confirm-nama"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Trah</div>
+                        <div class="col">: <span id="confirm-trah"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Jenis Kelamin</div>
+                        <div class="col">: <span id="confirm-jenis_kelamin"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Tanggal Lahir</div>
+                        <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Kennel</div>
+                        <div class="col">: <span id="confirm-kennel"></span></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -177,7 +218,7 @@
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
                     aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
-                    viewMode: 3,
+                    viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
             }).on('hidden.bs.modal', function() {
@@ -207,6 +248,24 @@
             $('#cancel-btn').click(function(event) {
                 resetImage();
             });
+        });
+
+        let saveBtn = $("#saveBtn");
+        saveBtn.click(function(){
+            $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
+            $('#confirm-nama').text($('input[name="can_a_s"]').val());
+            $('#confirm-trah').text($('#can_breed option:selected').text());
+            $('#confirm-jenis_kelamin').text($('#can_gender option:selected').text());
+            $('#confirm-tanggal_lahir').text($('input[name="can_date_of_birth"]').val());
+            $('#confirm-kennel').text($('#can_kennel_id option:selected').text());
+
+            $('#confirm-modal').modal('show');
+        });
+
+        let submitBtn = $("#submitBtn");
+        submitBtn.click(function(){
+            submitBtn.prop('disabled', true);
+            $('#mainForm').submit();
         });
     </script>
 </body>

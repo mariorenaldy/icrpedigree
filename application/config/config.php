@@ -599,6 +599,7 @@ $config['img_height'] = 600;
 $config['img_width_ratio'] = 4;
 $config['img_height_ratio'] = 3;
 $config['pp'] = 400;
+$config['mode'] = 0;
 
 $config['canine_count'] = 5;
 $config['pedigree_count'] = 5;
