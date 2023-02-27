@@ -22,9 +22,14 @@
                             echo validation_errors();
                             ?>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-2">Nama Anjing</div>
+                            <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
+                        </div>
                         <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Foto</label>
-                            <div class="col-md-12 text-center">
+                            <label class="control-label col-sm-12 text-center">Foto</label>
+                            <div class="col-sm-12 text-center">
                                 <?php 
                                     if (!$mode){ 
                                         if ($canine->can_photo && $canine->can_photo != '-'){
@@ -43,7 +48,7 @@
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Back</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
                         </div>
                     </form>
                 </div>
@@ -59,10 +64,10 @@
                     <div class="modal-body">
                         <div class="img-container">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-sm-8">
                                     <img src="" id="sample_image" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-sm-4">
                                     <div class="preview"></div>
                                 </div>
                             </div>

@@ -43,17 +43,16 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-sm-1"><b>Foto</b></div>
+                    <div class="col-sm-2"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
-                    <div class="col-sm-2"><b>Owner Lama</b></div>
-                    <div class="col-sm-2"><b>Kennel Lama</b></div>
+                    <div class="col-sm-2"><b>Owner</b></div>
                     <div class="col-sm-2"><b>Owner Baru</b></div>
-                    <div class="col-sm-2"><b>Kennel Baru</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"><b>Tanggal</b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
-                        <div class="col-sm-1 mb-1">
+                        <div class="col-sm-2 mb-1">
                             <?php if ($r->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$r->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
@@ -64,18 +63,15 @@
                             <?= $r->can_a_s; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->old_mem_name; ?>
+                            <?= $r->old_mem_name.' ('.$r->old_ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->old_ken_name; ?>
+                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->mem_name; ?>
+                            <?= $r->req_date; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->ken_name; ?>
-                        </div>
-                        <div class="col-sm-1">
                             <?php echo $r->stat_name; ?>
                         </div>
                     </div>

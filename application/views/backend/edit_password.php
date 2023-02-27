@@ -12,13 +12,6 @@
             <div class="col-md-12">  
                 <h3 class="text-center text-primary">Edit Password</h3>  
                 <form class="form-horizontal mt-3" action="<?= base_url(); ?>backend/Users/validate_edit" method="post">
-                    <div class="text-success">
-                        <?php		
-                            if ($this->session->flashdata('edit_password')){
-                                echo 'Password has been saved<br/>';
-                            }
-                        ?>
-                    </div>
                     <div class="text-danger">
                         <?php	
                         if ($this->session->flashdata('error_message')){
@@ -47,7 +40,7 @@
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary" type="submit">Save</button>
-                        <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Users'">Back</button>
+                        <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Dashboard'">Back</button>
                     </div>
                 </form>
             </div>

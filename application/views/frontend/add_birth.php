@@ -3,7 +3,7 @@
 <head>
     <title>Lapor Lahir</title>
     <?php $this->load->view('frontend/layout/head'); ?>
-    <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
 </head>
@@ -107,16 +107,12 @@
 
         $(document).ready(function(){
             var $modal = $('#modal');
-            var previewImg = document.getElementById('imgPreview');
+            var image = document.getElementById('imgPreview');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
 
             imageInput.addEventListener("change", function(event) {
-                showModalImg(event);
-            })
-
-            function showModalImg(event) {
                 var files = event.target.files;
                 var done = function(url) {
                     modalImage.src = url;
@@ -129,7 +125,7 @@
                     };
                     reader.readAsDataURL(files[0]);
                 }
-            }
+            })
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
@@ -153,14 +149,15 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        previewImg.src = base64data;
-                        $('#attachment').val(base64data);
+                        image.src = base64data;
+                        latestImage = base64data;
+                        $('#attachment').val(latestImage);
                         $modal.modal('hide');
                     };
                 });
             });
 
-            $('#cancel-btn').click(function() {
+            $('#cancel-btn').click(function(event) {
                 resetImage();
             });
         });

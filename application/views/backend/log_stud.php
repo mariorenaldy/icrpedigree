@@ -21,9 +21,9 @@
                         <thead>
                             <tr>
                                 <th>Last Modified</th>
-                                <th>Photo</th>
-                                <th>Sire</th>
-                                <th>Dam</th>
+                                <th width="20%">Photo</th>
+                                <th width="20%">Sire</th>
+                                <th width="20%">Dam</th>
                                 <th>Stud Date</th>
                                 <th>Status</th>
                             </tr>
@@ -32,7 +32,7 @@
                             <?php
                                 foreach ($stud AS $r){ ?>
                                     <tr>
-                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_name; ?>)</td>
+                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_username; ?>)</td>
                                         <td>
                                             <?php
                                                 if ($r->log_photo && $r->log_photo != '-'){
@@ -72,7 +72,10 @@
                         </tbody>
                     </table>
                 </div>
-            </div>                       
+            </div>
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>backend/Studs'"><i class="fa fa-arrow-left"></i></button>
+            </div>                         
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

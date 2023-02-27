@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
+
 class News extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor

@@ -47,7 +47,7 @@
                     <div class="col-sm-2"><b>Foto Lama</b></div>
                     <div class="col-sm-2"><b>Foto Baru</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Kennel</b></div>
+                    <div class="col-sm-2"><b>Tanggal</b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
@@ -66,10 +66,10 @@
                             <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->mem_name; ?>
+                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->ken_name; ?>
+                            <?= $r->req_date; ?>
                         </div>
                         <div class="col-sm-1">
                             <?php echo $r->stat_name; ?>

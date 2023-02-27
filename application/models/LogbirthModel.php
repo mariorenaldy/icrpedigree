@@ -14,7 +14,8 @@ class LogbirthModel extends CI_Model {
         $this->db->join('members','members.mem_id = studs.stu_member_id');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id AND kennels.ken_member_id = studs.stu_member_id');
         $this->db->join('canines','canines.can_id = studs.stu_dam_id');
-        $this->db->join('users','users.use_id = logs_birth.log_app_user');
+        $this->db->join('users u1','u1.use_id = logs_birth.log_user');
+        $this->db->join('users u2','u2.use_id = logs_birth.log_app_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_birth.log_stat');
         $this->db->order_by('logs_birth.log_date', 'desc');
         return $this->db->get();

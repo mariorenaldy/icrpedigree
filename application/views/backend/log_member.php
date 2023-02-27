@@ -76,7 +76,10 @@
                         </tbody>
                     </table>
                 </div>
-            </div>                       
+            </div>
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>backend/Members'"><i class="fa fa-arrow-left"></i></button>
+            </div>                         
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

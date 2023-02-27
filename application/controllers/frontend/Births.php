@@ -1,4 +1,7 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+#[\AllowDynamicProperties]
 
 class Births extends CI_Controller {
     public function __construct(){
@@ -183,7 +186,7 @@ class Births extends CI_Controller {
 						}
 					}
 				}
-					
+
 				if (!$err){
 					// syarat maksimal 75 hari dari lapor pacak
 					$whereStud['stu_id'] = $this->input->post('bir_stu_id');

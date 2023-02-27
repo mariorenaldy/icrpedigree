@@ -3,9 +3,9 @@
 <head>
     <title>Tambah Canine Generasi Pertama</title>
     <?php $this->load->view('frontend/layout/head'); ?>
-    <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
-    <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
-    <link href="<?= base_url().'assets/css/crop-modal-styles.css' ?>" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_member'); ?>  
@@ -248,24 +248,25 @@
             $('#cancel-btn').click(function(event) {
                 resetImage();
             });
-        });
 
-        let saveBtn = $("#saveBtn");
-        saveBtn.click(function(){
-            $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
-            $('#confirm-nama').text($('input[name="can_a_s"]').val());
-            $('#confirm-trah').text($('#can_breed option:selected').text());
-            $('#confirm-jenis_kelamin').text($('#can_gender option:selected').text());
-            $('#confirm-tanggal_lahir').text($('input[name="can_date_of_birth"]').val());
-            $('#confirm-kennel').text($('#can_kennel_id option:selected').text());
+            let saveBtn = $("#saveBtn");
+            saveBtn.click(function(){
+                $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
+                $('#confirm-nama').text($('input[name="can_a_s"]').val());
+                $('#confirm-trah').text($('#can_breed option:selected').text());
+                $('#confirm-jenis_kelamin').text($('#can_gender option:selected').text());
+                $('#confirm-tanggal_lahir').text($('input[name="can_date_of_birth"]').val());
+                $('#confirm-kennel').text($('#can_kennel_id option:selected').text());
 
-            $('#confirm-modal').modal('show');
-        });
+                $('#confirm-modal').modal('show');
+            });
 
-        let submitBtn = $("#submitBtn");
-        submitBtn.click(function(){
-            submitBtn.prop('disabled', true);
-            $('#mainForm').submit();
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#mainForm').submit();
+            });
+
         });
     </script>
 </body>

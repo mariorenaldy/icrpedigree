@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-12 align-items-center">
                     <h3 class="text-center text-primary">Add Canine</h3>  
-                    <form id="formCanine" class="form-horizontal" action="<?php echo base_url(); ?>backend/Canines/validate_add" method="post" enctype="multipart/form-data">
+                    <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>backend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
                             if ($this->session->flashdata('error_message')) {
@@ -228,7 +228,7 @@
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
                     aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
-                    viewMode: 3,
+                    viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
             }).on('hidden.bs.modal', function() {

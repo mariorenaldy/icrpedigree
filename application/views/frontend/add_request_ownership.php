@@ -22,24 +22,24 @@
                             echo validation_errors();
                             ?>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-2">Nama Canine</div>
+                        <div class="row mb-2">
+                            <div class="col-sm-2">Nama Anjing</div>
                             <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
                         </div>
                         <hr/>
                         <label class="checkbox-inline"><input type="checkbox" name="reg_member" value="1" <?php if (!$mode) echo 'checked'; else echo set_checkbox('reg_member', '1'); ?> /> Member</label>
                         <div class="input-group my-3">
-                            <label class="control-label col-md-2">Member/Kennel</label>
-                            <div class="col-md-9">
+                            <label class="control-label col-sm-2">Member/Kennel</label>
+                            <div class="col-sm-9">
                                 <input class="form-control" type="text" placeholder="Member/Kennel" name="mem_name" value="<?= set_value('mem_name'); ?>">
                             </div>
-                            <div class="col-md-1 text-end">
+                            <div class="col-sm-1 text-end">
                                 <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Member</label>
-                            <div class="col-md-10">
+                            <label class="control-label col-sm-2">Member</label>
+                            <div class="col-sm-10">
                                 <?php
                                     $mem = [];
                                     foreach($member as $row){
@@ -50,8 +50,8 @@
                             </div>
                         </div>
                         <div class="input-group mb-5">
-                            <label class="control-label col-md-2">Kennel</label>
-                            <div class="col-md-10">
+                            <label class="control-label col-sm-2">Kennel</label>
+                            <div class="col-sm-10">
                                 <?php
                                     $ken = [];
                                     foreach($kennel as $row){
@@ -63,20 +63,20 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">Name</label>
-                            <div class="col-md-10">
+                            <label for="mem_name" class="control-label col-sm-2">Name</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="Name" name="name" value="<?= set_value('name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-md-2">Phone Number</label>
-                            <div class="col-md-10">
+                            <label for="mem_hp" class="control-label col-sm-2">Phone Number</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="number" placeholder="Phone Number" name="hp" value="<?= set_value('hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_email" class="control-label col-md-2">email</label>
-                            <div class="col-md-10">
+                            <label for="mem_email" class="control-label col-sm-2">email</label>
+                            <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="email" name="email" value="<?= set_value('email'); ?>">
                             </div>
                         </div>

@@ -84,7 +84,7 @@
                                 $i = 0;  
                                 foreach ($ped AS $r){ ?>
                                     <tr>
-                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_name; ?>)</td>
+                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_username; ?>)</td>
                                         <td><?= $sire[$i]->can_a_s; ?></td>
                                         <td><?= $dam[$i]->can_a_s; ?></td>
                                     </tr>
@@ -93,7 +93,10 @@
                         </tbody>
                     </table>
                 </div>
-            </div>                       
+            </div> 
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'"><i class="fa fa-arrow-left"></i></button>
+            </div>                      
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

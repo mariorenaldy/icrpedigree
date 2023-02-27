@@ -15,9 +15,6 @@
             <h3 class="text-center text-warning">Profil</h3>
             <div class="text-success">
                 <?php		
-                    if ($this->session->flashdata('edit_profile')){
-                        echo 'Ubah data berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
-                    }
                     if ($this->session->flashdata('change_pp')) {
                         echo 'PP berhasil diubah.<br/>';
                     }
@@ -94,8 +91,29 @@
                 <div class="col-sm-3">email</div>
                 <div class="col-sm-8"><?= $member->mem_email ?></div>
             </div>
+            <hr/>
+            <div class="row mb-2">
+                <div class="col-md-12 text-center">
+                    <?php 
+                        if ($member->ken_photo && $member->ken_photo != '-'){
+                    ?>
+                        <img id="imgPreviewLogo" width="15%" src="<?= base_url().'uploads/kennels/'.$member->ken_photo ?>">
+                    <?php } else { ?>
+                        <img id="imgPreviewLogo" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-3">Nama Kennel</div>
+                <div class="col-sm-8"><?= $member->ken_name ?></div>
+            </div>     
+            <div class="row mb-1">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-3">Format Penamaan Anjing</div>
+                <div class="col-sm-8"><?= $kennel->ken_type_name ?></div>
+            </div>
         </div>
-
         <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">

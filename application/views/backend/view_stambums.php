@@ -56,6 +56,7 @@
                         <thead>
                             <tr>
                                 <th class="no-sort"></th>
+                                <th class="no-sort"></th>
                                 <th class="no-sort" style="width: 10%">Photo</th>
                                 <th>Name</th>
                                 <th class="no-sort">Breed</th>
@@ -69,7 +70,16 @@
                         <tbody>
                             <?php foreach ($stambum AS $r){ ?>
                                 <tr>
-                                    <td><button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->stb_id ?>, '<?= $r->stb_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Puppy"><i class="fa fa-trash"></i></button></td>
+                                    <td>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->stb_id ?>, '<?= $r->stb_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Puppy"><i class="fa fa-trash"></i></button>
+                                        <?php } ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $r->stb_id ?>)" data-toggle="tooltip" data-placement="top" title="Puppy Log"><i class="fa fa-history"></i></button>
+                                        <?php } ?>
+                                    </td>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">
@@ -83,7 +93,7 @@
                                     <td class="text-nowrap"><?= $r->stb_date_of_birth; ?></td>
                                     <td><?= $r->ken_name; ?></td>
                                     <td><?= $r->mem_name; ?></td>
-                                    <td><?= $r->stat_name.'<br/>'.$r->use_name.' (<span class="text-nowrap">'.$r->stb_app_date.'</span>)'; ?></td>
+                                    <td><?= $r->stat_name.'<br/>'.$r->use_username.' (<span class="text-nowrap">'.$r->stb_app_date.'</span>)'; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -103,6 +113,9 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Stambums/delete/"+id;
             }
+        }
+        function log(id){
+            window.location = "<?= base_url(); ?>backend/Stambums/log/"+id;
         }
         
         var modal = document.getElementById("myModal");

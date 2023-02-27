@@ -69,8 +69,14 @@
                         <div class="col-md-2">
                             <?php if (!$birth[$i]){ ?>
                                 <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button><br/>
+                                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
+                                <?php } ?>
+                                <br/>
                                 <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
+                            <?php } 
+                                if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Stud Log"><i class="fa fa-history"></i></button>
                             <?php } ?>
                         </div>
                         <div class="col-md-2 mb-1 text-center">
@@ -88,7 +94,7 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $s->stat_name.'<br/>'.$s->use_name.' (<span class="text-nowrap">'.$s->stu_app_date.'</span>)'; ?>
+                            <?= $s->stat_name.'<br/>'.$s->use_username.' (<span class="text-nowrap">'.$s->stu_app_date.'</span>)'; ?>
                         </div>
                     </div>
                 <?php
@@ -120,6 +126,9 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Studs/delete/"+id;
             }
+        }
+        function log(id){
+            window.location = "<?= base_url(); ?>backend/Studs/log/"+id;
         }
 
         var modal = document.getElementById("myModal");

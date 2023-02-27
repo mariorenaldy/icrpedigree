@@ -70,10 +70,16 @@
                         <div class="col-md-2">
                             <?php if (!$stambum[$i]){ ?>
                                 <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button><br/>
+                                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
+                                <?php } ?>
+                                <br/>
                             <?php } 
                                 if ($stambum_stat[$i]){ ?>
                                 <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
+                            <?php } 
+                                if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
                             <?php } ?>
                         </div>
                         <div class="col-md-2 mb-1 text-center">
@@ -92,12 +98,12 @@
                             <?= $b->ken_name; ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $b->stat_name.'<br/>'.$b->use_name.' (<span class="text-nowrap">'.$b->bir_app_date.'</span>)'; ?>
+                            <?= $b->stat_name.'<br/>'.$b->use_username.' (<span class="text-nowrap">'.$b->bir_app_date.'</span>)'; ?>
                         </div>
                     </div>
                 <?php $i++;
                 } ?>
-            </div>                           
+            </div>
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>
@@ -124,6 +130,9 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Births/delete/"+id;
             }
+        }
+        function log(id){
+            window.location = "<?= base_url(); ?>backend/Births/log/"+id;
         }
 
         var modal = document.getElementById("myModal");

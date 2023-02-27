@@ -5,7 +5,7 @@ class LogcanineModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_canine.log_date_of_birth, "%d-%m-%Y") as log_date_of_birth, DATE_FORMAT(logs_canine.log_date, "%d-%m-%Y") as log_date, DATE_FORMAT(logs_canine.log_app_date, "%d-%m-%Y") as log_app_date, u1.use_name AS user, u2.use_name AS app_user');
+        $this->db->select('*, DATE_FORMAT(logs_canine.log_date_of_birth, "%d-%m-%Y") as log_date_of_birth, DATE_FORMAT(logs_canine.log_date, "%d-%m-%Y") as log_date, DATE_FORMAT(logs_canine.log_app_date, "%d-%m-%Y") as log_app_date, u1.use_username AS user, u2.use_username AS app_user');
         $this->db->from('logs_canine');
         if ($where != null) {
             $this->db->where($where);

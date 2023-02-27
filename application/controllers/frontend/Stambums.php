@@ -1,4 +1,7 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+#[\AllowDynamicProperties]
 
 class Stambums extends CI_Controller {
     public function __construct(){

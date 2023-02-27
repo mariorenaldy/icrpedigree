@@ -35,7 +35,7 @@
                             <?php
                                 foreach ($stambum AS $r){ ?>
                                     <tr>
-                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_name; ?>)</td>
+                                        <td><span class="text-nowrap"><?= $r->log_date; ?></span><br/>(<?= $r->use_username; ?>)</td>
                                         <td>
                                             <?php
                                                 if ($r->log_photo && $r->log_photo != '-'){
@@ -58,7 +58,10 @@
                         </tbody>
                     </table>
                 </div>
-            </div>                       
+            </div>  
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>backend/Stambums'"><i class="fa fa-arrow-left"></i></button>
+            </div>                      
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

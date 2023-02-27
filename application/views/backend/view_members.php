@@ -94,10 +94,15 @@
                                         <td class="text-center">
                                             <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button>
                                             <button type="button" class="btn btn-warning mb-1" onclick="resetPass(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Reset Password"><i class="fa fa-refresh"></i></button>
+                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                                <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $m->mem_id ?>)" data-toggle="tooltip" data-placement="top" title="Kennel Log"><i class="fa fa-history"></i></button>
+                                            <?php } ?>
                                         </td>
                                         <td class="text-center">
+                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                             <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-trash"></i></button>
-                                            <?php if ($m->mem_type == $this->config->item('free_member')){ ?>
+                                            <?php }
+                                                if ($m->mem_type == $this->config->item('free_member')){ ?>
                                                 <button type="button" class="btn btn-primary mb-1" onclick="payment(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Payment"><i class="fas fa-money-bill"></i></button>
                                             <?php } ?>
                                         </td>
@@ -117,7 +122,7 @@
                                         <td><?= $m->mem_ktp; ?></td>
                                         <td><?= $m->mem_email; ?></td>
                                         <td><?php if ($m->mem_type == $this->config->item('pro_member')) 
-                                                echo 'Pro<br/>'.$m->use_name.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)';
+                                                echo 'Pro<br/>'.$m->use_username.' (<span class="text-nowrap">'.$m->mem_app_date.'</span>)';
                                             else 
                                                 echo 'Free'; 
                                             ?></td>
@@ -156,6 +161,10 @@
         function resetPass(id){
             window.location = "<?= base_url(); ?>backend/Members/view_reset/"+id;
         }
+        function log(id){
+            window.location = "<?= base_url(); ?>backend/Members/log/"+id;
+        }
+
         $(document).ready(function () {
             $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[14, 'desc']],
                 columnDefs: [{

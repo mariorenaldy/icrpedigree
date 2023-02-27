@@ -5,7 +5,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
-    <?php $this->load->view('frontend/layout/header_non_paid'); ?> 
+    <?php $this->load->view('frontend/layout/header'); ?> 
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container" id="beranda-main">
         <article class="row align-items-center justify-content-around">
@@ -62,12 +62,12 @@
                     <img src="<?= base_url('assets/img/icr_logo.png') ?>" class="center-block text-center" style="width: 30vw;">
                 </figure>
             </aside>
-            <div class="col-sm-12 text-center">
+            <!-- <div class="col-sm-12 text-center">
                 <video controls muted style="width: 30vw; margin-top: 5vh;">
                     <source src="<?= base_url('assets/video/OneEyedJack.mp4') ?>" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-            </div>
+            </div> -->
         </article>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>

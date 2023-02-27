@@ -7,7 +7,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'LogmemberModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
@@ -175,16 +175,6 @@ class Members extends CI_Controller {
 					}
 				}
 	
-				// if (!$err && $photo == "-"){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
-				// }
-		
-				// if (!$err && $logo == "-"){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
-				// }
-	
 				if ($this->input->post('mem_type'))
 					$email = $this->test_input($this->input->post('mem_email'));
 				else
@@ -228,10 +218,10 @@ class Members extends CI_Controller {
 
 					file_put_contents($logo_name, $uploadedLogo);
 					$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
-					
+
 					$mem_id = $this->MemberModel->record_count() + 1;
 					if ($this->input->post('mem_type')){
-						$data = array(
+						$dataMember = array(
 							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('mem_name')),
 							'mem_address' => $this->input->post('mem_address'),
@@ -250,9 +240,9 @@ class Members extends CI_Controller {
 						);
 						
 						if ($this->input->post('same'))
-							$data['mem_mail_address'] = $this->input->post('mem_address');
+							$dataMember['mem_mail_address'] = $this->input->post('mem_address');
 						else
-							$data['mem_mail_address'] = $this->input->post('mem_mail_address');
+							$dataMember['mem_mail_address'] = $this->input->post('mem_mail_address');
 						
 						$ken_id = $this->KennelModel->record_count() + 1;
 						$kennel_data = array(
@@ -267,7 +257,7 @@ class Members extends CI_Controller {
 						);
 					}
 					else{
-						$data = array(
+						$dataMember = array(
 							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('name')),
 							'mem_hp' => $this->input->post('hp'),
@@ -295,7 +285,7 @@ class Members extends CI_Controller {
 
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$id = $this->MemberModel->add_members($data);
+					$id = $this->MemberModel->add_members($dataMember);
 					if ($id){
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
@@ -332,140 +322,15 @@ class Members extends CI_Controller {
 		}
 
 		public function profile(){
-			if ($this->session->userdata('username')){
-				$where['mem_username'] = $this->session->userdata('username');
+			if ($this->session->userdata('mem_id')){
+				$where['mem_id'] = $this->session->userdata('mem_id');
 				$data['member'] = $this->MemberModel->get_members($where)->row();
-				if (!$data['member']){
-					redirect("frontend/Members");
-				}
-				else{
-					$this->load->view("frontend/profile", $data);
-				}
+				$whe['ken_id'] = $data['member']->ken_id;
+				$data['kennel'] = $this->KennelModel->get_kennels($whe)->row();
+				$this->load->view("frontend/profile", $data);
 			}
 			else{
 				redirect("frontend/Members");
-			}
-		}
-
-		public function edit_profile(){
-			if ($this->session->userdata('username')){
-				$where['mem_username'] = $this->session->userdata('username');
-				$data['member'] = $this->MemberModel->get_members($where)->row();
-				if (!$data['member']){
-					redirect("frontend/Members");
-				}
-				else{
-					$this->load->view("frontend/edit_profile");
-				}
-			}
-			else{
-				redirect("frontend/Members");
-			}
-		}
-
-		public function update(){
-			$id = $this->session->userdata('mem_id');
-			$res = $this->LogmemberModel->get_log($id)->result();
-			if ($res){
-				$this->session->set_flashdata('error_message', 'Data pengubahan sebelumnya belum diproses');
-				$this->load->view("frontend/edit_profile");
-			}
-			else{
-				$this->form_validation->set_error_delimiters('<div>','</div>');
-				$this->form_validation->set_message('required', '%s wajib diisi');
-				$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
-				$this->form_validation->set_rules('mem_address', 'Alamat sesuai KTP ', 'trim|required');
-				$this->form_validation->set_rules('mem_mail_address', 'Alamat surat menyurat ', 'trim|required');
-				$this->form_validation->set_rules('mem_hp', 'No. telp ', 'trim|required');
-				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
-				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
-				$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-
-				if ($this->form_validation->run() == FALSE){
-					$this->load->view("frontend/edit_profile");
-				}
-				else{
-					$err = 0;
-					$photo = '-';
-					if (isset($_FILES['attachment_member']) && !empty($_FILES['attachment_member']['tmp_name']) && is_uploaded_file($_FILES['attachment_member']['tmp_name'])) {
-						if (is_uploaded_file($_FILES['attachment_member']['tmp_name'])) {
-							$this->upload->initialize($this->config->item('upload_member'));
-							if ($this->upload->do_upload('attachment_member')) {
-								$uploadData = $this->upload->data();
-								$photo = $uploadData['file_name'];
-							} else {
-								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
-							}
-						}
-					}
-
-					$pp = '-';
-					if (!$err && isset($_FILES['attachment_pp']) && !empty($_FILES['attachment_pp']['tmp_name']) && is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
-						if (is_uploaded_file($_FILES['attachment_pp']['tmp_name'])) {
-							$this->upload->initialize($this->config->item('upload_member'));
-							if ($this->upload->do_upload('attachment_pp')) {
-								$uploadData = $this->upload->data();
-								$pp = $uploadData['file_name'];
-							} else {
-								$err++;
-								$this->session->set_flashdata('error_message', $this->upload->display_errors());
-							}
-						}
-					}
-
-					if (!$err && $photo == "-") {
-						$err++;
-						$this->session->set_flashdata('error_message', 'Foto KTP wajib diisi');
-					}
-
-					if (!$err && $pp == "-") {
-						$err++;
-						$this->session->set_flashdata('error_message', 'PP wajib diisi');
-					}
-
-					if (!$err) {
-						$data = array(
-							'log_member_id' => $id,
-							'log_name' => strtoupper($this->input->post('mem_name')),
-							'log_address' => $this->input->post('mem_address'),
-							'log_mail_address' => $this->input->post('mem_mail_address'),
-							'log_hp' => $this->input->post('mem_hp'),
-							'log_photo' => $photo,
-							'log_kota' => $this->input->post('mem_kota'),
-							'log_kode_pos' => $this->input->post('mem_kode_pos'),
-							'log_email' => $this->input->post('mem_email'),
-							'log_pp' => $pp,
-							'log_stat' => 0
-						);
-
-						$where['mem_id'] = $id;
-						$user = $this->MemberModel->get_members($where)->row_array();
-						if ($user == null) {
-							echo json_encode(array('data' => 'Data Tidak Ditemukan'));
-							return false;
-						}
-
-						$this->db->trans_strict(FALSE);
-						$this->db->trans_start();
-						$insert = $this->LogmemberModel->add_log($data);
-						if ($insert) {
-							$this->db->trans_complete();
-							$this->session->set_flashdata('edit_profile', TRUE);
-							redirect("frontend/Members/profile");
-						} else {
-							$err = 1;
-						}
-						if ($err) {
-							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data profil');
-							$this->load->view("frontend/edit_profile");
-						}
-					} 
-					else {
-						$this->load->view("frontend/edit_profile");
-					}
-				}
 			}
 		}
 
@@ -598,5 +463,4 @@ class Members extends CI_Controller {
 			redirect("frontend/Members");
 		}
 	}
-
 }

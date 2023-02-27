@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
+
 class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
@@ -367,6 +369,7 @@ class Canines extends CI_Controller {
         $wheMember['mem_id'] = $data['canine']->can_member_id;
         $data['member'] = $this->memberModel->get_members($wheMember)->result();
         $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
+        $wheKennel['ken_stat'] = $this->config->item('accepted');
         $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
       }
       $data['mode'] = 1;
@@ -390,6 +393,7 @@ class Canines extends CI_Controller {
 
       if ($data['member']){
         $wheKennel['ken_member_id'] =  $this->input->post('can_member_id');
+        $wheKennel['ken_stat'] = $this->config->item('accepted');
         $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
       }
       else{
@@ -430,12 +434,14 @@ class Canines extends CI_Controller {
 
       if ($data['member']){
         $wheKennel['ken_member_id'] =  $this->input->post('can_member_id');
+        $wheKennel['ken_stat'] = $this->config->item('accepted');
         $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
       }
       else{
         $wheMember['mem_id'] = $data['canine']->can_member_id;
         $data['member'] = $this->memberModel->get_members($wheMember)->result();
         $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
+        $wheKennel['ken_stat'] = $this->config->item('accepted');
         $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
       }
       $data['mode'] = 1;

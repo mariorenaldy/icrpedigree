@@ -10,7 +10,19 @@
         <div class="row">            
             <div class="col-md-12">                           
                 <h3 class="text-center text-primary">Dashboard</h3>
-            </div>                           
+            </div>
+            <div class="col-md-12">                           
+                <div class="text-success text-center">
+                <?php		
+                    if ($this->session->flashdata('edit_password')){
+                        echo 'Password has been edited<br/>';
+                    }
+                    if ($this->session->flashdata('edit_pp')){
+                        echo 'PP has been changed<br/>';
+                    }
+                ?>
+                </div>
+            </div>                     
         </div> 
         <?php $this->load->view('templates/footer'); ?>      
     </div>

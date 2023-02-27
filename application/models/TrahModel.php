@@ -6,7 +6,7 @@ class TrahModel extends CI_Model {
       $this->db->where($where);
     }
     $this->db->order_by('tra_name');
-    return $this->db->get('trah', $this->config->item('trah_count'));
+    return $this->db->get('trah');
   }
 
   public function add_trah($data){

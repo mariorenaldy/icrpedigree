@@ -36,7 +36,7 @@
                     ?>
                 </div>
                 <div class="search-container">
-                    <form action="<?= base_url().'frontend/Requestupdatecanine/search'?>" method="post">
+                    <form action="<?= base_url().'backend/Requestupdatecanine/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" placeholder="Canine Name" name="keywords" value="<?= set_value('keywords') ?>">
@@ -53,7 +53,7 @@
                     <div class="col-sm-2"><b>Old Photo</b></div>
                     <div class="col-sm-2"><b>New Foto</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Kennel</b></div>
+                    <div class="col-sm-2"><b>Date</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
@@ -75,10 +75,10 @@
                             <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newCan<?= $r->req_id ?>" onclick="display('newCan<?= $r->req_id ?>')">
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->mem_name; ?>
+                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->ken_name; ?>
+                            <?= $r->req_date; ?>
                         </div>
                     </div>
                 <?php } ?>

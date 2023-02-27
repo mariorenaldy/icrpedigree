@@ -6,7 +6,7 @@ class RequestownershipcanineModel extends CI_Model {
     }
 
     public function get_requests($where){
-        $this->db->select('*, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -17,11 +17,12 @@ class RequestownershipcanineModel extends CI_Model {
         $this->db->join('kennels AS k2','k2.ken_id = requests_ownership_canine.req_old_kennel_id AND k2.ken_member_id = m2.mem_id');
         $this->db->join('users','users.use_id = requests_ownership_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_ownership_canine.req_stat');
+        $this->db->order_by('requests_ownership_canine.req_id DESC');
         return $this->db->get('requests_ownership_canine');
     }
 
     public function search_requests($like, $where){
-        $this->db->select('*, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -37,8 +38,7 @@ class RequestownershipcanineModel extends CI_Model {
         $this->db->join('kennels AS k2','k2.ken_id = requests_ownership_canine.req_old_kennel_id AND k2.ken_member_id = m2.mem_id');
         $this->db->join('users','users.use_id = requests_ownership_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_ownership_canine.req_stat');
-        $this->db->order_by('requests_ownership_canine.req_date', 'desc');
-        $this->db->order_by('requests_ownership_canine.req_can_id', 'desc');
+        $this->db->order_by('requests_ownership_canine.req_id DESC');
         return $this->db->get('requests_ownership_canine');
     }
 

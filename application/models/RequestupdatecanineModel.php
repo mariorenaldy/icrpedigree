@@ -6,7 +6,7 @@ class RequestupdatecanineModel extends CI_Model {
     }
 
     public function get_requests($where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -15,13 +15,12 @@ class RequestupdatecanineModel extends CI_Model {
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
         $this->db->join('users','users.use_id = requests_update_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_update_canine.req_stat');
-        $this->db->order_by('requests_update_canine.req_date', 'desc');
-        $this->db->order_by('requests_update_canine.req_can_id', 'desc');
+        $this->db->order_by('requests_update_canine.req_id desc');
         return $this->db->get('requests_update_canine');
     }
 
     public function search_requests($like, $where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -35,8 +34,7 @@ class RequestupdatecanineModel extends CI_Model {
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
         $this->db->join('users','users.use_id = requests_update_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_update_canine.req_stat');
-        $this->db->order_by('requests_update_canine.req_date', 'desc');
-        $this->db->order_by('requests_update_canine.req_can_id', 'desc');
+        $this->db->order_by('requests_update_canine.req_id desc');
         return $this->db->get('requests_update_canine');
     }
 

@@ -90,10 +90,17 @@
                                         <button type="button" class="btn btn-warning mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Pedigree"><i class="fa fa-edit"></i></button>
                                     </td>
                                     <td class="text-center">
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $c->can_id ?>, '<?= $c->can_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Canine"><i class="fa fa-trash"></i></button>
+                                        <?php } ?>
                                         <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file"></i></button>
                                     </td>
-                                    <td class="text-center"><button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Log"><i class="fa fa-history"></i></button>
+                                        <?php } ?>
+                                    </td>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
@@ -113,7 +120,7 @@
                                     <td><?= $c->mem_name; ?></td>
                                     <td><?= $c->can_note; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
-                                    <td><?= $c->stat_name.'<br/>'.$c->use_name.' (<span class="text-nowrap">'.$c->can_app_date.'</span>)'; ?></td>
+                                    <td><?= $c->stat_name.'<br/>'.$c->use_username.' (<span class="text-nowrap">'.$c->can_app_date.'</span>)'; ?></td>
                                     <td style="display: none;"><?= $c->can_id; ?></td>
                                 </tr>
                             <?php } ?>
@@ -146,6 +153,9 @@
         }
         function detail(id){
             window.location = "<?= base_url(); ?>backend/Canines/view_detail/"+id;
+        }
+        function log(id){
+            window.location = "<?= base_url(); ?>backend/Canines/log/"+id;
         }
 
         var modal = document.getElementById("myModal");

@@ -51,9 +51,8 @@
                     <div class="col-sm-2"></div>
                     <div class="col-sm-2"><b>Name</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Kennel</b></div>
                     <div class="col-sm-2"><b>New Owner</b></div>
-                    <div class="col-sm-2"><b>New Kennel</b></div>
+                    <div class="col-sm-2"><b>Date</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
@@ -71,16 +70,13 @@
                             <?= $r->can_a_s; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->old_mem_name; ?>
+                            <?= $r->old_mem_name.' ('.$r->old_ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->old_ken_name; ?>
+                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->mem_name; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $r->ken_name; ?>
+                            <?= $r->req_date; ?>
                         </div>
                     </div>
                 <?php } ?>

@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
+
 class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
@@ -150,11 +152,6 @@ class Members extends CI_Controller {
 						}
 					}
 	
-					// if (!$err && $this->input->post('mem_type') && $logo == "-"){
-					// 	$err++;
-					// 	$this->session->set_flashdata('error_message', 'Foto kennel wajib diisi');
-					// }
-					
 					if ($this->input->post('mem_type'))
 						$email = $this->test_input($this->input->post('mem_email'));
 					else

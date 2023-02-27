@@ -42,14 +42,14 @@
               <p>ICR Number</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col"><?= $canine->can_icr_number ?></div>
+            <div class="col-7"><?= $canine->can_icr_number ?></div>
           </div>
           <div class="row gx-0">
             <div class="col-4">
               <p>Gender</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->can_gender ?>
             </div>
           </div>
@@ -58,7 +58,7 @@
               <p>Color</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->can_color ?>
             </div>
           </div>
@@ -67,7 +67,7 @@
               <p>Date of Birth</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->can_date_of_birth ?>
             </div>
           </div>
@@ -76,7 +76,7 @@
               <p>ICR Microchip</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->can_chip_number ?>
             </div>
           </div>
@@ -85,7 +85,7 @@
               <p>Owner</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->mem_name ?>
             </div>
           </div>
@@ -94,7 +94,7 @@
               <p>Kennel</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->ken_name ?>
             </div>
           </div>
@@ -103,7 +103,7 @@
               <p>Address</p>
             </div>
             <div class="col-1 text-center">:</div>
-            <div class="col">
+            <div class="col-7">
               <?= $canine->mem_mail_address ?>
             </div>
           </div>

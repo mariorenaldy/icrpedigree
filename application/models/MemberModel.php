@@ -14,6 +14,7 @@ class MemberModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('kennels.ken_stat', $this->config->item('accepted'));
         $this->db->from('members');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
         $this->db->join('users','users.use_id = members.mem_app_user');
@@ -28,6 +29,7 @@ class MemberModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->where('kennels.ken_stat', $this->config->item('accepted'));
         $this->db->group_start();
         if ($like != null) {
             $this->db->or_like($like);
