@@ -35,7 +35,7 @@
                                             $pil[$row->id] = $row->name;
                                         $i++;
                                     }
-                                    echo form_dropdown('stu_sire_id', $pil, set_value('stu_sire_id'), 'class="form-control"');
+                                    echo form_dropdown('stu_sire_id', $pil, set_value('stu_sire_id'), 'class="form-control", id="stu_sire_id"');
                                 ?>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                             $opt[$row->id] = $row->name;
                                         $i++;
                                     }
-                                    echo form_dropdown('stu_dam_id', $opt, set_value('stu_dam_id'), 'class="form-control"');
+                                    echo form_dropdown('stu_dam_id', $opt, set_value('stu_dam_id'), 'class="form-control", id="stu_dam_id"');
                                 ?>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="submit">Simpan</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="button">Simpan</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Studs'">Kembali</button>
                         </div>
                     </form>
@@ -127,6 +127,49 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">Sire</div>
+                            <div class="col">: <span id="confirm-sire"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Dam</div>
+                            <div class="col">: <span id="confirm-dam"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Foto Pacak</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto_pacak" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Foto Sire</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto_sire" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Foto Dam</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Tanggal Pacak</div>
+                            <div class="col">: <span id="confirm-tanggal_pacak"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
@@ -141,11 +184,6 @@
         $('#buttonSearch').on("click", function(e){
             e.preventDefault();
             $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/search_dam").submit();
-        });
-
-        $('#buttonSubmit').on("click", function(e){
-            e.preventDefault();
-            $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/validate_add").submit();
         });
 
         const imageInput = document.querySelector("#imageInput");
@@ -245,6 +283,24 @@
 
             $('#cancel-btn').click(function() {
                 resetImage(croppingImage);
+            });
+
+            let saveBtn = $("#buttonSubmit");
+            saveBtn.click(function(){
+                $('#confirm-sire').text($('#stu_sire_id option:selected').text());
+                $('#confirm-dam').text($('#stu_dam_id option:selected').text());
+                $('#confirm-foto_pacak').attr("src",  $('#imgPreview').attr("src"));
+                $('#confirm-foto_sire').attr("src",  $('#imgPreviewSire').attr("src"));
+                $('#confirm-foto_dam').attr("src",  $('#imgPreviewDam').attr("src"));
+                $('#confirm-tanggal_pacak').text($('input[name="stu_stud_date"]').val());
+
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/validate_add").submit();
             });
         });
     </script>

@@ -15,7 +15,7 @@
             <h3 class="text-center text-warning">Lapor Lahir</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
+                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
                         <?php if (!$mode){ ?>
                             <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
                         <?php } else { ?>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
                         </div>
                     </form>
@@ -85,6 +85,39 @@
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">Foto Dam</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Jumlah Jantan</div>
+                            <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Jumlah Betina</div>
+                            <div class="col">: <span id="confirm-jumlah_betina"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Tanggal Lahir</div>
+                            <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
                     </div>
                 </div>
             </div>
@@ -159,6 +192,22 @@
 
             $('#cancel-btn').click(function(event) {
                 resetImage();
+            });
+
+            let saveBtn = $("#saveBtn");
+            saveBtn.click(function(){
+                $('#confirm-jumlah_jantan').text($('input[name="bir_male"]').val());
+                $('#confirm-jumlah_betina').text($('input[name="bir_female"]').val());
+                $('#confirm-foto_dam').attr("src",  $('#imgPreview').attr("src"));
+                $('#confirm-tanggal_lahir').text($('input[name="bir_date_of_birth"]').val());
+
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#mainForm').submit();
             });
         });
     </script>
