@@ -13,7 +13,7 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">Laporan Ubah Kennel</h3> 
-                    <form class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmember/validate_edit" method="post" enctype="multipart/form-data">
+                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmember/validate_edit" method="post" enctype="multipart/form-data">
                         <div class="text-danger mb-1">
                             <?php
                             if ($this->session->flashdata('error_message')) {
@@ -142,13 +142,13 @@
                                     $pil[$row->ken_type_id] = $row->ken_type_name;
                                 }
                                 if (!$mode)
-                                    echo form_dropdown('ken_type_id', $pil, $member->ken_type_id, 'class="form-control"');
+                                    echo form_dropdown('ken_type_id', $pil, $member->ken_type_id, 'class="form-control", id="ken_type_id"');
                                 else
-                                    echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
+                                    echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
                             ?>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit">Save</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn">Save</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestmember'">Back</button>
                         </div>
                     </form>
@@ -178,6 +178,67 @@
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">KTP Number</div>
+                        <div class="col">: <span id="confirm-ktp_number"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">KTP Name</div>
+                        <div class="col">: <span id="confirm-ktp_name"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Mail Address</div>
+                        <div class="col">: <span id="confirm-mail_address"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Certificate Address</div>
+                        <div class="col">: <span id="confirm-certificate_address"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Phone Number</div>
+                        <div class="col">: <span id="confirm-phone_number"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">City</div>
+                        <div class="col">: <span id="confirm-city"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Postal Code</div>
+                        <div class="col">: <span id="confirm-postal_code"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">email</div>
+                        <div class="col">: <span id="confirm-email"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Foto Canine</div>
+                        <div class="col-auto pe-0">:</div>
+                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Kennel Name</div>
+                        <div class="col">: <span id="confirm-kennel_name"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Canine Name Format</div>
+                        <div class="col">: <span id="confirm-canine_name_format"></span></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -248,6 +309,28 @@
 
             $('#cancel-btn').click(function() {
                 resetImage(croppingImage);
+            });
+
+            let saveBtn = $("#saveBtn");
+            saveBtn.click(function(){
+                $('#confirm-ktp_number').text($('input[name="mem_ktp"]').val());
+                $('#confirm-ktp_name').text($('input[name="mem_name"]').val());
+                $('#confirm-mail_address').text($('input[name="mem_address"]').val());
+                $('#confirm-certificate_address').text($('input[name="mem_mail_address"]').val());
+                $('#confirm-phone_number').text($('input[name="mem_hp"]').val());
+                $('#confirm-city').text($('input[name="mem_kota"]').val());
+                $('#confirm-postal_code').text($('input[name="mem_kode_pos"]').val());
+                $('#confirm-email').text($('input[name="mem_email"]').val());
+                $('#confirm-foto').attr("src",  $('#imgPreviewLogo').attr("src"));
+                $('#confirm-kennel_name').text($('input[name="ken_name"]').val());
+                $('#confirm-canine_name_format').text($('#ken_type_id option:selected').text());
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#mainForm').submit();
             });
         });
     </script>

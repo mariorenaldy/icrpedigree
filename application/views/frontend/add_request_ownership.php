@@ -57,7 +57,7 @@
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
-                                    echo form_dropdown('can_kennel_id', $ken, $kennel_id, 'class="form-control"');
+                                    echo form_dropdown('can_kennel_id', $ken, $kennel_id, 'class="form-control", id="can_kennel_id"');
                                 ?>
                             </div>
                         </div>
@@ -82,10 +82,50 @@
                         </div>
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>"/>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="submit">Simpan</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="button">Simpan</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestownershipcanine'">Kembali</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="memberContainer" style="display: none;">
+                            <div class="row">
+                                <div class="col-4">Member</div>
+                                <div class="col">: <span id="confirm-member"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Kennel</div>
+                                <div class="col">: <span id="confirm-kennel"></span></div>
+                            </div>
+                        </div>
+                        <div id="notMemberContainer" style="display: none;">
+                            <div class="row">
+                                <div class="col-4">Name</div>
+                                <div class="col">: <span id="confirm-name"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Phone Number</div>
+                                <div class="col">: <span id="confirm-phone_number"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">email</div>
+                                <div class="col">: <span id="confirm-email"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,9 +142,31 @@
             $('#formCanine').attr('action', "<?= base_url(); ?>frontend/Requestownershipcanine/search_kennel").submit();
         });
 
-        $('#buttonSubmit').on("click", function(e){
-            e.preventDefault();
-            $('#formCanine').attr('action', "<?= base_url(); ?>frontend/Requestownershipcanine/validate").submit();
+        $(document).ready(function(){
+            let saveBtn = $("#buttonSubmit");
+            saveBtn.click(function(){
+                if($('input[name="reg_member"]').is(":checked")){
+                    $('#memberContainer').show();
+                    $('#notMemberContainer').hide();
+                    $('#confirm-member').text($('#can_member_id option:selected').text());
+                    $('#confirm-kennel').text($('#can_kennel_id option:selected').text());
+                }
+                else{
+                    $('#memberContainer').hide();
+                    $('#notMemberContainer').show();
+                    $('#confirm-name').text($('input[name="name"]').val());
+                    $('#confirm-phone_number').text($('input[name="hp"]').val());
+                    $('#confirm-email').text($('input[name="email"]').val());
+                }
+
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#formCanine').attr('action', "<?= base_url(); ?>frontend/Requestownershipcanine/validate").submit();
+            });
         });
     </script>
 </body>

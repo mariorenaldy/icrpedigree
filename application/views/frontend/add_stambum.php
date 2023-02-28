@@ -45,7 +45,7 @@
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
-                                    echo form_dropdown('stb_kennel_id', $ken, $kennel_id, 'class="form-control"');
+                                    echo form_dropdown('stb_kennel_id', $ken, $kennel_id, 'class="form-control", id="stb_kennel_id"');
                                 ?>
                             </div>
                         </div>
@@ -89,13 +89,13 @@
                                 <?php
                                     $gender['MALE'] = 'MALE';
                                     $gender['FEMALE'] = 'FEMALE';
-                                    echo form_dropdown('stb_gender', $gender, set_value('stb_gender'), 'class="form-control"');
+                                    echo form_dropdown('stb_gender', $gender, set_value('stb_gender'), 'class="form-control", id="stb_gender"');
                                 ?>
                             </div>
                         </div>
                         <input type="hidden" name="stb_bir_id" value="<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>"/>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit">Simpan</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
                         </div>
                     </form>
@@ -125,6 +125,59 @@
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="memberContainer" style="display: none;">
+                        <div class="row">
+                            <div class="col-4">Member</div>
+                            <div class="col">: <span id="confirm-member"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Kennel</div>
+                            <div class="col">: <span id="confirm-kennel"></span></div>
+                        </div>
+                    </div>
+                    <div id="notMemberContainer" style="display: none;">
+                        <div class="row">
+                            <div class="col-4">Name</div>
+                            <div class="col">: <span id="confirm-name"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Phone Number</div>
+                            <div class="col">: <span id="confirm-phone_number"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">email</div>
+                            <div class="col">: <span id="confirm-email"></span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Foto Canine</div>
+                        <div class="col-auto pe-0">:</div>
+                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Nama</div>
+                        <div class="col">: <span id="confirm-nama"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">Jenis Kelamin</div>
+                        <div class="col">: <span id="confirm-jenis_kelamin"></span></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -199,6 +252,34 @@
 
             $('#cancel-btn').click(function() {
                 resetImage();
+            });
+
+            let saveBtn = $("#saveBtn");
+            saveBtn.click(function(){
+                if($('input[name="reg_member"]').is(":checked")){
+                    $('#memberContainer').show();
+                    $('#notMemberContainer').hide();
+                    $('#confirm-member').text($('#stb_member_id option:selected').text());
+                    $('#confirm-kennel').text($('#stb_kennel_id option:selected').text());
+                }
+                else{
+                    $('#memberContainer').hide();
+                    $('#notMemberContainer').show();
+                    $('#confirm-name').text($('input[name="name"]').val());
+                    $('#confirm-phone_number').text($('input[name="hp"]').val());
+                    $('#confirm-email').text($('input[name="email"]').val());
+                }
+                $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
+                $('#confirm-nama').text($('input[name="stb_a_s"]').val());
+                $('#confirm-jenis_kelamin').text($('#stb_gender option:selected').text());
+
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#formCanine').submit();
             });
         });
     </script>
