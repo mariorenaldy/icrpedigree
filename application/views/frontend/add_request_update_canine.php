@@ -47,7 +47,7 @@
                         </div>
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="button">Save</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
                         </div>
                     </form>
@@ -77,6 +77,27 @@
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">Foto</div>
+                        <div class="col-auto pe-0">:</div>
+                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -155,6 +176,19 @@
 
             $('#cancel-btn').click(function() {
                 resetImage();
+            });
+
+            let saveBtn = $("#buttonSubmit");
+            saveBtn.click(function(){
+                $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
+
+                $('#confirm-modal').modal('show');
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#formCanine').submit();
             });
         });
     </script>
