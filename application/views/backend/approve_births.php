@@ -52,6 +52,7 @@
                     <div class="col-md-2"><b>Date of Birth</b></div>
                     <div class="col-md-1" align="center"><b>Male</b></div>
                     <div class="col-md-1" align="center"><b>Female</b></div>
+                    <div class="col-md-2"><b>Kennel</b></div>
                 </div>
                 <?php foreach ($birth AS $b){ ?>
                     <div class="row">
@@ -59,8 +60,8 @@
                             <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve Birth"><i class="fa fa-check"></i></button>
                             <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject Birth"><i class="fa fa-close"></i></button>
                         </div>
-                        <div class="col-md-2 mb-1">
-                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
+                        <div class="col-md-2 mb-1 text-center">
+                            <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')"><br/><?= $b->can_a_s; ?>
                         </div>
                         <div class="col-md-2">
                             <?= $b->bir_date_of_birth; ?>
@@ -70,6 +71,9 @@
                         </div>
                         <div class="col-md-1" align="right">
                             <?= $b->bir_female; ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?= $b->ken_name; ?>
                         </div>
                     </div>
                 <?php } ?>

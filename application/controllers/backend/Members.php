@@ -25,6 +25,7 @@ class Members extends CI_Controller {
 		public function index(){
 			$where['mem_type'] = $this->config->item('pro_member');
 			$where['mem_stat'] = $this->config->item('accepted');
+			$where['ken_stat'] = $this->config->item('accepted');
 			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2')->result();
 			$this->load->view('backend/view_members', $data);
 		}
@@ -36,6 +37,7 @@ class Members extends CI_Controller {
 			$like['ken_name'] = $this->input->post('keywords');
 			$like['mem_ktp'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('accepted');
+			$where['ken_stat'] = $this->config->item('accepted');
 			if ($this->input->post('mem_type') == $this->config->item('all_member'))
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
 			else
@@ -46,6 +48,7 @@ class Members extends CI_Controller {
 
 		public function view_approve(){
 			$where['mem_stat'] = $this->config->item('saved');
+			$where['ken_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->get_members($where)->result();
 			$this->load->view('backend/approve_members', $data);
 		}
@@ -56,6 +59,7 @@ class Members extends CI_Controller {
 			$like['mem_hp'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('saved');
+			$where['ken_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
 			$this->load->view('backend/approve_members', $data);
 		}

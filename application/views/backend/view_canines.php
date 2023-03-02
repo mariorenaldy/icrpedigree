@@ -77,9 +77,9 @@
                                 <th class="no-sort">Owner</th>
                                 <th class="no-sort">Note</th>
                                 <th class="no-sort">Reg. Date</th>
+                                <th class="no-sort">RIP?</th>
                                 <th class="no-sort">Status</th>
-                                <th class="no-sort"></th>
-                                
+                                <th style="display: none;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,6 +120,7 @@
                                     <td><?= $c->mem_name; ?></td>
                                     <td><?= $c->can_note; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
+                                    <td><?php if ($c->can_rip) echo '<i class="fa fa-check"></i>'; ?></td>
                                     <td><?= $c->stat_name.'<br/>'.$c->use_username.' (<span class="text-nowrap">'.$c->can_app_date.'</span>)'; ?></td>
                                     <td style="display: none;"><?= $c->can_id; ?></td>
                                 </tr>
@@ -172,7 +173,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[17, 'desc']],
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[18, 'desc']],
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

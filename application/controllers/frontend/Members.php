@@ -42,6 +42,7 @@ class Members extends CI_Controller {
 			else{
 				$where['mem_username'] = $this->input->post('username');
 				$where['mem_stat'] = $this->config->item('accepted');
+				$where['ken_stat'] = $this->config->item('accepted');
 				$member = $this->MemberModel->get_members($where)->row();
 				$err = 0;
 				if (!$member){
@@ -61,17 +62,26 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('login_error', 'Maaf kata sandi anda salah');
 				}
 				if (!$err){
-					$this->session->set_userdata('username', $this->input->post('username'));
-					$this->session->set_userdata('mem_id', $member->mem_id);
-					$this->session->set_userdata('mem_name', $member->mem_name);
-					$this->session->set_userdata('mem_type', $member->mem_type);
-					if ($member->mem_pp && $member->mem_pp != '-')
-						$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
-					else
-						$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
-					$notif = $this->notification_model->get_count($member->mem_id);
-					$this->session->set_userdata('notif_count', $notif->count);
-					redirect("frontend/Beranda");
+					$data['last_login'] = date('Y-m-d H:i:s');
+					$whe['mem_id'] = $member->mem_id;
+					$mem = $this->MemberModel->update_members($data, $whe);
+					if ($mem){
+						$this->session->set_userdata('username', $this->input->post('username'));
+						$this->session->set_userdata('mem_id', $member->mem_id);
+						$this->session->set_userdata('mem_name', $member->mem_name);
+						$this->session->set_userdata('mem_type', $member->mem_type);
+						if ($member->mem_pp && $member->mem_pp != '-')
+							$this->session->set_userdata('mem_pp', base_url().'uploads/members/'.$member->mem_pp);
+						else
+							$this->session->set_userdata('mem_pp', base_url().'assets/img/'.$this->config->item('default_img'));
+						$notif = $this->notification_model->get_count($member->mem_id);
+						$this->session->set_userdata('notif_count', $notif->count);
+						redirect("frontend/Beranda");
+					}
+					else{
+						$this->session->set_flashdata('login_error', 'Gagal login');
+						$this->load->view("frontend/login_form");
+					}
 				}
 				else{
 					$this->load->view("frontend/login_form");
@@ -294,8 +304,10 @@ class Members extends CI_Controller {
 								$this->db->trans_complete();
 								if ($this->input->post('mem_type'))
 									$this->session->set_flashdata('pro', TRUE);
-								else
+								else{
 									$this->session->set_flashdata('free', TRUE);
+									$this->session->set_flashdata('user', $this->input->post('email'));
+								}
 								redirect("frontend/Members");
 							}
 							else{

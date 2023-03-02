@@ -3,7 +3,7 @@
 class UsertypeModel extends CI_Model {
   public function get_user_type(){
     $this->db->select('*');
-    $this->db->order_by('user_type_id');
+    $this->db->order_by('user_type_id desc');
     return $this->db->get('user_type');
   }
 }

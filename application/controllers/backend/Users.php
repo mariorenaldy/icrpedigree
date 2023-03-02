@@ -20,7 +20,8 @@ class Users extends CI_Controller {
 		}
 
 		public function add(){
-			$this->load->view("backend/add_user");
+			$data['type'] = $this->usertypeModel->get_user_type()->result();
+			$this->load->view("backend/add_user", $data);
 		}
 
 		public function validate_add(){
@@ -29,23 +30,28 @@ class Users extends CI_Controller {
 				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 				$this->form_validation->set_rules('repass', 'Confirmation Password ', 'trim|matches[password]');
 
+				$data['type'] = $this->usertypeModel->get_user_type()->result();
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("backend/add_user", $data);
 				}
 				else{
-					$data = array(
+					$id = $this->userModel->get_max_id() + 1;
+					$user = array(
+						'use_id' => $id,
 						'use_username' => $this->input->post('username'),
 						'use_password' => sha1($this->input->post('password')),
-						'use_akses' => 1,
+						'use_type_id' => $this->input->post('use_type_id'),
+						'use_photo' => '-',
+						'use_stat' => $this->config->item('accepted'),
 					);
-					$res = $this->userModel->add_users($data);
+					$res = $this->userModel->add_users($user);
 					if ($res){
 						$this->session->set_flashdata('add_success', TRUE);
 						redirect("backend/Users");
 					}
 					else{
 						$this->session->set_flashdata('error_message', 'Failed to save user');
-						$this->load->view('backend/reset_password');
+						$this->load->view("backend/add_user", $data);
 					}
 				}
 			}

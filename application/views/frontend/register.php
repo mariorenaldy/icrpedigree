@@ -115,7 +115,7 @@
                             <div class="input-group mb-3">
                                 <label for="mem_username" class="control-label col-sm-2">Username</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?= set_value('mem_username'); ?>">
+                                    <input class="form-control" type="text" placeholder="Username" name="mem_username" value="<?= set_value('mem_username'); ?>" id="username" maxlength="40">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
@@ -429,6 +429,16 @@
         submitBtn.click(function(){
             submitBtn.prop('disabled', true);
             $('#mainForm').submit();
+        });
+
+        $("#username").on({
+            keydown: function(e) {
+                if (e.which === 32)
+                return false;
+            },
+            change: function() {
+                this.value = this.value.replace(/\s/g, "");
+            }
         });
     </script>
 </body>

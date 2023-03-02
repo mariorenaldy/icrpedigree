@@ -82,6 +82,7 @@
                                 <th>KTP</th>
                                 <th class="no-sort">email</th>
                                 <th class="no-sort">Type</th>
+                                <th class="no-sort">Last Login</th>
                                 <th style="display: none;"></th>
                             </tr>
                         </thead>
@@ -126,6 +127,7 @@
                                             else 
                                                 echo 'Free'; 
                                             ?></td>
+                                        <td class="text-nowrap"><?= $m->last_login; ?></td>
                                         <td style="display: none;"><?= $m->mem_app_date2; ?></td>
                                     </tr>
                                     <?php $i++; 
@@ -166,7 +168,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[14, 'desc']],
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[15, 'desc']],
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

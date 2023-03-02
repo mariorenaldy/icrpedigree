@@ -7,7 +7,7 @@ class Births extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'pedigreesModel', 'stambumModel'));
+        $this->load->model(array('studModel', 'birthModel', 'caninesModel', 'stambumModel'));
 		$this->load->library('upload', $this->config->item('upload_birth'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -17,16 +17,8 @@ class Births extends CI_Controller {
 
 	public function index(){
 		if ($this->session->userdata('mem_id')){
-			$wheStud['stu_partner_id'] = $this->session->userdata('mem_id');
-			$wheStud['stu_stat'] = $this->config->item('accepted');
-			$stud = $this->studModel->get_studs($wheStud)->result();
-
-			$data['births'] = Array();
-			foreach ($stud AS $r){
-				$wheBirth = [];
-				$wheBirth['bir_stu_id'] = $r->stu_id;
-				$data['births'][] = $this->birthModel->get_births($wheBirth)->row();
-			}
+			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
+			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
 
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
@@ -69,17 +61,10 @@ class Births extends CI_Controller {
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			}
 			if ($date){
-				$where['bir_date_of_birth'] = $date;
+				$wheBirth['bir_date_of_birth'] = $date;
 			}
-			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$stud = $this->studModel->get_studs($wheStud)->result();
-
-			$data['births'] = Array();
-			foreach ($stud AS $r){
-				$wheBirth = [];
-				$wheBirth['bir_stu_id'] = $r->stu_id;
-				$data['births'][] = $this->birthModel->get_births($wheBirth)->row();
-			}
+			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
+			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
 
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
@@ -116,10 +101,37 @@ class Births extends CI_Controller {
 
 	public function view_approved(){
 		if ($this->session->userdata('mem_id')){
-			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$data['births'] = $this->birthModel->get_births($where)->result();
-			$this->load->view('frontend/view_births', $data);
+			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
+			$wheBirth['bir_stat'] = $this->config->item('accepted');
+			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
+
+			$data['stambum_stat'] = array();
+			foreach ($data['births'] as $r){
+				if ($r){
+					$wheStbMale = [];
+					$wheStbMale['stb_bir_id'] = $r->bir_id;
+					$wheStbMale['stb_gender'] = 'MALE';
+					$wheStbMale['stb_stat'] = $this->config->item('accepted');
+					$male = $this->stambumModel->get_count($wheStbMale);
+
+					$wheStbFemale = [];
+					$wheStbFemale['stb_bir_id'] = $r->bir_id;
+					$wheStbFemale['stb_gender'] = 'FEMALE';
+					$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+					$female = $this->stambumModel->get_count($wheStbFemale);
+
+					if ($male >= $r->bir_male || $female >= $r->bir_female){
+						$data['stambum_stat'][] = 0;
+					}
+					else{
+						$data['stambum_stat'][] = 1;
+					}
+				}
+				else{
+					$data['stambum_stat'][] = 0;
+				}
+			}
+			$this->load->view('frontend/view_approved_births', $data);
 		}
 		else{
 			redirect('frontend/Members');
@@ -220,6 +232,7 @@ class Births extends CI_Controller {
 					if (!$err){
 						$data = array(
 							'bir_stu_id' => $this->input->post('bir_stu_id'),
+							'bir_member_id' => $stud->stu_partner_id,
 							'bir_dam_photo' => $damPhoto,
 							'bir_male' => $this->input->post('bir_male'),
 							'bir_female' => $this->input->post('bir_female'),

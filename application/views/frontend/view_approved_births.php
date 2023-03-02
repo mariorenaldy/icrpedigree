@@ -21,23 +21,6 @@
                         }
                     ?>
                 </div>
-                <div class="search-container">
-                    <form id="formBirth" action="<?= base_url().'frontend/Births/search'?>" method="post">
-                        <div class="input-group my-3">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
-                            </div>
-                            <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="row my-3">
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Lahir"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
                 <div class="row mb-1">
                     <div class="col-sm-2 text-center"><b>Foto</b></div>
                     <div class="col-sm-2"><b>DOB</b></div>
@@ -81,11 +64,6 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
-        function setDatePicker(id) {
-            $(id).datepicker({ dateFormat: 'dd-mm-yy' });
-            $(id).readOnly = true;
-        }
-        setDatePicker('#keywords');
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/view_approved";
         }
@@ -94,7 +72,7 @@
         }
         $(document).ready(function () {
             $('#keywords').on("change", function(){
-                $('#formBirth').attr('action', "<?= base_url(); ?>frontend/Births/search").submit();
+                $('#formBirth').attr('action', "<?= base_url(); ?>frontend/Births/search_approved").submit();
             });
         });
     </script>

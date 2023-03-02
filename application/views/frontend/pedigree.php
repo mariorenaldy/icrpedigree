@@ -85,6 +85,13 @@
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
+        function detail(id){
+            window.location = "<?= base_url(); ?>frontend/Canines/view_detail/"+id;
+        }
+        function pedigree(id){
+            window.location = "<?= base_url(); ?>frontend/Certificate/index/"+id;
+        }
+        
         var modal = document.getElementById("myModal");
         function display(id){
             var img = document.getElementById(id);

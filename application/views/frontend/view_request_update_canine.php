@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Laporan Ubah Foto</title>
+    <title>List Laporan Ubah Data</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,11 +17,11 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Laporan Ubah Foto</h3>
+                <h3 class="text-center text-warning">List Laporan Ubah Data</h3>
                 <div class="text-success mb-3">
                     <?php		
                         if ($this->session->flashdata('add_success')){
-                            echo 'Laporan ubah foto berhasil disimpan<br/>';
+                            echo 'Laporan ubah data berhasil disimpan<br/>';
                         }
                     ?>
                 </div>
@@ -48,7 +48,8 @@
                     <div class="col-sm-2"><b>Foto Baru</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
-                    <div class="col-sm-2"><b>Status</b></div>
+                    <div class="col-sm-1"><b>RIP?</b></div>
+                    <div class="col-sm-1"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
@@ -57,19 +58,26 @@
                         </div>
                         <div class="col-sm-2 mb-1">
                             <?php if ($r->req_old_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$r->req_old_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                                <img src="<?= base_url('uploads/canine/'.$r->req_old_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="oldImg<?= $r->req_id ?>" onclick="display('oldImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="oldImg<?= $r->req_id ?>" onclick="display('oldImg<?= $r->req_id ?>')">
                             <?php } ?>
                         </div>
                         <div class="col-sm-2 mb-1">
-                            <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                            <?php if ($r->req_photo != '-'){ ?>
+                                <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                            <?php } else{ ?>
+                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                            <?php } ?>
                         </div>
                         <div class="col-sm-2">
                             <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
                             <?= $r->req_date; ?>
+                        </div>
+                        <div class="col-sm-1">
+                            <?php if ($r->req_rip) echo '<i class="fa fa-check"></i>'; ?>
                         </div>
                         <div class="col-sm-1">
                             <?php echo $r->stat_name; ?>

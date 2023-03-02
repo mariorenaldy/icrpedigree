@@ -22,7 +22,7 @@
                                     echo 'Register berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.<br/>';
                                 }
                                 if ($this->session->flashdata('free')){
-                                    echo 'Register berhasil.<br/>Gunakan email sebagai username & no. hp sebagai password.<br/>';
+                                    echo 'Register berhasil.<br/>Username: '.$this->session->flashdata('user').'<br/>Password: no. hp';
                                 }
                             ?>
                         </div>

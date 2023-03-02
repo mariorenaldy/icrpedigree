@@ -27,6 +27,17 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
+                        <label class="control-label col-md-2">User Type</label>
+                        <div class="col-md-10">
+                            <?php
+                            foreach ($type as $row) {
+                                $pil[$row->user_type_id] = $row->user_type_name;
+                            }
+                            echo form_dropdown('use_type_id', $pil, set_value('use_type_id'), 'class="form-control"');
+                            ?>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
                         <label for="mem_name" class="control-label col-md-2">Password</label>
                         <div class="col-md-10">
                             <input class="form-control" type="password" placeholder="Password" name="password" value="<?= set_value('password'); ?>">

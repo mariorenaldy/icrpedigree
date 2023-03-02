@@ -80,6 +80,7 @@ class Stambums extends CI_Controller {
         $like['mem_name'] = $this->input->post('mem_name');
         $like['ken_name'] = $this->input->post('mem_name');
         $where['mem_stat'] = $this->config->item('accepted');
+        $where['ken_stat'] = $this->config->item('accepted');
         $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
         if ($data['member']){
@@ -108,6 +109,7 @@ class Stambums extends CI_Controller {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
+          $where['ken_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('stb_member_id');
@@ -143,6 +145,7 @@ class Stambums extends CI_Controller {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
+          $where['ken_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('stb_member_id');

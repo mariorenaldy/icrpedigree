@@ -87,6 +87,7 @@ class Canines extends CI_Controller {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
+          $where['ken_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           if ($data['member']){
@@ -111,6 +112,7 @@ class Canines extends CI_Controller {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
+          $where['ken_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -140,6 +142,7 @@ class Canines extends CI_Controller {
           $like['mem_name'] = $this->input->post('mem_name');
           $like['ken_name'] = $this->input->post('mem_name');
           $where['mem_stat'] = $this->config->item('accepted');
+          $where['ken_stat'] = $this->config->item('accepted');
           $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
           $whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -358,6 +361,7 @@ class Canines extends CI_Controller {
       $like['mem_name'] = $this->input->post('mem_name');
       $like['ken_name'] = $this->input->post('mem_name');
       $wheMember['mem_stat'] = $this->config->item('accepted');
+      $wheMember['ken_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){
@@ -389,6 +393,7 @@ class Canines extends CI_Controller {
       $like['mem_name'] = $this->input->post('mem_name');
       $like['ken_name'] = $this->input->post('mem_name');
       $wheMember['mem_stat'] = $this->config->item('accepted');
+      $wheMember['ken_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){
@@ -430,6 +435,7 @@ class Canines extends CI_Controller {
       $like['mem_name'] = $this->input->post('mem_name');
       $like['ken_name'] = $this->input->post('mem_name');
       $wheMember['mem_stat'] = $this->config->item('accepted');
+      $wheMember['ken_stat'] = $this->config->item('accepted');
       $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
 
       if ($data['member']){

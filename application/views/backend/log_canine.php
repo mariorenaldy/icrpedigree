@@ -32,6 +32,7 @@
                                 <th>Date of Birth</th>
                                 <th>Kennel</th>
                                 <th>Owner</th>
+                                <th>RIP?</th>
                                 <th>Note</th>
                                 <th>Status</th>
                             </tr>
@@ -61,6 +62,7 @@
                                         <td><?= $r->log_date_of_birth; ?></td>
                                         <td><?= $r->ken_name; ?></td>
                                         <td><?= $r->mem_name; ?></td>
+                                        <td><?php if ($r->log_rip) echo '<i class="fa fa-check"></i>'; ?></td>
                                         <td><?= $r->log_note; ?></td>
                                         <td><?= $r->stat_name; ?></td>
                                     </tr>

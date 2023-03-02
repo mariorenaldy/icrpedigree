@@ -100,11 +100,6 @@ class Requestupdatecanine extends CI_Controller {
 							}
 						}
 
-						if (!$err && $photo == "-"){
-							$err++;
-							$this->session->set_flashdata('error_message', 'Foto wajib diisi');
-						}
-
 						if (!$err){
 							$req_data = array(
 								'req_can_id' => $this->input->post('can_id'),
@@ -113,19 +108,24 @@ class Requestupdatecanine extends CI_Controller {
 								'req_date' => date('Y-m-d H:i:s'),
 								'req_photo' => $photo,
 								'req_old_photo' => $data['canine']->can_photo,
+								'req_rip' => $this->input->post('can_rip')
 							);	
+							// if ($photo != '-'){
+							// 	$req_data['req_photo'] = $photo;
+							// 	$req_data['req_old_photo'] = $data['canine']->can_photo;
+							// }
 							$res = $this->requestupdatecanineModel->add_requests($req_data);
 							if ($res){
 								$this->session->set_flashdata('add_success', TRUE);
 								redirect("frontend/Requestupdatecanine");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto.');
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data.');
 								$this->load->view("frontend/add_request_update_canine", $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto. Error code : '.$err);
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data. Error code : '.$err);
 							$this->load->view("frontend/add_request_update_canine", $data);
 						}
 					}

@@ -143,17 +143,17 @@
                             <div class="col-4">Dam</div>
                             <div class="col">: <span id="confirm-dam"></span></div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-4">Foto Pacak</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_pacak" width="50%"/></div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-4">Foto Sire</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_sire" width="50%"/></div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-4">Foto Dam</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_dam" width="50%"/></div>

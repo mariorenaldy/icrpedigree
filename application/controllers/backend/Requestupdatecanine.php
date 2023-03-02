@@ -44,7 +44,9 @@ class Requestupdatecanine extends CI_Controller {
 					if ($result){
 						$dataCan['can_user'] = $this->session->userdata('use_id');
 						$dataCan['can_date'] = date('Y-m-d H:i:s');
-						$dataCan['can_photo'] = $req->req_photo;
+						if ($req->req_photo != '-')
+							$dataCan['can_photo'] = $req->req_photo;
+						$dataCan['can_rip'] = $req->req_rip;
 						$wheCan['can_id'] = $req->req_can_id;
 						$res = $this->caninesModel->update_canines($dataCan, $wheCan);
 						if ($res){
@@ -53,6 +55,7 @@ class Requestupdatecanine extends CI_Controller {
 								'log_photo' => $req->req_photo,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
+								'log_rip' => $req->req_rip,
 							);
 							$log = $this->logcanineModel->add_log($dataLog);
 							if ($log){

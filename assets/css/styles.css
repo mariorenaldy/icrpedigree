@@ -131,7 +131,7 @@ div.container{
     font-size: 0.8em !important;
 }
 .img-fluid.pp{
-    width: 25px;
+    width: 30px;
     clip-path: circle();
 }
 .img-fluid.img-thumbnail.profile{
@@ -158,13 +158,14 @@ div.container{
 #main-nav-container #notif-nav br{
     display: none;
 }
-.nav-text.text-warning.notif-text{
-    font-size: 0.8em !important;
+.nav-text.notif-text{
+    font-size: 0.7em !important;
 }
 .col.date{
     font-size: 0.8em; 
     color:#BEBEBE;
 }
-#confirm-modal .modal-body{
-    word-break:break-all;
+hr.req-separator{
+    border-color: #ffc107;
+    background-color: #ffc107;
 }

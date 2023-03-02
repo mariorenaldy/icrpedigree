@@ -1,5 +1,11 @@
 <?php
 class UserModel extends CI_Model {
+    public function get_max_id(){
+		$this->db->select_max('use_id', 'max');
+		$query = $this->db->get('users');
+        return ($query->result()[0]->max);
+	}
+
     public function get_users($where){
         $this->db->select('*');
         if ($where) {
@@ -11,14 +17,12 @@ class UserModel extends CI_Model {
     }
 
     public function add_users($data){
-        $this->db->insert('users', $data);
-        return $this->db->insert_id();
+        return $this->db->insert('users', $data);
     }
 
     public function update_users($data, $where){
         $this->db->set($data);
         $this->db->where($where);
-        $this->db->update('users');
-        return $this->db->affected_rows();
+        return $this->db->update('users');
     }
 }

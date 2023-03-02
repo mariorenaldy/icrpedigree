@@ -38,6 +38,18 @@
 .marginCertificate .row .col.md-4 .desc{
     font-family: "Times New Roman", Times, serif;
 }
+.img-fluid.pp{
+    width: 30px;
+    clip-path: circle();
+}
+.col.date{
+    font-size: 0.8em; 
+    color:#BEBEBE;
+}
+hr.req-separator{
+    border-color: #ffc107;
+    background-color: #ffc107;
+}
 @font-face {
     font-family: "Cen725c";
     src: url("../font/Cen725c.ttf") format("truetype");

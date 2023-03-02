@@ -108,9 +108,9 @@
                             <label class="control-label col-md-2">ICR Number</label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?= $canine->can_icr_number; ?>">
+                                    <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?= $canine->can_icr_number; ?>" maxlength="15" oninput="this.value = this.value.replace(/[^0-9-]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?= set_value('can_icr_number'); ?>">
+                                    <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?= set_value('can_icr_number'); ?>" maxlength="15" oninput="this.value = this.value.replace(/[^0-9-]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 <?php } ?>
                             </div>
                         </div>

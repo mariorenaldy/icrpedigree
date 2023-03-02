@@ -8,37 +8,52 @@
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Kennels</span>
                         <ul class="dropdown-menu">
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve Kennel</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage Kennel</a></li>
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve</a></li>
+                           <?php } ?>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage</a></li>
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestmember') ?>">Approve Edit Kennel</a></li>
+                           <?php } ?>
                         </ul>
                      </div>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Canines</span>
                         <ul class="dropdown-menu">
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/view_approve') ?>">Approve</a></li>
+                           <?php } ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Change Ownership</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Change Photo</a></li>
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Change Data</a></li>
+                           <?php } ?>
                         </ul>
                      </div>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Studs</span>
                         <ul class="dropdown-menu">
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/view_approve') ?>">Approve</a></li>
+                           <?php } ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/') ?>">Manage</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Births</span>
                         <ul class="dropdown-menu">
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/view_approve') ?>">Approve</a></li>
+                           <?php } ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Puppies</span>
                         <ul class="dropdown-menu">
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/view_approve') ?>">Approve</a></li>
+                           <?php } ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/') ?>">Manage</a></li>
                         </ul>
                      </div>
@@ -57,10 +72,11 @@
                         </div>
                      <?php } ?>
                      <div class="dropdown">
-                           <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              <?= $this->session->userdata('use_username'); ?>
-                           </span>
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                           <img src="<?= $this->session->userdata('use_pp') ?>" class="img-fluid pp" alt="pp"> <?= $this->session->userdata('use_username') ?>
+                        </span>
                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="<?= base_url('backend/Users/edit_pp') ?>">Change PP</a></li>
                               <li><a class="dropdown-item" href="<?= base_url('backend/Users/edit_password') ?>">Edit Password</a></li>
                               <li><a class="dropdown-item" href="<?= base_url('backend/Users/logout') ?>">Logout</a></li>
                            </ul>

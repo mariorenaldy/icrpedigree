@@ -85,7 +85,7 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function add(){
-            window.location = "<?= base_url(); ?>frontend/Births/";
+            window.location = "<?= base_url(); ?>frontend/Births/view_approved";
         }
         var modal = document.getElementById("myModal");
         function display(id){

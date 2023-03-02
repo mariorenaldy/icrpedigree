@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Approve Change Canine Photo</title>
+    <title>Approve Change Canine Data</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,11 +17,11 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Approve Change Canine Photo</h3>
+                <h3 class="text-center text-primary">Approve Change Canine Data</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Change canine photo has been approved<br/>';
+                            echo 'Change canine data has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -31,7 +31,7 @@
                             echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Change canine photo has been rejected<br/>';
+                            echo 'Change canine data has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -51,9 +51,10 @@
                     <div class="col-sm-2"></div>
                     <div class="col-sm-2"><b>Name</b></div>
                     <div class="col-sm-2"><b>Old Photo</b></div>
-                    <div class="col-sm-2"><b>New Foto</b></div>
+                    <div class="col-sm-2"><b>New Photo</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Date</b></div>
+                    <div class="col-sm-1"><b>RIP?</b></div>
+                    <div class="col-sm-1"><b>Date</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
@@ -77,7 +78,10 @@
                         <div class="col-sm-2">
                             <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
+                            <?php if ($r->req_rip) echo '<i class="fa fa-check"></i>'; ?>
+                        </div>
+                        <div class="col-sm-1">
                             <?= $r->req_date; ?>
                         </div>
                     </div>

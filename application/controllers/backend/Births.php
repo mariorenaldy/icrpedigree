@@ -176,6 +176,7 @@ class Births extends CI_Controller {
 			
 							$dataBirth = array(
 								'bir_stu_id' => $this->input->post('bir_stu_id'),
+								'bir_member_id' => $stud->stu_partner_id,
 								'bir_dam_photo' => $damPhoto,
 								'bir_male' => $this->input->post('bir_male'),
 								'bir_female' => $this->input->post('bir_female'),
@@ -194,6 +195,7 @@ class Births extends CI_Controller {
 								$dataLog = array(
 									'log_bir_id' => $birth,
 									'log_stu_id' => $this->input->post('bir_stu_id'),
+									'log_member_id' => $stud->stu_partner_id,
 									'log_dam_photo' => $damPhoto,
 									'log_male' => $this->input->post('bir_male'),
 									'log_female' => $this->input->post('bir_female'),
@@ -422,6 +424,7 @@ class Births extends CI_Controller {
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
 							'log_stu_id' => $birth->bir_stu_id,
+							'log_member_id' => $birth->bir_member_id,
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,
@@ -534,6 +537,7 @@ class Births extends CI_Controller {
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
 							'log_stu_id' => $birth->bir_stu_id,
+							'log_member_id' => $birth->bir_member_id,
 							'log_dam_photo' => $birth->bir_dam_photo,
 							'log_male' => $birth->bir_male,
 							'log_female' => $birth->bir_female,

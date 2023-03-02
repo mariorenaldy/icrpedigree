@@ -17,7 +17,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>">Tambah Generasi Satu</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>">Lapor Pacak</a></li>
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view' ?>">Lapor Lahir</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view_approved' ?>">Lapor Lahir</a></li>
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li> -->
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li> -->
                         </ul>

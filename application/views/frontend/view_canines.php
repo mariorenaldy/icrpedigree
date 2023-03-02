@@ -66,7 +66,10 @@
                                 if ($c->can_icr_number) 
                                     echo $c->can_icr_number; 
                                 else 
-                                    echo $c->can_reg_number; 
+                                    echo $c->can_reg_number;
+                                echo '<br>';
+                                if ($c->can_rip) 
+                                    echo 'RIP'; 
                             ?>
                         </div>
                         <div class="col-sm-2">
@@ -86,11 +89,12 @@
                             <?php echo $c->stat_name; ?>
                         </div>
                         <div class="col-sm-2">
+                            <?php if ($c->can_stat == $this->config->item('accepted')){ ?>
                             <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil"><i class="fa fa-dog"></i></button>
                             <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fas fa-book-open"></i></button>
                             <button type="button" class="btn btn-success mb-1" onclick="edit_owner(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Ubah Pemilik"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="Ubah Foto Anjing"><i class="fa fa-image"></i></button>
-                            <!-- <button type="button" class="btn btn-light"><i class="fa fa-file-o" aria-hidden="true"></i></button> -->
+                            <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="Ubah Data Anjing"><i class="fa fa-pencil"></i></button>
+                            <?php } ?>
                         </div>
                     </div>
                 <?php } ?>

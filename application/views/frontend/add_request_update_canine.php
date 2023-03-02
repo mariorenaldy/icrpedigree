@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Lapor Ubah Foto Anjing</title>
+    <title>Lapor Ubah Data Anjing</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Ubah Foto Anjing</h3>  
+            <h3 class="text-center text-warning">Lapor Ubah Data Anjing</h3>  
                     <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatecanine/validate" method="post" enctype="multipart/form-data">
                         <div class="text-danger">
                             <?php
@@ -45,11 +45,17 @@
                                 <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
-                        <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
+                        <div class="input-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6">
+                                <label class="checkbox-inline"><input type="checkbox" name="can_rip" value="1" <?php if ($canine->can_rip) echo 'checked'; else echo set_checkbox('can_rip', '1'); ?> id="can_rip"/> RIP?</label>
+                                <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
+                            </div>
+                        </div>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="button">Save</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
-                        </div>
+                        </div>   
                     </form>
                 </div>
             </div>
@@ -92,6 +98,12 @@
                         <div class="col-4">Foto</div>
                         <div class="col-auto pe-0">:</div>
                         <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">RIP?</div>
+                        <div class="col">: <span id="confirm-rip"></span></div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -181,7 +193,11 @@
             let saveBtn = $("#buttonSubmit");
             saveBtn.click(function(){
                 $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
-
+                rip = $( "input:checked" ).length;
+                if (rip > 0)
+                    $('#confirm-rip').text('Ya');
+                else
+                    $('#confirm-rip').text('Tidak');
                 $('#confirm-modal').modal('show');
             });
 

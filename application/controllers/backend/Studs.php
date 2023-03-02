@@ -83,12 +83,14 @@ class Studs extends CI_Controller {
 				$likeMember['mem_name'] = $this->input->post('mem_name');
 				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
+				$whereMember['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				if ($data['member']){
 					$whereSire['can_member_id'] = $data['member'][0]->mem_id;
 					$whereSire['can_gender'] = 'MALE';
 					$whereSire['can_stat'] = $this->config->item('accepted');
+					$whereSire['can_rip '] = $this->config->item('canine_alive');
 					$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 				}
 				else{
@@ -135,11 +137,13 @@ class Studs extends CI_Controller {
 				$likeMember['mem_name'] = $this->input->post('mem_name');
 				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
+				$whereMember['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -182,11 +186,13 @@ class Studs extends CI_Controller {
 				$likeMember['mem_name'] = $this->input->post('mem_name');
 				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
+				$whereMember['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 				
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -215,10 +221,15 @@ class Studs extends CI_Controller {
 				}
 				$data['sireStat'] = $stat;
 	
+				$whereCan['can_id'] = $this->input->post('stu_sire_id');
+				$can = $this->caninesModel->get_canines($whereCan)->row();
 				$like['can_a_s'] = $this->input->post('can_a_s');
 				$whereDam['can_gender'] = 'FEMALE';
 				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
+				$whereDam['can_member_id !='] = $this->config->item('no_member');
+				$whereDam['can_breed'] = $can->can_breed;
+				$whereDam['can_rip '] = $this->config->item('canine_alive');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
 				// Dam harus 12 bulan
@@ -264,11 +275,13 @@ class Studs extends CI_Controller {
 				$likeMember['mem_name'] = $this->input->post('mem_name');
 				$likeMember['ken_name'] = $this->input->post('mem_name');
 				$whereMember['mem_stat'] = $this->config->item('accepted');
+				$whereMember['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($likeMember, $whereMember)->result();
 
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -296,10 +309,15 @@ class Studs extends CI_Controller {
 					}
 				}
 	
+				$whereCan['can_id'] = $this->input->post('stu_sire_id');
+				$can = $this->caninesModel->get_canines($whereCan)->row();
 				$like['can_a_s'] = $this->input->post('can_a_s');
 				$whereDam['can_gender'] = 'FEMALE';
 				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
+				$whereDam['can_member_id !='] = $this->config->item('no_member');
+				$whereDam['can_breed'] = $can->can_breed;
+				$whereDam['can_rip '] = $this->config->item('canine_alive');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
 				// Dam harus 12 bulan
@@ -621,6 +639,7 @@ class Studs extends CI_Controller {
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -694,6 +713,7 @@ class Studs extends CI_Controller {
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -722,10 +742,15 @@ class Studs extends CI_Controller {
 				}
 				$data['sireStat'] = $stat;
 	
+				$whereCan['can_id'] = $this->input->post('stu_sire_id');
+				$can = $this->caninesModel->get_canines($whereCan)->row();
 				$like['can_a_s'] = $this->input->post('can_a_s');
 				$whereDam['can_gender'] = 'FEMALE';
 				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
+				$whereDam['can_member_id !='] = $this->config->item('no_member');
+				$whereDam['can_breed'] = $can->can_breed;
+				$whereDam['can_rip '] = $this->config->item('canine_alive');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
 				// Dam harus 12 bulan
@@ -778,6 +803,7 @@ class Studs extends CI_Controller {
 				$whereSire['can_member_id'] = $this->input->post('can_member_id');
 				$whereSire['can_gender'] = 'MALE';
 				$whereSire['can_stat'] = $this->config->item('accepted');
+				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 	
 				// Sire harus 12 bulan
@@ -805,10 +831,15 @@ class Studs extends CI_Controller {
 					}
 				}
 	
+				$whereCan['can_id'] = $this->input->post('stu_sire_id');
+				$can = $this->caninesModel->get_canines($whereCan)->row();
 				$like['can_a_s'] = $this->input->post('can_a_s');
 				$whereDam['can_gender'] = 'FEMALE';
 				$whereDam['can_stat'] = $this->config->item('accepted');
 				$whereDam['can_id !='] = $this->config->item('dam_id');
+				$whereDam['can_member_id !='] = $this->config->item('no_member');
+				$whereDam['can_breed'] = $can->can_breed;
+				$whereDam['can_rip '] = $this->config->item('canine_alive');
 				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
 	
 				// Dam harus 12 bulan

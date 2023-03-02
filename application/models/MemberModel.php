@@ -10,11 +10,10 @@ class MemberModel extends CI_Model {
     }
 
     public function get_members($where, $sort = 'mem_id'){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->where('kennels.ken_stat', $this->config->item('accepted'));
         $this->db->from('members');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
         $this->db->join('users','users.use_id = members.mem_app_user');
@@ -24,12 +23,11 @@ class MemberModel extends CI_Model {
     }
 
     public function search_members($like, $where, $sort = 'mem_id'){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->where('kennels.ken_stat', $this->config->item('accepted'));
         $this->db->group_start();
         if ($like != null) {
             $this->db->or_like($like);

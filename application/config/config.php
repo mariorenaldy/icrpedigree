@@ -593,11 +593,20 @@ $config['upload_birth'] = Array(
     'file_name' => 'birth_'.time(),
 );
 
+$config['upload_path_user'] = realpath(APPPATH.'../uploads/users/');
+$config['path_user'] = 'uploads/users/';
+$config['upload_user'] = Array(
+    'upload_path' => $config['upload_path_user'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'user_'.time(),
+);
+
 $config['file_size'] = 1048576;
-$config['img_width'] = 800;
-$config['img_height'] = 600;
-$config['img_width_ratio'] = 4;
-$config['img_height_ratio'] = 3;
+$config['img_width'] = 960;
+$config['img_height'] = 540;
+$config['img_width_ratio'] = 16;
+$config['img_height_ratio'] = 9;
 $config['pp'] = 400;
 $config['mode'] = 0;
 
@@ -627,8 +636,8 @@ $config['free_member'] = 0;
 $config['pro_member'] = 1;
 $config['all_member'] = 2;
 
-$config['canine_rip'] = 0;
-$config['canine_alive'] = 1;
+$config['canine_rip'] = 1;
+$config['canine_alive'] = 0;
 
 $config['jarak_lapor_pacak'] = 7;
 $config['jarak_pacak'] = 120;
@@ -645,3 +654,5 @@ $config['no_member'] = 0;
 
 $config['stud'] = 1;
 $config['birth'] = 2;
+
+$config['super'] = 0;
