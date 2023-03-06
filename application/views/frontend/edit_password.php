@@ -13,21 +13,6 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Members/validate_edit_password" method="post" enctype="multipart/form-data">
-                        <div class="text-success">
-                            <?php		
-                                if ($this->session->flashdata('edit_password')){
-                                    echo 'Password berhasil diubah <br/>';
-                                }
-                            ?>
-                        </div>
-                        <div class="text-danger">
-                            <?php	
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-sm-2">Username</label>
                             <div class="col-sm-10"><?= $this->session->userdata('username'); ?></div>
@@ -58,8 +43,65 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('edit_password')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Password berhasil diubah</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
+    <script>
+        $(document).ready(function(){
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+            <?php		
+                if ($this->session->flashdata('edit_password')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+        });
+    </script>
 </body>
 </html>
 

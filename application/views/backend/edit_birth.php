@@ -30,7 +30,7 @@
                             ?>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Dam Photo</label>
+                            <label for="stu_dam_id" class="control-label col-md-12 text-center">Photo</label>
                             <div class="col-md-12 text-center">
                                 <?php 
                                     if (!$mode){ 

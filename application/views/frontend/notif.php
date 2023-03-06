@@ -22,12 +22,11 @@
                     <div class="col text-warning fs-5"><?= $r->title ?></div>
                 </div>
                 <div class="row">
-                    <div class="col"><?= $r->description ?></div>
+                    <div class="col"><?= $r->description ?><?php if ($r->note){ ?><br/><a class="class='text-decoration-none text-reset link-warning'" href="<?= $r->note ?>">Link Laporan</a><?php } ?></div>
                 </div>
         <?php 
                 $i++;
             } ?> 
-        </div>
         </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>

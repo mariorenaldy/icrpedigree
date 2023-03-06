@@ -21,16 +21,8 @@
                         <?php } else { ?>
                             <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
                         <?php } ?>
-                        <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Dam</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto semua anak saat sedang menyusui dengan induknya</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
@@ -122,6 +114,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
@@ -209,6 +226,10 @@
                 submitBtn.prop('disabled', true);
                 $('#mainForm').submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

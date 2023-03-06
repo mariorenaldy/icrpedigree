@@ -16,6 +16,7 @@ class Requestmember extends CI_Controller {
 
 		public function index(){
 			$where['req_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['request'] = $this->requestmemberModel->get_requests($where)->result();
 			$this->load->view('backend/view_request_member', $data);
         }
@@ -23,6 +24,7 @@ class Requestmember extends CI_Controller {
 		public function search(){
 			$like['can_a_s'] = $this->input->post('keywords');
             $where['req_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['request'] = $this->requestmemberModel->search_requests($like, $where)->result();
 			$this->load->view('backend/view_request_member', $data);
         }

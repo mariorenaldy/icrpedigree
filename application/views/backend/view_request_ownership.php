@@ -47,39 +47,50 @@
                         </div>
                     </form>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-2"><b>Name</b></div>
-                    <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>New Owner</b></div>
-                    <div class="col-sm-2"><b>Date</b></div>
-                </div>
-                <?php foreach ($req AS $r){ ?>
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Change Canine Ownership"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Change Canine Ownership"><i class="fa fa-close"></i></button>
-                        </div>
-                        <div class="col-sm-2 text-center">
-                            <?php if ($r->can_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$r->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
-                            <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th width="1%"></th>
+                                <th width="15%">Name</th>
+                                <th>Owner</th>
+                                <th>New Owner</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($req AS $r){ ?>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Change Canine Ownership"><i class="fa fa-check"></i></button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Change Canine Ownership"><i class="fa fa-close"></i></button>
+                                    </td>
+                                    <td align="center">
+                                        <?php if ($r->can_photo != '-'){ ?>
+                                            <img src="<?= base_url('uploads/canine/'.$r->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                                        <?php } else{ ?>
+                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
+                                        <?php } ?>
+                                        <br/>
+                                        <?= $r->can_a_s; ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->old_mem_name.' ('.$r->old_ken_name.')'; ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->req_date; ?>
+                                    </td>
+                                </tr>
                             <?php } ?>
-                            <br/>
-                            <?= $r->can_a_s; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $r->old_mem_name.' ('.$r->old_ken_name.')'; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
-                        </div>
-                        <div class="col-sm-2">
-                            <?= $r->req_date; ?>
-                        </div>
-                    </div>
-                <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>   

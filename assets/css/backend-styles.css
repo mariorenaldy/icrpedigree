@@ -44,11 +44,11 @@
 }
 .col.date{
     font-size: 0.8em; 
-    color:#BEBEBE;
+    color:#7d7d7d;
 }
 hr.req-separator{
-    border-color: #ffc107;
-    background-color: #ffc107;
+    border: 2px solid #0d6efd;;
+    background-color: #0d6efd;
 }
 @font-face {
     font-family: "Cen725c";

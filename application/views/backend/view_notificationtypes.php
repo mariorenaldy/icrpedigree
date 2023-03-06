@@ -18,24 +18,32 @@
                         }
                     ?>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-3"><b>Title</b></div>
-                    <div class="col-md-8"><b>Description</b></div>
-                    <div class="col-md-1"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th>Title</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($notif AS $r){ ?>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-success" onclick='update(<?= $r->notificationtype_id; ?>)' data-toggle="tooltip" data-placement="top" title="Edit Notification Type"><i class="fa fa-edit"></i></button>    
+                                    </td>
+                                    <td>
+                                        <?= $r->title; ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->description; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php foreach ($notif AS $r){ ?>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <?= $r->title; ?>
-                        </div>
-                        <div class="col-md-8 mb-1">
-                            <?= $r->description; ?>
-                        </div>
-                        <div class="col-md-1 mb-1">
-                            <button type="button" class="btn btn-success" onclick='update(<?= $r->notificationtype_id; ?>)' data-toggle="tooltip" data-placement="top" title="Edit Notification Type"><i class="fa fa-edit"></i></button>    
-                        </div>
-                    </div>
-                <?php } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

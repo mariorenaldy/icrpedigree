@@ -28,29 +28,48 @@
                         }
                     ?>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2"><b>Date</b></div>
-                    <div class="col-md-2"><b>Title</b></div>
-                    <div class="col-md-6"><b>Description</b></div>
-                    <div class="col-md-2"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th width="1%"></th>
+                                <th>Date</th>
+                                <th>Title</th>
+                                <th width="15%">Photo</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($news AS $r){ ?>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-success" onclick='update(<?= $r->news_id; ?>)' data-toggle="tooltip" data-placement="top" title="Edit News"><i class="fa fa-edit"></i></button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick='del(<?= $r->news_id; ?>)' data-toggle="tooltip" data-placement="top" title="Delete News"><i class="fa fa-close"></i></button>    
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <?= $r->date; ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->title; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($r->type == $this->config->item('stud')){ ?>
+                                            <img src="<?= base_url().'uploads/stud/'.$r->photo ?>" class="img-fluid img-thumbnail" id="stud<?= $r->news_id ?>" onclick="display('stud<?= $r->news_id ?>')">
+                                        <?php } else if ($r->type == $this->config->item('birth')){ ?>
+                                            <img src="<?= base_url().'uploads/births/'.$r->photo ?>" class="img-fluid img-thumbnail" id="birth<?= $r->news_id ?>" onclick="display('birth<?= $r->news_id ?>')">
+                                        <?php } ?>
+                                    </td>
+                                    <td>
+                                        <?= $r->description; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php foreach ($news AS $r){ ?>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <?= $r->date; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $r->title; ?>
-                        </div>
-                        <div class="col-md-6 mb-1">
-                            <?= $r->description; ?>
-                        </div>
-                        <div class="col-md-2 mb-1">
-                            <button type="button" class="btn btn-success" onclick='update(<?= $r->news_id; ?>)' data-toggle="tooltip" data-placement="top" title="Edit News"><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-danger" onclick='del(<?= $r->news_id; ?>)' data-toggle="tooltip" data-placement="top" title="Delete News"><i class="fa fa-close"></i></button>    
-                        </div>
-                    </div>
-                <?php } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

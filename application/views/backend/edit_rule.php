@@ -54,22 +54,6 @@
     </div>
     <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/suneditor.min.js"></script>
-    <script>
-        var suneditor = SUNEDITOR.create('rule', {
-            mode: 'inline',
-            display: 'block',
-            width: '100%',
-            height: '162',
-            popupDisplay: 'full',
-            buttonList: [
-                ['bold', 'underline', 'list']
-            ],
-            placeholder: 'Start typing something...'
-        });
-
-        function save(){
-            suneditor.save();
-        }
-    </script>
+    <script src="<?= base_url(); ?>assets/js/suneditor-setting.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ class CaninesModel extends CI_Model {
         return $this->db->count_all("canines");
     }
 
-    public function get_canines($where, $sort = 'can_id desc'){
+    public function get_canines($where, $sort = 'can_id desc', $offset = 0, $limit = 1){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
         if ($where != null) {
             $this->db->where($where);
@@ -18,11 +18,12 @@ class CaninesModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by($sort);
-        $this->db->limit($this->config->item('backend_canine_count'), 0);
+        if ($limit)
+            $this->db->limit($this->config->item('backend_canine_count'), $offset);
         return $this->db->get('canines');
     }
 
-    public function search_canines($like, $where, $sort = 'can_id desc'){
+    public function search_canines($like, $where, $sort = 'can_id desc', $offset = 0, $limit = 1){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
         if ($where != null) {
             $this->db->where($where);
@@ -37,6 +38,8 @@ class CaninesModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by($sort);
+        if ($limit)
+            $this->db->limit($this->config->item('backend_canine_count'), $offset);
         return $this->db->get('canines');
     }
 

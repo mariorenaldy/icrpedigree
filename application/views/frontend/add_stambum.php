@@ -16,14 +16,6 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Stambums/validate_add" method="post" enctype="multipart/form-data">
-                        <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <label class="checkbox-inline"><input type="checkbox" name="reg_member" value="1" <?php if (!$mode) echo 'checked'; else echo set_checkbox('reg_member', '1'); ?> /> Member</label>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Member</label>
@@ -131,53 +123,78 @@
         <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="memberContainer" style="display: none;">
+                            <div class="row">
+                                <div class="col-4">Member</div>
+                                <div class="col">: <span id="confirm-member"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Kennel</div>
+                                <div class="col">: <span id="confirm-kennel"></span></div>
+                            </div>
+                        </div>
+                        <div id="notMemberContainer" style="display: none;">
+                            <div class="row">
+                                <div class="col-4">Name</div>
+                                <div class="col">: <span id="confirm-name"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Phone Number</div>
+                                <div class="col">: <span id="confirm-phone_number"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">email</div>
+                                <div class="col">: <span id="confirm-email"></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Foto Canine</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Nama</div>
+                            <div class="col">: <span id="confirm-nama"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Jenis Kelamin</div>
+                            <div class="col">: <span id="confirm-jenis_kelamin"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div id="memberContainer" style="display: none;">
-                        <div class="row">
-                            <div class="col-4">Member</div>
-                            <div class="col">: <span id="confirm-member"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Kennel</div>
-                            <div class="col">: <span id="confirm-kennel"></span></div>
-                        </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div id="notMemberContainer" style="display: none;">
-                        <div class="row">
-                            <div class="col-4">Name</div>
-                            <div class="col">: <span id="confirm-name"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Phone Number</div>
-                            <div class="col">: <span id="confirm-phone_number"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">email</div>
-                            <div class="col">: <span id="confirm-email"></span></div>
-                        </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
                     </div>
-                    <div class="row">
-                        <div class="col-4">Foto Canine</div>
-                        <div class="col-auto pe-0">:</div>
-                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                     </div>
-                    <div class="row">
-                        <div class="col-4">Nama</div>
-                        <div class="col">: <span id="confirm-nama"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Jenis Kelamin</div>
-                        <div class="col">: <span id="confirm-jenis_kelamin"></span></div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                </div>
                 </div>
             </div>
         </div>
@@ -281,6 +298,10 @@
                 submitBtn.prop('disabled', true);
                 $('#formCanine').submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

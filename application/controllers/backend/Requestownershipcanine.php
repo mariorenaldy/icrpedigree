@@ -16,6 +16,8 @@ class Requestownershipcanine extends CI_Controller {
 
 		public function index(){
 			$where['req_stat'] = $this->config->item('saved');
+			$where['k1.ken_stat'] = $this->config->item('accepted');
+			$where['k2.ken_stat'] = $this->config->item('accepted');
 			$data['req'] = $this->requestownershipcanineModel->get_requests($where)->result();
 			$this->load->view('backend/view_request_ownership', $data);
         }
@@ -23,6 +25,8 @@ class Requestownershipcanine extends CI_Controller {
 		public function search(){
 			$like['can_a_s'] = $this->input->post('keywords');
             $where['req_stat'] = $this->config->item('saved');
+			$where['k1.ken_stat'] = $this->config->item('accepted');
+			$where['k2.ken_stat'] = $this->config->item('accepted');
 			$data['req'] = $this->requestownershipcanineModel->search_requests($like, $where)->result();
 			$this->load->view('backend/view_request_ownership', $data);
         }

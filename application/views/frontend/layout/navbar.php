@@ -18,6 +18,7 @@
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>">Tambah Generasi Satu</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>">Lapor Pacak</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view_approved' ?>">Lapor Lahir</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Births/view_approved' ?>">Lapor Anak</a></li>
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li> -->
                             <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li> -->
                         </ul>
@@ -44,4 +45,4 @@
     </div>
 </nav>
 <hr>
-<a href="<?= 'https://wa.me/6287777802288' ?>" class="text-decoration-none text-reset link-warning position-fixed btn btn-success end-0" style="top: 180px;"><i class="fa-brands fa-whatsapp"></i> <span class="nav-text">Chat to WA</span></a>
+<a href="<?= 'https://wa.me/6287777802288' ?>" class="text-decoration-none text-reset link-warning position-fixed btn btn-success end-0 wa"><i class="fa-brands fa-whatsapp"></i> <span class="nav-text">Chat to WA</span></a>

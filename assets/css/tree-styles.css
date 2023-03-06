@@ -107,34 +107,45 @@ body p {
 }
 .label .fs-5{
   font-family: "Times New Roman", Times, serif;
-  font-size: 1.4em !important;
+  font-size: 1.3em !important;
 }
 .text-center.fs-5.red{
   font-family: Impact;
-  font-size: 1.4em !important;
+  font-size: 1.3em !important;
   color: #e62225 !important;
   font-weight: 700;
 }
 .text-center.fs-5.black{
   font-family: Impact;
-  font-size: 1.4em !important;
+  font-size: 1.3em !important;
   color: black !important;
   font-weight: 700;
 }
 .label .fs-4{
   font-family: Impact;
-  font-size: 1.6em !important;
+  font-size: 1.5em !important;
   margin-bottom: 10px;
+}
+.text-center.fs-4.red{
+  font-family: Impact;
+  font-size: 1.5em !important;
+  color: #e62225 !important;
+  font-weight: 700;
+}
+.text-center.fs-4.black{
+  font-family: Impact;
+  font-size: 1.5em !important;
+  color: black !important;
+  font-weight: 700;
 }
 .label .fs-7{
   font-family: "Times New Roman", Times, serif;
-  font-size: .8em !important;
+  font-size: .7em !important;
 }
 .container{
   font-family: "Times New Roman", Times, serif;
   font-size: 1.2em !important;
-  margin-left: 20px;
-  width:310px;
+  width: 400px;
 }
 .lv1 .entry .label {
   top: 40%;
@@ -159,7 +170,7 @@ body p {
 }
 #main {
   top: 7%;
-  min-width: 400px;
+  min-width: 350px;
   margin-left: 0px;
 }
 .bg-container {

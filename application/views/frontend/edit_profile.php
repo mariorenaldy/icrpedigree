@@ -14,14 +14,6 @@
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">Laporan Ubah Kennel</h3> 
                     <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmember/validate_edit" method="post" enctype="multipart/form-data">
-                        <div class="text-danger mb-1">
-                            <?php
-                            if ($this->session->flashdata('error_message')) {
-                                echo $this->session->flashdata('error_message') . '<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group mb-3">
                             <label for="mem_ktp" class="control-label col-md-2">KTP Number</label>
                             <div class="col-md-10">
@@ -184,61 +176,86 @@
         <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">KTP Number</div>
+                            <div class="col">: <span id="confirm-ktp_number"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">KTP Name</div>
+                            <div class="col">: <span id="confirm-ktp_name"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Mail Address</div>
+                            <div class="col">: <span id="confirm-mail_address"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Certificate Address</div>
+                            <div class="col">: <span id="confirm-certificate_address"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Phone Number</div>
+                            <div class="col">: <span id="confirm-phone_number"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">City</div>
+                            <div class="col">: <span id="confirm-city"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Postal Code</div>
+                            <div class="col">: <span id="confirm-postal_code"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">email</div>
+                            <div class="col">: <span id="confirm-email"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Foto Canine</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Kennel Name</div>
+                            <div class="col">: <span id="confirm-kennel_name"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Canine Name Format</div>
+                            <div class="col">: <span id="confirm-canine_name_format"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-4">KTP Number</div>
-                        <div class="col">: <span id="confirm-ktp_number"></span></div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="row">
-                        <div class="col-4">KTP Name</div>
-                        <div class="col">: <span id="confirm-ktp_name"></span></div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
                     </div>
-                    <div class="row">
-                        <div class="col-4">Mail Address</div>
-                        <div class="col">: <span id="confirm-mail_address"></span></div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                     </div>
-                    <div class="row">
-                        <div class="col-4">Certificate Address</div>
-                        <div class="col">: <span id="confirm-certificate_address"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Phone Number</div>
-                        <div class="col">: <span id="confirm-phone_number"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">City</div>
-                        <div class="col">: <span id="confirm-city"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Postal Code</div>
-                        <div class="col">: <span id="confirm-postal_code"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">email</div>
-                        <div class="col">: <span id="confirm-email"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Foto Canine</div>
-                        <div class="col-auto pe-0">:</div>
-                        <div class="col"><img id="confirm-foto" width="50%"/></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Kennel Name</div>
-                        <div class="col">: <span id="confirm-kennel_name"></span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">Canine Name Format</div>
-                        <div class="col">: <span id="confirm-canine_name_format"></span></div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                </div>
                 </div>
             </div>
         </div>
@@ -332,6 +349,10 @@
                 submitBtn.prop('disabled', true);
                 $('#mainForm').submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

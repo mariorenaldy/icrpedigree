@@ -101,8 +101,8 @@ body{
     width: 15%;
 }
 #beranda-main{
-    margin-top: 11vh;
-    margin-bottom: 11vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 hr{
     margin-left: auto;
@@ -121,10 +121,10 @@ div.container{
     margin-bottom: 10vh; 
     margin-top: 5vh;
 }
-.container .row .col a:link {
-    color: orange !important;
+.container .row .col-12 a:link {
+    color: #ffc107 !important;
 }
-.container .row .col a:hover {
+.container .row .col-12 a:hover {
     color: yellow !important;
 }
 .row.footer .col-sm-12.text-center.copyright{
@@ -168,4 +168,8 @@ div.container{
 hr.req-separator{
     border-color: #ffc107;
     background-color: #ffc107;
+}
+.wa{
+    top: 180px; 
+    z-index: 9999;
 }

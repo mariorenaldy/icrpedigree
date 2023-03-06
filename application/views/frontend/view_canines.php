@@ -18,13 +18,6 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">Anjing Saya</h3>
-                <div class="text-success mb-3">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'Anjing berhasil disimpan<br/>';
-                        }
-                    ?>
-                </div>
                 <div class="search-container">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
@@ -100,6 +93,27 @@
                 <?php } ?>
             </div>                           
         </div> 
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Anjing berhasil disimpan</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
@@ -131,6 +145,13 @@
         span.onclick = function() {
             modal.style.display = "none";
         }
+
+        $(document).ready(function(){
+            <?php		
+                if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+        });
     </script>
 </body>
 </html>

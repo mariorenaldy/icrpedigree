@@ -68,6 +68,7 @@ class Studs extends CI_Controller {
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$whereBirth['bir_stat'] = $this->config->item('accepted');
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('frontend/view_approved_studs', $data);
@@ -200,8 +201,8 @@ class Studs extends CI_Controller {
 		if ($this->session->userdata('mem_id')){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('stu_sire_id', 'Sire id ', 'trim|required');
-			$this->form_validation->set_rules('stu_dam_id', 'Id dam ', 'trim|required');
+			$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
+			$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
 			$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
 			
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
@@ -378,9 +379,16 @@ class Studs extends CI_Controller {
 						// 	if ($diff > 2)
 						// 		$cek = false;
 						// }
+						
 						$year = $piece[2];
-						if ($year != "2023")
+						$month = $piece[1];
+						$day = $piece[0];
+						if ($year != $this->config->item('tahun_lapor_pacak'))
 							$cek = false;
+						else{
+							if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak'))
+								$cek = false;
+						}
 
 						if ($cek){
 							// jarak pacak utk dam yg sama adalah 120 hari
@@ -414,7 +422,7 @@ class Studs extends CI_Controller {
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('jarak_lapor_pacak').' hari');
+							$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak'));
 							$this->load->view('frontend/add_stud', $data);
 						}
 					}

@@ -15,14 +15,6 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
-                        <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group my-3">
                             <label for="imageInput" class="control-label col-sm-2">Tipe Membership</label>
                             <div class="col-sm-10">
@@ -192,94 +184,119 @@
         <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id=freeContainer <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
-                        <div class="row">
-                            <div class="col-4">Tipe Membership</div>
-                            <div class="col">: <span id="confirm-type_free"></span></div>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id=freeContainer <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
+                            <div class="row">
+                                <div class="col-4">Tipe Membership</div>
+                                <div class="col">: <span id="confirm-type_free"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Nama Sesuai KTP</div>
+                                <div class="col">: <span id="confirm-name_free"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">No. HP WA Aktif</div>
+                                <div class="col">: <span id="confirm-number_free"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">email</div>
+                                <div class="col">: <span id="confirm-email_free"></span></div>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-4">Nama Sesuai KTP</div>
-                            <div class="col">: <span id="confirm-name_free"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">No. HP WA Aktif</div>
-                            <div class="col">: <span id="confirm-number_free"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">email</div>
-                            <div class="col">: <span id="confirm-email_free"></span></div>
+                        <div id=proContainer <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
+                            <div class="row">
+                                <div class="col-6">Tipe Membership</div>
+                                <div class="col">: <span id="confirm-type"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">No. KTP</div>
+                                <div class="col">: <span id="confirm-ktp"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Nama Sesuai KTP</div>
+                                <div class="col">: <span id="confirm-name"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Alamat Surat Menyurat</div>
+                                <div class="col">: <span id="confirm-address"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Alamat yang Tertera di Sertifikat</div>
+                                <div class="col">: <span id="confirm-mail_address"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">No. HP WA Aktif</div>
+                                <div class="col">: <span id="confirm-number"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Kota</div>
+                                <div class="col">: <span id="confirm-kota"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Kode Pos</div>
+                                <div class="col">: <span id="confirm-kode_pos"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">email</div>
+                                <div class="col">: <span id="confirm-email"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">PP</div>
+                                <div class="col-auto pe-0">:</div>
+                                <div class="col"><img id="confirm-pp" width="50%"/></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Username</div>
+                                <div class="col">: <span id="confirm-username"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Foto Kennel</div>
+                                <div class="col-auto pe-0">:</div>
+                                <div class="col"><img id="confirm-logo" width="50%"/></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Nama Kennel</div>
+                                <div class="col">: <span id="confirm-ken_name"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">Format Penamaan Canine</div>
+                                <div class="col">: <span id="confirm-ken_type"></span></div>
+                            </div>
                         </div>
                     </div>
-                    <div id=proContainer <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
-                        <div class="row">
-                            <div class="col-6">Tipe Membership</div>
-                            <div class="col">: <span id="confirm-type"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">No. KTP</div>
-                            <div class="col">: <span id="confirm-ktp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Nama Sesuai KTP</div>
-                            <div class="col">: <span id="confirm-name"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Alamat Surat Menyurat</div>
-                            <div class="col">: <span id="confirm-address"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Alamat yang Tertera di Sertifikat</div>
-                            <div class="col">: <span id="confirm-mail_address"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">No. HP WA Aktif</div>
-                            <div class="col">: <span id="confirm-number"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Kota</div>
-                            <div class="col">: <span id="confirm-kota"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Kode Pos</div>
-                            <div class="col">: <span id="confirm-kode_pos"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">email</div>
-                            <div class="col">: <span id="confirm-email"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">PP</div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-pp" width="50%"/></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Username</div>
-                            <div class="col">: <span id="confirm-username"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Foto Kennel</div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-logo" width="50%"/></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Nama Kennel</div>
-                            <div class="col">: <span id="confirm-ken_name"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">Format Penamaan Canine</div>
-                            <div class="col">: <span id="confirm-ken_type"></span></div>
-                        </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -388,6 +405,10 @@
             $('#cancel-btn').click(function() {
                 resetImage(croppingImage);
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
 
         let registerBtn = $("#registerBtn");

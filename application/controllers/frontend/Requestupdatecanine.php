@@ -62,9 +62,7 @@ class Requestupdatecanine extends CI_Controller {
 				if (!$request){
 					$this->form_validation->set_error_delimiters('<div>','</div>');
 					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_error_delimiters('<div>', '</div>');
 					$this->form_validation->set_rules('can_id', 'Canine id ', 'trim|required');
-				
 					if ($this->form_validation->run() == FALSE){
 						$this->load->view("frontend/add_request_update_canine", $data);
 					}
@@ -110,10 +108,6 @@ class Requestupdatecanine extends CI_Controller {
 								'req_old_photo' => $data['canine']->can_photo,
 								'req_rip' => $this->input->post('can_rip')
 							);	
-							// if ($photo != '-'){
-							// 	$req_data['req_photo'] = $photo;
-							// 	$req_data['req_old_photo'] = $data['canine']->can_photo;
-							// }
 							$res = $this->requestupdatecanineModel->add_requests($req_data);
 							if ($res){
 								$this->session->set_flashdata('add_success', TRUE);

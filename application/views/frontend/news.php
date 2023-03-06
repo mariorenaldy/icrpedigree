@@ -27,11 +27,11 @@
                     <div class="col text-warning fs-5 mb-2"><?= $r->title ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 mb-2">
+                    <div class="col-sm-2 mb-2">
                         <?php if ($r->type == $this->config->item('stud')){ ?>
-                            <img width="15%" src="<?= base_url().'uploads/stud/'.$r->photo ?>" id="stud<?= $r->news_id ?>" onclick="display('stud<?= $r->news_id ?>')">
+                            <img src="<?= base_url().'uploads/stud/'.$r->photo ?>" class="img-fluid img-thumbnail" id="stud<?= $r->news_id ?>" onclick="display('stud<?= $r->news_id ?>')">
                         <?php } else if ($r->type == $this->config->item('birth')){ ?>
-                            <img width="15%" src="<?= base_url().'uploads/births/'.$r->photo ?>" id="birth<?= $r->news_id ?>" onclick="display('birth<?= $r->news_id ?>')">
+                            <img src="<?= base_url().'uploads/births/'.$r->photo ?>" class="img-fluid img-thumbnail" id="birth<?= $r->news_id ?>" onclick="display('birth<?= $r->news_id ?>')">
                         <?php } ?>
                     </div>
                 </div>

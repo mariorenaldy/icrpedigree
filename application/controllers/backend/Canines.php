@@ -17,6 +17,7 @@ class Canines extends CI_Controller {
 
     public function index(){
         $where['can_stat'] = $this->config->item('accepted');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->get_canines($where, 'can_id desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
@@ -27,12 +28,14 @@ class Canines extends CI_Controller {
         $like['can_chip_number'] = $this->input->post('keywords');
         $like['ken_name'] = $this->input->post('keywords');
         $where['can_stat'] = $this->config->item('accepted');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->search_canines($like, $where, 'can_id desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
     public function view_approve(){
         $where['can_stat'] = $this->config->item('saved');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->get_canines($where)->result();
         $this->load->view('backend/approve_canines', $data);
     }
@@ -43,6 +46,7 @@ class Canines extends CI_Controller {
         $like['can_chip_number'] = $this->input->post('keywords');
         $like['ken_name'] = $this->input->post('keywords');
         $where['can_stat'] = $this->config->item('saved');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->search_canines($like, $where)->result();
         $this->load->view('backend/approve_canines', $data);
 		}

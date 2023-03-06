@@ -14,14 +14,6 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestownershipcanine/validate" method="post">
-                        <div class="text-danger">
-                            <?php
-                            if ($this->session->flashdata('error_message')) {
-                                echo $this->session->flashdata('error_message') . '<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="row mb-2">
                             <div class="col-sm-2">Nama Anjing</div>
                             <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
@@ -129,6 +121,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
@@ -167,6 +184,10 @@
                 submitBtn.prop('disabled', true);
                 $('#formCanine').attr('action', "<?= base_url(); ?>frontend/Requestownershipcanine/validate").submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

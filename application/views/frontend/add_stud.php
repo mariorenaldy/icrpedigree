@@ -16,14 +16,6 @@
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
-                        <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group my-3">
                             <label for="stu_sire_id" class="control-label col-sm-2">Sire</label>
                             <div class="col-sm-10">
@@ -31,7 +23,7 @@
                                     $i = 0;
                                     $pil = [];
                                     foreach($sire as $row){
-                                        // if ($sireStat[$i])
+                                        if ($sireStat[$i])
                                             $pil[$row->id] = $row->name;
                                         $i++;
                                     }
@@ -170,6 +162,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
@@ -302,6 +319,10 @@
                 submitBtn.prop('disabled', true);
                 $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/validate_add").submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

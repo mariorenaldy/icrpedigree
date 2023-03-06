@@ -13,52 +13,42 @@
     <main class="container">
         <div class="container">
             <h3 class="text-center text-warning">Lapor Ubah Data Anjing</h3>  
-                    <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatecanine/validate" method="post" enctype="multipart/form-data">
-                        <div class="text-danger">
-                            <?php
-                            if ($this->session->flashdata('error_message')) {
-                                echo $this->session->flashdata('error_message') . '<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-2">Nama Anjing</div>
-                            <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
-                        </div>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center">Foto</label>
-                            <div class="col-sm-12 text-center">
-                                <?php 
-                                    if (!$mode){ 
-                                        if ($canine->can_photo && $canine->can_photo != '-'){
-                                ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'uploads/canine/'.$canine->can_photo ?>">
-                                <?php } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <?php } 
-                                } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <?php } ?>
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
-                                <input type="hidden" name="attachment" id="attachment">
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-6">
-                                <label class="checkbox-inline"><input type="checkbox" name="can_rip" value="1" <?php if ($canine->can_rip) echo 'checked'; else echo set_checkbox('can_rip', '1'); ?> id="can_rip"/> RIP?</label>
-                                <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="button">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
-                        </div>   
-                    </form>
+            <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatecanine/validate" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2">Nama Anjing</div>
+                    <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
                 </div>
-            </div>
+                <div class="input-group mt-3 mb-3 gap-3">
+                    <label class="control-label col-sm-12 text-center">Foto</label>
+                    <div class="col-sm-12 text-center">
+                        <?php 
+                            if (!$mode){ 
+                                if ($canine->can_photo && $canine->can_photo != '-'){
+                        ?>
+                            <img id="imgPreview" width="15%" src="<?= base_url().'uploads/canine/'.$canine->can_photo ?>">
+                        <?php } else { ?>
+                            <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                        <?php } 
+                        } else { ?>
+                            <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                        <?php } ?>
+                        <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
+                        <input type="hidden" name="attachment" id="attachment">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <label class="checkbox-inline"><input type="checkbox" name="can_rip" value="1" <?php if ($canine->can_rip) echo 'checked'; else echo set_checkbox('can_rip', '1'); ?> id="can_rip"/> RIP?</label>
+                        <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="buttonSubmit" class="btn btn-primary" type="button">Save</button>
+                    <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
+                </div>   
+            </form>
         </div>
         <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -89,27 +79,52 @@
         <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-4">Foto</div>
-                        <div class="col-auto pe-0">:</div>
-                        <div class="col"><img id="confirm-foto" width="50%"/></div>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">Foto</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto" width="50%"/></div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">RIP?</div>
+                            <div class="col">: <span id="confirm-rip"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
                     </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-4">RIP?</div>
-                        <div class="col">: <span id="confirm-rip"></span></div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -206,6 +221,10 @@
                 submitBtn.prop('disabled', true);
                 $('#formCanine').submit();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

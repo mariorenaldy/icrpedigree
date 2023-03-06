@@ -11,10 +11,10 @@
         <h3 class="text-center text-warning mb-3">Aturan</h3>
         <?php foreach ($rules AS $r){ ?>
             <div class="row">
-                <div class="col"><?= $r->ru_title ?></div>
+                <div class="col-12"><h5 class="text-warning"><?= $r->ru_title ?></h5></div>
             </div>
             <div class="row mb-5">
-                <div class="col"><?= $r->ru_desc ?></div>
+                <div class="col-12"><?= $r->ru_desc ?></div>
             </div>
         <?php } ?> 
         </div>

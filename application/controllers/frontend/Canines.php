@@ -7,7 +7,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->helper(array('url'));
@@ -195,10 +195,8 @@ class Canines extends CI_Controller {
 							$pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
 							if ($pedigree){
 								$this->db->trans_complete();
-								// $this->session->set_flashdata('add_success', true);
-								// redirect("frontend/Canines");
-								$this->session->set_flashdata('add_canine_success', true);
-								redirect("frontend/Beranda");
+								$this->session->set_flashdata('add_success', true);
+								redirect("frontend/Canines");
 							}
 							else{
 								$err++;

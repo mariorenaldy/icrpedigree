@@ -81,13 +81,13 @@
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">ICR Number</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?php echo set_value('can_icr_number'); ?>" maxlength="15" oninput="this.value = this.value.replace(/[^0-9-]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                                <input class="form-control" type="text" placeholder="ICR Number" name="can_icr_number" value="<?php echo set_value('can_icr_number'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Microchip Number</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Microchip Number" name="can_chip_number" value="<?php echo set_value('can_chip_number'); ?>">
+                                <input class="form-control" type="text" placeholder="Microchip Number" name="can_chip_number" value="<?php echo set_value('can_chip_number'); ?>" maxlength="15" oninput="this.value = this.value.replace(/[^0-9-]/g, '').replace(/(\..*?)\..*/g, '$1');">
                             </div>
                         </div>
                         <div class="input-group mb-3">

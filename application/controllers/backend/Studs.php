@@ -477,9 +477,9 @@ class Studs extends CI_Controller {
 								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
-									$result = $this->notification_model->add(1, $stud, $this->input->post('can_member_id'));
+									$result = $this->notification_model->add(14, $stud, $this->input->post('can_member_id'));
 									if ($result){
-										$res = $this->notification_model->add(1, $stud, $can->can_member_id);
+										$res = $this->notification_model->add(14, $stud, $can->can_member_id, base_url().'frontend/Births/add/'.$stud);
 										if ($res){
 											$whe['mem_id'] = $this->input->post('can_member_id');
 											$member = $this->memberModel->get_members($whe)->row();
@@ -505,12 +505,11 @@ class Studs extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
+												$notif = $this->notificationtype_model->get_by_id(14);
 												if ($member->mem_firebase_token){
-													$notif = $this->notificationtype_model->get_by_id(1);
 													firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 												}
 												if ($partner->mem_firebase_token){
-													$notif = $this->notificationtype_model->get_by_id(1);
 													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 												}
 												$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$stud);
@@ -989,16 +988,16 @@ class Studs extends CI_Controller {
 								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
-									$result = $this->notification_model->add(18, $this->input->post('stu_id'), $can->can_member_id);
+									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
 									if ($result){
 										$this->db->trans_complete();
 										$whePartner['mem_id'] = $can->can_member_id;
 										$partner = $this->memberModel->get_members($whePartner)->row();
 										if ($partner->mem_firebase_token){
-											$notif = $this->notificationtype_model->get_by_id(18);
+											$notif = $this->notificationtype_model->get_by_id(1);
 											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
-										$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$stud);
+										$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
 										$this->session->set_flashdata('telp', $partner->mem_hp);
 										$this->session->set_flashdata('edit_success', TRUE);
 										redirect('backend/Studs');
@@ -1071,9 +1070,9 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(14, $this->uri->segment(4), $stud->stu_member_id);
+							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id);
 							if ($result){
-								$res = $this->notification_model->add(14, $this->uri->segment(4), $stud->stu_partner_id);
+								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, base_url().'frontend/Births/add/'.$this->uri->segment(4));
 								if ($res){
 									$whe['mem_id'] = $stud->stu_member_id;
 									$member = $this->memberModel->get_members($whe)->row();
@@ -1105,12 +1104,11 @@ class Studs extends CI_Controller {
 									$news = $this->news_model->add($dataNews);
 									if ($news){
 										$this->db->trans_complete();
+										$notif = $this->notificationtype_model->get_by_id(1);
 										if ($member->mem_firebase_token){
-											$notif = $this->notificationtype_model->get_by_id(14);
 											firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
 										if ($partner->mem_firebase_token){
-											$notif = $this->notificationtype_model->get_by_id(14);
 											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
 										$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$this->uri->segment(4));

@@ -166,7 +166,7 @@ class Births extends CI_Controller {
 				$err = 0;
 				if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
 					$err++;
-					$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
 				}
 		
 				$damPhoto = '-';
@@ -217,10 +217,18 @@ class Births extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
 						}
 						else{
-							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
-							if ($diff > 1){
+							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+							if ($diff < 1){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+							}
+
+							if (!$err){
+								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+								if ($diff > 1){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+								}
 							}
 						}
 					}
@@ -240,11 +248,13 @@ class Births extends CI_Controller {
 						);
 						$births = $this->birthModel->add_births($data);
 						if ($births){
-							$this->session->set_flashdata('add_success', true);
-							redirect("frontend/Births");
+							// $this->session->set_flashdata('add_success', true);
+							// redirect("frontend/Births");
+							$this->session->set_flashdata('add_birth_success', true);
+							redirect("frontend/Beranda");
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data lahir');
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
 							$this->load->view('frontend/add_birth', $data);
 						}
 					}

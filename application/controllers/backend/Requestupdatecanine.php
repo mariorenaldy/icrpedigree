@@ -16,6 +16,7 @@ class Requestupdatecanine extends CI_Controller {
 
 		public function index(){
 			$where['req_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['req'] = $this->requestupdatecanineModel->get_requests($where)->result();
 			$this->load->view('backend/view_request_update_canine', $data);
         }
@@ -23,6 +24,7 @@ class Requestupdatecanine extends CI_Controller {
 		public function search(){
 			$like['can_a_s'] = $this->input->post('keywords');
             $where['req_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['req'] = $this->requestupdatecanineModel->search_requests($like, $where)->result();
 			$this->load->view('backend/view_request_update_canine', $data);
         }

@@ -17,6 +17,7 @@ class Births extends CI_Controller {
 
 		public function index(){
 			$where['bir_stat'] = $this->config->item('accepted');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 
 			$data['stambum'] = array();
@@ -58,6 +59,7 @@ class Births extends CI_Controller {
 				$where['bir_date_of_birth'] = $date;
 			}
 			$where['bir_stat'] = $this->config->item('accepted');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 
 			$data['stambum'] = array();
@@ -91,20 +93,7 @@ class Births extends CI_Controller {
 
 		public function view_approve(){
 			$where['bir_stat'] = $this->config->item('saved');
-			$data['birth'] = $this->birthModel->get_births($where)->result();
-			$this->load->view('backend/approve_births', $data);
-		}
-
-		public function search_approve(){
-			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
-			if (count($piece) == 3){
-				$date = $piece[2]."-".$piece[1]."-".$piece[0];
-			}
-			if ($date){
-				$where['bir_date_of_birth'] = $date;
-			}
-			$where['bir_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 			$this->load->view('backend/approve_births', $data);
 		}
@@ -190,85 +179,95 @@ class Births extends CI_Controller {
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
-							$birth = $this->birthModel->add_births($dataBirth);
-							if ($birth){
-								$dataLog = array(
-									'log_bir_id' => $birth,
-									'log_stu_id' => $this->input->post('bir_stu_id'),
-									'log_member_id' => $stud->stu_partner_id,
-									'log_dam_photo' => $damPhoto,
-									'log_male' => $this->input->post('bir_male'),
-									'log_female' => $this->input->post('bir_female'),
-									'log_date_of_birth' => $date,
-									'log_app_user' => $this->session->userdata('use_id'),
-									'log_app_date' => date('Y-m-d H:i:s'),
-									'log_stat' => $this->config->item('accepted'),
-									'log_user' => $this->session->userdata('use_id'),
-									'log_date' => date('Y-m-d H:i:s'),
-								);
-								$log = $this->logbirthModel->add_log($dataLog);
-								if ($log){
-									$result = $this->notification_model->add(21, $birth, $stud->stu_member_id);
-									if ($result){
-										$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id);
-										if ($res){
-											$whe['mem_id'] = $stud->stu_member_id;
-											$member = $this->memberModel->get_members($whe)->row();
+							$dataStud['stu_stat'] = $this->config->item('completed');
+							$whereStud['stu_id'] = $this->input->post('bir_stu_id');
+							$res = $this->studModel->update_studs($dataStud, $whereStud);
+							if ($res){
+								$birth = $this->birthModel->add_births($dataBirth);
+								if ($birth){
+									$dataLog = array(
+										'log_bir_id' => $birth,
+										'log_stu_id' => $this->input->post('bir_stu_id'),
+										'log_member_id' => $stud->stu_partner_id,
+										'log_dam_photo' => $damPhoto,
+										'log_male' => $this->input->post('bir_male'),
+										'log_female' => $this->input->post('bir_female'),
+										'log_date_of_birth' => $date,
+										'log_app_user' => $this->session->userdata('use_id'),
+										'log_app_date' => date('Y-m-d H:i:s'),
+										'log_stat' => $this->config->item('accepted'),
+										'log_user' => $this->session->userdata('use_id'),
+										'log_date' => date('Y-m-d H:i:s'),
+									);
+									$log = $this->logbirthModel->add_log($dataLog);
+									if ($log){
+										$result = $this->notification_model->add(21, $birth, $stud->stu_member_id);
+										if ($result){
+											$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id, base_url().'frontend/Stambums/add/'.$birth);
+											if ($res){
+												$whe['mem_id'] = $stud->stu_member_id;
+												$member = $this->memberModel->get_members($whe)->row();
 
-											$whePartner['mem_id'] = $stud->stu_partner_id;
-											$partner = $this->memberModel->get_members($whePartner)->row();
+												$whePartner['mem_id'] = $stud->stu_partner_id;
+												$partner = $this->memberModel->get_members($whePartner)->row();
 
-											$wheSire['can_id'] = $stud->stu_sire_id;
-											$can = $this->caninesModel->get_canines($wheSire)->row();
+												$wheSire['can_id'] = $stud->stu_sire_id;
+												$can = $this->caninesModel->get_canines($wheSire)->row();
 
-											$desc = 'Telah lahir ';
-											if ($this->input->post('bir_male') && $this->input->post('bir_female')){
-												$desc .= $this->input->post('bir_male').' jantan dan ';
-												$desc .= $this->input->post('bir_female').' betina';
-											}
-											else if ($this->input->post('bir_male'))
-												$desc .= $this->input->post('bir_male').' jantan';
-											else if ($this->input->post('bir_female'))
-												$desc .= $this->input->post('bir_female').' betina';
-											$desc .= ' pada tanggal '.$this->input->post('bir_date_of_birth').'.';
-											$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
-											
-											$dataNews = array(
-												'title' => 'Lahir '.$can->can_breed,
-												'description' => $desc,
-												'date' => $date,
-												'type' => $this->config->item('birth'),
-												'photo' => $damPhoto,
-											); 
-											$news = $this->news_model->add($dataNews);
-											if ($news){
-												$this->db->trans_complete();
-												$notif = $this->notificationtype_model->get_by_id(21);
-												if ($member->mem_firebase_token)
-													firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												if ($partner->mem_firebase_token)
-													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												$this->session->set_flashdata('add_success', true);
-												redirect("backend/Births");
+												$desc = 'Telah lahir ';
+												if ($this->input->post('bir_male') && $this->input->post('bir_female')){
+													$desc .= $this->input->post('bir_male').' jantan dan ';
+													$desc .= $this->input->post('bir_female').' betina';
+												}
+												else if ($this->input->post('bir_male'))
+													$desc .= $this->input->post('bir_male').' jantan';
+												else if ($this->input->post('bir_female'))
+													$desc .= $this->input->post('bir_female').' betina';
+												$desc .= ' pada tanggal '.$this->input->post('bir_date_of_birth').'.';
+												$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
+												
+												$dataNews = array(
+													'title' => 'Lahir '.$can->can_breed,
+													'description' => $desc,
+													'date' => $date,
+													'type' => $this->config->item('birth'),
+													'photo' => $damPhoto,
+												); 
+												$news = $this->news_model->add($dataNews);
+												if ($news){
+													$this->db->trans_complete();
+													$notif = $this->notificationtype_model->get_by_id(21);
+													if ($member->mem_firebase_token)
+														firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+													if ($partner->mem_firebase_token)
+														firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+													$this->session->set_flashdata('mesg', base_url().'frontend/Stambums/add/'.$birth);
+													$this->session->set_flashdata('telp', $partner->mem_hp);
+													$this->session->set_flashdata('add_success', true);
+													redirect("backend/Births");
+												}
+												else{
+													$err = 1;
+												}
 											}
 											else{
-												$err = 1;
+												$err = 2;
 											}
 										}
 										else{
-											$err = 2;
+											$err = 3;
 										}
 									}
 									else{
-										$err = 3;
+										$err = 4;
 									}
 								}
 								else{
-									$err = 4;
+									$err = 5;
 								}
 							}
 							else{
-								$err = 5;
+								$err = 6;
 							}
 							if ($err){
 								$this->session->set_flashdata('error_message', 'Failed to save birth. Err code: '.$err);
@@ -411,98 +410,108 @@ class Births extends CI_Controller {
 					$birth = $this->birthModel->get_births($where)->row();
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$data['bir_app_user'] = $this->session->userdata('use_id');
-					$data['bir_app_date'] = date('Y-m-d H:i:s');
-					$data['bir_user'] = $this->session->userdata('use_id');
-					$data['bir_date'] = date('Y-m-d H:i:s');
-					$data['bir_stat'] = $this->config->item('accepted');
-					$res = $this->birthModel->update_births($data, $where);
-					if ($res){
-						$err = 0;
-						$piece = explode("-", $birth->bir_date_of_birth);
-						$date = $piece[2]."-".$piece[1]."-".$piece[0];
-						$dataLog = array(
-							'log_bir_id' => $this->uri->segment(4),
-							'log_stu_id' => $birth->bir_stu_id,
-							'log_member_id' => $birth->bir_member_id,
-							'log_dam_photo' => $birth->bir_dam_photo,
-							'log_male' => $birth->bir_male,
-							'log_female' => $birth->bir_female,
-							'log_date_of_birth' => $date,
-							'log_app_user' => $this->session->userdata('use_id'),
-							'log_app_date' => date('Y-m-d H:i:s'),
-							'log_user' => $this->session->userdata('use_id'),
-							'log_date' => date('Y-m-d H:i:s'),
-							'log_stat' => $this->config->item('accepted'),
-						);
-						$log = $this->logbirthModel->add_log($dataLog);
-						if ($log){
-							$wheStud['stu_id'] = $birth->bir_stu_id;
-							$stud = $this->studModel->get_studs($wheStud)->row();
-							$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id);
-							if ($result){
-								$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id);
-								if ($res){
-									$whe['mem_id'] = $stud->stu_member_id;
-									$member = $this->memberModel->get_members($whe)->row();
+					$dataStud['stu_stat'] = $this->config->item('completed');
+					$whereStud['stu_id'] = $birth->bir_stu_id;
+					$result = $this->studModel->update_studs($dataStud, $whereStud);
+					if ($result){
+						$data['bir_app_user'] = $this->session->userdata('use_id');
+						$data['bir_app_date'] = date('Y-m-d H:i:s');
+						$data['bir_user'] = $this->session->userdata('use_id');
+						$data['bir_date'] = date('Y-m-d H:i:s');
+						$data['bir_stat'] = $this->config->item('accepted');
+						$res = $this->birthModel->update_births($data, $where);
+						if ($res){
+							$err = 0;
+							$piece = explode("-", $birth->bir_date_of_birth);
+							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+							$dataLog = array(
+								'log_bir_id' => $this->uri->segment(4),
+								'log_stu_id' => $birth->bir_stu_id,
+								'log_member_id' => $birth->bir_member_id,
+								'log_dam_photo' => $birth->bir_dam_photo,
+								'log_male' => $birth->bir_male,
+								'log_female' => $birth->bir_female,
+								'log_date_of_birth' => $date,
+								'log_app_user' => $this->session->userdata('use_id'),
+								'log_app_date' => date('Y-m-d H:i:s'),
+								'log_user' => $this->session->userdata('use_id'),
+								'log_date' => date('Y-m-d H:i:s'),
+								'log_stat' => $this->config->item('accepted'),
+							);
+							$log = $this->logbirthModel->add_log($dataLog);
+							if ($log){
+								$wheStud['stu_id'] = $birth->bir_stu_id;
+								$stud = $this->studModel->get_studs($wheStud)->row();
+								$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id);
+								if ($result){
+									$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id, base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
+									if ($res){
+										$whe['mem_id'] = $stud->stu_member_id;
+										$member = $this->memberModel->get_members($whe)->row();
 
-									$whePartner['mem_id'] = $stud->stu_partner_id;
-									$partner = $this->memberModel->get_members($whePartner)->row();
+										$whePartner['mem_id'] = $stud->stu_partner_id;
+										$partner = $this->memberModel->get_members($whePartner)->row();
 
-									$wheSire['can_id'] = $stud->stu_sire_id;
-									$can = $this->caninesModel->get_canines($wheSire)->row();
+										$wheSire['can_id'] = $stud->stu_sire_id;
+										$can = $this->caninesModel->get_canines($wheSire)->row();
 
-									$desc = 'Telah lahir ';
-									if ($birth->bir_male && $birth->bir_female){
-										$desc .= $birth->bir_male.' jantan dan ';
-										$desc .= $birth->bir_female.' betina';
-									}
-									else if ($birth->bir_male)
-										$desc .= $birth->bir_male.' jantan';
-									else if ($birth->bir_female)
-										$desc .= $birth->bir_female.' betina';
-									$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
-									$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
-									
-									$piece = explode("-", $birth->bir_date_of_birth);
-									$date = $piece[2]."-".$piece[1]."-".$piece[0];
+										$desc = 'Telah lahir ';
+										if ($birth->bir_male && $birth->bir_female){
+											$desc .= $birth->bir_male.' jantan dan ';
+											$desc .= $birth->bir_female.' betina';
+										}
+										else if ($birth->bir_male)
+											$desc .= $birth->bir_male.' jantan';
+										else if ($birth->bir_female)
+											$desc .= $birth->bir_female.' betina';
+										$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
+										$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
+										
+										$piece = explode("-", $birth->bir_date_of_birth);
+										$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
-									$dataNews = array(
-										'title' => 'Lahir '.$can->can_breed,
-										'description' => $desc,
-										'date' => $date,
-										'type' => $this->config->item('birth'),
-										'photo' => $birth->bir_dam_photo,
-									); 
-									$news = $this->news_model->add($dataNews);
-									if ($news){
-										$this->db->trans_complete();
-										$notif = $this->notificationtype_model->get_by_id(2);
-										if ($member->mem_firebase_token)
-											firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										if ($partner->mem_firebase_token)
-											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										$this->session->set_flashdata('approve', TRUE);
-										redirect('backend/Births/view_approve');
+										$dataNews = array(
+											'title' => 'Lahir '.$can->can_breed,
+											'description' => $desc,
+											'date' => $date,
+											'type' => $this->config->item('birth'),
+											'photo' => $birth->bir_dam_photo,
+										); 
+										$news = $this->news_model->add($dataNews);
+										if ($news){
+											$this->db->trans_complete();
+											$notif = $this->notificationtype_model->get_by_id(2);
+											if ($member->mem_firebase_token)
+												firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+											if ($partner->mem_firebase_token)
+												firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+											$this->session->set_flashdata('mesg', base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
+											$this->session->set_flashdata('telp', $partner->mem_hp);
+											$this->session->set_flashdata('approve', TRUE);
+											redirect('backend/Births/view_approve');
+										}
+										else{
+											$err = 1;
+										}
 									}
 									else{
-										$err = 1;
+										$err = 2;
 									}
 								}
 								else{
-									$err = 2;
+									$err = 3;
 								}
 							}
 							else{
-								$err = 3;
+								$err = 4;
 							}
 						}
 						else{
-							$err = 4;
+							$err = 5;
 						}
 					}
 					else{
-						$err = 5;
+						$err = 6;
 					}
 					if ($err){
 						$this->db->trans_rollback();

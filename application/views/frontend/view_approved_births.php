@@ -14,13 +14,6 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">List Lahir</h3>
-                <div class="text-success mb-3">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'Lahir berhasil disimpan<br/>';
-                        }
-                    ?>
-                </div>
                 <div class="row mb-1">
                     <div class="col-sm-2 text-center"><b>Foto</b></div>
                     <div class="col-sm-2"><b>DOB</b></div>

@@ -54,52 +54,60 @@
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Stud"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2"><b>Photo</b></div>
-                    <div class="col-md-2"><b>Sire</b></div>
-                    <div class="col-md-2"><b>Dam</b></div>
-                    <div class="col-md-2"><b>Date</b></div>
-                    <div class="col-md-2"><b>Status</b></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th width="1%"></th>
+                                <th width="15%">Photo</th>
+                                <th width="15%">Sire</th>
+                                <th width="15%">Dam</th>
+                                <th>Date of Birth<th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            $i = 0; 
+                            foreach ($stud AS $s){ ?>
+                            <tr>
+                                <td>
+                                    <?php if (!$birth[$i]){ ?>
+                                        <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
+                                    <?php } 
+                                    } ?>
+                                </td>
+                                <td>    
+                                    <?php if (!$birth[$i]){ ?>
+                                        <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
+                                    <?php } 
+                                        if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Stud Log"><i class="fa fa-history"></i></button>
+                                    <?php } ?>
+                                </td>
+                                <td align="center">
+                                    <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $s->stu_id ?>" onclick="display('stud<?= $s->stu_id ?>')">
+                                </td>
+                                <td align="center">
+                                    <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $s->stu_id ?>" onclick="display('sire<?= $s->stu_id ?>')">
+                                    <br/><?= $s->sire_a_s ?>
+                                </td>
+                                <td align="center">
+                                    <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $s->stu_id ?>" onclick="display('dam<?= $s->stu_id ?>')">
+                                    <br/><?= $s->dam_a_s ?>
+                                </td>
+                                <td class="text-nowrap">
+                                    <?= $s->stu_stud_date; ?>
+                                </td>
+                            </tr>
+                        <?php
+                            $i++; 
+                        } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php
-                    $i = 0; 
-                    foreach ($stud AS $s){ ?>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <?php if (!$birth[$i]){ ?>
-                                <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
-                                <?php } ?>
-                                <br/>
-                                <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
-                            <?php } 
-                                if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Stud Log"><i class="fa fa-history"></i></button>
-                            <?php } ?>
-                        </div>
-                        <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $s->stu_id ?>" onclick="display('stud<?= $s->stu_id ?>')">
-                        </div>
-                        <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $s->stu_id ?>" onclick="display('sire<?= $s->stu_id ?>')">
-                            <br/><?= $s->sire_a_s ?>
-                        </div>
-                        <div class="col-md-2 mb-1 text-center">
-                            <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $s->stu_id ?>" onclick="display('dam<?= $s->stu_id ?>')">
-                            <br/><?= $s->dam_a_s ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $s->stu_stud_date; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $s->stat_name.'<br/>'.$s->use_username.' (<span class="text-nowrap">'.$s->stu_app_date.'</span>)'; ?>
-                        </div>
-                    </div>
-                <?php
-                    $i++; 
-                } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

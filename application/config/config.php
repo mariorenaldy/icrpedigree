@@ -610,12 +610,12 @@ $config['img_height_ratio'] = 9;
 $config['pp'] = 400;
 $config['mode'] = 0;
 
-$config['canine_count'] = 5;
-$config['pedigree_count'] = 5;
-$config['stud_count'] = 5;
-$config['birth_count'] = 5;
+$config['canine_count'] = 10;
+$config['pedigree_count'] = 10;
+$config['stud_count'] = 10;
+$config['birth_count'] = 10;
 $config['notif_count'] = 10;
-$config['news_count'] = 10;
+$config['news_count'] = 50;
 
 $config['backend_member_count'] = 100;
 $config['backend_canine_count'] = 100;
@@ -631,6 +631,7 @@ $config['sire_id'] = 86;
 $config['saved'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
+$config['completed'] = 3;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;
@@ -640,8 +641,13 @@ $config['canine_rip'] = 1;
 $config['canine_alive'] = 0;
 
 $config['jarak_lapor_pacak'] = 7;
+$config['tanggal_lapor_pacak'] = 8;
+$config['bulan_lapor_pacak'] = 1;
+$config['tahun_lapor_pacak'] = 2023;
+$config['hari_lapor_pacak'] = '8 Jan 2023';
 $config['jarak_pacak'] = 120;
 $config['jarak_lapor_lahir'] = 75;
+$config['min_jarak_lapor_lahir'] = 58;
 $config['umur_canine'] = 12;
 $config['jarak_lapor_stb'] = 100;
 
@@ -656,3 +662,8 @@ $config['stud'] = 1;
 $config['birth'] = 2;
 
 $config['super'] = 0;
+
+$config['carousel_interval'] = 90000;
+$config['carousel_width'] = "1920px";
+$config['youtube_width'] = "420";
+$config['youtube_height'] = "315";

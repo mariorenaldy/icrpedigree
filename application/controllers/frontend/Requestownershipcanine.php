@@ -67,6 +67,7 @@ class Requestownershipcanine extends CI_Controller {
 				$like['mem_name'] = $this->input->post('mem_name');
 				$like['ken_name'] = $this->input->post('mem_name');
 				$where['mem_stat'] = $this->config->item('accepted');
+				$where['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($like, $where)->result();
 		
 				if ($data['member']){
@@ -98,6 +99,7 @@ class Requestownershipcanine extends CI_Controller {
 				$like['mem_name'] = $this->input->post('mem_name');
 				$like['ken_name'] = $this->input->post('mem_name');
 				$where['mem_stat'] = $this->config->item('accepted');
+				$where['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($like, $where)->result();
 		
 				$whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -123,6 +125,7 @@ class Requestownershipcanine extends CI_Controller {
 				$like['mem_name'] = $this->input->post('mem_name');
 				$like['ken_name'] = $this->input->post('mem_name');
 				$where['mem_stat'] = $this->config->item('accepted');
+				$where['ken_stat'] = $this->config->item('accepted');
 				$data['member'] = $this->memberModel->search_members($like, $where)->result();
 
 				$whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -141,7 +144,6 @@ class Requestownershipcanine extends CI_Controller {
 				if (!$request){
 					$this->form_validation->set_error_delimiters('<div>','</div>');
 					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_error_delimiters('<div>', '</div>');
 					$this->form_validation->set_rules('can_id', 'Anjing id ', 'trim|required');
 					if ($this->input->post('reg_member')){
 						$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');

@@ -49,38 +49,48 @@
                         </div>
                     </div>
                 <?php } ?>
-                <div class="row mb-1">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2"><b>PP</b></div>
-                    <div class="col-md-2"><b>Username</b></div>
-                    <div class="col-md-2"><b>Type</b></div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th width="1%"></th>
+                                <th width="15%">PP</th>
+                                <th>Username</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users AS $u){ ?>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-success mb-1" onclick="update_password(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Password"><i class="fa fa-pencil"></i></button>
+                                        <button type="button" class="btn btn-warning mb-1" onclick="update_pp(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Change PP"><i class="fa fa-image"></i></button>
+                                    </td>
+                                    <td>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <button type="button" class="btn btn-primary" onclick="update_type(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Edit User Type"><i class="fa fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger" onclick="del(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Delete User"><i class="fa fa-trash"></i></button>
+                                        <?php } ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($u->use_photo && $u->use_photo != '-'){ ?>
+                                            <img src="<?= base_url('uploads/users/'.$u->use_photo) ?>" class="img-fluid img-thumbnail" alt="user" id="myImg<?= $u->use_id ?>" onclick="display('myImg<?= $u->use_id ?>')">
+                                        <?php } else{ ?>
+                                            <img src="<?= base_url().'assets/img/'.$this->config->item('default_img') ?>" class="img-fluid img-thumbnail" alt="user" id="myImg<?= $u->use_id ?>" onclick="display('myImg<?= $u->use_id ?>')">
+                                        <?php } ?>
+                                    </td>
+                                    <td>
+                                        <?= $u->use_username; ?>
+                                    </td>
+                                    <td>
+                                        <?= $u->user_type_name; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php foreach ($users AS $u){ ?>
-                    <div class="row">
-                        <div class="col-md-2 mb-1">
-                            <button type="button" class="btn btn-success mb-1" onclick="update_password(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Password"><i class="fa fa-pencil"></i></button>
-                            <button type="button" class="btn btn-warning mb-1" onclick="update_pp(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Change PP"><i class="fa fa-image"></i></button>
-                            <br/>
-                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                            <button type="button" class="btn btn-primary" onclick="update_type(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Edit User Type"><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-danger" onclick="del(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Delete User"><i class="fa fa-trash"></i></button>
-                            <?php } ?>
-                        </div>
-                        <div class="col-md-2 mb-1">
-                            <?php if ($u->use_photo && $u->use_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/users/'.$u->use_photo) ?>" class="img-fluid img-thumbnail" alt="user" id="myImg<?= $u->use_id ?>" onclick="display('myImg<?= $u->use_id ?>')">
-                            <?php } else{ ?>
-                                <img src="<?= base_url().'assets/img/'.$this->config->item('default_img') ?>" class="img-fluid img-thumbnail" alt="user" id="myImg<?= $u->use_id ?>" onclick="display('myImg<?= $u->use_id ?>')">
-                            <?php } ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $u->use_username; ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $u->user_type_name; ?>
-                        </div>
-                    </div>
-                <?php } ?>
             </div>                           
         </div> 
         <?php $this->load->view('templates/footer'); ?>      

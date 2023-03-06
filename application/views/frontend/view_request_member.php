@@ -15,13 +15,6 @@
     <main class="container">
         <div class="container">
             <h3 class="text-center text-warning">List Laporan Ubah Kennel</h3>
-            <div class="text-success mb-3">
-                <?php		
-                    if ($this->session->flashdata('edit_profile')){
-                        echo 'Lapor Ubah Kennel berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.<br/>';
-                    }
-                ?>
-            </div>
             <?php $i = 0; 
                 foreach($request AS $req){ 
                     if ($i)
@@ -110,6 +103,27 @@
                     $i++;
                 } ?>
         </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('edit_profile')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Lapor Ubah Kennel berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>
@@ -126,6 +140,13 @@
     span.onclick = function() {
         modal.style.display = "none";
     }
+
+    $(document).ready(function(){
+        <?php		
+            if ($this->session->flashdata('edit_profile')){ ?>
+                $('#message-modal').modal('show');
+        <?php } ?>
+    });
 </script>
 </html>
 
