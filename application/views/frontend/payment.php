@@ -16,7 +16,7 @@
             <figcaption class="figure-caption">RAW FOOD</figcaption>
             <p>6000</p>
         </figure>
-        <form id="mainForm" class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
+        <form id="mainForm" class="form-horizontal" method="post" enctype="multipart/form-data">
             <div class="text-danger">
                 <?php
                 if ($this->session->flashdata('error_message')) {
@@ -75,12 +75,35 @@
                 ?>
             </div>
             <div class="text-center">
-                <button class="btn btn-primary" type="button" id="registerBtn" onclick="window.location = '<?= base_url() ?>frontend/Marketplace/demo'">Bayar</button>
+                <button class="btn btn-primary" type="button" id="checkout-button">Bayar</button>
                 <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Marketplace/product_detail'">Kembali</button>
             </div>
         </form>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
+    <script src="https://sandbox.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"></script>
+    <script type="text/javascript">
+        var checkoutButton = document.getElementById('checkout-button');
+        checkoutButton.addEventListener('click', function () {
+            // $.ajax({
+            //     url: "<?= base_url() ?>frontend/Marketplace/checkout2",
+            //     headers: {'X-Requested-With': 'XMLHttpRequest'}
+            // });
+            let amount = 6000;
+            $.ajax({
+                url: "<?= base_url() ?>frontend/Marketplace/checkout",
+                method: 'post',
+                data: {amount: amount},
+                success: function(response){
+                    if(response.status == 'success'){
+                        loadJokulCheckout(response.url);
+                    }else if(response.status == 'error'){
+                        alert("HTTP code: " + response.code + "\n" + response.message);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
