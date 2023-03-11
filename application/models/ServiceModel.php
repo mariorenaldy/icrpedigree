@@ -4,6 +4,16 @@ class ServiceModel extends CI_Model {
         parent::__construct();
     }
 
+    public function record_count() {
+        return $this->db->count_all("services");
+    }
+
+    public function fetch_data($num, $offset) {
+        $this->db->order_by('ser_id', 'desc');
+        $data = $this->db->get('services', $num, $offset);
+        return $data;
+    }
+
     public function get_services($where = null){
         $this->db->select('*');
         if ($where != null) {

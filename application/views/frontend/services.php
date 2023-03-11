@@ -22,33 +22,34 @@
             </form>
         </div>
         <div class="text-dark" id="productsContainer">
-            <div class="row m-5">
+            <?php $counter=0;
+            $len = count($services);
+            $pads = 3 - $len % 3;
+            foreach($services as $s) : 
+            if($counter % 3 == 0){ ?>
+                <div class="row m-5">
+            <?php } ?>
                 <div class="card col m-5">
                     <img src="<?= base_url('assets/img/service.jpg') ?>" class="card-img-top">
                     <div class="card-body">
-                        <h5 class="card-title">Grooming</h5>
-                        <p class="card-text">6000</p>
+                        <h5 class="card-title"><?= $s->ser_desc ?></h5>
+                        <p class="card-text"><?= $s->ser_reg_rule_ind ?></p>
+                        <p class="card-text"><?= $s->ser_reg_rule_eng ?></p>
                         <a href="<?= base_url(); ?>frontend/Marketplace/service_detail" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
-                <div class="card col m-5">
-                    <img src="<?= base_url('assets/img/service.jpg') ?>" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Training</h5>
-                        <p class="card-text">6000</p>
-                        <a href="<?= base_url(); ?>frontend/Marketplace/service_detail" class="btn btn-primary stretched-link">Detail</a>
-                    </div>
+            <?php $counter++; if($counter % 3 == 0){ ?>
                 </div>
-                <div class="card col m-5">
-                    <img src="<?= base_url('assets/img/service.jpg') ?>" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Breeding</h5>
-                        <p class="card-text">6000</p>
-                        <a href="<?= base_url(); ?>frontend/Marketplace/service_detail" class="btn btn-primary stretched-link">Detail</a>
+            <?php }
+            if($counter == $len && $pads !== 3){
+                for ($j = 0 ; $j < $pads; $j++){ ?>
+                    <div class="card col m-5" style="visibility: hidden;">
                     </div>
-                </div>
-            </div>
+                <?php }
+            }
+            endforeach; ?>
         </div>
+        <?= $this->pagination->create_links(); ?>
         <div class="text-center">
             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Marketplace'">Kembali</button>
         </div>

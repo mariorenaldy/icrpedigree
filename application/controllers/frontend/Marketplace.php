@@ -6,7 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Marketplace extends CI_Controller {
     public function __construct(){
 		parent::__construct();
-		$this->load->library(array('session', 'form_validation'));
+		$this->load->model(array('productModel', 'serviceModel'));
+		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
 	}
@@ -15,13 +16,87 @@ class Marketplace extends CI_Controller {
         $this->load->view("frontend/marketplace");
 	}
 	public function products(){
-        $this->load->view("frontend/products");
+		//pagination
+		$config['base_url'] = base_url() . '/frontend/Marketplace/products';
+		$config['total_rows'] = $this->productModel->record_count();
+		$config['per_page'] = 9;
+		
+		//styling pagination
+		$config['full_tag_open'] = '<nav><ul class="pagination justify-content-end">';
+		$config['full_tag_close'] = '</ul></nav>';
+		
+		$config['first_link'] = 'First';
+		$config['first_tag_open'] = '<li class="page-item">';
+		$config['first_tag_close'] = '</li>';
+		
+		$config['last_link'] = 'Last';
+		$config['last_tag_open'] = '<li class="page-item">';
+		$config['last_tag_close'] = '</li>';
+
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+
+		$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+
+		$config['attributes'] = array('class' => 'page-link');
+
+		//initialize pagination
+		$this->pagination->initialize($config);
+
+		$data['start'] = $this->uri->segment(4);
+		$data['products'] = $this->productModel->fetch_data($config['per_page'], $data['start'])->result();
+
+        $this->load->view("frontend/products", $data);
 	}
 	public function product_detail(){
         $this->load->view("frontend/product_detail");
 	}
 	public function services(){
-        $this->load->view("frontend/services");
+		//pagination
+		$config['base_url'] = base_url() . '/frontend/Marketplace/services';
+		$config['total_rows'] = $this->serviceModel->record_count();
+		$config['per_page'] = 9;
+		
+		//styling pagination
+		$config['full_tag_open'] = '<nav><ul class="pagination justify-content-end">';
+		$config['full_tag_close'] = '</ul></nav>';
+		
+		$config['first_link'] = 'First';
+		$config['first_tag_open'] = '<li class="page-item">';
+		$config['first_tag_close'] = '</li>';
+		
+		$config['last_link'] = 'Last';
+		$config['last_tag_open'] = '<li class="page-item">';
+		$config['last_tag_close'] = '</li>';
+
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+
+		$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+
+		$config['attributes'] = array('class' => 'page-link');
+
+		//initialize pagination
+		$this->pagination->initialize($config);
+
+		$data['start'] = $this->uri->segment(4);
+		$data['services'] = $this->serviceModel->fetch_data($config['per_page'], $data['start'])->result();
+
+        $this->load->view("frontend/services", $data);
 	}
 	public function service_detail(){
         $this->load->view("frontend/service_detail");
