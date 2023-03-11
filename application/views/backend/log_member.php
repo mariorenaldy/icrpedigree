@@ -43,7 +43,7 @@
                                 foreach ($member AS $m){ ?>
                                     <tr>
                                         <td><span class="text-nowrap"><?= $m->log_date; ?></span><br/>(<?= $m->user; ?>)</td>
-                                        <td><?= $kennel[$i]->log_kennel_name; ?></td>
+                                        <td><?= $m->ken_name; ?></td>
                                         <td><?= $m->log_name; ?></td>
                                         <td><?= $m->log_hp; ?></td>
                                         <td><?= $m->log_address; ?></td>

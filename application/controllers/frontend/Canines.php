@@ -181,6 +181,11 @@ class Canines extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
 					}
 
+					if (strlen($data['can_a_s']) >= $this->config->item('can_a_s_length')){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+					}
+
 					if (!$err){
 						$dataPed = array(
 							'ped_sire_id' => $this->config->item('sire_id'),

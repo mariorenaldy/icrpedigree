@@ -11,6 +11,7 @@ class LogmemberModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->join('members','members.mem_id = logs_member.log_member_id');
+        $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
         $this->db->join('users u1','u1.use_id = logs_member.log_user');
         $this->db->join('users u2','u2.use_id = logs_member.log_app_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_member.log_stat');

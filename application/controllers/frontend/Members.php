@@ -43,11 +43,17 @@ class Members extends CI_Controller {
 				$where['mem_username'] = $this->input->post('username');
 				$where['mem_stat'] = $this->config->item('accepted');
 				$where['ken_stat'] = $this->config->item('accepted');
-				$member = $this->MemberModel->get_members($where)->row();
+				$member = $this->MemberModel->get_members($where)->row(); // username
 				$err = 0;
 				if (!$member){
-					$err++;
-					$this->session->set_flashdata('login_error', 'Maaf nama pengguna tidak terdaftar');
+					$whereMem['mem_hp'] = $this->input->post('username');
+					$whereMem['mem_stat'] = $this->config->item('accepted');
+					$whereMem['ken_stat'] = $this->config->item('accepted'); 
+					$member = $this->MemberModel->get_members($whereMem)->row(); // no hp
+					if (!$member){
+						$err++;
+						$this->session->set_flashdata('login_error', 'Maaf nama pengguna/no hp tidak terdaftar');
+					}
 				}
 				if (!$err && $member->mem_stat == $this->config->item('rejected')){
 					$err++;
@@ -184,7 +190,7 @@ class Members extends CI_Controller {
 						}
 					}
 				}
-	
+
 				if ($this->input->post('mem_type'))
 					$email = $this->test_input($this->input->post('mem_email'));
 				else
@@ -195,31 +201,53 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Format email tidak valid');
 				}
 
-				if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
-				}
+				if ($this->input->post('mem_type')){
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_name', $this->input->post('mem_name'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Registrasi yang lama belum diproses. Harap menghubungi Admin');
+					}
 
-				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
-				}
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+					}
 
-				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'email tidak boleh sama');
-				}
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+					}
 
-				if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_email'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'email tidak boleh sama');
-				}
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+					}
 
-				if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
-				}
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_email'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+					}
 
+					if (!$err && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+					}
+				} else {
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_name', $this->input->post('name'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Registrasi yang lama belum diproses. Harap menghubungi Admin');
+					}
+
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+					}
+
+					if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+					}
+				}
+				
 				if (!$err){
 					if (isset($uploadedPP)){
 						file_put_contents($pp_name, $uploadedPP);

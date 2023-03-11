@@ -125,7 +125,7 @@ class Requestupdatecanine extends CI_Controller {
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Laporan ubah foto yang lama belum diproses. Harap menghubungi Admin.');
+					$this->session->set_flashdata('error_message', 'Laporan ubah data yang lama belum diproses. Harap menghubungi Admin.');
 					$this->load->view("frontend/add_request_update_canine", $data);
 				}
 			}

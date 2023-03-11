@@ -24,6 +24,7 @@ class Pedigree extends CI_Controller {
 		if ($this->session->userdata('mem_id')){
 			$like['can_a_s'] = $this->input->post('keywords');
 			$like['can_icr_number'] = $this->input->post('keywords');
+			$like['can_chip_number'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
 			$piece = explode("-", $this->input->post('keywords'));
 			if (isset($piece[1]) && isset($piece[2])){
@@ -31,11 +32,33 @@ class Pedigree extends CI_Controller {
 				$like['can_date_of_birth'] = $dob;
 			}
 			$where['can_member_id != '] = $this->config->item('no_member');
+			$where['can_stat'] = $this->config->item('accepted');
+			$where['can_rip'] = $this->config->item('canine_alive');
+			$where['mem_stat'] = $this->config->item('accepted');
+			$where['ken_stat'] = $this->config->item('accepted');
 			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
 			$this->load->view('frontend/pedigree', $data);
 		}
 		else{
-			redirect('frontend/Pedigree');
+			redirect('frontend/Members');
 		}
+    }
+
+	public function view(){
+		$data['canines'] = [];
+		$this->load->view('frontend/search_canine', $data);
+    }
+
+    public function search_canine(){
+		$like['can_a_s'] = $this->input->post('keywords');
+		$like['can_icr_number'] = $this->input->post('keywords');
+		$like['can_chip_number'] = $this->input->post('keywords');
+		$where['can_member_id != '] = $this->config->item('no_member');
+		$where['can_stat'] = $this->config->item('accepted');
+		$where['can_rip'] = $this->config->item('canine_alive');
+		$where['mem_stat'] = $this->config->item('accepted');
+		$where['ken_stat'] = $this->config->item('accepted');
+		$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
+		$this->load->view('frontend/search_canine', $data);
     }
 }

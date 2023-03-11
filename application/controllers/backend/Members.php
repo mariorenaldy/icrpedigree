@@ -498,12 +498,16 @@ class Members extends CI_Controller {
 								'mem_email' => $this->input->post('mem_email'),
 								'mem_ktp' => $this->input->post('mem_ktp'),
 								'mem_type' => $this->input->post('mem_type'),
-								'mem_payment_date' => date('2023-1-1'),
 								'mem_user' => $this->session->userdata('use_id'),
 								'mem_date' => date('Y-m-d H:i:s'),
 							);
 							if ($pp != '-')
 								$data['mem_pp'] = $pp;
+							if (!$dataReg['member']->mem_user){
+								$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
+								$data['mem_app_user'] = $this->session->userdata('use_id');
+								$data['mem_app_date'] = date('Y-m-d H:i:s');
+							}
 
 							$kennel_data = array(
 								'ken_name' => strtoupper($this->input->post('ken_name')),
@@ -528,8 +532,12 @@ class Members extends CI_Controller {
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
 								'log_mem_type' => $this->input->post('mem_type'),
-								'log_payment_date' => date('2023-1-1'),
 							);
+							if (!$dataReg['member']->mem_user){
+								$dataLog['log_payment_date'] = date('Y-m-d', strtotime('+1 year'));
+								$dataLog['log_app_user'] = $this->session->userdata('use_id');
+								$dataLog['log_app_date'] = date('Y-m-d H:i:s');
+							}
 	
 							$dataKennelLog = array(
 								'log_kennel_id' => $this->input->post('ken_id'),
@@ -876,9 +884,19 @@ class Members extends CI_Controller {
 		public function payment(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')){
+					$where['mem_id'] = $this->uri->segment(4);
+					$member = $this->MemberModel->get_members($where)->row();
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$where['mem_id'] = $this->uri->segment(4);
+					if (!$member->mem_app_user){
+						$data = array(
+							'mem_app_user' => $this->session->userdata('use_id'),
+							'mem_app_date' => date('Y-m-d H:i:s'),
+							'mem_name' => $member->mem_name,
+							'mem_hp' => $member->mem_hp,
+							'mem_email' => $member->mem_email,
+						);
+					}
 					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
 					$data['mem_type'] = $this->config->item('pro_member');
 					$data['mem_user'] = $this->session->userdata('use_id');
@@ -893,21 +911,59 @@ class Members extends CI_Controller {
 							'log_date' => date('Y-m-d H:i:s'),
 							'log_mem_type' => $this->config->item('pro_member'),
 						);
+						if (!$member->mem_app_user){
+							$dataLog['log_app_user'] = $this->session->userdata('use_id');
+							$dataLog['log_app_date'] = date('Y-m-d H:i:s');
+							$dataLog['log_name'] = $member->mem_name;
+							$dataLog['log_hp'] = $member->mem_hp;
+							$dataLog['log_email'] = $member->mem_email;
+							$dataLog['log_stat'] = $this->config->item('accepted');
+						}
 						$log = $this->LogmemberModel->add_log($dataLog);
 						if ($log){
-							$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
-							if ($res){
-								$this->db->trans_complete();
-								$member = $this->MemberModel->get_members($where)->row();
-								if ($member->mem_firebase_token){
-									$notif = $this->notificationtype_model->get_by_id(19);
-									firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+							if (!$member->mem_app_user){
+								$dataKennel = array(
+									'ken_stat' => $this->config->item('accepted'),
+									'ken_user' => $this->session->userdata('use_id'),
+									'ken_date' => date('Y-m-d H:i:s'),
+									'ken_app_user' => $this->session->userdata('use_id'),
+									'ken_app_date' => date('Y-m-d H:i:s'),
+								);
+								$wheKennel['ken_member_id'] = $this->uri->segment(4);
+								$res = $this->KennelModel->update_kennels($dataKennel, $wheKennel);
+								if ($res){
+									$dataKennelLog = array(
+										'log_kennel_id' => $member->ken_id,
+										'log_stat' => $this->config->item('accepted'),
+										'log_user' => $this->session->userdata('use_id'),
+										'log_date' => date('Y-m-d H:i:s'),
+										'log_app_user' => $this->session->userdata('use_id'),
+										'log_app_date' => date('Y-m-d H:i:s'),
+									);
+									$log = $this->LogkennelModel->add_log($dataKennelLog);
+									if (!$log){
+										$err = 4;
+									}
 								}
-								$this->session->set_flashdata('payment_success', TRUE);
-								redirect('backend/Members');
+								else{
+									$err = 5;
+								}
 							}
-							else{
-								$err = 1;
+							if (!$err){
+								$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
+								if ($res){
+									$this->db->trans_complete();
+									$member = $this->MemberModel->get_members($where)->row();
+									if ($member->mem_firebase_token){
+										$notif = $this->notificationtype_model->get_by_id(19);
+										firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+									}
+									$this->session->set_flashdata('payment_success', TRUE);
+									redirect('backend/Members');
+								}
+								else{
+									$err = 1;
+								}
 							}
 						}
 						else{
@@ -918,6 +974,7 @@ class Members extends CI_Controller {
 						$err = 3;
 					}
 					if ($err){
+						$this->db->trans_rollback();
 						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members');
 					}
@@ -988,9 +1045,7 @@ class Members extends CI_Controller {
 			if ($this->uri->segment(4)){
 				$where['log_member_id'] = $this->uri->segment(4);
 				$data['member'] = $this->LogmemberModel->get_logs($where)->result();
-				$wheKennel['mem_id'] = $this->uri->segment(4);
-				$kennel = $this->KennelModel->get_kennels($wheKennel)->row();
-				$wheLog['log_kennel_id'] = $kennel->ken_id;
+				$wheLog['log_kennel_id'] = $data['member'][0]->ken_id;
 				$data['kennel'] = $this->LogkennelModel->get_logs($wheLog)->result();
 				$this->load->view('backend/log_member', $data);
 			}

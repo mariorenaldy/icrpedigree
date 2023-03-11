@@ -12,31 +12,31 @@
       <div class="bg-container"></div>
       <br/><br/>
       <span class="label" id="main">
-        <p class="fs-5 text-center"><?= $canine->can_breed ?></p>
-        <?php if ($canine->can_photo && $canine->can_photo != '-'){ ?>
-          <figure class="text-center">
-            <img src="<?= base_url().$this->config->item('path_canine').$canine->can_photo ?>" class="img-fluid canine" alt="canine">
-          </figure>
-        <?php } else { ?>
-          <div class="imgReplacement"></div>
-        <?php } ?>
-        <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { 
-          if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){
-        ?>
-            <p class="text-center fs-4 red"><?= $canine->can_a_s ?></p>
-        <?php } else { ?>
-            <p class="text-center fs-5 red"><?= $canine->can_a_s ?></p>
-        <?php } 
-        }
-        else { 
-          if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ 
-        ?>
-            <p class="text-center fs-4 black"><?= $canine->can_a_s ?></p>
-        <?php } else { ?>
-            <p class="text-center fs-5 black"><?= $canine->can_a_s ?></p>
-        <?php } 
-        } ?>
-        <div class="container">
+      <div class="container">
+          <div class="fs-5 text-center"><?= $canine->can_breed ?></div>
+          <?php if ($canine->can_photo && $canine->can_photo != '-'){ ?>
+            <figure class="text-center">
+              <img src="<?= base_url().$this->config->item('path_canine').$canine->can_photo ?>" class="img-fluid canine" alt="canine">
+            </figure>
+          <?php } else { ?>
+            <div class="imgReplacement"></div>
+          <?php } ?>
+          <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { 
+            if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){
+          ?>
+              <div id="can_a_s" class="text-center fs-4 red"><?= $canine->can_a_s ?></div>
+          <?php } else { ?>
+              <div id="can_a_s" class="text-center fs-5 red"><?= $canine->can_a_s ?></div>
+          <?php } 
+          }
+          else { 
+            if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ 
+          ?>
+              <div id="can_a_s" class="text-center fs-4 black"><?= $canine->can_a_s ?></div>
+          <?php } else { ?>
+              <div id="can_a_s" class="text-center fs-5 black"><?= $canine->can_a_s ?></div>
+          <?php } 
+          } ?>
           <div class="row gx-0">
             <div class="col-4">
               <p>ICR Number</p>
@@ -387,6 +387,11 @@
       </div>
     </div>
   </div>
+  <!-- Folding Line -->
+  <div style="border-left: 1px solid grey; height: 20px; position: absolute; left: 433px; top: 0;"></div>
+  <div style="border-left: 1px solid grey; height: 20px; position: absolute; left: 433px; top: 590px;"></div>
+  <div style="border-left: 1px solid grey; height: 20px; position: absolute; left: 866px; top: 0;"></div>
+  <div style="border-left: 1px solid grey; height: 20px; position: absolute; left: 866px; top: 590px;"></div>
   <?php $this->load->view('templates/script'); ?>
 </body>
 </html>

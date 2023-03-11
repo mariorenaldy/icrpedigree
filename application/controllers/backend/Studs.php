@@ -16,13 +16,14 @@ class Studs extends CI_Controller {
 		}
 
 		public function index(){
-			$where['stu_stat'] = $this->config->item('accepted');
+			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$whereBirth['bir_stat'] = $this->config->item('accepted');
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('backend/view_studs', $data);
@@ -37,13 +38,14 @@ class Studs extends CI_Controller {
 			if ($date){
 				$where['stu_stud_date'] = $date;
 			}
-			$where['stu_stat'] = $this->config->item('accepted');
+			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
+				$whereBirth['bir_stat'] = $this->config->item('accepted');
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('backend/view_studs', $data);
@@ -832,6 +834,7 @@ class Studs extends CI_Controller {
 	
 				$whereCan['can_id'] = $this->input->post('stu_sire_id');
 				$can = $this->caninesModel->get_canines($whereCan)->row();
+				
 				$like['can_a_s'] = $this->input->post('can_a_s');
 				$whereDam['can_gender'] = 'FEMALE';
 				$whereDam['can_stat'] = $this->config->item('accepted');

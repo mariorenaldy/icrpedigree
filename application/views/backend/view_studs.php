@@ -63,27 +63,24 @@
                                 <th width="15%">Photo</th>
                                 <th width="15%">Sire</th>
                                 <th width="15%">Dam</th>
-                                <th>Date of Birth<th>
+                                <th>Date<th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php
                             $i = 0; 
-                            foreach ($stud AS $s){ ?>
+                            foreach ($stud AS $s){ 
+                                if (!$birth[$i]){ ?>
                             <tr>
                                 <td>
-                                    <?php if (!$birth[$i]){ ?>
-                                        <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
-                                    <?php } 
-                                    } ?>
+                                    <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                    <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
+                                    <?php } ?>
                                 </td>
                                 <td>    
-                                    <?php if (!$birth[$i]){ ?>
-                                        <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
-                                    <?php } 
-                                        if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                    <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Stud Log"><i class="fa fa-history"></i></button>
                                     <?php } ?>
                                 </td>
@@ -103,7 +100,8 @@
                                 </td>
                             </tr>
                         <?php
-                            $i++; 
+                                $i++; 
+                            }
                         } ?>
                         </tbody>
                     </table>

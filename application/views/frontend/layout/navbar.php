@@ -7,8 +7,8 @@
             <a href="<?= base_url().'frontend/Beranda' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-home"></i> <span class="nav-text">Home</span></a>
             <a href="<?= base_url().'frontend/Rules' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-list"></i> <span class="nav-text">Aturan</span></a>
             <a href="<?= base_url().'frontend/News' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-newspaper"></i> <span class="nav-text">Berita</span></a>
-            <?php if ($this->session->userdata('username')) : ?>
-                <a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text">Silsilah</span></a>
+            <?php if ($this->session->userdata('username')){ ?>
+                <a href="<?= base_url().'frontend/Pedigree' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text">Cari Anjing</span></a>
                 <?php if ($this->session->userdata('mem_type') == '1'){ ?>
                     <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,10 +37,11 @@
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/logout' ?>">Logout</a></li>
                     </ul>
                 </div>
-            <?php else : ?>
+            <?php } else { ?>
+                <a href="<?= base_url().'frontend/Pedigree/view' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text">Cari Anjing</span></a>
                 <a href="<?= base_url().'frontend/Members' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-user"></i> <span class="nav-text">Members</span></a>
-            <?php endif;?>
-                <!-- <a href="<?= base_url().'frontend/marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
+            <?php } ?>
+                <!-- <a href="<?= base_url().'frontend/Marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
         </div>
     </div>
 </nav>

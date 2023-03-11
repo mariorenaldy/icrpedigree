@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html class="min-vh-100">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Lapor Lahir</title>
+    <title>Lapor Ubah Data Lahir</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,47 +12,74 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Lahir</h3>
-            <div class="row">            
-                <div class="col-sm-12 align-items-center">                          
-                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
-                        <?php if (!$mode){ ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
-                        <?php } else { ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
-                        <?php } ?>
-                        <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto semua anak saat sedang menyusui dengan induknya</label>
-                            <div class="col-sm-12 text-center">
-                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
-                                <input type="hidden" name="attachment_dam" id="attachment">
-                            </div>
+            <h3 class="text-center text-warning">Lapor Ubah Data Lahir</h3>                         
+                <form id="formBirth" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatebirth/validate_edit" method="post" enctype="multipart/form-data">
+                    <?php if (!$mode){ ?>
+                        <input type="hidden" name="bir_id" value="<?= $birth->bir_id ?>" />
+                    <?php } else { ?>
+                        <input type="hidden" name="bir_id" value="<?= set_value('bir_id') ?>" />
+                    <?php } ?>
+                    <div class="text-danger">
+                        <?php		
+                        if ($this->session->flashdata('error_message')){
+                            echo $this->session->flashdata('error_message').'<br/>';
+                        }
+                        echo validation_errors();
+                        ?>
+                    </div>
+                    <div class="input-group mb-3 gap-3">
+                        <label for="stu_dam_id" class="control-label col-md-12 text-center">Photo</label>
+                        <div class="col-md-12 text-center">
+                            <?php 
+                                if (!$mode){ 
+                                    if ($birth->bir_dam_photo && $birth->bir_dam_photo != '-'){
+                            ?>
+                                <img id="imgPreview" width="15%" src="<?= base_url().'uploads/births/'.$birth->bir_dam_photo ?>">
+                            <?php } else { ?>
+                                <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                                <?php } 
+                            } else { ?>
+                                <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                            <?php } ?>
+                            <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
+                            <input type="hidden" name="attachment_dam" id="attachment">
                         </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan</label>
-                            <div class="col-sm-10">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="bir_male" class="control-label col-md-2">Male</label>
+                        <div class="col-md-10">
+                            <?php if (!$mode){ ?>
+                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= $birth->bir_male ?>">
+                            <?php } else { ?>
                                 <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
-                            </div>
+                            <?php } ?>
                         </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina</label>
-                            <div class="col-sm-10">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="bir_female" class="control-label col-md-2">Female</label>
+                        <div class="col-md-10">
+                            <?php if (!$mode){ ?>
+                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= $birth->bir_female ?>">
+                            <?php } else { ?>
                                 <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
-                            </div>
+                            <?php } ?>
                         </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-sm-2">Tanggal Lahir</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
-                            </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label for="bir_date_of_birth" class="control-label col-md-2">Date of Birth</label>
+                        <div class="col-md-10">
+                            <?php if (!$mode){ ?>
+                                <input class="form-control" type="text" placeholder="Date of Birth" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= $birth->bir_date_of_birth ?>" autocomplete="off">
+                            <?php } else { ?>    
+                                <input class="form-control" type="text" placeholder="Date of Birth" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
+                            <?php } ?>
                         </div>
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="text-center">
+                        <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
+                        <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatebirth'">Back</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -81,39 +108,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-4">Foto Dam</div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Jumlah Jantan</div>
-                            <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Jumlah Betina</div>
-                            <div class="col">: <span id="confirm-jumlah_betina"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Tanggal Lahir</div>
-                            <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade text-dark" id="error-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -132,9 +126,6 @@
                                 <?= validation_errors() ?>
                             </div>
                         <?php } ?>
-                        <div id="error-row" class="row" style="display: none;">
-                            <div id="error-col" class="col-12"></div>
-                        </div>
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
@@ -160,12 +151,16 @@
 
         $(document).ready(function(){
             var $modal = $('#modal');
-            var image = document.getElementById('imgPreview');
+            var previewImg = document.getElementById('imgPreview');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
 
             imageInput.addEventListener("change", function(event) {
+                showModalImg(event);
+            })
+
+            function showModalImg(event) {
                 var files = event.target.files;
                 var done = function(url) {
                     modalImage.src = url;
@@ -178,7 +173,7 @@
                     };
                     reader.readAsDataURL(files[0]);
                 }
-            })
+            }
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
@@ -202,39 +197,15 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        image.src = base64data;
-                        latestImage = base64data;
-                        $('#attachment').val(latestImage);
+                        previewImg.src = base64data;
+                        $('#attachment').val(base64data);
                         $modal.modal('hide');
                     };
                 });
             });
 
-            $('#cancel-btn').click(function(event) {
+            $('#cancel-btn').click(function() {
                 resetImage();
-            });
-
-            let saveBtn = $("#saveBtn");
-            saveBtn.click(function(){
-                if ($('input[name="bir_male"]').val() == 0 && $('input[name="bir_female"]').val() == 0){
-                    $('#error-col').html('Jumlah jantan & betina tidak boleh 0');
-                    $('#error-row').show();
-                    $('#error-modal').modal('show');
-                }
-                else{
-                    $('#confirm-jumlah_jantan').text($('input[name="bir_male"]').val());
-                    $('#confirm-jumlah_betina').text($('input[name="bir_female"]').val());
-                    $('#confirm-foto_dam').attr("src",  $('#imgPreview').attr("src"));
-                    $('#confirm-tanggal_lahir').text($('input[name="bir_date_of_birth"]').val());
-
-                    $('#confirm-modal').modal('show');
-                }
-            });
-
-            let submitBtn = $("#submitBtn");
-            submitBtn.click(function(){
-                submitBtn.prop('disabled', true);
-                $('#mainForm').submit();
             });
 
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>

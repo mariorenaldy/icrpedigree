@@ -134,7 +134,7 @@
                             <div class="input-group mb-3">
                                 <label for="ken_name" class="control-label col-sm-2">Nama Kennel</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
+                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>" maxlength="20">
                                 </div>
                             </div>
                             <div class="input-group mb-3">

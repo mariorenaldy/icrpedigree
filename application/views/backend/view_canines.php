@@ -122,7 +122,7 @@
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
                                     <td><?php if ($c->can_rip) echo '<i class="fa fa-check"></i>'; ?></td>
                                     <td><?= $c->stat_name.'<br/>'.$c->use_username.' (<span class="text-nowrap">'.$c->can_app_date.'</span>)'; ?></td>
-                                    <td style="display: none;"><?= $c->can_id; ?></td>
+                                    <td style="display: none;"><?= $c->can_app_date2; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

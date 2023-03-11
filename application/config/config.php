@@ -641,11 +641,12 @@ $config['canine_rip'] = 1;
 $config['canine_alive'] = 0;
 
 $config['jarak_lapor_pacak'] = 7;
-$config['tanggal_lapor_pacak'] = 8;
+$config['tanggal_lapor_pacak'] = 12;
 $config['bulan_lapor_pacak'] = 1;
 $config['tahun_lapor_pacak'] = 2023;
-$config['hari_lapor_pacak'] = '8 Jan 2023';
+$config['hari_lapor_pacak'] = '12 Jan 2023';
 $config['jarak_pacak'] = 120;
+$config['jarak_pacak_lahir'] = 90;
 $config['jarak_lapor_lahir'] = 75;
 $config['min_jarak_lapor_lahir'] = 58;
 $config['umur_canine'] = 12;
@@ -655,6 +656,7 @@ $config['admin'] = 0;
 $config['user'] = 1;
 
 $config['can_name_length'] = 20;
+$config['can_a_s_length'] = 60;
 
 $config['no_member'] = 0;
 

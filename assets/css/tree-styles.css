@@ -168,10 +168,13 @@ body p {
   width: 250px;
   margin-top: 2px;
 }
+#can_a_s{
+  word-wrap: break-word;
+}
 #main {
   top: 7%;
-  min-width: 350px;
-  margin-left: 0px;
+  min-width: 320px;
+  margin-left: 10px;
 }
 .bg-container {
   position: absolute;

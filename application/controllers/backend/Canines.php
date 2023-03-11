@@ -18,7 +18,7 @@ class Canines extends CI_Controller {
     public function index(){
         $where['can_stat'] = $this->config->item('accepted');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->get_canines($where, 'can_id desc')->result();
+        $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -29,7 +29,7 @@ class Canines extends CI_Controller {
         $like['ken_name'] = $this->input->post('keywords');
         $where['can_stat'] = $this->config->item('accepted');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->search_canines($like, $where, 'can_id desc')->result();
+        $data['canine'] = $this->caninesModel->search_canines($like, $where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc')->result();
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -244,6 +244,11 @@ class Canines extends CI_Controller {
               if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
                 $err++;
                 $this->session->set_flashdata('error_message', 'Duplicate canine name');
+              }
+
+              if (strlen($dataCan['can_a_s']) >= $this->config->item('can_a_s_length')){
+                $err++;
+                $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
               }
 
               $dataLog = array(
@@ -499,6 +504,11 @@ class Canines extends CI_Controller {
         if (!$err && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_a_s', $this->input->post('can_a_s'))){
           $err++;
           $this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+        }
+
+        if (strlen($this->input->post('can_a_s')) >= $this->config->item('can_a_s_length')){
+          $err++;
+          $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
         }
 
         if (!$err) {

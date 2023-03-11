@@ -55,7 +55,7 @@
                                 <th width="15%">Photo</th>
                                 <th width="15%">Sire</th>
                                 <th width="15%">Dam</th>
-                                <th>Date of Birth<th>
+                                <th>Date<th>
                             </tr>
                         </thead>
                         <tbody>

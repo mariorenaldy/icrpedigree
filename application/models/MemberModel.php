@@ -10,7 +10,7 @@ class MemberModel extends CI_Model {
     }
 
     public function get_members($where, $sort = 'mem_id'){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -23,7 +23,7 @@ class MemberModel extends CI_Model {
     }
 
     public function search_members($like, $where, $sort = 'mem_id'){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, members.mem_app_date AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);

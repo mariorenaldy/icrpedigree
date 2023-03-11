@@ -61,7 +61,7 @@ class Studs extends CI_Controller {
 	public function view_approved(){
 		if ($this->session->userdata('mem_id')){
 			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$where['stu_stat'] = $this->config->item('accepted');
+			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null ;
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$data['birth'] = array();
@@ -391,8 +391,19 @@ class Studs extends CI_Controller {
 						}
 
 						if ($cek){
-							// jarak pacak utk dam yg sama adalah 120 hari
-							$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+							// Jarak pacak utk dam yg sama adalah sbb:
+							// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
+							// Kurang dari 3 bulan dari lahir(ada lahir)
+							$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
+							$wheBirth['studs.stu_stat'] = $this->config->item('accepted');
+							$wheBirth['births.bir_stat'] = $this->config->item('accepted');
+							$birth = $this->birthModel->get_births($wheBirth)->row();
+							if (!$birth){
+								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+							}
+							else{
+								$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+							}
 							if (!$res){
 								$data = array(
 									'stu_photo' => $photo,
@@ -417,12 +428,18 @@ class Studs extends CI_Controller {
 								}
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari');
-								$this->load->view('frontend/add_stud', $data);
+								if (!$birth){
+									$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak');
+									$this->load->view('frontend/add_stud', $data);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal lahir');
+									$this->load->view('frontend/add_stud', $data);
+								}
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak'));
+							$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak').' hari');
 							$this->load->view('frontend/add_stud', $data);
 						}
 					}

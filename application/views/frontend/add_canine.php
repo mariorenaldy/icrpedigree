@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Tambah Canine Generasi Pertama</title>
+    <title>Tambah Anjing Generasi Pertama</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,12 +12,12 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Tambah Canine Generasi Pertama</h3>
+            <h3 class="text-center text-warning">Tambah Anjing Generasi Pertama</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Canine</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Anjing Seluruh Badan</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
@@ -27,7 +27,7 @@
                         <div class="input-group mb-3">
                             <label for="mem_name" class="control-label col-sm-2">Nama</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?= set_value('can_a_s'); ?>" maxlength="30">
                             </div>
                         </div>
                         <!-- <div class="input-group mb-3">
@@ -136,7 +136,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto Canine</div>
+                            <div class="col-4">Foto Anjing</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>

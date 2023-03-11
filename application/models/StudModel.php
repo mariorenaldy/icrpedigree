@@ -64,7 +64,7 @@ class StudModel extends CI_Model {
     }
 
     public function check_date($stu_dam_id, $date){
-        $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= ".$this->config->item('jarak_pacak')." AND s.stu_stat = ".$this->config->item('accepted');
+        $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= ".$this->config->item('jarak_pacak')." AND s.stu_stat IN (".$this->config->item('accepted').', '.$this->config->item('completed').')';
         $query = $this->db->query($sql);
         return $query->result();
     }

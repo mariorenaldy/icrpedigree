@@ -9,7 +9,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function get_canines($where, $sort = 'can_id desc', $offset = 0, $limit = 1){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2');
         if ($where != null) {
             $this->db->where($where);
         }
