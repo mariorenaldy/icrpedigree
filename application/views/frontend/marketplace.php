@@ -12,17 +12,30 @@
         <div class="text-dark" id="productsContainer">
             <div class="row m-5">
                 <div class="card col m-5">
-                    <img src="<?= base_url('assets/img/product.jpg') ?>" class="card-img-top">
+                    <div class="d-flex align-items-center" style="height: 300px;">
+                        <img src="<?= base_url('assets/img/product.jpg') ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="product">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">Products</h5>
                         <a href="<?= base_url(); ?>frontend/Marketplace/products" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
                 <div class="card col m-5">
-                    <img src="<?= base_url('assets/img/service.jpg') ?>" class="card-img-top">
+                    <div class="d-flex align-items-center" style="height: 300px;">
+                        <img src="<?= base_url('assets/img/service.jpg') ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="service">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">Services</h5>
                         <a href="<?= base_url(); ?>frontend/Marketplace/services" class="btn btn-primary stretched-link">Detail</a>
+                    </div>
+                </div>
+                <div class="card col m-5">
+                    <div class="d-flex align-items-center" style="height: 300px;">
+                        <img src="<?= base_url('assets/img/pet.jpg') ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="pet">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pets</h5>
+                        <a href="<?= base_url(); ?>frontend/Marketplace/pets" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
             </div>

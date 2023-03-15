@@ -11,10 +11,14 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <figure class="figure w-25">
-            <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" alt="...">
-            <h3 class="text-warning">PEDIGREE POUCH</h3>
-            <figcaption class="figure-caption">RAW FOOD</figcaption>
-            <p>6000</p>
+            <?php if ($products->pro_photo != '-' &&  $products->pro_photo != null){ ?>
+                <img src="<?= base_url('uploads/products/'.$products->pro_photo) ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
+            <?php } else{ ?>
+                <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
+            <?php } ?>
+            <h3 class="text-warning"><?= $products->pro_name ?></h3>
+            <figcaption class="figure-caption"><?= $products->pro_desc ?></figcaption>
+            <p><?= $products->pro_price ?></p>
         </figure>
         <form id="mainForm" class="form-horizontal" method="post" enctype="multipart/form-data">
             <div class="text-danger">
@@ -34,9 +38,6 @@
             <div class="input-group mb-3">
                 <label for="mem_ktp" class="control-label col-sm-2">Pilih Pengiriman</label>
                 <?php
-                // foreach ($kennelType as $row) {
-                //     $pil[$row->ken_type_id] = $row->ken_type_name;
-                // }
                 $options = array(
                     'instan'         => 'Instan',
                     'same_day'         => 'Same Day',
@@ -49,9 +50,6 @@
             <div class="input-group mb-3">
                 <label for="mem_ktp" class="control-label col-sm-2">Pilih Kurir</label>
                 <?php
-                // foreach ($kennelType as $row) {
-                //     $pil[$row->ken_type_id] = $row->ken_type_name;
-                // }
                 $options = array(
                     'JNE'         => 'JNE',
                     'J&T'         => 'J&T',
@@ -63,9 +61,6 @@
             <div class="input-group mb-3">
                 <label for="mem_ktp" class="control-label col-sm-2">Pilih Pembayaran</label>
                 <?php
-                // foreach ($kennelType as $row) {
-                //     $pil[$row->ken_type_id] = $row->ken_type_name;
-                // }
                 $options = array(
                     'BCA'         => 'BCA',
                     'BNI'         => 'BNI',
@@ -76,7 +71,7 @@
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" id="checkout-button">Bayar</button>
-                <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Marketplace/product_detail'">Kembali</button>
+                <button class="btn btn-danger" type="button" onclick="back(<?= $products->pro_id ?>)">Kembali</button>
             </div>
         </form>
     </main>
@@ -85,11 +80,7 @@
     <script type="text/javascript">
         var checkoutButton = document.getElementById('checkout-button');
         checkoutButton.addEventListener('click', function () {
-            // $.ajax({
-            //     url: "<?= base_url() ?>frontend/Marketplace/checkout2",
-            //     headers: {'X-Requested-With': 'XMLHttpRequest'}
-            // });
-            let amount = 6000;
+            let amount = <?= $products->pro_price ?>;
             $.ajax({
                 url: "<?= base_url() ?>frontend/Marketplace/checkout",
                 method: 'post',
@@ -103,6 +94,10 @@
                 }
             });
         });
+
+        function back(id){
+            window.location = "<?= base_url(); ?>frontend/Marketplace/product_detail/"+id;
+        }
     </script>
 </body>
 

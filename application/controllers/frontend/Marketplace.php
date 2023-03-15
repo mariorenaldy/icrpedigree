@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Marketplace extends CI_Controller {
     public function __construct(){
 		parent::__construct();
-		$this->load->model(array('productModel', 'serviceModel'));
+		$this->load->model(array('productModel', 'serviceModel', 'petModel'));
 		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
@@ -56,7 +56,14 @@ class Marketplace extends CI_Controller {
         $this->load->view("frontend/products", $data);
 	}
 	public function product_detail(){
-        $this->load->view("frontend/product_detail");
+		if ($this->uri->segment(4)){
+			$where['pro_id'] = $this->uri->segment(4);
+			$data['products'] = $this->productModel->get_products($where)->row();
+			$this->load->view("frontend/product_detail", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/products');
+        }
 	}
 	public function services(){
 		//pagination
@@ -99,10 +106,94 @@ class Marketplace extends CI_Controller {
         $this->load->view("frontend/services", $data);
 	}
 	public function service_detail(){
-        $this->load->view("frontend/service_detail");
+		if ($this->uri->segment(4)){
+			$where['ser_id'] = $this->uri->segment(4);
+			$data['services'] = $this->serviceModel->get_services($where)->row();
+			$this->load->view("frontend/service_detail", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/services');
+        }
 	}
-	public function payment(){
-        $this->load->view("frontend/payment");
+	public function pets(){
+		//pagination
+		$config['base_url'] = base_url() . '/frontend/Marketplace/pets';
+		$config['total_rows'] = $this->petModel->record_count();
+		$config['per_page'] = 9;
+		
+		//styling pagination
+		$config['full_tag_open'] = '<nav><ul class="pagination justify-content-end">';
+		$config['full_tag_close'] = '</ul></nav>';
+		
+		$config['first_link'] = 'First';
+		$config['first_tag_open'] = '<li class="page-item">';
+		$config['first_tag_close'] = '</li>';
+		
+		$config['last_link'] = 'Last';
+		$config['last_tag_open'] = '<li class="page-item">';
+		$config['last_tag_close'] = '</li>';
+
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+
+		$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+
+		$config['attributes'] = array('class' => 'page-link');
+
+		//initialize pagination
+		$this->pagination->initialize($config);
+
+		$data['start'] = $this->uri->segment(4);
+		$data['pets'] = $this->petModel->fetch_data($config['per_page'], $data['start'])->result();
+
+        $this->load->view("frontend/pets", $data);
+	}
+	public function pet_detail(){
+		if ($this->uri->segment(4)){
+			$where['pet_id'] = $this->uri->segment(4);
+			$data['pets'] = $this->petModel->get_pets($where)->row();
+			$this->load->view("frontend/pet_detail", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/pets');
+        }
+	}
+	public function product_payment(){
+		if ($this->uri->segment(4)){
+			$where['pro_id'] = $this->uri->segment(4);
+			$data['products'] = $this->productModel->get_products($where)->row();
+			$this->load->view("frontend/product_payment", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/product_detail');
+        }
+	}
+	public function service_payment(){
+		if ($this->uri->segment(4)){
+			$where['ser_id'] = $this->uri->segment(4);
+			$data['services'] = $this->serviceModel->get_services($where)->row();
+			$this->load->view("frontend/service_payment", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/service_detail');
+        }
+	}
+	public function pet_payment(){
+		if ($this->uri->segment(4)){
+			$where['pet_id'] = $this->uri->segment(4);
+			$data['pets'] = $this->petModel->get_pets($where)->row();
+			$this->load->view("frontend/pet_payment", $data);
+        }
+        else{
+          	redirect('frontend/Marketplace/pet_detail');
+        }
 	}
 	function generate_signature($componentSignature, $secretKey){
 		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));

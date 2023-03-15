@@ -30,12 +30,18 @@
                 <div class="row m-5">
             <?php } ?>
                 <div class="card col m-5">
-                    <img src="<?= base_url('assets/img/product.jpg') ?>" class="card-img-top">
+                    <div class="d-flex align-items-center" style="height: 300px;">
+                        <?php if ($p->pro_photo != '-' &&  $p->pro_photo != null){ ?>
+                                <img src="<?= base_url('uploads/products/'.$p->pro_photo) ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="product">
+                        <?php } else{ ?>
+                            <img src="<?= base_url('assets/img/product.jpg') ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="product">
+                        <?php } ?>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title"><?= $p->pro_name ?></h5>
                         <p class="card-text"><?= $p->pro_desc ?></p>
                         <p class="card-text"><?= $p->pro_price ?></p>
-                        <a href="<?= base_url(); ?>frontend/Marketplace/product_detail" class="btn btn-primary stretched-link">Detail</a>
+                        <button type="button" class="btn btn-primary stretched-link" onclick="detail(<?= $p->pro_id ?>)">Detail</button>
                     </div>
                 </div>
             <?php $counter++; if($counter % 3 == 0){ ?>
@@ -55,5 +61,10 @@
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
+    <script>
+        function detail(id){
+            window.location = "<?= base_url(); ?>frontend/Marketplace/product_detail/"+id;
+        }
+    </script>
 </body>
 </html>
