@@ -59,11 +59,14 @@
                                     <?= $b->bir_female; ?>
                                 </div>
                                 <div class="col-sm-2">
-                                    <?= $b->stat_name; ?>
+                                    <?= $b->bir_stat; ?>
                                 </div>
                                 <div class="col-sm-2">
                                 <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
                                         <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
+                                <?php } 
+                                if ($b->bir_stat == $this->config->item('accepted') && !$stambum[$i]){ ?>
+                                    <button type="button" class="btn btn-success mb-1" onclick="editBirth(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Lahir"><i class="fa fa-edit"></i></button>
                                 <?php } ?>
                                 </div>
                             </div>
@@ -107,6 +110,9 @@
         }
         function addStambum(birthId){
             window.location = "<?= base_url(); ?>frontend/Stambums/add/"+birthId;
+        }
+        function editBirth(birthId){
+            window.location = "<?= base_url(); ?>frontend/Requestupdatebirth/add/"+birthId;
         }
         $(document).ready(function () {
             $('#keywords').on("change", function(){

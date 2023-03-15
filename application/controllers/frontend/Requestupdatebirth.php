@@ -84,28 +84,27 @@ class Requestupdatebirth extends CI_Controller {
 		
 							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 								$err++;
-								$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+								$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 							}
-							else{
-								$image_name = $this->config->item('path_birth').'birth_'.time().'.png';
-								if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
+				
+							$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+							if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
+								$err++;
+								$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+							} else{
+								if (is_file($img_name) and !is_writable($img_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writeable.');
-								} else{
-									if (is_file($image_name) and !is_writable($image_name)) {
-										$err++;
-										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
-									}
-								}
-		
-								if (!$err){
-									file_put_contents($image_name, $uploadedImg);
-									$damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
+									$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
 								}
 							}
 						}
 
 						if (!$err){
+							if (isset($uploadedImg)){
+								file_put_contents($img_name, $uploadedImg);
+								$damPhoto = str_replace($this->config->item('path_birth'), '', $img_name);
+							}
+							
 							$piece = explode("-", $this->input->post('bir_date_of_birth'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 

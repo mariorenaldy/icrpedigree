@@ -24,32 +24,30 @@
                 </div>
                 <?php 
                     $i = 0;
-                    foreach ($births AS $b){ 
-                        if ($b){ ?>
-                            <div class="row">
-                                <div class="col-sm-2 mb-1">
-                                    <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                                </div>
-                                <div class="col-sm-2">
-                                    <?= $b->bir_date_of_birth; ?>
-                                </div>
-                                <div class="col-sm-1" align="right">
-                                    <?= $b->bir_male; ?>
-                                </div>
-                                <div class="col-sm-1" align="right">
-                                    <?= $b->bir_female; ?>
-                                </div>
-                                <div class="col-sm-2">
-                                    <?= $b->stat_name; ?>
-                                </div>
-                                <div class="col-sm-2">
-                                <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
-                                        <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
-                                <?php } ?>
-                                </div>
+                    foreach ($births AS $b){ ?>
+                        <div class="row">
+                            <div class="col-sm-2 mb-1">
+                                <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
                             </div>
-                        <?php }
-                        $i++;
+                            <div class="col-sm-2">
+                                <?= $b->bir_date_of_birth; ?>
+                            </div>
+                            <div class="col-sm-1" align="right">
+                                <?= $b->bir_male; ?>
+                            </div>
+                            <div class="col-sm-1" align="right">
+                                <?= $b->bir_female; ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <?= $b->stat_name; ?>
+                            </div>
+                            <div class="col-sm-2">
+                            <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
+                                    <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
+                            <?php } ?>
+                            </div>
+                        </div>
+                        <?php $i++;
                     } ?>
             </div>                           
         </div> 

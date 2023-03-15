@@ -20,30 +20,30 @@ class Births extends CI_Controller {
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
 			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
 
+			$data['stambum'] = array();
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
-				if ($r){
-					$wheStbMale = [];
-					$wheStbMale['stb_bir_id'] = $r->bir_id;
-					$wheStbMale['stb_gender'] = 'MALE';
-					$wheStbMale['stb_stat'] = $this->config->item('accepted');
-					$male = $this->stambumModel->get_count($wheStbMale);
+				$whereStambum = [];
+				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 
-					$wheStbFemale = [];
-					$wheStbFemale['stb_bir_id'] = $r->bir_id;
-					$wheStbFemale['stb_gender'] = 'FEMALE';
-					$wheStbFemale['stb_stat'] = $this->config->item('accepted');
-					$female = $this->stambumModel->get_count($wheStbFemale);
+				$wheStbMale = [];
+				$wheStbMale['stb_bir_id'] = $r->bir_id;
+				$wheStbMale['stb_gender'] = 'MALE';
+				$wheStbMale['stb_stat'] = $this->config->item('accepted');
+				$male = $this->stambumModel->get_count($wheStbMale);
 
-					if ($male >= $r->bir_male || $female >= $r->bir_female){
-						$data['stambum_stat'][] = 0;
-					}
-					else{
-						$data['stambum_stat'][] = 1;
-					}
+				$wheStbFemale = [];
+				$wheStbFemale['stb_bir_id'] = $r->bir_id;
+				$wheStbFemale['stb_gender'] = 'FEMALE';
+				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+				$female = $this->stambumModel->get_count($wheStbFemale);
+
+				if ($male >= $r->bir_male && $female >= $r->bir_female){
+					$data['stambum_stat'][] = 0;
 				}
 				else{
-					$data['stambum_stat'][] = 0;
+					$data['stambum_stat'][] = 1;
 				}
 			}
 			$this->load->view('frontend/view_births', $data);
@@ -66,30 +66,30 @@ class Births extends CI_Controller {
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
 			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
 
+			$data['stambum'] = array();
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
-				if ($r){
-					$wheStbMale = [];
-					$wheStbMale['stb_bir_id'] = $r->bir_id;
-					$wheStbMale['stb_gender'] = 'MALE';
-					$wheStbMale['stb_stat'] = $this->config->item('accepted');
-					$male = $this->stambumModel->get_count($wheStbMale);
+				$whereStambum = [];
+				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 
-					$wheStbFemale = [];
-					$wheStbFemale['stb_bir_id'] = $r->bir_id;
-					$wheStbFemale['stb_gender'] = 'FEMALE';
-					$wheStbFemale['stb_stat'] = $this->config->item('accepted');
-					$female = $this->stambumModel->get_count($wheStbFemale);
+				$wheStbMale = [];
+				$wheStbMale['stb_bir_id'] = $r->bir_id;
+				$wheStbMale['stb_gender'] = 'MALE';
+				$wheStbMale['stb_stat'] = $this->config->item('accepted');
+				$male = $this->stambumModel->get_count($wheStbMale);
 
-					if ($male >= $r->bir_male || $female >= $r->bir_female){
-						$data['stambum_stat'][] = 0;
-					}
-					else{
-						$data['stambum_stat'][] = 1;
-					}
+				$wheStbFemale = [];
+				$wheStbFemale['stb_bir_id'] = $r->bir_id;
+				$wheStbFemale['stb_gender'] = 'FEMALE';
+				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+				$female = $this->stambumModel->get_count($wheStbFemale);
+
+				if ($male >= $r->bir_male && $female >= $r->bir_female){
+					$data['stambum_stat'][] = 0;
 				}
 				else{
-					$data['stambum_stat'][] = 0;
+					$data['stambum_stat'][] = 1;
 				}
 			}
 			$this->load->view('frontend/view_births', $data);
@@ -107,28 +107,23 @@ class Births extends CI_Controller {
 
 			$data['stambum_stat'] = array();
 			foreach ($data['births'] as $r){
-				if ($r){
-					$wheStbMale = [];
-					$wheStbMale['stb_bir_id'] = $r->bir_id;
-					$wheStbMale['stb_gender'] = 'MALE';
-					$wheStbMale['stb_stat'] = $this->config->item('accepted');
-					$male = $this->stambumModel->get_count($wheStbMale);
+				$wheStbMale = [];
+				$wheStbMale['stb_bir_id'] = $r->bir_id;
+				$wheStbMale['stb_gender'] = 'MALE';
+				$wheStbMale['stb_stat'] = $this->config->item('accepted');
+				$male = $this->stambumModel->get_count($wheStbMale);
 
-					$wheStbFemale = [];
-					$wheStbFemale['stb_bir_id'] = $r->bir_id;
-					$wheStbFemale['stb_gender'] = 'FEMALE';
-					$wheStbFemale['stb_stat'] = $this->config->item('accepted');
-					$female = $this->stambumModel->get_count($wheStbFemale);
+				$wheStbFemale = [];
+				$wheStbFemale['stb_bir_id'] = $r->bir_id;
+				$wheStbFemale['stb_gender'] = 'FEMALE';
+				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
+				$female = $this->stambumModel->get_count($wheStbFemale);
 
-					if ($male >= $r->bir_male || $female >= $r->bir_female){
-						$data['stambum_stat'][] = 0;
-					}
-					else{
-						$data['stambum_stat'][] = 1;
-					}
+				if ($male >= $r->bir_male && $female >= $r->bir_female){
+					$data['stambum_stat'][] = 0;
 				}
 				else{
-					$data['stambum_stat'][] = 0;
+					$data['stambum_stat'][] = 1;
 				}
 			}
 			$this->load->view('frontend/view_approved_births', $data);

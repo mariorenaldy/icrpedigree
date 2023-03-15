@@ -114,18 +114,18 @@ class Requestupdatecanine extends CI_Controller {
 								redirect("frontend/Requestupdatecanine");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data.');
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah anjing.');
 								$this->load->view("frontend/add_request_update_canine", $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data. Error code : '.$err);
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah anjing. Error code : '.$err);
 							$this->load->view("frontend/add_request_update_canine", $data);
 						}
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Laporan ubah data yang lama belum diproses. Harap menghubungi Admin.');
+					$this->session->set_flashdata('error_message', 'Laporan ubah anjing yang lama belum diproses. Harap menghubungi Admin.');
 					$this->load->view("frontend/add_request_update_canine", $data);
 				}
 			}

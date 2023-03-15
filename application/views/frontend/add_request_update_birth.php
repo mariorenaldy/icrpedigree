@@ -13,7 +13,7 @@
     <main class="container">
         <div class="container">
             <h3 class="text-center text-warning">Lapor Ubah Data Lahir</h3>                         
-                <form id="formBirth" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatebirth/validate_edit" method="post" enctype="multipart/form-data">
+                <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatebirth/validate" method="post" enctype="multipart/form-data">
                     <?php if (!$mode){ ?>
                         <input type="hidden" name="bir_id" value="<?= $birth->bir_id ?>" />
                     <?php } else { ?>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
+                        <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
                         <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatebirth'">Back</button>
                     </div>
                 </form>
@@ -108,6 +108,39 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-4">Foto Dam</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Jumlah Jantan</div>
+                            <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Jumlah Betina</div>
+                            <div class="col">: <span id="confirm-jumlah_betina"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">Tanggal Lahir</div>
+                            <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade text-dark" id="error-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -126,6 +159,9 @@
                                 <?= validation_errors() ?>
                             </div>
                         <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
@@ -206,6 +242,29 @@
 
             $('#cancel-btn').click(function() {
                 resetImage();
+            });
+
+            let saveBtn = $("#saveBtn");
+            saveBtn.click(function(){
+                if ($('input[name="bir_male"]').val() == 0 && $('input[name="bir_female"]').val() == 0){
+                    $('#error-col').html('Jumlah jantan & betina tidak boleh 0');
+                    $('#error-row').show();
+                    $('#error-modal').modal('show');
+                }
+                else{
+                    $('#confirm-jumlah_jantan').text($('input[name="bir_male"]').val());
+                    $('#confirm-jumlah_betina').text($('input[name="bir_female"]').val());
+                    $('#confirm-foto_dam').attr("src",  $('#imgPreview').attr("src"));
+                    $('#confirm-tanggal_lahir').text($('input[name="bir_date_of_birth"]').val());
+
+                    $('#confirm-modal').modal('show');
+                }
+            });
+
+            let submitBtn = $("#submitBtn");
+            submitBtn.click(function(){
+                submitBtn.prop('disabled', true);
+                $('#mainForm').submit();
             });
 
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>

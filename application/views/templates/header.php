@@ -46,6 +46,9 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/view_approve') ?>">Approve</a></li>
                            <?php } ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
+                           <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatebirth') ?>">Approve Change Data</a></li>
+                           <?php } ?>
                         </ul>
                      </div>
                      <div class="dropdown">

@@ -202,9 +202,16 @@ class Members extends CI_Controller {
 				}
 
 				if ($this->input->post('mem_type')){
-					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_name', $this->input->post('mem_name'))){
+					$whereMem['mem_name'] = $this->input->post('mem_name');
+					$mem = $this->MemberModel->get_members($whereMem)->row();
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Registrasi yang lama belum diproses. Harap menghubungi Admin');
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+					}
+
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
@@ -232,9 +239,16 @@ class Members extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 					}
 				} else {
-					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_name', $this->input->post('name'))){
+					$whereMem['mem_name'] = $this->input->post('name');
+					$mem = $this->MemberModel->get_members($whereMem)->row();
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Registrasi yang lama belum diproses. Harap menghubungi Admin');
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+					}
+
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
