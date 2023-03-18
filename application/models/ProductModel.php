@@ -54,4 +54,12 @@ class ProductModel extends CI_Model {
         }
     }
 
+    public function search_products($num, $offset, $like){
+        $this->db->select('*');
+        if ($like != null) {
+            $this->db->like($like);
+        }
+        $this->db->order_by('pro_id', 'desc');
+        return $this->db->get('products', $num, $offset);
+    }
 }

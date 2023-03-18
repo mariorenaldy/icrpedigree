@@ -54,4 +54,12 @@ class PetModel extends CI_Model {
         }
     }
 
+    public function search_pets($num, $offset, $like){
+        $this->db->select('*');
+        if ($like != null) {
+            $this->db->like($like);
+        }
+        $this->db->order_by('pet_id', 'desc');
+        return $this->db->get('pets', $num, $offset);
+    }
 }

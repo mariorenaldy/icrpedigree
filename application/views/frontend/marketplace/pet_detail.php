@@ -25,7 +25,7 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function payment(id){
-            window.location = "<?= base_url(); ?>frontend/Marketplace/pet_payment/"+id;
+            window.location = "<?= base_url(); ?>frontend/marketplace/Pets/pet_payment/"+id;
         }
     </script>
 </body>

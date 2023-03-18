@@ -54,4 +54,12 @@ class ServiceModel extends CI_Model {
         }
     }
 
+    public function search_services($num, $offset, $like){
+        $this->db->select('*');
+        if ($like != null) {
+            $this->db->like($like);
+        }
+        $this->db->order_by('ser_id', 'desc');
+        return $this->db->get('services', $num, $offset);
+    }
 }

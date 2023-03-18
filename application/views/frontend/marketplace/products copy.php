@@ -10,7 +10,7 @@
     <main class="container">
         <h3 class="text-center text-warning">Products</h3>
         <div class="search-container">
-            <form action="<?= base_url().'frontend/Marketplace/search'?>" method="post">
+            <form action="<?= base_url().'frontend/marketplace/Products/search'?>" method="post">
                 <div class="input-group my-3 d-flex justify-content-center">
                     <div class="col-sm-6">
                         <input type="text" class="form-control" placeholder="Nama Produk" name="keywords" value="<?= set_value('keywords') ?>">
@@ -57,13 +57,13 @@
         </div>
         <?= $this->pagination->create_links(); ?>
         <div class="text-center">
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Marketplace'">Kembali</button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/marketplace/Marketplace'">Kembali</button>
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function detail(id){
-            window.location = "<?= base_url(); ?>frontend/Marketplace/product_detail/"+id;
+            window.location = "<?= base_url(); ?>frontend/marketplace/Products/product_detail/"+id;
         }
     </script>
 </body>

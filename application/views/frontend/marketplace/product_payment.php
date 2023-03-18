@@ -11,14 +11,14 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <figure class="figure w-25">
-            <?php if ($services->ser_photo != '-' &&  $services->ser_photo != null){ ?>
-                <img src="<?= base_url('uploads/services/'.$services->ser_photo) ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="service">
+            <?php if ($products->pro_photo != '-' &&  $products->pro_photo != null){ ?>
+                <img src="<?= base_url('uploads/products/'.$products->pro_photo) ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
             <?php } else{ ?>
-                <img src="<?= base_url('assets/img/service.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="service">
+                <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
             <?php } ?>
-            <h3 class="text-warning"><?= $services->ser_name ?></h3>
-            <figcaption class="figure-caption"><?= $services->ser_desc ?></figcaption>
-            <p><?= $services->ser_price ?></p>
+            <h3 class="text-warning"><?= $products->pro_name ?></h3>
+            <figcaption class="figure-caption"><?= $products->pro_desc ?></figcaption>
+            <p><?= $products->pro_price ?></p>
         </figure>
         <form id="mainForm" class="form-horizontal" method="post" enctype="multipart/form-data">
             <div class="text-danger">
@@ -71,7 +71,7 @@
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" id="checkout-button">Bayar</button>
-                <button class="btn btn-danger" type="button" onclick="back(<?= $services->ser_id ?>)">Kembali</button>
+                <button class="btn btn-danger" type="button" onclick="back(<?= $products->pro_id ?>)">Kembali</button>
             </div>
         </form>
     </main>
@@ -80,9 +80,9 @@
     <script type="text/javascript">
         var checkoutButton = document.getElementById('checkout-button');
         checkoutButton.addEventListener('click', function () {
-            let amount = <?= $services->ser_price ?>;
+            let amount = <?= $products->pro_price ?>;
             $.ajax({
-                url: "<?= base_url() ?>frontend/Marketplace/checkout",
+                url: "<?= base_url() ?>frontend/marketplace/Payment/checkout",
                 method: 'post',
                 data: {amount: amount},
                 success: function(response){
@@ -96,7 +96,7 @@
         });
 
         function back(id){
-            window.location = "<?= base_url(); ?>frontend/Marketplace/service_detail/"+id;
+            window.location = "<?= base_url(); ?>frontend/marketplace/Products/product_detail/"+id;
         }
     </script>
 </body>
