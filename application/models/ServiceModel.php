@@ -48,12 +48,6 @@ class ServiceModel extends CI_Model {
         return $result;
     }
 
-    public function remove_services($where = null){
-        if($where != null){
-            return $this->db->delete('services', $where);
-        }
-    }
-
     public function search_services($num, $offset, $like){
         $this->db->select('*');
         if ($like != null) {

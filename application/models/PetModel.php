@@ -48,12 +48,6 @@ class PetModel extends CI_Model {
         return $result;
     }
 
-    public function remove_pets($where = null){
-        if($where != null){
-            return $this->db->delete('pets', $where);
-        }
-    }
-
     public function search_pets($num, $offset, $like){
         $this->db->select('*');
         if ($like != null) {

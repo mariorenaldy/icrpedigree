@@ -48,12 +48,6 @@ class ProductModel extends CI_Model {
         return $result;
     }
 
-    public function remove_products($where = null){
-        if($where != null){
-            return $this->db->delete('products', $where);
-        }
-    }
-
     public function search_products($num, $offset, $like){
         $this->db->select('*');
         if ($like != null) {
