@@ -99,6 +99,9 @@ class Requestupdatecanine extends CI_Controller {
 						}
 
 						if (!$err){
+							$rip = 0;
+							if ($this->input->post('can_rip'))
+								$rip = 1;
 							$req_data = array(
 								'req_can_id' => $this->input->post('can_id'),
 								'req_member_id' => $this->session->userdata('mem_id'),
@@ -106,7 +109,7 @@ class Requestupdatecanine extends CI_Controller {
 								'req_date' => date('Y-m-d H:i:s'),
 								'req_photo' => $photo,
 								'req_old_photo' => $data['canine']->can_photo,
-								'req_rip' => $this->input->post('can_rip')
+								'req_rip' => $rip,
 							);	
 							$res = $this->requestupdatecanineModel->add_requests($req_data);
 							if ($res){

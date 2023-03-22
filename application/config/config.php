@@ -669,3 +669,5 @@ $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
 $config['youtube_width'] = "420";
 $config['youtube_height'] = "315";
+
+$config['default_password'] = "12345";

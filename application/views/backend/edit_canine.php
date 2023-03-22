@@ -172,6 +172,12 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline"><input type="checkbox" name="can_rip" value="1" <?php if ($canine->can_rip) echo 'checked'; else echo set_checkbox('can_rip', '1'); ?> id="can_rip"/> RIP?</label>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
                             <label for="password" class="control-label col-md-2">Note </label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>

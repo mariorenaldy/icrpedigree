@@ -35,14 +35,14 @@
                         }
                     ?>
                 </div>
-                <div class="search-container">
+                <div class="search-container sticky-top">
                     <form action="<?= base_url().'backend/Requestownershipcanine/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" placeholder="Nama Canine" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>

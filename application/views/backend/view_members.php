@@ -38,7 +38,7 @@
                         }
                     ?>
                 </div>
-                <div class="search-container my-3">
+                <div class="search-container my-3 sticky-top">
                     <form id="formMember" action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
@@ -168,7 +168,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[15, 'desc']],
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[15, 'desc']], dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

@@ -9,258 +9,256 @@
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_member'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
-    <div class="container">
-        <div class="row">            
-            <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">Laporan Ubah Kennel</h3> 
-                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmember/validate_edit" method="post" enctype="multipart/form-data">
-                        <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">KTP Number</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input type="hidden" name="mem_id" value="<?= $member->mem_id; ?>">
-                                    <input type="hidden" name="ken_id" value="<?= $member->ken_id; ?>">
-                                    <input class="form-control" type="number" placeholder="KTP Number" name="mem_ktp" value="<?= $member->mem_ktp; ?>">
-                                <?php } else { ?>
-                                    <input type="hidden" name="mem_id" value="<?= set_value('mem_id'); ?>">
-                                    <input type="hidden" name="ken_id" value="<?= set_value('ken_id'); ?>">
-                                    <input class="form-control" type="number" placeholder="KTP Number" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
-                                <?php } ?>
+    <main class="container">
+        <div class="container">
+            <div class="row">            
+                <div class="col-sm-12 align-items-center">                          
+                    <h3 class="text-center text-warning">Laporan Ubah Kennel</h3> 
+                        <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmember/validate_edit" method="post" enctype="multipart/form-data">
+                            <div class="input-group mb-3">
+                                <label for="mem_ktp" class="control-label col-sm-2">No. KTP</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= $member->mem_ktp; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-md-2">KTP Name</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="KTP Name" name="mem_name" value="<?= $member->mem_name; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="KTP Name" name="mem_name" value="<?= set_value('mem_name'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_name" class="control-label col-sm-2">Nama Sesuai KTP</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= $member->mem_name; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= set_value('mem_name'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-md-2">Mail Address</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= $member->mem_address; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_address" class="control-label col-sm-2">Alamat Surat Menyurat</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_address" value="<?= $member->mem_address; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-md-2">Certificate Address</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_mail_address" class="control-label col-sm-2">Alamat yang Tertera di Sertifikat</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="Alamat yang Tertera di Sertifikat" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="Alamat yang Tertera di Sertifikat" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-md-2">Phone Number</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="Phone Number" name="mem_hp" value="<?= $member->mem_hp; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="Phone Number" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_hp" class="control-label col-sm-2">No. HP WA Aktif</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="number" placeholder="No. HP WA Aktif" name="mem_hp" value="<?= $member->mem_hp; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="number" placeholder="No. HP WA Aktif" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_kota" class="control-label col-md-2">City</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="City" name="mem_kota" value="<?= $member->mem_kota; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="City" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_kota" class="control-label col-sm-2">Kota</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= $member->mem_kota; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_kode_pos" class="control-label col-md-2">Postal Code</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="Postal Code" name="mem_kode_pos" value="<?= $member->mem_kode_pos; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="Postal Code" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_kode_pos" class="control-label col-sm-2">Postal Code</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= $member->mem_kode_pos; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_email" class="control-label col-md-2">email</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= $member->mem_email; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= set_value('mem_email'); ?>">
-                                <?php } ?>
+                            <div class="input-group mb-3">
+                                <label for="mem_email" class="control-label col-sm-2">email</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= $member->mem_email; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= set_value('mem_email'); ?>">
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <hr />
-                        <div class="input-group mb-3 gap-3">
-                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Kennel Photo</label>
-                            <div class="col-md-12 text-center">
-                                <?php 
-                                    if (!$mode){ 
-                                        if ($member->ken_photo && $member->ken_photo != '-'){
+                            <hr />
+                            <div class="input-group mb-3 gap-3">
+                                <label for="imageInputLogo" class="control-label col-sm-12 text-center">Foto Kennel</label>
+                                <div class="col-sm-12 text-center">
+                                    <?php 
+                                        if (!$mode){ 
+                                            if ($member->ken_photo && $member->ken_photo != '-'){
+                                    ?>
+                                        <img id="imgPreviewLogo" width="15%" src="<?= base_url().'uploads/kennels/'.$member->ken_photo ?>">
+                                    <?php } else { ?>
+                                        <img id="imgPreviewLogo" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                                    <?php } 
+                                    } else { ?>
+                                        <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <?php } ?>
+                                    <input type="file" class="upload" id="imageInputLogo" onclick="resetImage('logo')"/>
+                                    <input type="hidden" name="attachment_logo" id="attachment_logo">
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="ken_name" class="control-label col-sm-2">Nama Kennel</label>
+                                <div class="col-sm-10">
+                                    <?php if (!$mode){ ?>
+                                        <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= $member->ken_name; ?>">
+                                    <?php } else { ?>
+                                        <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="mem_ktp" class="control-label col-sm-2">Format Penamaan Anjing</label>
+                                <?php
+                                    foreach ($kennelType as $row) {
+                                        $pil[$row->ken_type_id] = $row->ken_type_name;
+                                    }
+                                    if (!$mode)
+                                        echo form_dropdown('ken_type_id', $pil, $member->ken_type_id, 'class="form-control", id="ken_type_id"');
+                                    else
+                                        echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
                                 ?>
-                                    <img id="imgPreviewLogo" width="15%" src="<?= base_url().'uploads/kennels/'.$member->ken_photo ?>">
-                                <?php } else { ?>
-                                    <img id="imgPreviewLogo" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <?php } 
-                                } else { ?>
-                                    <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <?php } ?>
-                                <input type="file" class="upload" id="imageInputLogo" onclick="resetImage('logo')"/>
-                                <input type="hidden" name="attachment_logo" id="attachment_logo">
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="ken_name" class="control-label col-md-2">Kennel Name</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= $member->ken_name; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
-                                <?php } ?>
+                            <div class="text-center">
+                                <button class="btn btn-primary" type="button" id="saveBtn">Save</button>
+                                <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestmember'">Back</button>
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">Canine Name Format</label>
-                            <?php
-                                foreach ($kennelType as $row) {
-                                    $pil[$row->ken_type_id] = $row->ken_type_name;
-                                }
-                                if (!$mode)
-                                    echo form_dropdown('ken_type_id', $pil, $member->ken_type_id, 'class="form-control", id="ken_type_id"');
-                                else
-                                    echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
-                            ?>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="button" id="saveBtn">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestmember'">Back</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crop Image</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="img-container">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <img src="" id="sample_image" />
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="preview"></div>
+            <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Crop Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="img-container">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <img src="" id="sample_image" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="preview"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <div class="modal-footer">
+                            <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-4">KTP Number</div>
-                            <div class="col">: <span id="confirm-ktp_number"></span></div>
+            <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Konfirmasi Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="row">
-                            <div class="col-4">KTP Name</div>
-                            <div class="col">: <span id="confirm-ktp_name"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Mail Address</div>
-                            <div class="col">: <span id="confirm-mail_address"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Certificate Address</div>
-                            <div class="col">: <span id="confirm-certificate_address"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Phone Number</div>
-                            <div class="col">: <span id="confirm-phone_number"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">City</div>
-                            <div class="col">: <span id="confirm-city"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Postal Code</div>
-                            <div class="col">: <span id="confirm-postal_code"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">email</div>
-                            <div class="col">: <span id="confirm-email"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Foto Canine</div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-foto" width="50%"/></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Kennel Name</div>
-                            <div class="col">: <span id="confirm-kennel_name"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Canine Name Format</div>
-                            <div class="col">: <span id="confirm-canine_name_format"></span></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-danger">
-                        <?php if ($this->session->flashdata('error_message')){ ?>
+                        <div class="modal-body">
                             <div class="row">
-                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                                <div class="col-4">KTP Number</div>
+                                <div class="col">: <span id="confirm-ktp_number"></span></div>
                             </div>
-                        <?php } ?>
-                        <?php if (validation_errors()){ ?>
                             <div class="row">
-                                <?= validation_errors() ?>
+                                <div class="col-4">KTP Name</div>
+                                <div class="col">: <span id="confirm-ktp_name"></span></div>
                             </div>
-                        <?php } ?>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                            <div class="row">
+                                <div class="col-4">Mail Address</div>
+                                <div class="col">: <span id="confirm-mail_address"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Certificate Address</div>
+                                <div class="col">: <span id="confirm-certificate_address"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Phone Number</div>
+                                <div class="col">: <span id="confirm-phone_number"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">City</div>
+                                <div class="col">: <span id="confirm-city"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Postal Code</div>
+                                <div class="col">: <span id="confirm-postal_code"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">email</div>
+                                <div class="col">: <span id="confirm-email"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Foto Canine</div>
+                                <div class="col-auto pe-0">:</div>
+                                <div class="col"><img id="confirm-foto" width="50%"/></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Kennel Name</div>
+                                <div class="col">: <span id="confirm-kennel_name"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">Canine Name Format</div>
+                                <div class="col">: <span id="confirm-canine_name_format"></span></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Pesan Kesalahan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-danger">
+                            <?php if ($this->session->flashdata('error_message')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                                </div>
+                            <?php } ?>
+                            <?php if (validation_errors()){ ?>
+                                <div class="row">
+                                    <?= validation_errors() ?>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php $this->load->view('frontend/layout/footer'); ?>
         </div>
-        <?php $this->load->view('frontend/layout/footer'); ?>
-    </div>
+    </main>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
         const imageInputLogo = document.querySelector("#imageInputLogo");

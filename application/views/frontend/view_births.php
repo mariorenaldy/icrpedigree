@@ -14,9 +14,12 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">List Lahir</h3>
-                <div class="search-container">
+                <div class="search-container sticky-top">
                     <form id="formBirth" action="<?= base_url().'frontend/Births/search'?>" method="post">
                         <div class="input-group my-3">
+                            <div class="col-md-3 me-1">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                            </div>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
                             </div>
@@ -59,7 +62,7 @@
                                     <?= $b->bir_female; ?>
                                 </div>
                                 <div class="col-sm-2">
-                                    <?= $b->bir_stat; ?>
+                                    <?= $b->stat_name; ?>
                                 </div>
                                 <div class="col-sm-2">
                                 <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>

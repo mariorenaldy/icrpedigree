@@ -3,11 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 #[\AllowDynamicProperties]
 
-class Requestmember extends CI_Controller {
+class Requestpro extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'RequestmemberModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'RequestproModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
@@ -24,28 +24,28 @@ class Requestmember extends CI_Controller {
 		public function index(){
 			if ($this->session->userdata('mem_id')){
 				$where['req_member_id'] = $this->session->userdata('mem_id');
-				$data['request'] = $this->RequestmemberModel->get_requests($where)->result();
-				$this->load->view('frontend/view_request_member', $data);
+				$data['request'] = $this->RequestproModel->get_requests($where)->result();
+				$this->load->view('frontend/view_request_pro', $data);
 			}
 			else{
 				redirect('frontend/Members');
 			}
         }
 
-		public function edit_profile(){
+		public function become_pro(){
 			if ($this->session->userdata('mem_id')){
 				$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 				$where['mem_id'] = $this->session->userdata('mem_id');
 				$data['member'] = $this->MemberModel->get_members($where)->row();
 				$data['mode'] = 0;
-				$this->load->view("frontend/edit_profile", $data);
+				$this->load->view("frontend/become_pro", $data);
 			}
 			else{
 				redirect("frontend/Members");
 			}
 		}
 
-		public function validate_edit(){
+		public function validate(){
 			if ($this->session->userdata('mem_id')){
 				$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 				$where['mem_id'] = $this->session->userdata('mem_id');
@@ -54,10 +54,10 @@ class Requestmember extends CI_Controller {
 
 				$where['req_member_id'] = $this->session->userdata('mem_id');
 				$where['req_stat'] = $this->config->item('saved');
-				$res = $this->RequestmemberModel->get_requests($where)->num_rows();
+				$res = $this->RequestproModel->get_requests($where)->num_rows();
 				if ($res){
-					$this->session->set_flashdata('error_message', 'Laporan ubah kennel yang lama belum diproses. Harap menghubungi Admin.');
-					$this->load->view("frontend/edit_profile", $data);
+					$this->session->set_flashdata('error_message', 'Laporan menjadi pro yang lama belum diproses. Harap menghubungi Admin.');
+					$this->load->view("frontend/become_pro", $data);
 				}
 				else{
 					$this->form_validation->set_error_delimiters('<div>','</div>');
@@ -73,7 +73,7 @@ class Requestmember extends CI_Controller {
 					$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
 
 					if ($this->form_validation->run() == FALSE){
-						$this->load->view("frontend/edit_profile", $data);
+						$this->load->view("frontend/become_pro", $data);
 					}
 					else{
 						$err = 0;
@@ -162,17 +162,17 @@ class Requestmember extends CI_Controller {
 								'req_old_kennel_photo' => $data['member']->ken_photo,
 							);
 
-							$insert = $this->RequestmemberModel->add_requests($dataMember);
+							$insert = $this->RequestproModel->add_requests($dataMember);
 							if ($insert) {
-								$this->session->set_flashdata('edit_profile', TRUE);
-								redirect("frontend/Requestmember");
+								$this->session->set_flashdata('become_pro', TRUE);
+								redirect("frontend/Requestpro");
 							} else {
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah kennel');
-								$this->load->view("frontend/edit_profile", $data);
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan menjadi pro');
+								$this->load->view("frontend/become_pro", $data);
 							}
 						} 
 						else {
-							$this->load->view("frontend/edit_profile", $data);
+							$this->load->view("frontend/become_pro", $data);
 						}
 					}
 				}

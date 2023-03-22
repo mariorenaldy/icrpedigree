@@ -1,32 +1,53 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>List Laporan Ubah Kennel</title>
-    <?php $this->load->view('frontend/layout/head'); ?>
+    <title>Approve Become Pro</title>
+    <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
-<body class="text-white text-break">
+<body>
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImg">
     </div>
-    <?php $this->load->view('frontend/layout/header_member'); ?>  
-    <?php $this->load->view('frontend/layout/navbar'); ?>
-    <main class="container">
-        <div class="container">
-            <h3 class="text-center text-warning">List Laporan Ubah Kennel</h3>
+    <?php $this->load->view('templates/redirect'); ?>
+    <div class="container">
+        <?php $this->load->view('templates/header'); ?>  
+        <div class="row">            
+            <div class="col-md-12">                          
+                <h3 class="text-center text-primary">Approve Become Pro</h3>
+                <div class="text-success">
+                    <?php		
+                        if ($this->session->flashdata('approve')){
+                            echo 'Become pro has been approved<br/>';
+                        }
+                    ?>
+                </div>
+                <div class="text-danger">
+                    <?php		
+                        if ($this->session->flashdata('error_message')){
+                            echo $this->session->flashdata('error_message').'<br/>';
+                        }
+                        if ($this->session->flashdata('reject')){
+                            echo 'Become pro has been rejected<br/>';
+                        }
+                    ?>
+                </div>
             <?php $i = 0; 
                 foreach($request AS $req){ 
                     if ($i)
                         echo '<br/><hr class="req-separator"/>'; 
             ?>
                     <div class="row">
-                        <div class="col date"><?= $req->req_date ?></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">Status: <?= $req->stat_name ?></div>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-success" onclick='approve(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Edit Kennel"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Edit Kennel"><i class="fa fa-close"></i></button>
+                        </div>
                     </div>
                     <br/>
+                    <div class="row">
+                        <div class="col date"><?= $req->req_date ?></div>
+                    </div>
                     <div class="row mb-1">
                         <div class="col-sm-2">No. KTP</div>
                         <div class="col-sm-5"><?= $req->req_old_ktp ?></div>
@@ -103,31 +124,24 @@
                     $i++;
                 } ?>
         </div>
-        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-success">
-                            <?php if ($this->session->flashdata('edit_profile')){ ?>
-                                <div class="row">
-                                    <div class="col-12">Lapor Ubah Kennel berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.</div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <?php $this->load->view('frontend/layout/footer'); ?>
+        <?php $this->load->view('templates/footer'); ?>   
+    </div>
+    <?php $this->load->view('templates/script'); ?>
 </body>
 <script>
+    function approve(id, nama){
+        var proceed = confirm("Approve "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Requestpro/approve/"+id;
+        }
+    }
+    function reject(id, nama){
+        var proceed = confirm("Reject "+nama+" ?");
+        if (proceed){             
+            window.location = "<?= base_url(); ?>backend/Requestpro/reject/"+id;
+        }
+    }
+
     var modal = document.getElementById("myModal");
     function display(id){
         var img = document.getElementById(id);
@@ -140,13 +154,6 @@
     span.onclick = function() {
         modal.style.display = "none";
     }
-
-    $(document).ready(function(){
-        <?php		
-            if ($this->session->flashdata('edit_profile')){ ?>
-                $('#message-modal').modal('show');
-        <?php } ?>
-    });
 </script>
 </html>
 

@@ -16,11 +16,6 @@
                 </div>    
                 <div class="col-sm-6 text-center">                          
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_login" method="post">
-                        <div class="text-success">
-                            <?php		
-                                
-                            ?>
-                        </div>
                         <div class="input-group my-3">
                             <div class="col-sm-1"></div>  
                             <label for="username" class="control-label col-sm-3"><span class="input-group-addon"><i class="fa fa-tag"></i> Username:</span></label>
@@ -42,6 +37,12 @@
                                 <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'">Daftar</button>
                             </div>
                         </div>
+                        <div class="input-group mb-3">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-5 text-start">
+                                <a href="<?= base_url().'frontend/Requestreset/reset_password' ?>" class="text-decoration-none text-warning link-light"><h5>Lupa Password?</h5></a>
+                            </div>
+                        </div>     
                     </form>
                 </div>
                 <div class="col-sm-3">

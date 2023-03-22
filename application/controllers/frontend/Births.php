@@ -56,7 +56,7 @@ class Births extends CI_Controller {
 	public function search(){
 		if ($this->session->userdata('mem_id')){
 			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
+			$piece = explode("-", $this->input->post('date'));
 			if (count($piece) == 3){
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			}
@@ -64,7 +64,9 @@ class Births extends CI_Controller {
 				$wheBirth['bir_date_of_birth'] = $date;
 			}
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
-			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
+			$data['births'] = $this->birthModel->search_births($like, $wheBirth)->result();
 
 			$data['stambum'] = array();
 			$data['stambum_stat'] = array();
@@ -158,98 +160,104 @@ class Births extends CI_Controller {
 				$this->load->view('frontend/add_birth', $data);
 			}
 			else{
-				$err = 0;
-				if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
-					$err++;
-					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
-				}
-		
-				$damPhoto = '-';
-				if (!$err){
-					$uploadedImg = $_POST['attachment_dam'];
-					$image_array_1 = explode(";", $uploadedImg);
-					$image_array_2 = explode(",", $image_array_1[1]);
-					$uploadedImg = base64_decode($image_array_2[1]);
-
-					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+				$wheBirth['bir_stu_id'] = $this->input->post('bir_stu_id');
+				$wheStud['bir_stat != '] = $this->config->item('rejected');
+				$birth = $this->birthModel->get_births($wheBirth)->row();
+				if (!$birth){
+					$err = 0;
+					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
 						$err++;
-						$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
 					}
-					else{
-						$image_name = $this->config->item('path_birth').'birth_'.time().'.png';
-						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
+			
+					$damPhoto = '-';
+					if (!$err){
+						$uploadedImg = $_POST['attachment_dam'];
+						$image_array_1 = explode(";", $uploadedImg);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedImg = base64_decode($image_array_2[1]);
+
+						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writeable.');
-						} else{
-							if (is_file($image_name) and !is_writable($image_name)) {
-								$err++;
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
-							}
-						}
-
-						if (!$err){
-							file_put_contents($image_name, $uploadedImg);
-							$damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
-						}
-					}
-				}
-
-				if (!$err){
-					// syarat maksimal 75 hari dari lapor pacak
-					$whereStud['stu_id'] = $this->input->post('bir_stu_id');
-					$stud = $this->studModel->get_studs($whereStud)->row();
-					if ($stud){
-						$piece = explode("-", $this->input->post('bir_date_of_birth'));
-						$date = $piece[2]."-".$piece[1]."-".$piece[0];
-
-						$piece = explode("-", $stud->stu_stud_date);
-						$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
-
-						$ts = new DateTime($date);
-						$ts_stud = new DateTime($studDate);
-						if ($ts_stud > $ts){
-							$err++;
-							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+							$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
 						}
 						else{
-							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
-							if ($diff < 1){
+							$image_name = $this->config->item('path_birth').'birth_'.time().'.png';
+							if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+								$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writeable.');
+							} else{
+								if (is_file($image_name) and !is_writable($image_name)) {
+									$err++;
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+								}
 							}
 
 							if (!$err){
-								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
-								if ($diff > 1){
-									$err++;
-									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
-								}
+								file_put_contents($image_name, $uploadedImg);
+								$damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
 							}
 						}
 					}
-					else{
-						$err++;
-						$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
-					}
 
 					if (!$err){
-						$data = array(
-							'bir_stu_id' => $this->input->post('bir_stu_id'),
-							'bir_member_id' => $stud->stu_partner_id,
-							'bir_dam_photo' => $damPhoto,
-							'bir_male' => $this->input->post('bir_male'),
-							'bir_female' => $this->input->post('bir_female'),
-							'bir_date_of_birth' => $date,
-						);
-						$births = $this->birthModel->add_births($data);
-						if ($births){
-							// $this->session->set_flashdata('add_success', true);
-							// redirect("frontend/Births");
-							$this->session->set_flashdata('add_birth_success', true);
-							redirect("frontend/Beranda");
+						// syarat maksimal 75 hari dari lapor pacak
+						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
+						$stud = $this->studModel->get_studs($whereStud)->row();
+						if ($stud){
+							$piece = explode("-", $this->input->post('bir_date_of_birth'));
+							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$piece = explode("-", $stud->stu_stud_date);
+							$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$ts = new DateTime($date);
+							$ts_stud = new DateTime($studDate);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+							}
+							else{
+								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+								if ($diff < 1){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+								}
+
+								if (!$err){
+									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+									if ($diff > 1){
+										$err++;
+										$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+									}
+								}
+							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
+							$err++;
+							$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
+						}
+
+						if (!$err){
+							$data = array(
+								'bir_stu_id' => $this->input->post('bir_stu_id'),
+								'bir_member_id' => $stud->stu_partner_id,
+								'bir_dam_photo' => $damPhoto,
+								'bir_male' => $this->input->post('bir_male'),
+								'bir_female' => $this->input->post('bir_female'),
+								'bir_date_of_birth' => $date,
+							);
+							$births = $this->birthModel->add_births($data);
+							if ($births){
+								$this->session->set_flashdata('add_success', true);
+								redirect("frontend/Births");
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
+								$this->load->view('frontend/add_birth', $data);
+							}
+						}
+						else{
 							$this->load->view('frontend/add_birth', $data);
 						}
 					}
@@ -258,7 +266,14 @@ class Births extends CI_Controller {
 					}
 				}
 				else{
-					$this->load->view('frontend/add_birth', $data);
+					if ($birth->bir_stat == $this->config->item('saved')){
+						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						$this->load->view('frontend/add_birth', $data);
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
+						$this->load->view('frontend/add_birth', $data);
+					}
 				}
 			}
 		}

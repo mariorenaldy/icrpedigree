@@ -31,7 +31,7 @@ class Studs extends CI_Controller {
 
 		public function search(){
 			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
+			$piece = explode("-", $this->input->post('date'));
             if (count($piece) == 3){
                 $date = $piece[2]."-".$piece[1]."-".$piece[0];
             }
@@ -39,7 +39,9 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-			$data['stud'] = $this->studModel->get_studs($where)->result();
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
+			$data['stud'] = $this->studModel->search_studs($like, $where)->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -59,7 +61,7 @@ class Studs extends CI_Controller {
 
 		public function search_approve(){
 			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
+			$piece = explode("-", $this->input->post('date'));
             if (count($piece) == 3){
                 $date = $piece[2]."-".$piece[1]."-".$piece[0];
             }
@@ -67,7 +69,9 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			$where['stu_stat'] = $this->config->item('saved');
-			$data['stud'] = $this->studModel->get_studs($where)->result();
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
+			$data['stud'] = $this->studModel->search_studs($like, $where)->result();
 			$this->load->view('backend/approve_studs', $data);
 		}
 

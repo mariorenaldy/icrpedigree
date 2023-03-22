@@ -16,7 +16,7 @@
             </div>
             <div class="carousel-inner mb-5">
                 <div class="carousel-item active" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
-                    <img src="<?= base_url('assets/img/dummy-slider.jpg') ?>" class="d-block m-auto img-fluid" alt="ICR Pedigree">
+                    <img src="<?= base_url('assets/img/Pengumuman1.jpg') ?>" class="d-block m-auto img-fluid" alt="ICR Pedigree">
                 </div>
                 <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
                     <video id="carouselVideo" controls muted autoplay class="d-block m-auto">

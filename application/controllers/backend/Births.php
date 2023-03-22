@@ -16,7 +16,7 @@ class Births extends CI_Controller {
 		}
 
 		public function index(){
-			$where['bir_stat'] = $this->config->item('accepted');
+			$where['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
 
@@ -51,16 +51,18 @@ class Births extends CI_Controller {
 
 		public function search(){
 			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
+			$piece = explode("-", $this->input->post('date'));
 			if (count($piece) == 3){
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			}
 			if ($date){
 				$where['bir_date_of_birth'] = $date;
 			}
-			$where['bir_stat'] = $this->config->item('accepted');
+			$where['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
-			$data['birth'] = $this->birthModel->get_births($where)->result();
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
+			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
 
 			$data['stambum'] = array();
 			$data['stambum_stat'] = array();
@@ -95,6 +97,23 @@ class Births extends CI_Controller {
 			$where['bir_stat'] = $this->config->item('saved');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where)->result();
+			$this->load->view('backend/approve_births', $data);
+		}
+
+		public function search_approve(){
+			$date = '';
+			$piece = explode("-", $this->input->post('date'));
+            if (count($piece) == 3){
+                $date = $piece[2]."-".$piece[1]."-".$piece[0];
+            }
+			if ($date){
+				$where['bir_date_of_birth'] = $date;
+			}
+			$where['bir_stat'] = $this->config->item('saved');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
+			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
 			$this->load->view('backend/approve_births', $data);
 		}
 

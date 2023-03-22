@@ -890,8 +890,6 @@ class Members extends CI_Controller {
 					$this->db->trans_start();
 					if (!$member->mem_app_user){
 						$data = array(
-							'mem_app_user' => $this->session->userdata('use_id'),
-							'mem_app_date' => date('Y-m-d H:i:s'),
 							'mem_name' => $member->mem_name,
 							'mem_hp' => $member->mem_hp,
 							'mem_email' => $member->mem_email,
@@ -899,6 +897,8 @@ class Members extends CI_Controller {
 					}
 					$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
 					$data['mem_type'] = $this->config->item('pro_member');
+					$data['mem_app_user'] = $this->session->userdata('use_id');
+					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					$data['mem_user'] = $this->session->userdata('use_id');
 					$data['mem_date'] = date('Y-m-d H:i:s');
 					$res = $this->MemberModel->update_members($data, $where);

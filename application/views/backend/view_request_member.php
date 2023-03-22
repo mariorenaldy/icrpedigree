@@ -16,6 +16,18 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Approve Edit Kennel</h3>
+                <div class="search-container sticky-top">
+                    <form action="<?= base_url().'backend/Requestmember/search'?>" method="post">
+                        <div class="input-group my-3">
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Nama/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                            </div>
+                            <div class="col-sm-1 ms-1">
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Cari Kennel"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
@@ -85,7 +97,7 @@
                     </div>     
                     <div class="row mb-1">
                         <div class="col-sm-2">email</div>
-                        <div class="col-sm-5"></div>
+                        <div class="col-sm-5"><?= $req->req_old_email ?></div>
                         <div class="col-sm-5"><?= $req->req_email ?></div>
                     </div>
                     <hr/>

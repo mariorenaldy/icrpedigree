@@ -7,16 +7,35 @@ class StudModel extends CI_Model {
 
     public function get_studs($where){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
-        $this->db->from('studs');
-        if ($where != null)
+        if ($where != null){
             $this->db->where($where);
+        }
         $this->db->join('users','users.use_id = studs.stu_app_user');
         $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
         $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_dam_id');
         $this->db->order_by('studs.stu_stud_date', 'desc');
         $this->db->limit($this->config->item('backend_stud_count'), 0);
-        return $this->db->get();
+        return $this->db->get('studs');
+    }
+
+    public function search_studs($like, $where){
+        $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
+        if ($where != null){
+            $this->db->where($where);
+        }
+        $this->db->group_start();
+        if ($like != null) {
+            $this->db->or_like($like);
+        }
+        $this->db->group_end();
+        $this->db->join('users','users.use_id = studs.stu_app_user');
+        $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
+        $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
+        $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_dam_id');
+        $this->db->order_by('studs.stu_stud_date', 'desc');
+        $this->db->limit($this->config->item('backend_stud_count'), 0);
+        return $this->db->get('studs');
     }
 
     // public function search_by_member_app($q, $stu_member, $offset){
@@ -67,5 +86,16 @@ class StudModel extends CI_Model {
         $sql = "SELECT stu_stud_date FROM studs s where s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(s.stu_stud_date, '".$date."')) <= ".$this->config->item('jarak_pacak')." AND s.stu_stat IN (".$this->config->item('accepted').', '.$this->config->item('completed').')';
         $query = $this->db->query($sql);
         return $query->result();
+    }
+
+    public function check_siblings($canineId, $sireId, $damId){
+        $this->db->select('can_id');
+        $this->db->from('pedigrees');
+        $this->db->join('canines','pedigrees.ped_canine_id = canines.can_id');
+        $this->db->where('ped_sire_id', $sireId);
+        $this->db->where('ped_dam_id', $damId);
+        $this->db->where('ped_canine_id != ', $canineId);
+        $this->db->order_by('can_id');
+        return $this->db->get();
     }
 }

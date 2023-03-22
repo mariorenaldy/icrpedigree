@@ -37,11 +37,14 @@
                         }
                     ?>
                 </div>
-                <div class="search-container my-3">
+                <div class="search-container my-3 sticky-top">
                     <form id="formStud" action="<?= base_url().'backend/Studs/search'?>" method="post">
                         <div class="input-group">
+                            <div class="col-md-3 me-1">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                            </div>
                             <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Stud date" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
@@ -117,7 +120,7 @@
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#keywords');
+        setDatePicker('#date');
         function add(){
             window.location = "<?= base_url(); ?>backend/Studs/add";
         }

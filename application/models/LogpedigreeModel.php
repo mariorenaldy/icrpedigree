@@ -5,7 +5,7 @@ class LogpedigreeModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_pedigree.log_date, "%d-%m-%Y") as log_date');
+        $this->db->select('*, DATE_FORMAT(logs_pedigree.log_date, "%d-%m-%Y %H:%i:%s") as log_date');
         $this->db->from('logs_pedigree');
         if ($where != null) {
             $this->db->where($where);

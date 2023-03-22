@@ -7,7 +7,7 @@ class Requestupdatebirth extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'memberModel', 'logcanineModel', 'notification_model', 'notificationtype_model'));
+			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'logbirthModel', 'memberModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
@@ -22,17 +22,19 @@ class Requestupdatebirth extends CI_Controller {
         }
 
 		public function search(){
-			// $like['can_a_s'] = $this->input->post('keywords');
 			$date = '';
-			$piece = explode("-", $this->input->post('keywords'));
+			$piece = explode("-", $this->input->post('date'));
 			if (count($piece) == 3){
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			}
 			if ($date){
-				$wheBirth['req_date_of_birth'] = $date;
+				$like['req_date_of_birth'] = $date;
+				$like['req_old_date_of_birth'] = $date;
 			}
             $where['req_stat'] = $this->config->item('saved');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
+			$like['can_sire.can_a_s'] = $this->input->post('keywords');
+			$like['can_dam.can_a_s'] = $this->input->post('keywords');
 			$data['req'] = $this->requestupdatebirthModel->search_requests($like, $where)->result();
 			$this->load->view('backend/view_request_update_birth', $data);
         }

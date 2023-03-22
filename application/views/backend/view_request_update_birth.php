@@ -38,20 +38,15 @@
                 </div>
                 <div class="search-container">
                     <form action="<?= base_url().'backend/Requestupdatebirth/search'?>" method="post">
-                        <!-- <div class="input-group my-3">
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Nama Anjing" name="keywords" value="<?= set_value('keywords') ?>">
+                        <div class="input-group my-3 sticky-top">
+                            <div class="col-md-3 me-1">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
-                            <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" placeholder="Date of Birth" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
                             </div>
-                        </div> -->
-                        <div class="input-group my-3">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
-                            </div>
-                            <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
+                            <div class="col-md-1 ms-1">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
                             </div>
                         </div>
                     </form>
@@ -133,7 +128,7 @@
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#keywords');
+        setDatePicker('#date');
 
         function approve(id, nama){
             var proceed = confirm("Approve "+nama+" ?");

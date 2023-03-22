@@ -14,14 +14,17 @@
     <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">List Pacak</h3>
-                <div class="search-container">
+                <div class="search-container my-3 sticky-top">
                     <form id="formStud" action="<?= base_url().'frontend/Studs/search'?>" method="post">
-                        <div class="input-group my-3">
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal Pacak" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
+                        <div class="input-group">
+                            <div class="col-md-3 me-1">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
-                            <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Pacak"><i class="fa fa-search"></i></button>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
+                            </div>
+                            <div class="col-md-1 ms-1">
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
@@ -94,7 +97,7 @@
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#keywords');
+        setDatePicker('#date');
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/add";
         }

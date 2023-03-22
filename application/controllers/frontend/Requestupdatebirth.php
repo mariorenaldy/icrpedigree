@@ -76,7 +76,7 @@ class Requestupdatebirth extends CI_Controller {
 					else{
 						$err = 0;
 						$damPhoto = '-';
-						if (isset($_POST['attachment_dam']) || !empty($_POST['attachment_dam'])){
+						if ($this->input->post('attachment_dam')) {
 							$uploadedImg = $_POST['attachment_dam'];
 							$image_array_1 = explode(";", $uploadedImg);
 							$image_array_2 = explode(",", $image_array_1[1]);
@@ -97,14 +97,14 @@ class Requestupdatebirth extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
 								}
 							}
-						}
 
-						if (!$err){
-							if (isset($uploadedImg)){
+							if (!$err){
 								file_put_contents($img_name, $uploadedImg);
 								$damPhoto = str_replace($this->config->item('path_birth'), '', $img_name);
 							}
-							
+						}
+
+						if (!$err){
 							$piece = explode("-", $this->input->post('bir_date_of_birth'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 

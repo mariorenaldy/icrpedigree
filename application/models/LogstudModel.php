@@ -5,7 +5,7 @@ class LogstudModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_stud.log_date, "%d-%m-%Y") as log_date, DATE_FORMAT(logs_stud.log_app_date, "%d-%m-%Y") as log_app_date, DATE_FORMAT(logs_stud.log_stud_date, "%d-%m-%Y") as log_stud_date, c_sire.can_a_s AS sire, c_dam.can_a_s AS dam');
+        $this->db->select('*, DATE_FORMAT(logs_stud.log_date, "%d-%m-%Y %H:%i:%s") as log_date, DATE_FORMAT(logs_stud.log_app_date, "%d-%m-%Y") as log_app_date, DATE_FORMAT(logs_stud.log_stud_date, "%d-%m-%Y") as log_stud_date, c_sire.can_a_s AS sire, c_dam.can_a_s AS dam');
         $this->db->from('logs_stud');
         if ($where != null) {
             $this->db->where($where);

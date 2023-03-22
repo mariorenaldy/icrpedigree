@@ -520,6 +520,10 @@ class Canines extends CI_Controller {
           $piece = explode("-", $this->input->post('can_date_of_birth'));
           $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 
+          $rip = 0;
+          if ($this->input->post('can_rip'))
+            $rip = 1;
+
           $dataCan = array(
             'can_member_id' => $this->input->post('can_member_id'),
             'can_reg_number' => strtoupper($this->input->post('can_reg_number')),
@@ -534,6 +538,7 @@ class Canines extends CI_Controller {
             'can_chip_number' => $this->input->post('can_chip_number'),
             'can_icr_number' => $this->input->post('can_icr_number'),
             'can_a_s' => strtoupper($this->input->post('can_a_s')),
+            'can_rip' => $rip,
             'can_note' => $this->input->post('can_note'),
           );
 
@@ -556,6 +561,7 @@ class Canines extends CI_Controller {
             'log_chip_number' => $this->input->post('can_chip_number'),
             'log_icr_number' => $this->input->post('can_icr_number'),
             'log_member_id' => $this->input->post('can_member_id'),
+            'log_rip' => $rip,
             'log_note' => $this->input->post('can_note'),
           );
 

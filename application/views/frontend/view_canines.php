@@ -18,7 +18,7 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">Anjing Saya</h3>
-                <div class="search-container">
+                <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">

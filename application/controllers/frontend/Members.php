@@ -7,7 +7,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'requestresetModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
@@ -231,7 +231,7 @@ class Members extends CI_Controller {
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+						$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
 					}
 
 					if (!$err && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){

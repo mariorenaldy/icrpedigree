@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark my-navbar">
     <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainCollapse" aria-controls="mainCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -19,8 +19,10 @@
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>">Lapor Pacak</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view_approved' ?>">Lapor Lahir</a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Births/view_approved' ?>">Lapor Anak</a></li>
-                            <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li> -->
-                            <!-- <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li> -->
+                            <div class="dropdown-divider"></div>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs' ?>">List Pacak</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Births' ?>">List Lahir</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Stambums' ?>">List Anak</a></li>
                         </ul>
                     </div>
                 <?php } ?>
@@ -31,7 +33,11 @@
                         <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp"> <span class="nav-text notif-text"><?= $this->session->userdata('mem_name') ?></span>
                     </span>
                     <ul class="dropdown-menu">
-                        <?php if ($this->session->userdata('mem_type') == $this->config->item('pro_member')){ ?><li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestmember/edit_profile">Lapor Ubah Kennel</a></li><?php } ?>
+                        <?php if ($this->session->userdata('mem_type') == $this->config->item('pro_member')){ ?>
+                            <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestmember/edit_profile">Lapor Ubah Kennel</a></li>
+                        <?php } else { ?>
+                            <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestpro/become_pro">Menjadi Pro</a></li>
+                        <?php } ?>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/profile' ?>">Profil</a></li>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/view_edit_password' ?>">Ubah Password</a></li>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/logout' ?>">Logout</a></li>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>List Laporan Ubah Kennel</title>
+    <title>List Laporan Menjadi Pro</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -10,11 +10,11 @@
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImg">
     </div>
-    <?php $this->load->view('frontend/layout/header_member'); ?>  
+    <?php $this->load->view('frontend/layout/header'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">List Laporan Ubah Kennel</h3>
+            <h3 class="text-center text-warning">List Laporan Menjadi Pro</h3>
             <?php $i = 0; 
                 foreach($request AS $req){ 
                     if ($i)
@@ -111,9 +111,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
-                            <?php if ($this->session->flashdata('edit_profile')){ ?>
+                            <?php if ($this->session->flashdata('become_pro')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Lapor Ubah Kennel berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.</div>
+                                    <div class="col-12">Lapor Menjadi Pro berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.</div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -143,7 +143,7 @@
 
     $(document).ready(function(){
         <?php		
-            if ($this->session->flashdata('edit_profile')){ ?>
+            if ($this->session->flashdata('become_pro')){ ?>
                 $('#message-modal').modal('show');
         <?php } ?>
     });
