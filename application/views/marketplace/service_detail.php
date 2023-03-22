@@ -19,13 +19,13 @@
             <figcaption class="figure-caption"><?= $services->ser_desc ?></figcaption>
             <p><?= $services->ser_price ?></p>
             <button type="button" class="btn btn-primary" onclick="payment(<?= $services->ser_id ?>)">Sewa</button>
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/marketplace/Services'">Kembali</button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Services'">Kembali</button>
         </figure>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function payment(id){
-            window.location = "<?= base_url(); ?>frontend/marketplace/Services/service_payment/"+id;
+            window.location = "<?= base_url(); ?>marketplace/Services/service_payment/"+id;
         }
     </script>
 </body>

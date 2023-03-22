@@ -13,7 +13,7 @@ class Services extends CI_Controller {
 	}
 	public function index(){
 		//pagination
-		$config['base_url'] = base_url() . '/frontend/marketplace/Services/index';
+		$config['base_url'] = base_url() . 'marketplace/Services/index';
 		$config['total_rows'] = $this->serviceModel->record_count();
 		$config['per_page'] = 9;
 		$config['attributes'] = array('class' => 'page-link');
@@ -21,10 +21,10 @@ class Services extends CI_Controller {
 		//initialize pagination
 		$this->pagination->initialize($config);
 
-		$data['start'] = $this->uri->segment(5);
+		$data['start'] = $this->uri->segment(4);
 		$data['services'] = $this->serviceModel->fetch_data($config['per_page'], $data['start'])->result();
 
-        $this->load->view("frontend/marketplace/services", $data);
+        $this->load->view("marketplace/services", $data);
 	}
 	public function search(){
 		$keyword = '';
@@ -32,13 +32,13 @@ class Services extends CI_Controller {
 			$keyword = $this->input->get('keyword');
 		}
 		else{
-			redirect('frontend/marketplace/Services');
+			redirect('marketplace/Services');
 		}
 
 		//pagination
 		$this->db->like('ser_name', $keyword);
 		$this->db->from('services');
-		$config['base_url'] = base_url() . 'frontend/marketplace/Services/search';
+		$config['base_url'] = base_url() . 'marketplace/Services/search';
 		$config['total_rows'] = $this->db->count_all_results();
 		$config['per_page'] = 9;
 		$config['attributes'] = array('class' => 'page-link');
@@ -46,31 +46,31 @@ class Services extends CI_Controller {
 		//initialize pagination
 		$this->pagination->initialize($config);
 
-		$data['start'] = $this->uri->segment(5);
+		$data['start'] = $this->uri->segment(4);
 
 		$like['ser_name'] = $keyword;
 		$data['services'] = $this->serviceModel->search_services($config['per_page'], $data['start'], $like)->result();
 
-		$this->load->view("frontend/marketplace/services", $data);
+		$this->load->view("marketplace/services", $data);
     }
 	public function service_detail(){
-		if ($this->uri->segment(5)){
-			$where['ser_id'] = $this->uri->segment(5);
+		if ($this->uri->segment(4)){
+			$where['ser_id'] = $this->uri->segment(4);
 			$data['services'] = $this->serviceModel->get_services($where)->row();
-			$this->load->view("frontend/marketplace/service_detail", $data);
+			$this->load->view("marketplace/service_detail", $data);
         }
         else{
-          	redirect('frontend/Marketplace/services');
+          	redirect('Marketplace/services');
         }
 	}
 	public function service_payment(){
-		if ($this->uri->segment(5)){
-			$where['ser_id'] = $this->uri->segment(5);
+		if ($this->uri->segment(4)){
+			$where['ser_id'] = $this->uri->segment(4);
 			$data['services'] = $this->serviceModel->get_services($where)->row();
-			$this->load->view("frontend/marketplace/service_payment", $data);
+			$this->load->view("marketplace/service_payment", $data);
         }
         else{
-          	redirect('frontend/Marketplace/service_detail');
+          	redirect('Marketplace/service_detail');
         }
 	}
 }

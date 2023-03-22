@@ -19,13 +19,13 @@
             <figcaption class="figure-caption"><?= $pets->pet_desc ?></figcaption>
             <p><?= $pets->pet_price ?></p>
             <button type="button" class="btn btn-primary" onclick="payment(<?= $pets->pet_id ?>)">Beli</button>
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Marketplace/pets'">Kembali</button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>Marketplace/pets'">Kembali</button>
         </figure>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function payment(id){
-            window.location = "<?= base_url(); ?>frontend/marketplace/Pets/pet_payment/"+id;
+            window.location = "<?= base_url(); ?>marketplace/Pets/pet_payment/"+id;
         }
     </script>
 </body>

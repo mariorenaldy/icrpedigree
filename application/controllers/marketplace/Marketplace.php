@@ -12,6 +12,6 @@ class Marketplace extends CI_Controller {
 	}
 
 	public function index(){
-        $this->load->view("frontend/marketplace/marketplace");
+        $this->load->view("marketplace/marketplace");
 	}
 }

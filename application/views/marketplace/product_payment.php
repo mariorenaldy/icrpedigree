@@ -82,7 +82,7 @@
         checkoutButton.addEventListener('click', function () {
             let amount = <?= $products->pro_price ?>;
             $.ajax({
-                url: "<?= base_url() ?>frontend/marketplace/Payment/checkout",
+                url: "<?= base_url() ?>marketplace/Payment/checkout",
                 method: 'post',
                 data: {amount: amount},
                 success: function(response){
@@ -96,7 +96,7 @@
         });
 
         function back(id){
-            window.location = "<?= base_url(); ?>frontend/marketplace/Products/product_detail/"+id;
+            window.location = "<?= base_url(); ?>marketplace/Products/product_detail/"+id;
         }
     </script>
 </body>

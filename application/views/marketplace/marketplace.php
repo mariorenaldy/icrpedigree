@@ -17,7 +17,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Products</h5>
-                        <a href="<?= base_url(); ?>frontend/marketplace/Products" class="btn btn-primary stretched-link">Detail</a>
+                        <a href="<?= base_url(); ?>marketplace/Products" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
                 <div class="card col m-5">
@@ -26,7 +26,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Services</h5>
-                        <a href="<?= base_url(); ?>frontend/marketplace/Services" class="btn btn-primary stretched-link">Detail</a>
+                        <a href="<?= base_url(); ?>marketplace/Services" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
                 <div class="card col m-5">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Pets</h5>
-                        <a href="<?= base_url(); ?>frontend/marketplace/Pets" class="btn btn-primary stretched-link">Detail</a>
+                        <a href="<?= base_url(); ?>marketplace/Pets" class="btn btn-primary stretched-link">Detail</a>
                     </div>
                 </div>
             </div>

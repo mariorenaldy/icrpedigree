@@ -13,7 +13,7 @@ class Pets extends CI_Controller {
 	}
 	public function index(){
 		//pagination
-		$config['base_url'] = base_url() . '/frontend/marketplace/Pets/index';
+		$config['base_url'] = base_url() . 'marketplace/Pets/index';
 		$config['total_rows'] = $this->petModel->record_count();
 		$config['per_page'] = 9;
 		$config['attributes'] = array('class' => 'page-link');
@@ -21,10 +21,10 @@ class Pets extends CI_Controller {
 		//initialize pagination
 		$this->pagination->initialize($config);
 
-		$data['start'] = $this->uri->segment(5);
+		$data['start'] = $this->uri->segment(4);
 		$data['pets'] = $this->petModel->fetch_data($config['per_page'], $data['start'])->result();
 
-        $this->load->view("frontend/marketplace/pets", $data);
+        $this->load->view("marketplace/pets", $data);
 	}
 	public function search(){
 		$keyword = '';
@@ -32,13 +32,13 @@ class Pets extends CI_Controller {
 			$keyword = $this->input->get('keyword');
 		}
 		else{
-			redirect('frontend/marketplace/Pets');
+			redirect('marketplace/Pets');
 		}
 
 		//pagination
 		$this->db->like('pet_name', $keyword);
 		$this->db->from('pets');
-		$config['base_url'] = base_url() . 'frontend/marketplace/Pets/search';
+		$config['base_url'] = base_url() . 'marketplace/Pets/search';
 		$config['total_rows'] = $this->db->count_all_results();
 		$config['per_page'] = 9;
 		$config['attributes'] = array('class' => 'page-link');
@@ -46,31 +46,31 @@ class Pets extends CI_Controller {
 		//initialize pagination
 		$this->pagination->initialize($config);
 
-		$data['start'] = $this->uri->segment(5);
+		$data['start'] = $this->uri->segment(4);
 
 		$like['pet_name'] = $keyword;
 		$data['pets'] = $this->petModel->search_pets($config['per_page'], $data['start'], $like)->result();
 
-		$this->load->view("frontend/marketplace/pets", $data);
+		$this->load->view("marketplace/pets", $data);
     }
 	public function pet_detail(){
-		if ($this->uri->segment(5)){
-			$where['pet_id'] = $this->uri->segment(5);
+		if ($this->uri->segment(4)){
+			$where['pet_id'] = $this->uri->segment(4);
 			$data['pets'] = $this->petModel->get_pets($where)->row();
-			$this->load->view("frontend/marketplace/pet_detail", $data);
+			$this->load->view("marketplace/pet_detail", $data);
         }
         else{
-          	redirect('frontend/marketplace/pets');
+          	redirect('marketplace/pets');
         }
 	}
 	public function pet_payment(){
-		if ($this->uri->segment(5)){
-			$where['pet_id'] = $this->uri->segment(5);
+		if ($this->uri->segment(4)){
+			$where['pet_id'] = $this->uri->segment(4);
 			$data['pets'] = $this->petModel->get_pets($where)->row();
-			$this->load->view("frontend/marketplace/pet_payment", $data);
+			$this->load->view("marketplace/pet_payment", $data);
         }
         else{
-          	redirect('frontend/marketplace/pet_detail');
+          	redirect('marketplace/pet_detail');
         }
 	}
 }
