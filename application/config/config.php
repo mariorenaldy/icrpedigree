@@ -602,6 +602,15 @@ $config['upload_user'] = Array(
     'file_name' => 'user_'.time(),
 );
 
+$config['upload_path_product'] = realpath(APPPATH.'../uploads/products/');
+$config['path_product'] = 'uploads/products/';
+$config['upload_product'] = Array(
+    'upload_path' => $config['upload_path_product'],
+    'allowed_types' => 'jpg|jpeg|png',
+    'file_ext_tolower' => TRUE,
+    'file_name' => 'product_'.time(),
+);
+
 $config['file_size'] = 1048576;
 $config['img_width'] = 960;
 $config['img_height'] = 540;

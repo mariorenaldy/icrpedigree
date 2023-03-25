@@ -20,12 +20,7 @@ class ProductModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->order_by('pro_id', 'desc');
-        return $this->db->get('products');
-    }
-
-    public function get_product(){
-        $this->db->select('*');
-        $this->db->order_by('pro_id', 'desc');
+        $this->db->join('products_type', 'products.pro_type_id = products_type.pro_type_id', 'left');
         return $this->db->get('products');
     }
 

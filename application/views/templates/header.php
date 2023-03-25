@@ -62,6 +62,14 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/') ?>">Manage</a></li>
                         </ul>
                      </div>
+                     <!-- <div class="dropdown">
+                        <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Marketplace</span>
+                        <ul class="dropdown-menu">
+                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Products/listProducts') ?>">Manage Products</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Services/listServices') ?>">Manage Services</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Pets/listPets') ?>">Manage Pets</a></li>
+                        </ul>
+                     </div> -->
                      <?php if (!$this->session->userdata('use_akses')){ ?>
                         <div class="dropdown">
                               <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

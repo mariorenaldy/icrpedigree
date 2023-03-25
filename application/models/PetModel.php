@@ -23,12 +23,6 @@ class PetModel extends CI_Model {
         return $this->db->get('pets');
     }
 
-    public function get_pet(){
-        $this->db->select('*');
-        $this->db->order_by('pet_id', 'desc');
-        return $this->db->get('pets');
-    }
-
     public function add_pets($data = null){
         $result = false;
         if ($data != null) {

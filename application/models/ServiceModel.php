@@ -23,12 +23,6 @@ class ServiceModel extends CI_Model {
         return $this->db->get('services');
     }
 
-    public function get_service(){
-        $this->db->select('*');
-        $this->db->order_by('ser_id', 'desc');
-        return $this->db->get('services');
-    }
-
     public function add_services($data = null){
         $result = false;
         if ($data != null) {
