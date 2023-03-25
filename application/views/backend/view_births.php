@@ -75,49 +75,49 @@
                         <tbody>
                         <?php
                             $i = 0; 
-                            foreach ($birth AS $b){ ?>
-                            <tr>
-                                <td>
-                                    <?php if (!$stambum[$i]){ ?>
-                                        <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
-                                        <?php } 
-                                    } ?>
-                                </td>
-                                <td>
-                                    <?php if (!$stambum[$i] && $stambum_stat[$i]){ ?>
+                            foreach ($birth AS $b){
+                                if ($stambum_stat[$i]){ ?>
+                                <tr>
+                                    <td>
+                                        <?php if (!$stambum[$i]){ ?>
+                                            <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
+                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
+                                            <?php } 
+                                        } ?>
+                                    </td>
+                                    <td>
                                         <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
-                                    <?php } 
-                                        if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
-                                    <?php } ?>
-                                </td>
-                                <td align="center">
-                                    <img src="<?= base_url('uploads/stud/'.$b->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $b->bir_id ?>" onclick="display('stud<?= $b->bir_id ?>')"><br/><?= $b->stu_stud_date; ?>
-                                </td>
-                                <td align="center">
-                                    <img src="<?= base_url('uploads/stud/'.$b->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $b->bir_id ?>" onclick="display('sire<?= $b->bir_id ?>')">
-                                    <br/><?= $b->sire ?>
-                                </td>
-                                <td align="center">
-                                    <img src="<?= base_url('uploads/stud/'.$b->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $b->bir_id ?>" onclick="display('dam<?= $b->bir_id ?>')">
-                                    <br/><?= $b->dam ?>
-                                </td>
-                                <td align="center">
-                                    <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
-                                </td>
-                                <td align="right">
-                                    <?= $b->bir_male; ?>
-                                </td>
-                                <td align="right">
-                                    <?= $b->bir_female; ?>
-                                </td>
-                                <td class="text-nowrap">
-                                    <?= $b->bir_date_of_birth; ?>
-                                </td>
-                            </tr>
-                        <?php $i++;
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
+                                        <?php } ?>
+                                    </td>
+                                    <td align="center">
+                                        <img src="<?= base_url('uploads/stud/'.$b->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $b->bir_id ?>" onclick="display('stud<?= $b->bir_id ?>')"><br/><?= $b->stu_stud_date; ?>
+                                    </td>
+                                    <td align="center">
+                                        <img src="<?= base_url('uploads/stud/'.$b->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $b->bir_id ?>" onclick="display('sire<?= $b->bir_id ?>')">
+                                        <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $b->sire_id ?>"><?= $b->sire ?></a>
+                                    </td>
+                                    <td align="center">
+                                        <img src="<?= base_url('uploads/stud/'.$b->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $b->bir_id ?>" onclick="display('dam<?= $b->bir_id ?>')">
+                                        <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $b->dam_id ?>"><?= $b->dam ?></a>
+                                    </td>
+                                    <td align="center">
+                                        <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
+                                    </td>
+                                    <td align="right">
+                                        <?= $b->bir_male; ?>
+                                    </td>
+                                    <td align="right">
+                                        <?= $b->bir_female; ?>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <?= $b->bir_date_of_birth; ?>
+                                    </td>
+                                </tr>
+                        <?php   }
+                                $i++;
                         } ?>
                         </tbody>
                     </table>

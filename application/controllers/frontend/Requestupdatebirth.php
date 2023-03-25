@@ -28,15 +28,18 @@ class Requestupdatebirth extends CI_Controller {
 		public function search(){
 			if ($this->session->userdata('mem_id')){
 				$date = '';
-				$piece = explode("-", $this->input->post('keywords'));
+				$piece = explode("-", $this->input->post('date'));
 				if (count($piece) == 3){
 					$date = $piece[2]."-".$piece[1]."-".$piece[0];
 				}
 				if ($date){
-					$wheBirth['req_date_of_birth'] = $date;
+					$like['req_date_of_birth'] = $date;
+					$like['req_old_date_of_birth'] = $date;
 				}
 				$where['req_member_id'] = $this->session->userdata('mem_id');
-				$data['req'] = $this->requestupdatebirthModel->get_requests($where)->result();
+				$like['can_sire.can_a_s'] = $this->input->post('keywords');
+				$like['can_dam.can_a_s'] = $this->input->post('keywords');
+				$data['req'] = $this->requestupdatebirthModel->search_requests($like, $where)->result();
 				$this->load->view('frontend/view_request_update_birth', $data);
 			}
 			else{

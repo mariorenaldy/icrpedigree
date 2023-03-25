@@ -22,15 +22,7 @@ class Certificate extends CI_Controller{
                     $this->load->view('backend/certificateFront', $data);
                 }
                 else{
-                    $dataPrint['can_print'] = $data['canine']->can_print + 1;
-                    $res = $this->caninesModel->update_canines($dataPrint, $where);
-                    if ($res){
-                        $this->load->view('backend/certificatePreview', $data);
-                    }
-                    else{
-                        $this->session->set_flashdata('error', 'Gagal menyimpan data');
-                        redirect('backend/Canines');
-                    }
+                    $this->load->view('backend/certificatePreview', $data);
                 }
             } else {
                 $this->session->set_flashdata('error', 'Invalid canine id');
@@ -122,7 +114,15 @@ class Certificate extends CI_Controller{
                 }
 
                 if ($this->uri->segment(5)){
-                    $this->load->view('backend/certificateBack', $data);
+                    $dataPrint['can_print'] = $data['canine']->can_print + 1;
+                    $res = $this->caninesModel->update_canines($dataPrint, $where);
+                    if ($res){
+                        $this->load->view('backend/certificateBack', $data);
+                    }
+                    else{
+                        $this->session->set_flashdata('error', 'Gagal menyimpan data');
+                        redirect('backend/Canines');
+                    }
                 }
                 else{
                     $this->load->view('backend/certificatePreviewBack', $data);

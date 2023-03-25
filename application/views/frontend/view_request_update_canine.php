@@ -37,26 +37,26 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-sm-2"><b>Nama</b></div>
-                    <div class="col-sm-2"><b>Foto Lama</b></div>
-                    <div class="col-sm-2"><b>Foto Baru</b></div>
+                    <div class="col-sm-1"><b>Foto Lama</b></div>
+                    <div class="col-sm-1"><b>Foto Baru</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
                     <div class="col-sm-1"><b>RIP?</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
                         <div class="col-sm-2">
                             <?= $r->can_a_s; ?>
                         </div>
-                        <div class="col-sm-2 mb-1">
+                        <div class="col-sm-1 mb-1">
                             <?php if ($r->req_old_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$r->req_old_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="oldImg<?= $r->req_id ?>" onclick="display('oldImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
                                 <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="oldImg<?= $r->req_id ?>" onclick="display('oldImg<?= $r->req_id ?>')">
                             <?php } ?>
                         </div>
-                        <div class="col-sm-2 mb-1">
+                        <div class="col-sm-1 mb-1">
                             <?php if ($r->req_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
@@ -72,8 +72,15 @@
                         <div class="col-sm-1">
                             <?php if ($r->req_rip) echo '<i class="fa fa-check"></i>'; ?>
                         </div>
-                        <div class="col-sm-1">
-                            <?php echo $r->stat_name; ?>
+                        <div class="col-sm-2">
+                            <?php echo $r->stat_name; 
+                            if ($r->req_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($r->req_app_note)
+                                    echo $r->req_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                     </div>
                 <?php } ?>

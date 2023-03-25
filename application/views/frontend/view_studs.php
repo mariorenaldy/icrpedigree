@@ -60,7 +60,14 @@
                             <?= $s->stu_stud_date; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $s->stat_name; ?>
+                            <?php echo $s->stat_name; 
+                            if ($s->stu_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($s->stu_app_note)
+                                    echo $s->stu_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                     </div>
                 <?php

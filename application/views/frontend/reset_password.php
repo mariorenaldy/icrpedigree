@@ -11,7 +11,21 @@
         <div class="container">
             <h3 class="text-center text-warning">Lupa Password</h3>
             <div class="row">   
-                <div class="col-sm-12 text-center">                          
+                <div class="col-sm-12 text-center"> 
+                    <div class="text-success">
+                        <?php		
+                            if ($this->session->flashdata('success')){
+                                echo 'email username & password berhasil dikirim.<br/>';
+                            }
+                        ?>
+                    </div>
+                    <div class="text-danger">
+                        <?php		
+                            if ($this->session->flashdata('error_message')){
+                                echo $this->session->flashdata('error_message').'<br/>';
+                            }
+                        ?>
+                    </div>                         
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_reset" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-2"></div>

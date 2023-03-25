@@ -24,7 +24,16 @@
                         <div class="col date"><?= $req->req_date ?></div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">Status: <?= $req->stat_name ?></div>
+                        <div class="col-sm-12">Status: 
+                            <?php echo $req->stat_name; 
+                            if ($req->req_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($req->req_app_note)
+                                    echo $req->req_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
+                        </div>
                     </div>
                     <br/>
                     <div class="row mb-1">

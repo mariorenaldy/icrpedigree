@@ -164,7 +164,7 @@ class Stambums extends CI_Controller {
 					$male = $this->stambumModel->get_count($wheStbMale);
 					if ($male >= $data['birth']->bir_male){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Male canine children is full');
+						$this->session->set_flashdata('error_message', 'Anak jantan sudah semua');
 					}
 				}
 				else{
@@ -174,7 +174,7 @@ class Stambums extends CI_Controller {
 					$female = $this->stambumModel->get_count($wheStbFemale);
 					if ($female >= $data['birth']->bir_female){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Female canine child is full');
+						$this->session->set_flashdata('error_message', 'Anak betina sudah semua');
 					}
 				}
 
@@ -210,17 +210,17 @@ class Stambums extends CI_Controller {
 					$email = $this->test_input($this->input->post('email'));
 					if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Invalid email format');
+						$this->session->set_flashdata('error_message', 'Format email tidak valid');
 					}
 
 					if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate phone number');
+						$this->session->set_flashdata('error_message', 'No. HP sudah terdaftar');
 					}
 
 					if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate email');
+						$this->session->set_flashdata('error_message', 'email sudah terdaftar');
 					}
 
 					if (!$err){
@@ -298,7 +298,7 @@ class Stambums extends CI_Controller {
 
 					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate canine name');
+						$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
 					}
 		
 					if (!$err){

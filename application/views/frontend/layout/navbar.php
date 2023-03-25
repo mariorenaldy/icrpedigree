@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark my-navbar">
     <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainCollapse" aria-controls="mainCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span style="color:white">MENU</span>
     </button>
     <div class="collapse navbar-collapse" id="mainCollapse">
         <div class="flex-container d-flex justify-content-around align-items-center container-fluid fs-5 navbar-nav" id="main-nav-container" style="height:70px;">

@@ -104,9 +104,9 @@
             }
         }
         function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
+            var proceed = window.prompt("Reject "+nama+" ?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Requestownershipcanine/reject/"+id;
+                window.location = "<?= base_url(); ?>backend/Requestownershipcanine/reject/"+id+"/"+encodeURI(proceed);
             }
         }
 

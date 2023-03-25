@@ -25,6 +25,7 @@ class Births extends CI_Controller {
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$whereStambum['stb_stat'] = $this->config->item('accepted');
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 				
 				$wheStbMale = [];
@@ -69,6 +70,7 @@ class Births extends CI_Controller {
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$whereStambum['stb_stat'] = $this->config->item('accepted');
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 				
 				$wheStbMale = [];
@@ -557,6 +559,9 @@ class Births extends CI_Controller {
 					$data['bir_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
+					if ($this->uri->segment(5)){
+						$data['bir_app_note'] = urldecode($this->uri->segment(5));
+					}
 					$res = $this->birthModel->update_births($data, $where);
 					if ($res){
 						$err = 0;

@@ -70,7 +70,7 @@ class Studs extends CI_Controller {
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$whereBirth['bir_stat'] = $this->config->item('accepted');
+				$whereBirth['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('frontend/view_approved_studs', $data);

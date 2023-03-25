@@ -197,24 +197,41 @@ class Stambums extends CI_Controller {
             // cek jumlah male & female
             $wheBirth['bir_id'] = $this->input->post('stb_bir_id');
             $birth = $this->birthModel->get_births($wheBirth)->row();
+
+            $wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
+            $wheStbMale['stb_gender'] = 'MALE';
+            $wheStbMale['stb_stat'] = $this->config->item('accepted');
+            $male = $this->stambumModel->get_count($wheStbMale);
+
+            $wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
+            $wheStbFemale['stb_gender'] = 'FEMALE';
+            $wheStbFemale['stb_stat'] = $this->config->item('accepted');
+            $female = $this->stambumModel->get_count($wheStbFemale);
+
+            $maleFull = 0; 
+            $femaleFull = 0;
             if ($this->input->post('stb_gender') == 'MALE'){
-              $wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
-              $wheStbMale['stb_gender'] = 'MALE';
-              $wheStbMale['stb_stat'] = $this->config->item('accepted');
-              $male = $this->stambumModel->get_count($wheStbMale);
               if ($male >= $birth->bir_male){
                 $err++;
                 $this->session->set_flashdata('error_message', 'Male puppy is full');
               }
+              if ($male+1 == $birth->bir_male){
+                $maleFull = 1;
+              }
+              if ($female == $birth->bir_female){
+                $femaleFull = 1;
+              }
             }
             else{
-              $wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
-              $wheStbFemale['stb_gender'] = 'FEMALE';
-              $wheStbFemale['stb_stat'] = $this->config->item('accepted');
-              $female = $this->stambumModel->get_count($wheStbFemale);
               if ($female >= $birth->bir_female){
                 $err++;
                 $this->session->set_flashdata('error_message', 'Female puppy is full');
+              }
+              if ($male == $birth->bir_male){
+                $maleFull = 1;
+              }
+              if ($female+1 == $birth->bir_female){
+                $femaleFull = 1;
               }
             }
 
@@ -434,54 +451,64 @@ class Stambums extends CI_Controller {
                             $dataLogStb['log_stb_id'] = $result;
                             $log = $this->logstambumModel->add_log($dataLogStb);
                             if ($log){
-                              if ($this->input->post('reg_member')){
-                                $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'));
-                                if ($result){
-                                  $this->db->trans_complete();
-                                  if ($member->mem_firebase_token){
-                                    $notif = $this->notificationtype_model->get_by_id(18);
-                                    firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                                  }
-                                  $this->session->set_flashdata('add_success', true);
-                                  redirect("backend/Stambums");
-                                }
-                                else{
+                              if ($maleFull && $femaleFull){
+                                $dataBirth['bir_stat'] = $this->config->item('completed');
+                                $bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+                                if (!$bir){
                                   $err = 1;
-                                }
+                                } 
                               }
-                              else{
-                                $result = $this->notification_model->add(18, $result, $mem_id);
-                                if ($result){
-                                  $this->db->trans_complete();
-                                  $mail = send_greeting($this->input->post('email'));
-                                  $this->session->set_flashdata('add_success', true);
-                                  redirect("backend/Stambums");
+
+                              if (!$err){
+                                if ($this->input->post('reg_member')){
+                                  $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'));
+                                  if ($result){
+                                    $this->db->trans_complete();
+                                    if ($member->mem_firebase_token){
+                                      $notif = $this->notificationtype_model->get_by_id(18);
+                                      firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+                                    }
+                                    $this->session->set_flashdata('add_success', true);
+                                    redirect("backend/Stambums");
+                                  }
+                                  else{
+                                    $err = 2;
+                                  }
                                 }
                                 else{
-                                  $err = 1;
+                                  $result = $this->notification_model->add(18, $result, $mem_id);
+                                  if ($result){
+                                    $this->db->trans_complete();
+                                    $mail = send_greeting($this->input->post('email'));
+                                    $this->session->set_flashdata('add_success', true);
+                                    redirect("backend/Stambums");
+                                  }
+                                  else{
+                                    $err = 2;
+                                  }
                                 }
                               }
                             }
                             else{
-                              $err = 2;
+                              $err = 3;
                             }
                           }
                           else{
-                            $err = 3;
+                            $err = 4;
                           }
                         }
                         else{
-                          $err = 4;
+                          $err = 5;
                         }
                       }
                       else{
-                        $err = 5;
+                        $err = 6;
                       }
                     } else {
-                      $err = 6;
+                      $err = 7;
                     }
                   } else {
-                    $err = 7;
+                    $err = 8;
                   }
                   if ($err) {
                     $this->db->trans_rollback();
@@ -588,38 +615,80 @@ class Stambums extends CI_Controller {
                 if ($res){
                   $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id);
                   if ($res){
-                    $this->db->trans_complete();
-                    $whereMember['mem_id'] = $stb->stb_member_id;
-                    $member = $this->memberModel->get_members($whereMember)->row();
-                    if ($member->mem_firebase_token){
-                      $notif = $this->notificationtype_model->get_by_id(4);
-                      firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+                    // cek jumlah male & female
+                    $wheBirth['bir_id'] = $stb->stb_bir_id;
+                    $birth = $this->birthModel->get_births($wheBirth)->row();
+
+                    $wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
+                    $wheStbMale['stb_gender'] = 'MALE';
+                    $wheStbMale['stb_stat'] = $this->config->item('accepted');
+                    $male = $this->stambumModel->get_count($wheStbMale);
+
+                    $wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
+                    $wheStbFemale['stb_gender'] = 'FEMALE';
+                    $wheStbFemale['stb_stat'] = $this->config->item('accepted');
+                    $female = $this->stambumModel->get_count($wheStbFemale);
+
+                    $maleFull = 0; 
+                    $femaleFull = 0;
+                    if ($can->can_gender == 'MALE'){
+                      if ($male+1 == $birth->bir_male){
+                        $maleFull = 1;
+                      }
+                      if ($female == $birth->bir_female){
+                        $femaleFull = 1;
+                      }
                     }
-                    $this->session->set_flashdata('approve', TRUE);
-                    redirect('backend/Stambums/view_approve');
+                    else{
+                      if ($male == $birth->bir_male){
+                        $maleFull = 1;
+                      }
+                      if ($female+1 == $birth->bir_female){
+                        $femaleFull = 1;
+                      }
+                    }
+                    if ($maleFull && $femaleFull){
+                      $dataBirth['bir_stat'] = $this->config->item('completed');
+                      $bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+                      if (!$bir){
+                        $err = 1;
+                      } 
+                    }
+
+                    if (!$err){
+                      $this->db->trans_complete();
+                      $whereMember['mem_id'] = $stb->stb_member_id;
+                      $member = $this->memberModel->get_members($whereMember)->row();
+                      if ($member->mem_firebase_token){
+                        $notif = $this->notificationtype_model->get_by_id(4);
+                        firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
+                      }
+                      $this->session->set_flashdata('approve', TRUE);
+                      redirect('backend/Stambums/view_approve');
+                    }
                   }
                   else{
-                    $err = 1;
+                    $err = 2;
                   }
                 }
                 else{
-                  $err = 2;
+                  $err = 3;
                 }
               }
               else{
-                $serr = 3;
+                $serr = 4;
               }
             }
             else{
-              $err = 4;
+              $err = 5;
             }
           }
           else{
-            $err = 5;
+            $err = 6;
           }
         }
         else{
-          $err = 6;
+          $err = 7;
         }
         if ($err){
           $this->db->trans_rollback();
@@ -652,6 +721,9 @@ class Stambums extends CI_Controller {
           'stb_user' => $this->session->userdata('use_id'),
           'stb_date' => date('Y-m-d H:i:s'),
         );
+        if ($this->uri->segment(5)){
+          $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
+        }
         $res = $this->stambumModel->update_stambum($dataStb, $whereStb);
         if ($res){
           $dataLogStb = array(

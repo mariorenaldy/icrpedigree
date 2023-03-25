@@ -39,7 +39,7 @@
                     <div class="col-sm-2"><b>DOB</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
-                    <div class="col-sm-2"><b>Status</b></div>
+                    <div class="col-sm-4"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php 
@@ -62,13 +62,20 @@
                                     <?= $b->bir_female; ?>
                                 </div>
                                 <div class="col-sm-2">
-                                    <?= $b->stat_name; ?>
+                                    <?php echo $b->stat_name; 
+                                    if ($b->bir_stat == $this->config->item('rejected')){
+                                        echo '<br/>Alasan: ';
+                                        if ($b->bir_app_note)
+                                            echo $b->bir_app_note;
+                                        else
+                                            echo '-'; 
+                                    } ?>
                                 </div>
                                 <div class="col-sm-2">
-                                <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
+                                <?php if (($b->bir_stat == $this->config->item('accepted') || $b->bir_stat == $this->config->item('completed')) && $stambum_stat[$i]){ ?>
                                         <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
                                 <?php } 
-                                if ($b->bir_stat == $this->config->item('accepted') && !$stambum[$i]){ ?>
+                                if (($b->bir_stat == $this->config->item('accepted') || $b->bir_stat == $this->config->item('completed')) && !$stambum[$i]){ ?>
                                     <button type="button" class="btn btn-success mb-1" onclick="editBirth(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Lahir"><i class="fa fa-edit"></i></button>
                                 <?php } ?>
                                 </div>

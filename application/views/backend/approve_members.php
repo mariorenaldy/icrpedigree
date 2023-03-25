@@ -32,7 +32,7 @@
                     <form action="<?= base_url().'backend/Members/search_approve'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Phone number/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Kennel"><i class="fa fa-search"></i></button>
@@ -95,9 +95,9 @@
             }
         }
         function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
+            var proceed = window.prompt("Reject "+nama+" ?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Members/reject/"+id;
+                window.location = "<?= base_url(); ?>backend/Members/reject/"+id+"/"+encodeURI(proceed);
             }
         }
     </script>

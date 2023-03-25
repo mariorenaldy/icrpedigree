@@ -65,7 +65,14 @@
                             <?= $r->req_date; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?php echo $r->stat_name; ?>
+                            <?php echo $r->stat_name; 
+                            if ($r->req_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($r->req_app_note)
+                                    echo $r->req_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                     </div>
                 <?php } ?>

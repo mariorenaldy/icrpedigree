@@ -22,7 +22,8 @@ class Requestpro extends CI_Controller {
         }
 
 		public function search(){
-			$like['can_a_s'] = $this->input->post('keywords');
+			$like['mem_name'] = $this->input->post('keywords');
+			$like['ken_name'] = $this->input->post('keywords');
             $where['req_stat'] = $this->config->item('saved');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['request'] = $this->requestproModel->search_requests($like, $where)->result();
@@ -167,6 +168,9 @@ class Requestpro extends CI_Controller {
 					$dataReq['req_app_user'] = $this->session->userdata('use_id');
 					$dataReq['req_app_date'] = date('Y-m-d H:i:s');
 					$dataReq['req_stat'] = $this->config->item('rejected');
+					if ($this->uri->segment(5)){
+						$dataReq['req_app_note'] = urldecode($this->uri->segment(5));
+					}
 					
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();

@@ -92,11 +92,11 @@
                                 </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$s->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $s->stu_id ?>" onclick="display('sire<?= $s->stu_id ?>')">
-                                    <br/><?= $s->sire_a_s ?>
+                                    <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $s->stu_sire_id ?>"><?= $s->sire_a_s ?></a>
                                 </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$s->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $s->stu_id ?>" onclick="display('dam<?= $s->stu_id ?>')">
-                                    <br/><?= $s->dam_a_s ?>
+                                    <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $s->stu_dam_id ?>"><?= $s->dam_a_s ?></a>
                                 </td>
                                 <td class="text-nowrap">
                                     <?= $s->stu_stud_date; ?>

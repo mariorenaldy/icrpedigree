@@ -79,11 +79,11 @@
                                 </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$b->stu_sire_photo) ?>" class="img-fluid img-thumbnail" alt="Sire" id="sire<?= $b->bir_id ?>" onclick="display('sire<?= $b->bir_id ?>')">
-                                    <br/><?= $b->sire ?>
+                                    <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $b->sire_id ?>"><?= $b->sire ?></a>
                                 </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$b->stu_dam_photo) ?>" class="img-fluid img-thumbnail" alt="Dam" id="dam<?= $b->bir_id ?>" onclick="display('dam<?= $b->bir_id ?>')">
-                                    <br/><?= $b->dam ?>
+                                    <br/><a class="text-decoration-none" href="<?= base_url() ?>backend/Canines/view_detail/<?= $b->dam_id ?>"><?= $b->dam ?></a>
                                 </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $b->bir_id ?>" onclick="display('myImg<?= $b->bir_id ?>')">
@@ -122,9 +122,9 @@
             }
         }
         function reject(id){
-            var proceed = confirm("Reject birth?");
+            var proceed = window.prompt("Reject birth?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/reject/"+id;
+                window.location = "<?= base_url(); ?>backend/Births/reject/"+id+"/"+encodeURI(proceed);
             }
         }
 

@@ -14,7 +14,7 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage</a></li>
                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestmember') ?>">Approve Edit Kennel</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestreset') ?>">Approve Reset Password</a></li>
+                           <!-- <li><a class="dropdown-item" href="<?= base_url('backend/Requestreset') ?>">Approve Reset Password</a></li> -->
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestpro') ?>">Approve Become Pro</a></li>
                            <?php } ?>
                         </ul>

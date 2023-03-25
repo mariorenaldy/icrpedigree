@@ -19,35 +19,32 @@
                     <div class="col-sm-2"><b>DOB</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
-                    <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php 
                     $i = 0;
-                    foreach ($births AS $b){ ?>
-                        <div class="row">
-                            <div class="col-sm-2 mb-1">
-                                <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                            </div>
-                            <div class="col-sm-2">
-                                <?= $b->bir_date_of_birth; ?>
-                            </div>
-                            <div class="col-sm-1" align="right">
-                                <?= $b->bir_male; ?>
-                            </div>
-                            <div class="col-sm-1" align="right">
-                                <?= $b->bir_female; ?>
-                            </div>
-                            <div class="col-sm-2">
-                                <?= $b->stat_name; ?>
-                            </div>
-                            <div class="col-sm-2">
-                            <?php if ($b->bir_stat == $this->config->item('accepted') && $stambum_stat[$i]){ ?>
+                    foreach ($births AS $b){ 
+                            if (($b->bir_stat == $this->config->item('accepted') || $b->bir_stat == $this->config->item('completed')) && $stambum_stat[$i]){ ?>
+                            <div class="row">
+                                <div class="col-sm-2 mb-1">
+                                    <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
+                                </div>
+                                <div class="col-sm-2">
+                                    <?= $b->bir_date_of_birth; ?>
+                                </div>
+                                <div class="col-sm-1" align="right">
+                                    <?= $b->bir_male; ?>
+                                </div>
+                                <div class="col-sm-1" align="right">
+                                    <?= $b->bir_female; ?>
+                                </div>
+                                <div class="col-sm-2">
                                     <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
-                            <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <?php $i++;
+                        <?php
+                            } 
+                            $i++;
                     } ?>
             </div>                           
         </div> 

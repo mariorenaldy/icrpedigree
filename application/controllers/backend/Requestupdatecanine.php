@@ -113,6 +113,9 @@ class Requestupdatecanine extends CI_Controller {
 					$dataReq['req_app_user'] = $this->session->userdata('use_id');
 					$dataReq['req_app_date'] = date('Y-m-d H:i:s');
 					$dataReq['req_stat'] = $this->config->item('rejected');
+					if ($this->uri->segment(5)){
+						$dataReq['req_app_note'] = urldecode($this->uri->segment(5));
+					}
 					
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();

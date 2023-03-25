@@ -42,7 +42,7 @@
                     <form id="formMember" action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Address/Phone number/Kennel/KTP number" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Phone number/Kennel/KTP number" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Kennel"><i class="fa fa-search"></i></button>

@@ -14,6 +14,13 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Approve Reset Password</h3>
+                <div class="text-success">
+                    <?php		
+                        if ($this->session->flashdata('success')){
+                            echo 'email has been send.<br/>';
+                        }
+                    ?>
+                </div>
                 <div class="text-danger">
                     <?php		
                         if ($this->session->flashdata('error_message')){
@@ -79,9 +86,9 @@
             }
         }
         function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
+            var proceed = window.prompt("Reject "+nama+" ?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Requestreset/reject/"+id;
+                window.location = "<?= base_url(); ?>backend/Requestreset/reject/"+id+"/"+encodeURI(proceed);
             }
         }
         <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>

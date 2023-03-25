@@ -832,6 +832,9 @@ class Canines extends CI_Controller {
         $data['can_user'] = $this->session->userdata('use_id');
         $data['can_date'] = date('Y-m-d H:i:s');
         $data['can_stat'] = $this->config->item('rejected');
+        if ($this->uri->segment(5)){
+          $data['can_app_note'] = urldecode($this->uri->segment(5));
+        }
         $res = $this->caninesModel->update_canines($data, $where);
         if ($res){
           $err = 0;

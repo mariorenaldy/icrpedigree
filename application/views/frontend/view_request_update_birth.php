@@ -20,17 +20,12 @@
                 <h3 class="text-center text-warning">List Laporan Ubah Lahir</h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Requestupdatebirth/search'?>" method="post">
-                        <!-- <div class="input-group my-3">
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Nama Anjing" name="keywords" value="<?= set_value('keywords') ?>">
-                            </div>
-                            <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div> -->
                         <div class="input-group my-3">
+                            <div class="col-sm-3 me-1">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                            </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
@@ -52,7 +47,7 @@
                     <div class="col-sm-1"><b>Jumlah Jantan Baru</b></div>
                     <div class="col-sm-1"><b>Jumlah Betina Lama</b></div>
                     <div class="col-sm-1"><b>Jumlah Betina Baru</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
@@ -88,8 +83,15 @@
                         <div class="col-sm-1">
                             <?= $r->req_female; ?>
                         </div>
-                        <div class="col-sm-1">
-                            <?php echo $r->stat_name; ?>
+                        <div class="col-sm-2">
+                        <?php echo $r->stat_name; 
+                            if ($r->req_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($r->req_app_note)
+                                    echo $r->req_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                     </div>
                 <?php } ?>
@@ -123,7 +125,7 @@
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#keywords');
+        setDatePicker('#date');
 
         function add(){
             window.location = "<?= base_url(); ?>frontend/Births/";

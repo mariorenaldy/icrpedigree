@@ -72,10 +72,10 @@
                             <?php foreach ($req AS $r){ ?>
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Change Canine Ownership"><i class="fa fa-check"></i></button>
+                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Accept Change Birth Data"><i class="fa fa-check"></i></button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Change Canine Ownership"><i class="fa fa-close"></i></button>
+                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Reject Change Birth Data"><i class="fa fa-close"></i></button>
                                     </td>
                                     <td>
                                         <?php if ($r->req_old_dam_photo != '-'){ ?>
@@ -130,16 +130,16 @@
         }
         setDatePicker('#date');
 
-        function approve(id, nama){
-            var proceed = confirm("Approve "+nama+" ?");
+        function approve(id){
+            var proceed = confirm("Approve Change Birth Data?");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Requestupdatebirth/approve/"+id;
             }
         }
         function reject(id, nama){
-            var proceed = confirm("Reject "+nama+" ?");
+            var proceed = window.prompt("Reject Change Birth Data?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Requestupdatebirth/reject/"+id;
+                window.location = "<?= base_url(); ?>backend/Requestupdatebirth/reject/"+id+"/"+encodeURI(proceed);
             }
         }
 

@@ -6,7 +6,7 @@ class BirthModel extends CI_Model {
     }
 
     public function get_births($where, $offset = 0, $limit = 1){
-        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_dam.can_a_s AS dam, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
+        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -24,7 +24,7 @@ class BirthModel extends CI_Model {
     }
 
     public function search_births($like, $where, $offset = 0, $limit = 1){
-        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_dam.can_a_s AS dam, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
+        $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {
             $this->db->where($where);
         }

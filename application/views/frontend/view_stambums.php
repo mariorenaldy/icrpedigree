@@ -36,17 +36,16 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-sm-1"><b>Foto</b></div>
+                    <div class="col-sm-2"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
                     <div class="col-sm-2"><b>Deskripsi</b></div>
                     <div class="col-sm-2"><b>Tanggal Lahir</b></div>
                     <div class="col-sm-2"><b>Kennel</b></div>
-                    <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($stambum AS $r){ ?>
                     <div class="row">
-                        <div class="col-sm-1 mb-1">
+                        <div class="col-sm-2 mb-1">
                             <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">
                         </div>
                         <div class="col-sm-2">
@@ -62,13 +61,17 @@
                             <?php echo $r->stb_date_of_birth; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->ken_name; ?>
+                            <?= $r->mem_name.' ('.$r->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $r->mem_name; ?>
-                        </div>
-                        <div class="col-sm-1">
-                            <?php echo $r->stat_name; ?>
+                            <?php echo $r->stat_name; 
+                            if ($r->stb_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($r->stb_app_note)
+                                    echo $r->stb_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                     </div>
                 <?php } ?>

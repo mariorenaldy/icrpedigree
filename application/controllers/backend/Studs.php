@@ -7,7 +7,7 @@ class Studs extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model'));
+			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model', 'pedigreesModel'));
 			$this->load->library('upload', $this->config->item('upload_stud'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url', 'notif'));
@@ -23,7 +23,7 @@ class Studs extends CI_Controller {
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$whereBirth['bir_stat'] = $this->config->item('accepted');
+				$whereBirth['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('backend/view_studs', $data);
@@ -47,7 +47,7 @@ class Studs extends CI_Controller {
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$whereBirth['bir_stat'] = $this->config->item('accepted');
+				$whereBirth['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
 			$this->load->view('backend/view_studs', $data);
@@ -81,6 +81,7 @@ class Studs extends CI_Controller {
 			$data['sireStat'] = [];
 			$data['dam'] = [];
 			$data['damStat'] = [];
+			$data['mode'] = 0;
 			$this->load->view('backend/add_stud', $data);
 		}
 
@@ -131,6 +132,7 @@ class Studs extends CI_Controller {
 
 				$data['dam'] = [];
 				$data['damStat'] = [];
+				$data['mode'] = 0;
 				$this->load->view('backend/add_stud', $data);
 			}
 			else {
@@ -180,6 +182,7 @@ class Studs extends CI_Controller {
 
 				$data['dam'] = [];
 				$data['damStat'] = [];
+				$data['mode'] = 0;
 				$this->load->view('backend/add_stud', $data);
 			}
 			else{
@@ -263,6 +266,7 @@ class Studs extends CI_Controller {
 					}
 				}
 				$data['damStat'] = $stat;
+				$data['mode'] = 0;
 				$this->load->view('backend/add_stud', $data);
 			}
 			else{
@@ -350,6 +354,7 @@ class Studs extends CI_Controller {
 						$data['damStat'][] = 1;
 					}
 				}
+				$data['mode'] = $this->input->post('mode');
 	
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('backend/add_stud', $data);
@@ -440,10 +445,83 @@ class Studs extends CI_Controller {
 							}
 						}
 		
-						if (!$err){
-							$piece = explode("-", $this->input->post('stu_stud_date'));
-							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+						$piece = explode("-", $this->input->post('stu_stud_date'));
+						$date = $piece[2]."-".$piece[1]."-".$piece[0];
+						if (!$err && !$this->input->post('mode')){
+							// Lapor pacak harus kurang dari 7 hari
+							$err++;
+							$data['warning'] = Array();
+							// $ts = new DateTime($date);
+							// $ts_now = new DateTime();
+							
+							// if ($ts > $ts_now)
+							// 	$cek = false;
+							// else{
+							// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
+							// 	if ($diff > 2)
+							// 		$cek = false;
+							// }
+							
+							$year = $piece[2];
+							$month = $piece[1];
+							$day = $piece[0];
+							if ($year != $this->config->item('tahun_lapor_pacak'))
+								$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
+							else{
+								if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak'))
+									$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
+							}
 
+							// Jarak pacak utk dam yg sama adalah sbb:
+							// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
+							// Kurang dari 3 bulan dari lahir(ada lahir)
+							$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
+							$wheBirth['studs.stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+							$wheBirth['births.bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+							$birth = $this->birthModel->get_births($wheBirth)->row();
+							if (!$birth){
+								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+								if ($res)
+									$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak').' days from stud date';
+							}
+							else{
+								$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+								$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak_lahir').' days from birth date';
+							}
+								
+							// dam anak dari sire
+							$wherePedSire['ped_sire_id'] = $this->input->post('stu_sire_id');
+							$wherePedSire['ped_canine_id'] = $this->input->post('stu_dam_id');
+							$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
+							if ($pedSire){
+								$data['warning'][] = 'Dam is sire\'s child';
+							}
+
+							// sire anak dari dam
+							$wherePedDam['ped_dam_id'] = $this->input->post('stu_dam_id');
+							$wherePedDam['ped_canine_id'] = $this->input->post('stu_sire_id');
+							$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
+							if ($pedDam){
+								$data['warning'][] = 'Sire is dam\' child';
+							}
+									
+							// sibling
+							$wherePed['ped_canine_id'] = $this->input->post('stu_sire_id');
+							$ped = $this->pedigreesModel->get_pedigrees($wherePed)->row();
+							if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
+								$sibling = $this->studModel->check_siblings($this->input->post('stu_sire_id'), $ped->ped_sire_id, $ped->ped_dam_id)->result();
+								$cek = false;
+								foreach ($sibling AS $r){
+									if ($r->can_id == $this->input->post('stu_dam_id'))
+										$cek = true;
+								}
+								if ($cek){
+									$data['warning'][] = 'Sire and dam are sibling';
+								}
+							}
+						}
+
+						if (!$err){
 							$data = array(
 								'stu_photo' => $photo,
 								'stu_sire_id' => $this->input->post('stu_sire_id'),
@@ -548,7 +626,7 @@ class Studs extends CI_Controller {
 								$this->load->view('backend/edit_stud', $data);
 							}
 						}
-						else{
+						if ($err){
 							$this->load->view('backend/add_stud', $data);
 						}
 					}
@@ -1167,6 +1245,9 @@ class Studs extends CI_Controller {
 					$data['stu_user'] = $this->session->userdata('use_id');
 					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('rejected');
+					if ($this->uri->segment(5)){
+						$data['stu_app_note'] = urldecode($this->uri->segment(5));
+					}
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
 						$err = 0;

@@ -7,7 +7,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel', 'CaninesModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url', 'mail', 'notif'));
@@ -32,7 +32,6 @@ class Members extends CI_Controller {
 
 		public function search(){
 			$like['mem_name'] = $this->input->post('keywords');
-			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
 			$like['mem_ktp'] = $this->input->post('keywords');
@@ -55,7 +54,6 @@ class Members extends CI_Controller {
 
 		public function search_approve(){
 			$like['mem_name'] = $this->input->post('keywords');
-			$like['mem_address'] = $this->input->post('keywords');
 			$like['mem_hp'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('saved');
@@ -323,7 +321,10 @@ class Members extends CI_Controller {
 									}	
 									if (!$err){
 										$this->db->trans_complete();
-										$mail = send_greeting($this->input->post('mem_email'));
+										if ($this->input->post('mem_type'))
+											$mail = send_greeting($this->input->post('mem_email'), $this->input->post('mem_name'));
+										else
+											$mail = send_greeting($this->input->post('email'), $this->input->post('name'));
 										$this->session->set_flashdata('add_success', TRUE);
 										redirect("backend/Members");
 									}
@@ -690,8 +691,13 @@ class Members extends CI_Controller {
 									$result = $this->notification_model->add(17, $member->mem_id, $member->mem_id);
 									if ($result){
 										$this->db->trans_complete();
-										$mail = send_greeting($member->email);
-										$this->session->set_flashdata('approve', TRUE);
+										$mail = send_greeting($member->mem_email, $member->mem_name);
+										if ($mail){
+											$this->session->set_flashdata('approve', TRUE);
+										}
+										else{
+											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+										}
 										redirect('backend/Members/view_approve');
 									}
 									else{
@@ -740,6 +746,10 @@ class Members extends CI_Controller {
 					$data['mem_stat'] = $this->config->item('rejected');
 					$data['mem_user'] = $this->session->userdata('use_id');
 					$data['mem_date'] = date('Y-m-d H:i:s');
+					if ($this->uri->segment(5)){
+						$data['mem_app_note'] = urldecode($this->uri->segment(5));
+					}
+					
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
 						$dataKennel['ken_stat'] = $this->config->item('rejected');
@@ -847,24 +857,33 @@ class Members extends CI_Controller {
 								);
 								$res = $this->LogkennelModel->add_log($dataKennelLog);
 								if ($res){
-									$this->db->trans_complete();
-									$this->session->set_flashdata('delete_success', TRUE);
-									redirect("backend/Members");
+									$dataCan['can_member_id'] = $this->config->item('no_member');
+									$dataCan['can_kennel_id'] = $this->config->item('no_member');
+									$wheCan['can_member_id'] = $this->uri->segment(4);
+									$can = $this->CaninesModel->update_canines($dataCan, $wheCan);
+									if ($can){
+										$this->db->trans_complete();
+										$this->session->set_flashdata('delete_success', TRUE);
+										redirect("backend/Members");
+									}
+									else{
+										$err = 1;
+									}
 								}
 								else{
-									$err = 1;
+									$err = 2;
 								}
 							}
 							else{
-								$err = 2;
+								$err = 3;
 							}
 						}
 						else{
-							$err = 3;
+							$err = 4;
 						}
 					}
 					else{
-						$err = 4;
+						$err = 5;
 					}
 					if ($err){ 
 						$this->db->trans_rollback();
@@ -1048,6 +1067,23 @@ class Members extends CI_Controller {
 				$wheLog['log_kennel_id'] = $data['member'][0]->ken_id;
 				$data['kennel'] = $this->LogkennelModel->get_logs($wheLog)->result();
 				$this->load->view('backend/log_member', $data);
+			}
+			else{
+				redirect('backend/Members');
+			}
+		}
+
+		public function send_reg_mail(){
+			if ($this->uri->segment(4)){
+				$where['mem_id'] = $this->uri->segment(4);
+				$member = $this->MemberModel->get_members($where)->row();
+				$mail = send_greeting($member->mem_email, $member->mem_name);
+				if ($mail){
+					echo 'success';
+				}
+				else{
+					echo show_error($this->email->print_debugger());
+				}
 			}
 			else{
 				redirect('backend/Members');

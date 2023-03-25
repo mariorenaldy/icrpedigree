@@ -25,6 +25,7 @@ class Births extends CI_Controller {
 			foreach ($data['births'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$whereStambum['stb_stat'] = $this->config->item('accepted');
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 
 				$wheStbMale = [];
@@ -39,7 +40,7 @@ class Births extends CI_Controller {
 				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
 				$female = $this->stambumModel->get_count($wheStbFemale);
 
-				if ($male >= $r->bir_male && $female >= $r->bir_female){
+				if ($male == $r->bir_male && $female == $r->bir_female){
 					$data['stambum_stat'][] = 0;
 				}
 				else{
@@ -73,6 +74,7 @@ class Births extends CI_Controller {
 			foreach ($data['births'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
+				$whereStambum['stb_stat'] = $this->config->item('accepted');
 				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
 
 				$wheStbMale = [];
@@ -87,7 +89,7 @@ class Births extends CI_Controller {
 				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
 				$female = $this->stambumModel->get_count($wheStbFemale);
 
-				if ($male >= $r->bir_male && $female >= $r->bir_female){
+				if ($male == $r->bir_male && $female == $r->bir_female){
 					$data['stambum_stat'][] = 0;
 				}
 				else{
@@ -104,7 +106,7 @@ class Births extends CI_Controller {
 	public function view_approved(){
 		if ($this->session->userdata('mem_id')){
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
-			$wheBirth['bir_stat'] = $this->config->item('accepted');
+			$wheBirth['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
 
 			$data['stambum_stat'] = array();
@@ -121,7 +123,7 @@ class Births extends CI_Controller {
 				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
 				$female = $this->stambumModel->get_count($wheStbFemale);
 
-				if ($male >= $r->bir_male && $female >= $r->bir_female){
+				if ($male == $r->bir_male && $female == $r->bir_female){
 					$data['stambum_stat'][] = 0;
 				}
 				else{

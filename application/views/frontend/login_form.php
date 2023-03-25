@@ -40,7 +40,8 @@
                         <div class="input-group mb-3">
                             <div class="col-sm-4"></div>
                             <div class="col-sm-5 text-start">
-                                <a href="<?= base_url().'frontend/Requestreset/reset_password' ?>" class="text-decoration-none text-warning link-light"><h5>Lupa Password?</h5></a>
+                                <!-- <a href="<?= base_url().'frontend/Requestreset/reset_password' ?>" class="text-decoration-none text-warning link-light"><h5>Lupa Password?</h5></a> -->
+                                <a href="<?= base_url().'frontend/Members/reset_password' ?>" class="text-decoration-none text-warning link-light"><h5>Lupa Password?</h5></a>
                             </div>
                         </div>     
                     </form>

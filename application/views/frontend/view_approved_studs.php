@@ -19,7 +19,6 @@
                     <div class="col-sm-2 text-center"><b>Sire</b></div>
                     <div class="col-sm-2 text-center"><b>Dam</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
-                    <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php
@@ -41,9 +40,6 @@
                             </div>
                             <div class="col-sm-2">
                                 <?= $s->stu_stud_date; ?>
-                            </div>
-                            <div class="col-sm-2">
-                                <?= $s->stat_name; ?>
                             </div>
                             <div class="col-sm-2">
                                 <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Pilih Pacak"><i class="fa fa-check"></i></button>

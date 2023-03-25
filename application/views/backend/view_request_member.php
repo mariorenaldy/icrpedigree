@@ -20,7 +20,7 @@
                     <form action="<?= base_url().'backend/Requestmember/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Nama/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Cari Kennel"><i class="fa fa-search"></i></button>
@@ -148,9 +148,9 @@
         }
     }
     function reject(id, nama){
-        var proceed = confirm("Reject "+nama+" ?");
+        var proceed = window.prompt("Reject "+nama+" ?", "");
         if (proceed){             
-            window.location = "<?= base_url(); ?>backend/Requestmember/reject/"+id;
+            window.location = "<?= base_url(); ?>backend/Requestmember/reject/"+id+"/"+encodeURI(proceed);
         }
     }
 

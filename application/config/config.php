@@ -528,8 +528,8 @@ $config['email'] = Array(
     'protocol' => 'smtp',
     'smtp_host' => 'ssl://smtp.hostinger.com',
     'smtp_port' => 465,
-    'smtp_user' => 'admin@icrpedigree.com',
-    'smtp_pass' => 'Adm1n12345',
+    'smtp_user' => 'system@icrpedigree.com',
+    'smtp_pass' => 'NEW1cr202#',
     'mailtype'  => 'html', 
     'charset'   => 'iso-8859-1'
 );
@@ -669,5 +669,3 @@ $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
 $config['youtube_width'] = "420";
 $config['youtube_height'] = "315";
-
-$config['default_password'] = "12345";

@@ -36,17 +36,16 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-sm-1"><b>Foto</b></div>
+                    <div class="col-sm-2"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
                     <div class="col-sm-2"><b>Deskripsi</b></div>
                     <div class="col-sm-2"><b>Kennel</b></div>
-                    <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
                     <div class="row">
-                        <div class="col-sm-1 mb-1">
+                        <div class="col-sm-2 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                             <?php } else{ ?>
@@ -73,13 +72,17 @@
                             ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $c->ken_name; ?>
+                            <?= $c->mem_name.' ('.$c->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <?= $c->mem_name; ?>
-                        </div>
-                        <div class="col-sm-1">
-                            <?php echo $c->stat_name; ?>
+                            <?php echo $c->stat_name; 
+                            if ($c->can_stat == $this->config->item('rejected')){
+                                echo '<br/>Alasan: ';
+                                if ($c->can_app_note)
+                                    echo $c->can_app_note;
+                                else
+                                    echo '-'; 
+                            } ?>
                         </div>
                         <div class="col-sm-2">
                             <?php if ($c->can_stat == $this->config->item('accepted')){ ?>

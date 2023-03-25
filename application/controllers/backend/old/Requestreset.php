@@ -9,7 +9,7 @@ class Requestreset extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestresetModel', 'memberModel'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -45,18 +45,25 @@ class Requestreset extends CI_Controller {
 					$this->db->trans_start();
 					$result = $this->requestresetModel->update_requests($dataReq, $wheReq);
 					if ($result){
+						$wheMember['mem_id'] = $req->req_member_id;
+						$member = $this->memberModel->get_members($wheMember)->row();
 						$dataMember = array(
-							'mem_password' => sha1($this->config->item('default_password')),
+							'mem_password' => sha1($member->mem_hp),
 							'mem_user' => $this->session->userdata('use_id'),
 							'mem_date' => date('Y-m-d H:i:s'),
 						);
-						$wheMember['mem_id'] = $req->req_member_id;
 						$res = $this->memberModel->update_members($dataMember, $wheMember);
 						if ($res){
 							$this->db->trans_complete();
-							$member = $this->memberModel->get_members($wheMember)->row();
-							$this->session->set_flashdata('mesg', 'Username: '.$member->mem_username.'\nPassword: '.$this->config->item('default_password').'\nIni adalah password sementara. Harap diganti.');
+							$this->session->set_flashdata('mesg', 'Username: '.$member->mem_username.'\nPassword: '.$member->mem_hp.'\nIni adalah password sementara. Harap diganti.');
 							$this->session->set_flashdata('telp', $member->mem_hp);
+							$mail = send_reset_password($member->mem_email, $member->mem_username, $member->mem_hp);
+							if (!$mail){
+								$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+							}
+							else{
+								$this->session->set_flashdata('success', TRUE);
+							}
 							redirect('backend/Requestreset');
 						}
 						else{
@@ -91,6 +98,9 @@ class Requestreset extends CI_Controller {
 					$dataReq['req_app_user'] = $this->session->userdata('use_id');
 					$dataReq['req_app_date'] = date('Y-m-d H:i:s');
 					$dataReq['req_stat'] = $this->config->item('rejected');
+					if ($this->uri->segment(5)){
+						$dataReq['req_app_note'] = urldecode($this->uri->segment(5));
+					}
 					
 					$update = $this->requestresetModel->update_requests($dataReq, $wheReq);
 					if ($update){

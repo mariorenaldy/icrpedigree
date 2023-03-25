@@ -64,7 +64,7 @@ class Requestreset extends CI_Controller {
 						$res = $this->requestresetModel->add_requests($data);
 						if ($res){
 							$this->session->set_flashdata('reset', TRUE);
-							redirect("frontend/Members/reset_password");
+							redirect("frontend/Requestreset/reset_password");
 						}
 						else{
 							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan reset password');
