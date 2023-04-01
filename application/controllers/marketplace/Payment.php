@@ -29,7 +29,8 @@ class Payment extends CI_Controller {
 		// Data
 		$order = array(
 			"amount" => $amount,
-			"invoice_number" => $inv
+			"invoice_number" => $inv,
+			"callback_url" => "http://localhost/icrpedigree/frontend/Beranda"
 		);
 		$payment = array(
 			"payment_due_date" => 60

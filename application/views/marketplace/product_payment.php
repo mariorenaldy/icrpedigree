@@ -18,7 +18,9 @@
             <?php } ?>
             <h3 class="text-warning"><?= $products->pro_name ?></h3>
             <figcaption class="figure-caption"><?= $products->pro_desc ?></figcaption>
-            <p><?= $products->pro_price ?></p>
+            <p>Harga Satuan: <?= $products->pro_price ?></p>
+            <p>Jumlah Pembelian: <?= $this->uri->segment(5); ?></p>
+            <p class="h5 text-warning">Total Harga: <?= $products->pro_price * $this->uri->segment(5); ?></p>
         </figure>
         <form id="mainForm" class="form-horizontal" method="post" enctype="multipart/form-data">
             <div class="text-danger">
@@ -35,40 +37,6 @@
                     <input class="form-control" type="text" placeholder="Alamat" name="address" value="<?= set_value('address'); ?>">
                 </div>
             </div>
-            <div class="input-group mb-3">
-                <label for="mem_ktp" class="control-label col-sm-2">Pilih Pengiriman</label>
-                <?php
-                $options = array(
-                    'instan'         => 'Instan',
-                    'same_day'         => 'Same Day',
-                    'next_day'         => 'Next Day',
-                    'reguler'           => 'Reguler'
-                );
-                echo form_dropdown('ken_type_id', $options, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
-                ?>
-            </div>
-            <div class="input-group mb-3">
-                <label for="mem_ktp" class="control-label col-sm-2">Pilih Kurir</label>
-                <?php
-                $options = array(
-                    'JNE'         => 'JNE',
-                    'J&T'         => 'J&T',
-                    'SiCepat'         => 'SiCepat'
-                );
-                echo form_dropdown('ken_type_id', $options, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
-                ?>
-            </div>
-            <div class="input-group mb-3">
-                <label for="mem_ktp" class="control-label col-sm-2">Pilih Pembayaran</label>
-                <?php
-                $options = array(
-                    'BCA'         => 'BCA',
-                    'BNI'         => 'BNI',
-                    'BRI'         => 'BRI'
-                );
-                echo form_dropdown('ken_type_id', $options, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
-                ?>
-            </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" id="checkout-button">Bayar</button>
                 <button class="btn btn-danger" type="button" onclick="back(<?= $products->pro_id ?>)">Kembali</button>
@@ -80,19 +48,24 @@
     <script type="text/javascript">
         var checkoutButton = document.getElementById('checkout-button');
         checkoutButton.addEventListener('click', function () {
-            let amount = <?= $products->pro_price ?>;
-            $.ajax({
-                url: "<?= base_url() ?>marketplace/Payment/checkout",
-                method: 'post',
-                data: {amount: amount},
-                success: function(response){
-                    if(response.status == 'success'){
-                        loadJokulCheckout(response.url);
-                    }else if(response.status == 'error'){
-                        alert("HTTP code: " + response.code + "\n" + response.message);
+            if(!$('input[name="address"]').val()){
+                alert("Alamat belum diisi!");
+            }
+            else{
+                let amount = <?= $products->pro_price * $this->uri->segment(5) ?>;
+                $.ajax({
+                    url: "<?= base_url() ?>marketplace/Payment/checkout",
+                    method: 'post',
+                    data: {amount: amount},
+                    success: function(response){
+                        if(response.status == 'success'){
+                            loadJokulCheckout(response.url);
+                        }else if(response.status == 'error'){
+                            alert("HTTP code: " + response.code + "\n" + response.message);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         function back(id){
