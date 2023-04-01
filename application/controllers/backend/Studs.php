@@ -449,7 +449,6 @@ class Studs extends CI_Controller {
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						if (!$err && !$this->input->post('mode')){
 							// Lapor pacak harus kurang dari 7 hari
-							$err++;
 							$data['warning'] = Array();
 							// $ts = new DateTime($date);
 							// $ts_now = new DateTime();
@@ -465,11 +464,15 @@ class Studs extends CI_Controller {
 							$year = $piece[2];
 							$month = $piece[1];
 							$day = $piece[0];
-							if ($year != $this->config->item('tahun_lapor_pacak'))
+							if ($year != $this->config->item('tahun_lapor_pacak')){
+								$err++;
 								$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
+							}
 							else{
-								if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak'))
+								if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak')){
+									$err++;
 									$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
+								}
 							}
 
 							// Jarak pacak utk dam yg sama adalah sbb:
@@ -481,12 +484,17 @@ class Studs extends CI_Controller {
 							$birth = $this->birthModel->get_births($wheBirth)->row();
 							if (!$birth){
 								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
-								if ($res)
+								if ($res){
+									$err++;
 									$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak').' days from stud date';
+								}
 							}
 							else{
 								$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
-								$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak_lahir').' days from birth date';
+								if ($res){
+									$err++;
+									$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak_lahir').' days from birth date';
+								}
 							}
 								
 							// dam anak dari sire
@@ -494,6 +502,7 @@ class Studs extends CI_Controller {
 							$wherePedSire['ped_canine_id'] = $this->input->post('stu_dam_id');
 							$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
 							if ($pedSire){
+								$err++;
 								$data['warning'][] = 'Dam is sire\'s child';
 							}
 
@@ -502,6 +511,7 @@ class Studs extends CI_Controller {
 							$wherePedDam['ped_canine_id'] = $this->input->post('stu_sire_id');
 							$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
 							if ($pedDam){
+								$err++;
 								$data['warning'][] = 'Sire is dam\' child';
 							}
 									
@@ -516,6 +526,7 @@ class Studs extends CI_Controller {
 										$cek = true;
 								}
 								if ($cek){
+									$err++;
 									$data['warning'][] = 'Sire and dam are sibling';
 								}
 							}
@@ -561,9 +572,11 @@ class Studs extends CI_Controller {
 								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
-									$result = $this->notification_model->add(14, $stud, $this->input->post('can_member_id'));
+									$wheSire['can_id'] = $this->input->post('stu_sire_id');
+									$canSire = $this->caninesModel->get_canines($wheSire)->row();
+									$result = $this->notification_model->add(14, $stud, $this->input->post('can_member_id'), 'Nama Sire: '.$canSire->can_a_s.'<br>Nama Dam: '.$can->can_a_s);
 									if ($result){
-										$res = $this->notification_model->add(14, $stud, $can->can_member_id, base_url().'frontend/Births/add/'.$stud);
+										$res = $this->notification_model->add(14, $stud, $can->can_member_id, 'Nama Sire: '.$canSire->can_a_s.'<br>Nama Dam: '.$can->can_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$stud.'">Lapor Lahir</a>');
 										if ($res){
 											$whe['mem_id'] = $this->input->post('can_member_id');
 											$member = $this->memberModel->get_members($whe)->row();
@@ -585,6 +598,7 @@ class Studs extends CI_Controller {
 												'date' => $date,
 												'type' => $this->config->item('stud'),
 												'photo' => $photo,
+												'trans_id' => $stud,
 											); 
 											$news = $this->news_model->add($dataNews);
 											if ($news){
@@ -1073,7 +1087,9 @@ class Studs extends CI_Controller {
 								);
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
-									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
+									$wheSire['can_id'] = $this->input->post('stu_sire_id');
+									$canSire = $this->caninesModel->get_canines($wheSire)->row();
+									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, 'Nama Sire: '.$canSire->can_a_s.'<br>Nama Dam: '.$can->can_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->input->post('stu_id').'">Lapor Lahir</a>');
 									if ($result){
 										$this->db->trans_complete();
 										$whePartner['mem_id'] = $can->can_member_id;
@@ -1155,9 +1171,9 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id);
+							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
 							if ($result){
-								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, base_url().'frontend/Births/add/'.$this->uri->segment(4));
+								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->uri->segment(4).'">Lapor Lahir</a>');
 								if ($res){
 									$whe['mem_id'] = $stud->stu_member_id;
 									$member = $this->memberModel->get_members($whe)->row();
@@ -1185,6 +1201,7 @@ class Studs extends CI_Controller {
 										'date' => $date,
 										'type' => $this->config->item('stud'),
 										'photo' => $stud->stu_photo,
+										'trans_id' => $this->uri->segment(4),
 									); 
 									$news = $this->news_model->add($dataNews);
 									if ($news){
@@ -1267,7 +1284,7 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id);
+							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
 								$whe['mem_id'] = $stud->stu_member;

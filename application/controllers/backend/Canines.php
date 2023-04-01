@@ -297,7 +297,7 @@ class Canines extends CI_Controller {
                     if ($log){
                       $res = $this->logpedigreeModel->add_log($dataLogPed);
                       if ($res){
-                        $result = $this->notification_model->add(13, $id, $this->input->post('can_member_id'));
+                        $result = $this->notification_model->add(13, $id, $this->input->post('can_member_id'), "Nama anjing: ".$dataCan['can_a_s']);
 									      if ($result){
                           $this->db->trans_complete();
                           $whe['mem_id'] = $this->input->post('can_member_id');
@@ -780,7 +780,7 @@ class Canines extends CI_Controller {
             );
             $res = $this->logpedigreeModel->add_log($dataLogPed);
             if ($res){
-              $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id);
+              $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id, "Nama anjing: ".$can->can_a_s);
               if ($res3){
                 $this->db->trans_complete();
                 $whe_can['mem_id'] = $can->can_member_id;
@@ -838,7 +838,7 @@ class Canines extends CI_Controller {
         $res = $this->caninesModel->update_canines($data, $where);
         if ($res){
           $err = 0;
-          $res2 = $this->notification_model->add(12, $this->uri->segment(4), $can->can_member_id);
+          $res2 = $this->notification_model->add(12, $this->uri->segment(4), $can->can_member_id, "Nama anjing: ".$can->can_a_s);
           if ($res2){
             $piece = explode("-", $can->can_date_of_birth);
             $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];

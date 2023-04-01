@@ -35,11 +35,13 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-sm-2 text-center"><b>Foto</b></div>
+                    <div class="col-sm-1 text-center"><b>Foto</b></div>
+                    <div class="col-sm-2"><b>Sire</b></div>
+                    <div class="col-sm-2"><b>Dam</b></div>
                     <div class="col-sm-2"><b>DOB</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
-                    <div class="col-sm-4"><b>Status</b></div>
+                    <div class="col-sm-1"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php 
@@ -47,10 +49,14 @@
                     foreach ($births AS $b){ 
                         if ($b){ ?>
                             <div class="row">
-                                <div class="col-sm-2 mb-1">
+                                <div class="col-sm-1 mb-1">
                                     <img src="<?= base_url('uploads/births/'.$b->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine">
-                                    <br/><i class="fa fa-mars"></i> <?= $b->sire; ?>
-                                    <br/><i class="fa fa-venus"></i> <?= $b->dam; ?>
+                                </div>
+                                <div class="col-sm-2">
+                                    <?= $b->sire; ?>
+                                </div>
+                                <div class="col-sm-2">
+                                    <?= $b->dam; ?>
                                 </div>
                                 <div class="col-sm-2">
                                     <?= $b->bir_date_of_birth; ?>
@@ -61,7 +67,7 @@
                                 <div class="col-sm-1" align="right">
                                     <?= $b->bir_female; ?>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <?php echo $b->stat_name; 
                                     if ($b->bir_stat == $this->config->item('rejected')){
                                         echo '<br/>Alasan: ';

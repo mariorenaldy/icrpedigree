@@ -292,6 +292,9 @@
                 if (proceed){
                     $('#mode').val(1);
                 }
+                else{
+                    window.location = '<?= base_url() ?>backend/Studs';
+                }
             <?php } ?>
         });
     </script>

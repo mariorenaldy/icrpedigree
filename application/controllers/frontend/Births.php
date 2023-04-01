@@ -163,7 +163,7 @@ class Births extends CI_Controller {
 			}
 			else{
 				$wheBirth['bir_stu_id'] = $this->input->post('bir_stu_id');
-				$wheStud['bir_stat != '] = $this->config->item('rejected');
+				$wheBirth['bir_stat != '] = $this->config->item('rejected');
 				$birth = $this->birthModel->get_births($wheBirth)->row();
 				if (!$birth){
 					$err = 0;

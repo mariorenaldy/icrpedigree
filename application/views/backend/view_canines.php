@@ -77,7 +77,6 @@
                                 <th class="no-sort">Owner</th>
                                 <th class="no-sort">Note</th>
                                 <th class="no-sort">Reg. Date</th>
-                                <th class="no-sort">RIP?</th>
                                 <th class="no-sort">Status</th>
                                 <th style="display: none;"></th>
                             </tr>
@@ -111,7 +110,7 @@
                                     <td><?= $c->can_reg_number; ?></td>
                                     <td><?= $c->can_icr_number; ?></td>
                                     <td><?= $c->can_chip_number; ?></td>
-                                    <td><?= $c->can_a_s; ?></td>
+                                    <td><?= $c->can_a_s; ?><?php if ($c->can_rip) echo '<div class="text-danger"><b>----- RIP -----<b></div>'; ?></td>
                                     <td><?= $c->can_breed; ?></td>
                                     <td><?= $c->can_gender; ?></td>
                                     <td><?= $c->can_color; ?></td>
@@ -120,7 +119,6 @@
                                     <td><?= $c->mem_name; ?></td>
                                     <td><?= $c->can_note; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
-                                    <td><?php if ($c->can_rip) echo '<i class="fa fa-check"></i>'; ?></td>
                                     <td><?= $c->stat_name.'<br/>'.$c->use_username.' (<span class="text-nowrap">'.$c->can_app_date.'</span>)'; ?></td>
                                     <td style="display: none;"><?= $c->can_app_date2; ?></td>
                                 </tr>
@@ -173,7 +171,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[18, 'desc']], dom: 'lpftrip',
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[17, 'desc']], dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"
