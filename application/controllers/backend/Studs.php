@@ -10,7 +10,7 @@ class Studs extends CI_Controller {
 			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model', 'pedigreesModel'));
 			$this->load->library('upload', $this->config->item('upload_stud'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('url', 'notif'));
+			$this->load->helper(array('url', 'notif', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -411,9 +411,9 @@ class Studs extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Dam file size is too big (> 1 MB).');
 							}
 	
-							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
-							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
-							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+							$stud_name = $this->config->item('path_stud').$this->config->item('file_name_stud');
+							$sire_name = $this->config->item('path_stud').$this->config->item('file_name_sire');
+							$dam_name = $this->config->item('path_stud').$this->config->item('file_name_dam');
 	
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
@@ -610,9 +610,15 @@ class Studs extends CI_Controller {
 												if ($partner->mem_firebase_token){
 													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 												}
-												$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$stud);
-												$this->session->set_flashdata('telp', $partner->mem_hp);
-												$this->session->set_flashdata('add_success', TRUE);
+												$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $stud);
+												if (!$mail){
+													$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+												}
+												else{
+													$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$stud);
+													$this->session->set_flashdata('telp', $partner->mem_hp);
+													$this->session->set_flashdata('add_success', TRUE);
+												}
 												redirect('backend/Studs');
 											}
 											else{
@@ -988,7 +994,7 @@ class Studs extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Stud file size is too big (> 1 MB).');
 							}
 
-							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
+							$stud_name = $this->config->item('path_stud').$this->config->item('file_name_stud');
 						}
 						if (isset($_POST['attachment_sire']) && !empty($_POST['attachment_sire'])) {
 							$uploadedSire = $_POST['attachment_sire'];
@@ -1001,7 +1007,7 @@ class Studs extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Sire file size is too big (> 1 MB).');
 							}
 
-							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
+							$sire_name = $this->config->item('path_stud').$this->config->item('file_name_sire');
 						}
 						if (isset($_POST['attachment_dam']) && !empty($_POST['attachment_dam'])) {
 							$uploadedDam = $_POST['attachment_dam'];
@@ -1014,7 +1020,7 @@ class Studs extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Dam file size is too big (> 1 MB).');
 							}
 
-							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+							$dam_name = $this->config->item('path_stud').$this->config->item('file_name_dam');
 						}
 
 						if (isset($uploadedStud) || isset($uploadedSire) || isset($uploadedDam)){
@@ -1074,7 +1080,7 @@ class Studs extends CI_Controller {
 							$stud = $this->studModel->update_studs($data, $where);
 							if ($stud){
 								$dataLog = array(
-									'log_stu_id' => $stud,
+									'log_stu_id' => $this->input->post('stu_id'),
 									'log_photo' => $photo,
 									'log_sire_id' => $this->input->post('stu_sire_id'),
 									'log_dam_id' => $this->input->post('stu_dam_id'),
@@ -1098,9 +1104,15 @@ class Studs extends CI_Controller {
 											$notif = $this->notificationtype_model->get_by_id(1);
 											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
-										$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
-										$this->session->set_flashdata('telp', $partner->mem_hp);
-										$this->session->set_flashdata('edit_success', TRUE);
+										$mail = send_birth_link($partner->mem_email, $partner->mem_username, $canSire->can_a_s, $can->can_a_s, $this->input->post('stu_id'));
+										if (!$mail){
+											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+										}
+										else{
+											$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
+											$this->session->set_flashdata('telp', $partner->mem_hp);
+											$this->session->set_flashdata('edit_success', TRUE);
+										}
 										redirect('backend/Studs');
 									}
 									else{
@@ -1213,9 +1225,15 @@ class Studs extends CI_Controller {
 										if ($partner->mem_firebase_token){
 											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
-										$this->session->set_flashdata('mesg', base_url().'frontend/Births/add/'.$this->uri->segment(4));
-										$this->session->set_flashdata('telp', $partner->mem_hp);
-										$this->session->set_flashdata('approve', TRUE);
+										$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
+										if (!$mail){
+											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+										}
+										else{
+											$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$this->uri->segment(4));
+											$this->session->set_flashdata('telp', $partner->mem_hp);
+											$this->session->set_flashdata('approve', TRUE);
+										}
 										redirect('backend/Studs/view_approve');
 									}
 									else{
@@ -1356,7 +1374,7 @@ class Studs extends CI_Controller {
 					if ($err){
 						$this->db->trans_rollback();
 						$this->session->set_flashdata('error_message', 'Failed to delete stud id = '.$this->uri->segment(4)).'. Err code: '.$err;
-						redirect('backend/Studs/view_approve');
+						redirect('backend/Studs');
 					}
 				}
 				else {
@@ -1364,7 +1382,7 @@ class Studs extends CI_Controller {
 				}
 			}
 			else{
-				redirect('backend/Studs/view_approve');
+				redirect('backend/Studs');
 			}
 		}
 
@@ -1384,6 +1402,33 @@ class Studs extends CI_Controller {
 					$data['dam'][] = $this->caninesModel->get_canines($wheDam)->row();
 				}
 				$this->load->view('backend/log_stud', $data);
+			}
+			else{
+				redirect('backend/Studs');
+			}
+		}
+
+		public function send_birth_link(){
+			if ($this->uri->segment(4)){
+				$where['stu_id'] = $this->uri->segment(4);
+				$stud = $this->studModel->get_studs($where)->row();
+
+				$whePartner['mem_id'] = $stud->stu_partner_id;
+				$partner = $this->memberModel->get_members($whePartner)->row();
+
+				$wheDam['can_id'] = $stud->stu_dam_id;
+				$can = $this->caninesModel->get_canines($wheDam)->row();
+
+				$wheSire['can_id'] = $stud->stu_sire_id;
+				$c = $this->caninesModel->get_canines($wheSire)->row();
+
+				$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
+				if ($mail){
+					echo 'success';
+				}
+				else{
+					echo show_error($this->email->print_debugger());
+				}
 			}
 			else{
 				redirect('backend/Studs');

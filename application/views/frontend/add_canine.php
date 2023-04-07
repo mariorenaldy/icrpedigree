@@ -136,7 +136,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto Anjing</div>
+                            <div class="col-4">Foto Anjing Seluruh Badan</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Approve Child Registration</title>
+    <title>Approve Puppy</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -15,11 +15,11 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Approve Child Registration</h3>
+                <h3 class="text-center text-primary">Approve Puppy</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Child Registration has been approved<br/>';
+                            echo 'Puppy has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -29,7 +29,7 @@
                             echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Child Registration has been rejected<br/>';
+                            echo 'Puppy has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -63,8 +63,13 @@
                         <tbody>
                             <?php foreach ($stambum AS $r){ ?>
                                 <tr>
-                                    <td><button type="button" class="btn btn-success" onclick='approve(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
-                                    <td><button type="button" class="btn btn-danger" onclick='reject(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <td><button type="button" class="btn btn-success" onclick='approve(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger" onclick='reject(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
+                                    <?php } else { ?>
+                                        <td></td>
+                                        <td></td>
+                                    <?php } ?>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">

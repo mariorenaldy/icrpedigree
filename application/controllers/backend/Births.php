@@ -10,7 +10,7 @@ class Births extends CI_Controller {
 			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('url', 'notif'));
+			$this->load->helper(array('url', 'notif', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -162,7 +162,7 @@ class Births extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 						}
 				
-						$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+						$img_name = $this->config->item('path_birth').$this->config->item('file_name_birth');
 						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
@@ -222,9 +222,9 @@ class Births extends CI_Controller {
 									);
 									$log = $this->logbirthModel->add_log($dataLog);
 									if ($log){
-										$result = $this->notification_model->add(21, $birth, $stud->stu_member_id);
+										$result = $this->notification_model->add(21, $birth, $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
 										if ($result){
-											$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id, base_url().'frontend/Stambums/add/'.$birth);
+											$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$birth.'">Lapor Anak</a>');
 											if ($res){
 												$dataOldNews['stat'] = $this->config->item('rejected');
 												$whereOldNews['trans_id'] = $stud->stu_id;
@@ -237,8 +237,11 @@ class Births extends CI_Controller {
 													$whePartner['mem_id'] = $stud->stu_partner_id;
 													$partner = $this->memberModel->get_members($whePartner)->row();
 
+													$wheDam['can_id'] = $stud->stu_dam_id;
+													$can = $this->caninesModel->get_canines($wheDam)->row();
+				
 													$wheSire['can_id'] = $stud->stu_sire_id;
-													$can = $this->caninesModel->get_canines($wheSire)->row();
+													$c = $this->caninesModel->get_canines($wheSire)->row();
 
 													$desc = 'Telah lahir ';
 													if ($this->input->post('bir_male') && $this->input->post('bir_female')){
@@ -268,9 +271,16 @@ class Births extends CI_Controller {
 															firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 														if ($partner->mem_firebase_token)
 															firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-														$this->session->set_flashdata('mesg', base_url().'frontend/Stambums/add/'.$birth);
-														$this->session->set_flashdata('telp', $partner->mem_hp);
-														$this->session->set_flashdata('add_success', true);
+
+														$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $birth);
+														if (!$mail){
+															$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+														}
+														else{
+															$this->session->set_flashdata('mesg', 'Lapor Anak:\n'.base_url().'frontend/Stambums/add/'.$birth);
+															$this->session->set_flashdata('telp', $partner->mem_hp);
+															$this->session->set_flashdata('add_success', true);
+														}
 														redirect("backend/Births");
 													}
 													else{
@@ -360,7 +370,7 @@ class Births extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 						}
 			
-						$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+						$img_name = $this->config->item('path_birth').$this->config->item('file_name_birth');
 						if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
@@ -473,9 +483,9 @@ class Births extends CI_Controller {
 							if ($log){
 								$wheStud['stu_id'] = $birth->bir_stu_id;
 								$stud = $this->studModel->get_studs($wheStud)->row();
-								$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id);
+								$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
 								if ($result){
-									$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id, base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
+									$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4).'">Lapor Anak</a>');
 									if ($res){
 										$dataOldNews['stat'] = $this->config->item('rejected');
 										$whereOldNews['trans_id'] = $stud->stu_id;
@@ -488,8 +498,11 @@ class Births extends CI_Controller {
 											$whePartner['mem_id'] = $stud->stu_partner_id;
 											$partner = $this->memberModel->get_members($whePartner)->row();
 
+											$wheDam['can_id'] = $stud->stu_dam_id;
+											$can = $this->caninesModel->get_canines($wheDam)->row();
+		
 											$wheSire['can_id'] = $stud->stu_sire_id;
-											$can = $this->caninesModel->get_canines($wheSire)->row();
+											$c = $this->caninesModel->get_canines($wheSire)->row();
 
 											$desc = 'Telah lahir ';
 											if ($birth->bir_male && $birth->bir_female){
@@ -522,9 +535,15 @@ class Births extends CI_Controller {
 													firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 												if ($partner->mem_firebase_token)
 													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												$this->session->set_flashdata('mesg', base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
-												$this->session->set_flashdata('telp', $partner->mem_hp);
-												$this->session->set_flashdata('approve', TRUE);
+												$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
+												if (!$mail){
+													$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+												}
+												else{
+													$this->session->set_flashdata('mesg', 'Lapor Anak:\n'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
+													$this->session->set_flashdata('telp', $partner->mem_hp);
+													$this->session->set_flashdata('approve', TRUE);
+												}
 												redirect('backend/Births/view_approve');
 											}
 											else{
@@ -603,7 +622,7 @@ class Births extends CI_Controller {
 						if ($log){
 							$wheStud['stu_id'] = $birth->bir_stu_id;
 							$stud = $this->studModel->get_studs($wheStud)->row();
-							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id);
+							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
 								$wheBirth['mem_id'] = $birth->bir_member_id;
@@ -692,6 +711,39 @@ class Births extends CI_Controller {
 				$where['log_bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->logbirthModel->get_logs($where)->result();
 				$this->load->view('backend/log_birth', $data);
+			}
+			else{
+				redirect('backend/Births');
+			}
+		}
+
+		public function send_stambum_link(){
+			if ($this->uri->segment(4)){
+				$where['bir_id'] = $this->uri->segment(4);
+				$birth = $this->birthModel->get_births($where)->row();
+
+				$wheStud['stu_id'] = $birth->bir_stu_id;
+				$stud = $this->studModel->get_studs($wheStud)->row();
+							
+				$whe['mem_id'] = $stud->stu_member_id;
+				$member = $this->memberModel->get_members($whe)->row();
+
+				$whePartner['mem_id'] = $stud->stu_partner_id;
+				$partner = $this->memberModel->get_members($whePartner)->row();
+
+				$wheDam['can_id'] = $stud->stu_dam_id;
+				$can = $this->caninesModel->get_canines($wheDam)->row();
+
+				$wheSire['can_id'] = $stud->stu_sire_id;
+				$c = $this->caninesModel->get_canines($wheSire)->row();
+
+				$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
+				if ($mail){
+					echo 'success';
+				}
+				else{
+					echo show_error($this->email->print_debugger());
+				}
 			}
 			else{
 				redirect('backend/Births');

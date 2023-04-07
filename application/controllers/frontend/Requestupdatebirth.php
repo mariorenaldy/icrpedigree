@@ -90,7 +90,7 @@ class Requestupdatebirth extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 							}
 				
-							$img_name = $this->config->item('path_birth').'birth_'.time().'.png';
+							$img_name = $this->config->item('path_birth').$this->config->item('file_name_birth');
 							if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 								$err++;
 								$this->session->set_flashdata('error_message', 'births folder not found or not writable.');

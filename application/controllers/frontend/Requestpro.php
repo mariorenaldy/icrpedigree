@@ -89,7 +89,7 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('error_message', "Ukuran file kennel terlalu besar (> 1 MB).");
 							}
 
-							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+							$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');

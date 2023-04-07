@@ -30,15 +30,15 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan</label>
+                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan yang Hidup</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Jantan yang Hidup" name="bir_male" value="<?= set_value('bir_male'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina</label>
+                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina yang Hidup</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Betina yang Hidup" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -90,16 +90,16 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto Dam</div>
+                            <div class="col-4">Foto semua anak saat sedang menyusui dengan induknya</div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Jumlah Jantan</div>
+                            <div class="col-4">Jumlah Jantan yang Hidup</div>
                             <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Jumlah Betina</div>
+                            <div class="col-4">Jumlah Betina yang Hidup</div>
                             <div class="col">: <span id="confirm-jumlah_betina"></span></div>
                         </div>
                         <div class="row">

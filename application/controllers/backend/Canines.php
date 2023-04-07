@@ -174,7 +174,7 @@ class Canines extends CI_Controller {
                 $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
               }
     
-              $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+              $img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
               if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
                 $err++;
                 $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
@@ -478,7 +478,7 @@ class Canines extends CI_Controller {
               $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
             }
   
-            $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+            $img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
             if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
               $err++;
               $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');

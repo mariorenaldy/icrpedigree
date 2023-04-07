@@ -49,4 +49,53 @@ function send_reset_password($email, $username, $password){
 	$ci->email->message($message);
 	return $ci->email->send();
 }
+
+function send_birth_link($email, $member, $sire, $dam, $id){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	$ci->email->to($email);
+	$ci->email->subject('Lapor Pacak Disetujui');
+
+	$message = '<div>Yth. '.$member.',</div><br>';
+	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahu Anda bahwa pendaftaran pacak anjing antara '.$sire.' dan '.$dam.' telah disetujui. Anda sekarang dapat mendaftarkan laporan lahir setelah 58 hari.</div>';
+	$message .= '<div><a href="'.base_url().'frontend/Births/add/'.$id.'">Lapor Lahir</a></div><br>';
+	$message .= '<div>Kami ingin mengingatkan Anda untuk selalu mematuhi pedoman dan peraturan kami untuk memastikan kesehatan dan keamanan anjing Anda. Pastikan bahwa anjing Anda mendapatkan perawatan yang memadai dan sehat selama masa kehamilan dan setelah melahirkan.</div><br>';
+	$message .= '<div>Jika Anda memiliki pertanyaan atau kekhawatiran, jangan ragu untuk menghubungi kami kapan saja.</div><br>';
+	$message .= '<div>Terima kasih atas partisipasi Anda dalam program kami.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div>Tim ICRPedigree</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_stambum_link($email, $member, $sire, $dam, $id){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	$ci->email->to($email);
+	$ci->email->subject('Lapor Lahir Disetujui');
+
+	$message = '<div>Yth. '.$member.',</div><br>';
+	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahukan Anda bahwa pendaftaran kelahiran anjing hasil pacak antara '.$sire.' dan '.$dam.' telah disetujui. Langkah selanjutnya adalah mendaftarkan nama anak dan pembuatan stambum.</div>';
+	$message .= '<div><a href="'.base_url().'frontend/Stambums/add/'.$id.'">Lapor Anak</a></div><br>';
+	$message .= '<div>Mohon diperhatikan bahwa pendaftaran nama anak dan pembuatan stambum harus dilakukan minimal 45 hari setelah tanggal lahir dan batas maksimum 100 hari dari lahir. Pastikan Anda mematuhi jangka waktu ini untuk memastikan bahwa pendaftaran dilakukan dengan tepat waktu.</div><br>';
+	$message .= '<div>Kami ingin mengingatkan Anda untuk memastikan bahwa semua informasi yang diberikan dalam pendaftaran akurat dan sesuai dengan data yang sebenarnya. Hal ini akan membantu kami dalam memastikan bahwa detail informasi anjing yang terdaftar tercetak dengan benar pada stambum.</div><br>';
+	$message .= '<div>Jika Anda memiliki pertanyaan atau kekhawatiran mengenai pendaftaran, jangan ragu untuk menghubungi kami kapan saja.</div><br>';
+	$message .= '<div>Terima kasih atas partisipasi Anda dalam program kami.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div>Tim ICRPedigree</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
 ?>

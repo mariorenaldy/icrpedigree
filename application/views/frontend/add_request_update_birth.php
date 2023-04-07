@@ -28,7 +28,7 @@
                         ?>
                     </div>
                     <div class="input-group mb-3 gap-3">
-                        <label for="stu_dam_id" class="control-label col-md-12 text-center">Photo</label>
+                        <label for="stu_dam_id" class="control-label col-md-12 text-center">Foto semua anak saat sedang menyusui dengan induknya</label>
                         <div class="col-md-12 text-center">
                             <?php 
                                 if (!$mode){ 
@@ -46,32 +46,32 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="bir_male" class="control-label col-md-2">Male</label>
+                        <label for="bir_male" class="control-label col-md-2">Jumlah Jantan yang Hidup</label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= $birth->bir_male ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Jantan yang Hidup" name="bir_male" value="<?= $birth->bir_male ?>">
                             <?php } else { ?>
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan" name="bir_male" value="<?= set_value('bir_male'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Jantan yang Hidup" name="bir_male" value="<?= set_value('bir_male'); ?>">
                             <?php } ?>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="bir_female" class="control-label col-md-2">Female</label>
+                        <label for="bir_female" class="control-label col-md-2">Jumlah Betina yang Hidup</label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= $birth->bir_female ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Betina yang Hidup" name="bir_female" value="<?= $birth->bir_female ?>">
                             <?php } else { ?>
-                                <input class="form-control" type="text" placeholder="Jumlah Betina" name="bir_female" value="<?= set_value('bir_female'); ?>">
+                                <input class="form-control" type="text" placeholder="Jumlah Betina yang Hidup" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             <?php } ?>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label for="bir_date_of_birth" class="control-label col-md-2">Date of Birth</label>
+                        <label for="bir_date_of_birth" class="control-label col-md-2">Tanggal Lahir</label>
                         <div class="col-md-10">
                             <?php if (!$mode){ ?>
-                                <input class="form-control" type="text" placeholder="Date of Birth" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= $birth->bir_date_of_birth ?>" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= $birth->bir_date_of_birth ?>" autocomplete="off">
                             <?php } else { ?>    
-                                <input class="form-control" type="text" placeholder="Date of Birth" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" autocomplete="off">
                             <?php } ?>
                         </div>
                     </div>

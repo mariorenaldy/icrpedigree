@@ -50,6 +50,12 @@ hr.req-separator{
     border: 2px solid #0d6efd;;
     background-color: #0d6efd;
 }
+nav.navbar.my-navbar{
+    z-index: 1030;
+}
+.sticky-top { 
+    top: 3em; 
+}
 @font-face {
     font-family: "Cen725c";
     src: url("../font/Cen725c.ttf") format("truetype");

@@ -69,8 +69,8 @@
                                     </td>
                                     <td>
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <button type="button" class="btn btn-primary" onclick="update_type(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Edit User Type"><i class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger" onclick="del(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Delete User"><i class="fa fa-trash"></i></button>
+                                        <button type="button" class="btn btn-primary mb-1" onclick="update_type(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Edit User Type"><i class="fa fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $u->use_id ?>, '<?= $u->use_username ?>')" data-toggle="tooltip" data-placement="top" title="Delete User"><i class="fa fa-trash"></i></button>
                                         <?php } ?>
                                     </td>
                                     <td>

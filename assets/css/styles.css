@@ -171,14 +171,11 @@ hr.req-separator{
 }
 .wa{
     top: 180px; 
-    z-index: 9999;
+    z-index: 1020;
 }
-#quantity input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+nav.navbar.navbar-expand-lg.navbar-dark.my-navbar{
+    z-index: 1030;
 }
-
-#quantity {
-    -moz-appearance: textfield;
+.fs-7{
+    font-size: 0.8em;
 }

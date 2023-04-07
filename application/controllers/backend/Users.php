@@ -316,7 +316,7 @@ class Users extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 						}
 				
-						$img_name = $this->config->item('path_user').'user_'.time().'.png';
+						$img_name = $this->config->item('path_user').$this->config->item('file_name_user');
 						if (!is_dir($this->config->item('path_user')) or !is_writable($this->config->item('path_user'))) {
 							$err++;
 							$this->session->set_flashdata('error_message', 'User folder not found or not writable.');
@@ -392,7 +392,7 @@ class Users extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
 					}
 			
-					$img_name = $this->config->item('path_user').'user_'.time().'.png';
+					$img_name = $this->config->item('path_user').$this->config->item('file_name_user');
 					if (!is_dir($this->config->item('path_user')) or !is_writable($this->config->item('path_user'))) {
 						$err++;
 						$this->session->set_flashdata('error_message', 'User folder not found or not writable.');

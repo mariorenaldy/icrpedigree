@@ -10,7 +10,7 @@ class Stambums extends CI_Controller {
         $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation'));
-        $this->load->helper(array('url', 'mail', 'notif'));
+        $this->load->helper(array('url', 'notif'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
     }
@@ -182,7 +182,7 @@ class Stambums extends CI_Controller {
                 $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
               }
     
-              $img_name = $this->config->item('path_canine').'canine_'.time().'.png';
+              $img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
               if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
                 $err++;
                 $this->session->set_flashdata('error_message', 'canine folder not found or not writable.');
@@ -461,7 +461,7 @@ class Stambums extends CI_Controller {
 
                               if (!$err){
                                 if ($this->input->post('reg_member')){
-                                  $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'));
+                                  $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
                                   if ($result){
                                     $this->db->trans_complete();
                                     if ($member->mem_firebase_token){
@@ -613,12 +613,11 @@ class Stambums extends CI_Controller {
                 );
                 $res = $this->logpedigreeModel->add_log($dataLogPed);
                 if ($res){
-                  $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id);
+                  $wheBirth['bir_id'] = $stb->stb_bir_id;
+                  $birth = $this->birthModel->get_births($wheBirth)->row();
+                  $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id, "Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
                   if ($res){
                     // cek jumlah male & female
-                    $wheBirth['bir_id'] = $stb->stb_bir_id;
-                    $birth = $this->birthModel->get_births($wheBirth)->row();
-
                     $wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
                     $wheStbMale['stb_gender'] = 'MALE';
                     $wheStbMale['stb_stat'] = $this->config->item('accepted');
@@ -741,7 +740,9 @@ class Stambums extends CI_Controller {
           );
           $log = $this->logstambumModel->add_log($dataLogStb);
           if ($log){
-            $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id);
+            $wheBirth['bir_id'] = $stb->stb_bir_id;
+            $birth = $this->birthModel->get_births($wheBirth)->row();
+            $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id, "Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
             if ($res){
                 $this->db->trans_complete();
                 $wheMember['mem_id'] = $stb->stb_member_id;

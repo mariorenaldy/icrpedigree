@@ -5,6 +5,7 @@
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>assets/css/datatables.min.css" rel="stylesheet" />
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -58,15 +59,15 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table id="datatable" class="table table-hover">
                         <thead>
                             <tr>
                                 <th width="1%"></th>
                                 <th width="1%"></th>
-                                <th width="15%">Photo</th>
-                                <th width="15%">Sire</th>
-                                <th width="15%">Dam</th>
-                                <th>Date<th>
+                                <th width="25%">Photo</th>
+                                <th width="25%">Sire</th>
+                                <th width="25%">Dam</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,7 +164,11 @@
             $('#keywords').on("change", function(){
                 $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search").submit();
             });
+
+            $('#datatable').DataTable({searching: false, info: false, "ordering": false, dom: 'lpftrip',
+            });
         });
     </script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
 </body>
 </html>

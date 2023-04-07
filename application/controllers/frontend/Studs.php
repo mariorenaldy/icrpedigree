@@ -340,9 +340,9 @@ class Studs extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Ukuran file dam terlalu besar (> 1 MB).');
 							}
 
-							$stud_name = $this->config->item('path_stud').'stud_'.time().'.png';
-							$sire_name = $this->config->item('path_stud').'sire_'.time().'.png';
-							$dam_name = $this->config->item('path_stud').'dam_'.time().'.png';
+							$stud_name = $this->config->item('path_stud').$this->config->item('file_name_stud');
+							$sire_name = $this->config->item('path_stud').$this->config->item('file_name_sire');
+							$dam_name = $this->config->item('path_stud').$this->config->item('file_name_dam');
 
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;

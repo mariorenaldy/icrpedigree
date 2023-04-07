@@ -36,7 +36,8 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-sm-2"><b>Foto</b></div>
+                    <div class="col-sm-1 fs-7"><b>Stambum</b></div>
+                    <div class="col-sm-1"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
                     <div class="col-sm-2"><b>Owner Baru</b></div>
@@ -45,12 +46,11 @@
                 </div>
                 <?php foreach ($req AS $r){ ?>
                     <div class="row">
-                        <div class="col-sm-2 mb-1">
-                            <?php if ($r->can_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/canine/'.$r->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
-                            <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')">
-                            <?php } ?>
+                        <div class="col-sm-1 mb-1">
+                            <img src="<?= base_url('uploads/ownership/'.$r->req_stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="stb<?= $r->req_id ?>" onclick="display('stb<?= $r->req_id ?>')">
+                        </div>
+                        <div class="col-sm-1 mb-1">
+                            <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="canine<?= $r->req_id ?>" onclick="display('canine<?= $r->req_id ?>')">
                         </div>
                         <div class="col-sm-2">
                             <?= $r->can_a_s; ?>

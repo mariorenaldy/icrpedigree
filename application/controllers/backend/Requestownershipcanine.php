@@ -50,6 +50,7 @@ class Requestownershipcanine extends CI_Controller {
 						$dataCan['can_date'] = date('Y-m-d H:i:s');
 						$dataCan['can_member_id'] = $req->req_member_id;
 						$dataCan['can_kennel_id'] = $req->req_kennel_id;
+						$dataCan['can_photo'] = $req->req_photo;
 						$wheCan['can_id'] = $req->req_can_id;
 						$res = $this->caninesModel->update_canines($dataCan, $wheCan);
 						if ($res){
@@ -59,22 +60,24 @@ class Requestownershipcanine extends CI_Controller {
 								'log_kennel_id' => $req->req_kennel_id,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
+								'log_photo' => $req->req_photo,
 							);
 							$log = $this->logcanineModel->add_log($dataLog);
 							if ($log){
-								$result = $this->notification_model->add(3, $this->uri->segment(4), $req->req_old_member_id);
+								$can = $this->caninesModel->get_canines($wheCan)->row();
+								$whe_old['mem_id'] = $req->req_old_member_id;
+								$member_old = $this->memberModel->get_members($whe_old)->row();
+								$whe_new['mem_id'] = $req->req_member_id;
+								$member_new = $this->memberModel->get_members($whe_new)->row();
+								$result = $this->notification_model->add(3, $this->uri->segment(4), $req->req_old_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 								if ($result){
-									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id);
+									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 									if ($res){
 										$this->db->trans_complete();
 										$notif = $this->notificationtype_model->get_by_id(3);
-										$whe_old['mem_id'] = $req->req_old_member_id;
-										$member_old = $this->memberModel->get_members($whe_old)->row();
 										if ($member_old->mem_firebase_token){
 											firebase_notif($member_old->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
-										$whe_new['mem_id'] = $req->req_member_id;
-										$member_new = $this->memberModel->get_members($whe_new)->row();
 										if ($member_new->mem_firebase_token){
 											firebase_notif($member_new->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 										}
@@ -133,19 +136,21 @@ class Requestownershipcanine extends CI_Controller {
 					$this->db->trans_start();
 					$update = $this->requestownershipcanineModel->update_requests($dataReq, $wheReq);
 					if ($update){
-						$result = $this->notification_model->add(8, $this->uri->segment(4), $req->req_old_member_id);
+						$wheCan['can_id'] = $req->req_can_id;
+						$can = $this->caninesModel->get_canines($wheCan)->row();
+						$whe_old['mem_id'] = $req->req_old_member_id;
+						$member_old = $this->memberModel->get_members($whe_old)->row();
+						$whe_new['mem_id'] = $req->req_member_id;
+						$member_new = $this->memberModel->get_members($whe_new)->row();
+						$result = $this->notification_model->add(8, $this->uri->segment(4), $req->req_old_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 						if ($result){
-							$res = $this->notification_model->add(8, $this->uri->segment(4), $req->req_member_id);
+							$res = $this->notification_model->add(8, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 							if ($res){
 								$this->db->trans_complete();
 								$notif = $this->notificationtype_model->get_by_id(3);
-								$whe_old['mem_id'] = $req->req_old_member_id;
-								$member_old = $this->memberModel->get_members($whe_old)->row();
 								if ($member_old->mem_firebase_token){
 									firebase_notif($member_old->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 								}
-								$whe_new['mem_id'] = $req->req_member_id;
-								$member_new = $this->memberModel->get_members($whe_new)->row();
 								if ($member_new->mem_firebase_token){
 									firebase_notif($member_new->mem_firebase_token, $notif[0]->title, $notif[0]->description);
 								}

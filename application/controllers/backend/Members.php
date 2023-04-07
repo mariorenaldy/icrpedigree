@@ -119,7 +119,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
 								}
 
-								$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+								$pp_name = $this->config->item('path_member').$this->config->item('file_name_member');
 								if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 									$err++;
 									$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
@@ -141,7 +141,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
 							}
 							
-							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+							$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');
@@ -179,7 +179,7 @@ class Members extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Duplicate email');
 					}
 
-					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
+					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
 						$err++;
 						$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
 					}
@@ -413,7 +413,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'The PP file size is too big (> 1 MB).');
 							}
 
-							$pp_name = $this->config->item('path_member').'member_'.time().'.png';
+							$pp_name = $this->config->item('path_member').$this->config->item('file_name_member');
 							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'members folder not found or not writable.');
@@ -435,7 +435,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', "The Kennel Photo file size is too big (> 1 MB).");
 							}
 
-							$logo_name = $this->config->item('path_kennel').'kennel_'.time().'.png';
+							$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
 								$this->session->set_flashdata('error_message', 'kennels folder not found or not writable.');

@@ -536,80 +536,31 @@ $config['email'] = Array(
 
 $config['forgot_password'] = 'app/Email/forgotpassword/';
 
-$config['upload_path_member'] = realpath(APPPATH.'../uploads/members/');
 $config['path_member'] = 'uploads/members/';
-$config['upload_member'] = Array(
-    'upload_path' => $config['upload_path_member'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'member_'.time(),
-);
+$config['file_name_member'] = 'member_'.time().'.png';
 
-$config['upload_path_kennel'] = realpath(APPPATH.'../uploads/kennels/');
 $config['path_kennel'] = 'uploads/kennels/';
-$config['upload_kennel'] = Array(
-    'upload_path' => $config['upload_path_kennel'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'kennel_'.time(),
-);
+$config['file_name_kennel'] = 'kennel_'.time().'.png';
 
-$config['upload_path_canine'] = realpath(APPPATH.'../uploads/canine/');
 $config['path_canine'] = 'uploads/canine/';
-$config['upload_canine'] = Array(
-    'upload_path' => $config['upload_path_canine'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'canines_'.time(),
-);
+$config['file_name_canine'] = 'canine_'.time().'.png';
 
-$config['upload_path_stud'] = realpath(APPPATH.'../uploads/stud/');
 $config['path_stud'] = 'uploads/stud/';
-$config['upload_stud'] = Array(
-    'upload_path' => $config['upload_path_stud'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'stud_'.time(),
-);
-$config['upload_stud_sire'] = Array(
-    'upload_path' => $config['upload_path_stud'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'sire_'.time(),
-);
-$config['upload_stud_dam'] = Array(
-    'upload_path' => $config['upload_path_stud'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'dam_'.time(),
-);
+$config['file_name_stud'] = 'stud_'.time().'.png';
+$config['file_name_sire'] = 'sire_'.time().'.png';
+$config['file_name_dam'] = 'dam_'.time().'.png';
 
-$config['upload_path_birth'] = realpath(APPPATH.'../uploads/births/');
 $config['path_birth'] = 'uploads/births/';
-$config['upload_birth'] = Array(
-    'upload_path' => $config['upload_path_birth'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'birth_'.time(),
-);
+$config['file_name_birth'] = 'birth_'.time().'.png';
 
-$config['upload_path_user'] = realpath(APPPATH.'../uploads/users/');
 $config['path_user'] = 'uploads/users/';
-$config['upload_user'] = Array(
-    'upload_path' => $config['upload_path_user'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'user_'.time(),
-);
+$config['file_name_user'] = 'user_'.time().'.png';
 
-$config['upload_path_product'] = realpath(APPPATH.'../uploads/products/');
+$config['path_ownership'] = 'uploads/ownership/';
+$config['file_name_ownership'] = 'stambum_'.time().'.png';
+
 $config['path_product'] = 'uploads/products/';
-$config['upload_product'] = Array(
-    'upload_path' => $config['upload_path_product'],
-    'allowed_types' => 'jpg|jpeg|png',
-    'file_ext_tolower' => TRUE,
-    'file_name' => 'product_'.time(),
-);
+$config['file_name_product'] = 'product_'.time().'.png';
 
 $config['file_size'] = 1048576;
 $config['img_width'] = 960;
@@ -650,10 +601,10 @@ $config['canine_rip'] = 1;
 $config['canine_alive'] = 0;
 
 $config['jarak_lapor_pacak'] = 7;
-$config['tanggal_lapor_pacak'] = 12;
-$config['bulan_lapor_pacak'] = 1;
+$config['tanggal_lapor_pacak'] = 5;
+$config['bulan_lapor_pacak'] = 2;
 $config['tahun_lapor_pacak'] = 2023;
-$config['hari_lapor_pacak'] = '12 Jan 2023';
+$config['hari_lapor_pacak'] = '5 Feb 2023';
 $config['jarak_pacak'] = 120;
 $config['jarak_pacak_lahir'] = 90;
 $config['jarak_lapor_lahir'] = 75;
@@ -671,10 +622,15 @@ $config['no_member'] = 0;
 
 $config['stud'] = 1;
 $config['birth'] = 2;
+$config['puppy'] = 3;
+$config['canine'] = 4;
+$config['kennel'] = 5;
 
 $config['super'] = 0;
+$config['system'] = 4;
 
 $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
 $config['youtube_width'] = "420";
 $config['youtube_height'] = "315";
+

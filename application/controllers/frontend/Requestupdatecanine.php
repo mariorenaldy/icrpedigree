@@ -80,7 +80,7 @@ class Requestupdatecanine extends CI_Controller {
 								$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
 							}
 							else{
-								$image_name = $this->config->item('path_canine').'canines_'.time().'.png';
+								$image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
 								if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 									$err++;
 									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
