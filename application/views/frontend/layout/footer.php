@@ -5,7 +5,7 @@
                 <hr>
             </div>
             <div class="col-auto fs-3">
-                Kami <span id="mengerti">mengerti</span> apa yang anda butuhkan!
+                <?= lang("foot_header"); ?>
             </div>
             <div class="col">
                 <hr>
@@ -17,14 +17,14 @@
         <div class="row justify-content-between m-2">
             <section class="col-auto">
                 <div class="row mb-3 fs-5">
-                    <div class="col">Hubungi Kami</div>
+                    <div class="col"><?= lang("foot_contact_us"); ?></div>
                 </div>
                 <div class="row fs-6">
                     <div class="col-auto text-left">
-                        <span class="text-primary"><i class="fa fa-map-marker" aria-hidden="true"></i></span><span> Jl. Cisatu 2 No. 12b<br/>Ciumbuleuit Bandung</span>
+                        <span class="text-primary"><i class="fa fa-map-marker" aria-hidden="true"></i></span><span> <?= lang("foot_address"); ?></span>
                     </div>
                     <div class="col-auto">
-                        <span class="text-warning"><i class="fa fa-phone" aria-hidden="true"></i></span><span> 087777802288</span>
+                        <span class="text-warning"><i class="fa fa-phone" aria-hidden="true"></i></span><span> <?= lang("foot_number"); ?></span>
                     </div>
                     <!-- <div class="col-auto d-flex">
                         <div>
@@ -39,7 +39,7 @@
             </section>
             <section class="col-auto">
                 <div class="row mb-3 fs-5">
-                    <div class="col">Social Media</div>
+                    <div class="col"><?= lang("foot_social_media"); ?></div>
                 </div>
                 <div class="row mb-1">
                     <a class="social-media-link text-decoration-none text-reset link-primary" href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><i class="fab fa-facebook-f text-primary" aria-hidden="true"></i> Facebook</a>

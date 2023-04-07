@@ -12,6 +12,13 @@ class Members extends CI_Controller {
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url', 'mail'));
 			$this->load->database();
+
+			$site_lang = $this->session->userdata('site_lang');
+			if ($site_lang) {
+				$this->lang->load('register',$this->session->userdata('site_lang'));
+			} else {
+				$this->lang->load('register','english');
+			}
 		}
 
 		public function test_input($data) {
@@ -107,28 +114,48 @@ class Members extends CI_Controller {
 
 		public function validate_register(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
-			// if ($this->input->post('mem_type')){
-				$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
-				$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
-				$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-				$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
-				if (!$this->input->post('same'))
-					$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
-				$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
-				$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
-				$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
-				$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
-				$this->form_validation->set_rules('password', 'Password ', 'trim|required');
-				$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
-				$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
-			// }
-			// else{
-			// 	$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
-			// 	$this->form_validation->set_rules('hp', 'No. HP Aktif WA ', 'trim|required');
-			// 	$this->form_validation->set_rules('email', 'email ', 'trim|required');
-			// }
+			$site_lang = $this->session->userdata('site_lang');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
+				// if ($this->input->post('mem_type')){
+					$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
+					$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
+					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+					$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
+					if (!$this->input->post('same'))
+						$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
+					$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
+					$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
+					$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
+					$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
+				// }
+				// else{
+				// 	$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
+				// 	$this->form_validation->set_rules('hp', 'No. HP Aktif WA ', 'trim|required');
+				// 	$this->form_validation->set_rules('email', 'email ', 'trim|required');
+				// }
+			}
+			else{
+				$this->form_validation->set_message('required', '%s required');
+				$this->form_validation->set_message('matches', 'Password and confirm password is not the same');
+					$this->form_validation->set_rules('mem_name', 'Name According to ID Card ', 'trim|required');
+					$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Phone Number ', 'trim|required');
+					$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
+					$this->form_validation->set_rules('mem_address', 'Mailing Address ', 'trim|required');
+					if (!$this->input->post('same'))
+						$this->form_validation->set_rules('mem_mail_address', 'Address Shown on The Certificate ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
+					$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
+					$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
+					$this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+			}
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 			if ($this->form_validation->run() == FALSE){
@@ -139,7 +166,12 @@ class Members extends CI_Controller {
 				// if ($this->input->post('mem_type')){
 					if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Foto Kennel wajib diisi');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Foto Kennel wajib diisi');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Kennel Photo required');
+						}
 					}
 	
 					$pp = '-';
@@ -153,17 +185,32 @@ class Members extends CI_Controller {
 		
 							if ((strlen($uploadedPP) > $this->config->item('file_size'))){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file PP terlalu besar (> 1 MB).<br/>');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file PP terlalu besar (> 1 MB).<br/>');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'PP file size is  too big (> 1 MB).<br/>');
+								}
 							}
 
 							$pp_name = $this->config->item('path_member').$this->config->item('file_name_member');
 							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writeable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'member folder not found or not writeable.');
+								}
 							} else {
 								if (is_file($pp_name) and !is_writable($pp_name)){
 									$err++;
-									$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writeable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'PP file already exist and not writeable.');
+									}
 								}
 							}
 						}
@@ -175,17 +222,32 @@ class Members extends CI_Controller {
 	
 						if ((strlen($uploadedLogo) > $this->config->item('file_size'))){
 							$err++;
-							$this->session->set_flashdata('error_message', "Ukuran file Foto Kennel terlalu besar (> 1 MB).<br/>");
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', "Ukuran file Foto Kennel terlalu besar (> 1 MB).<br/>");
+							}
+							else{
+								$this->session->set_flashdata('error_message', "Kennel Photo file size is too big (> 1 MB).<br/>");
+							}
 						}
 						
 						$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 						if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'kennel folder not found or not writeable.');
+							}
 						} else {
 							if (is_file($logo_name) and !is_writable($logo_name)){
 								$err++;
-								$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writeable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Kennel Photo file already exist and not writeable.');
+								}
 							}
 						}
 					}
@@ -198,7 +260,12 @@ class Members extends CI_Controller {
 
 				if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 					$err++;
-					$this->session->set_flashdata('error_message', 'Format email tidak valid');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Format email tidak valid');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Email format is not valid');
+					}
 				}
 
 				// if ($this->input->post('mem_type')){
@@ -206,37 +273,73 @@ class Members extends CI_Controller {
 					$mem = $this->MemberModel->get_members($whereMem)->row();
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Your name is already registered and has not been processed. Please contact Admin');
+						}
 					}
 
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Your name is already registered');
+						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'ID Card Number cannot be the same');
+						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Phone number cannot be the same');
+						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Email cannot be the same');
+						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Username cannot be the same');
+						}
 					}
 
 					if (!$err && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 						$err++;
 						$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Kennel name cannot be the same');
+						}
 					}
 				// } else {
 				// 	$whereMem['mem_name'] = $this->input->post('name');
@@ -365,7 +468,12 @@ class Members extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Gagal menyimpan data member');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan data member');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to save member data');
+						}
 						$this->load->view("frontend/register", $dataReg);
 					}
 				}

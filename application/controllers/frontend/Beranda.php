@@ -9,6 +9,13 @@ class Beranda extends CI_Controller {
 		parent::__construct();
 		$this->load->library(array('session'));
         $this->load->helper(array('url'));
+		
+		$site_lang = $this->session->userdata('site_lang');
+        if ($site_lang) {
+            $this->lang->load('home',$this->session->userdata('site_lang'));
+        } else {
+            $this->lang->load('home','english');
+        }
 	}
 
 	public function index()

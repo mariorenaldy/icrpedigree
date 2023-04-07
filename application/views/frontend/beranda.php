@@ -46,7 +46,7 @@
         <?php if (!$this->session->userdata('username')){ ?>
             <div class="col-sm-12 text-center">
                 <button class="btn btn-primary btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Login</button>
-                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'">Daftar</button>
+                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'"><?= lang("home_register"); ?></button>
                 <!-- <a href="mailto:icr_indonesia@yahoo.com" id="article-button" class="btn text-decoration-none text-reset">Hubungi Kami</a> -->
             </div>
         <?php } ?>
