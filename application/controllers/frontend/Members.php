@@ -16,8 +16,10 @@ class Members extends CI_Controller {
 			$site_lang = $this->session->userdata('site_lang');
 			if ($site_lang) {
 				$this->lang->load('register',$this->session->userdata('site_lang'));
+				$this->lang->load('login',$this->session->userdata('site_lang'));
 			} else {
-				$this->lang->load('register','english');
+				$this->lang->load('register','indonesia');
+				$this->lang->load('login','indonesia');
 			}
 		}
 
@@ -39,7 +41,15 @@ class Members extends CI_Controller {
 
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
+			
+			$site_lang = $this->session->userdata('site_lang');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s required');
+			}
+
 			$this->form_validation->set_rules('username', 'Username', 'trim|required');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		
@@ -59,20 +69,40 @@ class Members extends CI_Controller {
 					$member = $this->MemberModel->get_members($whereMem)->row(); // no hp
 					if (!$member){
 						$err++;
-						$this->session->set_flashdata('login_error', 'Maaf nama pengguna/no hp tidak terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('login_error', 'Maaf nama pengguna/no hp tidak terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('login_error', 'Sorry, the username/phone number is not registered');
+						}
 					}
 				}
 				if (!$err && $member->mem_stat == $this->config->item('rejected')){
 					$err++;
-					$this->session->set_flashdata('login_error', 'Masa berlaku member telah habis. Harap melakukan pembayaran');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('login_error', 'Masa berlaku member telah habis. Harap melakukan pembayaran');
+					}
+					else{
+						$this->session->set_flashdata('login_error', 'Member validity period has expired. Please do the annual payment');
+					}
 				}
 				if (!$err && $member->mem_stat == $this->config->item('saved')){
 					$err++;
-					$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi customer service');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi customer service');
+					}
+					else{
+						$this->session->set_flashdata('login_error', 'Member data has not been approved. Please contact customer service');
+					}
 				}
 				if (!$err && sha1($this->input->post('password')) != $member->mem_password){
 					$err++;
-					$this->session->set_flashdata('login_error', 'Maaf kata sandi anda salah');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('login_error', 'Maaf kata sandi anda salah');
+					}
+					else{
+						$this->session->set_flashdata('login_error', 'Sorry your password is wrong');
+					}
 				}
 				if (!$err){
 					$data['last_login'] = date('Y-m-d H:i:s');
@@ -92,7 +122,12 @@ class Members extends CI_Controller {
 						redirect("frontend/Beranda");
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Gagal login');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('login_error', 'Gagal login');
+						}
+						else{
+							$this->session->set_flashdata('login_error', 'Login failed');
+						}
 						$this->load->view("frontend/login_form");
 					}
 				}

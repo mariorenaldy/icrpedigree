@@ -14,7 +14,7 @@ class Beranda extends CI_Controller {
         if ($site_lang) {
             $this->lang->load('home',$this->session->userdata('site_lang'));
         } else {
-            $this->lang->load('home','english');
+            $this->lang->load('home','indonesia');
         }
 	}
 
