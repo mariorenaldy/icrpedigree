@@ -570,17 +570,18 @@ $config['img_height_ratio'] = 9;
 $config['pp'] = 400;
 $config['mode'] = 0;
 
-$config['canine_count'] = 10;
-$config['pedigree_count'] = 10;
-$config['stud_count'] = 10;
-$config['birth_count'] = 10;
+$config['canine_count'] = 5;
+$config['stud_count'] = 5;
+$config['birth_count'] = 5;
+$config['stb_count'] = 5;
 $config['notif_count'] = 10;
-$config['news_count'] = 50;
+$config['news_count'] = 10;
 
 $config['backend_member_count'] = 100;
 $config['backend_canine_count'] = 100;
 $config['backend_stud_count'] = 100;
 $config['backend_birth_count'] = 100;
+$config['backend_stb_count'] = 100;
 
 $config['canine_img'] = 'Dog.svg';
 $config['default_img'] = 'avatar.jpg';
@@ -588,6 +589,7 @@ $config['default_img'] = 'avatar.jpg';
 $config['dam_id'] = 87;
 $config['sire_id'] = 86;
 
+$config['deleted'] = 0;
 $config['saved'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
@@ -609,8 +611,9 @@ $config['jarak_pacak'] = 120;
 $config['jarak_pacak_lahir'] = 90;
 $config['jarak_lapor_lahir'] = 75;
 $config['min_jarak_lapor_lahir'] = 58;
+$config['jarak_lapor_anak'] = 100;
+$config['min_jarak_lapor_anak'] = 45;
 $config['umur_canine'] = 12;
-$config['jarak_lapor_stb'] = 100;
 
 $config['admin'] = 0;
 $config['user'] = 1;
