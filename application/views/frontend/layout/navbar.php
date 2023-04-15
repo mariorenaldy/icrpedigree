@@ -59,10 +59,10 @@
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/LangSwitch/switchLanguage/english' ?>">Eng</a></li>
                         </ul>
                     <?php } else { ?>
-                        <i class="fa fa-language"></i> <span class="nav-text">Ind</span> 
+                        <i class="fa fa-language"></i> <span class="nav-text">Eng</span> 
                     </span>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/LangSwitch/switchLanguage/english' ?>">Eng</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/LangSwitch/switchLanguage/indonesia' ?>">Ind</a></li>
                         </ul>
                     <?php } ?>
                 </div>
