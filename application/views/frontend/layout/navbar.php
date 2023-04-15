@@ -47,22 +47,22 @@
                 <a href="<?= base_url().'frontend/Pedigree/view' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text"><?= lang("nav_find_dogs"); ?></span></a>
                 <a href="<?= base_url().'frontend/Members' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-user"></i> <span class="nav-text">Members</span></a>
             <?php } ?>
-                <!-- <a href="<?= base_url().'frontend/Marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
+                <!-- <a href="<?= base_url().'marketplace/Marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php 
+                    <?php 
                         $site_lang = $this->session->userdata('site_lang');
                         if ($site_lang == 'indonesia') { ?>
-                        <i class="fa fa-language"></i> <span class="nav-text">Indonesia</span> 
+                        <i class="fa fa-language"></i> <span class="nav-text">Ind</span> 
                     </span>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/langswitch/switchLanguage/english' ?>">English</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/LangSwitch/switchLanguage/english' ?>">Eng</a></li>
                         </ul>
                     <?php } else { ?>
-                        <i class="fa fa-language"></i> <span class="nav-text">English</span> 
-                        </span>
+                        <i class="fa fa-language"></i> <span class="nav-text">Ind</span> 
+                    </span>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/langswitch/switchLanguage/indonesia' ?>">Indonesia</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url().'frontend/LangSwitch/switchLanguage/english' ?>">Eng</a></li>
                         </ul>
                     <?php } ?>
                 </div>

@@ -18,10 +18,10 @@
                     <form id="formBirth" action="<?= base_url().'frontend/Births/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-md-3 me-1">
-                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="keywords" id="keywords" autocomplete="off" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="date" id="date" autocomplete="off" value="<?= $date ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
@@ -34,15 +34,16 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Lahir"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-1 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>Sire</b></div>
-                    <div class="col-sm-2"><b>Dam</b></div>
-                    <div class="col-sm-2"><b>DOB</b></div>
+                    <div class="col-sm-2"><b>Jantan</b></div>
+                    <div class="col-sm-2"><b>Betina</b></div>
+                    <div class="col-sm-2"><b>Tanggal Lahir</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
                     <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
-                    <div class="col-sm-1"><b>Status</b></div>
-                    <div class="col-sm-2"></div>
+                    <div class="col-sm-2"><b>Status</b></div>
+                    <div class="col-sm-1"></div>
                 </div>
                 <?php 
                     $i = 0;
@@ -67,7 +68,7 @@
                                 <div class="col-sm-1" align="right">
                                     <?= $b->bir_female; ?>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-2">
                                     <?php echo $b->stat_name; 
                                     if ($b->bir_stat == $this->config->item('rejected')){
                                         echo '<br/>Alasan: ';
@@ -77,11 +78,11 @@
                                             echo '-'; 
                                     } ?>
                                 </div>
-                                <div class="col-sm-2">
-                                <?php if (($b->bir_stat == $this->config->item('accepted') || $b->bir_stat == $this->config->item('completed')) && $stambum_stat[$i]){ ?>
-                                        <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button>
-                                <?php } 
-                                if (($b->bir_stat == $this->config->item('accepted') || $b->bir_stat == $this->config->item('completed')) && !$stambum[$i]){ ?>
+                                <div class="col-sm-1">
+                                <?php //if ($b->bir_stat == $this->config->item('accepted')){ ?>
+                                        <!-- <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button> -->
+                                <?php //} 
+                                if ($b->bir_stat == $this->config->item('accepted')){ ?>
                                     <button type="button" class="btn btn-success mb-1" onclick="editBirth(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Lahir"><i class="fa fa-edit"></i></button>
                                 <?php } ?>
                                 </div>
@@ -89,6 +90,8 @@
                         <?php }
                         $i++;
                     } ?>
+                    <br/>
+                    <?= $this->pagination->create_links(); ?>
             </div>                           
         </div> 
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
@@ -113,6 +116,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pesan Kesalahan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-danger">
+                    <?php if ($this->session->flashdata('error_message')){ ?>
+                        <div class="row">
+                            <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                        </div>
+                    <?php } ?>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
@@ -120,7 +143,7 @@
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });
             $(id).readOnly = true;
         }
-        setDatePicker('#keywords');
+        setDatePicker('#date');
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/view_approved";
         }
@@ -138,6 +161,10 @@
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
                     $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message')){ ?>
+                $('#error-modal').modal('show');
             <?php } ?>
         });
     </script>

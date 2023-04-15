@@ -8,7 +8,7 @@ class Studs extends CI_Controller {
 		parent::__construct();
 		$this->load->model(array('studModel', 'caninesModel', 'memberModel', 'birthModel', 'pedigreesModel'));
 		$this->load->library('upload', $this->config->item('upload_stud'));
-		$this->load->library(array('session', 'form_validation'));
+		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
 		date_default_timezone_set("Asia/Bangkok");
@@ -16,8 +16,47 @@ class Studs extends CI_Controller {
 
 	public function index(){
 		if ($this->session->userdata('mem_id')){
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+			$config['per_page'] = $this->config->item('stud_count');
+			$config['uri_segment'] = 4;
+			$config['use_page_numbers'] = TRUE;
+
+			//Encapsulate whole pagination 
+			$config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+			$config['full_tag_close'] = '</ul>';
+
+			//First link of pagination
+			$config['first_link'] = 'Pertama';
+			$config['first_tag_open'] = '<li>';
+			$config['first_tag_close'] = '</li>';
+
+			//Customizing the “Digit” Link
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+
+			//For PREVIOUS PAGE Setup
+			$config['prev_link'] = '<';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '</li>';
+
+			//For NEXT PAGE Setup
+			$config['next_link'] = '>';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '</li>';
+
+			//For LAST PAGE Setup
+			$config['last_link'] = 'Akhir';
+			$config['last_tag_open'] = '<li>';
+			$config['last_tag_close'] = '</li>';
+
+			//For CURRENT page on which you are
+			$config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+
+			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
+
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
-			$data['stud'] = $this->studModel->get_studs($where)->result();
+			$data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('stud_count'))->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -25,6 +64,15 @@ class Studs extends CI_Controller {
 				$whereBirth['bir_stu_id'] = $s->stu_id;
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
+
+            $config['base_url'] = base_url().'/frontend/Studs/index';
+			$config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0)->num_rows();
+			$this->pagination->initialize($config);
+
+			$data['keywords'] = '';
+            $data['date'] = '';
+            $this->session->set_userdata('keywords', '');
+            $this->session->set_userdata('date', '');
 			$this->load->view('frontend/view_studs', $data);
 		}
 		else{
@@ -34,8 +82,63 @@ class Studs extends CI_Controller {
 
 	public function search(){
 		if ($this->session->userdata('mem_id')){
-			$date = '';
-			$piece = explode("-", $this->input->post('date'));
+            if ($this->input->post('keywords')){
+				$this->session->set_userdata('keywords', $this->input->post('keywords'));
+                $data['keywords'] = $this->input->post('keywords');
+			}
+			else{
+				$data['keywords'] = $this->session->userdata('keywords');
+			}
+
+            if ($this->input->post('date')){
+				$this->session->set_userdata('date', $this->input->post('date'));
+				$data['date'] = $this->input->post('date');
+			}
+			else{
+				$data['date'] = $this->session->userdata('date');
+			}
+
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+			$config['per_page'] = $this->config->item('stud_count');
+			$config['uri_segment'] = 4;
+			$config['use_page_numbers'] = TRUE;
+
+			//Encapsulate whole pagination 
+			$config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+			$config['full_tag_close'] = '</ul>';
+
+			//First link of pagination
+			$config['first_link'] = 'Pertama';
+			$config['first_tag_open'] = '<li>';
+			$config['first_tag_close'] = '</li>';
+
+			//Customizing the “Digit” Link
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+
+			//For PREVIOUS PAGE Setup
+			$config['prev_link'] = '<';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '</li>';
+
+			//For NEXT PAGE Setup
+			$config['next_link'] = '>';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '</li>';
+
+			//For LAST PAGE Setup
+			$config['last_link'] = 'Akhir';
+			$config['last_tag_open'] = '<li>';
+			$config['last_tag_close'] = '</li>';
+
+			//For CURRENT page on which you are
+			$config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+
+			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
+            
+            $date = '';
+			$piece = explode("-", $data['date']);
 			if (count($piece) == 3){
 				$date = $piece[2]."-".$piece[1]."-".$piece[0];
 			}
@@ -43,9 +146,9 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
-			$like['can_sire.can_a_s'] = $this->input->post('keywords');
-			$like['can_dam.can_a_s'] = $this->input->post('keywords');
-			$data['stud'] = $this->studModel->search_studs($like, $where)->result();
+			$like['can_sire.can_a_s'] = $data['keywords'];
+			$like['can_dam.can_a_s'] = $data['keywords'];
+			$data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('stud_count'))->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -53,6 +156,10 @@ class Studs extends CI_Controller {
 				$whereBirth['bir_stu_id'] = $s->stu_id;
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
 			}
+
+            $config['base_url'] = base_url().'/frontend/Studs/search';
+			$config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0)->num_rows();
+			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_studs', $data);
 		}
 		else{
@@ -63,15 +170,44 @@ class Studs extends CI_Controller {
 	public function view_approved(){
 		if ($this->session->userdata('mem_id')){
 			$where['stu_partner_id'] = $this->session->userdata('mem_id');
-			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+			$where['stu_stat'] = $this->config->item('accepted');
 			$data['stud'] = $this->studModel->get_studs($where)->result();
 
 			$data['birth'] = array();
+			$data['stat'] = array();
 			foreach ($data['stud'] as $s){
 				$whereBirth = [];
 				$whereBirth['bir_stu_id'] = $s->stu_id;
-				$whereBirth['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+				$whereBirth['bir_stat != '] = $this->config->item('rejected');
 				$data['birth'][] = $this->birthModel->get_births($whereBirth)->num_rows();
+
+				$piece = explode("-", $s->stu_stud_date);
+				$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+
+				$ts = new DateTime();
+				$ts_stud = new DateTime($studDate);
+				if ($ts_stud > $ts){
+					$data['stat'][] = false;
+				}
+				else{ // min 58 hari; max 75 hari
+					$err = 0;
+					$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+					if ($diff < 1){
+						$err++;
+					}
+
+					if (!$err){
+						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+						if ($diff > 1){
+							$err++;
+						}
+					}
+
+					if (!$err)
+						$data['stat'][] = true;
+					else
+						$data['stat'][] = false;
+				}
 			}
 			$this->load->view('frontend/view_approved_studs', $data);
 		}
@@ -89,6 +225,7 @@ class Studs extends CI_Controller {
 			$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
 
 			// Sire harus 12 bulan
+			$count = 0;
 			$stat = Array();
 			foreach ($data['sire'] as $c){
 				$can = $this->caninesModel->get_dob_by_id($c->id);
@@ -110,12 +247,19 @@ class Studs extends CI_Controller {
 				}
 				else{
 					$stat[] = 1;
+					$count++;
 				}
 			}
 			$data['sireStat'] = $stat;
 			$data['dam'] = [];
 			$data['damStat'] = [];
-			$this->load->view('frontend/add_stud', $data);
+			if ($count){
+				$this->load->view('frontend/add_stud', $data);
+			}
+			else{
+				$this->session->set_flashdata('error_message', 'Tidak ada anjing jantan min 12 bulan');
+				redirect("frontend/Studs");
+			}
 		}
 		else{
 			redirect("frontend/Members");
@@ -466,8 +610,6 @@ class Studs extends CI_Controller {
 										if ($stud){
 											$this->session->set_flashdata('add_success', true);
 											redirect("frontend/Studs");
-											// $this->session->set_flashdata('add_stud_success', true);
-											// redirect("frontend/Beranda");
 										}
 										else{
 											$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');

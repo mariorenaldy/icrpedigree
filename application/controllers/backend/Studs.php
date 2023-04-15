@@ -17,7 +17,7 @@ class Studs extends CI_Controller {
 
 		public function index(){
 			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-			$data['stud'] = $this->studModel->get_studs($where)->result();
+			$data['stud'] = $this->studModel->get_studs($where, 0, $this->config->item('backend_stud_count'))->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -41,7 +41,7 @@ class Studs extends CI_Controller {
 			$where['stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$like['can_sire.can_a_s'] = $this->input->post('keywords');
 			$like['can_dam.can_a_s'] = $this->input->post('keywords');
-			$data['stud'] = $this->studModel->search_studs($like, $where)->result();
+			$data['stud'] = $this->studModel->search_studs($like, $where, 0, $this->config->item('backend_stud_count'))->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -584,12 +584,9 @@ class Studs extends CI_Controller {
 											$whePartner['mem_id'] = $can->can_member_id;
 											$partner = $this->memberModel->get_members($whePartner)->row();
 
-											$wheSire['can_id'] = $this->input->post('stu_sire_id');
-											$c = $this->caninesModel->get_canines($wheSire)->row();
-
 											$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
 											$desc .= ' pada tanggal '.$this->input->post('stu_stud_date');
-											$desc .= ' antara '.$c->can_a_s;
+											$desc .= ' antara '.$canSire->can_a_s;
 											$desc .= ' dan '.$can->can_a_s;
 
 											$dataNews = array(

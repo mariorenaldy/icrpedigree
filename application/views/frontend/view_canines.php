@@ -15,14 +15,14 @@
 <?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
-        <div class="row">            
+        <div class="row">     
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning">Anjing Saya</h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
@@ -35,6 +35,7 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Tambah Generasi Satu"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-2"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
@@ -94,7 +95,9 @@
                         </div>
                     </div>
                 <?php } ?>
-            </div>                           
+                <br>
+                <?= $this->pagination->create_links(); ?>  
+            </div>                       
         </div> 
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
                 <div class="modal-dialog modal-lg">

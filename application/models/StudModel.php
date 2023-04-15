@@ -5,7 +5,7 @@ class StudModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_studs($where){
+    public function get_studs($where, $offset = 0, $limit = 0){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){
             $this->db->where($where);
@@ -15,11 +15,12 @@ class StudModel extends CI_Model {
         $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_dam_id');
         $this->db->order_by('studs.stu_stud_date', 'desc');
-        $this->db->limit($this->config->item('backend_stud_count'), 0);
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('studs');
     }
 
-    public function search_studs($like, $where){
+    public function search_studs($like, $where, $offset = 0, $limit = 0){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){
             $this->db->where($where);
@@ -34,7 +35,8 @@ class StudModel extends CI_Model {
         $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines AS can_dam','can_dam.can_id = studs.stu_dam_id');
         $this->db->order_by('studs.stu_stud_date', 'desc');
-        $this->db->limit($this->config->item('backend_stud_count'), 0);
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('studs');
     }
 

@@ -28,13 +28,14 @@ class News_model extends CI_Model{
         return $this->db->update('news');
     }
 
-	function get_news($where){
+	function get_news($where, $offset = 0, $limit = 1){
 		$this->db->select('*, DATE_FORMAT(date, "%d-%m-%Y") AS date');
 		if ($where != null) {
             $this->db->where($where);
         }
 		$this->db->order_by('news.date DESC, news.news_id DESC');
-		$this->db->limit($this->config->item('news_count'), 0);
+		if ($limit)
+            $this->db->limit($this->config->item('news_count'), $offset);
 		return $this->db->get('news'); 		
 	}
 }

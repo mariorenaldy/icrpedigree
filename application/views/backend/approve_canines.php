@@ -6,6 +6,7 @@
     <title>Approve Canine</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/datatables.min.css" type="text/css" />
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -39,7 +40,7 @@
                     <form action="<?= base_url().'backend/Canines/search_approve'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Registration number/Chip number/Name/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>
@@ -48,23 +49,20 @@
                     </form>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table id="datatable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Photo</th>
-                                <th>Current Reg. Number</th>
-                                <th>ICR Number</th>
-                                <th>Chip Number</th>
-                                <th>Name</th>
+                                <th class="no-sort"></th>
+                                <th class="no-sort"></th>
+                                <th class="no-sort">Photo</th>
+                                <th class="no-sort">Name</th>
                                 <th>Breed</th>
                                 <th>Gender</th>
-                                <th>Color</th>
-                                <th>Date of Birth</th>
+                                <th class="no-sort">Date of Birth</th>
                                 <th>Kennel</th>
-                                <th>Owner</th>
-                                <th>Reg. Date</th>
+                                <th class="no-sort">Owner</th>
+                                <th class="no-sort">Reg. Date</th>
+                                <th style="display: none;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,17 +82,14 @@
                                             <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } ?>
                                     </td>
-                                    <td><?= $c->can_reg_number; ?></td>
-                                    <td><?= $c->can_icr_number; ?></td>
-                                    <td><?= $c->can_chip_number; ?></td>
                                     <td><?= $c->can_a_s; ?></td>
                                     <td><?= $c->can_breed; ?></td>
                                     <td><?= $c->can_gender; ?></td>
-                                    <td><?= $c->can_color; ?></td>
                                     <td class="text-nowrap"><?= $c->can_date_of_birth; ?></td>
                                     <td><?= $c->ken_name; ?></td>
                                     <td><?= $c->mem_name; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
+                                    <td style="display: none;"><?= $c->can_reg_date2; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -131,6 +126,16 @@
         span.onclick = function() {
             modal.style.display = "none";
         }
+
+        $(document).ready(function () {
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[10, 'desc']], dom: 'lpftrip',
+                columnDefs: [{
+                    orderable: false,
+                    targets: "no-sort"
+                }]
+            });
+        });
     </script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
 </body>
 </html>

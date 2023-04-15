@@ -86,7 +86,7 @@
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('pro')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Register berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.</div>
+                                    <div class="col-12">Register berhasil.<br/>Silakan hubungi admin untuk mendapatkan persetujuan.</div>
                                 </div>
                             <?php } ?>
                             <?php if ($this->session->flashdata('free')){ ?>

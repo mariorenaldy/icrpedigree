@@ -16,15 +16,15 @@
                 <h3 class="text-center text-warning">Pilih Pacak</h3>
                 <div class="row mb-1">
                     <div class="col-sm-2 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2 text-center"><b>Sire</b></div>
-                    <div class="col-sm-2 text-center"><b>Dam</b></div>
+                    <div class="col-sm-2 text-center"><b>Jantan</b></div>
+                    <div class="col-sm-2 text-center"><b>Betina</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php
                     $i = 0; 
                     foreach ($stud AS $s){ 
-                        if (!$birth[$i]){
+                        if (!$birth[$i] && $stat[$i]){
                 ?>
                         <div class="row">
                             <div class="col-sm-2 mb-1 text-center">
@@ -52,12 +52,38 @@
             </div>                           
         </div> 
     </div>
+    <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         function addBirth(studId){
             window.location = "<?= base_url(); ?>frontend/Births/add/"+studId;
         }
+        $(document).ready(function(){
+            <?php if ($this->session->flashdata('error_message')){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+        });
     </script>
 </body>
 </html>

@@ -8,7 +8,7 @@ class Requestupdatebirth extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'notification_model', 'notificationtype_model'));
-			$this->load->library(array('session', 'form_validation'));
+			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
@@ -16,8 +16,56 @@ class Requestupdatebirth extends CI_Controller {
 
 		public function index(){
 			if ($this->session->userdata('mem_id')){
+                $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+                $config['per_page'] = $this->config->item('birth_count');
+                $config['uri_segment'] = 4;
+                $config['use_page_numbers'] = TRUE;
+
+                //Encapsulate whole pagination 
+                $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+                $config['full_tag_close'] = '</ul>';
+
+                //First link of pagination
+                $config['first_link'] = 'Pertama';
+                $config['first_tag_open'] = '<li>';
+                $config['first_tag_close'] = '</li>';
+
+                //Customizing the “Digit” Link
+                $config['num_tag_open'] = '<li>';
+                $config['num_tag_close'] = '</li>';
+
+                //For PREVIOUS PAGE Setup
+                $config['prev_link'] = '<';
+                $config['prev_tag_open'] = '<li>';
+                $config['prev_tag_close'] = '</li>';
+
+                //For NEXT PAGE Setup
+                $config['next_link'] = '>';
+                $config['next_tag_open'] = '<li>';
+                $config['next_tag_close'] = '</li>';
+
+                //For LAST PAGE Setup
+                $config['last_link'] = 'Akhir';
+                $config['last_tag_open'] = '<li>';
+                $config['last_tag_close'] = '</li>';
+
+                //For CURRENT page on which you are
+                $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+                $config['cur_tag_close'] = '</a></li>';
+
+                $config['attributes'] = array('class' => 'page-link bg-dark text-light');
+
 				$where['req_member_id'] = $this->session->userdata('mem_id');
-				$data['req'] = $this->requestupdatebirthModel->get_requests($where)->result();
+				$data['req'] = $this->requestupdatebirthModel->get_requests($where, $page * $config['per_page'], $this->config->item('birth_count'))->result();
+
+                $config['base_url'] = base_url().'/frontend/Requestupdatebirth/index';
+                $config['total_rows'] = $this->requestupdatebirthModel->get_requests($where, $page * $config['per_page'], 0)->num_rows();
+                $this->pagination->initialize($config);
+
+                $data['keywords'] = '';
+                $data['date'] = '';
+                $this->session->set_userdata('keywords', '');
+                $this->session->set_userdata('date', '');
 				$this->load->view('frontend/view_request_update_birth', $data);
 			}
 			else{
@@ -27,8 +75,63 @@ class Requestupdatebirth extends CI_Controller {
 
 		public function search(){
 			if ($this->session->userdata('mem_id')){
+                if ($this->input->post('keywords')){
+                    $this->session->set_userdata('keywords', $this->input->post('keywords'));
+                    $data['keywords'] = $this->input->post('keywords');
+                }
+                else{
+                    $data['keywords'] = $this->session->userdata('keywords');
+                }
+    
+                if ($this->input->post('date')){
+                    $this->session->set_userdata('date', $this->input->post('date'));
+                    $data['date'] = $this->input->post('date');
+                }
+                else{
+                    $data['date'] = $this->session->userdata('date');
+                }
+
+                $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+                $config['per_page'] = $this->config->item('birth_count');
+                $config['uri_segment'] = 4;
+                $config['use_page_numbers'] = TRUE;
+
+                //Encapsulate whole pagination 
+                $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+                $config['full_tag_close'] = '</ul>';
+
+                //First link of pagination
+                $config['first_link'] = 'Pertama';
+                $config['first_tag_open'] = '<li>';
+                $config['first_tag_close'] = '</li>';
+
+                //Customizing the “Digit” Link
+                $config['num_tag_open'] = '<li>';
+                $config['num_tag_close'] = '</li>';
+
+                //For PREVIOUS PAGE Setup
+                $config['prev_link'] = '<';
+                $config['prev_tag_open'] = '<li>';
+                $config['prev_tag_close'] = '</li>';
+
+                //For NEXT PAGE Setup
+                $config['next_link'] = '>';
+                $config['next_tag_open'] = '<li>';
+                $config['next_tag_close'] = '</li>';
+
+                //For LAST PAGE Setup
+                $config['last_link'] = 'Akhir';
+                $config['last_tag_open'] = '<li>';
+                $config['last_tag_close'] = '</li>';
+
+                //For CURRENT page on which you are
+                $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+                $config['cur_tag_close'] = '</a></li>';
+
+                $config['attributes'] = array('class' => 'page-link bg-dark text-light');
+
 				$date = '';
-				$piece = explode("-", $this->input->post('date'));
+				$piece = explode("-", $data['date']);
 				if (count($piece) == 3){
 					$date = $piece[2]."-".$piece[1]."-".$piece[0];
 				}
@@ -37,9 +140,13 @@ class Requestupdatebirth extends CI_Controller {
 					$like['req_old_date_of_birth'] = $date;
 				}
 				$where['req_member_id'] = $this->session->userdata('mem_id');
-				$like['can_sire.can_a_s'] = $this->input->post('keywords');
-				$like['can_dam.can_a_s'] = $this->input->post('keywords');
-				$data['req'] = $this->requestupdatebirthModel->search_requests($like, $where)->result();
+				$like['can_sire.can_a_s'] = $data['keywords'];
+				$like['can_dam.can_a_s'] = $data['keywords'];
+				$data['req'] = $this->requestupdatebirthModel->search_requests($like, $where, $page * $config['per_page'], $this->config->item('birth_count'))->result();
+
+                $config['base_url'] = base_url().'/frontend/Requestupdatebirth/search';
+                $config['total_rows'] = $this->requestupdatebirthModel->search_requests($like, $where, $page * $config['per_page'], 0)->num_rows();
+                $this->pagination->initialize($config);
 				$this->load->view('frontend/view_request_update_birth', $data);
 			}
 			else{

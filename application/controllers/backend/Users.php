@@ -55,15 +55,13 @@ class Users extends CI_Controller {
 					}
 				}
 			}
+            else{
+				redirect("backend/Users/login");
+			}
 		}
 
 		public function edit_password(){
-			if ($this->session->userdata('use_username')){
-				$this->load->view("backend/edit_password");
-			}
-			else{
-				redirect("backend/Users/login");
-			}
+			$this->load->view("backend/edit_password");
 		}
 
 		public function validate_edit(){
@@ -108,14 +106,14 @@ class Users extends CI_Controller {
 
 		public function update_password(){
 			if ($this->uri->segment(4)){
-				$where['use_id'] = $this->uri->segment(4);
-				$data['user'] = $this->userModel->get_users($where)->row();
-				if ($data['user']){
-					$this->load->view("backend/update_password", $data);
-				}
-				else{
-					redirect("backend/Users");
-				}
+                $where['use_id'] = $this->uri->segment(4);
+                $data['user'] = $this->userModel->get_users($where)->row();
+                if ($data['user']){
+                    $this->load->view("backend/update_password", $data);
+                }
+                else{
+                    redirect("backend/Users");
+                }
 			}
 			else{
 				redirect("backend/Users");
@@ -165,20 +163,32 @@ class Users extends CI_Controller {
 
 		public function delete(){
 			if ($this->uri->segment(4)){
-				$where['use_id'] = $this->uri->segment(4);
-				$user = $this->userModel->get_users($where)->row();
-				if ($user){
-					$data['use_stat'] = 0;
-					$res = $this->userModel->update_users($data, $where);
-					if ($res){
-						$this->session->set_flashdata('delete', TRUE);
-					}
-					else{
-						$this->session->set_flashdata('error_message', 'Failed to delete user');
-					}
-				}
+                if ($this->session->userdata('use_username')){
+                    $where['use_id'] = $this->uri->segment(4);
+                    $user = $this->userModel->get_users($where)->row();
+                    if ($user){
+                        $data['use_stat'] = $this->config->item('deleted');
+                        $res = $this->userModel->update_users($data, $where);
+                        if ($res){
+                            $this->session->set_flashdata('delete', TRUE);
+                        }
+                        else{
+                            $this->session->set_flashdata('error_message', 'Failed to delete user');
+                        }
+                        redirect("backend/Users");
+                    }
+                    else{
+                        $this->session->set_flashdata('error_message', 'Failed to delete user');
+                        redirect("backend/Users");
+                    }
+                }
+                else{
+                    redirect("backend/Users/login");
+                }
 			}
-			redirect("backend/Users");
+			else{
+                redirect("backend/Users");
+            }
 		}
 
 		public function login(){

@@ -18,7 +18,7 @@ class Births extends CI_Controller {
 		public function index(){
 			$where['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
-			$data['birth'] = $this->birthModel->get_births($where)->result();
+			$data['birth'] = $this->birthModel->get_births($where, 0, $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
 			$data['stambum_stat'] = array();
@@ -63,7 +63,7 @@ class Births extends CI_Controller {
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$like['can_sire.can_a_s'] = $this->input->post('keywords');
 			$like['can_dam.can_a_s'] = $this->input->post('keywords');
-			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
+			$data['birth'] = $this->birthModel->search_births($like, $where, 0, $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
 			$data['stambum_stat'] = array();

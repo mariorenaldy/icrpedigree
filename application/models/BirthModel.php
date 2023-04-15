@@ -5,7 +5,7 @@ class BirthModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_births($where, $offset = 0, $limit = 1){
+    public function get_births($where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {
             $this->db->where($where);
@@ -19,11 +19,11 @@ class BirthModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
         $this->db->order_by('births.bir_date_of_birth', 'desc');
         if ($limit)
-            $this->db->limit($this->config->item('backend_birth_count'), $offset);
+            $this->db->limit($limit, $offset);
         return $this->db->get('births');
     }
 
-    public function search_births($like, $where, $offset = 0, $limit = 1){
+    public function search_births($like, $where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {
             $this->db->where($where);
@@ -42,7 +42,7 @@ class BirthModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = births.bir_stat');
         $this->db->order_by('births.bir_date_of_birth', 'desc');
         if ($limit)
-            $this->db->limit($this->config->item('backend_birth_count'), $offset);
+            $this->db->limit($limit, $offset);
         return $this->db->get('births');
     }
 

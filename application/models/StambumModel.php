@@ -4,7 +4,7 @@ class StambumModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_stambum($where, $sort = 'stb_id desc'){
+    public function get_stambum($where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
         if ($where != null) {
             $this->db->where($where);
@@ -14,11 +14,12 @@ class StambumModel extends CI_Model {
         $this->db->join('kennels','kennels.ken_id = stambums.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->join('users', 'stambums.stb_app_user = users.use_id');
         $this->db->order_by($sort);
-        $this->db->limit($this->config->item('backend_canine_count'), 0);
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('stambums');
     }
 
-    public function search_stambum($like, $where, $sort = 'stb_id desc'){
+    public function search_stambum($like, $where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
         if ($where != null) {
             $this->db->where($where);
@@ -33,6 +34,8 @@ class StambumModel extends CI_Model {
         $this->db->join('kennels','kennels.ken_id = stambums.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->join('users', 'stambums.stb_app_user = users.use_id');
         $this->db->order_by($sort);
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('stambums');
     }
 

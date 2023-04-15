@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>List Laporan Ubah Lahir</title>
     <?php $this->load->view('frontend/layout/head'); ?>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
+    <link href="<?php echo base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
+    <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
 <body class="text-white text-break">
 <div id="myModal" class="modal">
@@ -22,10 +23,10 @@
                     <form action="<?= base_url().'frontend/Requestupdatebirth/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-3 me-1">
-                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
+                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="date" id="date" autocomplete="off" value="<?= $date ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
@@ -38,6 +39,7 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Foto"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-1"><b>Foto Lama</b></div>
                     <div class="col-sm-1"><b>Foto Baru</b></div>
@@ -95,6 +97,8 @@
                         </div>
                     </div>
                 <?php } ?>
+                <br/>
+                <?= $this->pagination->create_links(); ?>
             </div>                           
         </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
@@ -120,6 +124,7 @@
         </div>
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script>
         function setDatePicker(id) {
             $(id).datepicker({ dateFormat: 'dd-mm-yy' });

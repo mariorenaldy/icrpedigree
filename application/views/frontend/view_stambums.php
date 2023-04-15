@@ -22,7 +22,7 @@
                     <form action="<?= base_url().'frontend/Stambums/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Nama" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Nama" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anak"><i class="fa fa-search"></i></button>
@@ -35,6 +35,7 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-2"><b>Foto</b></div>
                     <div class="col-sm-2"><b>Nama</b></div>
@@ -75,6 +76,8 @@
                         </div>
                     </div>
                 <?php } ?>
+                <br/>
+                <?= $this->pagination->create_links(); ?>
             </div>                           
         </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
@@ -87,13 +90,33 @@
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Anak berhasil disimpan</div>
+                                    <div class="col-12">Lapor anak berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan.</div>
                                 </div>
                             <?php } ?>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                     </div>
                 </div>
             </div>
@@ -121,6 +144,9 @@
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
                     $('#message-modal').modal('show');
+            <?php } ?>
+            <?php if ($this->session->flashdata('error_message')){ ?>
+                $('#error-modal').modal('show');
             <?php } ?>
         });
     </script>

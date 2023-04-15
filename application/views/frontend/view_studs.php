@@ -18,10 +18,10 @@
                     <form id="formStud" action="<?= base_url().'frontend/Studs/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-3 me-1">
-                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
+                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= $date ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
@@ -34,10 +34,11 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Pacak"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-2 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2 text-center"><b>Sire</b></div>
-                    <div class="col-sm-2 text-center"><b>Dam</b></div>
+                    <div class="col-sm-2 text-center"><b>Jantan</b></div>
+                    <div class="col-sm-2 text-center"><b>Betina</b></div>
                     <div class="col-sm-2"><b>Tanggal</b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                 </div>
@@ -73,25 +74,47 @@
                 <?php
                         $i++; 
                     } ?>
+                <br/>
+                <?= $this->pagination->create_links(); ?>
             </div>                           
         </div> 
-        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pemberitahuan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-success">
+                    <?php if ($this->session->flashdata('add_success')){ ?>
+                        <div class="row">
+                            <div class="col-12">Pacak berhasil disimpan</div>
                         </div>
-                        <div class="modal-body text-success">
-                            <?php if ($this->session->flashdata('add_success')){ ?>
-                                <div class="row">
-                                    <div class="col-12">Pacak berhasil disimpan</div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
-                        </div>
+                    <?php } ?>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                     </div>
                 </div>
             </div>
@@ -108,9 +131,6 @@
         function add(){
             window.location = "<?= base_url(); ?>frontend/Studs/add";
         }
-        function addBirth(studId){
-            window.location = "<?= base_url(); ?>frontend/Births/add/"+studId;
-        }
         $(document).ready(function () {
             $('#keywords').on("change", function(){
                 $('#formStud').attr('action', "<?= base_url(); ?>frontend/Studs/search").submit();
@@ -119,6 +139,10 @@
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
                     $('#message-modal').modal('show');
+            <?php } ?>
+            
+            <?php if ($this->session->flashdata('error_message')){ ?>
+                $('#error-modal').modal('show');
             <?php } ?>
         });
     </script>

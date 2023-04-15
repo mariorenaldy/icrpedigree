@@ -9,7 +9,7 @@ class Canines extends CI_Controller {
         parent::__construct();
         $this->load->model(array('caninesModel','memberModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
-        $this->load->library(array('session', 'form_validation'));
+        $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
@@ -17,8 +17,54 @@ class Canines extends CI_Controller {
 
 	public function index(){
 		if ($this->session->userdata('mem_id')){
+			$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+			$config['per_page'] = $this->config->item('canine_count');
+			$config['uri_segment'] = 4;
+			$config['use_page_numbers'] = TRUE;
+
+			//Encapsulate whole pagination 
+			$config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+			$config['full_tag_close'] = '</ul>';
+
+			//First link of pagination
+			$config['first_link'] = 'Pertama';
+			$config['first_tag_open'] = '<li>';
+			$config['first_tag_close'] = '</li>';
+
+			//Customizing the “Digit” Link
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+
+			//For PREVIOUS PAGE Setup
+			$config['prev_link'] = '<';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '</li>';
+
+			//For NEXT PAGE Setup
+			$config['next_link'] = '>';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '</li>';
+
+			//For LAST PAGE Setup
+			$config['last_link'] = 'Akhir';
+			$config['last_tag_open'] = '<li>';
+			$config['last_tag_close'] = '</li>';
+
+			//For CURRENT page on which you are
+			$config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+
+			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
+
 			$where['can_member_id'] = $this->session->userdata('mem_id');
-			$data['canines'] = $this->caninesModel->get_canines($where)->result();
+			$data['canines'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'))->result();
+
+			$config['base_url'] = base_url().'/frontend/Canines/index';
+			$config['total_rows'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], 0)->num_rows();
+			$this->pagination->initialize($config);
+
+			$data['keywords'] = '';
+            $this->session->set_userdata('keywords', '');
 			$this->load->view('frontend/view_canines', $data);
 		}
 		else{
@@ -28,10 +74,61 @@ class Canines extends CI_Controller {
 
     public function search(){
 		if ($this->session->userdata('mem_id')){
-			$like['can_a_s'] = $this->input->post('keywords');
-			$like['can_icr_number'] = $this->input->post('keywords');
+			if ($this->input->post('keywords')){
+				$this->session->set_userdata('keywords', $this->input->post('keywords'));
+				$data['keywords'] = $this->input->post('keywords');
+			}
+			else{
+				$data['keywords'] = $this->session->userdata('keywords');
+			}
+			
+			$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+			$config['per_page'] = $this->config->item('canine_count');
+			$config['uri_segment'] = 4;
+			$config['use_page_numbers'] = TRUE;
+
+			//Encapsulate whole pagination 
+			$config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+			$config['full_tag_close'] = '</ul>';
+
+			//First link of pagination
+			$config['first_link'] = 'Pertama';
+			$config['first_tag_open'] = '<li>';
+			$config['first_tag_close'] = '</li>';
+
+			//Customizing the “Digit” Link
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+
+			//For PREVIOUS PAGE Setup
+			$config['prev_link'] = '<';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '</li>';
+
+			//For NEXT PAGE Setup
+			$config['next_link'] = '>';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '</li>';
+
+			//For LAST PAGE Setup
+			$config['last_link'] = 'Akhir';
+			$config['last_tag_open'] = '<li>';
+			$config['last_tag_close'] = '</li>';
+
+			//For CURRENT page on which you are
+			$config['cur_tag_open'] = '<li class="active"><a class="page-link bg-dark text-warning border-light" href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+
+			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
+
+			$like['can_a_s'] = $data['keywords'];
+			$like['can_icr_number'] = $data['keywords'];
 			$where['can_member_id'] = $this->session->userdata('mem_id');
-			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
+			$data['canines'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'))->result();
+
+			$config['base_url'] = base_url().'/frontend/Canines/search';
+			$config['total_rows'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], 0)->num_rows();
+			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_canines', $data);
 		}
 		else{
@@ -67,7 +164,8 @@ class Canines extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata('mem_id')){
-			$data['trah'] = $this->trahModel->get_trah(null)->result();
+            $wheTrah['tra_stat'] = $this->config->item('accepted');
+			$data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
@@ -90,7 +188,8 @@ class Canines extends CI_Controller {
 			// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			
-			$data['trah'] = $this->trahModel->get_trah(null)->result();
+            $wheTrah['tra_stat'] = $this->config->item('accepted');
+			$data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
@@ -230,55 +329,55 @@ class Canines extends CI_Controller {
 		}
 	}
 
-	public function search_canine(){
-		$data['canines'] = [];
-		$data['kennel'] = [];
-		$this->load->view('frontend/search_canine', $data);
-    }
+	// public function search_canine(){
+	// 	$data['canines'] = [];
+	// 	$data['kennel'] = [];
+	// 	$this->load->view('frontend/search_canine', $data);
+    // }
 
-    public function validate_canine(){
-		if ($this->session->userdata('mem_id')){
-			$like['can_a_s'] = $this->input->post('can_a_s');
-			$where['can_member_id'] = 0;
-			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
+    // public function validate_canine(){
+	// 	if ($this->session->userdata('mem_id')){
+	// 		$like['can_a_s'] = $this->input->post('can_a_s');
+	// 		$where['can_member_id'] = 0;
+	// 		$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
 
-			$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-			$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
-			$this->load->view('frontend/search_canine', $data);
-		}
-		else{
-			redirect("frontend/Members");
-		}
-    }
+	// 		$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
+	// 		$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
+	// 		$this->load->view('frontend/search_canine', $data);
+	// 	}
+	// 	else{
+	// 		redirect("frontend/Members");
+	// 	}
+    // }
 
-	public function validate_claim_canine(){
-		if ($this->session->userdata('mem_id')){
-			$like['can_a_s'] = $this->input->post('can_a_s');
-			$where['can_member_id'] = 0;
-			$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
+	// public function validate_claim_canine(){
+	// 	if ($this->session->userdata('mem_id')){
+	// 		$like['can_a_s'] = $this->input->post('can_a_s');
+	// 		$where['can_member_id'] = 0;
+	// 		$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
 
-			$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-			$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
+	// 		$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
+	// 		$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
 
-			$dataCanine = array(
-				'can_stat' => $this->config->item('saved'),
-				'can_app_user' => 0,
-				'can_member_id' => $this->session->userdata('mem_id'),
-				'can_kennel_id' => $this->input->post('ken_id'),
-			);
-			$wheCanine['can_id'] = $this->input->post('can_id');
-			$res = $this->caninesModel->update_canines($dataCanine, $wheCanine);
-			if ($res){
-				$this->session->set_flashdata('claim_success', TRUE);
-				redirect("frontend/Canines/search_canine");
-			}
-			else{
-				$this->session->set_flashdata('error_message', 'Gagal menyimpan klaim canine');
-				$this->load->view('frontend/search_canine', $data);
-			}
-		}
-		else{
-			redirect("frontend/Members");
-		}
-    }
+	// 		$dataCanine = array(
+	// 			'can_stat' => $this->config->item('saved'),
+	// 			'can_app_user' => 0,
+	// 			'can_member_id' => $this->session->userdata('mem_id'),
+	// 			'can_kennel_id' => $this->input->post('ken_id'),
+	// 		);
+	// 		$wheCanine['can_id'] = $this->input->post('can_id');
+	// 		$res = $this->caninesModel->update_canines($dataCanine, $wheCanine);
+	// 		if ($res){
+	// 			$this->session->set_flashdata('claim_success', TRUE);
+	// 			redirect("frontend/Canines/search_canine");
+	// 		}
+	// 		else{
+	// 			$this->session->set_flashdata('error_message', 'Gagal menyimpan klaim canine');
+	// 			$this->load->view('frontend/search_canine', $data);
+	// 		}
+	// 	}
+	// 	else{
+	// 		redirect("frontend/Members");
+	// 	}
+    // }
 }

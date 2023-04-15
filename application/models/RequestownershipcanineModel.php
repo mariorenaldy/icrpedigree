@@ -5,7 +5,7 @@ class RequestownershipcanineModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_requests($where){
+    public function get_requests($where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
         if ($where != null) {
             $this->db->where($where);
@@ -18,10 +18,12 @@ class RequestownershipcanineModel extends CI_Model {
         $this->db->join('users','users.use_id = requests_ownership_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_ownership_canine.req_stat');
         $this->db->order_by('requests_ownership_canine.req_id DESC');
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('requests_ownership_canine');
     }
 
-    public function search_requests($like, $where){
+    public function search_requests($like, $where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
         if ($where != null) {
             $this->db->where($where);
@@ -39,6 +41,8 @@ class RequestownershipcanineModel extends CI_Model {
         $this->db->join('users','users.use_id = requests_ownership_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_ownership_canine.req_stat');
         $this->db->order_by('requests_ownership_canine.req_id DESC');
+        if ($limit)
+            $this->db->limit($limit, $offset);
         return $this->db->get('requests_ownership_canine');
     }
 

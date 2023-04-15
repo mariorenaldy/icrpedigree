@@ -59,11 +59,12 @@
                               Config
                            </span>
                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="<?= base_url('backend/News') ?>">News</a></li>
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Notificationtype') ?>">Notification Type</a></li>
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Setting') ?>">Setting</a></li>
-                              <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/Breeds') ?>">Breeds</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/News') ?>">News</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/Notificationtype') ?>">Notification Type</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/Setting') ?>">Setting</a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
                            </ul>
                      </div>
                      <div class="dropdown">

@@ -29,8 +29,10 @@ class Notification_model extends CI_Model{
 			return false;
 	}
 
-	function get_by_mem_id($member, $offset = 0){
-		$sql = "SELECT n.notification_id, n.transaction_id, DATE_FORMAT(n.created_date, '%d-%m-%Y') AS date, n.notificationtype_id, nt.title, nt.description, n.note FROM notification n, notificationtype nt WHERE n.notificationtype_id = nt.notificationtype_id AND n.mem_id = ".$member." ORDER BY n.created_date DESC LIMIT ".$offset.", ".$this->config->item('notif_count');
+	function get_by_mem_id($member, $offset = 0, $limit = 1){
+		$sql = "SELECT n.notification_id, n.transaction_id, DATE_FORMAT(n.created_date, '%d-%m-%Y') AS date, n.notificationtype_id, nt.title, nt.description, n.note FROM notification n, notificationtype nt WHERE n.notificationtype_id = nt.notificationtype_id AND n.mem_id = ".$member." ORDER BY n.created_date DESC";
+		if ($limit) 
+			$sql .= " LIMIT ".$offset.", ".$this->config->item('notif_count');
 		$query = $this->db->query($sql);
         return $query->result();  		
 	}

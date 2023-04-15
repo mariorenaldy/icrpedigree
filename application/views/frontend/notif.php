@@ -10,6 +10,8 @@
     <div class="container">
         <h3 class="text-center text-warning mb-3">Notification</h3>
         <?php
+            echo $this->pagination->create_links();
+
             $i = 0; 
             foreach ($notif AS $r){ 
                 if ($i > 0)
@@ -26,7 +28,11 @@
                 </div>
         <?php 
                 $i++;
-            } ?> 
+            }
+            
+            echo '<br>';
+            echo $this->pagination->create_links();
+        ?> 
         </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>

@@ -17,7 +17,7 @@
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="input-group my-3">
-                            <label for="stu_sire_id" class="control-label col-sm-2">Sire</label>
+                            <label for="stu_sire_id" class="control-label col-sm-2">Nama Jantan (Minimal umur 12 bulan)</label>
                             <div class="col-sm-10">
                                 <?php
                                     $i = 0;
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="can_a_s" class="control-label col-sm-2">Cari Dam</label>
+                            <label for="can_a_s" class="control-label col-sm-2">Cari Betina</label>
                             <div class="col-sm-9">
                                 <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_dam_id" class="control-label col-sm-2">Nama Dam</label>
+                            <label for="stu_dam_id" class="control-label col-sm-2">Nama Betina (Minimal umur 12 bulan)</label>
                             <div class="col-sm-10">
                                 <?php
                                     $i = 0;
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Sire</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Jantan Baru</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('sire')"/>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Dam</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Betina Baru</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('dam')"/>

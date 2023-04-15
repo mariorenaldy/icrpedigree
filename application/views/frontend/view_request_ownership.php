@@ -22,7 +22,7 @@
                     <form action="<?= base_url().'frontend/Requestownershipcanine/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Nama Anjing" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Nama Anjing" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
@@ -35,6 +35,7 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Pemilik"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-1 fs-7"><b>Stambum</b></div>
                     <div class="col-sm-1"><b>Foto</b></div>
@@ -76,6 +77,8 @@
                         </div>
                     </div>
                 <?php } ?>
+                <br/>
+                <?= $this->pagination->create_links(); ?>
             </div>                           
         </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">

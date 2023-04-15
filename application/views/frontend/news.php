@@ -14,12 +14,14 @@
             <img class="modal-content" id="modalImg">
         </div>
         <h3 class="text-center text-warning mb-3">Berita</h3>
-        <?php
+        <?php 
+            echo $this->pagination->create_links();
+
             $i = 0; 
             foreach ($news AS $r){ 
                 if ($i > 0)
                     echo '<hr/>';
-            ?>
+        ?>
                 <div class="row">
                     <div class="col date"><?= $r->date ?></div>
                 </div>
@@ -40,7 +42,11 @@
                 </div>
         <?php 
                 $i++;
-            } ?> 
+            } 
+            
+            echo '<br>';
+            echo $this->pagination->create_links();
+        ?> 
         </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
