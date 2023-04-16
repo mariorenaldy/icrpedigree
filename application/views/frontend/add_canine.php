@@ -52,6 +52,7 @@
                             <label for="mem_hp" class="control-label col-sm-2">Trah</label>
                             <div class="col-sm-10">
                                 <?php
+                                    $pil = [];
                                     foreach($trah as $row){
                                         $pil[$row->tra_name] = $row->tra_name;
                                     }
@@ -78,7 +79,8 @@
                         <div class="input-group mb-3">
                             <label for="mem_mail_address" class="control-label col-sm-2">Tanggal Lahir</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="can_date_of_birth" name="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" autocomplete="off">
+                            <!--  -->
+                                <input class="form-control" type="text" placeholder="Tanggal Lahir" name="can_date_of_birth" id="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
                         <div class="input-group mb-3">

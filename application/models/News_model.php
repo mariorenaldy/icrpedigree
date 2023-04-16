@@ -22,7 +22,7 @@ class News_model extends CI_Model{
 		return $data['news_id'];
 	}
 
-	public function update($data, $where){
+	function update($data, $where){
         $this->db->set($data);
         $this->db->where($where);
         return $this->db->update('news');
@@ -38,4 +38,9 @@ class News_model extends CI_Model{
             $this->db->limit($this->config->item('news_count'), $offset);
 		return $this->db->get('news'); 		
 	}
+
+    function delete($where){
+        $this->db->where($where);
+        return $this->db->delete('news');
+    }
 }

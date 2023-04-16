@@ -22,6 +22,7 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Change Data</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport') ?>">Approve Export Stambum</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">

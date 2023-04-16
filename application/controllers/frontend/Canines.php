@@ -164,7 +164,7 @@ class Canines extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata('mem_id')){
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat'] = $this->config->item('frontend_breed');
 			$data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
@@ -188,7 +188,7 @@ class Canines extends CI_Controller {
 			// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat'] = $this->config->item('frontend_breed');
 			$data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
@@ -243,85 +243,100 @@ class Canines extends CI_Controller {
 				// 	$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
 				// }
 
+                $piece = explode("-", $this->input->post('can_date_of_birth'));
+                $dob = $piece[2]."-".$piece[1]."-".$piece[0];
 				if (!$err){
-					$piece = explode("-", $this->input->post('can_date_of_birth'));
-					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
-					
-					$id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
-					$data = array(
-						'can_id' => $id,
-						'can_member_id' => $this->session->userdata('mem_id'),
-						'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
-						'can_breed' => $this->input->post('can_breed'),
-						'can_gender' => $this->input->post('can_gender'),
-						'can_date_of_birth' => $dob,
-						'can_color' => '-', // $this->input->post('can_color'),
-						'can_kennel_id' => $this->input->post('can_kennel_id'),
-						'can_reg_date' => date("Y/m/d"),
-						'can_photo' => $photo,
-						'can_chip_number' => '-', // $this->input->post('can_chip_number'),
-						'can_icr_number' => '-', // $this->input->post('can_icr_number'),
-					);
-		
-					// nama diubah berdasarkan kennel
-					$whereKennel['ken_id'] = $this->input->post('can_kennel_id');
-					$kennel = $this->KennelModel->get_kennels($whereKennel)->result();
-					if ($kennel){
-						if ($kennel[0]->ken_type_id == 1)
-							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
-						else if ($kennel[0]->ken_type_id == 2)
-							$data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
-						else 
-							$data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
-					}
-		
-					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
-						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
-					}
+					$ts = new DateTime();
+					$ts_dob = new DateTime($dob);
+                    if ($ts_dob > $ts){
+                        $err++;
+                        $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                    }
+                    else{ // min 45 hari
+                        $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
+                        if ($diff < 1){
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                        }
+                    }
+                }
 
-					if (strlen($data['can_a_s']) >= $this->config->item('can_a_s_length')){
-						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
-					}
+                if (!$err){
+                    $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
+                    $data = array(
+                        'can_id' => $id,
+                        'can_member_id' => $this->session->userdata('mem_id'),
+                        'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
+                        'can_breed' => $this->input->post('can_breed'),
+                        'can_gender' => $this->input->post('can_gender'),
+                        'can_date_of_birth' => $dob,
+                        'can_color' => '-', // $this->input->post('can_color'),
+                        'can_kennel_id' => $this->input->post('can_kennel_id'),
+                        'can_reg_date' => date("Y/m/d"),
+                        'can_photo' => $photo,
+                        'can_chip_number' => '-', // $this->input->post('can_chip_number'),
+                        'can_icr_number' => '-', // $this->input->post('can_icr_number'),
+                    );
+    
+                    // nama diubah berdasarkan kennel
+                    $whereKennel['ken_id'] = $this->input->post('can_kennel_id');
+                    $kennel = $this->KennelModel->get_kennels($whereKennel)->result();
+                    if ($kennel){
+                        if ($kennel[0]->ken_type_id == 1)
+                            $data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
+                        else if ($kennel[0]->ken_type_id == 2)
+                            $data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
+                        else 
+                            $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
+                    }
+        
+                    if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
+                        $err++;
+                        $this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+                    }
 
-					if (!$err){
-						$dataPed = array(
-							'ped_sire_id' => $this->config->item('sire_id'),
-							'ped_dam_id' => $this->config->item('dam_id'),
-							'ped_canine_id' => $id,
-						);
+                    if (strlen($data['can_a_s']) >= $this->config->item('can_a_s_length')){
+                        $err++;
+                        $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+                    }
 
-						$this->db->trans_strict(FALSE);
-						$this->db->trans_start();
-						$canines = $this->caninesModel->add_canines($data);
-						if ($canines){
-							$pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
-							if ($pedigree){
-								$this->db->trans_complete();
-								$this->session->set_flashdata('add_success', true);
-								redirect("frontend/Canines");
-							}
-							else{
-								$err++;
-							}
-						}
-						else{
-							$err++;
-						}
-						if ($err){
-							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
-							$this->load->view('frontend/add_canine', $data);
-						}
-					}
-					else{
-						$this->load->view('frontend/add_canine', $data);
-					}
-				}
-				else{
-					$this->load->view('frontend/add_canine', $data);
-				}
+                    if (!$err){
+                        $dataPed = array(
+                            'ped_sire_id' => $this->config->item('sire_id'),
+                            'ped_dam_id' => $this->config->item('dam_id'),
+                            'ped_canine_id' => $id,
+                        );
+
+                        $this->db->trans_strict(FALSE);
+                        $this->db->trans_start();
+                        $canines = $this->caninesModel->add_canines($data);
+                        if ($canines){
+                            $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
+                            if ($pedigree){
+                                $this->db->trans_complete();
+                                $this->session->set_flashdata('add_success', true);
+                                redirect("frontend/Canines");
+                            }
+                            else{
+                                $err++;
+                            }
+                        }
+                        else{
+                            $err++;
+                        }
+                        if ($err){
+                            $this->db->trans_rollback();
+                            $this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
+                            $this->load->view('frontend/add_canine', $data);
+                        }
+                    }
+                    else{
+                        $this->load->view('frontend/add_canine', $data);
+                    }
+                }
+                else{
+                    $this->load->view('frontend/add_canine', $data);
+                }
 			}
 		}
 		else{

@@ -159,6 +159,9 @@ class Births extends CI_Controller {
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
 			$wheBirth['bir_stat'] = $this->config->item('accepted');
 			$data['births'] = $this->birthModel->get_births($wheBirth)->result();
+
+            $data['stb'] = Array();
+            $data['stat'] = Array();
 			foreach ($data['births'] as $r){
 				$whereStb = [];
 				$whereStb['stb_bir_id'] = $r->bir_id;
@@ -310,11 +313,6 @@ class Births extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
 								}
 							}
-
-							if (!$err){
-								file_put_contents($image_name, $uploadedImg);
-								$damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
-							}
 						}
 					}
 
@@ -355,33 +353,33 @@ class Births extends CI_Controller {
 							$err++;
 							$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
 						}
+                    }
 
-						if (!$err){
-							$data = array(
-								'bir_stu_id' => $this->input->post('bir_stu_id'),
-								'bir_member_id' => $stud->stu_partner_id,
-								'bir_dam_photo' => $damPhoto,
-								'bir_male' => $this->input->post('bir_male'),
-								'bir_female' => $this->input->post('bir_female'),
-								'bir_date_of_birth' => $date,
-							);
-							$births = $this->birthModel->add_births($data);
-							if ($births){
-								$this->session->set_flashdata('add_success', true);
-								redirect("frontend/Births");
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
-								$this->load->view('frontend/add_birth', $data);
-							}
-						}
-						else{
-							$this->load->view('frontend/add_birth', $data);
-						}
-					}
-					else{
-						$this->load->view('frontend/add_birth', $data);
-					}
+                    if (!$err){
+                        file_put_contents($image_name, $uploadedImg);
+                        $damPhoto = str_replace($this->config->item('path_birth'), '', $image_name);
+
+                        $data = array(
+                            'bir_stu_id' => $this->input->post('bir_stu_id'),
+                            'bir_member_id' => $stud->stu_partner_id,
+                            'bir_dam_photo' => $damPhoto,
+                            'bir_male' => $this->input->post('bir_male'),
+                            'bir_female' => $this->input->post('bir_female'),
+                            'bir_date_of_birth' => $date,
+                        );
+                        $births = $this->birthModel->add_births($data);
+                        if ($births){
+                            $this->session->set_flashdata('add_success', true);
+                            redirect("frontend/Births");
+                        }
+                        else{
+                            $this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
+                            $this->load->view('frontend/add_birth', $data);
+                        }
+                    }
+                    else{
+                        $this->load->view('frontend/add_birth', $data);
+                    }
 				}
 				else{
 					if ($birth->bir_stat == $this->config->item('saved')){

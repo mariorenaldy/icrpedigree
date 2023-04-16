@@ -78,7 +78,7 @@ class Canines extends CI_Controller {
     }
 
     public function add(){
-        $wheTrah['tra_stat'] = $this->config->item('accepted');
+        $wheTrah['tra_stat != '] = $this->config->item('deleted');
         $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
         $data['member'] = [];
         $data['kennel'] = [];
@@ -87,7 +87,7 @@ class Canines extends CI_Controller {
   
     public function search_member(){
         if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 
             $like['mem_name'] = $this->input->post('mem_name');
@@ -113,7 +113,7 @@ class Canines extends CI_Controller {
 
     public function search_kennel(){
         if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 
             $like['mem_name'] = $this->input->post('mem_name');
@@ -144,7 +144,7 @@ class Canines extends CI_Controller {
             $this->form_validation->set_rules('can_color', 'Color ', 'trim|required');
             $this->form_validation->set_rules('can_date_of_birth', 'Date of Birth ', 'trim|required');
         
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 
             $like['mem_name'] = $this->input->post('mem_name');
@@ -200,13 +200,28 @@ class Canines extends CI_Controller {
                     $this->session->set_flashdata('error_message', 'Duplicate microchip number');
                 }
 
-                if (!$err) {
+                $piece = explode("-", $this->input->post('can_date_of_birth'));
+                $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
+                if (!$err){
+                    $ts = new DateTime();
+					$ts_dob = new DateTime($dob);
+                    if ($ts_dob > $ts){
+                        $err++;
+                        $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                    }
+                    else{ // min 45 hari
+                        $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
+                        if ($diff < 1){
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                        }
+                    }
+                }
+
+                if (!$err){
                     file_put_contents($img_name, $uploadedImg);
                     $photo = str_replace($this->config->item('path_canine'), '', $img_name);
 
-                    $piece = explode("-", $this->input->post('can_date_of_birth'));
-                    $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
-            
                     $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
                     $dataCan = array(
                         'can_id' => $id,
@@ -350,7 +365,7 @@ class Canines extends CI_Controller {
 
     public function edit_canine(){
         if ($this->uri->segment(4)){
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah(null)->result();
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
@@ -368,7 +383,7 @@ class Canines extends CI_Controller {
 
     public function search_member_update(){
         if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
             $where['can_id'] = $this->input->post('can_id');
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
@@ -401,7 +416,7 @@ class Canines extends CI_Controller {
 
     public function search_kennel_update(){
         if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
             $where['can_id'] = $this->input->post('can_id');
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
@@ -444,7 +459,7 @@ class Canines extends CI_Controller {
             $this->form_validation->set_rules('can_color', 'Color ', 'trim|required');
             $this->form_validation->set_rules('can_date_of_birth', 'Date of Birth ', 'trim|required');
 
-            $wheTrah['tra_stat'] = $this->config->item('accepted');
+            $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
             $where['can_id'] = $this->input->post('can_id');
             $data['canine'] = $this->caninesModel->get_canines($where)->row();

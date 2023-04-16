@@ -76,8 +76,7 @@
                         <tbody>
                         <?php
                             $i = 0; 
-                            foreach ($birth AS $b){
-                                if ($stambum_stat[$i]){ ?>
+                            foreach ($birth AS $b){ ?>
                                 <tr>
                                     <td>
                                         <?php if (!$stambum[$i]){ ?>
@@ -88,8 +87,10 @@
                                         } ?>
                                     </td>
                                     <td>
+                                        <?php if ($stat[$i]){ ?>
                                         <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <?php }
+                                            if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
                                     </td>
@@ -117,7 +118,7 @@
                                         <?= $b->bir_date_of_birth; ?>
                                     </td>
                                 </tr>
-                        <?php   }
+                        <?php   
                                 $i++;
                         } ?>
                         </tbody>

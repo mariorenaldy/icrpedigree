@@ -83,8 +83,10 @@
                                     <?php } ?>
                                 </td>
                                 <td>    
+                                    <?php if ($stat[$i]){ ?>
                                     <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
-                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                    <?php }
+                                        if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Stud Log"><i class="fa fa-history"></i></button>
                                     <?php } ?>
                                 </td>

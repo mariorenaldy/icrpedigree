@@ -14,6 +14,7 @@ $lang["nav_stud_list"] = "List Pacak";
 $lang["nav_birth_list"] = "List Lahir";
 $lang["nav_puppy_list"] = "List Anak";
 $lang["nav_my_dogs"] = "Anjing Saya";
+$lang["nav_export_stambum"] = "Ekspor Stambum";
 
 $lang["nav_report_kennel_change"] = "Lapor Ubah Kennel";
 $lang["nav_become_pro"] = "Menjadi Pro";

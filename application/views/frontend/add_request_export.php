@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Lapor Lahir</title>
+    <title>Ekspor Stambum</title>
     <?php $this->load->view('frontend/layout/head'); ?>
-    <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
 </head>
@@ -12,44 +11,29 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Lahir</h3>
+            <h3 class="text-center text-warning">Ekspor Stambum</h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
-                        <?php if (!$mode){ ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= $bir_stu_id ?>" />
-                        <?php } else { ?>
-                            <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
-                        <?php } ?>
+                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestexport/validate_add" method="post" enctype="multipart/form-data">
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto semua anak saat sedang menyusui dengan induknya</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b>Foto Anjing Seluruh Badan</b></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
-                                <input type="hidden" name="attachment_dam" id="attachment">
+                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
+                                <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan yang Hidup</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan yang Hidup" name="bir_male" value="<?= set_value('bir_male'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina yang Hidup</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Betina yang Hidup" name="bir_female" value="<?= set_value('bir_female'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-sm-2">Tanggal Lahir</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" readonly>
+                        <div class="input-group my-3 gap-3">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b>Foto Stambum</b></label>
+                            <div class="col-sm-12 text-center">
+                                <img id="imgPreviewStb" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <input type="file" class="upload" id="imageInputStb" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stb')"/>
+                                <input type="hidden" name="attachment_stb" id="attachment_stb">
                             </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestexport'">Kembali</button>
                         </div>
                     </form>
                 </div>
@@ -90,23 +74,16 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto semua anak saat sedang menyusui dengan induknya</div>
+                            <div class="col-4">Foto Anjing Seluruh Badan</div>
                             <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
+                            <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>
+                        <br/>
                         <div class="row">
-                            <div class="col-4">Jumlah Jantan yang Hidup</div>
-                            <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
+                            <div class="col-4">Foto Stambum</div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-foto-stb" width="50%"/></div>
                         </div>
-                        <div class="row">
-                            <div class="col-4">Jumlah Betina yang Hidup</div>
-                            <div class="col">: <span id="confirm-jumlah_betina"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">Tanggal Lahir</div>
-                            <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
-                        </div>
-                    </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
@@ -132,9 +109,6 @@
                                 <?= validation_errors() ?>
                             </div>
                         <?php } ?>
-                        <div id="error-row" class="row" style="display: none;">
-                            <div id="error-col" class="col-12"></div>
-                        </div>
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
@@ -144,28 +118,40 @@
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
-    <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
-        function setDatePicker(id) {
-            $(id).datepicker({ dateFormat: 'dd-mm-yy' });
-            $(id).readOnly = true;
-        }
-        setDatePicker('#bir_date_of_birth');
-
         const imageInput = document.querySelector("#imageInput");
-        var resetImage = function() {
-            imageInput.value = null;
+        const imageInputStb = document.querySelector("#imageInputStb");
+        var croppingImage = null;
+
+        var resetImage = function(input) {
+            if(input === "canine"){
+                imageInput.value = null;
+            }
+            else if(input === "stb"){
+                imageInputStb.value = null;
+            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
-            var image = document.getElementById('imgPreview');
+            var preview = document.getElementById('imgPreview');
+            var previewStb = document.getElementById('imgPreviewStb');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
 
             imageInput.addEventListener("change", function(event) {
+                croppingImage = "canine";
+                showModalImg(event);
+            })
+
+            imageInputStb.addEventListener("change", function(event) {
+                croppingImage = "stb";
+                showModalImg(event);
+            })
+
+            function showModalImg(event) {
                 var files = event.target.files;
                 var done = function(url) {
                     modalImage.src = url;
@@ -178,7 +164,7 @@
                     };
                     reader.readAsDataURL(files[0]);
                 }
-            })
+            }
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
@@ -202,33 +188,29 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        image.src = base64data;
-                        latestImage = base64data;
-                        $('#attachment').val(latestImage);
+                        if(croppingImage === "canine"){
+                            preview.src = base64data;
+                            $('#attachment').val(base64data);
+                        }
+                        else if(croppingImage === "stb"){
+                            previewStb.src = base64data;
+                            $('#attachment_stb').val(base64data);
+                        }
                         $modal.modal('hide');
                     };
                 });
             });
 
-            $('#cancel-btn').click(function(event) {
-                resetImage();
+            $('#cancel-btn').click(function() {
+                resetImage(croppingImage);
             });
 
             let saveBtn = $("#saveBtn");
             saveBtn.click(function(){
-                if ($('input[name="bir_male"]').val() == 0 && $('input[name="bir_female"]').val() == 0){
-                    $('#error-col').html('Jumlah jantan & betina tidak boleh 0');
-                    $('#error-row').show();
-                    $('#error-modal').modal('show');
-                }
-                else{
-                    $('#confirm-jumlah_jantan').text($('input[name="bir_male"]').val());
-                    $('#confirm-jumlah_betina').text($('input[name="bir_female"]').val());
-                    $('#confirm-foto_dam').attr("src",  $('#imgPreview').attr("src"));
-                    $('#confirm-tanggal_lahir').text($('input[name="bir_date_of_birth"]').val());
+                $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
+                $('#confirm-foto-stb').attr("src",  $('#imgPreviewStb').attr("src"));
 
-                    $('#confirm-modal').modal('show');
-                }
+                $('#confirm-modal').modal('show');
             });
 
             let submitBtn = $("#submitBtn");

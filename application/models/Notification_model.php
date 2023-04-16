@@ -42,4 +42,9 @@ class Notification_model extends CI_Model{
 		$query = $this->db->query($sql);
         return $query->row();  
 	}
+
+    function delete($where){
+        $this->db->where($where);
+        return $this->db->delete('notification');
+    }
 }

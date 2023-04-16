@@ -24,7 +24,7 @@ class Breeds extends CI_Controller {
 
 		public function validate_add(){
 			if ($this->session->userdata('use_username')){
-				$this->form_validation->set_rules('tra_name', 'Breed ', 'trim|required|is_unique[Trah.tra_name]');
+				$this->form_validation->set_rules('tra_name', 'Breed ', 'trim|required|is_unique[trah.tra_name]');
 				
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("backend/add_breed");
@@ -32,7 +32,7 @@ class Breeds extends CI_Controller {
 				else{
 					$breed = array(
 						'tra_name' => strtoupper($this->input->post('tra_name')),
-						'tra_stat' => $this->config->item('accepted'),
+						'tra_stat' => $this->config->item('backend_breed'),
 					);
 					$res = $this->trahModel->add_trah($breed);
 					if ($res){
@@ -121,7 +121,7 @@ class Breeds extends CI_Controller {
 			if ($this->uri->segment(4)){
                 if ($this->session->userdata('use_username')){
                     $where['tra_id'] = $this->uri->segment(4);
-                    $data['tra_stat'] = $this->config->item('accepted');
+                    $data['tra_stat'] = $this->config->item('backend_breed');
                     $res = $this->trahModel->update_trah($data, $where);
                     if ($res){
                         $this->session->set_flashdata('activate', TRUE);

@@ -7,7 +7,7 @@ class Births extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel'));
+			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel', 'logstudModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('url', 'notif', 'mail'));
@@ -16,36 +16,55 @@ class Births extends CI_Controller {
 		}
 
 		public function index(){
-			$where['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+			$where['bir_stat'] = $this->config->item('accepted');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where, 0, $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
-			$data['stambum_stat'] = array();
+			$data['stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
-				$whereStambum['stb_stat'] = $this->config->item('accepted');
-				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
-				
-				$wheStbMale = [];
-				$wheStbMale['stb_bir_id'] = $r->bir_id;
-				$wheStbMale['stb_gender'] = 'MALE';
-				$wheStbMale['stb_stat'] = $this->config->item('accepted');
-				$male = $this->stambumModel->get_count($wheStbMale);
+				$whereStambum['stb_stat != '] = $this->config->item('rejected');
+                $stb = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+				$data['stambum'][] = $stb;
 
-				$wheStbFemale = [];
-				$wheStbFemale['stb_bir_id'] = $r->bir_id;
-				$wheStbFemale['stb_gender'] = 'FEMALE';
-				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
-				$female = $this->stambumModel->get_count($wheStbFemale);
+                if ($stb < ($r->bir_male + $r->bir_female)){
+                    $piece = explode("-", $r->bir_date_of_birth);
+                    $dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
-				if ($male == $r->bir_male && $female == $r->bir_female){
-					$data['stambum_stat'][] = 0;
-				}
-				else{
-					$data['stambum_stat'][] = 1;
-				}
+                    $ts = new DateTime();
+                    $ts_birth = new DateTime($dob);
+                    if ($ts_birth > $ts){
+                        $data['stat'][] = false;
+                    }
+                    else{ // min 45 hari; max 100 hari
+                        $err = 0;
+                        $diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+                        if ($diff < 1){
+                            $err++;
+                        }
+
+                        if (!$err){
+                            $diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+                            if ($diff > 1){
+                                $err++;
+                            }
+                        }
+
+                        if (!$err){
+
+                        }
+
+                        if (!$err)
+                            $data['stat'][] = true;
+                        else
+                            $data['stat'][] = false;
+                    }
+                }
+                else{
+                    $data['stat'][] = false;
+                }
 			}
 			$this->load->view('backend/view_births', $data);
 		}
@@ -59,38 +78,53 @@ class Births extends CI_Controller {
 			if ($date){
 				$where['bir_date_of_birth'] = $date;
 			}
-			$where['bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+			$where['bir_stat'] = $this->config->item('accepted');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$like['can_sire.can_a_s'] = $this->input->post('keywords');
 			$like['can_dam.can_a_s'] = $this->input->post('keywords');
 			$data['birth'] = $this->birthModel->search_births($like, $where, 0, $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
-			$data['stambum_stat'] = array();
+			$data['stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
-				$whereStambum['stb_stat'] = $this->config->item('accepted');
-				$data['stambum'][] = $this->stambumModel->get_stambum($whereStambum)->num_rows();
-				
-				$wheStbMale = [];
-				$wheStbMale['stb_bir_id'] = $r->bir_id;
-				$wheStbMale['stb_gender'] = 'MALE';
-				$wheStbMale['stb_stat'] = $this->config->item('accepted');
-				$male = $this->stambumModel->get_count($wheStbMale);
+				$whereStambum['stb_stat != '] = $this->config->item('rejected');
+				$stb = $this->stambumModel->get_stambum($whereStambum)->num_rows();
+				$data['stambum'][] = $stb;
 
-				$wheStbFemale = [];
-				$wheStbFemale['stb_bir_id'] = $r->bir_id;
-				$wheStbFemale['stb_gender'] = 'FEMALE';
-				$wheStbFemale['stb_stat'] = $this->config->item('accepted');
-				$female = $this->stambumModel->get_count($wheStbFemale);
+                if ($stb < ($r->bir_male + $r->bir_female)){
+                    $piece = explode("-", $r->bir_date_of_birth);
+                    $dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
-				if ($male == $r->bir_male && $female == $r->bir_female){
-					$data['stambum_stat'][] = 0;
-				}
-				else{
-					$data['stambum_stat'][] = 1;
-				}
+                    $ts = new DateTime();
+                    $ts_birth = new DateTime($dob);
+                    if ($ts_birth > $ts){
+                        $data['stat'][] = false;
+                    }
+                    else{ // min 45 hari; max 100 hari
+                        $err = 0;
+                        $diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+                        if ($diff < 1){
+                            $err++;
+                        }
+
+                        if (!$err){
+                            $diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+                            if ($diff > 1){
+                                $err++;
+                            }
+                        }
+
+                        if (!$err)
+                            $data['stat'][] = true;
+                        else
+                            $data['stat'][] = false;
+                    }
+                }
+                else{
+                    $data['stat'][] = false;
+                }
 			}
 			$this->load->view('backend/view_births', $data);
 		}
@@ -121,9 +155,63 @@ class Births extends CI_Controller {
 
 		public function add(){ 
 			if ($this->uri->segment(4)){
-				$data['bir_stu_id'] = $this->uri->segment(4);
-				$data['mode'] = 0;
-				$this->load->view('backend/add_birth', $data);
+                // // min 58 hari; max 75 hari
+                $whereStud['stu_id'] = $this->uri->segment(4);
+                $stud = $this->studModel->get_studs($whereStud)->row();
+                if ($stud->stu_stat == $this->config->item('accepted')){
+                    $whereBirth['bir_stu_id'] = $this->uri->segment(4);
+                    $whereBirth['bir_stat != '] = $this->config->item('rejected');
+                    $birth = $this->birthModel->get_births($whereBirth)->num_rows();
+                    if (!$birth){
+                        $err = 0;
+                        $piece = explode("-", $stud->stu_stud_date);
+                        $studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+    
+                        $ts = new DateTime();
+                        $ts_stud = new DateTime($studDate);
+                        if ($ts_stud > $ts){
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+                        }
+                        else{
+                            $diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+                            if ($diff < 1){
+                                $err++;
+                                $this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+                            }
+    
+                            if (!$err){
+                                $diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+                                if ($diff > 1){
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+                                }
+                            }
+    
+                            if (!$err){
+                                $data['bir_stu_id'] = $this->uri->segment(4);
+                                $data['mode'] = 0;
+                                $this->load->view('backend/add_birth', $data);
+                            }
+                            else{
+                                redirect('backend/Studs');
+                            }
+                        }
+                    }
+                    else{
+                        if ($birth->bir_stat == $this->config->item('saved')){
+                            $this->session->set_flashdata('error_message', 'Birth has been saved.');
+                        }
+                        else{
+                            $this->session->set_flashdata('error_message', 'Birth has been approved.');
+                        }
+                        redirect('backend/Studs');
+                    }
+                }
+                else{
+                    $this->session->set_flashdata('error_message', 'Lapor lahir tidak valid');
+                    redirect('backend/Studs');
+                }
 			}
 			else{
 				redirect('backend/Studs');
@@ -139,7 +227,7 @@ class Births extends CI_Controller {
 				$this->form_validation->set_rules('bir_date_of_birth', 'Date of Birth ', 'trim|required');
 	
 				$data['bir_stu_id'] = $this->input->post('bir_stu_id');
-				$data['mode'] = 1;
+				$data['mode'] = $this->input->post('mode');
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('backend/add_birth', $data);
 				}
@@ -173,6 +261,46 @@ class Births extends CI_Controller {
 							}
 						}
 					}
+
+                    if (!$err && !$this->input->post('mode')){
+						// syarat maksimal 75 hari dari lapor pacak
+                        $data['warning'] = Array();
+						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
+						$stud = $this->studModel->get_studs($whereStud)->row();
+						if ($stud){
+							$piece = explode("-", $this->input->post('bir_date_of_birth'));
+							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$piece = explode("-", $stud->stu_stud_date);
+							$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$ts = new DateTime($date);
+							$ts_stud = new DateTime($studDate);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+							}
+							else{
+								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+								if ($diff < 1){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+								}
+
+								if (!$err){
+									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+									if ($diff > 1){
+										$err++;
+										$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+									}
+								}
+							}
+						}
+						else{
+							$err++;
+							$this->session->set_flashdata('error_message', 'Invalid stud id'); 
+						}
+                    }
 						
 					if (!$err){
 						file_put_contents($img_name, $uploadedImg);
@@ -352,7 +480,7 @@ class Births extends CI_Controller {
 	
 				$where['bir_id'] = $this->input->post('bir_id');
 				$data['birth'] = $this->birthModel->get_births($where)->row();
-				$data['mode'] = 1;
+				$data['mode'] = $this->input->post('mode');
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('backend/edit_birth', $data);
 				}
@@ -381,6 +509,46 @@ class Births extends CI_Controller {
 							}
 						}
 					}
+
+                    if (!$err && !$this->input->post('mode')){
+						// syarat maksimal 75 hari dari lapor pacak
+                        $data['warning'] = Array();
+						$whereStud['stu_id'] = $data['birth']->bir_stu_id;
+						$stud = $this->studModel->get_studs($whereStud)->row();
+						if ($stud){
+							$piece = explode("-", $this->input->post('bir_date_of_birth'));
+							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$piece = explode("-", $stud->stu_stud_date);
+							$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+
+							$ts = new DateTime($date);
+							$ts_stud = new DateTime($studDate);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+							}
+							else{
+								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+								if ($diff < 1){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+								}
+
+								if (!$err){
+									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+									if ($diff > 1){
+										$err++;
+										$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+									}
+								}
+							}
+						}
+						else{
+							$err++;
+							$this->session->set_flashdata('error_message', 'Invalid stud id'); 
+						}
+                    }
 	
 					if (!$err){
 						if (isset($uploadedImg)){
@@ -663,6 +831,7 @@ class Births extends CI_Controller {
 		public function delete(){
 			if ($this->uri->segment(4)){
 				if ($this->session->userdata('use_username')) {
+                    $err = 0;
 					$where['bir_id'] = $this->uri->segment(4);
 					$data['bir_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
@@ -671,7 +840,6 @@ class Births extends CI_Controller {
 					$this->db->trans_start();
 					$res = $this->birthModel->update_births($data, $where);
 					if ($res){
-						$err = 0;
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
 							'log_user' => $this->session->userdata('use_id'),
@@ -680,16 +848,39 @@ class Births extends CI_Controller {
 						);
 						$log = $this->logbirthModel->add_log($dataLog);
 						if ($log){
-							$this->db->trans_complete();
-							$this->session->set_flashdata('delete', TRUE);
-							redirect('backend/Births');
+                            $birth = $this->birthModel->get_births($where)->row();
+                            $whereStud['stu_id'] = $birth->bir_stu_id;
+                            $dataStud['stu_user'] = $this->session->userdata('use_id');
+                            $dataStud['stu_date'] = date('Y-m-d H:i:s');
+                            $dataStud['stu_stat'] = $this->config->item('accepted');
+                            $res = $this->studModel->update_studs($dataStud, $whereStud);
+                            if ($res){
+                                $dataLogStud = array(
+                                    'log_stu_id' => $birth->bir_stu_id,
+                                    'log_user' => $this->session->userdata('use_id'),
+                                    'log_date' => date('Y-m-d H:i:s'),
+                                    'log_stat' => $this->config->item('accepted'),
+                                );
+                                $log = $this->logstudModel->add_log($dataLogStud);
+                                if ($log){
+                                    $this->db->trans_complete();
+                                    $this->session->set_flashdata('delete', TRUE);
+                                    redirect('backend/Births');
+                                }
+                                else{
+                                    $err = 1;
+                                }
+                            }
+                            else{
+                                $err = 2;
+                            }
 						}
 						else{
-							$err = 1;
+							$err = 3;
 						}
 					}
 					else{
-						$err = 2;
+						$err = 4;
 					}
 					if ($err){
 						$this->db->trans_rollback();

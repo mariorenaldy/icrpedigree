@@ -8,12 +8,12 @@ class LanguageLoader
         $ci->load->helper('language');
         $ci->load->library('session');
 
-        if ($ci->session->userdata('site_lang')) {
-            $ci->lang->load('navbar',$ci->session->userdata('site_lang'));
-            $ci->lang->load('footer',$ci->session->userdata('site_lang'));
+        if ($ci->input->cookie('site_lang')) {
+            $ci->lang->load('navbar', $ci->input->cookie('site_lang'));
+            $ci->lang->load('footer', $ci->input->cookie('site_lang'));
         } else {
-            $ci->lang->load('navbar','indonesia');
-            $ci->lang->load('footer','indonesia');
+            $ci->lang->load('navbar', 'indonesia');
+            $ci->lang->load('footer', 'indonesia');
         }
     }
 }

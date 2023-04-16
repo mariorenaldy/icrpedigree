@@ -59,23 +59,68 @@ class Stambums extends CI_Controller {
             if ($this->session->userdata('use_id')){
                 $wheBirth['bir_id'] = $this->uri->segment(4);
                 $data['birth'] = $this->birthModel->get_births($wheBirth)->row();
-                $wheStud['stu_id'] = $data['birth']->bir_stu_id;
-                $data['stud'] = $this->studModel->get_studs($wheStud)->row();
-                $wheMember['mem_id IN ('.$data['stud']->stu_member_id.', '.$data['stud']->stu_partner_id.')'] = null;
-                $data['member'] = $this->memberModel->get_members($wheMember)->result();
-                $whe['ken_member_id'] =  $data['member'][0]->mem_id;
-                $whe['ken_stat'] = $this->config->item('accepted');
-                $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
-                $data['kennel_id'] = $data['kennel'][0]->ken_id;
-                $data['mode'] = 0;
-                $this->load->view('backend/add_stambum', $data);
+
+                if ($data['birth']->bir_stat == $this->config->item('accepted')){ // harus kurang dari 100 hari
+					$whereStb['stb_bir_id'] = $this->uri->segment(4);
+					$whereStb['stb_stat != '] = $this->config->item('rejected');
+					$stb = $this->stambumModel->get_stambum($whereStb)->num_rows();
+					if ($stb < ($data['birth']->bir_male + $data['birth']->bir_female)){
+						$err = 0;
+						$piece = explode("-", $data['birth']->bir_date_of_birth);
+						$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+
+						$ts = new DateTime();
+						$ts_birth = new DateTime($dob);
+						if ($ts_birth > $ts){
+							$err++;
+							$this->session->set_flashdata('error_message', 'Puppy must be reported before '.$this->config->item('jarak_lapor_anak').' days from birth'); 
+						}
+						else{
+							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+							if ($diff < 1){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Puppy must be reported after '.$this->config->item('min_jarak_lapor_anak').' days from birth');
+							}
+
+							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+							if ($diff > 1){
+								$err++;
+								$this->session->set_flashdata('error_message', 'Puppy must be reported before '.$this->config->item('jarak_lapor_anak').' days from birth');
+							}
+						}
+
+						if (!$err){
+							$wheStud['stu_id'] = $data['birth']->bir_stu_id;
+                            $data['stud'] = $this->studModel->get_studs($wheStud)->row();
+                            $wheMember['mem_id IN ('.$data['stud']->stu_member_id.', '.$data['stud']->stu_partner_id.')'] = null;
+                            $data['member'] = $this->memberModel->get_members($wheMember)->result();
+                            $whe['ken_member_id'] =  $data['member'][0]->mem_id;
+                            $whe['ken_stat'] = $this->config->item('accepted');
+                            $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+                            $data['kennel_id'] = $data['kennel'][0]->ken_id;
+                            $data['mode'] = 0;
+                            $this->load->view('backend/add_stambum', $data);
+						}
+						else{
+							redirect("backend/Births");
+						}
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Puppy is full');
+						redirect('backend/Births');
+					}
+				}
+				else {
+					$this->session->set_flashdata('error_message', 'Invalid birth');
+					redirect("backend/Births");
+				}
             }
             else{
                 redirect("backend/Users/login");
             }
         }
         else{
-          redirect("backend/Stambums");
+          redirect("backend/Births");
         }
     }
 

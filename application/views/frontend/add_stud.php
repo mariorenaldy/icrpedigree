@@ -82,7 +82,7 @@
                         <div class="input-group mb-3">
                             <label for="stu_stud_date" class="control-label col-sm-2">Tanggal Pacak</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" readonly>
                             </div>
                         </div>
                         <div class="text-center">

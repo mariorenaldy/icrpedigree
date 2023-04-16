@@ -78,6 +78,7 @@
                             </div>
                         </div>
                         <div class="text-center">
+                            <input type="hidden" id="mode" name="mode" value="<?= $mode ?>" />
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Births'">Back</button>
                         </div>
@@ -186,6 +187,21 @@
             $('#cancel-btn').click(function() {
                 resetImage();
             });
+
+            <?php if (isset($warning)){ ?>
+                var proceed = confirm("<?php 
+                    foreach ($warning AS $r){
+                        echo $r.'\n';
+                    }
+                    echo 'Proceed?';
+                ?>");
+                if (proceed){
+                    $('#mode').val(1);
+                }
+                else{
+                    window.location = '<?= base_url() ?>backend/Births';
+                }
+            <?php } ?>
         });
     </script>
 </body>

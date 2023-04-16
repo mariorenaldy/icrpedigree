@@ -10,17 +10,17 @@ class Members extends CI_Controller {
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'requestresetModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'mail'));
+			$this->load->helper(array('form', 'url', 'mail', 'cookie'));
 			$this->load->database();
 
-			$site_lang = $this->session->userdata('site_lang');
-			if ($site_lang) {
-				$this->lang->load('register',$this->session->userdata('site_lang'));
-				$this->lang->load('login',$this->session->userdata('site_lang'));
-			} else {
-				$this->lang->load('register','indonesia');
-				$this->lang->load('login','indonesia');
-			}
+			if ($this->input->cookie('site_lang')) {
+                $this->lang->load('register', $this->input->cookie('site_lang'));
+                $this->lang->load('login', $this->input->cookie('site_lang'));
+            } else {
+                set_cookie('site_lang', 'indonesia', '2147483647'); 
+                $this->lang->load('register', 'indonesia');
+                $this->lang->load('login', 'indonesia');
+            }
 		}
 
 		public function test_input($data) {
@@ -41,13 +41,10 @@ class Members extends CI_Controller {
 
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			
-			$site_lang = $this->session->userdata('site_lang');
+
+            $site_lang = $this->session->userdata('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
-			}
-			else{
-				$this->form_validation->set_message('required', '%s required');
 			}
 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required');
@@ -69,39 +66,39 @@ class Members extends CI_Controller {
 					$member = $this->MemberModel->get_members($whereMem)->row(); // no hp
 					if (!$member){
 						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('login_error', 'Maaf nama pengguna/no hp tidak terdaftar');
+                        if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('login_error', 'Nama pengguna/no hp tidak terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('login_error', 'Sorry, the username/phone number is not registered');
+							$this->session->set_flashdata('login_error', 'Username/phone number is not registered');
 						}
 					}
 				}
 				if (!$err && $member->mem_stat == $this->config->item('rejected')){
 					$err++;
-					if ($site_lang == 'indonesia') {
+                    if ($site_lang == 'indonesia') {
 						$this->session->set_flashdata('login_error', 'Masa berlaku member telah habis. Harap melakukan pembayaran');
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Member validity period has expired. Please do the annual payment');
+						$this->session->set_flashdata('login_error', 'Your membership has been expired. Please pay the annual fee to continue using the service');
 					}
 				}
 				if (!$err && $member->mem_stat == $this->config->item('saved')){
 					$err++;
-					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi customer service');
+                    if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi admin');
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Member data has not been approved. Please contact customer service');
+						$this->session->set_flashdata('login_error', 'Your membership has not been approved. Please contact admin');
 					}
 				}
 				if (!$err && sha1($this->input->post('password')) != $member->mem_password){
 					$err++;
-					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('login_error', 'Maaf kata sandi anda salah');
+                    if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('login_error', 'Kata sandi salah');
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Sorry your password is wrong');
+						$this->session->set_flashdata('login_error', 'Invalid password');
 					}
 				}
 				if (!$err){
@@ -122,7 +119,7 @@ class Members extends CI_Controller {
 						redirect("frontend/Beranda");
 					}
 					else{
-						if ($site_lang == 'indonesia') {
+                        if ($site_lang == 'indonesia') {
 							$this->session->set_flashdata('login_error', 'Gagal login');
 						}
 						else{
@@ -205,7 +202,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Foto Kennel wajib diisi');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Kennel Photo required');
+							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
 						}
 					}
 	
@@ -224,7 +221,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Ukuran file PP terlalu besar (> 1 MB).<br/>');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'PP file size is  too big (> 1 MB).<br/>');
+									$this->session->set_flashdata('error_message', 'PP file size is too big (> 1 MB).<br/>');
 								}
 							}
 
@@ -235,7 +232,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writeable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'member folder not found or not writeable.');
+									$this->session->set_flashdata('error_message', 'member folder is not found or does not writeable.');
 								}
 							} else {
 								if (is_file($pp_name) and !is_writable($pp_name)){
@@ -244,7 +241,7 @@ class Members extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writeable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'PP file already exist and not writeable.');
+										$this->session->set_flashdata('error_message', 'PP file is already exist and is not writeable.');
 									}
 								}
 							}
@@ -272,7 +269,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'kennel folder not found or not writeable.');
+								$this->session->set_flashdata('error_message', 'kennel folder is not found or doesn not writeable.');
 							}
 						} else {
 							if (is_file($logo_name) and !is_writable($logo_name)){
@@ -281,7 +278,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writeable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Kennel Photo file already exist and not writeable.');
+									$this->session->set_flashdata('error_message', 'Kennel Photo file is already exist and is not writeable.');
 								}
 							}
 						}
@@ -312,7 +309,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Your name is already registered and has not been processed. Please contact Admin');
+							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please contact Admin');
 						}
 					}
 
@@ -322,7 +319,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Your name is already registered');
+							$this->session->set_flashdata('error_message', 'Name is already registered');
 						}
 					}
 
@@ -332,7 +329,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'ID Card Number cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate ID Card Number');
 						}
 					}
 
@@ -342,7 +339,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Phone number cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate Phone number');
 						}
 					}
 
@@ -352,7 +349,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'email tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Email cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate email');
 						}
 					}
 
@@ -362,7 +359,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Username cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate username');
 						}
 					}
 
@@ -373,7 +370,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Kennel name cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate kennel name');
 						}
 					}
 				// } else {

@@ -62,7 +62,7 @@ function send_birth_link($email, $member, $sire, $dam, $id){
 	$ci->email->subject('Lapor Pacak Disetujui');
 
 	$message = '<div>Yth. '.$member.',</div><br>';
-	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahu Anda bahwa pendaftaran pacak anjing antara '.$sire.' dan '.$dam.' telah disetujui. Anda sekarang dapat mendaftarkan laporan lahir setelah '.$this->config->item('min_jarak_lapor_lahir').' hari.</div>';
+	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahu Anda bahwa pendaftaran pacak anjing antara '.$sire.' dan '.$dam.' telah disetujui. Anda sekarang dapat mendaftarkan laporan lahir setelah '.$ci->config->item('min_jarak_lapor_lahir').' hari.</div><br>';
 	$message .= '<div><a href="'.base_url().'frontend/Births/add/'.$id.'">Lapor Lahir</a></div><br>';
 	$message .= '<div>Kami ingin mengingatkan Anda untuk selalu mematuhi pedoman dan peraturan kami untuk memastikan kesehatan dan keamanan anjing Anda. Pastikan bahwa anjing Anda mendapatkan perawatan yang memadai dan sehat selama masa kehamilan dan setelah melahirkan.</div><br>';
 	$message .= '<div>Jika Anda memiliki pertanyaan atau kekhawatiran, jangan ragu untuk menghubungi kami kapan saja.</div><br>';
@@ -86,9 +86,9 @@ function send_stambum_link($email, $member, $sire, $dam, $id){
 	$ci->email->subject('Lapor Lahir Disetujui');
 
 	$message = '<div>Yth. '.$member.',</div><br>';
-	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahukan Anda bahwa pendaftaran kelahiran anjing hasil pacak antara '.$sire.' dan '.$dam.' telah disetujui. Langkah selanjutnya adalah mendaftarkan nama anak dan pembuatan stambum.</div>';
+	$message .= '<div>Kami dari tim ICRPedigree ingin memberitahukan Anda bahwa pendaftaran kelahiran anjing hasil pacak antara '.$sire.' dan '.$dam.' telah disetujui. Langkah selanjutnya adalah mendaftarkan nama anak dan pembuatan stambum.</div><br>';
 	$message .= '<div><a href="'.base_url().'frontend/Stambums/add/'.$id.'">Lapor Anak</a></div><br>';
-	$message .= '<div>Mohon diperhatikan bahwa pendaftaran nama anak dan pembuatan stambum harus dilakukan minimal '.$this->config->item('min_jarak_lapor_anak').' hari setelah tanggal lahir dan batas maksimum '.$this->config->item('jarak_lapor_anak').' hari dari lahir. Pastikan Anda mematuhi jangka waktu ini untuk memastikan bahwa pendaftaran dilakukan dengan tepat waktu.</div><br>';
+	$message .= '<div>Mohon diperhatikan bahwa pendaftaran nama anak dan pembuatan stambum harus dilakukan minimal '.$ci->config->item('min_jarak_lapor_anak').' hari setelah tanggal lahir dan batas maksimum '.$ci->config->item('jarak_lapor_anak').' hari dari lahir. Pastikan Anda mematuhi jangka waktu ini untuk memastikan bahwa pendaftaran dilakukan dengan tepat waktu.</div><br>';
 	$message .= '<div>Kami ingin mengingatkan Anda untuk memastikan bahwa semua informasi yang diberikan dalam pendaftaran akurat dan sesuai dengan data yang sebenarnya. Hal ini akan membantu kami dalam memastikan bahwa detail informasi anjing yang terdaftar tercetak dengan benar pada stambum.</div><br>';
 	$message .= '<div>Jika Anda memiliki pertanyaan atau kekhawatiran mengenai pendaftaran, jangan ragu untuk menghubungi kami kapan saja.</div><br>';
 	$message .= '<div>Terima kasih atas partisipasi Anda dalam program kami.</div><br>';

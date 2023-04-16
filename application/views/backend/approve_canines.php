@@ -58,7 +58,7 @@
                                 <th class="no-sort">Name</th>
                                 <th>Breed</th>
                                 <th>Gender</th>
-                                <th class="no-sort">Date of Birth</th>
+                                <th>Date of Birth</th>
                                 <th>Kennel</th>
                                 <th class="no-sort">Owner</th>
                                 <th class="no-sort">Reg. Date</th>
