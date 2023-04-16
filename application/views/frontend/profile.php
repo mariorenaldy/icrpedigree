@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Profil</title>
+    <title><?= lang("profile_title"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url().'assets/css/pp-styles.css' ?>" rel="stylesheet" />
     <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Profil</h3>
+            <h3 class="text-center text-warning"><?= lang("profile_title"); ?></h3>
             <form action="<?= base_url(); ?>frontend/Members/change_pp" method="post" enctype="multipart/form-data">
                 <div class="row mb-2">            
                     <div class="col-sm-4"></div>
@@ -21,7 +21,7 @@
                             <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile profilepic__image" alt="PP">
                             <div class="profilepic__content">
                                 <span class="profilepic__icon"><i class="fa-solid fa-file-image"></i></span>
-                                <span class="profilepic__text">Ubah PP</span>
+                                <span class="profilepic__text"><?= lang("profile_change_pp"); ?></span>
                             </div>
                             <input type="file" class="upload" id="my_file" style="display: none;" onclick="resetImage(event)"/>
                             <input type="hidden" name="attachment_pp" id="attachment_pp">
@@ -31,49 +31,49 @@
                 <div class="row mb-5">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 edit-buttons text-center" style="display: none;">
-                        <button class="btn btn-primary" type="submit">Simpan</button>
-                        <button class="btn btn-danger" type="button" onclick="revert()">Batal</button>
+                        <button class="btn btn-primary" type="submit"><?= lang("profile_save"); ?></button>
+                        <button class="btn btn-danger" type="button" onclick="revert()"><?= lang("profile_cancel"); ?></button>
                     </div>
                 </div>
             </form>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">No. KTP</div>
+                <div class="col-sm-3"><?= lang("profile_id_card_number"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_ktp ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Nama Sesuai KTP</div>
+                <div class="col-sm-3"><?= lang("profile_name"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_name ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Alamat Surat Menyurat</div>
+                <div class="col-sm-3"><?= lang("profile_mailing_address"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_address ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Alamat yang Tertera di Sertifikat</div>
+                <div class="col-sm-3"><?= lang("profile_certificate_address"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_mail_address ?></div>
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">No. HP WA Aktif</div>
+                <div class="col-sm-3"><?= lang("profile_number"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_hp ?></div>
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Kota</div>
+                <div class="col-sm-3"><?= lang("profile_city"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_kota ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Kode Pos</div>
+                <div class="col-sm-3"><?= lang("profile_postal_code"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_kode_pos ?></div>
             </div>     
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">email</div>
+                <div class="col-sm-3"><?= lang("profile_email"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_email ?></div>
             </div>
             <hr/>
@@ -90,12 +90,12 @@
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Nama Kennel</div>
+                <div class="col-sm-3"><?= lang("profile_kennel_name"); ?></div>
                 <div class="col-sm-8"><?= $member->ken_name ?></div>
             </div>     
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3">Format Penamaan Anjing</div>
+                <div class="col-sm-3"><?= lang("profile_kennel_format"); ?></div>
                 <div class="col-sm-8"><?= $kennel->ken_type_name ?></div>
             </div>
         </div>
@@ -120,7 +120,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("profile_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("profile_error_message");?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">
@@ -149,13 +149,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang("profile_notice");?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('change_pp')){ ?>
                                 <div class="row">
-                                    <div class="col-12">PP berhasil diubah</div>
+                                    <div class="col-12"><?= lang("profile_change_pp_success");?></div>
                                 </div>
                             <?php } ?>
                         </div>

@@ -16,10 +16,12 @@ class Members extends CI_Controller {
 			if ($this->input->cookie('site_lang')) {
                 $this->lang->load('register', $this->input->cookie('site_lang'));
                 $this->lang->load('login', $this->input->cookie('site_lang'));
+                $this->lang->load('profile', $this->input->cookie('site_lang'));
             } else {
                 set_cookie('site_lang', 'indonesia', '2147483647'); 
                 $this->lang->load('register', 'indonesia');
                 $this->lang->load('login', 'indonesia');
+                $this->lang->load('profile', 'indonesia');
             }
 		}
 
@@ -42,7 +44,7 @@ class Members extends CI_Controller {
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 
-            $site_lang = $this->session->userdata('site_lang');
+            $site_lang = $this->input->cookie('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 			}
@@ -146,7 +148,7 @@ class Members extends CI_Controller {
 
 		public function validate_register(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$site_lang = $this->session->userdata('site_lang');
+			$site_lang = $this->input->cookie('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
@@ -597,9 +599,15 @@ class Members extends CI_Controller {
 			$err = 0;
 			$where['mem_id'] = $this->session->userdata('mem_id');
 			$data['member'] = $this->MemberModel->get_members($where)->row();
+			$site_lang = $this->input->cookie('site_lang');
 			if (!$data['member']) {
 				$err++;
-				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Data Not Found');
+				}
 			} else {
 				$pp = '-';
 				if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])) {
@@ -610,17 +618,32 @@ class Members extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'File size is too big (> 1 MB).');
+						}
 					}
 					else{
 						$image_name = $this->config->item('path_member').$this->config->item('file_name_member');
 						if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'members folder not found or not writeable.');
+							}
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
+								}
 							}
 						}
 
@@ -633,7 +656,12 @@ class Members extends CI_Controller {
 
 				if (!$err && $pp == "-") {
 					$err++;
-					$this->session->set_flashdata('error_message', 'PP wajib diisi');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'PP wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'PP is required');
+					}
 				}
 
 				if (!$err){
@@ -645,7 +673,12 @@ class Members extends CI_Controller {
 						redirect("frontend/Members/profile", $data);
 					} else {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to change PP');
+						}
 					}
 				}
 				else {
