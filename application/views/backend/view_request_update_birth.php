@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Approve Change Birth Data</title>
+    <title>Approve Update Birth</title>
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
@@ -18,11 +18,11 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Approve Change Birth Data</h3>
+                <h3 class="text-center text-primary">Approve Update Birth</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Change birth data has been approved<br/>';
+                            echo 'Update birth has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -32,7 +32,7 @@
                             echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Change birth data has been rejected<br/>';
+                            echo 'Update birth has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -57,25 +57,24 @@
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th width="15%"><b>Foto Lama</b></th>
-                                <th width="15%"><b>Foto Baru</b></th>
-                                <th><b>DOB Lama</b></th>
-                                <th><b>DOB Baru</b></th>
-                                <th><b>Jumlah Jantan Lama</b></th>
-                                <th><b>Jumlah Jantan Baru</b></th>
-                                <th><b>Jumlah Betina Lama</b></th>
-                                <th><b>Jumlah Betina Baru</b></th>
-                                <th><b>Status</b></th>
+                                <th width="15%"><b>Old Photo</b></th>
+                                <th width="15%"><b>New Photo</b></th>
+                                <th><b>Old DOB</b></th>
+                                <th><b>New DOB</b></th>
+                                <th><b>Old Male</b></th>
+                                <th><b>New Male</b></th>
+                                <th><b>Old Female</b></th>
+                                <th><b>New Female</b></th>
                                 </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($req AS $r){ ?>
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Accept Change Birth Data"><i class="fa fa-check"></i></button>
+                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Accept Update Birth"><i class="fa fa-check"></i></button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Reject Change Birth Data"><i class="fa fa-close"></i></button>
+                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Reject Update Birth"><i class="fa fa-close"></i></button>
                                     </td>
                                     <td>
                                         <?php if ($r->req_old_dam_photo != '-'){ ?>
@@ -109,9 +108,6 @@
                                     <td align="right">
                                         <?= $r->req_female; ?>
                                     </td>
-                                    <td>
-                                        <?php echo $r->stat_name; ?>
-                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -131,13 +127,13 @@
         setDatePicker('#date');
 
         function approve(id){
-            var proceed = confirm("Approve Change Birth Data?");
+            var proceed = confirm("Approve Update Birth?");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Requestupdatebirth/approve/"+id;
             }
         }
         function reject(id, nama){
-            var proceed = window.prompt("Reject Change Birth Data?", "");
+            var proceed = window.prompt("Reject Update Birth?", "");
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Requestupdatebirth/reject/"+id+"/"+encodeURI(proceed);
             }

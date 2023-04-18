@@ -9,7 +9,7 @@ class Stambums extends CI_Controller {
         parent::__construct();
         $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
-        $this->load->library(array('session', 'form_validation'));
+        $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url', 'notif'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
@@ -23,18 +23,140 @@ class Stambums extends CI_Controller {
 		}
 
     public function index(){
+        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+        $config['per_page'] = $this->config->item('backend_stb_count');
+        $config['uri_segment'] = 4;
+        $config['use_page_numbers'] = TRUE;
+
+        //Encapsulate whole pagination 
+        $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+        $config['full_tag_close'] = '</ul>';
+
+        //First link of pagination
+        $config['first_link'] = 'Pertama';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+
+        //Customizing the “Digit” Link
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+
+        //For PREVIOUS PAGE Setup
+        $config['prev_link'] = '<';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+
+        //For NEXT PAGE Setup
+        $config['next_link'] = '>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+
+        //For LAST PAGE Setup
+        $config['last_link'] = 'Akhir';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        //For CURRENT page on which you are
+        $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
         $where['stb_stat'] = $this->config->item('accepted');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_a_s', 0, $this->config->item('backend_stb_count'))->result();
+        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
+
+        $config['base_url'] = base_url().'/backend/Stambums/index';
+        $config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], 0)->num_rows();
+        $this->pagination->initialize($config);
+
+        $data['keywords'] = '';
+        $data['sort_by'] = 'stb_id';
+        $data['sort_type'] = 'desc';
+        $this->session->set_userdata('keywords', '');
+        $this->session->set_userdata('keywords', 'stb_id');
+        $this->session->set_userdata('keywords', 'desc');
         $this->load->view('backend/view_stambums', $data);
     }
 
     public function search(){
-        $like['stb_a_s'] = $this->input->post('keywords');
-        $like['ken_name'] = $this->input->post('keywords');
+        if ($this->input->post('keywords')){
+            $this->session->set_userdata('keywords', $this->input->post('keywords'));
+            $data['keywords'] = $this->input->post('keywords');
+        }
+        else{
+            if ($this->uri->segment(4)){
+                $data['keywords'] = $this->session->userdata('keywords');
+            }
+            else{
+                $this->session->set_userdata('keywords', '');
+                $data['keywords'] = '';
+            }
+        }
+
+        if ($this->input->post('sort_by')){
+            $this->session->set_userdata('sort_by', $this->input->post('sort_by'));
+            $this->session->set_userdata('sort_type', $this->input->post('sort_type'));
+            $data['sort_by'] = $this->input->post('sort_by');
+            $data['sort_type'] = $this->input->post('sort_type');
+        }
+        else{
+            $data['sort_by'] = $this->session->userdata('sort_by');
+            $data['sort_type'] = $this->session->userdata('sort_type');
+        }
+
+        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+        $config['per_page'] = $this->config->item('backend_stb_count');
+        $config['uri_segment'] = 4;
+        $config['use_page_numbers'] = TRUE;
+
+        //Encapsulate whole pagination 
+        $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+        $config['full_tag_close'] = '</ul>';
+
+        //First link of pagination
+        $config['first_link'] = 'Pertama';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+
+        //Customizing the “Digit” Link
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+
+        //For PREVIOUS PAGE Setup
+        $config['prev_link'] = '<';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+
+        //For NEXT PAGE Setup
+        $config['next_link'] = '>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+
+        //For LAST PAGE Setup
+        $config['last_link'] = 'Akhir';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        //For CURRENT page on which you are
+        $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+        if ($data['keywords']){
+            $like['stb_a_s'] = $data['keywords'];
+            $like['ken_name'] = $data['keywords'];
+        }
+        else  
+            $like = null;
         $where['stb_stat'] = $this->config->item('accepted');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', 0, $this->config->item('backend_stb_count'))->result();
+        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
+
+        $config['base_url'] = base_url().'/backend/Stambums/search';
+        $config['total_rows'] = $this->stambumModel->search_stambum($like, $where, $page * $config['per_page'], 0)->num_rows();
+        $this->pagination->initialize($config);
         $this->load->view('backend/view_stambums', $data);
     }
 
@@ -637,6 +759,8 @@ class Stambums extends CI_Controller {
                             'log_user' => $this->session->userdata('use_id'),
                             'log_date' => date('Y-m-d H:i:s'),
                             'log_can_id' => $id,
+                            'log_member_id' => $stb->stb_member_id,
+                            'log_kennel_id' => $stb->stb_kennel_id,
                         );
                         $log = $this->logstambumModel->add_log($dataLogStb);
                         if ($log){

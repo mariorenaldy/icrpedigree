@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Laporan Ubah Lahir</title>
+    <title>List Laporan Lahir</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?php echo base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Laporan Ubah Lahir</h3>
+                <h3 class="text-center text-warning">List Laporan Lahir</h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Requestupdatebirth/search'?>" method="post">
                         <div class="input-group my-3">

@@ -3,7 +3,7 @@
 <head>
     <title>Canine List</title>
     <?php $this->load->view('templates/head'); ?>
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
+    <!-- <link rel="stylesheet" href="<?= base_url(); ?>assets/css/datatables.min.css" /> -->
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
@@ -44,19 +44,44 @@
                     <form action="<?= base_url().'backend/Canines/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="ICR number/Chip number/Name/Kennel" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="ICR number/Chip number/Name/Kennel" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
+                <!-- <form action="<?= base_url().'backend/Canines/search'?>" method="post"> -->
+                    <div class="input-group">
+                        <label class="col-md-1">Sort by: </label>
+                        <div class="col-md-2">
+                            <?php
+                                $pil['can_app_date2'] = 'Date';
+                                $pil['can_date_of_birth2'] = 'Date of Birth';
+                                $pil['can_breed'] = 'Breed';
+                                $pil['can_gender'] = 'Gender';
+                                echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 
+                            ?>
+                        </div>
+                        <div class="col-md-1 ms-1">
+                            <?php
+                                $pil2['desc'] = 'Desc';
+                                $pil2['asc'] = 'Asc';
+                                echo form_dropdown('sort_type', $pil2, $sort_type, 'class="form-control"'); 
+                            ?>
+                        </div>
+                        <div class="col-md-1 ms-1">
+                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Sort Canine"><i class="fa fa-sort"></i></button>
+                        </div>
+                    </div>
+                </form>
                 <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Canine"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="table-responsive">
                     <table id="datatable" class="table table-hover">
                         <thead>
@@ -125,6 +150,8 @@
                             <?php } ?>
                         </tbody>
                     </table>
+                    <br/>
+                    <?= $this->pagination->create_links(); ?>
                 </div>
             </div>                           
         </div> 
@@ -170,15 +197,15 @@
             modal.style.display = "none";
         }
 
-        $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[17, 'desc']], dom: 'lpftrip',
-                columnDefs: [{
-                    orderable: false,
-                    targets: "no-sort"
-                }]
-            });
-        });
+        // $(document).ready(function () {
+        //     $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[17, 'desc']], dom: 'lpftrip',
+        //         columnDefs: [{
+        //             orderable: false,
+        //             targets: "no-sort"
+        //         }]
+        //     });
+        // });
     </script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
+    <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->
 </body>
 </html>

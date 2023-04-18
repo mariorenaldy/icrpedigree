@@ -10,7 +10,7 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Members/') ?>">Manage</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestmember') ?>">Approve Edit Kennel</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestmember') ?>">Approve Update Kennel</a></li>
                            <!-- <li><a class="dropdown-item" href="<?= base_url('backend/Requestreset') ?>">Approve Reset Password</a></li> -->
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestpro') ?>">Approve Become Pro</a></li>
                         </ul>
@@ -21,7 +21,7 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Change Data</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Update Photo & RIP</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport') ?>">Approve Export Stambum</a></li>
                         </ul>
                      </div>
@@ -37,7 +37,7 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatebirth') ?>">Approve Change Data</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatebirth') ?>">Approve Update Birth</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">

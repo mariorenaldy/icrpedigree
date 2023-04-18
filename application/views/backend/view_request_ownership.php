@@ -53,8 +53,8 @@
                             <tr>
                                 <th width="1%"></th>
                                 <th width="1%"></th>
-                                <th width="15%">Stambum Lama</th>
-                                <th width="15%">Foto Baru</th>
+                                <th width="15%">Stambum Photo</th>
+                                <th width="15%">Canine Photo</th>
                                 <th width="15%">Name</th>
                                 <th>Owner</th>
                                 <th>New Owner</th>

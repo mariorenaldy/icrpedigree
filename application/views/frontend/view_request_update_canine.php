@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Laporan Ubah Anjing</h3>
+                <h3 class="text-center text-warning">List Laporan Ubah Foto & RIP</h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Requestupdatecanine/search'?>" method="post">
                         <div class="input-group my-3">
@@ -99,7 +99,7 @@
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Laporan ubah anjing berhasil disimpan</div>
+                                    <div class="col-12">Laporan Ubah Foto & RIP berhasil disimpan</div>
                                 </div>
                             <?php } ?>
                         </div>

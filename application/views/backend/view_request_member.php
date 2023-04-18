@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Approve Edit Kennel</title>
+    <title>Approve Update Kennel</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -15,7 +15,7 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Approve Edit Kennel</h3>
+                <h3 class="text-center text-primary">Approve Update Kennel</h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'backend/Requestmember/search'?>" method="post">
                         <div class="input-group my-3">
@@ -31,7 +31,7 @@
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Edit kennel has been approved<br/>';
+                            echo 'Update kennel has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -41,7 +41,7 @@
                             echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Edit kennel has been rejected<br/>';
+                            echo 'Update kennel has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -53,8 +53,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                <button type="button" class="btn btn-success" onclick='approve(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Edit Kennel"><i class="fa fa-check"></i></button>
-                                <button type="button" class="btn btn-danger" onclick='reject(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Edit Kennel"><i class="fa fa-close"></i></button>
+                                <button type="button" class="btn btn-success" onclick='approve(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Kennel"><i class="fa fa-check"></i></button>
+                                <button type="button" class="btn btn-danger" onclick='reject(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Kennel"><i class="fa fa-close"></i></button>
                             <?php } ?>
                         </div>
                     </div>

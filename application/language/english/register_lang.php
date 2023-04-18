@@ -3,11 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang["register_header"] = "Registration";
 $lang["register_id_card_number"] = "ID Card Number";
-$lang["register_name"] = "Name According to ID Card";
-$lang["register_mailing_address"] = "Mailing Address";
-$lang["register_certificate_address"] = "Address Shown on The Certificate";
-$lang["register_same_address"] = "Same as mailing address";
-$lang["register_number"] = "Active WhatsApp Phone Number";
+$lang["register_name"] = "ID Card Name";
+$lang["register_mailing_address"] = "Mail Address";
+$lang["register_certificate_address"] = "Certificate Address";
+$lang["register_same_address"] = "The same as mail address";
+$lang["register_number"] = "Active WhatsApp Number";
 $lang["register_city"] = "City";
 $lang["register_postal_code"] = "Postal Code";
 $lang["register_email"] = "Email";

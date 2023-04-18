@@ -8,16 +8,54 @@ class Studs extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model', 'pedigreesModel'));
-			$this->load->library('upload', $this->config->item('upload_stud'));
-			$this->load->library(array('session', 'form_validation'));
+			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('url', 'notif', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
 
 		public function index(){
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_stud_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
 			$where['stu_stat'] = $this->config->item('accepted');
-			$data['stud'] = $this->studModel->get_studs($where, 0, $this->config->item('backend_stud_count'))->result();
+			$data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
 
             $data['stat'] = array();
 			$data['birth'] = array();
@@ -55,12 +93,79 @@ class Studs extends CI_Controller {
 						$data['stat'][] = false;
                 }
 			}
-			$this->load->view('backend/view_studs', $data);
+
+            $config['base_url'] = base_url().'/backend/Studs/index';
+            $config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
+
+            $data['keywords'] = '';
+            $data['date'] = '';
+            $this->session->set_userdata('keywords', '');
+            $this->session->set_userdata('date', '');
+            $this->load->view('backend/view_studs', $data);
 		}
 
 		public function search(){
+            if ($this->input->post('keywords') || $this->input->post('date')){
+                $this->session->set_userdata('keywords', $this->input->post('keywords'));
+                $this->session->set_userdata('date', $this->input->post('date'));
+                $data['keywords'] = $this->input->post('keywords');
+                $data['date'] = $this->input->post('date');
+            }
+            else{
+                if ($this->uri->segment(4)){
+                    $data['keywords'] = $this->session->userdata('keywords');
+                    $data['date'] = $this->session->userdata('date');
+                }
+                else{
+                    $this->session->set_userdata('keywords', '');
+                    $this->session->set_userdata('date', '');
+                    $data['keywords'] = '';
+                    $data['date'] = '';
+                }
+            }
+
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_stud_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
 			$date = '';
-			$piece = explode("-", $this->input->post('date'));
+			$piece = explode("-", $data['date']);
             if (count($piece) == 3){
                 $date = $piece[2]."-".$piece[1]."-".$piece[0];
             }
@@ -68,9 +173,13 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			$where['stu_stat'] = $this->config->item('accepted');
-			$like['can_sire.can_a_s'] = $this->input->post('keywords');
-			$like['can_dam.can_a_s'] = $this->input->post('keywords');
-			$data['stud'] = $this->studModel->search_studs($like, $where, 0, $this->config->item('backend_stud_count'))->result();
+            if ($data['keywords']){
+                $like['can_sire.can_a_s'] = $data['keywords'];
+                $like['can_dam.can_a_s'] = $data['keywords'];
+            }
+            else
+                $like = null;
+			$data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
 
             $data['stat'] = array();
 			$data['birth'] = array();
@@ -108,6 +217,10 @@ class Studs extends CI_Controller {
 						$data['stat'][] = false;
                 }
 			}
+
+            $config['base_url'] = base_url().'/backend/Studs/search';
+            $config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
 			$this->load->view('backend/view_studs', $data);
 		}
 

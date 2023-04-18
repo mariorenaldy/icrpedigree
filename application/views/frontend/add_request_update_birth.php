@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Lapor Ubah Data Lahir</title>
+    <title>Lapor Ubah Lahir</title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Ubah Data Lahir</h3>                         
+            <h3 class="text-center text-warning">Lapor Ubah Lahir</h3>                         
                 <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatebirth/validate" method="post" enctype="multipart/form-data">
                     <?php if (!$mode){ ?>
                         <input type="hidden" name="bir_id" value="<?= $birth->bir_id ?>" />

@@ -24,15 +24,15 @@ class CaninesModel extends CI_Model {
     }
 
     public function search_canines($like, $where, $sort = 'can_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2');
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');

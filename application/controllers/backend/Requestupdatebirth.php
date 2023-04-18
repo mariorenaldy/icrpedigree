@@ -108,7 +108,7 @@ class Requestupdatebirth extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to approve change birth data id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to approve update birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Requestupdatebirth');
 					}
 				}
@@ -162,7 +162,7 @@ class Requestupdatebirth extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to reject change birth data id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to reject update birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Requestupdatebirth');
 					}
 				}

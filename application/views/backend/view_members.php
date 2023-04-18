@@ -3,7 +3,7 @@
 <head>
     <title>Kennel List</title>
     <?php $this->load->view('templates/head'); ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/datatables.min.css" /> -->
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -42,7 +42,7 @@
                     <form id="formMember" action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Phone number/Kennel/KTP number" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name/Phone number/Kennel/KTP number" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Kennel"><i class="fa fa-search"></i></button>
@@ -53,17 +53,41 @@
                                     $type[$this->config->item('pro_member')] = 'Pro';
                                     $type[$this->config->item('all_member')] = 'All';  
                                     $type[$this->config->item('free_member')] = 'Free';
-                                    echo form_dropdown('mem_type', $type, set_value('mem_type'), 'class="form-control", id="mem_type"');
+                                    echo form_dropdown('mem_type', $type, $mem_type, 'class="form-control", id="mem_type"');
                             ?>
                             </div>
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
+                <!-- <form action="<?= base_url().'backend/Members/search'?>" method="post"> -->
+                <div class="input-group">
+                        <label class="col-md-1">Sort by: </label>
+                        <div class="col-md-2">
+                            <?php
+                                $pil['mem_app_date2'] = 'Date';
+                                $pil['ken_name'] = 'Kennel';
+                                $pil['mem_name'] = 'Name';
+                                echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 
+                            ?>
+                        </div>
+                        <div class="col-md-1 ms-1">
+                            <?php
+                                $pil2['desc'] = 'Desc';
+                                $pil2['asc'] = 'Asc';
+                                echo form_dropdown('sort_type', $pil2, $sort_type, 'class="form-control"'); 
+                            ?>
+                        </div>
+                        <div class="col-md-1 ms-1">
+                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Sort Canine"><i class="fa fa-sort"></i></button>
+                        </div>
+                    </div>
+                </form>
                 <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Kennel"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="table-responsive">
                     <table id="datatable" class="table table-hover">
                         <thead>
@@ -135,6 +159,8 @@
                             }?>
                         </tbody>
                     </table>
+                    <br/>
+                    <?= $this->pagination->create_links(); ?>
                 </div>
             </div>                       
         </div> 
@@ -168,17 +194,17 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[15, 'desc']], dom: 'lpftrip',
-                columnDefs: [{
-                    orderable: false,
-                    targets: "no-sort"
-                }]
-            });
+        //     $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[15, 'desc']], dom: 'lpftrip',
+        //         columnDefs: [{
+        //             orderable: false,
+        //             targets: "no-sort"
+        //         }]
+        //     });
             $('#mem_type').on("change", function(){
                 $('#formMember').attr('action', "<?= base_url(); ?>backend/Members/search").submit();
             });
         });
     </script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
+    <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->
 </body>
 </html>

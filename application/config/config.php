@@ -559,6 +559,9 @@ $config['file_name_user'] = 'user_'.time().'.png';
 $config['path_ownership'] = 'uploads/ownership/';
 $config['file_name_ownership'] = 'stambum_'.time().'.png';
 
+$config['path_export'] = 'uploads/export/';
+$config['file_name_export'] = 'stambum_'.time().'.png';
+
 $config['path_product'] = 'uploads/products/';
 $config['file_name_product'] = 'product_'.time().'.png';
 
@@ -577,17 +580,20 @@ $config['stb_count'] = 5;
 $config['notif_count'] = 10;
 $config['news_count'] = 10;
 
-$config['backend_member_count'] = 100;
-$config['backend_canine_count'] = 100;
-$config['backend_stud_count'] = 100;
-$config['backend_birth_count'] = 100;
-$config['backend_stb_count'] = 100;
+$config['backend_member_count'] = 10;
+$config['backend_canine_count'] = 10;
+$config['backend_stud_count'] = 10;
+$config['backend_birth_count'] = 10;
+$config['backend_stb_count'] = 10;
 
 $config['canine_img'] = 'Dog.svg';
 $config['default_img'] = 'avatar.jpg';
 
 $config['dam_id'] = 87;
 $config['sire_id'] = 86;
+
+$config['backend_breed'] = 2;
+$config['frontend_breed'] = 1;
 
 $config['deleted'] = 0;
 $config['saved'] = 0;
@@ -601,6 +607,8 @@ $config['all_member'] = 2;
 
 $config['canine_rip'] = 1;
 $config['canine_alive'] = 0;
+
+$config['jarak_hapus'] = 60;
 
 $config['jarak_lapor_pacak'] = 7;
 $config['tanggal_lapor_pacak'] = 5;

@@ -8,8 +8,7 @@ class Members extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel', 'CaninesModel'));
-			$this->load->library('upload', $this->config->item('upload_member'));
-			$this->load->library(array('session', 'form_validation'));
+			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('url', 'mail', 'notif'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
@@ -23,25 +22,158 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_member_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
 			$where['mem_type'] = $this->config->item('pro_member');
 			$where['mem_stat'] = $this->config->item('accepted');
 			$where['ken_stat'] = $this->config->item('accepted');
-			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2')->result();
+			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
+
+            $config['base_url'] = base_url().'/backend/Members/index';
+            $config['total_rows'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
+
+            $data['keywords'] = '';
+            $data['sort_by'] = 'mem_app_date2';
+            $data['sort_type'] = 'desc';
+            $data['mem_type'] = $this->config->item('pro_member');
+            $this->session->set_userdata('keywords', '');
+            $this->session->set_userdata('sort_by', 'mem_app_date2');
+            $this->session->set_userdata('sort_type', 'desc');
+            $this->session->set_userdata('mem_type', $this->config->item('pro_member'));
 			$this->load->view('backend/view_members', $data);
 		}
 
 		public function search(){
-			$like['mem_name'] = $this->input->post('keywords');
-			$like['mem_hp'] = $this->input->post('keywords');
-			$like['ken_name'] = $this->input->post('keywords');
-			$like['mem_ktp'] = $this->input->post('keywords');
+            if ($this->input->post('keywords')){
+                $this->session->set_userdata('keywords', $this->input->post('keywords'));
+                $data['keywords'] = $this->input->post('keywords');
+            }
+            else{
+                if ($this->uri->segment(4)){
+                    $data['keywords'] = $this->session->userdata('keywords');
+                }
+                else{
+                    $this->session->set_userdata('keywords', '');
+                    $data['keywords'] = '';
+                }
+            }
+    
+            if ($this->input->post('sort_by')){
+                $this->session->set_userdata('sort_by', $this->input->post('sort_by'));
+                $this->session->set_userdata('sort_type', $this->input->post('sort_type'));
+                $data['sort_by'] = $this->input->post('sort_by');
+                $data['sort_type'] = $this->input->post('sort_type');
+            }
+            else{
+                $data['sort_by'] = $this->session->userdata('sort_by');
+                $data['sort_type'] = $this->session->userdata('sort_type');
+            }
+
+            if ($this->input->post('mem_type')){
+                $this->session->set_userdata('mem_type', $this->input->post('mem_type'));
+                $data['mem_type'] = $this->input->post('mem_type');
+            }
+            else{
+                $data['mem_type'] = $this->session->userdata('mem_type');
+            }
+
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_member_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+            if ($data['keywords']){
+                $like['mem_name'] = $data['keywords'];
+                $like['mem_hp'] = $data['keywords'];
+                $like['ken_name'] = $data['keywords'];
+                $like['mem_ktp'] = $data['keywords'];
+            }
+            else
+                $like = null;
+
 			$where['mem_stat'] = $this->config->item('accepted');
 			$where['ken_stat'] = $this->config->item('accepted');
-			if ($this->input->post('mem_type') == $this->config->item('all_member'))
+			if ($data['mem_type'] == $this->config->item('all_member'))
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
 			else
-				$where['mem_type'] = $this->input->post('mem_type');
-			$data['member'] = $this->MemberModel->search_members($like, $where, 'mem_app_date2')->result();
+				$where['mem_type'] = $data['mem_type'];
+			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
+
+            $config['base_url'] = base_url().'/backend/Members/search';
+            $config['total_rows'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
 			$this->load->view('backend/view_members', $data);
 		}
 

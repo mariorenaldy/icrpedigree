@@ -5,7 +5,7 @@
     <?php $this->load->view('templates/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
-    <link href="<?= base_url(); ?>assets/css/datatables.min.css" rel="stylesheet" />
+    <!-- <link href="<?= base_url(); ?>assets/css/datatables.min.css" rel="stylesheet" /> -->
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -42,10 +42,10 @@
                     <form id="formStud" action="<?= base_url().'backend/Studs/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-3 me-1">
-                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= set_value('date') ?>">
+                                <input type="text" class="form-control" placeholder="Stud date" name="date" id="date" autocomplete="off" value="<?= $date ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Stud"><i class="fa fa-search"></i></button>
@@ -58,6 +58,7 @@
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Stud"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="table-responsive">
                     <table id="datatable" class="table table-hover">
                         <thead>
@@ -111,6 +112,8 @@
                         } ?>
                         </tbody>
                     </table>
+                    <br/>
+                    <?= $this->pagination->create_links(); ?>
                 </div>
             </div>                           
         </div> 
@@ -167,10 +170,10 @@
                 $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search").submit();
             });
 
-            $('#datatable').DataTable({searching: false, info: false, "ordering": false, dom: 'lpftrip',
-            });
+            // $('#datatable').DataTable({searching: false, info: false, "ordering": false, dom: 'lpftrip',
+            // });
         });
     </script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
+    <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->
 </body>
 </html>

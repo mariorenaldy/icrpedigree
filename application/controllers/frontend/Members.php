@@ -44,7 +44,7 @@ class Members extends CI_Controller {
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 
-            $site_lang = $this->input->cookie('site_lang');
+            $site_lang = $this->session->userdata('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 			}
@@ -148,7 +148,7 @@ class Members extends CI_Controller {
 
 		public function validate_register(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$site_lang = $this->input->cookie('site_lang');
+			$site_lang = $this->session->userdata('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
@@ -599,15 +599,9 @@ class Members extends CI_Controller {
 			$err = 0;
 			$where['mem_id'] = $this->session->userdata('mem_id');
 			$data['member'] = $this->MemberModel->get_members($where)->row();
-			$site_lang = $this->input->cookie('site_lang');
 			if (!$data['member']) {
 				$err++;
-				if ($site_lang == 'indonesia') {
-					$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
-				}
-				else{
-					$this->session->set_flashdata('error_message', 'Data Not Found');
-				}
+				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 			} else {
 				$pp = '-';
 				if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])) {
@@ -618,32 +612,17 @@ class Members extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'File size is too big (> 1 MB).');
-						}
+						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
 					}
 					else{
 						$image_name = $this->config->item('path_member').$this->config->item('file_name_member');
 						if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
 							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'members folder not found or not writeable.');
-							}
+							$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
 								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
-								}
+								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
 							}
 						}
 
@@ -656,12 +635,7 @@ class Members extends CI_Controller {
 
 				if (!$err && $pp == "-") {
 					$err++;
-					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'PP wajib diisi');
-					}
-					else{
-						$this->session->set_flashdata('error_message', 'PP is required');
-					}
+					$this->session->set_flashdata('error_message', 'PP wajib diisi');
 				}
 
 				if (!$err){
@@ -673,12 +647,7 @@ class Members extends CI_Controller {
 						redirect("frontend/Members/profile", $data);
 					} else {
 						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Failed to change PP');
-						}
+						$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
 					}
 				}
 				else {

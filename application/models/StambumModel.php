@@ -24,11 +24,11 @@ class StambumModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('approval_status','approval_status.stat_id = stambums.stb_stat');
         $this->db->join('members','members.mem_id = stambums.stb_member_id');
         $this->db->join('kennels','kennels.ken_id = stambums.stb_kennel_id AND kennels.ken_member_id = members.mem_id');

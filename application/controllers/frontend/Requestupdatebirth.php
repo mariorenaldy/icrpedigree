@@ -241,12 +241,12 @@ class Requestupdatebirth extends CI_Controller {
 								redirect("frontend/Requestupdatebirth");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data.');
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir.');
 								$this->load->view("frontend/add_request_update_birth", $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah data. Error code : '.$err);
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir. Error code : '.$err);
 							$this->load->view("frontend/add_request_update_birth", $data);
 						}
 					}

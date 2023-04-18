@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Approve Change Canine Data</title>
+    <title>Approve Update Photo & RIP</title>
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,11 +17,11 @@
         <?php $this->load->view('templates/header'); ?>  
         <div class="row">            
             <div class="col-md-12">                          
-                <h3 class="text-center text-primary">Approve Change Canine Data</h3>
+                <h3 class="text-center text-primary">Approve Update Photo & RIP</h3>
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve')){
-                            echo 'Change canine data has been approved<br/>';
+                            echo 'Update Photo & RIP has been approved<br/>';
                         }
                     ?>
                 </div>
@@ -31,7 +31,7 @@
                             echo $this->session->flashdata('error_message').'<br/>';
                         }
                         if ($this->session->flashdata('reject')){
-                            echo 'Change canine data has been rejected<br/>';
+                            echo 'Update Photo & RIP has been rejected<br/>';
                         }
                     ?>
                 </div>
@@ -66,10 +66,10 @@
                                 <tr>
                                     <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <td>
-                                            <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Change Canine Ownership"><i class="fa fa-check"></i></button>
+                                            <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Photo & RIP"><i class="fa fa-check"></i></button>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Change Canine Ownership"><i class="fa fa-close"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Photo & RIP"><i class="fa fa-close"></i></button>
                                         </td>
                                     <?php } else { ?>
                                         <td></td>

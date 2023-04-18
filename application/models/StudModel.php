@@ -25,11 +25,11 @@ class StudModel extends CI_Model {
         if ($where != null){
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('users','users.use_id = studs.stu_app_user');
         $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
         $this->db->join('canines AS can_sire','can_sire.can_id = studs.stu_sire_id');

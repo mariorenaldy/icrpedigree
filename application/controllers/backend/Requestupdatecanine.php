@@ -92,7 +92,7 @@ class Requestupdatecanine extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to approve change canine data id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to approve update photo & RIP id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Requestupdatecanine');
 					}
 				}
@@ -146,7 +146,7 @@ class Requestupdatecanine extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to reject change canine data id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('error_message', 'Failed to reject update photo & RIP id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Requestupdatecanine');
 					}
 				}
