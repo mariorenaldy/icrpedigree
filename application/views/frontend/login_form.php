@@ -54,7 +54,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title"><?= lang("login_error_message"); ?></h5>
+                            <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-danger">
@@ -80,7 +80,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title"><?= lang("login_notice"); ?></h5>
+                            <h5 class="modal-title"><?= lang("common_notice"); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-<title>Berita</title>
+<title><?= lang('common_news'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/backend-modal.css" rel="stylesheet" />
 </head>
@@ -13,7 +13,7 @@
             <span class="close">&times;</span>
             <img class="modal-content" id="modalImg">
         </div>
-        <h3 class="text-center text-warning mb-3">Berita</h3>
+        <h3 class="text-center text-warning mb-3"><?= lang('common_news'); ?></h3>
         <?php 
             echo $this->pagination->create_links();
 

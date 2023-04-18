@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Ubah Password</title>
+    <title><?= lang('mem_change_password'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -9,7 +9,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-        <h3 class="text-center text-warning">Ubah Password</h3>
+        <h3 class="text-center text-warning"><?= lang('mem_change_password'); ?></h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form class="form-horizontal" action="<?= base_url(); ?>frontend/Members/validate_edit_password" method="post" enctype="multipart/form-data">
@@ -24,20 +24,20 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2">Password Baru</label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang('mem_new_password'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="password" placeholder="Password Baru" name="newpass" value="<?= set_value('newpass'); ?>">
+                                <input class="form-control" type="password" placeholder="<?= lang('mem_new_password'); ?>" name="newpass" value="<?= set_value('newpass'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2">Konfirmasi Password</label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang('mem_confirm_password'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="password" placeholder="Konfirmasi Password" name="repass" value="<?= set_value('repass'); ?>">
+                                <input class="form-control" type="password" placeholder="<?= lang('mem_confirm_password'); ?>" name="repass" value="<?= set_value('repass'); ?>">
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Kembali</button>
+                            <button class="btn btn-primary" type="submit"><?= lang('common_save'); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'"><?= lang('common_back'); ?></button>
                         </div>
                     </form>
                 </div>
@@ -47,7 +47,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang('common_error_message'); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">
@@ -72,13 +72,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang('common_notice'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('edit_password')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Password berhasil diubah</div>
+                                    <div class="col-12"><?= lang('mem_change_password_success'); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

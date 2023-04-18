@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cari Anjing</title>
+    <title><?= lang("pedigree_title"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,26 +17,26 @@
         </div>
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">Cari Anjing</h3>
+                <h3 class="text-center text-warning"><?= lang("pedigree_title"); ?></h3>
                 <div class="search-container mb-5">
                     <form action="<?= base_url().'frontend/Pedigree/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" placeholder="No. ICR/No. Microchip/Nama/Kennel/Tanggal Lahir" name="keywords" value="<?= set_value('keywords') ?>"><br/>Format Tanggal Lahir: tgl-bulan-tahun. Contoh: 1-1-2023.
+                                <input type="text" class="form-control" placeholder="<?= lang('pedigree_search_placeholder'); ?>" name="keywords" value="<?= set_value('keywords') ?>"><br/><?= lang("pedigree_dob_format"); ?>
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Canine"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang('can_search'); ?>"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row mb-1 fs-5">
-                    <div class="col-sm-2"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>No. ICR</b></div>
-                    <div class="col-sm-2"><b>No. Microchip</b></div>
-                    <div class="col-sm-2"><b>Nama</b></div>
-                    <div class="col-sm-2"><b>Kennel</b></div>
+                    <div class="col-sm-2"><b><?= lang("can_photo"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_icr"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_chip"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_name"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_kennel"); ?></b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
@@ -65,7 +65,7 @@
                             <?= $c->mem_name.' ('.$c->ken_name.')'; ?>
                         </div>
                         <div class="col-sm-2">
-                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil Canine"><i class="fa fa-file"></i></button>
+                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang('can_detail'); ?>"><i class="fa fa-file"></i></button>
                             <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fa fa-dog"></i></button>
                         </div>
                     </div>

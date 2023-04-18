@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Lapor Pacak</title>
+    <title><?= lang("stud_report"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,12 +12,12 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Pacak</h3>
+            <h3 class="text-center text-warning"><?= lang("stud_report"); ?></h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formStud" class="form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="input-group my-3">
-                            <label for="stu_sire_id" class="control-label col-sm-2">Nama Jantan (Minimal umur 12 bulan)</label>
+                            <label for="stu_sire_id" class="control-label col-sm-2"><?= lang("stud_male_name_min"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $i = 0;
@@ -32,16 +32,16 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="can_a_s" class="control-label col-sm-2">Cari Betina</label>
+                            <label for="can_a_s" class="control-label col-sm-2"><?= lang("stud_find_female"); ?></label>
                             <div class="col-sm-9">
-                                <input class="form-control" type="text" placeholder="Nama Dam" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("stud_dam_name"); ?>" name="can_a_s" value="<?= set_value('can_a_s'); ?>">
                             </div>
                             <div class="col-sm-1 text-end">
                                 <button id="buttonSearch" class="btn btn-warning" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_dam_id" class="control-label col-sm-2">Nama Betina (Minimal umur 12 bulan)</label>
+                            <label for="stu_dam_id" class="control-label col-sm-2"><?= lang("stud_female_name_min"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $i = 0;
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Pacak</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("stud_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stud')"/>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Jantan Baru</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("stud_male_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('sire')"/>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto Betina Baru</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("stud_female_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('dam')"/>
@@ -80,14 +80,14 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="stu_stud_date" class="control-label col-sm-2">Tanggal Pacak</label>
+                            <label for="stu_stud_date" class="control-label col-sm-2"><?= lang("stud_date"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Pacak" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" readonly>
+                                <input class="form-control" type="text" placeholder="<?= lang("stud_date"); ?>" id="stu_stud_date" name="stu_stud_date" value="<?= set_value('stu_stud_date'); ?>" readonly>
                             </div>
                         </div>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="button">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Studs'">Kembali</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Studs'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -123,41 +123,41 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <h5 class="modal-title"><?= lang("common_data_confirmation"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Sire</div>
+                            <div class="col-4"><?= lang("stud_male_name"); ?></div>
                             <div class="col">: <span id="confirm-sire"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Dam</div>
+                            <div class="col-4"><?= lang("stud_female_name"); ?></div>
                             <div class="col">: <span id="confirm-dam"></span></div>
                         </div>
                         <div class="row mb-1">
-                            <div class="col-4">Foto Pacak</div>
+                            <div class="col-4"><?= lang("stud_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_pacak" width="50%"/></div>
                         </div>
                         <div class="row mb-1">
-                            <div class="col-4">Foto Sire</div>
+                            <div class="col-4"><?= lang("stud_male_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_sire" width="50%"/></div>
                         </div>
                         <div class="row mb-1">
-                            <div class="col-4">Foto Dam</div>
+                            <div class="col-4"><?= lang("stud_female_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Tanggal Pacak</div>
+                            <div class="col-4"><?= lang("stud_date"); ?></div>
                             <div class="col">: <span id="confirm-tanggal_pacak"></span></div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

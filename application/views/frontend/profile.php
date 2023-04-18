@@ -31,49 +31,49 @@
                 <div class="row mb-5">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 edit-buttons text-center" style="display: none;">
-                        <button class="btn btn-primary" type="submit"><?= lang("profile_save"); ?></button>
-                        <button class="btn btn-danger" type="button" onclick="revert()"><?= lang("profile_cancel"); ?></button>
+                        <button class="btn btn-primary" type="submit"><?= lang("common_save"); ?></button>
+                        <button class="btn btn-danger" type="button" onclick="revert()"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </form>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_id_card_number"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_id_card_number"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_ktp ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_name"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_name"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_name ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_mailing_address"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_mailing_address"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_address ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_certificate_address"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_certificate_address"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_mail_address ?></div>
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_number"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_number"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_hp ?></div>
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_city"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_city"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_kota ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_postal_code"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_postal_code"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_kode_pos ?></div>
             </div>     
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_email"); ?></div>
+                <div class="col-sm-3">email</div>
                 <div class="col-sm-8"><?= $member->mem_email ?></div>
             </div>
             <hr/>
@@ -90,12 +90,12 @@
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_kennel_name"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_kennel_name"); ?></div>
                 <div class="col-sm-8"><?= $member->ken_name ?></div>
             </div>     
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("profile_kennel_format"); ?></div>
+                <div class="col-sm-3"><?= lang("mem_kennel_format"); ?></div>
                 <div class="col-sm-8"><?= $kennel->ken_type_name ?></div>
             </div>
         </div>
@@ -120,7 +120,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("profile_cancel"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><?= lang("profile_error_message");?></h5>
+                        <h5 class="modal-title"><?= lang("common_error_message");?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">
@@ -149,7 +149,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title"><?= lang("profile_notice");?></h5>
+                            <h5 class="modal-title"><?= lang("common_notice");?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">

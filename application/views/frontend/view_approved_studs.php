@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pilih Pacak</title>
+    <title><?= lang('stud_choose'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -13,12 +13,12 @@
     <div class="container">
     <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">Pilih Pacak</h3>
+                <h3 class="text-center text-warning"><?= lang('stud_choose'); ?></h3>
                 <div class="row mb-1">
-                    <div class="col-sm-2 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2 text-center"><b>Jantan</b></div>
-                    <div class="col-sm-2 text-center"><b>Betina</b></div>
-                    <div class="col-sm-2"><b>Tanggal</b></div>
+                    <div class="col-sm-2 text-center"><b><?= lang('common_photo'); ?></b></div>
+                    <div class="col-sm-2 text-center"><b><?= lang('common_male'); ?></b></div>
+                    <div class="col-sm-2 text-center"><b><?= lang('common_female'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_date'); ?></b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php
@@ -42,7 +42,7 @@
                                 <?= $s->stu_stud_date; ?>
                             </div>
                             <div class="col-sm-2">
-                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Pilih Pacak"><i class="fa fa-check"></i></button>
+                                <button type="button" class="btn btn-primary" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang('stud_choose'); ?>"><i class="fa fa-check"></i></button>
                             </div>
                         </div>
                 <?php
@@ -56,7 +56,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

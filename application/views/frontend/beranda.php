@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title><?= lang("home_title"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -21,7 +21,7 @@
                 <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
                     <video id="carouselVideo" controls muted autoplay class="d-block m-auto">
                         <source src="<?= base_url('assets/video/OneEyedJack.mp4') ?>" type="video/mp4">
-                        Your browser does not support the video tag.
+                        <?= lang("home_video_error"); ?>
                     </video>
                 </div>
                 <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
@@ -36,17 +36,17 @@
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#adsCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden"><?= lang("common_prev"); ?></span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#adsCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden"><?= lang("common_next"); ?></span>
             </button>
         </div>
         <?php if (!$this->session->userdata('username')){ ?>
             <div class="col-sm-12 text-center">
                 <button class="btn btn-primary btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Login</button>
-                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'"><?= lang("home_register"); ?></button>
+                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members/register'"><?= lang("common_register"); ?></button>
                 <!-- <a href="mailto:icr_indonesia@yahoo.com" id="article-button" class="btn text-decoration-none text-reset">Hubungi Kami</a> -->
             </div>
         <?php } ?>
@@ -54,18 +54,18 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang("common_notice"); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_stud_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Pacak berhasil disimpan</div>
+                                    <div class="col-12"><?= lang("common_add_stud_success"); ?></div>
                                 </div>
                             <?php } ?>
                             <?php if ($this->session->flashdata('add_birth_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Lahir berhasil disimpan</div>
+                                    <div class="col-12"><?= lang("common_add_birth_success"); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

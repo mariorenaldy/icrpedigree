@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Lahir</title>
+    <title><?= lang("birth_list"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -13,35 +13,35 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Lahir</h3>
+                <h3 class="text-center text-warning"><?= lang("birth_list"); ?></h3>
                 <div class="search-container sticky-top">
                     <form id="formBirth" action="<?= base_url().'frontend/Births/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-md-3 me-1">
-                                <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= $keywords ?>">
+                                <input type="text" class="form-control" placeholder="<?= lang("common_name"); ?>" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="Tanggal lahir" name="date" id="date" autocomplete="off" value="<?= $date ?>">
+                                <input type="text" class="form-control" placeholder="<?= lang("common_dob"); ?>" name="date" id="date" autocomplete="off" value="<?= $date ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Cari Lahir"></i></button>
+                                <button type="submit" class="btn btn-warning"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="<?= lang("birth_search"); ?>"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Lahir"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang("birth_report"); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
-                    <div class="col-sm-1 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>Jantan</b></div>
-                    <div class="col-sm-2"><b>Betina</b></div>
-                    <div class="col-sm-2"><b>Tanggal Lahir</b></div>
-                    <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
-                    <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
+                    <div class="col-sm-1 text-center"><b><?= lang("common_photo"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("common_male"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("common_female"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("common_dob"); ?></b></div>
+                    <div class="col-sm-1 text-center"><b><?= lang("common_number_of_males"); ?></b></div>
+                    <div class="col-sm-1 text-center"><b><?= lang("common_number_of_females"); ?></b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-1"></div>
                 </div>
@@ -83,7 +83,7 @@
                                         <!-- <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Anak"><i class="fa fa-plus"></i> Anak</button> -->
                                 <?php //} 
                                 if ($b->bir_stat == $this->config->item('accepted')){ ?>
-                                    <button type="button" class="btn btn-success mb-1" onclick="editBirth(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Lahir"><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-success mb-1" onclick="editBirth(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("birth_edit"); ?>"><i class="fa fa-edit"></i></button>
                                 <?php } ?>
                                 </div>
                             </div>
@@ -98,13 +98,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang("common_notice"); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Lahir berhasil disimpan</div>
+                                    <div class="col-12"><?= lang("birth_add_success"); ?></div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -120,7 +120,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Pesan Kesalahan</h5>
+                    <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-danger">

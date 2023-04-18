@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Tambah Anjing Generasi Pertama</title>
+    <title><?= lang("can_add"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,12 +12,12 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Tambah Anjing Generasi Pertama</h3>
+            <h3 class="text-center text-warning"><?= lang("can_add"); ?></h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Canines/validate_add" method="post" enctype="multipart/form-data">
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b>Foto Anjing Seluruh Badan</b></label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b><?= lang("can_full_body"); ?></b></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
@@ -25,9 +25,9 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2">Nama</label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang("can_name"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Nama" name="can_a_s" value="<?= set_value('can_a_s'); ?>" maxlength="30">
+                                <input class="form-control" type="text" placeholder="<?= lang('can_name'); ?>" name="can_a_s" value="<?= set_value('can_a_s'); ?>" maxlength="30">
                             </div>
                         </div>
                         <!-- <div class="input-group mb-3">
@@ -49,7 +49,7 @@
                             </div>
                         </div> -->
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2">Trah</label>
+                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("can_breed"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $pil = [];
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2">Jenis Kelamin</label>
+                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("can_gender"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $gender['MALE'] = 'MALE';
@@ -77,10 +77,10 @@
                             </div>
                         </div> -->
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2">Tanggal Lahir</label>
+                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("can_dob"); ?></label>
                             <div class="col-sm-10">
                             <!--  -->
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" name="can_date_of_birth" id="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" readonly>
+                                <input class="form-control" type="text" placeholder="<?= lang('can_dob'); ?>" name="can_date_of_birth" id="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -96,8 +96,8 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Kembali</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn"><?= lang("common_save"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
@@ -124,7 +124,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -133,29 +133,29 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <h5 class="modal-title"><?= lang("common_data_confirmation"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto Anjing Seluruh Badan</div>
+                            <div class="col-4"><?= lang("can_full_body"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Nama</div>
+                            <div class="col-4"><?= lang("common_name"); ?></div>
                             <div class="col">: <span id="confirm-nama"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Trah</div>
+                            <div class="col-4"><?= lang("can_breed"); ?></div>
                             <div class="col">: <span id="confirm-trah"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Jenis Kelamin</div>
+                            <div class="col-4"><?= lang("can_gender"); ?></div>
                             <div class="col">: <span id="confirm-jenis_kelamin"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Tanggal Lahir</div>
+                            <div class="col-4"><?= lang("common_dob"); ?></div>
                             <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
                         </div>
                         <div class="row">
@@ -164,8 +164,8 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

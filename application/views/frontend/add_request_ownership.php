@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Lapor Ubah Pemilik</title>
+    <title><?= lang("owner_report"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,17 +12,17 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Ubah Pemilik</h3>  
+            <h3 class="text-center text-warning"><?= lang("owner_report"); ?></h3>  
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestownershipcanine/validate" method="post">
                         <div class="row mb-2">
-                            <div class="col-sm-2">Nama Anjing</div>
+                            <div class="col-sm-2"><?= lang("common_dog_name"); ?></div>
                             <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
                         </div>
                         <hr/>
                         <div class="row mb-2">
-                            <div class="col-sm-12">Pemilik Baru:</div>
+                            <div class="col-sm-12"><?= lang("owner_new"); ?>:</div>
                         </div>
                         <label class="checkbox-inline"><input type="checkbox" name="reg_member" value="1" <?php if (!$mode) echo 'checked'; else echo set_checkbox('reg_member', '1'); ?> /> Member</label>
                         <div class="input-group my-3">
@@ -60,15 +60,15 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2">Name</label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang("common_name"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Name" name="name" value="<?= set_value('name'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("common_name"); ?>" name="name" value="<?= set_value('name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2">Phone Number</label>
+                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("mem_phone_number"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="number" placeholder="Phone Number" name="hp" value="<?= set_value('hp'); ?>">
+                                <input class="form-control" type="number" placeholder="<?= lang("mem_phone_number"); ?>" name="hp" value="<?= set_value('hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -79,7 +79,7 @@
                         </div>
                         <hr/>
                         <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center">Foto Stambum Lama</label>
+                            <label class="control-label col-sm-12 text-center"><?= lang("owner_old_stambum_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewStb" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
                                 <input type="file" class="upload" id="imageInputStb" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stb')"/>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center">Foto Anjing Baru</label>
+                            <label class="control-label col-sm-12 text-center"><?= lang("owner_new_dog_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewCanine" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
                                 <input type="file" class="upload" id="imageInputCanine" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
@@ -96,8 +96,8 @@
                         </div>
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>"/>
                         <div class="text-center">
-                            <button id="buttonSubmit" class="btn btn-primary" type="button">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestownershipcanine'">Kembali</button>
+                            <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestownershipcanine'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
@@ -124,7 +124,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -133,17 +133,17 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <h5 class="modal-title"><?= lang("common_data_confirmation"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row mb-1">
-                            <div class="col-4">Foto Stambum Lama</div>
+                            <div class="col-4"><?= lang("owner_old_stambum_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_stb" width="50%"/></div>
                         </div>
                         <div class="row mb-1">
-                            <div class="col-4">Foto Anjing Baru</div>
+                            <div class="col-4"><?= lang("owner_new_dog_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_canine" width="50%"/></div>
                         </div>
@@ -163,7 +163,7 @@
                                 <div class="col">: <span id="confirm-name"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Phone Number</div>
+                                <div class="col-4"><?= lang("mem_phone_number"); ?></div>
                                 <div class="col">: <span id="confirm-phone_number"></span></div>
                             </div>
                             <div class="row">
@@ -173,8 +173,8 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -183,7 +183,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

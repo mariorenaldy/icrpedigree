@@ -12,6 +12,15 @@ class Requestmember extends CI_Controller {
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
+
+			if ($this->input->cookie('site_lang')) {
+				$this->lang->load('common', $this->input->cookie('site_lang'));
+				$this->lang->load('member', $this->input->cookie('site_lang'));
+			} else {
+				set_cookie('site_lang', 'indonesia', '2147483647'); 
+				$this->lang->load('common','indonesia');
+				$this->lang->load('member','indonesia');
+			}
 		}
 
 		public function test_input($data) {

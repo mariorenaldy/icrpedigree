@@ -10,9 +10,11 @@ class Beranda extends CI_Controller {
         $this->load->helper(array('url', 'cookie'));
 		
         if ($this->input->cookie('site_lang')) {
+            $this->lang->load('common', $this->input->cookie('site_lang'));
             $this->lang->load('home', $this->input->cookie('site_lang'));
         } else {
             set_cookie('site_lang', 'indonesia', '2147483647'); 
+            $this->lang->load('common','indonesia');
             $this->lang->load('home','indonesia');
         }
 	}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Lapor Ubah Foto & RIP</title>
+    <title><?= lang("can_report_change_photo_rip"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,15 +12,15 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Ubah Foto & RIP</h3>  
+            <h3 class="text-center text-warning"><?= lang("can_report_change_photo_rip"); ?></h3>  
             <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestupdatecanine/validate" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-sm-3"></div>
-                    <div class="col-sm-2">Nama Anjing</div>
+                    <div class="col-sm-2"><?= lang("common_dog_name"); ?></div>
                     <div class="col-sm-4">: <?= $canine->can_a_s ?></div>
                 </div>
                 <div class="input-group mt-3 mb-3 gap-3">
-                    <label class="control-label col-sm-12 text-center">Foto</label>
+                    <label class="control-label col-sm-12 text-center"><?= lang("common_photo"); ?></label>
                     <div class="col-sm-12 text-center">
                         <?php 
                             if (!$mode){ 
@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <button id="buttonSubmit" class="btn btn-primary" type="button">Save</button>
-                    <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'">Back</button>
+                    <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
+                    <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'"><?= lang("common_back"); ?></button>
                 </div>   
             </form>
         </div>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -80,12 +80,12 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <h5 class="modal-title"><?= lang("common_data_confirmation"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto</div>
+                            <div class="col-4"><?= lang("common_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>
@@ -97,8 +97,8 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

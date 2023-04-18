@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Laporan Ubah Pemilik</title>
+    <title><?= lang('owner_report_list'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Laporan Ubah Pemilik</h3>
+                <h3 class="text-center text-warning"><?= lang('owner_report_list'); ?></h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Requestownershipcanine/search'?>" method="post">
                         <div class="input-group my-3">
@@ -25,24 +25,24 @@
                                 <input type="text" class="form-control" placeholder="Nama Anjing" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang('owner_search_dog'); ?>"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Pemilik"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang('owner_report'); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-1 fs-7"><b>Stambum</b></div>
-                    <div class="col-sm-1"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>Nama</b></div>
+                    <div class="col-sm-1"><b><?= lang('common_photo'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_name'); ?></b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Owner Baru</b></div>
-                    <div class="col-sm-2"><b>Tanggal</b></div>
+                    <div class="col-sm-2"><b><?= lang('owner_new'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_date'); ?></b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
@@ -85,13 +85,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang('common_notice'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Laporan ubah pemilik berhasil disimpan</div>
+                                    <div class="col-12"><?= lang('owner_report_success'); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

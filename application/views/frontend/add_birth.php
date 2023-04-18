@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Lapor Lahir</title>
+    <title><?= lang('birth_report'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lapor Lahir</h3>
+            <h3 class="text-center text-warning"><?= lang('birth_report'); ?></h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Births/validate_add" method="post" enctype="multipart/form-data">
@@ -22,7 +22,7 @@
                             <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
                         <?php } ?>
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center">Foto semua anak saat sedang menyusui dengan induknya</label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang('birth_photo_breastfed'); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
@@ -30,26 +30,26 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_male" class="control-label col-sm-2">Jumlah Jantan yang Hidup</label>
+                            <label for="bir_male" class="control-label col-sm-2"><?= lang('birth_living_males'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Jantan yang Hidup" name="bir_male" value="<?= set_value('bir_male'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang('birth_living_males'); ?>" name="bir_male" value="<?= set_value('bir_male'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-sm-2">Jumlah Betina yang Hidup</label>
+                            <label for="bir_female" class="control-label col-sm-2"><?= lang('birth_living_females'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Jumlah Betina yang Hidup" name="bir_female" value="<?= set_value('bir_female'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang('birth_living_females'); ?>" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-sm-2">Tanggal Lahir</label>
+                            <label for="bir_date_of_birth" class="control-label col-sm-2"><?= lang('birth_dob'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Tanggal Lahir" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" readonly>
+                                <input class="form-control" type="text" placeholder="<?= lang('birth_dob'); ?>" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="button" id="saveBtn">Simpan</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'">Kembali</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn"><?= lang('common_save'); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'"><?= lang('common_back'); ?></button>
                         </div>
                     </form>
                 </div>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang('common_cancel'); ?></button>
                     </div>
                 </div>
             </div>
@@ -85,31 +85,31 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Konfirmasi Data</h5>
+                        <h5 class="modal-title"><?= lang('common_data_confirmation'); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">Foto semua anak saat sedang menyusui dengan induknya</div>
+                            <div class="col-4"><?= lang('birth_photo_breastfed'); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto_dam" width="50%"/></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Jumlah Jantan yang Hidup</div>
+                            <div class="col-4"><?= lang('birth_living_males'); ?></div>
                             <div class="col">: <span id="confirm-jumlah_jantan"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Jumlah Betina yang Hidup</div>
+                            <div class="col-4"><?= lang('birth_living_females'); ?></div>
                             <div class="col">: <span id="confirm-jumlah_betina"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4">Tanggal Lahir</div>
+                            <div class="col-4"><?= lang('birth_dob'); ?></div>
                             <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang('common_yes'); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang('common_no'); ?></button>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

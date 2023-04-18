@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Eksport Stambum</title>
+    <title><?= lang('can_export_stambum_list'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,18 +17,18 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">List Eksport Stambum</h3>
+                <h3 class="text-center text-warning"><?= lang('can_export_stambum_list'); ?></h3>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Lapor Ubah Foto"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang('can_export_stambum'); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
-                    <div class="col-sm-2"><b>Foto Anjing</b></div>
-                    <div class="col-sm-2"><b>Foto Stambum</b></div>
+                    <div class="col-sm-2"><b><?= lang('can_dog_photo'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('can_stambum_photo'); ?></b></div>
                     <div class="col-sm-2"><b>Owner</b></div>
-                    <div class="col-sm-2"><b>Tanggal</b></div>
+                    <div class="col-sm-2"><b><?= lang('common_date'); ?></b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                 </div>
                 <?php foreach ($req AS $r){ ?>
@@ -65,13 +65,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang('common_notice'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Eksport stambum berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan.</div>
+                                    <div class="col-12"><?= lang('can_export_stambum_success'); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

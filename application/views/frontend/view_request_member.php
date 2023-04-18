@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>List Laporan Ubah Kennel</title>
+    <title><?= lang('mem_edit_kennel_list'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -14,7 +14,7 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">List Laporan Ubah Kennel</h3>
+            <h3 class="text-center text-warning"><?= lang('mem_edit_kennel_list'); ?></h3>
             <?php $i = 0; 
                 foreach($request AS $req){ 
                     if ($i)
@@ -27,7 +27,13 @@
                         <div class="col-sm-12">Status: 
                             <?php echo $req->stat_name; 
                             if ($req->req_stat == $this->config->item('rejected')){
-                                echo '<br/>Alasan: ';
+                                $site_lang = $this->session->userdata('site_lang');
+                                if ($site_lang == 'indonesia') {
+                                    echo '<br/>Alasan: ';
+                                }
+                                else{
+                                    echo '<br/>Reason: ';
+                                }
                                 if ($req->req_app_note)
                                     echo $req->req_app_note;
                                 else
@@ -36,37 +42,37 @@
                     </div>
                     <br/>
                     <div class="row mb-1">
-                        <div class="col-sm-2">No. KTP</div>
+                        <div class="col-sm-2"><?= lang('mem_id_card_number'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_ktp ?></div>
                         <div class="col-sm-5"><?= $req->req_ktp ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Nama Sesuai KTP</div>
+                        <div class="col-sm-2"><?= lang('mem_name'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_name ?></div>
                         <div class="col-sm-5"><?= $req->req_name ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Alamat Surat Menyurat</div>
+                        <div class="col-sm-2"><?= lang('mem_mailing_address'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_address ?></div>
                         <div class="col-sm-5"><?= $req->req_address ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Alamat yang Tertera di Sertifikat</div>
+                        <div class="col-sm-2"><?= lang('mem_certificate_address'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_mail_address ?></div>
                         <div class="col-sm-5"><?= $req->req_mail_address ?></div>
                     </div>      
                     <div class="row mb-1">
-                        <div class="col-sm-2">No. HP WA Aktif</div>
+                        <div class="col-sm-2"><?= lang('mem_number'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_hp ?></div>
                         <div class="col-sm-5"><?= $req->req_hp ?></div>
                     </div>      
                     <div class="row mb-1">
-                        <div class="col-sm-2">Kota</div>
+                        <div class="col-sm-2"><?= lang('mem_city'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_kota ?></div>
                         <div class="col-sm-5"><?= $req->req_kota ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Kode Pos</div>
+                        <div class="col-sm-2"><?= lang('mem_postal_code'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_kode_pos ?></div>
                         <div class="col-sm-5"><?= $req->req_kode_pos ?></div>
                     </div>     
@@ -98,12 +104,12 @@
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Nama Kennel</div>
+                        <div class="col-sm-2"><?= lang('mem_kennel_name'); ?></div>
                         <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
                         <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
                     </div>     
                     <div class="row mb-1">
-                        <div class="col-sm-2">Format Penamaan Anjing</div>
+                        <div class="col-sm-2"><?= lang('mem_kennel_format'); ?></div>
                         <div class="col-sm-5"><?= $req->ken_type_name ?></div>
                         <div class="col-sm-5"><?= $req->ken_type_name ?></div>
                     </div>
@@ -115,13 +121,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang('common_notice'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('edit_profile')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Lapor Ubah Kennel berhasil disimpan.<br/>Hubungi admin untuk mendapatkan approval.</div>
+                                    <div class="col-12"><?= lang('mem_edit_kennel_success'); ?><br/><?= lang('mem_contact_admin'); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

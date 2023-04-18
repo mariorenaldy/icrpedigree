@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Lahir</title>
+    <title><?= lang('birth_choose'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
@@ -13,14 +13,14 @@
     <div class="container">
         <div class="row">            
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">Pilih Lahir</h3>
+                <h3 class="text-center text-warning"><?= lang('birth_choose'); ?></h3>
                 <div class="row mb-1">
-                    <div class="col-sm-2 text-center"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>Jantan</b></div>
-                    <div class="col-sm-2"><b>Betina</b></div>
-                    <div class="col-sm-2"><b>Tanggal Lahir</b></div>
-                    <div class="col-sm-1 text-center"><b>Jumlah Jantan</b></div>
-                    <div class="col-sm-1 text-center"><b>Jumlah Betina</b></div>
+                    <div class="col-sm-2 text-center"><b><?= lang('common_photo'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_male'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_female'); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang('common_date'); ?></b></div>
+                    <div class="col-sm-1 text-center"><b><?= lang('common_number_of_males'); ?></b></div>
+                    <div class="col-sm-1 text-center"><b><?= lang('common_number_of_females'); ?></b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php 
@@ -48,7 +48,7 @@
                             <?= $b->bir_female; ?>
                         </div>
                         <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Pilih Lahir"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-primary mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang('birth_choose'); ?>"><i class="fa fa-check"></i></button>
                         </div>
                     </div>
                 <?php
@@ -63,7 +63,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pesan Kesalahan</h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

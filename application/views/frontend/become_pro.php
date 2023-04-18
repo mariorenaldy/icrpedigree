@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Menjadi Pro</title>
+    <title><?= lang('mem_become_pro'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
@@ -11,77 +11,77 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h2 class="text-center text-warning">Menjadi Pro</h2>
+            <h2 class="text-center text-warning"><?= lang('mem_become_pro'); ?></h2>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?php echo base_url(); ?>frontend/Requestpro/validate" method="post" enctype="multipart/form-data">
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-sm-2">No. KTP</label>
+                            <label for="mem_ktp" class="control-label col-sm-2"><?= lang('mem_id_card_number'); ?></label>
                             <div class="col-sm-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= $member->mem_ktp; ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_id_card_number'); ?>" name="mem_ktp" value="<?= $member->mem_ktp; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="No. KTP" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_id_card_number'); ?>" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2">Nama Sesuai KTP</label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang('mem_name'); ?></label>
                             <div class="col-sm-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= $member->mem_name; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_name'); ?>" name="mem_name" value="<?= $member->mem_name; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Nama Sesuai KTP" name="mem_name" value="<?= set_value('mem_name'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_name'); ?>" name="mem_name" value="<?= set_value('mem_name'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-sm-2">Alamat Surat Menyurat</label>
+                            <label for="mem_address" class="control-label col-sm-2"><?= lang('mem_mailing_address'); ?></label>
                             <div class="col-sm-10"> 
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_address" value="<?= $member->mem_address; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_address" value="<?= $member->mem_address; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Alamat Surat Menyurat" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2">Alamat yang Tertera di Sertifikat</label>
+                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang('mem_certificate_address'); ?></label>
                             <div class="col-sm-10 gap-1">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Alamat yang Tertera di Sertifikat" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Alamat yang Tertera di Sertifikat" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2">No. HP WA Aktif</label>
+                            <label for="mem_hp" class="control-label col-sm-2"><?= lang('mem_number'); ?></label>
                             <div class="col-sm-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="No. HP WA Aktif" name="mem_hp" value="<?= $member->mem_hp; ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_number'); ?>" name="mem_hp" value="<?= $member->mem_hp; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="No. HP WA Aktif" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_number'); ?>" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kota" class="control-label col-sm-2">Kota</label>
+                            <label for="mem_kota" class="control-label col-sm-2"><?= lang('mem_city'); ?></label>
                             <div class="col-sm-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= $member->mem_kota; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_city'); ?>" name="mem_kota" value="<?= $member->mem_kota; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Kota" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_city'); ?>" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kode_pos" class="control-label col-sm-2">Kode Pos</label>
+                            <label for="mem_kode_pos" class="control-label col-sm-2"><?= lang('mem_postal_code'); ?></label>
                             <div class="col-sm-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= $member->mem_kode_pos; ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_postal_code'); ?>" name="mem_kode_pos" value="<?= $member->mem_kode_pos; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="Kode Pos" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
+                                    <input class="form-control" type="number" placeholder="<?= lang('mem_postal_code'); ?>" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInputLogo" class="control-label col-md-12 text-center">Foto Kennel</label>
+                            <label for="imageInputLogo" class="control-label col-md-12 text-center"><?= lang('mem_kennel_photo'); ?></label>
                             <div class="col-md-12 text-center">
                                 <?php 
                                     if (!$mode){ 
@@ -115,17 +115,17 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="ken_name" class="control-label col-md-2">Nama Kennel</label>
+                            <label for="ken_name" class="control-label col-md-2"><?= lang('mem_kennel_name'); ?></label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= $member->ken_name; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_kennel_name'); ?>" name="ken_name" value="<?= $member->ken_name; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="Nama Kennel" name="ken_name" value="<?= set_value('ken_name'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_kennel_name'); ?>" name="ken_name" value="<?= set_value('ken_name'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-md-2">Format Penamaan Anjing</label>
+                            <label for="mem_ktp" class="control-label col-md-2"><?= lang('mem_kennel_format'); ?></label>
                             <?php
                                 foreach ($kennelType as $row) {
                                     $pil[$row->ken_type_id] = $row->ken_type_name;
@@ -137,8 +137,8 @@
                             ?>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg" type="button" id="saveBtn">Menjadi Pro</button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestpro'">Kembali</button>
+                            <button class="btn btn-primary btn-lg" type="button" id="saveBtn"><?= lang('mem_become_pro'); ?></button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestpro'"><?= lang('common_back'); ?></button>
                         </div>
                     </form>
                 </div>
@@ -165,7 +165,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang('common_cancel'); ?></button>
                     </div>
                 </div>
             </div>
@@ -174,36 +174,36 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Konfirmasi Data</h5>
+                            <h5 class="modal-title"><?= lang('common_data_confirmation'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-4">KTP Number</div>
+                                <div class="col-4"><?= lang('mem_id_card_number'); ?></div>
                                 <div class="col">: <span id="confirm-ktp_number"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">KTP Name</div>
+                                <div class="col-4"><?= lang('mem_name'); ?></div>
                                 <div class="col">: <span id="confirm-ktp_name"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Mail Address</div>
+                                <div class="col-4"><?= lang('mem_mailing_address'); ?></div>
                                 <div class="col">: <span id="confirm-mail_address"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Certificate Address</div>
+                                <div class="col-4"><?= lang('mem_certificate_address'); ?></div>
                                 <div class="col">: <span id="confirm-certificate_address"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Phone Number</div>
+                                <div class="col-4"><?= lang('mem_number'); ?></div>
                                 <div class="col">: <span id="confirm-phone_number"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">City</div>
+                                <div class="col-4"><?= lang('mem_city'); ?></div>
                                 <div class="col">: <span id="confirm-city"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Postal Code</div>
+                                <div class="col-4"><?= lang('mem_postal_code'); ?></div>
                                 <div class="col">: <span id="confirm-postal_code"></span></div>
                             </div>
                             <div class="row">
@@ -211,22 +211,22 @@
                                 <div class="col">: <span id="confirm-email"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Foto Canine</div>
+                                <div class="col-4"><?= lang('mem_kennel_photo'); ?></div>
                                 <div class="col-auto pe-0">:</div>
                                 <div class="col"><img id="confirm-foto" width="50%"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Kennel Name</div>
+                                <div class="col-4"><?= lang('mem_kennel_name'); ?></div>
                                 <div class="col">: <span id="confirm-kennel_name"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Canine Name Format</div>
+                                <div class="col-4"><?= lang('mem_kennel_format'); ?></div>
                                 <div class="col">: <span id="confirm-canine_name_format"></span></div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" id="submitBtn">Ya</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                            <button type="button" class="btn btn-primary" id="submitBtn"><?= lang('common_yes'); ?></button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang('common_no'); ?></button>
                         </div>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pesan Kesalahan</h5>
+                            <h5 class="modal-title"><?= lang('common_error_message'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-danger">

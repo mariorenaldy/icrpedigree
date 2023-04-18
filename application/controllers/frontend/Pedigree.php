@@ -13,6 +13,15 @@ class Pedigree extends CI_Controller {
         $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
+
+		if ($this->input->cookie('site_lang')) {
+            $this->lang->load('canine', $this->input->cookie('site_lang'));
+            $this->lang->load('pedigree', $this->input->cookie('site_lang'));
+        } else {
+            set_cookie('site_lang', 'indonesia', '2147483647'); 
+            $this->lang->load('canine','indonesia');
+            $this->lang->load('pedigree','indonesia');
+        }
     }
 
 	public function index(){

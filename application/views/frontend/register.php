@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title>Registrasi</title>
+    <title><?= lang("register_header"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
@@ -16,52 +16,52 @@
                 <div class="col-sm-12 align-items-center">                          
                     <form id="mainForm" class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_register" method="post" enctype="multipart/form-data">
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-sm-2"><?= lang("register_id_card_number"); ?></label>
+                            <label for="mem_ktp" class="control-label col-sm-2"><?= lang("mem_id_card_number"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="number" placeholder="<?= lang("register_id_card_number"); ?>" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
+                                <input class="form-control" type="number" placeholder="<?= lang("mem_id_card_number"); ?>" name="mem_ktp" value="<?= set_value('mem_ktp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2"><?= lang("register_name"); ?></label>
+                            <label for="mem_name" class="control-label col-sm-2"><?= lang("mem_name"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="<?= lang("register_name"); ?>" name="mem_name" value="<?= set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("mem_name"); ?>" name="mem_name" value="<?= set_value('mem_name'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-sm-2"><?= lang("register_mailing_address"); ?></label>
+                            <label for="mem_address" class="control-label col-sm-2"><?= lang("mem_mailing_address"); ?></label>
                             <div class="col-sm-10"> 
-                                <input class="form-control" type="text" placeholder="<?= lang("register_mailing_address"); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("mem_mailing_address"); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("register_certificate_address"); ?></label>
+                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("mem_certificate_address"); ?></label>
                             <div class="col-sm-10 gap-1">
                                 <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> <?= lang("register_same_address"); ?></label>
-                                <input class="form-control" type="text" placeholder="<?= lang("register_certificate_address"); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("mem_certificate_address"); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("register_number"); ?></label>
+                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("mem_number"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="number" placeholder="<?= lang("register_number"); ?>" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
+                                <input class="form-control" type="number" placeholder="<?= lang("mem_number"); ?>" name="mem_hp" value="<?= set_value('mem_hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kota" class="control-label col-sm-2"><?= lang("register_city"); ?></label>
+                            <label for="mem_kota" class="control-label col-sm-2"><?= lang("mem_city"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="<?= lang("register_city"); ?>" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
+                                <input class="form-control" type="text" placeholder="<?= lang("mem_city"); ?>" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_kode_pos" class="control-label col-sm-2"><?= lang("register_postal_code"); ?></label>
+                            <label for="mem_kode_pos" class="control-label col-sm-2"><?= lang("mem_postal_code"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="number" placeholder="<?= lang("register_postal_code"); ?>" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
+                                <input class="form-control" type="number" placeholder="<?= lang("mem_postal_code"); ?>" name="mem_kode_pos" value="<?= set_value('mem_kode_pos'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_email" class="control-label col-sm-2"><?= lang("register_email"); ?></label>
+                            <label for="mem_email" class="control-label col-sm-2">email</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="<?= lang("register_email"); ?>" name="mem_email" value="<?= set_value('mem_email'); ?>">
+                                <input class="form-control" type="text" placeholder="email" name="mem_email" value="<?= set_value('mem_email'); ?>">
                             </div>
                         </div>
                         <hr/>
@@ -86,14 +86,14 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="repass" class="control-label col-sm-2"><?= lang("register_confirm_password"); ?></label>
+                            <label for="repass" class="control-label col-sm-2"><?= lang("mem_confirm_password"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="password" placeholder="<?= lang("register_confirm_password"); ?>" name="repass" value="<?= set_value('repass'); ?>">
+                                <input class="form-control" type="password" placeholder="<?= lang("mem_confirm_password"); ?>" name="repass" value="<?= set_value('repass'); ?>">
                             </div>
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInputLogo" class="control-label col-sm-12 text-center"><?= lang("register_kennel_photo"); ?></label>
+                            <label for="imageInputLogo" class="control-label col-sm-12 text-center"><?= lang("mem_kennel_photo"); ?></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewLogo" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputLogo" onclick="resetImage('logo')"/>
@@ -101,13 +101,13 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="ken_name" class="control-label col-sm-2"><?= lang("register_kennel_name"); ?></label>
+                            <label for="ken_name" class="control-label col-sm-2"><?= lang("mem_kennel_name"); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="<?= lang("register_kennel_name"); ?>" name="ken_name" value="<?= set_value('ken_name'); ?>" maxlength="20">
+                                <input class="form-control" type="text" placeholder="<?= lang("mem_kennel_name"); ?>" name="ken_name" value="<?= set_value('ken_name'); ?>" maxlength="20">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_ktp" class="control-label col-sm-2"><?= lang("register_kennel_format"); ?></label>
+                            <label for="mem_ktp" class="control-label col-sm-2"><?= lang("mem_kennel_format"); ?></label>
                             <?php
                                 foreach($kennelType as $row){
                                     $pil[$row->ken_type_id] = $row->ken_type_name;
@@ -118,7 +118,7 @@
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary btn-lg" type="button" id="registerBtn">Register</button>
-                        <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'"><?= lang("register_back"); ?></button>
+                        <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'"><?= lang("common_back"); ?></button>
                     </div>
                 </form>
             </div>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("register_cancel"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn"><?= lang("common_cancel"); ?></button>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><?= lang("register_confirm_data"); ?></h5>
+                        <h5 class="modal-title"><?= lang("common_data_confirmation"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -181,35 +181,35 @@
                                 <div class="col">: <span id="confirm-type"></span></div>
                             </div> -->
                             <div class="row">
-                                <div class="col-6"><?= lang("register_id_card_number"); ?></div>
+                                <div class="col-6"><?= lang("mem_id_card_number"); ?></div>
                                 <div class="col">: <span id="confirm-ktp"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_name"); ?></div>
+                                <div class="col-6"><?= lang("mem_name"); ?></div>
                                 <div class="col">: <span id="confirm-name"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_mailing_address"); ?></div>
+                                <div class="col-6"><?= lang("mem_mailing_address"); ?></div>
                                 <div class="col">: <span id="confirm-address"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_certificate_address"); ?></div>
+                                <div class="col-6"><?= lang("mem_certificate_address"); ?></div>
                                 <div class="col">: <span id="confirm-mail_address"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_number"); ?></div>
+                                <div class="col-6"><?= lang("mem_number"); ?></div>
                                 <div class="col">: <span id="confirm-number"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_city"); ?></div>
+                                <div class="col-6"><?= lang("mem_city"); ?></div>
                                 <div class="col">: <span id="confirm-kota"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_postal_code"); ?></div>
+                                <div class="col-6"><?= lang("mem_postal_code"); ?></div>
                                 <div class="col">: <span id="confirm-kode_pos"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_email"); ?></div>
+                                <div class="col-6">email</div>
                                 <div class="col">: <span id="confirm-email"></span></div>
                             </div>
                             <div class="row">
@@ -222,23 +222,23 @@
                                 <div class="col">: <span id="confirm-username"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_kennel_photo"); ?></div>
+                                <div class="col-6"><?= lang("mem_kennel_photo"); ?></div>
                                 <div class="col-auto pe-0">:</div>
                                 <div class="col"><img id="confirm-logo" width="50%"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_kennel_name"); ?></div>
+                                <div class="col-6"><?= lang("mem_kennel_name"); ?></div>
                                 <div class="col">: <span id="confirm-ken_name"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("register_kennel_format"); ?></div>
+                                <div class="col-6"><?= lang("mem_kennel_format"); ?></div>
                                 <div class="col">: <span id="confirm-ken_type"></span></div>
                             </div>
                         <!-- </div> -->
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("register_yes"); ?></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("register_no"); ?></button>
+                        <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -247,7 +247,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><?= lang("register_error_message"); ?></h5>
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">

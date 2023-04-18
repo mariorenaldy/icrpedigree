@@ -12,6 +12,15 @@ class Studs extends CI_Controller {
 		$this->load->helper(array('url'));
 		$this->load->database();
 		date_default_timezone_set("Asia/Bangkok");
+
+		if ($this->input->cookie('site_lang')) {
+            $this->lang->load('common', $this->input->cookie('site_lang'));
+            $this->lang->load('stud', $this->input->cookie('site_lang'));
+        } else {
+            set_cookie('site_lang', 'indonesia', '2147483647'); 
+            $this->lang->load('common','indonesia');
+            $this->lang->load('stud','indonesia');
+        }
 	}
 
 	public function index(){

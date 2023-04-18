@@ -14,14 +14,18 @@ class Members extends CI_Controller {
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {
+                $this->lang->load('common', $this->input->cookie('site_lang'));
                 $this->lang->load('register', $this->input->cookie('site_lang'));
                 $this->lang->load('login', $this->input->cookie('site_lang'));
                 $this->lang->load('profile', $this->input->cookie('site_lang'));
+                $this->lang->load('member', $this->input->cookie('site_lang'));
             } else {
                 set_cookie('site_lang', 'indonesia', '2147483647'); 
+                $this->lang->load('common', 'indonesia');
                 $this->lang->load('register', 'indonesia');
                 $this->lang->load('login', 'indonesia');
                 $this->lang->load('profile', 'indonesia');
+                $this->lang->load('member', 'indonesia');
             }
 		}
 

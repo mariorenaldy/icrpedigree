@@ -12,6 +12,17 @@ class Requestownershipcanine extends CI_Controller {
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
+
+			if ($this->input->cookie('site_lang')) {
+				$this->lang->load('common', $this->input->cookie('site_lang'));
+				$this->lang->load('member', $this->input->cookie('site_lang'));
+				$this->lang->load('ownership', $this->input->cookie('site_lang'));
+			} else {
+				set_cookie('site_lang', 'indonesia', '2147483647'); 
+				$this->lang->load('common','indonesia');
+				$this->lang->load('member','indonesia');
+				$this->lang->load('ownership','indonesia');
+			}
 		}
 
 		public function test_input($data) {

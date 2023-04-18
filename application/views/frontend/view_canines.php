@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anjing Saya</title>
+    <title><?= lang("can_my_dogs"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/backend-modal.css" />
 </head>
@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">     
             <div class="col-sm-12">                          
-                <h3 class="text-center text-warning">Anjing Saya</h3>
+                <h3 class="text-center text-warning"><?= lang("can_my_dogs"); ?></h3>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
@@ -25,22 +25,22 @@
                                 <input type="text" class="form-control" placeholder="No. ICR/Nama" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
-                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Anjing"><i class="fa fa-search"></i></button>
+                                <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang("can_search"); ?>"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="Tambah Generasi Satu"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
-                    <div class="col-sm-2"><b>Foto</b></div>
-                    <div class="col-sm-2"><b>Nama</b></div>
-                    <div class="col-sm-2"><b>Deskripsi</b></div>
-                    <div class="col-sm-2"><b>Kennel</b></div>
+                    <div class="col-sm-2"><b><?= lang("can_photo"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_name"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_desc"); ?></b></div>
+                    <div class="col-sm-2"><b><?= lang("can_kennel"); ?></b></div>
                     <div class="col-sm-2"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
@@ -87,10 +87,10 @@
                         </div>
                         <div class="col-sm-2">
                             <?php if ($c->can_stat == $this->config->item('accepted')){ ?>
-                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Detil"><i class="fa fa-dog"></i></button>
+                            <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_detail"); ?>"><i class="fa fa-dog"></i></button>
                             <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fas fa-book-open"></i></button>
-                            <button type="button" class="btn btn-success mb-1" onclick="edit_owner(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Ubah Pemilik"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="Ubah Data Anjing"><i class="fa fa-pencil"></i></button>
+                            <button type="button" class="btn btn-success mb-1" onclick="edit_owner(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_change_owner"); ?>"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="<?= lang("can_change_dog_data"); ?>"><i class="fa fa-pencil"></i></button>
                             <?php } ?>
                         </div>
                     </div>
@@ -103,13 +103,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang("common_notice"); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Anjing berhasil disimpan</div>
+                                    <div class="col-12"><?= lang("can_add_success"); ?></div>
                                 </div>
                             <?php } ?>
                         </div>

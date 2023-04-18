@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Silsilah</title>
+  <title><?= lang("common_family_tree"); ?></title>
   <?php $this->load->view('frontend/layout/head'); ?>
   <link href="<?= base_url(); ?>assets/css/tree-styles.css" rel="stylesheet" />
   <link href="<?= base_url(); ?>assets/css/backend-styles.css" rel="stylesheet" />
@@ -9,7 +9,7 @@
 <body class="text-white text-break">
 <?php $this->load->view('frontend/layout/header_non_paid'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
-<h3 class="text-center text-warning">Silsilah</h3> 
+<h3 class="text-center text-warning"><?= lang("common_family_tree"); ?></h3> 
 <div id="wrapper"> 
   <span class="label" id="main">
     <div class="container">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lupa Password</title>
+    <title><?= lang('mem_forgot_password'); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
@@ -9,13 +9,19 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning">Lupa Password</h3>
+            <h3 class="text-center text-warning"><?= lang('mem_forgot_password'); ?></h3>
             <div class="row">   
                 <div class="col-sm-12 text-center"> 
                     <div class="text-success">
                         <?php		
                             if ($this->session->flashdata('success')){
-                                echo 'email username & password berhasil dikirim.<br/>';
+                                $site_lang = $this->session->userdata('site_lang');
+                                if ($site_lang == 'indonesia') {
+                                    echo 'email username & password berhasil dikirim.<br/>';
+                                }
+                                else{
+                                    echo 'email username & password sent successfully.<br/>';
+                                }
                             }
                         ?>
                     </div>
@@ -29,9 +35,9 @@
                     <form class="form-horizontal" action="<?php echo base_url(); ?>frontend/Members/validate_reset" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-2"></div>
-                            <label for="mem_hp" class="control-label col-sm-1">No. HP :</label>
+                            <label for="mem_hp" class="control-label col-sm-1"><?= lang('mem_phone_number'); ?> :</label>
                             <div class="col-sm-7">
-                                <input class="form-control" type="text" id="mem_hp" name="mem_hp" placeholder="No. HP" value="<?= set_value('mem_hp'); ?>">
+                                <input class="form-control" type="text" id="mem_hp" name="mem_hp" placeholder="<?= lang('mem_phone_number'); ?>" value="<?= set_value('mem_hp'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -45,7 +51,7 @@
                             <div class="col-sm-3"></div>
                             <div class="col-sm-7 text-start">
                                 <button class="btn btn-primary btn-lg" type="submit">Reset</button>
-                                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Batal</button>
+                                <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'"><?= lang('common_cancel'); ?></button>
                             </div>
                         </div>    
                     </form>
@@ -55,7 +61,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pesan Kesalahan</h5>
+                            <h5 class="modal-title"><?= lang('common_error_message'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-danger">
@@ -76,13 +82,13 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pemberitahuan</h5>
+                            <h5 class="modal-title"><?= lang('common_notice'); ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('reset')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Reset password berhasil.<br/>Silakan hubungi ICR admin untuk mendapatkan approval.</div>
+                                    <div class="col-12"><?= lang('mem_reset_success'); ?><br/><?= lang('mem_contact_admin'); ?></div>
                                 </div>
                             <?php } ?>
                         </div>
