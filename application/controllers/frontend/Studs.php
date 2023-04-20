@@ -362,10 +362,18 @@ class Studs extends CI_Controller {
 		if ($this->session->userdata('mem_id')){
 			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
-			$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
-			$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
+				$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
+				$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
+				$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
+				$this->form_validation->set_rules('stu_stud_date', 'Stud Date ', 'trim|required');
+			}
 			
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
 			$whereSire['can_gender'] = 'MALE';

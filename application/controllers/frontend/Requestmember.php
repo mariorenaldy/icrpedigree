@@ -76,16 +76,31 @@ class Requestmember extends CI_Controller {
 				}
 				else{
 					$this->form_validation->set_error_delimiters('<div>','</div>');
-					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
-					$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
-					$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
-					$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
-					$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
-					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-					$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
-					$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
+					if ($site_lang == 'indonesia') {
+						$this->form_validation->set_message('required', '%s wajib diisi');
+						$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
+						$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
+						$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
+						$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
+						$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
+						$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
+						$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+						$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
+						$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
+					}
+					else{
+						$this->form_validation->set_message('required', '%s is required');
+						$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
+						$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
+						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
+						$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
+						$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+						$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
+						$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+						$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
+						$this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+					}
+					
 
 					if ($this->form_validation->run() == FALSE){
 						$this->load->view("frontend/edit_profile", $data);

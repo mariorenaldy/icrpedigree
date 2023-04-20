@@ -311,11 +311,20 @@ class Births extends CI_Controller {
 		if ($this->session->userdata('username')){
 			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('bir_stu_id', 'Id Pacak ', 'trim|required');
-			$this->form_validation->set_rules('bir_male', 'Jumlah Jantan ', 'trim|required');
-			$this->form_validation->set_rules('bir_female', 'Jumlah Betina ', 'trim|required');
-			$this->form_validation->set_rules('bir_date_of_birth', 'Tanggal lahir ', 'trim|required');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_rules('bir_stu_id', 'Id Pacak ', 'trim|required');
+				$this->form_validation->set_rules('bir_male', 'Jumlah Jantan ', 'trim|required');
+				$this->form_validation->set_rules('bir_female', 'Jumlah Betina ', 'trim|required');
+				$this->form_validation->set_rules('bir_date_of_birth', 'Tanggal lahir ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_rules('bir_stu_id', 'Stud Id ', 'trim|required');
+				$this->form_validation->set_rules('bir_male', 'Live Males Count ', 'trim|required');
+				$this->form_validation->set_rules('bir_female', 'Live Females Count ', 'trim|required');
+				$this->form_validation->set_rules('bir_date_of_birth', 'Date of Birth ', 'trim|required');
+			}
 
 			$data['mode'] = 1;
 			if ($this->form_validation->run() == FALSE){

@@ -270,9 +270,16 @@ class Stambums extends CI_Controller {
 		if ($this->session->userdata('mem_id')){
 			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
-			$this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
+				$this->form_validation->set_rules('stb_a_s', 'Nama Canine ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+				$this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
+			}
 			
 			$wheBirth['bir_id'] = $this->input->post('stb_bir_id');
 			$data['birth'] = $this->birthModel->get_births($wheBirth)->row();

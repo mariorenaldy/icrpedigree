@@ -42,9 +42,9 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_date_of_birth" class="control-label col-sm-2"><?= lang('birth_dob'); ?></label>
+                            <label for="bir_date_of_birth" class="control-label col-sm-2"><?= lang('common_dob'); ?></label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="<?= lang('birth_dob'); ?>" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" readonly>
+                                <input class="form-control" type="text" placeholder="<?= lang('common_dob'); ?>" id="bir_date_of_birth" name="bir_date_of_birth" value="<?= set_value('bir_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
                         <div class="text-center">
@@ -103,7 +103,7 @@
                             <div class="col">: <span id="confirm-jumlah_betina"></span></div>
                         </div>
                         <div class="row">
-                            <div class="col-4"><?= lang('birth_dob'); ?></div>
+                            <div class="col-4"><?= lang('common_dob'); ?></div>
                             <div class="col">: <span id="confirm-tanggal_lahir"></span></div>
                         </div>
                     </div>

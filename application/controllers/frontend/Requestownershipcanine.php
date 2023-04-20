@@ -252,16 +252,31 @@ class Requestownershipcanine extends CI_Controller {
 				$request = $this->requestownershipcanineModel->get_requests($wheReq)->num_rows();
 				if (!$request){
 					$this->form_validation->set_error_delimiters('<div>','</div>');
-					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_rules('can_id', 'Anjing id ', 'trim|required');
-					if ($this->input->post('reg_member')){
-						$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
-						$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
+					if ($site_lang == 'indonesia') {
+						$this->form_validation->set_message('required', '%s wajib diisi');
+						$this->form_validation->set_rules('can_id', 'Id Anjing ', 'trim|required');
+						if ($this->input->post('reg_member')){
+							$this->form_validation->set_rules('can_member_id', 'Id Member ', 'trim|required');
+							$this->form_validation->set_rules('can_kennel_id', 'Id Kennel ', 'trim|required');
+						}
+						else{
+							$this->form_validation->set_rules('name', 'Nama member ', 'trim|required');
+							$this->form_validation->set_rules('hp', 'No. HP ', 'trim|required');
+							$this->form_validation->set_rules('email', 'email ', 'trim|required');
+						}
 					}
 					else{
-						$this->form_validation->set_rules('name', 'Member name ', 'trim|required');
-						$this->form_validation->set_rules('hp', 'Phone number ', 'trim|required');
-						$this->form_validation->set_rules('email', 'email ', 'trim|required');
+						$this->form_validation->set_message('required', '%s is required');
+						$this->form_validation->set_rules('can_id', 'Dog id ', 'trim|required');
+						if ($this->input->post('reg_member')){
+							$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
+							$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
+						}
+						else{
+							$this->form_validation->set_rules('name', 'Member name ', 'trim|required');
+							$this->form_validation->set_rules('hp', 'Phone number ', 'trim|required');
+							$this->form_validation->set_rules('email', 'email ', 'trim|required');
+						}
 					}
 					
 					if ($this->form_validation->run() == FALSE){

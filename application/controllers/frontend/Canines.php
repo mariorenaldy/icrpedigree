@@ -189,15 +189,27 @@ class Canines extends CI_Controller {
 		if ($this->session->userdata('mem_id')){
 			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_message('required', '%s wajib diisi');
-			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
-			$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
-			// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
-			// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-			// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
-			// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
-			$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
-			
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
+				$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
+				// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
+				// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
+				// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
+				// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
+				$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s is required');
+				$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
+				$this->form_validation->set_rules('can_a_s', 'Name ', 'trim|required');
+				// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
+				// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
+				// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
+				// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
+				$this->form_validation->set_rules('can_date_of_birth', 'Date of Birth ', 'trim|required');
+			}
+
             $wheTrah['tra_stat'] = $this->config->item('frontend_breed');
 			$data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');

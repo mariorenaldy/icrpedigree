@@ -52,6 +52,9 @@ class Members extends CI_Controller {
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 			}
+			else{
+				$this->form_validation->set_message('required', '%s is required');
+			}
 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required');
@@ -178,14 +181,14 @@ class Members extends CI_Controller {
 				// }
 			}
 			else{
-				$this->form_validation->set_message('required', '%s required');
+				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_message('matches', 'Password and confirm password is not the same');
-					$this->form_validation->set_rules('mem_name', 'Name According to ID Card ', 'trim|required');
-					$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Phone Number ', 'trim|required');
-					$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Mailing Address ', 'trim|required');
+					$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
+					$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
+					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+					$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
 					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_mail_address', 'Address Shown on The Certificate ', 'trim|required');
+						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 					$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
@@ -554,10 +557,18 @@ class Members extends CI_Controller {
 			if ($this->session->userdata('username')){
 				$site_lang = $this->input->cookie('site_lang');
 				$this->form_validation->set_error_delimiters('<div>','</div>');
-				$this->form_validation->set_message('required', '%s wajib diisi');
-				$this->form_validation->set_rules('password', 'Password', 'trim|required');
-				$this->form_validation->set_rules('newpass', 'Password Baru', 'trim|required');
-				$this->form_validation->set_rules('repass', 'Konfirmasi Password', 'trim|matches[newpass]');
+				if ($site_lang == 'indonesia') {
+					$this->form_validation->set_message('required', '%s wajib diisi');
+					$this->form_validation->set_rules('password', 'Password', 'trim|required');
+					$this->form_validation->set_rules('newpass', 'Password Baru', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Konfirmasi Password', 'trim|matches[newpass]');
+				}
+				else{
+					$this->form_validation->set_message('required', '%s is required');
+					$this->form_validation->set_rules('password', 'Password', 'trim|required');
+					$this->form_validation->set_rules('newpass', 'New Password', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Confirm Password', 'trim|matches[newpass]');
+				}
 			
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('frontend/edit_password');

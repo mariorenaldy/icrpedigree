@@ -188,8 +188,14 @@ class Requestupdatebirth extends CI_Controller {
 				$request = $this->requestupdatebirthModel->get_requests($wheReq)->result();
 				if (!$request){
 					$this->form_validation->set_error_delimiters('<div>','</div>');
-					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_rules('bir_id', 'Birth id ', 'trim|required');
+					if ($site_lang == 'indonesia') {
+						$this->form_validation->set_message('required', '%s wajib diisi');
+						$this->form_validation->set_rules('bir_id', 'Id Birth ', 'trim|required');
+					}
+					else{
+						$this->form_validation->set_message('required', '%s is required');
+						$this->form_validation->set_rules('bir_id', 'Birth id ', 'trim|required');
+					}
 					if ($this->form_validation->run() == FALSE){
 						$this->load->view("frontend/add_request_update_birth", $data);
 					}
