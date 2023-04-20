@@ -170,7 +170,7 @@ class Users extends CI_Controller {
                         $data['use_stat'] = $this->config->item('deleted');
                         $res = $this->userModel->update_users($data, $where);
                         if ($res){
-                            $this->session->set_flashdata('delete', TRUE);
+                            $this->session->set_flashdata('delete_success', TRUE);
                         }
                         else{
                             $this->session->set_flashdata('error_message', 'Failed to delete user');
@@ -202,12 +202,12 @@ class Users extends CI_Controller {
 			$err = 0;
 			if (!$user){
 				$err++;
-				$this->session->set_flashdata('login_error', 'Maaf nama pengguna tidak terdaftar');
+				$this->session->set_flashdata('error_message', 'Username is not registered');
 			}
 	
 			if (!$err && sha1($this->input->post('password')) != $user->use_password){
 				$err++;
-				$this->session->set_flashdata('login_error', 'Maaf kata sandi anda salah');
+				$this->session->set_flashdata('error_message', 'Wrong password');
 			}
 	
 			if (!$err){

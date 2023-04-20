@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-2">RIP?</div>
-                    <div class="col-sm-4">: <?php if ($canine->can_rip) echo '<i class="fa fa-check"></i>'; ?></div>
+                    <div class="col-sm-4">: <?php if ($canine->can_rip) echo '<i class="fa fa-check"></i>'; else echo '-'; ?></div>
                 </div>
                 <div class="row">
                     <div class="col-md-3"></div>

@@ -68,12 +68,13 @@ class Breeds extends CI_Controller {
 		}
 
 		public function validate_edit(){
+            $data['mode'] = 1;
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_rules('tra_name', 'Breed ', 'trim|required|is_unique[Trah.tra_name]');
 
 				if ($this->form_validation->run() == FALSE){
-					$this->load->view("backend/edit_breed");
+					$this->load->view("backend/edit_breed", $data);
 				}
 				else{
 					$where['tra_id'] = $this->input->post('tra_id');
@@ -85,7 +86,7 @@ class Breeds extends CI_Controller {
                     }
                     else{
                         $this->session->set_flashdata('error_message', 'Failed to edit breed');
-						$this->load->view('backend/edit_breed');
+						$this->load->view('backend/edit_breed', $data);
 					}
 				}
 			}
@@ -101,7 +102,7 @@ class Breeds extends CI_Controller {
                     $data['tra_stat'] = $this->config->item('deleted');
                     $res = $this->trahModel->update_trah($data, $where);
                     if ($res){
-                        $this->session->set_flashdata('delete', TRUE);
+                        $this->session->set_flashdata('delete_success', TRUE);
                     }
                     else{
                         $this->session->set_flashdata('error_message', 'Failed to delete breed');
@@ -124,7 +125,7 @@ class Breeds extends CI_Controller {
                     $data['tra_stat'] = $this->config->item('backend_breed');
                     $res = $this->trahModel->update_trah($data, $where);
                     if ($res){
-                        $this->session->set_flashdata('activate', TRUE);
+                        $this->session->set_flashdata('activate_success', TRUE);
                     }
                     else{
                         $this->session->set_flashdata('error_message', 'Failed to activate breed');

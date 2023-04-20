@@ -16,32 +16,6 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">User List</h3>
-                <div class="text-success">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'User has been saved<br/>';
-                        }
-                        if ($this->session->flashdata('edit_password')){
-                            echo 'Password has been edited<br/>';
-                        }
-                        if ($this->session->flashdata('edit_type')){
-                            echo 'User type has been edited<br/>';
-                        }
-                        if ($this->session->flashdata('edit_pp')){
-                            echo 'PP has been changed<br/>';
-                        }
-                        if ($this->session->flashdata('delete')){
-                            echo 'User has been deleted<br/>';
-                        }
-                    ?>
-                </div>
-                <div class="text-danger">
-                    <?php		
-                        if ($this->session->flashdata('error_message')){
-                            echo $this->session->flashdata('error_message').'<br/>';
-                        }
-                    ?>
-                </div>
                 <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                     <div class="row my-3">
                         <div class="col-md-12">
@@ -93,6 +67,75 @@
                 </div>
             </div>                           
         </div> 
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">User has been saved</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('edit_password')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Password has been changed</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('edit_type')){ ?>
+                                <div class="row">
+                                    <div class="col-12">User type has been changed</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('edit_pp')){ ?>
+                                <div class="row">
+                                    <div class="col-12">PP has been changed</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('delete_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">User has been deleted</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>      
     </div>
     <?php $this->load->view('templates/script'); ?>
@@ -128,6 +171,19 @@
         span.onclick = function() {
             modal.style.display = "none";
         }
+
+        $(document).ready(function () {
+            <?php		
+                if ($this->session->flashdata('add_success') || $this->session->flashdata('edit_password') ||
+                    $this->session->flashdata('edit_type') || $this->session->flashdata('edit_pp') || 
+                    $this->session->flashdata('delete_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+        });
     </script>
 </body>
 </html>

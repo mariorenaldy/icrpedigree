@@ -21,14 +21,6 @@
                         <?php } else { ?>
                             <input type="hidden" name="bir_stu_id" value="<?= set_value('bir_stu_id') ?>" />
                         <?php } ?>
-                        <div class="text-danger">
-                            <?php		
-                            if ($this->session->flashdata('error_message')){
-                                echo $this->session->flashdata('error_message').'<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group mb-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Photo</label>
                             <div class="col-md-12 text-center">
@@ -86,6 +78,34 @@
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                     </div>
                 </div>
             </div>
@@ -165,6 +185,10 @@
             $('#cancel-btn').click(function() {
                 resetImage();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
 
             <?php if (isset($warning)){ ?>
                 var proceed = confirm("<?php 

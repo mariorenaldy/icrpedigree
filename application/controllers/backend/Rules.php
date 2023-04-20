@@ -42,7 +42,7 @@ class Rules extends CI_Controller {
 					redirect('backend/Rules');
 				}
 				else{
-					$this->session->set_flashdata('add_error', 'Failed to save rule');
+					$this->session->set_flashdata('error_message', 'Failed to save rule');
 					$this->load->view('backend/add_rule');
 				}
 			}
@@ -62,7 +62,7 @@ class Rules extends CI_Controller {
 
 		public function validate_edit(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$this->form_validation->set_rules('title', 'Judul ', 'trim|required');
+			$this->form_validation->set_rules('title', 'Title ', 'trim|required');
 			$this->form_validation->set_rules('rule', 'Rule ', 'trim|required');
 
 			$where['ru_rule_id'] = $this->input->post('rule_id');
@@ -83,7 +83,7 @@ class Rules extends CI_Controller {
 					redirect('backend/Rules');
 				}
 				else{
-					$this->session->set_flashdata('edit_error', 'Failed to edit rule');
+					$this->session->set_flashdata('error_message', 'Failed to edit rule');
 					$this->load->view('backend/edit_rule', $data);
 				}
 			}
@@ -99,7 +99,7 @@ class Rules extends CI_Controller {
 					redirect('backend/Rules');
 				}
 				else{
-					$this->session->set_flashdata('delete_error', 'Failed to delete rule');
+					$this->session->set_flashdata('error_message', 'Failed to delete rule');
 					redirect('backend/Rules');
 				}
 			}

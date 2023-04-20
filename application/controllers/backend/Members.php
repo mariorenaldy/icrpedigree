@@ -107,13 +107,7 @@ class Members extends CI_Controller {
                 $data['sort_type'] = $this->session->userdata('sort_type');
             }
 
-            if ($this->input->post('mem_type')){
-                $this->session->set_userdata('mem_type', $this->input->post('mem_type'));
-                $data['mem_type'] = $this->input->post('mem_type');
-            }
-            else{
-                $data['mem_type'] = $this->session->userdata('mem_type');
-            }
+            $data['mem_type'] = $this->input->post('mem_type');
 
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
             $config['per_page'] = $this->config->item('backend_member_count');

@@ -16,14 +16,6 @@
                 <div class="col-md-12 align-items-center">
                     <h3 class="text-center text-primary">Edit Canine</h3>  
                     <form id="formCanine" class="form-horizontal" action="<?= base_url(); ?>backend/Canines/validate_edit_canine" method="post" enctype="multipart/form-data">
-                        <div class="text-danger">
-                            <?php
-                            if ($this->session->flashdata('error_message')) {
-                                echo $this->session->flashdata('error_message') . '<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group my-3">
                             <label class="control-label col-md-2">Member Name/Kennel</label>
                             <div class="col-md-9">
@@ -221,6 +213,34 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>
     </main>
     <?php $this->load->view('templates/script'); ?>
@@ -312,6 +332,10 @@
             $('#cancel-btn').click(function() {
                 resetImage();
             });
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

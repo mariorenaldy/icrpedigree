@@ -490,16 +490,20 @@ class Studs extends CI_Controller {
 					}
 				}
 	
-				$whereCan['can_id'] = $this->input->post('stu_sire_id');
-				$can = $this->caninesModel->get_canines($whereCan)->row();
-				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'FEMALE';
-				$whereDam['can_stat'] = $this->config->item('accepted');
-				$whereDam['can_id !='] = $this->config->item('dam_id');
-				$whereDam['can_member_id !='] = $this->config->item('no_member');
-				$whereDam['can_breed'] = $can->can_breed;
-				$whereDam['can_rip '] = $this->config->item('canine_alive');
-				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
+                if ($this->input->post('stu_sire_id')){
+                    $whereCan['can_id'] = $this->input->post('stu_sire_id');
+                    $can = $this->caninesModel->get_canines($whereCan)->row();
+                    $like['can_a_s'] = $this->input->post('can_a_s');
+                    $whereDam['can_gender'] = 'FEMALE';
+                    $whereDam['can_stat'] = $this->config->item('accepted');
+                    $whereDam['can_id !='] = $this->config->item('dam_id');
+                    $whereDam['can_member_id !='] = $this->config->item('no_member');
+                    $whereDam['can_breed'] = $can->can_breed;
+                    $whereDam['can_rip '] = $this->config->item('canine_alive');
+                    $data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
+                }
+                else
+                    $data['dam'] = [];
 	
 				// Dam harus 12 bulan
 				$data['damStat'] = Array();
@@ -1614,7 +1618,7 @@ class Studs extends CI_Controller {
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
 							$this->db->trans_complete();
-							$this->session->set_flashdata('delete', TRUE);
+							$this->session->set_flashdata('delete_success', TRUE);
 							redirect('backend/Studs');
 						}
 						else{

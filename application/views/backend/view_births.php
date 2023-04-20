@@ -18,26 +18,6 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Birth List</h3>
-                <div class="text-success">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'Birth has been saved<br/>';
-                        }
-                        if ($this->session->flashdata('edit_success')){
-                            echo 'Birth has been edited<br/>';
-                        }
-                        if ($this->session->flashdata('delete')){
-                            echo 'Birth has been deleted<br/>';
-                        }
-                    ?>
-                </div>
-                <div class="text-danger">
-                    <?php		
-                        if ($this->session->flashdata('error_message')){
-                            echo $this->session->flashdata('error_message').'<br/>';
-                        }
-                    ?>
-                </div>
                 <div class="search-container my-3 sticky-top">
                     <form id="formBirth" action="<?= base_url().'backend/Births/search'?>" method="post">
                         <div class="input-group">
@@ -129,6 +109,65 @@
                 </div>
             </div>
         </div> 
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Birth has been saved</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('edit_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Birth has been edited</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('delete_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Birth has been deleted</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>      
     </div>
     <?php $this->load->view('templates/script'); ?>
@@ -185,6 +224,16 @@
 
             // $('#datatable').DataTable({searching: false, info: false, "ordering": false, dom: 'lpftrip',
             // });
+
+            <?php		
+                if ($this->session->flashdata('add_success') || $this->session->flashdata('edit_success') ||
+                    $this->session->flashdata('delete_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
     <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->

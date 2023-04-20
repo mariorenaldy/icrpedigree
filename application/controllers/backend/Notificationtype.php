@@ -50,7 +50,7 @@ class Notificationtype extends CI_Controller{
                 redirect('backend/Notificationtype');
             }
             else{
-                $this->session->set_flashdata('edit_error', 'Failed to edit notification type');
+                $this->session->set_flashdata('error_message', 'Failed to edit notification type');
                 $this->load->view('backend/edit_notificationtype', $data);
             }
         }

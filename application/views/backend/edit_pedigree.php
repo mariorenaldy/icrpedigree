@@ -14,14 +14,6 @@
                 <div class="col-md-12 align-items-center">
                     <h3 class="text-center text-primary">Edit Pedigree</h3>  
                     <form id="formPedigree" class="form-horizontal" method="post" action="<?php echo base_url(); ?>backend/Canines/validate_edit_pedigree">
-                        <div class="text-danger">
-                            <?php
-                            if ($this->session->flashdata('error_message')) {
-                                echo $this->session->flashdata('error_message') . '<br/>';
-                            }
-                            echo validation_errors();
-                            ?>
-                        </div>
                         <div class="input-group my-3">
                             <label class="control-label col-md-2">Nama Canine</label>
                             <div class="col-md-10"><?= $canine->can_a_s ?></div>
@@ -86,6 +78,34 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>
     </main>
     <?php $this->load->view('templates/script'); ?>
@@ -104,6 +124,12 @@
         $('#buttonSubmit').on("click", function(e) {
             e.preventDefault();
             $('#formPedigree').attr('action', "<?= base_url(); ?>backend/Canines/validate_edit_pedigree").submit();
+        });
+
+        $(document).ready(function(){
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
 </body>

@@ -12,32 +12,6 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Kennel List</h3>
-                <div class="text-success">
-                    <?php		
-                        if ($this->session->flashdata('add_success')){
-                            echo 'Kennel has been saved<br/>';
-                        }
-                        if ($this->session->flashdata('edit_success')){
-                            echo 'Kennel has been edited<br/>';
-                        }
-                        if ($this->session->flashdata('delete_success')){
-                            echo 'Kennel has been deleted<br/>';
-                        }
-                        if ($this->session->flashdata('payment_success')){
-                            echo 'Kennel\'s payment has been saved<br/>';
-                        }
-                        if ($this->session->flashdata('reset_password')){
-                            echo 'Password has been reset<br/>';
-                        }
-                    ?>
-                </div>
-                <div class="text-danger">
-                    <?php		
-                        if ($this->session->flashdata('error_message')){
-                            echo $this->session->flashdata('error_message').'<br/>';
-                        }
-                    ?>
-                </div>
                 <div class="search-container my-3 sticky-top">
                     <form id="formMember" action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
@@ -164,6 +138,75 @@
                 </div>
             </div>                       
         </div> 
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Kennel has been saved</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('edit_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Kennel has been edited</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('delete_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Kennel has been deleted</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('payment_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Kennel\'s payment has been saved</div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('reset_password')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Password has been reset</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>      
     </div>
     <?php $this->load->view('templates/script'); ?>
@@ -203,6 +246,17 @@
             $('#mem_type').on("change", function(){
                 $('#formMember').attr('action', "<?= base_url(); ?>backend/Members/search").submit();
             });
+
+            <?php		
+                if ($this->session->flashdata('add_success') || $this->session->flashdata('edit_success') ||
+                    $this->session->flashdata('delete_success') || $this->session->flashdata('payment_success') || 
+                    $this->session->flashdata('reset_password')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
         });
     </script>
     <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->

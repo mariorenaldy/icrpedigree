@@ -52,7 +52,7 @@ class News extends CI_Controller{
                 redirect('backend/News');
             }
             else{
-                $this->session->set_flashdata('edit_error', 'Failed to edit news');
+                $this->session->set_flashdata('error_message', 'Failed to edit news');
                 $this->load->view('backend/edit_news', $data);
             }
         }
@@ -68,7 +68,7 @@ class News extends CI_Controller{
                 redirect('backend/News');
             }
             else{
-                $this->session->set_flashdata('delete_error', 'Failed to delete news');
+                $this->session->set_flashdata('error_message', 'Failed to delete news');
                 redirect('backend/News');
             }
         }

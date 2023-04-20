@@ -18,23 +18,6 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Approve Update Photo & RIP</h3>
-                <div class="text-success">
-                    <?php		
-                        if ($this->session->flashdata('approve')){
-                            echo 'Update Photo & RIP has been approved<br/>';
-                        }
-                    ?>
-                </div>
-                <div class="text-danger">
-                    <?php		
-                        if ($this->session->flashdata('error_message')){
-                            echo $this->session->flashdata('error_message').'<br/>';
-                        }
-                        if ($this->session->flashdata('reject')){
-                            echo 'Update Photo & RIP has been rejected<br/>';
-                        }
-                    ?>
-                </div>
                 <div class="search-container sticky-top">
                     <form action="<?= base_url().'backend/Requestupdatecanine/search'?>" method="post">
                         <div class="input-group my-3">
@@ -108,6 +91,60 @@
                 </div>
             </div>                           
         </div> 
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error Message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (validation_errors()){ ?>
+                            <div class="row">
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
+                        <?php if ($this->session->flashdata('reject')){ ?>
+                            <div class="row">
+                                <div class="col-12">Update Photo & RIP has been rejected</div>
+                            </div>
+                        <?php } ?>
+                        <div id="error-row" class="row" style="display: none;">
+                            <div id="error-col" class="col-12"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('approve')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Update Photo & RIP has been approved</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <?php $this->load->view('templates/footer'); ?>   
     </div>
     <?php $this->load->view('templates/script'); ?>
@@ -137,6 +174,17 @@
         span.onclick = function() {
             modal.style.display = "none";
         }
+
+        $(document).ready(function () {
+            <?php		
+                if ($this->session->flashdata('approve')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors() || $this->session->flashdata('reject')){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+        });
     </script>
 </body>
 </html>
