@@ -69,9 +69,9 @@ class Requestownershipcanine extends CI_Controller {
 								$member_old = $this->memberModel->get_members($whe_old)->row();
 								$whe_new['mem_id'] = $req->req_member_id;
 								$member_new = $this->memberModel->get_members($whe_new)->row();
-								$result = $this->notification_model->add(3, $this->uri->segment(4), $req->req_old_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
+								$result = $this->notification_model->add(3, $this->uri->segment(4), $req->req_old_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 								if ($result){
-									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
+									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 									if ($res){
 										$this->db->trans_complete();
 										$notif = $this->notificationtype_model->get_by_id(3);
@@ -142,9 +142,9 @@ class Requestownershipcanine extends CI_Controller {
 						$member_old = $this->memberModel->get_members($whe_old)->row();
 						$whe_new['mem_id'] = $req->req_member_id;
 						$member_new = $this->memberModel->get_members($whe_new)->row();
-						$result = $this->notification_model->add(8, $this->uri->segment(4), $req->req_old_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
+						$result = $this->notification_model->add(8, $this->uri->segment(4), $req->req_old_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 						if ($result){
-							$res = $this->notification_model->add(8, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s.'<br/>Pemilik lama: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
+							$res = $this->notification_model->add(8, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 							if ($res){
 								$this->db->trans_complete();
 								$notif = $this->notificationtype_model->get_by_id(3);

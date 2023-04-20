@@ -79,7 +79,7 @@ class Requestupdatebirth extends CI_Controller {
 							if ($log){
 								$wheBirth['bir_id'] = $req->req_bir_id;
 								$birth = $this->birthModel->get_births($wheBirth)->row();
-								$result = $this->notification_model->add(15, $this->uri->segment(4), $req->req_member_id, "Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
+								$result = $this->notification_model->add(15, $this->uri->segment(4), $req->req_member_id, "Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
 								if ($result){
 									$this->db->trans_complete();
 									$notif = $this->notificationtype_model->get_by_id(15);
@@ -141,7 +141,7 @@ class Requestupdatebirth extends CI_Controller {
 					if ($update){
 						$wheBirth['bir_id'] = $req->req_bir_id;
 						$birth = $this->birthModel->get_births($wheBirth)->row();
-						$result = $this->notification_model->add(16, $this->uri->segment(4), $req->req_member_id, "Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
+						$result = $this->notification_model->add(16, $this->uri->segment(4), $req->req_member_id, "Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
 						if ($result){
 							$this->db->trans_complete();
 							$notif = $this->notificationtype_model->get_by_id(16);

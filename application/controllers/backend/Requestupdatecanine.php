@@ -63,7 +63,7 @@ class Requestupdatecanine extends CI_Controller {
 							if ($log){
 								$wheCan['can_id'] = $req->req_can_id;
 								$can = $this->caninesModel->get_canines($wheCan)->row();
-								$result = $this->notification_model->add(22, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s);
+								$result = $this->notification_model->add(22, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s);
 								if ($result){
 									$this->db->trans_complete();
 									$notif = $this->notificationtype_model->get_by_id(22);
@@ -125,7 +125,7 @@ class Requestupdatecanine extends CI_Controller {
 					if ($update){
 						$wheCan['can_id'] = $req->req_can_id;
 						$can = $this->caninesModel->get_canines($wheCan)->row();
-						$result = $this->notification_model->add(23, $this->uri->segment(4), $req->req_member_id, 'Nama Anjing: '.$can->can_a_s);
+						$result = $this->notification_model->add(23, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s);
 						if ($result){
 							$this->db->trans_complete();
 							$notif = $this->notificationtype_model->get_by_id(23);

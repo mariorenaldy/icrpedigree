@@ -760,7 +760,11 @@ class Studs extends CI_Controller {
 											$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
 											$desc .= ' pada tanggal '.$this->input->post('stu_stud_date');
 											$desc .= ' antara '.$canSire->can_a_s;
-											$desc .= ' dan '.$can->can_a_s;
+											$desc .= ' dan '.$can->can_a_s.'<br><hr><br>';
+                                            $desc .= $member->mem_name.' ('.$member->ken_name.')';
+                                            $desc .= ' has bred on '.$stud->stu_stud_date;
+                                            $desc .= ' between '.$c->can_a_s;
+                                            $desc .= ' and '.$can->can_a_s;
 
 											$dataNews = array(
 												'title' => 'Pacak '.$can->can_breed,
@@ -1352,7 +1356,7 @@ class Studs extends CI_Controller {
 								if ($log){
 									$wheSire['can_id'] = $this->input->post('stu_sire_id');
 									$canSire = $this->caninesModel->get_canines($wheSire)->row();
-									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, 'Nama Sire: '.$canSire->can_a_s.'<br>Nama Dam: '.$can->can_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->input->post('stu_id').'">Lapor Lahir</a>');
+									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, 'Nama jantan / Sire name: '.$canSire->can_a_s.'<br>Nama betina / Dam name: '.$can->can_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->input->post('stu_id').'">Lapor Lahir / Birth Report</a>');
 									if ($result){
 										$this->db->trans_complete();
 										$whePartner['mem_id'] = $can->can_member_id;
@@ -1366,7 +1370,7 @@ class Studs extends CI_Controller {
 											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 										}
 										else{
-											$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
+											$this->session->set_flashdata('mesg', 'Lapor Lahir / Birth Report:\n'.base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
 											$this->session->set_flashdata('telp', $partner->mem_hp);
 											$this->session->set_flashdata('edit_success', TRUE);
 										}
@@ -1440,9 +1444,9 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
 							if ($result){
-								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->uri->segment(4).'">Lapor Lahir</a>');
+								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->uri->segment(4).'">Lapor Lahir / Birth Report</a>');
 								if ($res){
 									$whe['mem_id'] = $stud->stu_member_id;
 									$member = $this->memberModel->get_members($whe)->row();
@@ -1459,7 +1463,11 @@ class Studs extends CI_Controller {
 									$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
 									$desc .= ' pada tanggal '.$stud->stu_stud_date;
 									$desc .= ' antara '.$c->can_a_s;
-									$desc .= ' dan '.$can->can_a_s;
+									$desc .= ' dan '.$can->can_a_s.'<br><hr><br>';
+                                    $desc .= $member->mem_name.' ('.$member->ken_name.')';
+									$desc .= ' has bred on '.$stud->stu_stud_date;
+									$desc .= ' between '.$c->can_a_s;
+									$desc .= ' and '.$can->can_a_s;
 
 									$piece = explode("-", $stud->stu_stud_date);
 									$date = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -1487,7 +1495,7 @@ class Studs extends CI_Controller {
 											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 										}
 										else{
-											$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$this->uri->segment(4));
+											$this->session->set_flashdata('mesg', 'Lapor Lahir / Birth Report:\n'.base_url().'frontend/Births/add/'.$this->uri->segment(4));
 											$this->session->set_flashdata('telp', $partner->mem_hp);
 											$this->session->set_flashdata('approve', TRUE);
 										}
@@ -1559,7 +1567,7 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
 								$whe['mem_id'] = $stud->stu_member;

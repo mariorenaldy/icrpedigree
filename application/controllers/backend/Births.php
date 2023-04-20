@@ -91,10 +91,6 @@ class Births extends CI_Controller {
                             }
                         }
 
-                        if (!$err){
-
-                        }
-
                         if (!$err)
                             $data['stat'][] = true;
                         else
@@ -269,7 +265,7 @@ class Births extends CI_Controller {
 
 		public function add(){ 
 			if ($this->uri->segment(4)){
-                // // min 58 hari; max 75 hari
+                // min 58 hari; max 75 hari
                 $whereStud['stu_id'] = $this->uri->segment(4);
                 $stud = $this->studModel->get_studs($whereStud)->row();
                 if ($stud->stu_stat == $this->config->item('accepted')){
@@ -377,8 +373,7 @@ class Births extends CI_Controller {
 					}
 
                     if (!$err && !$this->input->post('mode')){
-						// syarat maksimal 75 hari dari lapor pacak
-                        $data['warning'] = Array();
+						$data['warning'] = Array();
 						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
 						$stud = $this->studModel->get_studs($whereStud)->row();
 						if ($stud){
@@ -464,9 +459,9 @@ class Births extends CI_Controller {
 									);
 									$log = $this->logbirthModel->add_log($dataLog);
 									if ($log){
-										$result = $this->notification_model->add(21, $birth, $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+										$result = $this->notification_model->add(21, $birth, $stud->stu_member_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s);
 										if ($result){
-											$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$birth.'">Lapor Anak</a>');
+											$res = $this->notification_model->add(21, $birth, $stud->stu_partner_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$birth.'">Lapor Anak / Puppy Report</a>');
 											if ($res){
 												$dataOldNews['stat'] = $this->config->item('rejected');
 												$whereOldNews['trans_id'] = $stud->stu_id;
@@ -496,6 +491,17 @@ class Births extends CI_Controller {
 														$desc .= $this->input->post('bir_female').' betina';
 													$desc .= ' pada tanggal '.$this->input->post('bir_date_of_birth').'.';
 													$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
+                                                    $desc .= ' untuk informasi lebih lanjut<br><hr><br>';
+													if ($this->input->post('bir_male') && $this->input->post('bir_female')){
+                                                        $desc .= $this->input->post('bir_male').' male(s) and ';
+														$desc .= $this->input->post('bir_female').' female(s)';
+													}
+													else if ($this->input->post('bir_male'))
+														$desc .= $this->input->post('bir_male').' male(s)';
+													else if ($this->input->post('bir_female'))
+														$desc .= $this->input->post('bir_female').' female(s)';
+													$desc .= ' was/were born on '.$this->input->post('bir_date_of_birth').'.';
+													$desc .= ' Contact '.$partner->mem_name.' ('.$partner->ken_name.') for more information';
 													
 													$dataNews = array(
 														'title' => 'Lahir '.$can->can_breed,
@@ -519,7 +525,7 @@ class Births extends CI_Controller {
 															$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 														}
 														else{
-															$this->session->set_flashdata('mesg', 'Lapor Anak:\n'.base_url().'frontend/Stambums/add/'.$birth);
+															$this->session->set_flashdata('mesg', 'Lapor Anak / Puppy Report:\n'.base_url().'frontend/Stambums/add/'.$birth);
 															$this->session->set_flashdata('telp', $partner->mem_hp);
 															$this->session->set_flashdata('add_success', true);
 														}
@@ -625,8 +631,7 @@ class Births extends CI_Controller {
 					}
 
                     if (!$err && !$this->input->post('mode')){
-						// syarat maksimal 75 hari dari lapor pacak
-                        $data['warning'] = Array();
+						$data['warning'] = Array();
 						$whereStud['stu_id'] = $data['birth']->bir_stu_id;
 						$stud = $this->studModel->get_studs($whereStud)->row();
 						if ($stud){
@@ -765,9 +770,9 @@ class Births extends CI_Controller {
 							if ($log){
 								$wheStud['stu_id'] = $birth->bir_stu_id;
 								$stud = $this->studModel->get_studs($wheStud)->row();
-								$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+								$result = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_member_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s);
 								if ($result){
-									$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4).'">Lapor Anak</a>');
+									$res = $this->notification_model->add(2, $this->uri->segment(4), $stud->stu_partner_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4).'">Lapor Anak / Puppy Report</a>');
 									if ($res){
 										$dataOldNews['stat'] = $this->config->item('rejected');
 										$whereOldNews['trans_id'] = $stud->stu_id;
@@ -797,7 +802,18 @@ class Births extends CI_Controller {
 												$desc .= $birth->bir_female.' betina';
 											$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
 											$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
-											
+                                            $desc .= ' untuk informasi lebih lanjut<br><hr><br>';
+                                            if ($this->input->post('bir_male') && $this->input->post('bir_female')){
+                                                $desc .= $this->input->post('bir_male').' male(s) and ';
+                                                $desc .= $this->input->post('bir_female').' female(s)';
+                                            }
+                                            else if ($this->input->post('bir_male'))
+                                                $desc .= $this->input->post('bir_male').' male(s)';
+                                            else if ($this->input->post('bir_female'))
+                                                $desc .= $this->input->post('bir_female').' female(s)';
+                                            $desc .= ' was/were born on '.$this->input->post('bir_date_of_birth').'.';
+                                            $desc .= ' Contact '.$partner->mem_name.' ('.$partner->ken_name.') for more information';
+
 											$piece = explode("-", $birth->bir_date_of_birth);
 											$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -822,7 +838,7 @@ class Births extends CI_Controller {
 													$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 												}
 												else{
-													$this->session->set_flashdata('mesg', 'Lapor Anak:\n'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
+													$this->session->set_flashdata('mesg', 'Lapor Anak / Puppy Report:\n'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
 													$this->session->set_flashdata('telp', $partner->mem_hp);
 													$this->session->set_flashdata('approve', TRUE);
 												}
@@ -904,7 +920,7 @@ class Births extends CI_Controller {
 						if ($log){
 							$wheStud['stu_id'] = $birth->bir_stu_id;
 							$stud = $this->studModel->get_studs($wheStud)->row();
-							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id, "Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
 								$wheBirth['mem_id'] = $birth->bir_member_id;

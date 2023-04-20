@@ -628,7 +628,7 @@ class Stambums extends CI_Controller {
 
                                                     if (!$err){
                                                         if ($this->input->post('reg_member')){
-                                                            $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama Anjing: ".$dataCan['can_a_s']."<br>Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+                                                            $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
                                                             if ($result){
                                                                 $this->db->trans_complete();
                                                                 if ($member->mem_firebase_token){
@@ -643,7 +643,7 @@ class Stambums extends CI_Controller {
                                                             }
                                                         }
                                                         else{
-                                                            $result = $this->notification_model->add(18, $result, $mem_id, "Nama Anjing: ".$dataCan['can_a_s']."<br>Nama Sire: ".$stud->sire_a_s.'<br>Nama Dam: '.$stud->dam_a_s);
+                                                            $result = $this->notification_model->add(18, $result, $mem_id, "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
                                                             if ($result){
                                                                 $this->db->trans_complete();
                                                                 $mail = send_greeting($this->input->post('email'));
@@ -808,7 +808,7 @@ class Stambums extends CI_Controller {
                                     );
                                     $log = $this->logpedigreeModel->add_log($dataLogPed);
                                     if ($log){
-                                        $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id, "Nama Anjing: ".$stb->stb_a_s."<br>Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
+                                        $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                                         if ($res){
                                             $this->db->trans_complete();
                                             $whereMember['mem_id'] = $stb->stb_member_id;
@@ -900,7 +900,7 @@ class Stambums extends CI_Controller {
                     if ($log){
                         $wheBirth['bir_id'] = $stb->stb_bir_id;
                         $birth = $this->birthModel->get_births($wheBirth)->row();
-                        $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id, "Nama Anjing: ".$stb->stb_a_s."<br>Nama Sire: ".$birth->sire.'<br>Nama Dam: '.$birth->dam);
+                        $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                         if ($res){
                             $this->db->trans_complete();
                             $wheMember['mem_id'] = $stb->stb_member_id;

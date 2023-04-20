@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang["can_search"] = "Cari Anjing";
-$lang["can_detail"] = "Detil Canine";
+$lang["can_detail"] = "Detil Anjing";
 $lang["can_photo"] = "Foto";
 $lang["can_old_photo"] = "Foto Lama";
 $lang["can_new_photo"] = "Foto Baru";
@@ -20,21 +20,21 @@ $lang["can_dob"] = "Tanggal Lahir";
 $lang["can_full_body"] = "Foto Anjing Seluruh Badan";
 $lang["can_export_stambum"] = "Ekspor Stambum";
 $lang["can_export_stambum_list"] = "List Ekspor Stambum";
-$lang["can_export_stambum_success"] = "Ekspor stambum berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan.";
+$lang["can_export_stambum_success"] = "Ekspor stambum berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan";
 $lang["can_dog_photo"] = "Foto Anjing";
 $lang["can_stambum_photo"] = "Foto Stambum";
 $lang["can_add_success"] = "Anjing berhasil disimpan";
 
 $lang["can_add_puppy"] = "Tambah Anak";
-$lang["can_can_photo"] = "Foto Canine";
+$lang["can_can_photo"] = "Foto Anjing";
 $lang["can_puppy_list"] = "List Anak";
 $lang["can_search_puppy"] = "Cari Anak";
 $lang["can_report_puppy"] = "Lapor Anak";
 $lang["can_add_puppy_success"] = "Anak berhasil disimpan";
-$lang["can_report_puppy_success"] = "Lapor anak berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan.";
+$lang["can_report_puppy_success"] = "Lapor anak berhasil disimpan. Hubungi admin untuk mendapatkan persetujuan";
 
 $lang["can_report_change_photo_rip"] = "Lapor Ubah Foto & RIP";
 $lang["can_report_change_photo_rip_list"] = "List Laporan Ubah Foto & RIP";
 $lang["can_report_change_photo_rip_success"] = "Lapor Ubah Foto & RIP berhasil disimpan";
 $lang["can_change_owner"] = "Ubah Pemilik";
-$lang["can_change_dog_data"] = "Ubah Data Anjing";
+$lang["can_change_dog_data"] = "Ubah Foto & RIP";

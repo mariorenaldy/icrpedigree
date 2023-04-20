@@ -11,6 +11,7 @@
         <div class="row">            
             <div class="col-md-12">                         
                 <h3 class="text-center text-primary">News</h3>
+                <?= $this->pagination->create_links(); ?>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -52,6 +53,8 @@
                             <?php } ?>
                         </tbody>
                     </table>
+                    <br/>
+                    <?= $this->pagination->create_links(); ?>
                 </div>
             </div>                           
         </div> 

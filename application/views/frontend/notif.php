@@ -15,7 +15,7 @@
             $i = 0; 
             foreach ($notif AS $r){ 
                 if ($i > 0)
-                    echo '<hr/>';
+                    echo '<hr class="req-separator"/>';
             ?>
                 <div class="row">
                     <div class="col date"><?= $r->date ?></div>

@@ -585,6 +585,7 @@ $config['backend_canine_count'] = 10;
 $config['backend_stud_count'] = 10;
 $config['backend_birth_count'] = 10;
 $config['backend_stb_count'] = 10;
+$config['backend_news_count'] = 10;
 
 $config['canine_img'] = 'Dog.svg';
 $config['default_img'] = 'avatar.jpg';

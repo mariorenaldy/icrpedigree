@@ -15,6 +15,6 @@ $lang["stud_male_photo"] = "New Male Photo";
 $lang["stud_female_photo"] = "New Female Photo";
 $lang["stud_date"] = "Stud Date";
 $lang["stud_dam_name"] = "Dam Name";
-$lang["stud_add_success"] = "Stud saved successfully";
+$lang["stud_add_success"] = "Stud has been saved";
 
 $lang["stud_choose"] = "Choose Stud";
