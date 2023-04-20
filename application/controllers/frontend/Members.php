@@ -48,7 +48,7 @@ class Members extends CI_Controller {
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 
-            $site_lang = $this->session->userdata('site_lang');
+            $site_lang = $this->input->cookie('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 			}
@@ -152,7 +152,7 @@ class Members extends CI_Controller {
 
 		public function validate_register(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			$site_lang = $this->session->userdata('site_lang');
+			$site_lang = $this->input->cookie('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
@@ -235,19 +235,19 @@ class Members extends CI_Controller {
 							if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writeable.');
+									$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'member folder is not found or does not writeable.');
+									$this->session->set_flashdata('error_message', 'member folder is not found or does not writable.');
 								}
 							} else {
 								if (is_file($pp_name) and !is_writable($pp_name)){
 									$err++;
 									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writeable.');
+										$this->session->set_flashdata('error_message', 'File PP sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'PP file is already exist and is not writeable.');
+										$this->session->set_flashdata('error_message', 'PP file is already exist and is not writable.');
 									}
 								}
 							}
@@ -272,19 +272,19 @@ class Members extends CI_Controller {
 						if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 							$err++;
 							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
+								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'kennel folder is not found or doesn not writeable.');
+								$this->session->set_flashdata('error_message', 'kennel folder is not found or doesn not writable.');
 							}
 						} else {
 							if (is_file($logo_name) and !is_writable($logo_name)){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writeable.');
+									$this->session->set_flashdata('error_message', 'File Foto Kennel sudah ada dan tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Kennel Photo file is already exist and is not writeable.');
+									$this->session->set_flashdata('error_message', 'Kennel Photo file is already exist and is not writable.');
 								}
 							}
 						}
@@ -552,6 +552,7 @@ class Members extends CI_Controller {
 	
 		public function validate_edit_password(){
 			if ($this->session->userdata('username')){
+				$site_lang = $this->input->cookie('site_lang');
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_rules('password', 'Password', 'trim|required');
@@ -567,7 +568,12 @@ class Members extends CI_Controller {
 					$member = $this->MemberModel->get_members($where)->row_array();
 					if (!$member) {
 						$err = 1;
-						$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Data Not Found');
+						}
 					}
 					else{
 						if (sha1($this->input->post('password')) == $member['mem_password']) {
@@ -579,12 +585,22 @@ class Members extends CI_Controller {
 							}
 							else{
 								$err = 2;
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan password');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan password');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save password');
+								}
 							}
 						}
 						else {
 							$err = 3;
-							$this->session->set_flashdata('error_message', 'Password salah');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Password salah');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Invalid password');
+							}
 						}
 					}
 					if ($err){
@@ -600,12 +616,18 @@ class Members extends CI_Controller {
 
 	public function change_pp(){
 		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
 			$err = 0;
 			$where['mem_id'] = $this->session->userdata('mem_id');
 			$data['member'] = $this->MemberModel->get_members($where)->row();
 			if (!$data['member']) {
 				$err++;
-				$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Data Not Found');
+				}
 			} else {
 				$pp = '-';
 				if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])) {
@@ -616,17 +638,32 @@ class Members extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'File size is too big (> 1 MB).');
+						}
 					}
 					else{
 						$image_name = $this->config->item('path_member').$this->config->item('file_name_member');
 						if (!is_dir($this->config->item('path_member')) or !is_writable($this->config->item('path_member'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writeable.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'member folders not found or not writable.');
+							}
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+								}
 							}
 						}
 
@@ -639,7 +676,12 @@ class Members extends CI_Controller {
 
 				if (!$err && $pp == "-") {
 					$err++;
-					$this->session->set_flashdata('error_message', 'PP wajib diisi');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'PP wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'PP required');
+					}
 				}
 
 				if (!$err){
@@ -651,7 +693,12 @@ class Members extends CI_Controller {
 						redirect("frontend/Members/profile", $data);
 					} else {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Gagal mengubah PP');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to change PP');
+						}
 					}
 				}
 				else {
@@ -669,11 +716,17 @@ class Members extends CI_Controller {
 	}
 
 	public function validate_reset(){
+		$site_lang = $this->input->cookie('site_lang');
 		$this->form_validation->set_rules('mem_hp', 'No. hp', 'trim');
 		$this->form_validation->set_rules('mem_email', 'email', 'trim');
 		
 		if (!$this->input->post('mem_hp') && !$this->input->post('mem_email')){
-			$this->session->set_flashdata('error_message', 'No. HP atau email harus diisi');
+			if ($site_lang == 'indonesia') {
+				$this->session->set_flashdata('error_message', 'No. HP atau email harus diisi');
+			}
+			else{
+				$this->session->set_flashdata('error_message', 'Phone number or email required');
+			}
 			$this->load->view("frontend/reset_password");
 		}
 		else{
@@ -699,7 +752,12 @@ class Members extends CI_Controller {
 			}
 
 			if (!$mem_id){
-				$this->session->set_flashdata('error_message', 'No. HP atau email tidak terdaftar');
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'No. HP atau email tidak terdaftar');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Phone number or email is not registered');
+				}
 				$this->load->view("frontend/reset_password");
 			}
 			else{
@@ -716,7 +774,12 @@ class Members extends CI_Controller {
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Gagal reset password. Hubungi Admin.');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Gagal reset password. Hubungi Admin.');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Failed to reset password. Contact Admin.');
+					}
 				}
 				$this->load->view("frontend/reset_password");
 			}

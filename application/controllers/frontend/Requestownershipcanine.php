@@ -227,6 +227,7 @@ class Requestownershipcanine extends CI_Controller {
 
 		public function validate(){
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$wheCan['can_id'] = $this->input->post('can_id');
 				$data['canine'] = $this->caninesModel->get_canines($wheCan)->row();
 
@@ -278,17 +279,32 @@ class Requestownershipcanine extends CI_Controller {
 							$email = $this->test_input($this->input->post('email'));
 							if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Invalid email format');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Format email tidak valid');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Invalid email format');
+								}
 							}
 
 							if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Duplicate phone number');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Duplicate phone number');
+								}
 							}
 
 							if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Duplicate email');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Duplicate email');
+								}
 							}
 
 							if (!$err){
@@ -342,11 +358,21 @@ class Requestownershipcanine extends CI_Controller {
 						if (!$err){
 							if (!isset($_POST['attachment_canine']) || empty($_POST['attachment_canine'])) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Dog photo is required');
+								}
 							}
 							if (!isset($_POST['attachment_stb']) || empty($_POST['attachment_stb'])) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Stambum photo is required');
+								}
 							}
 
 							$uploadedStb = $_POST['attachment_stb'];
@@ -356,7 +382,12 @@ class Requestownershipcanine extends CI_Controller {
 		
 							if ((strlen($uploadedStb) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file stambum terlalu besar (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file stambum terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The stambum file size is too big (> 1 MB).');
+								}
 							}
 
 							$uploadedCanine = $_POST['attachment_canine'];
@@ -366,7 +397,12 @@ class Requestownershipcanine extends CI_Controller {
 		
 							if ((strlen($uploadedCanine) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file anjing terlalu besar (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file anjing terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The dog file size is too big (> 1 MB).');
+								}
 							}
 
 							$stb_name = $this->config->item('path_ownership').$this->config->item('file_name_ownership');
@@ -374,18 +410,38 @@ class Requestownershipcanine extends CI_Controller {
 
 							if (!is_dir($this->config->item('path_ownership')) or !is_writable($this->config->item('path_ownership'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder ownership tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder ownership tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Ownership folder not found or not writable.');
+								}
 							} else if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+								}
 							} else {
 								if (is_file($stb_name) and !is_writable($stb_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File stambum sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File stambum sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The stambum file already exists and not writable.');
+									}
 								}
 								if (is_file($canine_name) and !is_writable($canine_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File anjing sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File anjing sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The dog file is already exists and not writable.');
+									}
 								}
 							}
 
@@ -427,19 +483,34 @@ class Requestownershipcanine extends CI_Controller {
 							}
 							else{
 								$this->db->trans_rollback();
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save ownership change report.');
+								}
 								$this->load->view("frontend/add_request_ownership", $data);
 							}
 						}
 						else{
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik. Error code : '.$err);
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik. Error code : '.$err);
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save ownership change report. Error code : '.$err);
+							}
 							$this->load->view("frontend/add_request_ownership", $data);
 						}
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin.');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin.');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'The old ownership change report has not been processed. Please contact Admin.');
+					}
 					$this->load->view("frontend/add_request_ownership", $data);
 				}
 			}

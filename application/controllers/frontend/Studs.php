@@ -227,6 +227,7 @@ class Studs extends CI_Controller {
 
 	public function add(){
 		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
 			$whereSire['can_member_id'] = $this->session->userdata('mem_id');
 			$whereSire['can_gender'] = 'MALE';
 			$whereSire['can_stat'] = $this->config->item('accepted');
@@ -266,7 +267,12 @@ class Studs extends CI_Controller {
 				$this->load->view('frontend/add_stud', $data);
 			}
 			else{
-				$this->session->set_flashdata('error_message', 'Tidak ada anjing jantan min 12 bulan');
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Tidak ada anjing jantan min 12 bulan');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'There is no male dogs at least 12 months old');
+				}
 				redirect("frontend/Studs");
 			}
 		}
@@ -354,6 +360,7 @@ class Studs extends CI_Controller {
 
 	public function validate_add(){
 		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
@@ -448,15 +455,30 @@ class Studs extends CI_Controller {
 						$err = 0;
 						if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto dam wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Dam photo is required');
+							}
 						}
 						if (!isset($_POST['attachment_sire']) || empty($_POST['attachment_sire'])) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto sire wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Sire photo is required');
+							}
 						}
 						if (!isset($_POST['attachment_stud']) || empty($_POST['attachment_stud'])){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto pacak wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Stud photo is required');
+							}
 						}
 
 						$photo = '-';
@@ -470,7 +492,12 @@ class Studs extends CI_Controller {
 		
 							if ((strlen($uploadedStud) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file stud terlalu besar (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file stud terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The stud file size is too big (> 1 MB).');
+								}
 							}
 
 							$uploadedSire = $_POST['attachment_sire'];
@@ -480,7 +507,12 @@ class Studs extends CI_Controller {
 		
 							if ((strlen($uploadedSire) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file sire terlalu besar (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file sire terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The sire file size is too big (> 1 MB).');
+								}
 							}
 
 							$uploadedDam = $_POST['attachment_dam'];
@@ -490,7 +522,12 @@ class Studs extends CI_Controller {
 		
 							if ((strlen($uploadedDam) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Ukuran file dam terlalu besar (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file dam terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The dam file size is too big (> 1 MB).');
+								}
 							}
 
 							$stud_name = $this->config->item('path_stud').$this->config->item('file_name_stud');
@@ -499,19 +536,39 @@ class Studs extends CI_Controller {
 
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder stud tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder stud tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Stud folder not found or not writable.');
+								}
 							} else{
 								if (is_file($stud_name) and !is_writable($stud_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File stud sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File stud sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The stud file is already exists and not writable.');
+									}
 								}
 								if (is_file($sire_name) and !is_writable($sire_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File sire sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File sire sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The sire file is already exists and not writable.');
+									}
 								}
 								if (is_file($dam_name) and !is_writable($dam_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File dam sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File dam sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The dam file is already exists and not writable.');
+									}
 								}
 							}
 
@@ -572,7 +629,12 @@ class Studs extends CI_Controller {
 									$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
 									if ($pedSire){
 										$err++;
-										$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
+										if ($site_lang == 'indonesia') {
+											$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
+										}
+										else{
+											$this->session->set_flashdata('error_message', 'The dam cannot be the child of sire');
+										}
 									}
 
 									if (!$err){
@@ -582,7 +644,12 @@ class Studs extends CI_Controller {
 										$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
 										if ($pedDam){
 											$err++;
-											$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
+											if ($site_lang == 'indonesia') {
+												$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
+											}
+											else{
+												$this->session->set_flashdata('error_message', 'The sire cannot be the child of dam');
+											}
 										}
 									}
 
@@ -599,7 +666,12 @@ class Studs extends CI_Controller {
 											}
 											if ($cek){
 												$err++;
-												$this->session->set_flashdata('error_message', 'Sire dan dam adalah sibling');
+												if ($site_lang == 'indonesia') {
+													$this->session->set_flashdata('error_message', 'Sire dan dam adalah sibling');
+												}
+												else{
+													$this->session->set_flashdata('error_message', 'Sire and dam are siblings');
+												}
 											}
 										}
 									}
@@ -621,7 +693,12 @@ class Studs extends CI_Controller {
 											redirect("frontend/Studs");
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
+											if ($site_lang == 'indonesia') {
+												$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
+											}
+											else{
+												$this->session->set_flashdata('error_message', 'Failed to save stud data. Err code: 1');
+											}
 											$this->load->view('frontend/add_stud', $data);
 										}
 									}
@@ -631,17 +708,32 @@ class Studs extends CI_Controller {
 								}
 								else{
 									if (!$birth){
-										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak');
+										if ($site_lang == 'indonesia') {
+											$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak');
+										}
+										else{
+											$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak').' days from stud date');
+										}
 										$this->load->view('frontend/add_stud', $data);
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal lahir');
+										if ($site_lang == 'indonesia') {
+											$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal lahir');
+										}
+										else{
+											$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak_lahir').' days from birth date');
+										}
 										$this->load->view('frontend/add_stud', $data);
 									}
 								}
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak').' hari');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak').' hari');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Stud report must be less than '.$this->config->item('hari_lapor_pacak').' days');
+								}
 								$this->load->view('frontend/add_stud', $data);
 							}
 						}
@@ -650,17 +742,32 @@ class Studs extends CI_Controller {
 						}
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 3');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 3');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to save stud data. Err code: 3');
+						}
 						$this->load->view('frontend/add_stud', $data);
 					}
 				}
 				else{
 					if ($stud->stu_stat == $this->config->item('saved')){
-						$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Stud report is already registered and has not been processed. Please contact Admin');
+						}
 						$this->load->view('frontend/add_stud', $data);
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Stud report is already registered');
+						}
 						$this->load->view('frontend/add_stud', $data);
 					}
 				}

@@ -21,6 +21,7 @@ class Certificate extends CI_Controller{
 
     public function index(){
         if ($this->uri->segment(4)){
+            $site_lang = $this->input->cookie('site_lang');
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_can_pedigrees($where)->row();
             if ($data['canine']){ 
@@ -100,7 +101,12 @@ class Certificate extends CI_Controller{
                 $this->load->view('frontend/certificateBack', $data);
             }
             else{
-                $this->session->set_flashdata('error', 'Id canine tidak valid');
+                if ($site_lang == 'indonesia') {
+                    $this->session->set_flashdata('error', 'Id canine tidak valid');
+                }
+                else{
+                    $this->session->set_flashdata('error', 'Canine Id is not valid');
+                }
                 redirect('frontend/Canines');
             }
         } else {

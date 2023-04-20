@@ -333,7 +333,7 @@ class Users extends CI_Controller {
 						} else{
 							if (is_file($img_name) and !is_writable($img_name)) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
+								$this->session->set_flashdata('error_message', 'File already exists and not writable.');
 							}
 						}
 					}
@@ -409,7 +409,7 @@ class Users extends CI_Controller {
 					} else{
 						if (is_file($img_name) and !is_writable($img_name)) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
+							$this->session->set_flashdata('error_message', 'File already exists and not writable.');
 						}
 					}
 				}

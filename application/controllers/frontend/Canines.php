@@ -187,6 +187,7 @@ class Canines extends CI_Controller {
 
 	public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
@@ -222,11 +223,21 @@ class Canines extends CI_Controller {
 						$image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
 						if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writeable.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Dog folder not found or not writable.');
+							}
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+								}
 							}
 						}
 
@@ -239,7 +250,12 @@ class Canines extends CI_Controller {
 
 				if (!$err && $photo == "-"){
 					$err++;
-					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Photo is required');
+					}
 				}
 
 				// if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
@@ -259,13 +275,23 @@ class Canines extends CI_Controller {
 					$ts_dob = new DateTime($dob);
                     if ($ts_dob > $ts){
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+						}
+						else{
+							$this->session->set_flashdata('error_message', "The dog's date of birth must be more than ".$this->config->item('min_jarak_lapor_anak').' days');
+						}
                     }
                     else{ // min 45 hari
                         $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
                         if ($diff < 1){
                             $err++;
-                            $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+							}
+							else{
+								$this->session->set_flashdata('error_message', "The dog's date of birth must be more than ".$this->config->item('min_jarak_lapor_anak').' days');
+							}
                         }
                     }
                 }
@@ -301,12 +327,22 @@ class Canines extends CI_Controller {
         
                     if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Dog names cannot be the same');
+						}
                     }
 
                     if (strlen($data['can_a_s']) >= $this->config->item('can_a_s_length')){
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+						}
+						else{
+							$this->session->set_flashdata('error_message', "The dog's name is too long. Coupled with the kennel name, it must be under ".$this->config->item('can_a_s_length').' characters');
+						}
                     }
 
                     if (!$err){
@@ -335,7 +371,12 @@ class Canines extends CI_Controller {
                         }
                         if ($err){
                             $this->db->trans_rollback();
-                            $this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save dog data');
+							}
                             $this->load->view('frontend/add_canine', $data);
                         }
                     }

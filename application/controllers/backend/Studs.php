@@ -592,19 +592,19 @@ class Studs extends CI_Controller {
 	
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
+								$this->session->set_flashdata('error_message', 'stud folder not found or not writable.');
 							} else{
 								if (is_file($stud_name) and !is_writable($stud_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Stud file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Stud file already exists and not writable.');
 								}
 								if (is_file($sire_name) and !is_writable($sire_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Sire file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Sire file already exists and not writable.');
 								}
 								if (is_file($dam_name) and !is_writable($dam_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Dam file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Dam file already exists and not writable.');
 								}
 							}
 						}
@@ -1200,19 +1200,19 @@ class Studs extends CI_Controller {
 						if (isset($uploadedStud) || isset($uploadedSire) || isset($uploadedDam)){
 							if (!is_dir($this->config->item('path_stud')) or !is_writable($this->config->item('path_stud'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'stud folder not found or not writeable.');
+								$this->session->set_flashdata('error_message', 'stud folder not found or not writable.');
 							} else{
 								if (is_file($stud_name) and !is_writable($stud_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Stud file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Stud file already exists and not writable.');
 								}
 								if (is_file($sire_name) and !is_writable($sire_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Sire file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Sire file already exists and not writable.');
 								}
 								if (is_file($dam_name) and !is_writable($dam_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Dam file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Dam file already exists and not writable.');
 								}
 							}
 						}

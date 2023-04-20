@@ -154,6 +154,7 @@ class Stambums extends CI_Controller {
 	public function add(){
         if ($this->uri->segment(4)){  
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$wheBirth['bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
 
@@ -170,19 +171,34 @@ class Stambums extends CI_Controller {
 						$ts_birth = new DateTime($dob);
 						if ($ts_birth > $ts){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'); 
+							}
 						}
 						else{
 							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
 							if ($diff < 1){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date');
+								}
 							}
 
 							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
 							if ($diff > 1){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date');
+								}
 							}
 						}
 
@@ -196,16 +212,31 @@ class Stambums extends CI_Controller {
 					}
 					else{
 						if ($stb->stb_stat == $this->config->item('saved')){
-							$this->session->set_flashdata('error_message', 'Lapor anak sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Lapor anak sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The puppy report is already registered and has not been processed. Please contact Admin');
+							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Lapor anak sudah terdaftar');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Lapor anak sudah terdaftar');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The puppy report is already registered');
+							}
 						}
 						redirect('frontend/Births/view_approved');
 					}
 				}
 				else {
-					$this->session->set_flashdata('error_message', 'Lapor anak tidak valid');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Lapor anak tidak valid');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'The puppy report is not valid');
+					}
 					redirect("frontend/Births/view_approved");
 				}
 			}
@@ -237,6 +268,7 @@ class Stambums extends CI_Controller {
 
 	public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
@@ -252,7 +284,12 @@ class Stambums extends CI_Controller {
 				$err = 0;
 				if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
 					$err++;
-					$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Photo is required');
+					}
 				}
 
 				$photo = '-';
@@ -264,17 +301,32 @@ class Stambums extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+						}
 					}
 
 					$img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
 					if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 						$err++;
-						$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+						}
 					} else{
 						if (is_file($img_name) and !is_writable($img_name)) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The file already exists and not writable.');
+							}
 						}
 					}
 
@@ -301,7 +353,12 @@ class Stambums extends CI_Controller {
 				if ($this->input->post('stb_gender') == 'MALE'){
 					if ($male >= $data['birth']->bir_male){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Anak jantan sudah semua');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Anak jantan sudah semua');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Male puppies are all done');
+						}
 					}
 					if ($male+1 == $data['birth']->bir_male){
 						$maleFull = 1;
@@ -313,7 +370,12 @@ class Stambums extends CI_Controller {
 				else{
 					if ($female >= $data['birth']->bir_female){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Anak betina sudah semua');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Anak betina sudah semua');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Female puppies are all done');
+						}
 					}
 					if ($male == $data['birth']->bir_male){
 						$maleFull = 1;
@@ -331,19 +393,34 @@ class Stambums extends CI_Controller {
 					$ts_birth = new DateTime($dob);
 					if ($ts_birth > $ts){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'); 
+						}
 					}
 					else{
 						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
 						if ($diff < 1){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date');
+							}
 						}
 
 						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
 						if ($diff > 1){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date');
+							}
 						}
 					}
 				}
@@ -366,7 +443,12 @@ class Stambums extends CI_Controller {
 
 					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $can_a_s)){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Dog names cannot be the same');
+						}
 					}
 		
 					if (!$err){
@@ -425,7 +507,12 @@ class Stambums extends CI_Controller {
 						}
 						if ($err){
 							$this->db->trans_rollback();
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak. Error code: '.$err);
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak. Error code: '.$err);
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save puppy data. Error code: '.$err);
+							}
 							$this->load->view('frontend/add_stambum', $data);
 						}
 					}
@@ -445,6 +532,7 @@ class Stambums extends CI_Controller {
 
 	public function cancel_all(){
         if ($this->uri->segment(4)){  
+			$site_lang = $this->input->cookie('site_lang');
 			if ($this->session->userdata('mem_id')){
 				$wheBirth['bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
@@ -461,7 +549,12 @@ class Stambums extends CI_Controller {
 						redirect("frontend/Stambums");
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to save puppy report.');
+						}
 						redirect("frontend/Stambums");
 					}
 				}
@@ -478,6 +571,7 @@ class Stambums extends CI_Controller {
 	public function force_complete(){
         if ($this->uri->segment(4)){  
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$wheBirth['bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
 
@@ -492,7 +586,12 @@ class Stambums extends CI_Controller {
 						redirect("frontend/Stambums");
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to save puppy report.');
+						}
 						redirect("frontend/Stambums");
 					}
 				}

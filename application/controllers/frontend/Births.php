@@ -214,6 +214,7 @@ class Births extends CI_Controller {
 
 	public function add(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			// // min 58 hari; max 75 hari
 			$whereStud['stu_id'] = $this->uri->segment(4);
 			$stud = $this->studModel->get_studs($whereStud)->row();
@@ -230,20 +231,35 @@ class Births extends CI_Controller {
 					$ts_stud = new DateTime($studDate);
 					if ($ts_stud > $ts){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date'); 
+						}
 					}
 					else{
 						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
 						if ($diff < 1){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Birth report must be more than '.$this->config->item('min_jarak_lapor_lahir').' days after stud date');
+							}
 						}
 
 						if (!$err){
 							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
 							if ($diff > 1){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date');
+								}
 							}
 						}
 
@@ -259,16 +275,31 @@ class Births extends CI_Controller {
 				}
 				else{
 					if ($birth->bir_stat == $this->config->item('saved')){
-						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Birth report is already registered and has not been processed. Please contact Admin');
+						}
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Birth report is already registered');
+						}
 					}
 					redirect('frontend/Studs/view_approved');
 				}
 			}
 			else{
-				$this->session->set_flashdata('error_message', 'Lapor lahir tidak valid');
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Lapor lahir tidak valid');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Birth report is not valid');
+				}
 				redirect('frontend/Studs/view_approved');
 			}
 		}
@@ -278,6 +309,7 @@ class Births extends CI_Controller {
 
 	public function validate_add(){
 		if ($this->session->userdata('username')){
+			$site_lang = $this->input->cookie('site_lang');
 			$this->form_validation->set_error_delimiters('<div>','</div>');
 			$this->form_validation->set_message('required', '%s wajib diisi');
 			$this->form_validation->set_rules('bir_stu_id', 'Id Pacak ', 'trim|required');
@@ -297,7 +329,12 @@ class Births extends CI_Controller {
 					$err = 0;
 					if (!isset($_POST['attachment_dam']) || empty($_POST['attachment_dam'])){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Photo is required');
+						}
 					}
 			
 					$damPhoto = '-';
@@ -315,11 +352,21 @@ class Births extends CI_Controller {
 							$image_name = $this->config->item('path_birth').$this->config->item('file_name_birth');
 							if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Birth folder not found or not writable.');
+								}
 							} else{
 								if (is_file($image_name) and !is_writable($image_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+									}
 								}
 							}
 						}
@@ -340,27 +387,47 @@ class Births extends CI_Controller {
 							$ts_stud = new DateTime($studDate);
 							if ($ts_stud > $ts){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date'); 
+								}
 							}
 							else{
 								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
 								if ($diff < 1){
 									$err++;
-									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Birth report must be more than '.$this->config->item('min_jarak_lapor_lahir').' days after stud date');
+									}
 								}
 
 								if (!$err){
 									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
 									if ($diff > 1){
 										$err++;
-										$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+										if ($site_lang == 'indonesia') {
+											$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+										}
+										else{
+											$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date');
+										}
 									}
 								}
 							}
 						}
 						else{
 							$err++;
-							$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Stud Id is not valid'); 
+							}
 						}
                     }
 
@@ -382,7 +449,12 @@ class Births extends CI_Controller {
                             redirect("frontend/Births");
                         }
                         else{
-                            $this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan lahir');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save birth');
+							}
                             $this->load->view('frontend/add_birth', $data);
                         }
                     }
@@ -392,10 +464,20 @@ class Births extends CI_Controller {
 				}
 				else{
 					if ($birth->bir_stat == $this->config->item('saved')){
-						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Birth report is already registered and has not been processed. Please contact Admin');
+						}
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Birth report is already registered');
+						}
 					}
 					$this->load->view('frontend/add_birth', $data);
 				}

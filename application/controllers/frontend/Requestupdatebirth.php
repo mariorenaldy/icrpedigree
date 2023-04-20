@@ -177,6 +177,7 @@ class Requestupdatebirth extends CI_Controller {
 
 		public function validate(){
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$wheBirth['bir_id'] = $this->input->post('bir_id');
 				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
 				$data['mode'] = 1;
@@ -203,17 +204,32 @@ class Requestupdatebirth extends CI_Controller {
 		
 							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+								}
 							}
 				
 							$img_name = $this->config->item('path_birth').$this->config->item('file_name_birth');
 							if (!is_dir($this->config->item('path_birth')) or !is_writable($this->config->item('path_birth'))) {
 								$err++;
-								$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder births tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+								}
 							} else{
 								if (is_file($img_name) and !is_writable($img_name)) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'File already exists and not writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+									}
 								}
 							}
 
@@ -250,18 +266,33 @@ class Requestupdatebirth extends CI_Controller {
 								redirect("frontend/Requestupdatebirth");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save birth change report.');
+								}
 								$this->load->view("frontend/add_request_update_birth", $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir. Error code : '.$err);
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir. Error code : '.$err);
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save birth change report. Error code : '.$err);
+							}
 							$this->load->view("frontend/add_request_update_birth", $data);
 						}
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Laporan ubah lahir yang lama belum diproses. Harap menghubungi Admin.');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Laporan ubah lahir yang lama belum diproses. Harap menghubungi Admin.');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'The old birth change report has not been processed. Please contact Admin.');
+					}
 					$this->load->view("frontend/add_request_update_birth", $data);
 				}
 			}

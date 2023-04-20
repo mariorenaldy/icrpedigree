@@ -157,6 +157,7 @@ class Requestupdatecanine extends CI_Controller {
 
 		public function validate(){
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$wheCan['can_id'] = $this->input->post('can_id');
 				$data['canine'] = $this->caninesModel->get_canines($wheCan)->row();
 				$data['mode'] = 1;
@@ -189,11 +190,21 @@ class Requestupdatecanine extends CI_Controller {
 								$image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
 								if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 									$err++;
-									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+									}
 								} else{
 									if (is_file($image_name) and !is_writable($image_name)) {
 										$err++;
-										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+										if ($site_lang == 'indonesia') {
+											$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+										}
+										else{
+											$this->session->set_flashdata('error_message', 'The file is already exists and not writable.');
+										}
 									}
 								}
 
@@ -223,18 +234,33 @@ class Requestupdatecanine extends CI_Controller {
 								redirect("frontend/Requestupdatecanine");
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto & RIP.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto & RIP.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save photo & RIP change report.');
+								}
 								$this->load->view("frontend/add_request_update_canine", $data);
 							}
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto & RIP. Error code : '.$err);
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah foto & RIP. Error code : '.$err);
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Failed to save photo & RIP change report. Error code : '.$err);
+							}
 							$this->load->view("frontend/add_request_update_canine", $data);
 						}
 					}
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Laporan ubah foto & RIP yang lama belum diproses. Harap menghubungi Admin.');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Laporan ubah foto & RIP yang lama belum diproses. Harap menghubungi Admin.');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'The old photo & RIP change report has not been processed. Please contact Admin.');
+					}
 					$this->load->view("frontend/add_request_update_canine", $data);
 				}
 			}

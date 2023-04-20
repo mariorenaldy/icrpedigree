@@ -15,7 +15,7 @@
                     <div class="text-success">
                         <?php		
                             if ($this->session->flashdata('success')){
-                                $site_lang = $this->session->userdata('site_lang');
+                                $site_lang = $this->input->cookie('site_lang');
                                 if ($site_lang == 'indonesia') {
                                     echo 'email username & password berhasil dikirim.<br/>';
                                 }

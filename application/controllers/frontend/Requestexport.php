@@ -95,6 +95,7 @@ class Requestexport extends CI_Controller {
 
     public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
+            $site_lang = $this->input->cookie('site_lang');
 			$whe['ken_member_id'] = $this->session->userdata('mem_id');
 			$whe['ken_stat'] = $this->config->item('accepted');
 			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
@@ -116,11 +117,21 @@ class Requestexport extends CI_Controller {
                     $image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
                     if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writeable.');
+                        if ($site_lang == 'indonesia') {
+                            $this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writable.');
+                        }
+                        else{
+                            $this->session->set_flashdata('error_message', 'Dog folder not found or not writable.');
+                        }
                     } else{
                         if (is_file($image_name) and !is_writable($image_name)) {
                             $err++;
-                            $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+                            if ($site_lang == 'indonesia') {
+                                $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+                            }
+                            else{
+                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
                         }
                     }
 
@@ -145,11 +156,21 @@ class Requestexport extends CI_Controller {
                     $image_name_stb = $this->config->item('path_export').$this->config->item('file_name_export');
                     if (!is_dir($this->config->item('path_export')) or !is_writable($this->config->item('path_export'))) {
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Folder export tidak ditemukan atau tidak writeable.');
+                        if ($site_lang == 'indonesia') {
+                            $this->session->set_flashdata('error_message', 'Folder export tidak ditemukan atau tidak writable.');
+                        }
+                        else{
+                            $this->session->set_flashdata('error_message', 'Export folder not found or not writable.');
+                        }
                     } else{
                         if (is_file($image_name_stb) and !is_writable($image_name_stb)) {
                             $err++;
-                            $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writeable.');
+                            if ($site_lang == 'indonesia') {
+                                $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+                            }
+                            else{
+                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
                         }
                     }
 
@@ -162,12 +183,22 @@ class Requestexport extends CI_Controller {
 
             if (!$err && $photo == "-"){
                 $err++;
-                $this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+                if ($site_lang == 'indonesia') {
+                    $this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+                }
+                else{
+                    $this->session->set_flashdata('error_message', 'Dog photo is required');
+                }
             }
 
             if (!$err && $photo_stb == "-"){
                 $err++;
-                $this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
+                if ($site_lang == 'indonesia') {
+                    $this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
+                }
+                else{
+                    $this->session->set_flashdata('error_message', 'Stambum photo is required');
+                }
             }
 
             if (!$err){
@@ -185,7 +216,12 @@ class Requestexport extends CI_Controller {
                     redirect("frontend/Requestexport");
                 }
                 else{
-                    $this->session->set_flashdata('error_message', 'Gagal menyimpan eksport stambum');
+                    if ($site_lang == 'indonesia') {
+                        $this->session->set_flashdata('error_message', 'Gagal menyimpan eksport stambum');
+                    }
+                    else{
+                        $this->session->set_flashdata('error_message', 'Failed to save export stambum');
+                    }
                     $this->load->view('frontend/add_request_export', $data);
                 }
             }

@@ -252,7 +252,7 @@ class Members extends CI_Controller {
 								} else {
 									if (is_file($pp_name) and !is_writable($pp_name)){
 										$err++;
-										$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
+										$this->session->set_flashdata('error_message', 'PP file already exists and not writable.');
 									}
 								}
 							}
@@ -274,7 +274,7 @@ class Members extends CI_Controller {
 							} else {
 								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
-									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writable.');
 								}
 							}
 						}
@@ -546,7 +546,7 @@ class Members extends CI_Controller {
 							} else {
 								if (is_file($pp_name) and !is_writable($pp_name)){
 									$err++;
-									$this->session->set_flashdata('error_message', 'PP file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'PP file already exists and not writable.');
 								}
 							}
 						}
@@ -568,7 +568,7 @@ class Members extends CI_Controller {
 							} else {
 								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
-									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writeable.');
+									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writable.');
 								}
 							}
 						}

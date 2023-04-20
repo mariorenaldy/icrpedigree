@@ -56,6 +56,7 @@ class Requestpro extends CI_Controller {
 
 		public function validate(){
 			if ($this->session->userdata('mem_id')){
+				$site_lang = $this->input->cookie('site_lang');
 				$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 				$where['mem_id'] = $this->session->userdata('mem_id');
 				$data['member'] = $this->MemberModel->get_members($where)->row();
@@ -65,7 +66,12 @@ class Requestpro extends CI_Controller {
 				$where['req_stat'] = $this->config->item('saved');
 				$res = $this->RequestproModel->get_requests($where)->num_rows();
 				if ($res){
-					$this->session->set_flashdata('error_message', 'Laporan menjadi pro yang lama belum diproses. Harap menghubungi Admin.');
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Laporan menjadi pro yang lama belum diproses. Harap menghubungi Admin.');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'The old become pro report has not been processed. Please contact Admin');
+					}
 					$this->load->view("frontend/become_pro", $data);
 				}
 				else{
@@ -95,17 +101,32 @@ class Requestpro extends CI_Controller {
 		
 							if ((strlen($uploadedLogo) > $this->config->item('file_size'))){
 								$err++;
-								$this->session->set_flashdata('error_message', "Ukuran file kennel terlalu besar (> 1 MB).");
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', "Ukuran file kennel terlalu besar (> 1 MB).");
+								}
+								else{
+									$this->session->set_flashdata('error_message', "The kennel file size is too big (> 1 MB).");
+								}
 							}
 
 							$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 							if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writeable.');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Kennel folder not found or not writable.');
+								}
 							} else {
 								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
-									$this->session->set_flashdata('error_message', 'File kennel sudah ada dan tidak writeable.');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File kennel sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The kennel file is already exists and not writable.');
+									}
 								}
 							}
 						}
@@ -113,27 +134,52 @@ class Requestpro extends CI_Controller {
 						$email = $this->test_input($this->input->post('mem_email'));
 						if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 							$err++;
-							$this->session->set_flashdata('error_message', 'Format email tidak valid');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Format email tidak valid');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Invalid email format');
+							}
 						}
 	
 						if (!$err && $this->MemberModel->check_for_duplicate($this->session->userdata('mem_id'), 'mem_ktp', $this->input->post('mem_ktp'))){
 							$err++;
-							$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'ID Card Numbers cannot be the same');
+							}
 						}
 	
 						if (!$err && $this->MemberModel->check_for_duplicate($this->session->userdata('mem_id'), 'mem_hp', $this->input->post('mem_hp'))){
 							$err++;
-							$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Phone numbers cannot be the same');
+							}
 						}
 		
 						if (!$err && $this->MemberModel->check_for_duplicate($this->session->userdata('mem_id'), 'mem_email', $this->input->post('mem_email'))){
 							$err++;
-							$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'email cannot be the same');
+							}
 						}
 	
 						if (!$err && $this->KennelModel->check_for_duplicate($this->session->userdata('mem_id'), 'ken_name', $this->input->post('ken_name'))){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Kennel names cannot be the same');
+							}
 						}
 
 						if (!$err) {
@@ -176,7 +222,12 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('become_pro', TRUE);
 								redirect("frontend/Requestpro");
 							} else {
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan menjadi pro');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan menjadi pro');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save become pro report');
+								}
 								$this->load->view("frontend/become_pro", $data);
 							}
 						} 
