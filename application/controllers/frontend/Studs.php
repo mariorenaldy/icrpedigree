@@ -271,7 +271,7 @@ class Studs extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Tidak ada anjing jantan min 12 bulan');
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'There is no male dogs at least 12 months old');
+					$this->session->set_flashdata('error_message', 'No male dogs with a minimum age of 12 months');
 				}
 				redirect("frontend/Studs");
 			}
@@ -369,7 +369,6 @@ class Studs extends CI_Controller {
 				$this->form_validation->set_rules('stu_stud_date', 'Tanggal pacak ', 'trim|required');
 			}
 			else{
-				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
 				$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
 				$this->form_validation->set_rules('stu_stud_date', 'Stud Date ', 'trim|required');
@@ -548,7 +547,7 @@ class Studs extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder stud tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Stud folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Stud folder is not found or is not writable.');
 								}
 							} else{
 								if (is_file($stud_name) and !is_writable($stud_name)) {
@@ -557,7 +556,7 @@ class Studs extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File stud sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The stud file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The stud file is already exists and is not writable.');
 									}
 								}
 								if (is_file($sire_name) and !is_writable($sire_name)) {
@@ -566,7 +565,7 @@ class Studs extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File sire sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The sire file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The sire file is already exists and is not writable.');
 									}
 								}
 								if (is_file($dam_name) and !is_writable($dam_name)) {
@@ -575,7 +574,7 @@ class Studs extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File dam sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The dam file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The dam file is already exists and is not writable.');
 									}
 								}
 							}
@@ -705,7 +704,7 @@ class Studs extends CI_Controller {
 												$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
 											}
 											else{
-												$this->session->set_flashdata('error_message', 'Failed to save stud data. Err code: 1');
+												$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: 1');
 											}
 											$this->load->view('frontend/add_stud', $data);
 										}
@@ -754,7 +753,7 @@ class Studs extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 3');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Failed to save stud data. Err code: 3');
+							$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: 3');
 						}
 						$this->load->view('frontend/add_stud', $data);
 					}

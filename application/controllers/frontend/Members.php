@@ -7,7 +7,7 @@ class Members extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'requestresetModel'));
+			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url', 'mail', 'cookie'));
@@ -51,9 +51,6 @@ class Members extends CI_Controller {
             $site_lang = $this->input->cookie('site_lang');
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
-			}
-			else{
-				$this->form_validation->set_message('required', '%s is required');
 			}
 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required');
@@ -181,21 +178,19 @@ class Members extends CI_Controller {
 				// }
 			}
 			else{
-				$this->form_validation->set_message('required', '%s is required');
-				$this->form_validation->set_message('matches', 'Password and confirm password is not the same');
-					$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
-					$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
-					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
-					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
-					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
-					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
-					$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
-					$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
-					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
-					$this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
-					$this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+				$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
+                $this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
+                $this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+                $this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
+                if (!$this->input->post('same'))
+                    $this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
+                $this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+                $this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
+                $this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
+                $this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+                $this->form_validation->set_rules('password', 'Password ', 'trim|required');
+                $this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
+                $this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
 			}
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
@@ -241,7 +236,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder member tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'member folder is not found or does not writable.');
+									$this->session->set_flashdata('error_message', 'member folder is not found or is not writable.');
 								}
 							} else {
 								if (is_file($pp_name) and !is_writable($pp_name)){
@@ -278,7 +273,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'kennel folder is not found or doesn not writable.');
+								$this->session->set_flashdata('error_message', 'kennel folder is not found or is not writable.');
 							}
 						} else {
 							if (is_file($logo_name) and !is_writable($logo_name)){
@@ -315,7 +310,7 @@ class Members extends CI_Controller {
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar dan belum diproses. Harap menghubungi Admin');
 						}
 						else{
 							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please contact Admin');
@@ -325,7 +320,7 @@ class Members extends CI_Controller {
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar');
 						}
 						else{
 							$this->session->set_flashdata('error_message', 'Name is already registered');
@@ -374,7 +369,6 @@ class Members extends CI_Controller {
 
 					if (!$err && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 						if ($site_lang == 'indonesia') {
 							$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 						}
@@ -513,7 +507,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Gagal menyimpan data member');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Failed to save member data');
+							$this->session->set_flashdata('error_message', 'Failed to save member');
 						}
 						$this->load->view("frontend/register", $dataReg);
 					}
@@ -564,7 +558,6 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('repass', 'Konfirmasi Password', 'trim|matches[newpass]');
 				}
 				else{
-					$this->form_validation->set_message('required', '%s is required');
 					$this->form_validation->set_rules('password', 'Password', 'trim|required');
 					$this->form_validation->set_rules('newpass', 'New Password', 'trim|required');
 					$this->form_validation->set_rules('repass', 'Confirm Password', 'trim|matches[newpass]');
@@ -583,7 +576,7 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Data Not Found');
+							$this->session->set_flashdata('error_message', 'Not Found');
 						}
 					}
 					else{
@@ -637,7 +630,7 @@ class Members extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Data Tidak Ditemukan');
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Data Not Found');
+					$this->session->set_flashdata('error_message', 'Not Found');
 				}
 			} else {
 				$pp = '-';
@@ -664,7 +657,7 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Folder members tidak ditemukan atau tidak writable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'member folders not found or not writable.');
+								$this->session->set_flashdata('error_message', 'Member folder not found or not writable.');
 							}
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
@@ -673,7 +666,7 @@ class Members extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+									$this->session->set_flashdata('error_message', 'File already exists and is not writable.');
 								}
 							}
 						}
@@ -736,7 +729,7 @@ class Members extends CI_Controller {
 				$this->session->set_flashdata('error_message', 'No. HP atau email harus diisi');
 			}
 			else{
-				$this->session->set_flashdata('error_message', 'Phone number or email required');
+				$this->session->set_flashdata('error_message', 'Phone number or email is required');
 			}
 			$this->load->view("frontend/reset_password");
 		}
@@ -786,10 +779,10 @@ class Members extends CI_Controller {
 				}
 				else{
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Gagal reset password. Hubungi Admin.');
+						$this->session->set_flashdata('error_message', 'Gagal reset password. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Failed to reset password. Contact Admin.');
+						$this->session->set_flashdata('error_message', 'Failed to reset password. Please contact Admin.');
 					}
 				}
 				$this->load->view("frontend/reset_password");

@@ -70,7 +70,7 @@ class Requestmember extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Laporan ubah kennel yang lama belum diproses. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The old kennel change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous kennel change report has not been processed. Please contact Admin.');
 					}
 					$this->load->view("frontend/edit_profile", $data);
 				}
@@ -89,7 +89,6 @@ class Requestmember extends CI_Controller {
 						$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
 					}
 					else{
-						$this->form_validation->set_message('required', '%s is required');
 						$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
 						$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
 						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
@@ -131,7 +130,7 @@ class Requestmember extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Kennel folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Kennel folder is not found or is not writable.');
 								}
 							} else {
 								if (is_file($logo_name) and !is_writable($logo_name)){
@@ -140,7 +139,7 @@ class Requestmember extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File kennel sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The kennel file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The kennel file is already exists and is not writable.');
 									}
 								}
 							}
@@ -163,7 +162,7 @@ class Requestmember extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'ID Card Numbers cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate ID Card Number');
 							}
 						}
 	
@@ -173,7 +172,7 @@ class Requestmember extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Phone numbers cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate phone number');
 							}
 						}
 		
@@ -183,7 +182,7 @@ class Requestmember extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'email tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'email cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate email');
 							}
 						}
 	
@@ -193,7 +192,7 @@ class Requestmember extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Kennel names cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate kennel name');
 							}
 						}
 
@@ -241,7 +240,7 @@ class Requestmember extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah kennel');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Failed to save kennel change report');
+									$this->session->set_flashdata('error_message', 'Failed to save kennel update report');
 								}
 								$this->load->view("frontend/edit_profile", $data);
 							}

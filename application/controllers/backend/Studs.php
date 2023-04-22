@@ -760,7 +760,7 @@ class Studs extends CI_Controller {
 											$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
 											$desc .= ' pada tanggal '.$this->input->post('stu_stud_date');
 											$desc .= ' antara '.$canSire->can_a_s;
-											$desc .= ' dan '.$can->can_a_s.'<br><hr><br>';
+											$desc .= ' dan '.$can->can_a_s.'<br><hr>';
                                             $desc .= $member->mem_name.' ('.$member->ken_name.')';
                                             $desc .= ' has bred on '.$stud->stu_stud_date;
                                             $desc .= ' between '.$c->can_a_s;
@@ -1463,7 +1463,7 @@ class Studs extends CI_Controller {
 									$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
 									$desc .= ' pada tanggal '.$stud->stu_stud_date;
 									$desc .= ' antara '.$c->can_a_s;
-									$desc .= ' dan '.$can->can_a_s.'<br><hr><br>';
+									$desc .= ' dan '.$can->can_a_s.'<br><hr>';
                                     $desc .= $member->mem_name.' ('.$member->ken_name.')';
 									$desc .= ' has bred on '.$stud->stu_stud_date;
 									$desc .= ' between '.$c->can_a_s;
@@ -1473,7 +1473,7 @@ class Studs extends CI_Controller {
 									$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
 									$dataNews = array(
-										'title' => 'Pacak '.$can->can_breed,
+										'title' => 'Pacak / Bred '.$can->can_breed,
 										'description' => $desc,
 										'date' => $date,
 										'type' => $this->config->item('stud'),

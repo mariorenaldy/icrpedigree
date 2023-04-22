@@ -235,7 +235,7 @@ class Stambums extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Lapor anak tidak valid');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The puppy report is not valid');
+						$this->session->set_flashdata('error_message', 'Invalid puppy report');
 					}
 					redirect("frontend/Births/view_approved");
 				}
@@ -276,7 +276,6 @@ class Stambums extends CI_Controller {
 				$this->form_validation->set_rules('stb_a_s', 'Nama Canine ', 'trim|required');
 			}
 			else{
-				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
 				$this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
 			}
@@ -323,7 +322,7 @@ class Stambums extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+							$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
 						}
 					} else{
 						if (is_file($img_name) and !is_writable($img_name)) {
@@ -332,7 +331,7 @@ class Stambums extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'The file already exists and not writable.');
+								$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
 							}
 						}
 					}
@@ -364,7 +363,7 @@ class Stambums extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Anak jantan sudah semua');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Male puppies are all done');
+							$this->session->set_flashdata('error_message', 'Male puppies is full');
 						}
 					}
 					if ($male+1 == $data['birth']->bir_male){
@@ -381,7 +380,7 @@ class Stambums extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Anak betina sudah semua');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Female puppies are all done');
+							$this->session->set_flashdata('error_message', 'Female puppies is full');
 						}
 					}
 					if ($male == $data['birth']->bir_male){
@@ -454,7 +453,7 @@ class Stambums extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Dog names cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate dog name');
 						}
 					}
 		
@@ -518,7 +517,7 @@ class Stambums extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak. Error code: '.$err);
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Failed to save puppy data. Error code: '.$err);
+								$this->session->set_flashdata('error_message', 'Failed to save puppy. Error code: '.$err);
 							}
 							$this->load->view('frontend/add_stambum', $data);
 						}

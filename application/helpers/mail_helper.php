@@ -12,7 +12,7 @@ function send_greeting($email, $member){
 	$ci->email->to($email);
 	$ci->email->subject('Registrasi Keanggotaan di www.ICRPedigree.com Disetujui / Membership Registration on www.ICRPedigree.com Approved');
 
-	$message = '<div style="width: 500px; margin: auto;">';
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
 	$message .= '<div style="display: flex; align-items:center;">';
 	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
 	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
@@ -37,7 +37,7 @@ function send_greeting($email, $member){
 	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
 	$message .= '<div>Contact: +6287777802288</div>';
 	$message .= '<hr style="border-top: 1px solid black; margin-top: 1em; margin-bottom: 1em;">';
-	$message .= '<div style="text-align: center;">Copyright &copy; 2021 ARTechnology. All rights reserved</div>';
+	$message .= '<div style="text-align: center;">Copyright &copy; 2021 <span style="color: red">ART</span>echnology. All rights reserved</div>';
 	$message .= '</div>';
 	
 	$ci->email->message($message);

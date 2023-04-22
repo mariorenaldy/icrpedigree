@@ -266,7 +266,6 @@ class Requestownershipcanine extends CI_Controller {
 						}
 					}
 					else{
-						$this->form_validation->set_message('required', '%s is required');
 						$this->form_validation->set_rules('can_id', 'Dog id ', 'trim|required');
 						if ($this->input->post('reg_member')){
 							$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
@@ -359,7 +358,7 @@ class Requestownershipcanine extends CI_Controller {
 									}
 									}
 									else{
-									$err = 'M2';
+                                        $err = 'M2';
 									}
 								}
 								else{
@@ -429,7 +428,7 @@ class Requestownershipcanine extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder ownership tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Ownership folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Ownership folder is not found or is not writable.');
 								}
 							} else if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
 								$err++;
@@ -437,7 +436,7 @@ class Requestownershipcanine extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
 								}
 							} else {
 								if (is_file($stb_name) and !is_writable($stb_name)) {
@@ -446,7 +445,7 @@ class Requestownershipcanine extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File stambum sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The stambum file already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The stambum file is already exists and is not writable.');
 									}
 								}
 								if (is_file($canine_name) and !is_writable($canine_name)) {
@@ -455,7 +454,7 @@ class Requestownershipcanine extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File anjing sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The dog file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The dog file is already exists and is not writable.');
 									}
 								}
 							}
@@ -524,7 +523,7 @@ class Requestownershipcanine extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The old ownership change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous ownership change report has not been processed. Please contact Admin.');
 					}
 					$this->load->view("frontend/add_request_ownership", $data);
 				}

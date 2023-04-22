@@ -298,7 +298,7 @@ class Births extends CI_Controller {
 					$this->session->set_flashdata('error_message', 'Lapor lahir tidak valid');
 				}
 				else{
-					$this->session->set_flashdata('error_message', 'Birth report is not valid');
+					$this->session->set_flashdata('error_message', 'Invalid Birth report');
 				}
 				redirect('frontend/Studs/view_approved');
 			}
@@ -319,7 +319,6 @@ class Births extends CI_Controller {
 				$this->form_validation->set_rules('bir_date_of_birth', 'Tanggal lahir ', 'trim|required');
 			}
 			else{
-				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_rules('bir_stu_id', 'Stud Id ', 'trim|required');
 				$this->form_validation->set_rules('bir_male', 'Live Males Count ', 'trim|required');
 				$this->form_validation->set_rules('bir_female', 'Live Females Count ', 'trim|required');
@@ -365,7 +364,7 @@ class Births extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder lahir tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Birth folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Birth folder is not found or is not writable.');
 								}
 							} else{
 								if (is_file($image_name) and !is_writable($image_name)) {
@@ -374,7 +373,7 @@ class Births extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
 									}
 								}
 							}
@@ -435,7 +434,7 @@ class Births extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Stud Id is not valid'); 
+								$this->session->set_flashdata('error_message', 'Invalid Stud Id'); 
 							}
 						}
                     }
@@ -485,7 +484,7 @@ class Births extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Lapor lahir sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Birth report is already registered');
+							$this->session->set_flashdata('error_message', 'Birth report is registered');
 						}
 					}
 					$this->load->view('frontend/add_birth', $data);

@@ -194,7 +194,7 @@ class Requestupdatecanine extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
+										$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
 									}
 								} else{
 									if (is_file($image_name) and !is_writable($image_name)) {
@@ -203,7 +203,7 @@ class Requestupdatecanine extends CI_Controller {
 											$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'The file is already exists and not writable.');
+											$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
 										}
 									}
 								}
@@ -259,7 +259,7 @@ class Requestupdatecanine extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Laporan ubah foto & RIP yang lama belum diproses. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The old photo & RIP change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous photo & RIP change report has not been processed. Please contact Admin.');
 					}
 					$this->load->view("frontend/add_request_update_canine", $data);
 				}

@@ -200,7 +200,6 @@ class Canines extends CI_Controller {
 				$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			}
 			else{
-				$this->form_validation->set_message('required', '%s is required');
 				$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
 				$this->form_validation->set_rules('can_a_s', 'Name ', 'trim|required');
 				// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
@@ -229,7 +228,12 @@ class Canines extends CI_Controller {
 
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
-						$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+                        if ($site_lang == 'indonesia') {
+                            $data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+                        }
+                        else{
+                            $data['error_message'] = 'File size is too big (> 1 MB).<br/>';
+                        }
 					}
 					else{
 						$image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
@@ -239,7 +243,7 @@ class Canines extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writable.');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Dog folder not found or not writable.');
+								$this->session->set_flashdata('error_message', 'Dog folder is not found or is not writable.');
 							}
 						} else{
 							if (is_file($image_name) and !is_writable($image_name)) {
@@ -248,7 +252,7 @@ class Canines extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+									$this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
 								}
 							}
 						}
@@ -343,7 +347,7 @@ class Canines extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Dog names cannot be the same');
+							$this->session->set_flashdata('error_message', 'Duplicate dog name');
 						}
                     }
 
@@ -353,7 +357,7 @@ class Canines extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
 						}
 						else{
-							$this->session->set_flashdata('error_message', "The dog's name is too long. Coupled with the kennel name, it must be under ".$this->config->item('can_a_s_length').' characters');
+							$this->session->set_flashdata('error_message', "The dog's name is too long. Added with the kennel name, it must be under ".$this->config->item('can_a_s_length').' characters');
 						}
                     }
 
@@ -387,7 +391,7 @@ class Canines extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Gagal menyimpan data anjing');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Failed to save dog data');
+								$this->session->set_flashdata('error_message', 'Failed to save dog');
 							}
                             $this->load->view('frontend/add_canine', $data);
                         }

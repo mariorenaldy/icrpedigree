@@ -491,7 +491,7 @@ class Births extends CI_Controller {
 														$desc .= $this->input->post('bir_female').' betina';
 													$desc .= ' pada tanggal '.$this->input->post('bir_date_of_birth').'.';
 													$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
-                                                    $desc .= ' untuk informasi lebih lanjut<br><hr><br>';
+                                                    $desc .= ' untuk informasi lebih lanjut<br><hr>';
 													if ($this->input->post('bir_male') && $this->input->post('bir_female')){
                                                         $desc .= $this->input->post('bir_male').' male(s) and ';
 														$desc .= $this->input->post('bir_female').' female(s)';
@@ -802,7 +802,7 @@ class Births extends CI_Controller {
 												$desc .= $birth->bir_female.' betina';
 											$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
 											$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
-                                            $desc .= ' untuk informasi lebih lanjut<br><hr><br>';
+                                            $desc .= ' untuk informasi lebih lanjut<br><hr>';
                                             if ($this->input->post('bir_male') && $this->input->post('bir_female')){
                                                 $desc .= $this->input->post('bir_male').' male(s) and ';
                                                 $desc .= $this->input->post('bir_female').' female(s)';
@@ -818,7 +818,7 @@ class Births extends CI_Controller {
 											$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
 											$dataNews = array(
-												'title' => 'Lahir '.$can->can_breed,
+												'title' => 'Lahir / Birth '.$can->can_breed,
 												'description' => $desc,
 												'date' => $date,
 												'type' => $this->config->item('birth'),

@@ -111,7 +111,12 @@ class Requestexport extends CI_Controller {
 
                 if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
                     $err++;
-                    $data['error_message'] = 'Ukuran file anjing terlalu besar (> 1 MB).<br/>';
+                    if ($site_lang == 'indonesia') {
+                        $data['error_message'] = 'Ukuran file anjing terlalu besar (> 1 MB).<br/>';
+                    }
+                    else{
+                        $data['error_message'] = 'Dog file size is too big (> 1 MB).<br/>';
+                    }
                 }
                 else{
                     $image_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
@@ -121,7 +126,7 @@ class Requestexport extends CI_Controller {
                             $this->session->set_flashdata('error_message', 'Folder anjing tidak ditemukan atau tidak writable.');
                         }
                         else{
-                            $this->session->set_flashdata('error_message', 'Dog folder not found or not writable.');
+                            $this->session->set_flashdata('error_message', 'Dog folder is not found or is not writable.');
                         }
                     } else{
                         if (is_file($image_name) and !is_writable($image_name)) {
@@ -130,7 +135,7 @@ class Requestexport extends CI_Controller {
                                 $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
                             }
                             else{
-                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                                $this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
                             }
                         }
                     }
@@ -150,7 +155,12 @@ class Requestexport extends CI_Controller {
 
                 if ((strlen($uploadedImgStb) > $this->config->item('file_size'))) {
                     $err++;
-                    $data['error_message'] = 'Ukuran file stambum terlalu besar (> 1 MB).<br/>';
+                    if ($site_lang == 'indonesia') {
+                        $data['error_message'] = 'Ukuran file stambum terlalu besar (> 1 MB).<br/>';
+                    }
+                    else{
+                        $data['error_message'] = 'Stambum file size is too big (> 1 MB).<br/>';
+                    }
                 }
                 else{
                     $image_name_stb = $this->config->item('path_export').$this->config->item('file_name_export');
@@ -160,7 +170,7 @@ class Requestexport extends CI_Controller {
                             $this->session->set_flashdata('error_message', 'Folder export tidak ditemukan atau tidak writable.');
                         }
                         else{
-                            $this->session->set_flashdata('error_message', 'Export folder not found or not writable.');
+                            $this->session->set_flashdata('error_message', 'Export folder is not found or is not writable.');
                         }
                     } else{
                         if (is_file($image_name_stb) and !is_writable($image_name_stb)) {
@@ -169,7 +179,7 @@ class Requestexport extends CI_Controller {
                                 $this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
                             }
                             else{
-                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                                $this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
                             }
                         }
                     }
@@ -220,7 +230,7 @@ class Requestexport extends CI_Controller {
                         $this->session->set_flashdata('error_message', 'Gagal menyimpan eksport stambum');
                     }
                     else{
-                        $this->session->set_flashdata('error_message', 'Failed to save export stambum');
+                        $this->session->set_flashdata('error_message', 'Failed to save stambum export');
                     }
                     $this->load->view('frontend/add_request_export', $data);
                 }

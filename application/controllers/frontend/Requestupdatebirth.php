@@ -193,7 +193,6 @@ class Requestupdatebirth extends CI_Controller {
 						$this->form_validation->set_rules('bir_id', 'Id Birth ', 'trim|required');
 					}
 					else{
-						$this->form_validation->set_message('required', '%s is required');
 						$this->form_validation->set_rules('bir_id', 'Birth id ', 'trim|required');
 					}
 					if ($this->form_validation->run() == FALSE){
@@ -225,16 +224,16 @@ class Requestupdatebirth extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder births tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'births folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'births folder is not found or is not writable.');
 								}
 							} else{
 								if (is_file($img_name) and !is_writable($img_name)) {
 									$err++;
 									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+										$this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
 									}
 								}
 							}
@@ -276,7 +275,7 @@ class Requestupdatebirth extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Failed to save birth change report.');
+									$this->session->set_flashdata('error_message', 'Failed to save birth update report.');
 								}
 								$this->load->view("frontend/add_request_update_birth", $data);
 							}
@@ -286,7 +285,7 @@ class Requestupdatebirth extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah lahir. Error code : '.$err);
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Failed to save birth change report. Error code : '.$err);
+								$this->session->set_flashdata('error_message', 'Failed to save birth update report. Error code : '.$err);
 							}
 							$this->load->view("frontend/add_request_update_birth", $data);
 						}
@@ -297,7 +296,7 @@ class Requestupdatebirth extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Laporan ubah lahir yang lama belum diproses. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The old birth change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous birth change report has not been processed. Please contact Admin.');
 					}
 					$this->load->view("frontend/add_request_update_birth", $data);
 				}

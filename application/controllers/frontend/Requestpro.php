@@ -70,7 +70,7 @@ class Requestpro extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Laporan menjadi pro yang lama belum diproses. Harap menghubungi Admin.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The old become pro report has not been processed. Please contact Admin');
+						$this->session->set_flashdata('error_message', 'The previous become pro report has not been processed. Please contact Admin');
 					}
 					$this->load->view("frontend/become_pro", $data);
 				}
@@ -130,7 +130,7 @@ class Requestpro extends CI_Controller {
 									$this->session->set_flashdata('error_message', 'Folder kennel tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Kennel folder not found or not writable.');
+									$this->session->set_flashdata('error_message', 'Kennel folder is not found or is not writable.');
 								}
 							} else {
 								if (is_file($logo_name) and !is_writable($logo_name)){
@@ -139,7 +139,7 @@ class Requestpro extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'File kennel sudah ada dan tidak writable.');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The kennel file is already exists and not writable.');
+										$this->session->set_flashdata('error_message', 'The kennel file is already exists and is not writable.');
 									}
 								}
 							}
@@ -162,7 +162,7 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'ID Card Numbers cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate ID Card Number');
 							}
 						}
 	
@@ -172,7 +172,7 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Phone numbers cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate phone number');
 							}
 						}
 		
@@ -182,7 +182,7 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'email tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'email cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate email');
 							}
 						}
 	
@@ -192,7 +192,7 @@ class Requestpro extends CI_Controller {
 								$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Kennel names cannot be the same');
+								$this->session->set_flashdata('error_message', 'Duplicate kennel name');
 							}
 						}
 

@@ -105,7 +105,7 @@ class Certificate extends CI_Controller{
                     $this->session->set_flashdata('error', 'Id canine tidak valid');
                 }
                 else{
-                    $this->session->set_flashdata('error', 'Canine Id is not valid');
+                    $this->session->set_flashdata('error', 'Invalid Canine Id');
                 }
                 redirect('frontend/Canines');
             }
