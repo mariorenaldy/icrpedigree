@@ -43,6 +43,86 @@
                 <span class="visually-hidden"><?= lang("common_next"); ?></span>
             </button>
         </div>
+        <div id="dogsCarousel" class="carousel slide" data-bs-ride="carousel" style="width: <?= $this->config->item('carousel_width') ?>">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#dogsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#dogsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#dogsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner mb-5">
+                <div class="carousel-item active" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
+                    <table>
+                        <tr>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[0]['can_photo']) ?>" class="d-block img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[1]['can_photo']) ?>" class="d-block img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[2]['can_photo']) ?>" class="d-block img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[3]['can_photo']) ?>" class="d-block img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[4]['can_photo']) ?>" class="d-block img-fluid">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
+                    <table>
+                        <tr>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[5]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[6]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[7]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[8]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[9]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
+                    <table>
+                        <tr>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[10]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[11]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[12]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[13]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                            <td class="border border-warning">
+                                <img src="<?= base_url('uploads/canine/'.$dogs[14]['can_photo']) ?>" class="d-block m-auto img-fluid">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#dogsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><?= lang("common_prev"); ?></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#dogsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><?= lang("common_next"); ?></span>
+            </button>
+        </div>
         <?php if (!$this->session->userdata('username')){ ?>
             <div class="col-sm-12 text-center">
                 <button class="btn btn-primary btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Members'">Login</button>

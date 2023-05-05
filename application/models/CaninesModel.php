@@ -168,4 +168,12 @@ class CaninesModel extends CI_Model {
     //     $query = $this->db->query($sql);
     //     return $query->result();  
 	// }
+
+    public function get_random_canines($limit = 15){
+        $this->db->order_by('id', 'RANDOM');
+        $this->db->where('can_photo != ', '-');
+        $this->db->limit($limit);
+        $query = $this->db->get('canines');
+        return $query->result_array();
+    }
 }
