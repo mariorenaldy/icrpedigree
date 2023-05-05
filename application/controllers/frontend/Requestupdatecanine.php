@@ -256,10 +256,10 @@ class Requestupdatecanine extends CI_Controller {
 				}
 				else{
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Laporan ubah foto & RIP yang lama belum diproses. Harap menghubungi Admin.');
+						$this->session->set_flashdata('error_message', 'Laporan ubah foto & RIP yang lama belum diproses. Harap menghubungi Admin');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The previous photo & RIP change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous photo & RIP change report has not been processed. Please contact Admin');
 					}
 					$this->load->view("frontend/add_request_update_canine", $data);
 				}

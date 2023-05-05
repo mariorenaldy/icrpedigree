@@ -12,6 +12,7 @@ class StambumModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = stambums.stb_stat');
         $this->db->join('members','members.mem_id = stambums.stb_member_id');
         $this->db->join('kennels','kennels.ken_id = stambums.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('births','stambums.stb_bir_id = births.bir_id');
         $this->db->join('users', 'stambums.stb_app_user = users.use_id');
         $this->db->order_by($sort);
         if ($limit)
@@ -32,6 +33,7 @@ class StambumModel extends CI_Model {
         $this->db->join('approval_status','approval_status.stat_id = stambums.stb_stat');
         $this->db->join('members','members.mem_id = stambums.stb_member_id');
         $this->db->join('kennels','kennels.ken_id = stambums.stb_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('births','stambums.stb_bir_id = births.bir_id');
         $this->db->join('users', 'stambums.stb_app_user = users.use_id');
         $this->db->order_by($sort);
         if ($limit)

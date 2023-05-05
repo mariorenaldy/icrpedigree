@@ -29,11 +29,11 @@ class RequestupdatebirthModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('births','births.bir_id = requests_update_birth.req_bir_id');
         $this->db->join('studs','studs.stu_id = births.bir_stu_id');
         $this->db->join('members','members.mem_id = requests_update_birth.req_member_id AND members.mem_id = studs.stu_partner_id');

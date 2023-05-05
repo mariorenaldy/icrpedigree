@@ -7,8 +7,7 @@ class Requestexport extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('requestexportModel','memberModel', 'KennelModel'));
-        $this->load->library('upload', $this->config->item('upload_canine'));
+        $this->load->model(array('requestexportModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -83,10 +82,7 @@ class Requestexport extends CI_Controller {
 
 	public function add(){
         if ($this->session->userdata('mem_id')){
-            $whe['ken_member_id'] = $this->session->userdata('mem_id');
-			$whe['ken_stat'] = $this->config->item('accepted');
-			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
-			$this->load->view('frontend/add_request_export', $data);
+            $this->load->view('frontend/add_request_export');
 		}
 		else{
 			redirect("frontend/Members");
@@ -96,10 +92,6 @@ class Requestexport extends CI_Controller {
     public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
             $site_lang = $this->input->cookie('site_lang');
-			$whe['ken_member_id'] = $this->session->userdata('mem_id');
-			$whe['ken_stat'] = $this->config->item('accepted');
-			$data['kennel'] = $this->KennelModel->get_kennels($whe)->result();
-			
             $err = 0;
             $photo = '-';
             $photo_stb = '-';
@@ -232,11 +224,11 @@ class Requestexport extends CI_Controller {
                     else{
                         $this->session->set_flashdata('error_message', 'Failed to save stambum export');
                     }
-                    $this->load->view('frontend/add_request_export', $data);
+                    $this->load->view('frontend/add_request_export');
                 }
             }
             else{
-                $this->load->view('frontend/add_request_export', $data);
+                $this->load->view('frontend/add_request_export');
             }
 		}
 		else{

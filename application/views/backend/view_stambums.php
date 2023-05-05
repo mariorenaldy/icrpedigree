@@ -65,6 +65,7 @@
                             <tr>
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
+                                <th class="no-sort" style="width: 10%">Birth Photo</th>
                                 <th class="no-sort" style="width: 10%">Photo</th>
                                 <th>Name</th>
                                 <th class="no-sort">Breed</th>
@@ -87,6 +88,9 @@
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $r->stb_id ?>)" data-toggle="tooltip" data-placement="top" title="Puppy Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
+                                    </td>
+                                    <td>
+                                        <img src="<?= base_url('uploads/births/'.$r->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="birth<?= $r->stb_id ?>" onclick="display('birth<?= $r->stb_id ?>')">
                                     </td>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>

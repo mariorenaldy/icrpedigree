@@ -17,6 +17,10 @@
     font-size: 1.1em !important;
     font-family: "Times New Roman", Times, serif;
 }
+.row .col.md-4 ol.p-0 li.icr-note{
+    font-size: 1em !important;
+    font-family: "Times New Roman", Times, serif;
+}
 .footer .row .col-md-4.text-center.copyright{
     font-size: 0.8em !important;
 }

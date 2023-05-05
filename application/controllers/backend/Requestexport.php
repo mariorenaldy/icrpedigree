@@ -9,7 +9,7 @@ class Requestexport extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestexportModel', 'memberModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'notif'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}

@@ -8,7 +8,6 @@ class Requestmember extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'RequestmemberModel'));
-			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();

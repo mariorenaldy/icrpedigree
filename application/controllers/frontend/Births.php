@@ -8,8 +8,7 @@ class Births extends CI_Controller {
         // Call the CI_Controller constructor
         parent::__construct();
         $this->load->model(array('studModel', 'birthModel', 'stambumModel'));
-		$this->load->library('upload', $this->config->item('upload_birth'));
-        $this->load->library(array('session', 'form_validation', 'pagination'));
+		$this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");

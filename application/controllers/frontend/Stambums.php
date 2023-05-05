@@ -8,9 +8,8 @@ class Stambums extends CI_Controller {
         // Call the CI_Controller constructor
         parent::__construct();
         $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
-        $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-        $this->load->helper(array('url', 'mail', 'notif'));
+        $this->load->helper(array('url', 'notif'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
 
@@ -23,13 +22,6 @@ class Stambums extends CI_Controller {
             $this->lang->load('canine','indonesia');
         }
     }
-
-	public function test_input($data) {
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
-		return $data;
-	}
 
 	public function index(){
 		if ($this->session->userdata('mem_id')){
@@ -273,7 +265,7 @@ class Stambums extends CI_Controller {
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
-				$this->form_validation->set_rules('stb_a_s', 'Nama Canine ', 'trim|required');
+				$this->form_validation->set_rules('stb_a_s', 'Nama anjing ', 'trim|required');
 			}
 			else{
 				$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');

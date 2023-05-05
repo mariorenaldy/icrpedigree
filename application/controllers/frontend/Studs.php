@@ -7,7 +7,6 @@ class Studs extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		$this->load->model(array('studModel', 'caninesModel', 'memberModel', 'birthModel', 'pedigreesModel'));
-		$this->load->library('upload', $this->config->item('upload_stud'));
 		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
@@ -620,16 +619,16 @@ class Studs extends CI_Controller {
 								// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
 								// Kurang dari 3 bulan dari lahir(ada lahir)
 								$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
-								$wheBirth['studs.stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-								$wheBirth['births.bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
+								$wheBirth['studs.stu_stat != '] = $this->config->item('rejected');
+								$wheBirth['births.bir_stat != '] = $this->config->item('rejected');
 								$birth = $this->birthModel->get_births($wheBirth)->row();
-								if (!$birth){
-									$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+                                if (!$birth){
+                                    $res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
 								}
 								else{
-									$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+                                    $res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
 								}
-								if (!$res){ 
+                                if (!$res){ 
 									// dam anak dari sire
 									$wherePedSire['ped_sire_id'] = $this->input->post('stu_sire_id');
 									$wherePedSire['ped_canine_id'] = $this->input->post('stu_dam_id');

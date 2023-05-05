@@ -71,15 +71,15 @@ class Breeds extends CI_Controller {
             $data['mode'] = 1;
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
-				$this->form_validation->set_rules('tra_name', 'Breed ', 'trim|required|is_unique[Trah.tra_name]');
+				$this->form_validation->set_rules('tra_name', 'Breed ', 'trim|required|is_unique[trah.tra_name]');
 
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view("backend/edit_breed", $data);
 				}
 				else{
 					$where['tra_id'] = $this->input->post('tra_id');
-					$data['tra_name'] = strtoupper($this->input->post('tra_name'));
-                    $res = $this->trahModel->update_trah($data, $where);
+					$dataTrah['tra_name'] = strtoupper($this->input->post('tra_name'));
+                    $res = $this->trahModel->update_trah($dataTrah, $where);
                     if ($res){
                         $this->session->set_flashdata('edit_success', TRUE);
                         redirect("backend/Breeds");

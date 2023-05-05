@@ -23,7 +23,7 @@
                         <div class="input-group my-3">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" placeholder="<?= lang('pedigree_search_placeholder_free'); ?>" name="keywords" value="<?= set_value('keywords') ?>">
+                                <input type="text" class="form-control" placeholder="<?= lang('pedigree_search_placeholder_free'); ?>" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-sm-1 ms-1">
                                 <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang('can_search'); ?>"><i class="fa fa-search"></i></button>
@@ -31,6 +31,7 @@
                         </div>
                     </form>
                 </div>
+                <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1 fs-5">
                     <div class="col-sm-2"><b><?= lang("can_photo"); ?></b></div>
                     <div class="col-sm-3"><b><?= lang("can_icr"); ?></b></div>
@@ -61,6 +62,8 @@
                         </div>
                     </div>
                 <?php } ?>
+                <br/>
+                <?= $this->pagination->create_links(); ?>
             </div>                           
         </div> 
     </div>

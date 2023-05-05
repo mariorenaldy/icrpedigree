@@ -22,14 +22,11 @@
       <div class="col md-4"><span class="desc"><?= $rules->set_rule; ?></span></div>
       <div class="col md-4">
         <div class="notes-title mb-3">NOTES:</div>
-        <!-- <ol class="p-0" style="list-style-position: inside;">
-          <li>July 4, 1969: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-          <li>20 July, 1969: Nam hendrerit nisi sed sollicitu-din pellentesque. </li>
-          <li>January 4, 1996: Nunc posuere purus rhon-Cols pulvinar aliquam. </li>
-          <li>August 6, 1945: Ut aliquet tristique nisi vitae volutpat. </li>
-          <li>April 13, 1961: Nulls aliquet porttitor venena-tis. </li>
-          <li>October 12, 1942: Donee a dui et dui fringilla consectetur id nec massa. </li>
-        </ol> -->
+            <ol class="p-0" style="list-style-position: inside;">
+                <?php foreach ($notes AS $r){ 
+                    echo '<li class="icr-note">'.$r->note_date.': '.$r->note_desc.'</li>'; 
+                } ?>
+            </ol>
       </div>
     </div>
   </div>

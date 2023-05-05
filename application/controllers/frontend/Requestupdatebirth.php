@@ -7,7 +7,7 @@ class Requestupdatebirth extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'notification_model', 'notificationtype_model'));
+			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'notification_model', 'notificationtype_model', 'studModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
@@ -244,12 +244,68 @@ class Requestupdatebirth extends CI_Controller {
 							}
 						}
 
-						if (!$err){
-							$piece = explode("-", $this->input->post('bir_date_of_birth'));
-							$date = $piece[2]."-".$piece[1]."-".$piece[0];
+                        if (!$err){
+                            // syarat maksimal 75 hari dari lapor pacak
+                            $whereStud['stu_id'] = $data['birth']->bir_stu_id;
+                            $stud = $this->studModel->get_studs($whereStud)->row();
+                            if ($stud){
+                                $piece = explode("-", $this->input->post('bir_date_of_birth'));
+                                $date = $piece[2]."-".$piece[1]."-".$piece[0];
+    
+                                $piece = explode("-", $stud->stu_stud_date);
+                                $studDate = $piece[2]."-".$piece[1]."-".$piece[0];
+    
+                                $ts = new DateTime($date);
+                                $ts_stud = new DateTime($studDate);
+                                if ($ts_stud > $ts){
+                                    $err++;
+                                    if ($site_lang == 'indonesia') {
+                                        $this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+                                    }
+                                    else{
+                                        $this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date'); 
+                                    }
+                                }
+                                else{
+                                    $diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+                                    if ($diff < 1){
+                                        $err++;
+                                        if ($site_lang == 'indonesia') {
+                                            $this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+                                        }
+                                        else{
+                                            $this->session->set_flashdata('error_message', 'Birth report must be more than '.$this->config->item('min_jarak_lapor_lahir').' days after stud date');
+                                        }
+                                    }
+    
+                                    if (!$err){
+                                        $diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+                                        if ($diff > 1){
+                                            $err++;
+                                            if ($site_lang == 'indonesia') {
+                                                $this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+                                            }
+                                            else{
+                                                $this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                $err++;
+                                if ($site_lang == 'indonesia') {
+                                    $this->session->set_flashdata('error_message', 'Id pacak tidak valid'); 
+                                }
+                                else{
+                                    $this->session->set_flashdata('error_message', 'Invalid Stud Id'); 
+                                }
+                            }
+                        }
 
+                        if (!$err){
 							$piece = explode("-", $data['birth']->bir_date_of_birth);
-							$birthDate = $piece[2]."-".$piece[1]."-".$piece[0];
+                            $birthDate = $piece[2]."-".$piece[1]."-".$piece[0];
 
 							$req_data = array(
 								'req_bir_id' => $this->input->post('bir_id'),

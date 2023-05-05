@@ -8,7 +8,6 @@ class Canines extends CI_Controller {
         // Call the CI_Controller constructor
         parent::__construct();
         $this->load->model(array('caninesModel','memberModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
-        $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();

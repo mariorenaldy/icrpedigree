@@ -21,7 +21,7 @@ class Rules extends CI_Controller {
 		}
 
 		public function index(){
-			$where['ru_stat'] = 1;
+			$where['ru_stat'] = $this->config->item('accepted');
 			$data['rules'] = $this->rulesModel->get_rules($where)->result();
 			$this->load->view('frontend/rules', $data);
 		}

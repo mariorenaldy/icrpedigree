@@ -58,7 +58,7 @@ class BirthModel extends CI_Model {
     }
 
     public function check_date($stu_dam_id, $date){
-        $sql = "SELECT b.bir_date_of_birth FROM births b, studs s where b.bir_stu_id = s.stu_id AND s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(b.bir_date_of_birth, '".$date."')) <= ".$this->config->item('jarak_pacak_lahir')." AND s.stu_stat = ".$this->config->item('accepted')." AND b.bir_stat = ".$this->config->item('accepted');
+        $sql = "SELECT b.bir_date_of_birth FROM births b, studs s where b.bir_stu_id = s.stu_id AND s.stu_dam_id = ".$stu_dam_id." AND ABS(DATEDIFF(b.bir_date_of_birth, '".$date."')) <= ".$this->config->item('jarak_pacak_lahir')." AND s.stu_stat = ".$this->config->item('completed')." AND b.bir_stat = ".$this->config->item('accepted');
         $query = $this->db->query($sql);
         return $query->result();
     }

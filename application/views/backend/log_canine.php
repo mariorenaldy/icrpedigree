@@ -59,7 +59,7 @@
                                         <td><?= $r->log_breed; ?></td>
                                         <td><?= $r->log_gender; ?></td>
                                         <td><?= $r->log_color; ?></td>
-                                        <td><?= $r->log_date_of_birth; ?></td>
+                                        <td class="text-nowrap"><?= $r->log_date_of_birth; ?></td>
                                         <td><?= $r->ken_name; ?></td>
                                         <td><?= $r->mem_name; ?></td>
                                         <td><?php if ($r->log_rip) echo '<i class="fa fa-check"></i>'; ?></td>

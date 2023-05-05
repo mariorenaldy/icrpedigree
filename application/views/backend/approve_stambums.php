@@ -34,6 +34,7 @@
                             <tr>
                                 <th></th>
                                 <th></th>
+                                <th style="width: 10%">Birth Photo</th>
                                 <th style="width: 10%">Photo</th>
                                 <th>Name</th>
                                 <th>Breed</th>
@@ -53,6 +54,9 @@
                                         <td></td>
                                         <td></td>
                                     <?php } ?>
+                                    <td>
+                                        <img src="<?= base_url('uploads/births/'.$r->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="birth<?= $r->stb_id ?>" onclick="display('birth<?= $r->stb_id ?>')">
+                                    </td>
                                     <td>
                                         <?php if ($r->stb_photo && $r->stb_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $r->stb_id ?>" onclick="display('myImg<?= $r->stb_id ?>')">

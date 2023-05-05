@@ -28,11 +28,11 @@ class RequestownershipcanineModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('canines','canines.can_id = requests_ownership_canine.req_can_id');
         $this->db->join('members AS m1','m1.mem_id = requests_ownership_canine.req_member_id');
         $this->db->join('kennels AS k1','k1.ken_id = requests_ownership_canine.req_kennel_id AND k1.ken_member_id = m1.mem_id');

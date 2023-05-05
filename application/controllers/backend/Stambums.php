@@ -163,7 +163,7 @@ class Stambums extends CI_Controller {
     public function view_approve(){
         $where['stb_stat'] = $this->config->item('saved');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_a_s')->result();
+        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc')->result();
         $this->load->view('backend/approve_stambums', $data);
     }
     
@@ -172,7 +172,7 @@ class Stambums extends CI_Controller {
         $like['ken_name'] = $this->input->post('keywords');
         $where['stb_stat'] = $this->config->item('saved');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s')->result();
+        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_id desc')->result();
         $this->load->view('backend/approve_stambums', $data);
 		}
 

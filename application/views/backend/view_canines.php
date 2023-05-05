@@ -89,12 +89,13 @@
                                     <td class="text-center">
                                         <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Canine"><i class="fa fa-edit"></i></button>
                                         <button type="button" class="btn btn-warning mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Pedigree"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                    <td class="text-center">
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $c->can_id ?>, '<?= $c->can_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Canine"><i class="fa fa-trash"></i></button>
                                         <?php } ?>
+                                    </td>
+                                    <td class="text-center">
                                         <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file"></i></button>
+                                        <button type="button" class="btn btn-secondary mb-1" onclick="note(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Note"><i class="fa fa-list"></i></button>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button>
@@ -223,6 +224,9 @@
         }
         function log(id){
             window.location = "<?= base_url(); ?>backend/Canines/log/"+id;
+        }
+        function note(id){
+            window.location = "<?= base_url(); ?>backend/Caninenote/index/"+id;
         }
 
         var modal = document.getElementById("myModal");

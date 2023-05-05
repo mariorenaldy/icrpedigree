@@ -762,12 +762,12 @@ class Studs extends CI_Controller {
 											$desc .= ' antara '.$canSire->can_a_s;
 											$desc .= ' dan '.$can->can_a_s.'<br><hr>';
                                             $desc .= $member->mem_name.' ('.$member->ken_name.')';
-                                            $desc .= ' has bred on '.$stud->stu_stud_date;
-                                            $desc .= ' between '.$c->can_a_s;
+                                            $desc .= ' has bred on '.$this->input->post('stu_stud_date');
+                                            $desc .= ' between '.$canSire->can_a_s;
                                             $desc .= ' and '.$can->can_a_s;
 
 											$dataNews = array(
-												'title' => 'Pacak '.$can->can_breed,
+												'title' => 'Pacak / Bred'.$can->can_breed,
 												'description' => $desc,
 												'date' => $date,
 												'type' => $this->config->item('stud'),

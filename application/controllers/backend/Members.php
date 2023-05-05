@@ -1204,6 +1204,7 @@ class Members extends CI_Controller {
 				$where['mem_id'] = $this->uri->segment(4);
 				$member = $this->MemberModel->get_members($where)->row();
 				$mail = send_greeting($member->mem_email, $member->mem_name);
+                // $mail = send_greeting("riskadewi@yahoo.com", $member->mem_name);
 				if ($mail){
 					echo 'success';
 				}

@@ -504,7 +504,7 @@ class Births extends CI_Controller {
 													$desc .= ' Contact '.$partner->mem_name.' ('.$partner->ken_name.') for more information';
 													
 													$dataNews = array(
-														'title' => 'Lahir '.$can->can_breed,
+														'title' => 'Lahir / Birth'.$can->can_breed,
 														'description' => $desc,
 														'date' => $date,
 														'type' => $this->config->item('birth'),
@@ -803,15 +803,15 @@ class Births extends CI_Controller {
 											$desc .= ' pada tanggal '.$birth->bir_date_of_birth.'.';
 											$desc .= ' Hubungi '.$partner->mem_name.' ('.$partner->ken_name.')';
                                             $desc .= ' untuk informasi lebih lanjut<br><hr>';
-                                            if ($this->input->post('bir_male') && $this->input->post('bir_female')){
-                                                $desc .= $this->input->post('bir_male').' male(s) and ';
-                                                $desc .= $this->input->post('bir_female').' female(s)';
+                                            if ($birth->bir_male && $birth->bir_female){
+                                                $desc .= $birth->bir_male.' male(s) and ';
+                                                $desc .= $birth->bir_female.' female(s)';
                                             }
-                                            else if ($this->input->post('bir_male'))
-                                                $desc .= $this->input->post('bir_male').' male(s)';
-                                            else if ($this->input->post('bir_female'))
-                                                $desc .= $this->input->post('bir_female').' female(s)';
-                                            $desc .= ' was/were born on '.$this->input->post('bir_date_of_birth').'.';
+                                            else if ($birth->bir_male)
+                                                $desc .= $birth->bir_male.' male(s)';
+                                            else if ($birth->bir_female)
+                                                $desc .= $birth->bir_female.' female(s)';
+                                            $desc .= ' was/were born on '.$birth->bir_date_of_birth.'.';
                                             $desc .= ' Contact '.$partner->mem_name.' ('.$partner->ken_name.') for more information';
 
 											$piece = explode("-", $birth->bir_date_of_birth);
