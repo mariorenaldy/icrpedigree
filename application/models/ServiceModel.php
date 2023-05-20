@@ -26,7 +26,7 @@ class ServiceModel extends CI_Model {
     public function add_services($data = null){
         $result = false;
         if ($data != null) {
-            $this->db->insert('service', $data);
+            $this->db->insert('services', $data);
             $result = $this->db->insert_id();
         }
         return $result;

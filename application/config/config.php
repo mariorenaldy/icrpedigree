@@ -565,6 +565,12 @@ $config['file_name_export'] = 'stambum_'.time().'.png';
 $config['path_product'] = 'uploads/products/';
 $config['file_name_product'] = 'product_'.time().'.png';
 
+$config['path_service'] = 'uploads/services/';
+$config['file_name_service'] = 'service_'.time().'.png';
+
+$config['path_pet'] = 'uploads/pets/';
+$config['file_name_pet'] = 'pet_'.time().'.png';
+
 $config['file_size'] = 1048576;
 $config['img_width'] = 960;
 $config['img_height'] = 540;
