@@ -69,6 +69,7 @@
                                 <th class="no-sort">Updated User</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th class="no-sort">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,6 +102,7 @@
                                     <td><?= $p->pet_updated_user; ?></td>
                                     <td class="text-nowrap"><?= $p->pet_created_at; ?></td>
                                     <td class="text-nowrap"><?= $p->pet_updated_at; ?></td>
+                                    <td><?= $p->pet_stat; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

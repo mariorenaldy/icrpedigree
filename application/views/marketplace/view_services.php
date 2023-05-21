@@ -69,7 +69,7 @@
                                 <th class="no-sort">Updated User</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
-                                <th>Status</th>
+                                <th class="no-sort">Status</th>
                             </tr>
                         </thead>
                         <tbody>

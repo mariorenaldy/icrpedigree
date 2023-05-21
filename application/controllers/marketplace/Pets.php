@@ -22,7 +22,8 @@ class Pets extends CI_Controller {
 		$this->pagination->initialize($config);
 
 		$data['start'] = $this->uri->segment(4);
-		$data['pets'] = $this->petModel->fetch_data($config['per_page'], $data['start'])->result();
+		$where['pet_stat'] = $this->config->item('accepted');
+		$data['pets'] = $this->petModel->fetch_data($where, $config['per_page'], $data['start'])->result();
 
         $this->load->view("marketplace/pets", $data);
 	}
@@ -49,15 +50,22 @@ class Pets extends CI_Controller {
 		$data['start'] = $this->uri->segment(4);
 
 		$like['pet_name'] = $keyword;
-		$data['pets'] = $this->petModel->search_pets($config['per_page'], $data['start'], $like)->result();
+		$where['pet_stat'] = $this->config->item('accepted');
+		$data['pets'] = $this->petModel->search_pets($where, $config['per_page'], $data['start'], $like)->result();
 
 		$this->load->view("marketplace/pets", $data);
     }
 	public function pet_detail(){
 		if ($this->uri->segment(4)){
 			$where['pet_id'] = $this->uri->segment(4);
+			$where['pet_stat'] = $this->config->item('accepted');
 			$data['pets'] = $this->petModel->get_pets($where)->row();
-			$this->load->view("marketplace/pet_detail", $data);
+			if($data['pets']){
+				$this->load->view("marketplace/pet_detail", $data);
+			}
+			else{
+				redirect('marketplace/pets');
+			}
         }
         else{
           	redirect('marketplace/pets');
@@ -66,8 +74,14 @@ class Pets extends CI_Controller {
 	public function pet_payment(){
 		if ($this->uri->segment(4)){
 			$where['pet_id'] = $this->uri->segment(4);
+			$where['pet_stat'] = $this->config->item('accepted');
 			$data['pets'] = $this->petModel->get_pets($where)->row();
-			$this->load->view("marketplace/pet_payment", $data);
+			if($data['pets']){
+				$this->load->view("marketplace/pet_payment", $data);
+			}
+			else{
+				redirect('marketplace/pets');
+			}
         }
         else{
           	redirect('marketplace/pet_detail');
@@ -77,7 +91,8 @@ class Pets extends CI_Controller {
 	//backend
 	public function listPets()
 	{
-		$data['pets'] = $this->petModel->get_pets()->result();
+		$where['pet_stat'] = $this->config->item('accepted');
+		$data['pets'] = $this->petModel->get_pets($where)->result();
 		$this->load->view("marketplace/view_pets", $data);
 	}
 	public function add()
@@ -124,6 +139,11 @@ class Pets extends CI_Controller {
 					}
 				}
 
+				if (!$err && $this->petModel->check_for_duplicate($this->input->post('pet_id'), 'pet_name', $this->input->post('pet_name'))){
+                    $err++;
+                    $this->session->set_flashdata('error_message', 'Pet name cannot be the same');
+                }
+
 				if (!$err) {
 					file_put_contents($img_name, $uploadedImg);
 					$photo = str_replace($this->config->item('path_pet'), '', $img_name);
@@ -136,7 +156,8 @@ class Pets extends CI_Controller {
 						'pet_desc' => $this->input->post('pet_desc'),
 						'pet_photo' => $photo,
 						'pet_created_user' => $this->session->userdata('use_id'),
-						'pet_created_at' => date('Y-m-d H:i:s')
+						'pet_created_at' => date('Y-m-d H:i:s'),
+						'pet_stat' => $this->config->item('accepted')
 					);
 
 					$dataLog = array(
@@ -146,7 +167,8 @@ class Pets extends CI_Controller {
 						'log_pet_desc' => $this->input->post('pet_desc'),
 						'log_pet_photo' => $photo,
 						'log_pet_created_user' => $this->session->userdata('use_id'),
-						'log_pet_created_at' => date('Y-m-d H:i:s')
+						'log_pet_created_at' => date('Y-m-d H:i:s'),
+						'log_stat' => $this->config->item('accepted')
 					);
 
 					if (!$err) {
@@ -180,5 +202,169 @@ class Pets extends CI_Controller {
 		} else {
 			redirect("backend/Users/login");
 		}
+	}
+	public function delete(){
+        if ($this->uri->segment(4)){
+            if ($this->session->userdata('use_username')){
+                $err = 0;
+                $where['pet_id'] = $this->uri->segment(4);
+                $data['pet_stat'] = $this->config->item('deleted');
+                $data['pet_updated_user'] = $this->session->userdata('use_id');
+                $data['pet_updated_at'] = date('Y-m-d H:i:s');
+
+                $dataLog = array(
+                    'log_pet_id' => $this->uri->segment(4),
+                    'log_stat' => $this->config->item('deleted'),
+                    'log_pet_updated_user' => $this->session->userdata('use_id'),
+                    'log_pet_updated_at' => date('Y-m-d H:i:s'),
+                );
+
+                $this->db->trans_strict(FALSE);
+                $this->db->trans_start();
+                $res = $this->petModel->update_pets($data, $where);
+                if ($res){
+                    $log = $this->logpetModel->add_log($dataLog);
+                    if ($log){
+                        $this->db->trans_complete();
+                        $this->session->set_flashdata('delete_success', TRUE);
+                        redirect("marketplace/Pets/listPets");
+                    }
+                    else{
+                        $err = 1;
+                    }
+                }
+                else{
+                    $err = 2;
+                }
+                if ($err){
+                    $this->db->trans_rollback();
+                    $this->session->set_flashdata('error_message', 'Failed to delete pet id = '.$this->uri->segment(4).'. Error code: '.$err);
+                    redirect('marketplace/Pets/listPets');
+                }
+            }
+            else{
+                redirect("backend/Users/login");
+            }
+        }
+        else{
+        	redirect("marketplace/Pets/listPets");
+        }
+    }
+	public function edit(){
+        if ($this->uri->segment(4)){
+            $where['pet_id'] = $this->uri->segment(4);
+            $data['pet'] = $this->petModel->get_pets($where)->row();
+			$data['mode'] = 0;
+            $this->load->view("marketplace/edit_pet", $data);
+        }
+        else{
+            redirect('marketplace/Pets/listPets');
+        }
+    }
+	public function validate_edit(){ 
+        if ($this->session->userdata('use_username')) {
+            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $this->form_validation->set_rules('pet_name', 'Name ', 'trim|required');
+            $this->form_validation->set_rules('pet_price', 'Price ', 'trim|required');
+
+            $where['pet_id'] = $this->input->post('pet_id');
+            $data['pet'] = $this->petModel->get_pets($where)->row();
+            $data['mode'] = 1;
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('marketplace/edit_pet', $data);
+            } else {
+                $err = 0;
+                $photo = '-';
+                if (!$err){
+                    if (isset($_POST['attachment']) && !empty($_POST['attachment'])){
+                        $uploadedImg = $_POST['attachment'];
+                        $image_array_1 = explode(";", $uploadedImg);
+                        $image_array_2 = explode(",", $image_array_1[1]);
+                        $uploadedImg = base64_decode($image_array_2[1]);
+            
+                        if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+                        }
+            
+                        $img_name = $this->config->item('path_pet').$this->config->item('file_name_pet');
+                        if (!is_dir($this->config->item('path_pet')) or !is_writable($this->config->item('path_pet'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Pet folder not found or not writable.');
+                        } else{
+                            if (is_file($img_name) and !is_writable($img_name)) {
+                                $err++;
+                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
+                        }
+                    }
+				}
+
+                if (!$err && $this->petModel->check_for_duplicate($this->input->post('pet_id'), 'pet_name', $this->input->post('pet_name'))){
+                    $err++;
+                    $this->session->set_flashdata('error_message', 'Pet name cannot be the same');
+                }
+
+                if (!$err) {
+                    if (isset($uploadedImg)){
+                        file_put_contents($img_name, $uploadedImg);
+                        $photo = str_replace($this->config->item('path_pet'), '', $img_name);
+                    }
+
+					$dataPet = array(
+						'pet_name' => $this->input->post('pet_name'),
+						'pet_price' => $this->input->post('pet_price'),
+						'pet_desc' => $this->input->post('pet_desc'),
+						'pet_updated_user' => $this->session->userdata('use_id'),
+						'pet_updated_at' => date('Y-m-d H:i:s')
+					);
+
+                    if ($photo != '-')
+                        $dataPet['pet_photo'] = $photo;
+
+					$dataLog = array(
+						'log_pet_id' => $this->input->post('pet_id'),
+						'log_pet_name' => $this->input->post('pet_name'),
+						'log_pet_price' => $this->input->post('pet_price'),
+						'log_pet_desc' => $this->input->post('pet_desc'),
+						'log_pet_photo' => $photo,
+						'log_pet_updated_user' => $this->session->userdata('use_id'),
+						'log_pet_updated_at' => date('Y-m-d H:i:s')
+					);
+
+                    if (!$err) {
+                        $this->db->trans_strict(FALSE);
+                        $this->db->trans_start();
+                        $pets = $this->petModel->update_pets($dataPet, $where);
+                        if ($pets) {
+                            $log = $this->logpetModel->add_log($dataLog);
+                            if ($log){
+                                $this->db->trans_complete();
+                                $this->session->set_flashdata('edit_success', true);
+                                redirect("marketplace/Pets/listPets");
+                            }
+                            else{
+                                $err = 1;
+                            }
+                        } else {
+                            $err = 2;
+                        }
+                        if ($err) {
+                            $this->db->trans_rollback();
+                            $this->session->set_flashdata('error_message', 'Failed to edit pet id = '.$this->input->post('pet_id').'. Error code: '.$err);
+                            $this->load->view('marketplace/edit_pet', $data);
+                        }
+                    } else {
+                        $this->load->view('marketplace/edit_pet', $data);
+                    }
+                } else {
+                    $this->load->view('marketplace/edit_pet', $data);
+                }
+            }
+        }
+        else{
+            redirect('backend/Users/login');
+        }
 	}
 }
