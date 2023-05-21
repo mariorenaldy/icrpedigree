@@ -67,8 +67,9 @@
                                 <th>Description</th>
                                 <th class="no-sort">Created User</th>
                                 <th class="no-sort">Updated User</th>
-                                <th class="no-sort">Created At</th>
-                                <th class="no-sort">Updated At</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,6 +102,7 @@
                                     <td><?= $s->ser_updated_user; ?></td>
                                     <td class="text-nowrap"><?= $s->ser_created_at; ?></td>
                                     <td class="text-nowrap"><?= $s->ser_updated_at; ?></td>
+                                    <td><?= $s->ser_stat; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -142,7 +144,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[18, 'desc']], dom: 'lpftrip',
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[4, 'desc']], dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

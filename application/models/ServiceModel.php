@@ -8,8 +8,11 @@ class ServiceModel extends CI_Model {
         return $this->db->count_all("services");
     }
 
-    public function fetch_data($num, $offset) {
+    public function fetch_data($where = null, $num, $offset) {
         $this->db->order_by('ser_id', 'desc');
+        if ($where != null) {
+            $this->db->where($where);
+        }
         $data = $this->db->get('services', $num, $offset);
         return $data;
     }
@@ -32,22 +35,30 @@ class ServiceModel extends CI_Model {
         return $result;
     }
 
-    public function update_services($data = null, $where = null){
-        $result = false;
-        if($data != null && $where != null){
-            $this->db->set($data);
-            $this->db->where($where);
-            $this->db->update('services');
-        }
-        return $result;
+    public function update_services($data, $where){
+        $this->db->set($data);
+        $this->db->where($where);
+        return $this->db->update('services');
     }
 
-    public function search_services($num, $offset, $like){
+    public function search_services($where, $num, $offset, $like){
         $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
         if ($like != null) {
             $this->db->like($like);
         }
         $this->db->order_by('ser_id', 'desc');
         return $this->db->get('services', $num, $offset);
+    }
+
+    public function check_for_duplicate($id, $field, $val){
+        $sql = "SELECT ser_id from services where ".$field." = '".$val."' AND ser_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').")";
+        if ($id){
+            $sql .= ' AND ser_id <> '.$id;
+        }
+        $query = $this->db->query($sql);
+        return count($query->result());
     }
 }

@@ -145,6 +145,11 @@ class Products extends CI_Controller
 					}
 				}
 
+				if (!$err && $this->productModel->check_for_duplicate($this->input->post('pro_id'), 'pro_name', $this->input->post('pro_name'))){
+                    $err++;
+                    $this->session->set_flashdata('error_message', 'Product name cannot be the same');
+                }
+
 				if (!$err) {
 					file_put_contents($img_name, $uploadedImg);
 					$photo = str_replace($this->config->item('path_product'), '', $img_name);

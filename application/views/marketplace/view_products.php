@@ -62,15 +62,15 @@
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
                                 <th class="no-sort">Photo</th>
-                                <th>Type</th>
+                                <th class="no-sort">Type</th>
                                 <th>Name</th>
                                 <th>Price</th>
-                                <th>Description</th>
+                                <th class="no-sort">Description</th>
                                 <th class="no-sort">Created User</th>
                                 <th class="no-sort">Updated User</th>
-                                <th class="no-sort">Created At</th>
-                                <th class="no-sort">Updated At</th>
-                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th class="no-sort">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -146,7 +146,7 @@
         }
 
         $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[18, 'desc']], dom: 'lpftrip',
+            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[5, 'desc']], dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"
