@@ -70,6 +70,7 @@
                                 <th class="no-sort">Updated User</th>
                                 <th class="no-sort">Created At</th>
                                 <th class="no-sort">Updated At</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,6 +104,7 @@
                                     <td><?= $p->pro_updated_user; ?></td>
                                     <td class="text-nowrap"><?= $p->pro_created_at; ?></td>
                                     <td class="text-nowrap"><?= $p->pro_updated_at; ?></td>
+                                    <td><?= $p->pro_stat; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
