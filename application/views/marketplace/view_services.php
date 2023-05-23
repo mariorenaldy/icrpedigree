@@ -38,7 +38,7 @@
                     ?>
                 </div>
                 <div class="search-container my-3 sticky-top">
-                    <form action="<?= base_url().'backend/Services/search'?>" method="post">
+                    <form action="<?= base_url().'marketplace/Services/search_list'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
                                 <input type="text" class="form-control" placeholder="Service Name" name="keywords" value="<?= set_value('keywords') ?>">
@@ -90,7 +90,7 @@
                                     </td>
                                     <td>
                                         <?php if ($s->ser_photo && $s->ser_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/services/'.$s->ser_photo) ?>" class="img-fluid img-thumbnail" alt="service" id="myImg<?= $s->ser_id ?>" onclick="display('myImg<?= $s->ser_id ?>')">
+                                            <img src="<?= base_url('uploads/services/'.$s->ser_photo) ?>" class="img-fluid img-thumbnail" alt="service" id="myImg<?= $s->ser_id ?>" onclick="display('myImg<?= $s->ser_id ?>')" style="max-height:100px;">
                                         <?php } else{ ?>
                                             <img src="<?= base_url().'assets/img/service.jpg' ?>" class="img-fluid img-thumbnail" alt="service" id="myImg<?= $s->ser_id ?>" onclick="display('myImg<?= $s->ser_id ?>')" style="max-height:100px;">
                                         <?php } ?>

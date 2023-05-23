@@ -41,7 +41,7 @@ class ServiceModel extends CI_Model {
         return $this->db->update('services');
     }
 
-    public function search_services($where, $num, $offset, $like){
+    public function search_services($where, $num = 0, $offset = 0, $like){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);

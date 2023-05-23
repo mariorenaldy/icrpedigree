@@ -157,6 +157,8 @@ class Services extends CI_Controller {
 						'ser_photo' => $photo,
 						'ser_created_user' => $this->session->userdata('use_id'),
 						'ser_created_at' => date('Y-m-d H:i:s'),
+						'ser_updated_user' => $this->session->userdata('use_id'),
+						'ser_updated_at' => date('Y-m-d H:i:s'),
 						'ser_stat' => $this->config->item('accepted')
 					);
 
@@ -168,6 +170,8 @@ class Services extends CI_Controller {
 						'log_service_photo' => $photo,
 						'log_service_created_user' => $this->session->userdata('use_id'),
 						'log_service_created_at' => date('Y-m-d H:i:s'),
+						'log_service_updated_user' => $this->session->userdata('use_id'),
+						'log_service_updated_at' => date('Y-m-d H:i:s'),
 						'log_stat' => $this->config->item('accepted')
 					);
 
@@ -330,7 +334,8 @@ class Services extends CI_Controller {
 						'log_service_desc' => $this->input->post('ser_desc'),
 						'log_service_photo' => $photo,
 						'log_service_updated_user' => $this->session->userdata('use_id'),
-						'log_service_updated_at' => date('Y-m-d H:i:s')
+						'log_service_updated_at' => date('Y-m-d H:i:s'),
+						'log_stat' => $this->config->item('accepted')
 					);
 
                     if (!$err) {
@@ -367,4 +372,38 @@ class Services extends CI_Controller {
             redirect('backend/Users/login');
         }
 	}
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_service_id'] = $this->uri->segment(4);
+            $data['service'] = $this->logserviceModel->get_logs($where)->result();
+            $this->load->view('marketplace/log_service', $data);
+        }
+        else{
+            redirect('marketplace/Services/listServices');
+        }
+    }
+	public function search_list(){
+        if ($this->input->post('keywords')){
+            $this->session->set_userdata('keywords', $this->input->post('keywords'));
+            $data['keywords'] = $this->input->post('keywords');
+        }
+        else{
+            if ($this->uri->segment(4)){
+                $data['keywords'] = $this->session->userdata('keywords');
+            }
+            else{
+                $this->session->set_userdata('keywords', '');
+                $data['keywords'] = '';
+            }
+        }
+
+        if ($data['keywords']){
+            $like['ser_name'] = $data['keywords'];
+        }
+        else
+            $like = null;
+        $where['ser_stat'] = $this->config->item('accepted');
+        $data['services'] = $this->serviceModel->search_services($where, 0, 0, $like)->result();
+        $this->load->view("marketplace/view_services", $data);
+    }
 }

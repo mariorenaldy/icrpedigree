@@ -91,7 +91,7 @@
                                     </td>
                                     <td>
                                         <?php if ($p->pro_photo && $p->pro_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/products/'.$p->pro_photo) ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $p->pro_id ?>" onclick="display('myImg<?= $p->pro_id ?>')">
+                                            <img src="<?= base_url('uploads/products/'.$p->pro_photo) ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $p->pro_id ?>" onclick="display('myImg<?= $p->pro_id ?>')" style="max-height:100px;">
                                         <?php } else{ ?>
                                             <img src="<?= base_url().'assets/img/product.jpg' ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $p->pro_id ?>" onclick="display('myImg<?= $p->pro_id ?>')" style="max-height:100px;">
                                         <?php } ?>

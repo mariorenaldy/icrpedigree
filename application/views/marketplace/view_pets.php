@@ -90,7 +90,7 @@
                                     </td>
                                     <td>
                                         <?php if ($p->pet_photo && $p->pet_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/pets/'.$p->pet_photo) ?>" class="img-fluid img-thumbnail" alt="pet" id="myImg<?= $p->pet_id ?>" onclick="display('myImg<?= $p->pet_id ?>')">
+                                            <img src="<?= base_url('uploads/pets/'.$p->pet_photo) ?>" class="img-fluid img-thumbnail" alt="pet" id="myImg<?= $p->pet_id ?>" onclick="display('myImg<?= $p->pet_id ?>')" style="max-height:100px;">
                                         <?php } else{ ?>
                                             <img src="<?= base_url().'assets/img/pet.jpg' ?>" class="img-fluid img-thumbnail" alt="pet" id="myImg<?= $p->pet_id ?>" onclick="display('myImg<?= $p->pet_id ?>')" style="max-height:100px;">
                                         <?php } ?>
