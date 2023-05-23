@@ -164,6 +164,8 @@ class Products extends CI_Controller
 						'pro_photo' => $photo,
 						'pro_created_user' => $this->session->userdata('use_id'),
 						'pro_created_at' => date('Y-m-d H:i:s'),
+						'pro_updated_user' => $this->session->userdata('use_id'),
+						'pro_updated_at' => date('Y-m-d H:i:s'),
 						'pro_stat' => $this->config->item('accepted')
 					);
 
@@ -176,6 +178,8 @@ class Products extends CI_Controller
 						'log_product_photo' => $photo,
 						'log_product_created_user' => $this->session->userdata('use_id'),
 						'log_product_created_at' => date('Y-m-d H:i:s'),
+						'log_product_updated_user' => $this->session->userdata('use_id'),
+						'log_product_updated_at' => date('Y-m-d H:i:s'),
 						'log_stat' => $this->config->item('accepted')
 					);
 
@@ -343,7 +347,8 @@ class Products extends CI_Controller
 						'log_product_desc' => $this->input->post('pro_desc'),
 						'log_product_photo' => $photo,
 						'log_product_updated_user' => $this->session->userdata('use_id'),
-						'log_product_updated_at' => date('Y-m-d H:i:s')
+						'log_product_updated_at' => date('Y-m-d H:i:s'),
+						'log_stat' => $this->config->item('accepted')
 					);
 
                     if (!$err) {
@@ -380,4 +385,38 @@ class Products extends CI_Controller
             redirect('backend/Users/login');
         }
 	}
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_product_id'] = $this->uri->segment(4);
+            $data['product'] = $this->logproductModel->get_logs($where)->result();
+            $this->load->view('marketplace/log_product', $data);
+        }
+        else{
+            redirect('marketplace/Products/listProducts');
+        }
+    }
+	public function search_list(){
+        if ($this->input->post('keywords')){
+            $this->session->set_userdata('keywords', $this->input->post('keywords'));
+            $data['keywords'] = $this->input->post('keywords');
+        }
+        else{
+            if ($this->uri->segment(4)){
+                $data['keywords'] = $this->session->userdata('keywords');
+            }
+            else{
+                $this->session->set_userdata('keywords', '');
+                $data['keywords'] = '';
+            }
+        }
+
+        if ($data['keywords']){
+            $like['pro_name'] = $data['keywords'];
+        }
+        else
+            $like = null;
+        $where['pro_stat'] = $this->config->item('accepted');
+        $data['products'] = $this->productModel->search_products($where, 0, 0, $like)->result();
+        $this->load->view("marketplace/view_products", $data);
+    }
 }

@@ -42,7 +42,7 @@ class ProductModel extends CI_Model {
         return $this->db->update('products');
     }
 
-    public function search_products($where, $num, $offset, $like){
+    public function search_products($where, $num = 0, $offset = 0, $like){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);
@@ -51,6 +51,7 @@ class ProductModel extends CI_Model {
             $this->db->like($like);
         }
         $this->db->order_by('pro_id', 'desc');
+        $this->db->join('products_type', 'products.pro_type_id = products_type.pro_type_id', 'left');
         return $this->db->get('products', $num, $offset);
     }
 
