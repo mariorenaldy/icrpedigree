@@ -42,7 +42,7 @@ class ProductModel extends CI_Model {
         return $this->db->update('products');
     }
 
-    public function search_products($where, $num = 0, $offset = 0, $like){
+    public function search_products($where, $num, $offset, $like){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);

@@ -157,6 +157,8 @@ class Pets extends CI_Controller {
 						'pet_photo' => $photo,
 						'pet_created_user' => $this->session->userdata('use_id'),
 						'pet_created_at' => date('Y-m-d H:i:s'),
+						'pet_updated_user' => $this->session->userdata('use_id'),
+						'pet_updated_at' => date('Y-m-d H:i:s'),
 						'pet_stat' => $this->config->item('accepted')
 					);
 
@@ -168,6 +170,8 @@ class Pets extends CI_Controller {
 						'log_pet_photo' => $photo,
 						'log_pet_created_user' => $this->session->userdata('use_id'),
 						'log_pet_created_at' => date('Y-m-d H:i:s'),
+						'log_pet_updated_user' => $this->session->userdata('use_id'),
+						'log_pet_updated_at' => date('Y-m-d H:i:s'),
 						'log_stat' => $this->config->item('accepted')
 					);
 
@@ -330,7 +334,8 @@ class Pets extends CI_Controller {
 						'log_pet_desc' => $this->input->post('pet_desc'),
 						'log_pet_photo' => $photo,
 						'log_pet_updated_user' => $this->session->userdata('use_id'),
-						'log_pet_updated_at' => date('Y-m-d H:i:s')
+						'log_pet_updated_at' => date('Y-m-d H:i:s'),
+						'log_stat' => $this->config->item('accepted')
 					);
 
                     if (!$err) {
@@ -367,4 +372,38 @@ class Pets extends CI_Controller {
             redirect('backend/Users/login');
         }
 	}
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_pet_id'] = $this->uri->segment(4);
+            $data['pet'] = $this->logpetModel->get_logs($where)->result();
+            $this->load->view('marketplace/log_pet', $data);
+        }
+        else{
+            redirect('marketplace/Pets/listPets');
+        }
+    }
+	public function search_list(){
+        if ($this->input->post('keywords')){
+            $this->session->set_userdata('keywords', $this->input->post('keywords'));
+            $data['keywords'] = $this->input->post('keywords');
+        }
+        else{
+            if ($this->uri->segment(4)){
+                $data['keywords'] = $this->session->userdata('keywords');
+            }
+            else{
+                $this->session->set_userdata('keywords', '');
+                $data['keywords'] = '';
+            }
+        }
+
+        if ($data['keywords']){
+            $like['pet_name'] = $data['keywords'];
+        }
+        else
+            $like = null;
+        $where['pet_stat'] = $this->config->item('accepted');
+        $data['pets'] = $this->petModel->search_pets($where, 0, 0, $like)->result();
+        $this->load->view("marketplace/view_pets", $data);
+    }
 }

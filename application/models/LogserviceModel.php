@@ -16,7 +16,6 @@ class LogserviceModel extends CI_Model {
         return $this->db->get();
     }
 
-
     public function add_log($data){
         $insert = $this->db->insert('logs_service', $data);
         return $insert;

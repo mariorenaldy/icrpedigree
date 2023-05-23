@@ -38,7 +38,7 @@
                     ?>
                 </div>
                 <div class="search-container my-3 sticky-top">
-                    <form action="<?= base_url().'backend/Pets/search'?>" method="post">
+                    <form action="<?= base_url().'marketplace/Pets/search_list'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
                                 <input type="text" class="form-control" placeholder="Pet Name" name="keywords" value="<?= set_value('keywords') ?>">
