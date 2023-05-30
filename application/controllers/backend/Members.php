@@ -957,6 +957,9 @@ class Members extends CI_Controller {
 						'mem_date' => date('Y-m-d H:i:s'),
 						'mem_stat' => $this->config->item('rejected'),
 					);
+                    if ($this->uri->segment(5)){
+                        $data['mem_app_note'] = urldecode($this->uri->segment(5));
+                    }
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->MemberModel->update_members($data, $where);

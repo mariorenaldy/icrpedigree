@@ -13,7 +13,7 @@
       <br/><br/>
       <span class="label" id="main">
       <div class="container">
-          <div class="fs-5 text-center"><?= $canine->can_breed ?></div>
+          <div class="fs-4 text-center"><?= $canine->can_breed ?></div>
           <?php if ($canine->can_photo && $canine->can_photo != '-'){ ?>
             <figure class="text-center">
               <img src="<?= base_url().$this->config->item('path_canine').$canine->can_photo ?>" class="img-fluid canine" alt="canine">
@@ -24,17 +24,17 @@
           <?php if ($canine->can_icr_number && $canine->can_icr_number != '-') { 
             if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){
           ?>
-              <div id="can_a_s" class="text-center fs-4 red"><?= $canine->can_a_s ?></div>
+              <div id="can_a_s" class="text-center fs-3 red"><?= $canine->can_a_s ?></div>
           <?php } else { ?>
-              <div id="can_a_s" class="text-center fs-5 red"><?= $canine->can_a_s ?></div>
+              <div id="can_a_s" class="text-center fs-4 red"><?= $canine->can_a_s ?></div>
           <?php } 
           }
           else { 
             if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ 
           ?>
-              <div id="can_a_s" class="text-center fs-4 black"><?= $canine->can_a_s ?></div>
+              <div id="can_a_s" class="text-center fs-3 black"><?= $canine->can_a_s ?></div>
           <?php } else { ?>
-              <div id="can_a_s" class="text-center fs-5 black"><?= $canine->can_a_s ?></div>
+              <div id="can_a_s" class="text-center fs-4 black"><?= $canine->can_a_s ?></div>
           <?php } 
           } ?>
           <div class="row gx-0">
@@ -384,6 +384,7 @@
       <div>
         <p class="text-center position-absolute president">CEO of Indonesian Canine Registry</p>
         <p class="text-center position-absolute president-name">KRIS JOHAN</p>
+        <p class="text-end position-absolute print-date"><?= date('d-m-Y'); ?></p>
       </div>
     </div>
   </div>

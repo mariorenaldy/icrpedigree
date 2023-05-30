@@ -87,7 +87,12 @@ class Canines extends CI_Controller {
 				$data['keywords'] = $this->input->post('keywords');
 			}
 			else{
-				$data['keywords'] = $this->session->userdata('keywords');
+                if ($this->uri->segment(4))
+                    $data['keywords'] = $this->session->userdata('keywords');
+                else{
+                    $data['keywords'] = '';
+                    $this->session->set_userdata('keywords', '');
+                }
 			}
 			
 			$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
@@ -156,8 +161,8 @@ class Canines extends CI_Controller {
 			$data['dam'] = $this->caninesModel->get_canines($dam)->row();
 			
 			if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
-				$data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE')->result();
-				$data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE')->result();
+				$data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE', $data['canine']->can_date_of_birth2)->result();
+				$data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE', $data['canine']->can_date_of_birth2)->result();
 			}
 			else{
 				$data['male_siblings'] = [];

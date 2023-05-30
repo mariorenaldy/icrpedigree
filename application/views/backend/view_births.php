@@ -52,6 +52,7 @@
                                 <th>Male</th>
                                 <th>Female</th>
                                 <th>Date of Birth</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,11 +68,19 @@
                                             <?php } 
                                         } ?>
                                     </td>
-                                    <td>
-                                        <?php if ($stat[$i]){ ?>
-                                        <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
+                                    <td class="text-nowrap">
+                                        <?php if ($stat[$i]){ 
+                                            if ($stb_date[$i]){ ?>
+                                            <button type="button" class="btn btn-warning mb-1" onclick="addMoreStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
+                                            <?php echo '<br/>'.$stb_date[$i].'<br/>'; 
+                                        } else { ?>
+                                            <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
                                         <?php }
-                                            if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        }
+                                            if ($this->session->userdata('use_type_id') == $this->config->item('super')){ 
+                                                if ($stb_date[$i]){ ?>
+                                                    <button type="button" class="btn btn-primary mb-1" onclick="complete(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Complete Birth"><i class="fa fa-check"></i></button>
+                                            <?php } ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
                                     </td>
@@ -97,6 +106,9 @@
                                     </td>
                                     <td class="text-nowrap">
                                         <?= $b->bir_date_of_birth; ?>
+                                    </td>
+                                    <td>
+                                        <?= $b->stat_name.'<br/>'.$b->use_username.' (<span class="text-nowrap">'.$b->bir_app_date.'</span>)'; ?>
                                     </td>
                                 </tr>
                         <?php   
@@ -160,6 +172,11 @@
                                     <div class="col-12">Birth has been deleted</div>
                                 </div>
                             <?php } ?>
+                            <?php if ($this->session->flashdata('complete_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Birth has been completed</div>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
@@ -185,13 +202,22 @@
         function addStambum(birthId){
             window.location = "<?= base_url(); ?>backend/Stambums/add/"+birthId;
         }
+        function addMoreStambum(birthId){
+            window.location = "<?= base_url(); ?>backend/Stambums/add_more/"+birthId;
+        }
         function edit(id){
             window.location = "<?= base_url(); ?>backend/Births/edit/"+id;
         }
         function del(id){
-            var proceed = confirm("Delete birth?");
+            var proceed = window.prompt("Delete birth?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/delete/"+id;
+                window.location = "<?= base_url(); ?>backend/Births/delete/"+id+"/"+encodeURI(proceed);
+            }
+        }
+        function complete(id){
+            var proceed = confirm("Complete birth?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Births/complete/"+id;
             }
         }
         function log(id){
@@ -227,7 +253,7 @@
 
             <?php		
                 if ($this->session->flashdata('add_success') || $this->session->flashdata('edit_success') ||
-                    $this->session->flashdata('delete_success')){ ?>
+                    $this->session->flashdata('delete_success') || $this->session->flashdata('complete_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
 

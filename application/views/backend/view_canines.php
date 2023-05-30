@@ -34,8 +34,9 @@
                         <label class="col-md-1">Sort by: </label>
                         <div class="col-md-2">
                             <?php
-                                $pil['can_app_date2'] = 'Date';
+                                $pil['can_app_date2'] = 'Approved Date';
                                 $pil['can_date_of_birth2'] = 'Date of Birth';
+                                $pil['can_date'] = 'Edited Date';
                                 $pil['can_breed'] = 'Breed';
                                 $pil['can_gender'] = 'Gender';
                                 echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 
@@ -56,6 +57,7 @@
                 <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Canine"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="to_csv()" data-toggle="tooltip" data-placement="top" title="To csv">CSV</button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
@@ -96,18 +98,19 @@
                                     <td class="text-center">
                                         <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Detail"><i class="fa fa-file"></i></button>
                                         <button type="button" class="btn btn-secondary mb-1" onclick="note(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Note"><i class="fa fa-list"></i></button>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button>
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Canine Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
                                     </td>
+                                    <td class="text-center text-nowrap">
+                                        <button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button><br/>
+                                        <?php if ($c->can_last_print) echo $c->can_last_print; else echo '-'; ?>
+                                    </td>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
-                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
+                                            <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url().'assets/img/'.$this->config->item('canine_img') ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
+                                            <img src="<?= base_url().'assets/img/'.$this->config->item('canine_img') ?>" class="img-fluid img-thumbnail canine-img" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
                                         <?php } ?>
                                     </td>
                                     <td><?= $c->can_reg_number; ?></td>
@@ -211,9 +214,9 @@
             window.location = "<?= base_url(); ?>backend/Canines/edit_pedigree/"+id;
         }
         function del(id, nama){
-            var proceed = confirm("Delete "+nama+" ?");
+            var proceed = window.prompt("Delete "+nama+" ?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Canines/delete/"+id;
+                window.location = "<?= base_url(); ?>backend/Canines/delete/"+id+"/"+encodeURI(proceed);
             }
         }
         function print(id){
@@ -227,6 +230,9 @@
         }
         function note(id){
             window.location = "<?= base_url(); ?>backend/Caninenote/index/"+id;
+        }
+        function to_csv(){
+            window.location = "<?= base_url(); ?>backend/Canines/to_csv";
         }
 
         var modal = document.getElementById("myModal");

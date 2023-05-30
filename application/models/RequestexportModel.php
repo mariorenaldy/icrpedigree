@@ -25,11 +25,11 @@ class RequestexportModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
-        $this->db->group_start();
         if ($like != null) {
+            $this->db->group_start();
             $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->group_end();
         $this->db->join('members','members.mem_id = requests_export.req_member_id');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
         $this->db->join('users','users.use_id = requests_export.req_app_user');

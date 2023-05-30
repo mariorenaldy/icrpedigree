@@ -7,9 +7,9 @@ class Stambums extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
+        $this->load->model(array('stambumModel', 'caninesModel', 'memberModel', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-        $this->load->helper(array('url', 'notif'));
+        $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
 
@@ -87,7 +87,12 @@ class Stambums extends CI_Controller {
                 $data['keywords'] = $this->input->post('keywords');
 			}
 			else{
-				$data['keywords'] = $this->session->userdata('keywords');
+				if ($this->uri->segment(4))
+                    $data['keywords'] = $this->session->userdata('keywords');
+                else{
+                    $data['keywords'] = '';
+                    $this->session->set_userdata('keywords', '');
+                }
 			}
 
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
@@ -384,6 +389,7 @@ class Stambums extends CI_Controller {
 				}
 
 				if (!$err){
+                    $data['warning'] = Array();
 					$piece = explode("-", $data['birth']->bir_date_of_birth);
 					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -476,22 +482,12 @@ class Stambums extends CI_Controller {
 								$dataBirth['bir_stat'] = $this->config->item('completed');
 								$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
 								if ($bir){
-									$res = $this->notification_model->add(18, $result, $kennel->mem_id);
-									if ($res){
-										$this->db->trans_complete();
-										if ($kennel->mem_firebase_token){
-											$notif = $this->notificationtype_model->get_by_id(18);
-											firebase_notif($kennel->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
-										$this->session->set_flashdata('add_success', true);
-										redirect("frontend/Stambums");
-									}
-									else{
-										$err = 1;
-									} 
+                                    $this->db->trans_complete();
+                                    $this->session->set_flashdata('add_success', true);
+                                    redirect("frontend/Stambums");
 								}
 								else{
-									$err = 2;
+									$err = 1;
 								}
 							}
 							else{ // tambah anak lagi
@@ -501,7 +497,7 @@ class Stambums extends CI_Controller {
 							}			
 						}
 						else{
-							$err = 3;
+							$err = 2;
 						}
 						if ($err){
 							$this->db->trans_rollback();
@@ -543,18 +539,15 @@ class Stambums extends CI_Controller {
 						'stb_date' => date('Y-m-d H:i:s'),
 					);
 					$res = $this->stambumModel->update_stambum($dataStb, $whereStb);
-					if ($res){
-						redirect("frontend/Stambums");
-					}
-					else{
+					if (!$res){
 						if ($site_lang == 'indonesia') {
 							$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
 						}
 						else{
 							$this->session->set_flashdata('error_message', 'Failed to save puppy report.');
 						}
-						redirect("frontend/Stambums");
 					}
+                    redirect("frontend/Stambums");
 				}
 			}
 			else{

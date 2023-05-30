@@ -97,7 +97,7 @@
                         <input type="hidden" name="stb_bir_id" value="<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>"/>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Stambums'">Back</button>
+                            <button class="btn btn-danger" type="button" onclick="warning()">Back</button>
                         </div>
                     </form>
                 </div>
@@ -125,6 +125,27 @@
                     <div class="modal-footer">
                         <button type="button" id="crop" class="btn btn-primary">Crop</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12">Puppy has been saved</div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,6 +197,16 @@
             e.preventDefault();
             $('#formCanine').attr('action', "<?= base_url(); ?>backend/Stambums/validate_add").submit();
         });
+
+        function warning(){
+            var proceed = confirm("Simpan lapor anak?");
+            if (proceed){
+                window.location = '<?= base_url() ?>backend/Stambums/force_complete/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
+            }
+            else{  
+                window.location = '<?= base_url() ?>backend/Stambums/cancel_all/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
+            }
+        }
 
         const imageInput = document.querySelector("#imageInput");
         var resetImage = function() {
@@ -241,8 +272,28 @@
                 resetImage();
             });
 
+            <?php		
+                if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
+            <?php } ?>
+
+            <?php if (isset($warning)){ ?>
+                var proceed = confirm("<?php 
+                    foreach ($warning AS $r){
+                        echo $r.'\n';
+                    }
+                    echo 'Proceed?';
+                ?>");
+                if (proceed){
+                    $('#mode').val(1);
+                }
+                else{
+                    window.location = '<?= base_url() ?>backend/Stambums/cancel_all/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
+                }
             <?php } ?>
         });
     </script>

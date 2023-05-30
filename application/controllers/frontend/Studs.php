@@ -95,7 +95,12 @@ class Studs extends CI_Controller {
                 $data['keywords'] = $this->input->post('keywords');
 			}
 			else{
-				$data['keywords'] = $this->session->userdata('keywords');
+				if ($this->uri->segment(4))
+                    $data['keywords'] = $this->session->userdata('keywords');
+                else{
+                    $data['keywords'] = '';
+                    $this->session->set_userdata('keywords', '');
+                }
 			}
 
             if ($this->input->post('date')){
@@ -103,7 +108,12 @@ class Studs extends CI_Controller {
 				$data['date'] = $this->input->post('date');
 			}
 			else{
-				$data['date'] = $this->session->userdata('date');
+                if ($this->uri->segment(4))
+                    $data['date'] = $this->session->userdata('date');
+                else{
+                    $data['date'] = '';
+                    $this->session->set_userdata('date', '');
+                }
 			}
 
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
@@ -639,7 +649,7 @@ class Studs extends CI_Controller {
 											$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'The dam cannot be the child of sire');
+											$this->session->set_flashdata('error_message', 'Dam cannot be the child of sire');
 										}
 									}
 
@@ -654,7 +664,7 @@ class Studs extends CI_Controller {
 												$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
 											}
 											else{
-												$this->session->set_flashdata('error_message', 'The sire cannot be the child of dam');
+												$this->session->set_flashdata('error_message', 'Sire cannot be the child of dam');
 											}
 										}
 									}
@@ -664,7 +674,7 @@ class Studs extends CI_Controller {
 										$wherePed['ped_canine_id'] = $this->input->post('stu_sire_id');
 										$ped = $this->pedigreesModel->get_pedigrees($wherePed)->row();
 										if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
-											$sibling = $this->studModel->check_siblings($this->input->post('stu_sire_id'), $ped->ped_sire_id, $ped->ped_dam_id)->result();
+											$sibling = $this->studModel->check_siblings($this->input->post('stu_sire_id'), $ped->ped_sire_id, $ped->ped_dam_id, $can->can_date_of_birth2)->result();
 											$cek = false;
 											foreach ($sibling AS $r){
 												if ($r->can_id == $this->input->post('stu_dam_id'))

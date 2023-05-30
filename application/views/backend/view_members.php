@@ -218,9 +218,9 @@
             window.location = "<?= base_url(); ?>backend/Members/edit/"+id;
         }
         function del(id, nama){
-            var proceed = confirm("Delete "+nama+" ?");
+            var proceed = window.prompt("Delete "+nama+" ?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Members/delete/"+id;
+                window.location = "<?= base_url(); ?>backend/Members/delete/"+id+"/"+encodeURI(proceed);
             }
         }
         function payment(id, nama){

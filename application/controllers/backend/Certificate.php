@@ -17,6 +17,7 @@ class Certificate extends CI_Controller{
             $where['can_id'] = $this->uri->segment(4);
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
             $data['rules'] = $this->settingModel->get_setting('set_rule')->row();
+            $where['note_stat'] = $this->config->item('accepted');
             $data['notes'] = $this->caninenotesModel->get_note($where)->result();
             if ($data['canine']) {
                 if ($this->uri->segment(5)){
@@ -116,6 +117,7 @@ class Certificate extends CI_Controller{
 
                 if ($this->uri->segment(5)){
                     $dataPrint['can_print'] = $data['canine']->can_print + 1;
+                    $dataPrint['can_last_print'] = date('Y-m-d H:i:s');
                     $res = $this->caninesModel->update_canines($dataPrint, $where);
                     if ($res){
                         $this->load->view('backend/certificateBack', $data);

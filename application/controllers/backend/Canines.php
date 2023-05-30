@@ -66,8 +66,8 @@ class Canines extends CI_Controller {
         $data['sort_by'] = 'can_app_date2';
         $data['sort_type'] = 'desc';
         $this->session->set_userdata('keywords', '');
-        $this->session->set_userdata('keywords', 'can_app_date2');
-        $this->session->set_userdata('keywords', 'desc');
+        $this->session->set_userdata('sort_by', 'can_app_date2');
+        $this->session->set_userdata('sort_type', 'desc');
         $this->load->view('backend/view_canines', $data);
     }
 
@@ -290,6 +290,141 @@ class Canines extends CI_Controller {
         $this->load->view('backend/approve_canines', $data);
     }
 
+    public function list(){
+        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+        $config['per_page'] = $this->config->item('canine_list');
+        $config['uri_segment'] = 4;
+        $config['use_page_numbers'] = TRUE;
+
+        //Encapsulate whole pagination 
+        $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+        $config['full_tag_close'] = '</ul>';
+
+        //First link of pagination
+        $config['first_link'] = 'Pertama';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+
+        //Customizing the “Digit” Link
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+
+        //For PREVIOUS PAGE Setup
+        $config['prev_link'] = '<';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+
+        //For NEXT PAGE Setup
+        $config['next_link'] = '>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+
+        //For LAST PAGE Setup
+        $config['last_link'] = 'Akhir';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        //For CURRENT page on which you are
+        $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+        $where['can_stat'] = $this->config->item('accepted');
+        $where['can_rip'] = $this->config->item('canine_alive');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
+        $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('canine_list'))->result();
+        
+        $config['base_url'] = base_url().'/backend/Canines/list';
+        $config['total_rows'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], 0)->num_rows();
+        $this->pagination->initialize($config);
+
+        $data['before'] = '';
+        $data['after'] = '';
+        $this->session->set_userdata('keywords', '');
+        $this->load->view('backend/list_canines', $data);
+    }
+
+    public function search_list(){
+        if ($this->input->post('before') && $this->input->post('after')){
+            $this->session->set_userdata('before', $this->input->post('before'));
+            $data['before'] = $this->input->post('before');
+            $this->session->set_userdata('after', $this->input->post('after'));
+            $data['after'] = $this->input->post('after');
+        }
+        else{
+            if ($this->uri->segment(4)){
+                $data['before'] = $this->session->userdata('before');
+                $data['after'] = $this->session->userdata('after');
+            }
+            else{
+                $this->session->set_userdata('before', '');
+                $this->session->set_userdata('after', '');
+                $data['before'] = '';
+                $data['after'] = '';
+            }
+        }
+
+        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+        $config['per_page'] = $this->config->item('canine_list');
+        $config['uri_segment'] = 4;
+        $config['use_page_numbers'] = TRUE;
+
+        //Encapsulate whole pagination 
+        $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+        $config['full_tag_close'] = '</ul>';
+
+        //First link of pagination
+        $config['first_link'] = 'Pertama';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+
+        //Customizing the “Digit” Link
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+
+        //For PREVIOUS PAGE Setup
+        $config['prev_link'] = '<';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+
+        //For NEXT PAGE Setup
+        $config['next_link'] = '>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+
+        //For LAST PAGE Setup
+        $config['last_link'] = 'Akhir';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        //For CURRENT page on which you are
+        $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+        if ($data['before'] && $data['after']){
+            $piece = explode("-", $data['after']);
+            $after = $piece[2]."-".$piece[1]."-".$piece[0];
+
+            $piece = explode("-", $data['before']);
+            $before = $piece[2]."-".$piece[1]."-".$piece[0];
+            
+            $where['can_date >= '] = $after;
+            $where['can_date <= '] = $before;
+        }
+        $where['can_stat'] = $this->config->item('accepted');
+        $where['can_rip'] = $this->config->item('canine_alive');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
+        $data['canine'] = $this->caninesModel->search_canines(null, $where, 'DATE_FORMAT(canines.can_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('canine_list'))->result();
+
+        $config['base_url'] = base_url().'/backend/Canines/search_list';
+        $config['total_rows'] = $this->caninesModel->search_canines(null, $where, 'DATE_FORMAT(canines.can_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], 0)->num_rows();
+        $this->pagination->initialize($config);
+        $this->load->view('backend/list_canines', $data);
+    }
+
     public function view_detail(){
         if ($this->uri->segment(4)){
             $where['can_id'] = $this->uri->segment(4);
@@ -302,8 +437,8 @@ class Canines extends CI_Controller {
             $data['dam'] = $this->caninesModel->get_canines($dam)->row();
             
             if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
-                $data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE')->result();
-                $data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE')->result();
+                $data['male_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'MALE', $data['canine']->can_date_of_birth2)->result();
+                $data['female_siblings'] = $this->caninesModel->get_siblings($this->uri->segment(4), $ped->ped_sire_id, $ped->ped_dam_id, 'FEMALE', $data['canine']->can_date_of_birth2)->result();
             }
             else{
                 $data['male_siblings'] = [];
@@ -1168,6 +1303,9 @@ public function validate_edit_pedigree(){
                 $data['can_stat'] = $this->config->item('rejected');
                 $data['can_user'] = $this->session->userdata('use_id');
                 $data['can_date'] = date('Y-m-d H:i:s');
+                if ($this->uri->segment(5)){
+                    $data['can_app_note'] = urldecode($this->uri->segment(5));
+                }
 
                 $dataLog = array(
                     'log_canine_id' => $this->uri->segment(4),
@@ -1229,5 +1367,28 @@ public function validate_edit_pedigree(){
         else{
             redirect('backend/Canines');
         }
+    }
+
+    public function to_csv(){
+        $where['can_stat'] = $this->config->item('accepted');
+        $where['kennels.ken_stat'] = $this->config->item('accepted');
+        $canine = $this->caninesModel->get_canines($where, 'can_icr_number, can_chip_number', 0, 0)->result();
+
+        $Arr = Array(); 
+        $Arr[] = array('Current Reg. Number','ICR Number','Chip Number','Name','Breed','Gender','Color','Date of Birth','Kennel','Owner','Note','Reg. Date','Status');
+        foreach ($canine as $row){
+            $Arr[] = array($row->can_reg_number, $row->can_icr_number, $row->can_chip_number, $row->can_a_s, $row->can_breed, $row->can_gender, $row->can_color, $row->can_date_of_birth, $row->ken_name, $row->mem_name, $row->can_note, $row->can_reg_date, $row->stat_name.'( '.$row->use_username.' / '.$row->can_app_date.' )');
+        }
+
+        header("Content-type: application/csv");
+        header('Content-Disposition: attachment; filename="canines_'.date('d-m-Y').'.csv"');
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $handle = fopen('php://output', 'w');
+        foreach ($Arr as $row) {
+            fputcsv($handle, $row);
+        }
+        fclose($handle);
     }
 }

@@ -13,13 +13,17 @@
                 <button type="button" data-bs-target="#adsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#adsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#adsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#adsCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
             </div>
             <div class="carousel-inner mb-5">
                 <div class="carousel-item active" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
+                    <a href="https://www.facebook.com/Indonesian-Canine-Registry-1793017194288491/"><img src="<?= base_url('assets/img/lombafotoicr.png') ?>" class="d-block m-auto img-fluid" alt="ICR Pedigree"></a>
+                </div>
+                <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
                     <img src="<?= base_url('assets/img/Pengumuman1.jpg') ?>" class="d-block m-auto img-fluid" alt="ICR Pedigree">
                 </div>
                 <div class="carousel-item" data-bs-interval="<?= $this->config->item('carousel_interval') ?>">
-                    <video id="carouselVideo" controls muted autoplay class="d-block m-auto">
+                    <video id="carouselVideo2" controls muted autoplay class="d-block m-auto">
                         <source src="<?= base_url('assets/video/OneEyedJack.mp4') ?>" type="video/mp4">
                         <?= lang("home_video_error"); ?>
                     </video>

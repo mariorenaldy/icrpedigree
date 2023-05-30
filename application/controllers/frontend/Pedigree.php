@@ -37,7 +37,12 @@ class Pedigree extends CI_Controller {
 				$data['keywords'] = $this->input->post('keywords');
 			}
 			else{
-				$data['keywords'] = $this->session->userdata('keywords');
+				if ($this->uri->segment(4))
+                    $data['keywords'] = $this->session->userdata('keywords');
+                else{
+                    $data['keywords'] = '';
+                    $this->session->set_userdata('keywords', '');
+                }
 			}
 
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
@@ -118,7 +123,12 @@ class Pedigree extends CI_Controller {
             $data['keywords'] = $this->input->post('keywords');
         }
         else{
-            $data['keywords'] = $this->session->userdata('keywords');
+            if ($this->uri->segment(4))
+                $data['keywords'] = $this->session->userdata('keywords');
+            else{
+                $data['keywords'] = '';
+                $this->session->set_userdata('keywords', '');
+            }
         }
 
         $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;

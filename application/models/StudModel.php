@@ -90,13 +90,15 @@ class StudModel extends CI_Model {
         return $query->result();
     }
 
-    public function check_siblings($canineId, $sireId, $damId){
+    public function check_siblings($canineId, $sireId, $damId, $dob = null){
         $this->db->select('can_id');
         $this->db->from('pedigrees');
         $this->db->join('canines','pedigrees.ped_canine_id = canines.can_id');
         $this->db->where('ped_sire_id', $sireId);
         $this->db->where('ped_dam_id', $damId);
         $this->db->where('ped_canine_id != ', $canineId);
+        if ($dob)
+            $this->db->where('can_date_of_birth', $dob);
         $this->db->order_by('can_id');
         return $this->db->get();
     }

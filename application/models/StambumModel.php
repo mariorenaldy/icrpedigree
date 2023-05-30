@@ -5,7 +5,7 @@ class StambumModel extends CI_Model {
     }
 
     public function get_stambum($where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
+        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date, DATE_FORMAT(stambums.stb_date, "%d-%m-%Y") as stb_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -21,7 +21,7 @@ class StambumModel extends CI_Model {
     }
 
     public function search_stambum($like, $where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date');
+        $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date, DATE_FORMAT(stambums.stb_date, "%d-%m-%Y") as stb_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -59,43 +59,4 @@ class StambumModel extends CI_Model {
         $this->db->where($where);
         return $this->db->update('stambums');
     }
-
-    // public function search_by_member_app($q, $can_member, $offset){ 
-    //     $date = '';
-    //     $sql = "SELECT * FROM stambum c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
-    //     if ($can_member)
-    //         $sql .= " AND m.mem_id = ".$can_member;
-    //     if ($q){
-    //         $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3)
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //     }
-    //     if ($date)
-    //         $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
-    //     if ($q)
-    //         $sql .= ")";
-    //     $sql .= " ORDER BY can_a_s LIMIT ".$offset.", ".$this->config->item('canine_count');
-    //     $query = $this->db->query($sql);
-    //     return $query->result();
-    // }
-
-    // function search_count_by_member_app($q, $can_member){
-    //     $date = '';
-	// 	$sql = "SELECT COUNT(*) AS count FROM stambum c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
-	// 	if ($can_member)
-    //         $sql .= " AND m.mem_id = ".$can_member;
-    //     if ($q){
-    //         $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3)
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //     }
-    //     if ($date)
-    //         $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
-    //     if ($q)
-    //         $sql .= ")";
-    //     $query = $this->db->query($sql);
-    //     return $query->result();  
-	// }
 }

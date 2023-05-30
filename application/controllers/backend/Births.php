@@ -56,19 +56,24 @@ class Births extends CI_Controller {
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
 			$where['bir_stat'] = $this->config->item('accepted');
-			$where['kennels.ken_stat'] = $this->config->item('accepted');
+            $where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
+            $data['stb_date'] = array();
 			$data['stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
 				$whereStambum['stb_stat != '] = $this->config->item('rejected');
-                $stb = $this->stambumModel->get_stambum($whereStambum)->num_rows();
-				$data['stambum'][] = $stb;
+                $stb = $this->stambumModel->get_stambum($whereStambum);
+				$data['stambum'][] = $stb->num_rows();
+                if ($stb->num_rows())
+                    $data['stb_date'][] = $stb->row()->stb_date;
+                else
+                    $data['stb_date'][] = '';
 
-                if ($stb < ($r->bir_male + $r->bir_female)){
+                if ($stb->num_rows() < ($r->bir_male + $r->bir_female)){
                     $piece = explode("-", $r->bir_date_of_birth);
                     $dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -181,7 +186,7 @@ class Births extends CI_Controller {
 				$where['bir_date_of_birth'] = $date;
 			}
 			$where['bir_stat'] = $this->config->item('accepted');
-			$where['kennels.ken_stat'] = $this->config->item('accepted');
+            $where['kennels.ken_stat'] = $this->config->item('accepted');
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $this->input->post('keywords');
                 $like['can_dam.can_a_s'] = $this->input->post('keywords');
@@ -191,15 +196,20 @@ class Births extends CI_Controller {
 			$data['birth'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
 
 			$data['stambum'] = array();
+            $data['stb_date'] = array();
 			$data['stat'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
 				$whereStambum['stb_stat != '] = $this->config->item('rejected');
-				$stb = $this->stambumModel->get_stambum($whereStambum)->num_rows();
-				$data['stambum'][] = $stb;
+				$stb = $this->stambumModel->get_stambum($whereStambum);
+				$data['stambum'][] = $stb->num_rows();
+                if ($stb->num_rows())
+                    $data['stb_date'][] = $stb->row()->stb_date;
+                else
+                    $data['stb_date'][] = '';
 
-                if ($stb < ($r->bir_male + $r->bir_female)){
+                if ($stb->num_rows() < ($r->bir_male + $r->bir_female)){
                     $piece = explode("-", $r->bir_date_of_birth);
                     $dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -261,6 +271,158 @@ class Births extends CI_Controller {
 			$like['can_dam.can_a_s'] = $this->input->post('keywords');
 			$data['birth'] = $this->birthModel->search_births($like, $where)->result();
 			$this->load->view('backend/approve_births', $data);
+		}
+
+        public function all(){
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_birth_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+			$where['bir_stat != '] = $this->config->item('rejected');
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
+			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
+
+            $config['base_url'] = base_url().'/backend/Births/all';
+            $config['total_rows'] = $this->birthModel->get_births($where, $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
+
+            $data['keywords'] = '';
+            $data['date'] = '';
+            $data['type'] = $this->config->item('all');
+            $this->session->set_userdata('keywords', '');
+            $this->session->set_userdata('date', '');
+            $this->session->set_userdata('type', $this->config->item('all'));
+			$this->load->view('backend/view_all_birth', $data);
+		}
+
+		public function search_all(){
+            if ($this->input->post('type')){
+                $this->session->set_userdata('type', $this->input->post('type'));
+                $data['type'] = $this->input->post('type');
+            }
+            else{
+                if ($this->uri->segment(4)){
+                    $data['type'] = $this->session->userdata('type');
+                }
+            }
+            if ($this->input->post('keywords') || $this->input->post('date')){
+                $this->session->set_userdata('keywords', $this->input->post('keywords'));
+                $this->session->set_userdata('date', $this->input->post('date'));
+                $data['keywords'] = $this->input->post('keywords');
+                $data['date'] = $this->input->post('date');
+            }
+            else{
+                if ($this->uri->segment(4)){
+                    $data['keywords'] = $this->session->userdata('keywords');
+                    $data['date'] = $this->session->userdata('date');
+                }
+                else{
+                    $this->session->set_userdata('keywords', '');
+                    $this->session->set_userdata('date', '');
+                    $data['keywords'] = '';
+                    $data['date'] = '';
+                }
+            }
+
+            $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+            $config['per_page'] = $this->config->item('backend_birth_count');
+            $config['uri_segment'] = 4;
+            $config['use_page_numbers'] = TRUE;
+
+            //Encapsulate whole pagination 
+            $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+            $config['full_tag_close'] = '</ul>';
+
+            //First link of pagination
+            $config['first_link'] = 'Pertama';
+            $config['first_tag_open'] = '<li>';
+            $config['first_tag_close'] = '</li>';
+
+            //Customizing the “Digit” Link
+            $config['num_tag_open'] = '<li>';
+            $config['num_tag_close'] = '</li>';
+
+            //For PREVIOUS PAGE Setup
+            $config['prev_link'] = '<';
+            $config['prev_tag_open'] = '<li>';
+            $config['prev_tag_close'] = '</li>';
+
+            //For NEXT PAGE Setup
+            $config['next_link'] = '>';
+            $config['next_tag_open'] = '<li>';
+            $config['next_tag_close'] = '</li>';
+
+            //For LAST PAGE Setup
+            $config['last_link'] = 'Akhir';
+            $config['last_tag_open'] = '<li>';
+            $config['last_tag_close'] = '</li>';
+
+            //For CURRENT page on which you are
+            $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            $config['attributes'] = array('class' => 'page-link bg-light text-primary');
+
+			$date = '';
+			$piece = explode("-", $data['date']);
+			if (count($piece) == 3){
+				$date = $piece[2]."-".$piece[1]."-".$piece[0];
+			}
+			if ($date){
+				$where['bir_date_of_birth'] = $date;
+			}
+			if ($data['type'] == $this->config->item('all'))
+                $where['bir_stat != '] = $this->config->item('rejected');
+            else
+                $where['bir_stat'] = $data['type'];
+			$where['kennels.ken_stat'] = $this->config->item('accepted');
+            if ($data['keywords']){
+                $like['can_sire.can_a_s'] = $this->input->post('keywords');
+                $like['can_dam.can_a_s'] = $this->input->post('keywords');
+            }
+            else
+                $like = null;
+			$data['birth'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
+
+            $config['base_url'] = base_url().'/backend/Births/search_all';
+            $config['total_rows'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], 0)->num_rows();
+            $this->pagination->initialize($config);
+			$this->load->view('backend/view_all_birth', $data);
 		}
 
 		public function add(){ 
@@ -387,20 +549,20 @@ class Births extends CI_Controller {
 							$ts_stud = new DateTime($studDate);
 							if ($ts_stud > $ts){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
 							}
 							else{
 								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
 								if ($diff < 1){
 									$err++;
-									$this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
 								}
 
 								if (!$err){
 									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
 									if ($diff > 1){
 										$err++;
-										$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
 									}
 								}
 							}
@@ -645,20 +807,20 @@ class Births extends CI_Controller {
 							$ts_stud = new DateTime($studDate);
 							if ($ts_stud > $ts){
 								$err++;
-								$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
 							}
 							else{
 								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
 								if ($diff < 1){
 									$err++;
-									$this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
 								}
 
 								if (!$err){
 									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
 									if ($diff > 1){
 										$err++;
-										$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
 									}
 								}
 							}
@@ -966,6 +1128,9 @@ class Births extends CI_Controller {
 					$data['bir_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
+                    if ($this->uri->segment(5)){
+                        $data['bir_app_note'] = urldecode($this->uri->segment(5));
+                    }
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->birthModel->update_births($data, $where);
@@ -994,7 +1159,7 @@ class Births extends CI_Controller {
                                 $log = $this->logstudModel->add_log($dataLogStud);
                                 if ($log){
                                     $this->db->trans_complete();
-                                    $this->session->set_flashdata('delete', TRUE);
+                                    $this->session->set_flashdata('delete_success', TRUE);
                                     redirect('backend/Births');
                                 }
                                 else{
@@ -1019,6 +1184,52 @@ class Births extends CI_Controller {
 					}
 				}
 				else{
+					redirect('backend/Users/login');
+				}
+			}
+			else{
+				redirect('backend/Births');
+			}
+		}
+
+        public function complete(){
+			if ($this->uri->segment(4)){
+                if ($this->session->userdata('use_id')){
+                    $err = 0;
+                    $where['bir_id'] = $this->uri->segment(4);
+                    $data['bir_user'] = $this->session->userdata('use_id');
+                    $data['bir_date'] = date('Y-m-d H:i:s');
+                    $data['bir_stat'] = $this->config->item('completed');
+                    $this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$res = $this->birthModel->update_births($data, $where);
+					if ($res){
+						$dataLog = array(
+							'log_bir_id' => $this->uri->segment(4),
+							'log_user' => $this->session->userdata('use_id'),
+							'log_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('completed'),
+						);
+						$log = $this->logbirthModel->add_log($dataLog);
+						if ($log){
+                            $this->db->trans_complete();
+                            $this->session->set_flashdata('complete_success', TRUE);
+                            redirect('backend/Births');
+                        }
+                        else{
+                            $err = 1;
+                        }
+                    }
+                    else{
+                        $err = 2;
+                    }
+                    if ($err){
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to complete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						redirect('backend/Births');
+					}
+                }
+                else{
 					redirect('backend/Users/login');
 				}
 			}

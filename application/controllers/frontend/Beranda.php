@@ -9,6 +9,7 @@ class Beranda extends CI_Controller {
         $this->load->model(array('caninesModel'));
 		$this->load->library(array('session'));
         $this->load->helper(array('url', 'cookie'));
+        $this->load->database();
 		
         if ($this->input->cookie('site_lang')) {
             $this->lang->load('common', $this->input->cookie('site_lang'));

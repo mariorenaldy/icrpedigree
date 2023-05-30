@@ -186,7 +186,7 @@ class Stambums extends CI_Controller {
 					$whereStb['stb_bir_id'] = $this->uri->segment(4);
 					$whereStb['stb_stat != '] = $this->config->item('rejected');
 					$stb = $this->stambumModel->get_stambum($whereStb)->num_rows();
-					if ($stb < ($data['birth']->bir_male + $data['birth']->bir_female)){
+					if (!$stb){
 						$err = 0;
 						$piece = explode("-", $data['birth']->bir_date_of_birth);
 						$dob = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -228,7 +228,12 @@ class Stambums extends CI_Controller {
 						}
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Puppy is full');
+						if ($stb->stb_stat == $this->config->item('saved')){
+							$this->session->set_flashdata('error_message', 'The puppy report is already registered and has not been processed');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'The puppy report is already registered');
+						}
 						redirect('backend/Births');
 					}
 				}
@@ -242,7 +247,32 @@ class Stambums extends CI_Controller {
             }
         }
         else{
-          redirect("backend/Births");
+            redirect("backend/Births");
+        }
+    }
+
+    public function add_more(){
+        if ($this->uri->segment(4)){  
+			if ($this->session->userdata('use_id')){
+				$wheBirth['bir_id'] = $this->uri->segment(4);
+				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+                $wheStud['stu_id'] = $data['birth']->bir_stu_id;
+                $data['stud'] = $this->studModel->get_studs($wheStud)->row();
+                $wheMember['mem_id IN ('.$data['stud']->stu_member_id.', '.$data['stud']->stu_partner_id.')'] = null;
+                $data['member'] = $this->memberModel->get_members($wheMember)->result();
+                $whe['ken_member_id'] =  $data['member'][0]->mem_id;
+                $whe['ken_stat'] = $this->config->item('accepted');
+                $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+                $data['kennel_id'] = $data['kennel'][0]->ken_id;
+				$data['mode'] = 0;
+				$this->load->view('backend/add_stambum', $data);
+			}
+			else{
+				redirect("backend/Users/login");
+			}
+        }
+        else{
+			redirect("backend/Births");
         }
     }
 
@@ -401,6 +431,32 @@ class Stambums extends CI_Controller {
                         $femaleFull = 1;
                     }
                 }
+
+                if (!$err && !$this->input->post('mode')){
+                    $data['warning'] = Array();
+					$piece = explode("-", $birth->bir_date_of_birth);
+					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+
+					$ts = new DateTime();
+					$ts_birth = new DateTime($dob);
+					if ($ts_birth > $ts){
+						$err++;
+						$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'; 
+					}
+					else{
+						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+						if ($diff < 1){
+							$err++;
+							$data['warning'][] = 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date';
+						}
+
+						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+						if ($diff > 1){
+							$err++;
+							$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date';
+						}
+					}
+				}
 
                 if (!$err) {
                     $wheStud['stu_id'] = $birth->bir_stu_id;
@@ -636,7 +692,10 @@ class Stambums extends CI_Controller {
                                                                     firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
                                                                 }
                                                                 $this->session->set_flashdata('add_success', true);
-                                                                redirect("backend/Stambums");
+                                                                if ($maleFull && $femaleFull)
+                                                                    redirect("backend/Stambums");
+                                                                else // tambah anak lg
+                                                                    redirect("backend/Stambums/add_more/".$this->input->post('stb_bir_id'));
                                                             }
                                                             else{
                                                                 $err = 2;
@@ -648,7 +707,10 @@ class Stambums extends CI_Controller {
                                                                 $this->db->trans_complete();
                                                                 $mail = send_greeting($this->input->post('email'));
                                                                 $this->session->set_flashdata('add_success', true);
-                                                                redirect("backend/Stambums");
+                                                                if ($maleFull && $femaleFull)
+                                                                    redirect("backend/Stambums");
+                                                                else // tambah anak lg
+                                                                    redirect("backend/Stambums/add_more/".$this->input->post('stb_bir_id'));
                                                             }
                                                             else{
                                                                 $err = 2;
@@ -696,6 +758,113 @@ class Stambums extends CI_Controller {
         } 
         else {
             redirect("backend/Users/login");
+        }
+    }
+
+    public function cancel_all(){
+        if ($this->uri->segment(4)){  
+			if ($this->session->userdata('use_id')){
+				$wheBirth['bir_id'] = $this->uri->segment(4);
+				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+
+				if ($data['birth']->bir_stat == $this->config->item('accepted')){ 
+					$whereStb['stb_bir_id'] = $this->uri->segment(4);
+					$dataStb = array(
+						'stb_stat' => $this->config->item('rejected'),
+						'stb_user' => 0,
+						'stb_date' => date('Y-m-d H:i:s'),
+					);
+
+                    $this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+                    $err = 0;
+					$res = $this->stambumModel->update_stambum($dataStb, $whereStb);
+					if ($res){
+                        $where['log_stb_id'] = $this->uri->segment(4);
+                        $data = array(
+                            'log_stat' => $this->config->item('rejected'),
+                            'log_user' => 0,
+                            'log_date' => date('Y-m-d H:i:s'),
+                        );
+                        $log = $this->logstambumModel->update_log($data, $where);
+                        if ($log){
+                            $stbs = $this->stambumModel->get_stambum($whereStb)->result();
+                            foreach ($stbs AS $stb){
+                                $whe = Array();
+                                $whe['can_id'] = $stb->stb_can_id;
+                                $dataCan = array(
+                                    'can_stat' => $this->config->item('rejected'),
+                                    'can_user' => 0,
+                                    'can_date' => date('Y-m-d H:i:s'),
+                                );
+                                $res = $this->caninesModel->update_canines($dataCan, $whe);
+                                if ($res){
+                                    $dataLog = array(
+                                        'log_canine_id' => $stb->stb_can_id,
+                                        'log_stat' => $this->config->item('rejected'),
+                                        'log_user' => 0,
+                                        'log_date' => date('Y-m-d H:i:s'),
+                                    );
+                                    $log = $this->logcanineModel->add_log($dataLog);
+                                    if (!$log){
+                                        $err = 1;
+                                    }
+                                }
+                                else{
+                                    $err = 2;
+                                }
+                            }
+                        }
+                        else{
+                            $err = 3;
+                        }
+                    }
+                    else{
+                        $err = 4;
+                    }
+                    if (!$err)
+                        $this->db->trans_complete();
+                    else{
+                        $this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to save puppy report. Err code: '.$err);
+					}
+                    redirect("backend/Stambums");
+				}
+			}
+			else{
+				redirect("backend/Users/login");
+			}
+        }
+        else{
+			redirect("backend/Stambums");
+        }
+    }
+
+    public function force_complete(){
+        if ($this->uri->segment(4)){  
+			if ($this->session->userdata('use_id')){
+				$wheBirth['bir_id'] = $this->uri->segment(4);
+				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+
+				if ($data['birth']->bir_stat == $this->config->item('accepted')){ 
+					$dataBirth = array(
+						'bir_stat' => $this->config->item('completed'),
+						'bir_user' => $this->config->item('system'),
+						'bir_date' => date('Y-m-d H:i:s'),
+					);
+					$res = $this->birthModel->update_births($dataBirth, $wheBirth);
+					if (!$res){
+                        $this->session->set_flashdata('error_message', 'Failed to save puppy report.');
+					}
+                    redirect("backend/Stambums");
+				}
+			}
+			else{
+				redirect("backend/Users/login");
+			}
+        }
+        else{
+			redirect("backend/Stambums");
         }
     }
 
@@ -945,30 +1114,33 @@ public function delete(){
             $where['stb_id'] = $this->uri->segment(4);
             $stb = $this->stambumModel->get_stambum($where)->row();
             $dataStb = array(
-            'stb_stat' => $this->config->item('rejected'),
-            'stb_user' => $this->session->userdata('use_id'),
-            'stb_date' => date('Y-m-d H:i:s'),
+                'stb_stat' => $this->config->item('rejected'),
+                'stb_user' => $this->session->userdata('use_id'),
+                'stb_date' => date('Y-m-d H:i:s'),
             );
+            if ($this->uri->segment(5)){
+                $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
+            }
 
             $data = array(
-            'log_stb_id' => $this->uri->segment(4),
-            'log_stat' => $this->config->item('rejected'),
-            'log_user' => $this->session->userdata('use_id'),
-            'log_date' => date('Y-m-d H:i:s'),
+                'log_stb_id' => $this->uri->segment(4),
+                'log_stat' => $this->config->item('rejected'),
+                'log_user' => $this->session->userdata('use_id'),
+                'log_date' => date('Y-m-d H:i:s'),
             );
 
             $whe['can_id'] = $stb->stb_can_id;
             $dataCan = array(
-            'can_stat' => $this->config->item('rejected'),
-            'can_user' => $this->session->userdata('use_id'),
-            'can_date' => date('Y-m-d H:i:s'),
+                'can_stat' => $this->config->item('rejected'),
+                'can_user' => $this->session->userdata('use_id'),
+                'can_date' => date('Y-m-d H:i:s'),
             );
 
             $dataLog = array(
-            'log_canine_id' => $stb->stb_can_id,
-            'log_stat' => $this->config->item('rejected'),
-            'log_user' => $this->session->userdata('use_id'),
-            'log_date' => date('Y-m-d H:i:s'),
+                'log_canine_id' => $stb->stb_can_id,
+                'log_stat' => $this->config->item('rejected'),
+                'log_user' => $this->session->userdata('use_id'),
+                'log_date' => date('Y-m-d H:i:s'),
             );
 
             $this->db->trans_strict(FALSE);

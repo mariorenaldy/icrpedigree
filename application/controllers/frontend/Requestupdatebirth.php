@@ -89,7 +89,12 @@ class Requestupdatebirth extends CI_Controller {
                     $data['keywords'] = $this->input->post('keywords');
                 }
                 else{
-                    $data['keywords'] = $this->session->userdata('keywords');
+                    if ($this->uri->segment(4))
+                        $data['keywords'] = $this->session->userdata('keywords');
+                    else{
+                        $data['keywords'] = '';
+                        $this->session->set_userdata('keywords', '');
+                    }
                 }
     
                 if ($this->input->post('date')){
@@ -97,7 +102,12 @@ class Requestupdatebirth extends CI_Controller {
                     $data['date'] = $this->input->post('date');
                 }
                 else{
-                    $data['date'] = $this->session->userdata('date');
+                    if ($this->uri->segment(4))
+                        $data['date'] = $this->session->userdata('date');
+                    else{
+                        $data['date'] = '';
+                        $this->session->set_userdata('date', '');
+                    }
                 }
 
                 $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;

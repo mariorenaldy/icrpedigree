@@ -22,4 +22,10 @@ class logstambumModel extends CI_Model {
         $insert = $this->db->insert('logs_stambum', $data);
         return $insert;
     }
+
+    public function update_log($data, $where){
+        $this->db->set($data);
+        $this->db->where($where);
+        return $this->db->update('logs_stambum');
+    }
 }

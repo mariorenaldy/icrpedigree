@@ -45,10 +45,11 @@
                             <tr>
                                 <th width="1%"></th>
                                 <th width="1%"></th>
-                                <th width="25%">Photo</th>
-                                <th width="25%">Sire</th>
-                                <th width="25%">Dam</th>
+                                <th width="20%">Photo</th>
+                                <th width="20%">Sire</th>
+                                <th width="20%">Dam</th>
                                 <th>Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +85,9 @@
                                 </td>
                                 <td class="text-nowrap">
                                     <?= $s->stu_stud_date; ?>
+                                </td>
+                                <td>
+                                    <?= $s->stat_name.'<br/>'.$s->use_username.' (<span class="text-nowrap">'.$s->stu_app_date.'</span>)' ?>
                                 </td>
                             </tr>
                         <?php
@@ -171,9 +175,9 @@
             window.location = "<?= base_url(); ?>backend/Studs/edit/"+id;
         }
         function del(id){
-            var proceed = confirm("Delete stud?");
+            var proceed = window.prompt("Delete stud?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Studs/delete/"+id;
+                window.location = "<?= base_url(); ?>backend/Studs/delete/"+id+"/"+encodeURI(proceed);
             }
         }
         function log(id){

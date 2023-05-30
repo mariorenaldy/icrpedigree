@@ -9,7 +9,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function get_canines($where, $sort = 'can_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, , DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, , DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2, DATE_FORMAT(canines.can_last_print, "%d-%m-%Y") as can_last_print, DATE_FORMAT(canines.can_date, "%d-%m-%Y") as can_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -24,7 +24,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function search_canines($like, $where, $sort = 'can_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2, DATE_FORMAT(canines.can_date, "%d-%m-%Y") as can_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -69,7 +69,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function get_can_pedigrees($where){
-        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date');
+        $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_last_print, "%d-%m-%Y") as can_last_print');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -118,7 +118,7 @@ class CaninesModel extends CI_Model {
         return count($query->result());
     }
 
-    public function get_siblings($canineId, $sireId, $damId, $gender){
+    public function get_siblings($canineId, $sireId, $damId, $gender, $dob = null){
         $this->db->select('can_a_s');
         $this->db->from('pedigrees');
         $this->db->join('canines','pedigrees.ped_canine_id = canines.can_id');
@@ -126,52 +126,18 @@ class CaninesModel extends CI_Model {
         $this->db->where('ped_dam_id', $damId);
         $this->db->where('ped_canine_id != ', $canineId);
         $this->db->where('can_gender', $gender);
+        if ($dob)
+            $this->db->where('can_date_of_birth', $dob);
         $this->db->order_by('can_id');
         return $this->db->get();
     }
 
-    // public function search_by_member_app($q, $can_member, $offset){ 
-    //     $date = '';
-    //     $sql = "SELECT * FROM canines c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
-    //     if ($can_member)
-    //         $sql .= " AND m.mem_id = ".$can_member;
-    //     if ($q){
-    //         $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3)
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //     }
-    //     if ($date)
-    //         $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
-    //     if ($q)
-    //         $sql .= ")";
-    //     $sql .= " ORDER BY can_a_s LIMIT ".$offset.", ".$this->config->item('canine_count');
-    //     $query = $this->db->query($sql);
-    //     return $query->result();
-    // }
-
-    // function search_count_by_member_app($q, $can_member){
-    //     $date = '';
-	// 	$sql = "SELECT COUNT(*) AS count FROM canines c, members m, kennels k, users u, approval_status a WHERE c.can_member_id = m.mem_id AND k.ken_member_id = m.mem_id AND k.ken_id = c.can_kennel_id AND c.can_stat = 1 AND u.use_id = c.can_app_user AND a.stat_id = c.can_app_stat";
-	// 	if ($can_member)
-    //         $sql .= " AND m.mem_id = ".$can_member;
-    //     if ($q){
-    //         $sql .= " AND (c.can_icr_number LIKE '%".$q."%' OR c.can_chip_number LIKE '%".$q."%' OR c.can_a_s LIKE '%".$q."%' OR k.ken_name LIKE '%".$q."%'";
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3)
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //     }
-    //     if ($date)
-    //         $sql .= " OR c.can_date_of_birth LIKE '%".$date."%'";
-    //     if ($q)
-    //         $sql .= ")";
-    //     $query = $this->db->query($sql);
-    //     return $query->result();  
-	// }
-
     public function get_random_canines($limit = 15){
         $this->db->order_by('id', 'RANDOM');
         $this->db->where('can_photo != ', '-');
+        $this->db->where('can_member_id != ', $this->config->item('no_member'));
+        $this->db->where('can_stat', $this->config->item('accepted'));
+        $this->db->where('can_rip', $this->config->item('canine_alive'));
         $this->db->limit($limit);
         $query = $this->db->get('canines');
         return $query->result_array();
