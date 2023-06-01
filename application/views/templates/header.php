@@ -20,9 +20,11 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Canines/can_list') ?>">Photo List</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Update Photo & RIP</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport') ?>">Approve Export Stambum</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport/manage') ?>">Manage Export Stambum</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -30,6 +32,7 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/') ?>">Manage</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Studs/all') ?>">Log</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -38,6 +41,7 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatebirth') ?>">Approve Update Birth</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Births/all') ?>">Log</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -47,14 +51,14 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/') ?>">Manage</a></li>
                         </ul>
                      </div>
-                     <!-- <div class="dropdown">
+                     <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Marketplace</span>
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Products/listProducts') ?>">Manage Products</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Services/listServices') ?>">Manage Services</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Pets/listPets') ?>">Manage Pets</a></li>
+                           <!-- <li><a class="dropdown-item" href="<?= base_url('marketplace/Services/listServices') ?>">Manage Services</a></li> -->
+                           <!-- <li><a class="dropdown-item" href="<?= base_url('marketplace/Pets/listPets') ?>">Manage Pets</a></li> -->
                         </ul>
-                     </div> -->
+                     </div>
                      <div class="dropdown">
                            <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               Config
