@@ -16,10 +16,12 @@ class Canines extends CI_Controller {
 		if ($this->input->cookie('site_lang')) {
             $this->lang->load('common', $this->input->cookie('site_lang'));
             $this->lang->load('canine', $this->input->cookie('site_lang'));
+			$this->lang->load('ownership', $this->input->cookie('site_lang'));
         } else {
             set_cookie('site_lang', 'indonesia', '2147483647'); 
             $this->lang->load('common','indonesia');
             $this->lang->load('canine','indonesia');
+			$this->lang->load('ownership', 'indonesia');
         }
     }
 
