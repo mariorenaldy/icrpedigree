@@ -191,7 +191,7 @@
                             <?php } ?>
                             <?php if ($this->session->flashdata('payment_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Kennel\'s payment has been saved</div>
+                                    <div class="col-12">Kennel's payment has been saved</div>
                                 </div>
                             <?php } ?>
                             <?php if ($this->session->flashdata('reset_password')){ ?>
