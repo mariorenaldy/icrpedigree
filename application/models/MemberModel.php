@@ -42,6 +42,26 @@ class MemberModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function search_other_members($excludeId, $like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->from('members');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        if ($like != null) {
+            $this->db->group_start();
+            $this->db->or_like($like);
+            $this->db->group_end();
+        }
+        $this->db->where('mem_id != ', $excludeId);
+        $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
+        $this->db->join('users','members.mem_app_user = users.use_id');
+        $this->db->order_by($sort);
+        if ($limit)
+            $this->db->limit($limit, $offset);
+        return $this->db->get();
+    }
+
     public function add_members($data){
         return $this->db->insert('members', $data);
     }
