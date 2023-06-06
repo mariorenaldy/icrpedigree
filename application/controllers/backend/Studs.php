@@ -927,7 +927,7 @@ class Studs extends CI_Controller {
                                             $desc .= ' and '.$can->can_a_s;
 
 											$dataNews = array(
-												'title' => 'Pacak / Bred'.$can->can_breed,
+												'title' => 'Pacak / Bred '.$can->can_breed,
 												'description' => $desc,
 												'date' => $date,
 												'type' => $this->config->item('stud'),

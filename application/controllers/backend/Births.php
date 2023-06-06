@@ -666,7 +666,7 @@ class Births extends CI_Controller {
 													$desc .= ' Contact '.$partner->mem_name.' ('.$partner->ken_name.') for more information';
 													
 													$dataNews = array(
-														'title' => 'Lahir / Birth'.$can->can_breed,
+														'title' => 'Lahir / Birth '.$can->can_breed,
 														'description' => $desc,
 														'date' => $date,
 														'type' => $this->config->item('birth'),
