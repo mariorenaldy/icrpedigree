@@ -20,7 +20,6 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Canines/can_list') ?>">Photo List</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Update Photo & RIP</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport') ?>">Approve Export Stambum</a></li>
@@ -55,8 +54,7 @@
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Marketplace</span>
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Products/listProducts') ?>">Manage Products</a></li>
-                           <!-- <li><a class="dropdown-item" href="<?= base_url('marketplace/Services/listServices') ?>">Manage Services</a></li> -->
-                           <!-- <li><a class="dropdown-item" href="<?= base_url('marketplace/Pets/listPets') ?>">Manage Pets</a></li> -->
+                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Orders/listOrders') ?>">Manage Orders</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -67,12 +65,10 @@
                                 <li><a class="dropdown-item" href="<?= base_url('backend/Breeds') ?>">Breeds</a></li>
                                 <li><a class="dropdown-item" href="<?= base_url('backend/News') ?>">News</a></li>
                                 <li><a class="dropdown-item" href="<?= base_url('backend/Notificationtype') ?>">Notification Type</a></li>
-                                <li><a class="dropdown-item" href="<?= base_url('backend/Rules') ?>">Rules</a></li>
-                                <li><a class="dropdown-item" href="<?= base_url('backend/Setting') ?>">Setting</a></li>
                                 <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
                            </ul>
                      </div>
-                     <div class="dropdown">
+                     <div class="dropdown me-5">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                            <img src="<?= $this->session->userdata('use_pp') ?>" class="img-fluid pp" alt="pp"> <?= $this->session->userdata('use_username') ?>
                         </span>
