@@ -24,7 +24,7 @@ $lang["mem_new_password"] = "Password Baru";
 $lang["mem_confirm_password"] = "Konfirmasi Password";
 $lang["mem_forgot_password"] = "Lupa Password";
 $lang["mem_reset_success"] = "Reset password berhasil";
-$lang["mem_contact_admin"] = "Hubungi admin untuk mendapatkan approval";
+$lang["mem_contact_admin"] = "Hubungi admin atau tunggu persetujuan";
 
 $lang["mem_edit_kennel"] = "Laporan Ubah Kennel";
 $lang["mem_edit_kennel_list"] = "List Laporan Ubah Kennel";

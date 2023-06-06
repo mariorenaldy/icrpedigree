@@ -20,7 +20,7 @@ $lang["can_dob"] = "Date of Birth";
 $lang["can_full_body"] = "Full Body Dog Photo";
 $lang["can_export_stambum"] = "Export Stambum";
 $lang["can_export_stambum_list"] = "Export Stambum List";
-$lang["can_export_stambum_success"] = "Export stambum has been saved. Contact admin for approval";
+$lang["can_export_stambum_success"] = "Export stambum has been saved. Contact admin or wait for approval";
 $lang["can_dog_photo"] = "Dog Photo";
 $lang["can_stambum_photo"] = "Stambum Photo";
 $lang["can_add_success"] = "Dog saved successfully";
@@ -31,7 +31,7 @@ $lang["can_puppy_list"] = "Puppy List";
 $lang["can_search_puppy"] = "Search Puppy";
 $lang["can_report_puppy"] = "Report Puppy";
 $lang["can_add_puppy_success"] = "Puppy has been saved";
-$lang["can_report_puppy_success"] = "Report puppy has been saved. Contact admin for approval";
+$lang["can_report_puppy_success"] = "Report puppy has been saved. Contact admin or wait for approval";
 
 $lang["can_report_change_photo_rip"] = "Report Change Photo & RIP";
 $lang["can_report_change_photo_rip_list"] = "Report Change Photo & RIP List";

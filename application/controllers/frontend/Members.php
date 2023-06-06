@@ -91,10 +91,10 @@ class Members extends CI_Controller {
 				if (!$err && $member->mem_stat == $this->config->item('saved')){
 					$err++;
                     if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi admin');
+						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi admin atau tunggu persetujuan');
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Your membership has not been approved. Please contact admin');
+						$this->session->set_flashdata('login_error', 'Your membership has not been approved. Please contact admin or wait for approval');
 					}
 				}
 				if (!$err && sha1($this->input->post('password')) != $member->mem_password){
@@ -309,10 +309,10 @@ class Members extends CI_Controller {
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar dan belum diproses. Harap menghubungi Admin atau tunggu persetujuan');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please contact Admin');
+							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please contact Admin or wait for approval');
 						}
 					}
 
@@ -478,20 +478,14 @@ class Members extends CI_Controller {
 					if ($id){
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
-							$res = $this->notification_model->add(17, $mem_id, $mem_id);
-							if ($res){
-								$this->db->trans_complete();
-								// if ($this->input->post('mem_type'))
-									$this->session->set_flashdata('pro', TRUE);
-								// else{
-								// 	$this->session->set_flashdata('free', TRUE);
-								// 	$this->session->set_flashdata('user', $this->input->post('email'));
-								// }
-								redirect("frontend/Members");
-							}
-							else{
-								$err = 1;
-							}
+							$this->db->trans_complete();
+							// if ($this->input->post('mem_type'))
+								$this->session->set_flashdata('pro', TRUE);
+							// else{
+							// 	$this->session->set_flashdata('free', TRUE);
+							// 	$this->session->set_flashdata('user', $this->input->post('email'));
+							// }
+							redirect("frontend/Members");
 						}
 						else{
 							$err = 2;
