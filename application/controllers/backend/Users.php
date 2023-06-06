@@ -226,7 +226,9 @@ class Users extends CI_Controller {
 		}
 
 		public function logout(){
-			$this->session->sess_destroy();
+			$this->session->unset_userdata('use_username');
+			$this->session->unset_userdata('use_id');
+			$this->session->unset_userdata('use_type_id');
 			redirect('backend/Users/login');
 		}
 

@@ -140,7 +140,12 @@ class Members extends CI_Controller {
 		}
 
 		public function logout(){
-			session_destroy();
+			$this->session->unset_userdata('username');
+			$this->session->unset_userdata('mem_id');
+			$this->session->unset_userdata('mem_name');
+			$this->session->unset_userdata('mem_type');
+			$this->session->unset_userdata('mem_pp');
+			$this->session->unset_userdata('notif_count');
 			redirect('frontend/Members');
 		}
 
@@ -424,7 +429,7 @@ class Members extends CI_Controller {
 							'mem_password' => sha1($this->input->post('password')),
 							'mem_stat' => $this->config->item('saved'),
 							'mem_type' => $this->config->item('pro_member'),
-							'mem_user' => 0,
+							'mem_user' => $this->config->item('system'),
 							'mem_date' => date('Y-m-d H:i:s'),
 						);
 						
@@ -441,7 +446,7 @@ class Members extends CI_Controller {
 							'ken_photo' => $logo,
 							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('saved'),
-							'ken_user' => 0,
+							'ken_user' => $this->config->item('system'),
 							'ken_date' => date('Y-m-d H:i:s'),
 						);
 					// }
