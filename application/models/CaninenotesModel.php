@@ -6,7 +6,8 @@ class CaninenotesModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->join('users', 'canine_notes.note_user = users.use_id');
-        $this->db->order_by('note_id');
+        // $this->db->order_by('note_id');
+        $this->db->order_by('note_date');
         return $this->db->get('canine_notes');
     }
 
