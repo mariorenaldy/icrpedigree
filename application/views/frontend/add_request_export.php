@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="input-group my-3 gap-3">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b><?= lang("can_export_stambum_photo"); ?></b></label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b><?= lang("can_stambum_photo"); ?></b></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewStb" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputStb" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stb')"/>
@@ -84,6 +84,7 @@
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto-stb" width="50%"/></div>
                         </div>
+                    </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= lang("common_no"); ?></button>
