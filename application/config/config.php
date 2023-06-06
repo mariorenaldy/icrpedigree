@@ -24,7 +24,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/icrpedigree/';
-// $config['base_url'] = 'http://dev.icrpedigree.com/';
 
 /*
 |--------------------------------------------------------------------------
@@ -524,18 +523,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-$config['email'] = Array(
-    'protocol' => 'smtp',
-    'smtp_host' => 'ssl://smtp.hostinger.com',
-    'smtp_port' => 465,
-    'smtp_user' => 'system@icrpedigree.com',
-    'smtp_pass' => 'NEW1cr202#',
-    'mailtype'  => 'html', 
-    'charset'   => 'iso-8859-1'
-);
-
-$config['forgot_password'] = 'app/Email/forgotpassword/';
-
 $config['path_member'] = 'uploads/members/';
 $config['file_name_member'] = 'member_'.time().'.png';
 
@@ -564,12 +551,6 @@ $config['file_name_export'] = 'stambum_'.time().'.png';
 
 $config['path_product'] = 'uploads/products/';
 $config['file_name_product'] = 'product_'.time().'.png';
-
-$config['path_service'] = 'uploads/services/';
-$config['file_name_service'] = 'service_'.time().'.png';
-
-$config['path_pet'] = 'uploads/pets/';
-$config['file_name_pet'] = 'pet_'.time().'.png';
 
 $config['file_size'] = 1048576;
 $config['img_width'] = 960;
