@@ -71,9 +71,15 @@ class Requestownershipcanine extends CI_Controller {
 								$member_new = $this->memberModel->get_members($whe_new)->row();
 								$result = $this->notification_model->add(3, $this->uri->segment(4), $req->req_old_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 								if ($result){
-									$this->db->trans_complete();
-									$this->session->set_flashdata('approve', TRUE);
-									redirect('backend/Requestownershipcanine');
+									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
+									if ($res){
+										$this->db->trans_complete();
+										$this->session->set_flashdata('approve', TRUE);
+										redirect('backend/Requestownershipcanine');
+									}
+									else{
+										$err = 1;
+									}
 								}
 								else{
 									$err = 2;
