@@ -47,7 +47,6 @@
                     <li>Nama indukan dan pejantan</li>
                     <li>Nama kennel</li>
                     <li>Nama owner</li>
-                    <li>Alamat owner</li>
                     <li>Batas waktu pengajuan registrasi anakan terhitung 100 hari dari tanggal pelaporan lahiran.</li>
                     <li>Apabila pengajuan registrasi melewati dari tanggal yang telah di tentukan (100 hari terhitung dari pelaporan lahiran) maka pada anakan tersebut  akan dianggap generasi pertama dan tidak akan memiliki silsilah keturunan  ( F1 ) , seluruh pengajuan di daftarkan melalui website ICRPedigree</li>
                 </ul>

@@ -20,6 +20,12 @@ class Rules extends CI_Controller {
 		}
 
 		public function index(){
-			$this->load->view('frontend/rules');
+			$site_lang = $this->input->cookie('site_lang');
+			if ($site_lang == 'indonesia') {
+				$this->load->view('frontend/rules');
+			}
+			else{
+				$this->load->view('frontend/rules_eng');
+			}
 		}
 }
