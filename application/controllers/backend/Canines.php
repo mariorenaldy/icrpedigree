@@ -798,8 +798,15 @@ class Canines extends CI_Controller {
                         'can_note' => $this->input->post('can_note'),
                     );
 
-                    if ($photo != '-')
+                    if ($photo != '-'){
                         $dataCan['can_photo'] = $photo;
+                    }
+                    else{
+                        if ($data['canine']->can_photo != '-'){
+                            $photo = $data['canine']->can_photo;
+                            $dataCan['can_photo'] = $data['canine']->can_photo;
+                        }
+                    }
                     
                     $dataLog = array(
                         'log_canine_id' => $this->input->post('can_id'),
