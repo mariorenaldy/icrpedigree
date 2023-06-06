@@ -32,9 +32,9 @@
       else { 
         if (strlen($canine->can_a_s) <= $this->config->item('can_name_length')){ 
       ?>
-          <div id="can_a_s" class="text-center fs-4 black"><?= $canine->can_a_s ?></div>
+          <div id="can_a_s" class="text-center fs-4 white"><?= $canine->can_a_s ?></div>
       <?php } else { ?>
-          <div id="can_a_s" class="text-center fs-5 black"><?= $canine->can_a_s ?></div>
+          <div id="can_a_s" class="text-center fs-5 white"><?= $canine->can_a_s ?></div>
       <?php } 
       } ?>
       <div class="row gx-0">
