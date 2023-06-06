@@ -87,6 +87,11 @@
                 <?= $this->pagination->create_links(); ?>
             </div>                           
         </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><i class="fa fa-arrow-left"></i></button>
+            </div>
+        </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -133,6 +138,9 @@
                     $('#message-modal').modal('show');
             <?php } ?>
         });
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
     </script>
 </body>
 </html>

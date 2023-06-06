@@ -65,6 +65,10 @@
         function detail(id){
             window.location = "<?= base_url(); ?>marketplace/Products/product_detail/"+id;
         }
+
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
     </script>
 </body>
 </html>

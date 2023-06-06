@@ -35,6 +35,12 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <div class="row my-3">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-info" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><?= lang('owner_report_list'); ?></button>
+                        <button type="button" class="btn btn-info" onclick="list_edit_canine()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><?= lang('can_report_change_photo_rip_list'); ?></button>
+                    </div>
+                </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-2"><b><?= lang("can_photo"); ?></b></div>
@@ -144,6 +150,12 @@
         function edit_canine(id){
             window.location = "<?= base_url(); ?>frontend/Requestupdatecanine/add/"+id;
         }
+        function list_edit_owner(){
+            window.location = "<?= base_url(); ?>frontend/Requestownershipcanine";
+        }
+        function list_edit_canine(){
+            window.location = "<?= base_url(); ?>frontend/Requestupdatecanine";
+        }
 
         var modal = document.getElementById("myModal");
         function display(id){
@@ -164,6 +176,10 @@
                     $('#message-modal').modal('show');
             <?php } ?>
         });
+        
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
     </script>
 </body>
 </html>

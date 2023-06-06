@@ -208,6 +208,10 @@
                 $('#error-modal').modal('show');
             <?php } ?>
         });
+
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
     </script>
     <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script> -->
 </body>
