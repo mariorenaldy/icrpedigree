@@ -30,24 +30,6 @@
                                 <input class="form-control" type="text" placeholder="<?= lang('can_name'); ?>" name="can_a_s" value="<?= set_value('can_a_s'); ?>" maxlength="30">
                             </div>
                         </div>
-                        <!-- <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-sm-2">No. Registrasi</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="No. Registrasi" name="can_reg_number" value="<?= set_value('can_reg_number'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-sm-2">No. ICR</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="No. ICR" name="can_icr_number" value="<?php echo set_value('can_icr_number'); ?>">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-sm-2">No. Microchip</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="No. Microchip" name="can_chip_number" value="<?php echo set_value('can_chip_number'); ?>">
-                            </div>
-                        </div> -->
                         <div class="input-group mb-3">
                             <label for="mem_hp" class="control-label col-sm-2"><?= lang("can_breed"); ?></label>
                             <div class="col-sm-10">
@@ -70,16 +52,9 @@
                                 ?>
                             </div>
                         </div>
-                        <!-- <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2">Warna</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Warna" name="can_color" value="<?= set_value('can_color'); ?>">
-                            </div>
-                        </div> -->
                         <div class="input-group mb-3">
                             <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("can_dob"); ?></label>
                             <div class="col-sm-10">
-                            <!--  -->
                                 <input class="form-control" type="text" placeholder="<?= lang('can_dob'); ?>" name="can_date_of_birth" id="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
