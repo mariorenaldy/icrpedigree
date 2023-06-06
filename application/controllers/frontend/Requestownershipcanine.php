@@ -181,7 +181,7 @@ class Requestownershipcanine extends CI_Controller {
 				$like['ken_name'] = $this->input->post('mem_name');
 				$where['mem_stat'] = $this->config->item('accepted');
 				$where['ken_stat'] = $this->config->item('accepted');
-				$data['member'] = $this->memberModel->search_members($like, $where)->result();
+				$data['member'] = $this->memberModel->search_other_members($this->session->userdata('mem_id'), $like, $where)->result();
 		
 				if ($data['member']){
 					$whe['ken_member_id'] =  $data['member'][0]->mem_id;
@@ -261,8 +261,8 @@ class Requestownershipcanine extends CI_Controller {
 						$this->form_validation->set_message('required', '%s wajib diisi');
 						$this->form_validation->set_rules('can_id', 'Id Anjing ', 'trim|required');
 						if ($this->input->post('reg_member')){
-							$this->form_validation->set_rules('can_member_id', 'Id Member ', 'trim|required');
-							$this->form_validation->set_rules('can_kennel_id', 'Id Kennel ', 'trim|required');
+							$this->form_validation->set_rules('can_member_id', 'Member ', 'trim|required');
+							$this->form_validation->set_rules('can_kennel_id', 'Kennel ', 'trim|required');
 						}
 						else{
 							$this->form_validation->set_rules('name', 'Nama member ', 'trim|required');
@@ -273,8 +273,8 @@ class Requestownershipcanine extends CI_Controller {
 					else{
 						$this->form_validation->set_rules('can_id', 'Dog id ', 'trim|required');
 						if ($this->input->post('reg_member')){
-							$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
-							$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
+							$this->form_validation->set_rules('can_member_id', 'Member ', 'trim|required');
+							$this->form_validation->set_rules('can_kennel_id', 'Kennel ', 'trim|required');
 						}
 						else{
 							$this->form_validation->set_rules('name', 'Member name ', 'trim|required');
@@ -374,26 +374,25 @@ class Requestownershipcanine extends CI_Controller {
 
 						$stb = '-';
 						$photo = '-';
+						if (!isset($_POST['attachment_canine']) || empty($_POST['attachment_canine'])) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Dog photo is required');
+							}
+						}
+						if (!isset($_POST['attachment_stb']) || empty($_POST['attachment_stb'])) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Stambum photo is required');
+							}
+						}
 						if (!$err){
-							if (!isset($_POST['attachment_canine']) || empty($_POST['attachment_canine'])) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'Dog photo is required');
-								}
-							}
-							if (!isset($_POST['attachment_stb']) || empty($_POST['attachment_stb'])) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'Stambum photo is required');
-								}
-							}
-
 							$uploadedStb = $_POST['attachment_stb'];
 							$image_array_1 = explode(";", $uploadedStb);
 							$image_array_2 = explode(",", $image_array_1[1]);
@@ -513,22 +512,22 @@ class Requestownershipcanine extends CI_Controller {
 						}
 						else{
 							$this->db->trans_rollback();
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik. Error code : '.$err);
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Failed to save ownership change report. Error code : '.$err);
-							}
+							// if ($site_lang == 'indonesia') {
+							// 	$this->session->set_flashdata('error_message', 'Gagal menyimpan laporan ubah pemilik. Error code : '.$err);
+							// }
+							// else{
+							// 	$this->session->set_flashdata('error_message', 'Failed to save ownership change report. Error code : '.$err);
+							// }
 							$this->load->view("frontend/add_request_ownership", $data);
 						}
 					}
 				}
 				else{
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin.');
+						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin atau tunggu persetujuan.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The previous ownership change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous ownership change report has not been processed. Please contact Admin or wait for approval.');
 					}
 					$this->load->view("frontend/add_request_ownership", $data);
 				}

@@ -608,9 +608,9 @@ class Studs extends CI_Controller {
 		public function validate_add(){
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
-				$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
-				$this->form_validation->set_rules('stu_sire_id', 'Sire id ', 'trim|required');
-				$this->form_validation->set_rules('stu_dam_id', 'Dam id ', 'trim|required');
+				$this->form_validation->set_rules('can_member_id', 'Member ', 'trim|required');
+				$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
+				$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
 				$this->form_validation->set_rules('stu_stud_date', 'Stud date ', 'trim|required');
 				
 				$likeMember['mem_name'] = $this->input->post('mem_name');
@@ -1212,9 +1212,9 @@ class Studs extends CI_Controller {
 			if ($this->session->userdata('use_username')){
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				$this->form_validation->set_rules('stu_id', 'Stud id ', 'trim|required');
-				$this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
-				$this->form_validation->set_rules('stu_sire_id', 'Sire id ', 'trim|required');
-				$this->form_validation->set_rules('stu_dam_id', 'Dam id ', 'trim|required');
+				$this->form_validation->set_rules('can_member_id', 'Member ', 'trim|required');
+				$this->form_validation->set_rules('stu_sire_id', 'Sire ', 'trim|required');
+				$this->form_validation->set_rules('stu_dam_id', 'Dam ', 'trim|required');
 				$this->form_validation->set_rules('stu_stud_date', 'Stud date ', 'trim|required');
 				
 				$where['stu_id'] = $this->input->post('stu_id');
