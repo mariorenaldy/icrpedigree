@@ -27,7 +27,13 @@
                         <div class="col-sm-12">Status: 
                             <?php echo $req->stat_name; 
                             if ($req->req_stat == $this->config->item('rejected')){
-                                echo '<br/>Alasan: ';
+                                $site_lang = $this->input->cookie('site_lang');
+                                if ($site_lang == 'indonesia') {
+                                    echo '<br/>Alasan: ';
+                                }
+                                else{
+                                    echo '<br/>Reason: ';
+                                }
                                 if ($req->req_app_note)
                                     echo $req->req_app_note;
                                 else

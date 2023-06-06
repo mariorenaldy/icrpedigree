@@ -61,7 +61,11 @@
                             <?php if ($r->req_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php if ($r->req_old_photo != '-'){ ?>
+                                    <img src="<?= base_url('uploads/canine/'.$r->req_old_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php } else{ ?>
+                                    <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php } ?>
                             <?php } ?>
                         </div>
                         <div class="col-sm-2">
@@ -76,7 +80,13 @@
                         <div class="col-sm-2">
                             <?php echo $r->stat_name; 
                             if ($r->req_stat == $this->config->item('rejected')){
-                                echo '<br/>Alasan: ';
+                                $site_lang = $this->input->cookie('site_lang');
+                                if ($site_lang == 'indonesia') {
+                                    echo '<br/>Alasan: ';
+                                }
+                                else{
+                                    echo '<br/>Reason: ';
+                                }
                                 if ($r->req_app_note)
                                     echo $r->req_app_note;
                                 else

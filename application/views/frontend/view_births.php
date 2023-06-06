@@ -71,7 +71,13 @@
                                 <div class="col-sm-2">
                                     <?php echo $b->stat_name; 
                                     if ($b->bir_stat == $this->config->item('rejected')){
-                                        echo '<br/>Alasan: ';
+                                        $site_lang = $this->input->cookie('site_lang');
+                                        if ($site_lang == 'indonesia') {
+                                            echo '<br/>Alasan: ';
+                                        }
+                                        else{
+                                            echo '<br/>Reason: ';
+                                        }
                                         if ($b->bir_app_note)
                                             echo $b->bir_app_note;
                                         else

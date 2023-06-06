@@ -72,7 +72,11 @@
                                         <?php if ($r->req_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newCan<?= $r->req_id ?>" onclick="display('newCan<?= $r->req_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="oldCan<?= $r->req_id ?>" onclick="display('oldCan<?= $r->req_id ?>')">
+                                            <?php if ($r->req_old_photo != '-'){ ?>
+                                                <img src="<?= base_url('uploads/canine/'.$r->req_old_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newCan<?= $r->req_id ?>" onclick="display('newCan<?= $r->req_id ?>')">
+                                            <?php } else{ ?>
+                                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newCan<?= $r->req_id ?>" onclick="display('newCan<?= $r->req_id ?>')">
+                                            <?php } ?>
                                         <?php } ?>
                                     </td>
                                     <td>

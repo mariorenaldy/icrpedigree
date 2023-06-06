@@ -63,7 +63,13 @@
                         <div class="col-sm-2">
                             <?php echo $s->stat_name; 
                             if ($s->stu_stat == $this->config->item('rejected')){
-                                echo '<br/>Alasan: ';
+                                $site_lang = $this->input->cookie('site_lang');
+                                if ($site_lang == 'indonesia') {
+                                    echo '<br/>Alasan: ';
+                                }
+                                else{
+                                    echo '<br/>Reason: ';
+                                }
                                 if ($s->stu_app_note)
                                     echo $s->stu_app_note;
                                 else
