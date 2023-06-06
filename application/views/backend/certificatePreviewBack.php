@@ -112,7 +112,7 @@
         </div>
       </span>
       <div class="branch lv1">
-        <div class="entry" style=""><span class="label">
+        <div class="entry"><span class="label">
           <?php if ($sire && $sire->can_icr_number && $sire->can_icr_number != '-') { ?>
             <p class="fs-7">Sire:</p>
             <?php if (strlen($sire->can_a_s) <= $this->config->item('can_name_length')) echo '<p class="fs-6 red">'; else echo '<p class="fs-7 red">'; echo $sire->can_a_s.'</p>'; ?>

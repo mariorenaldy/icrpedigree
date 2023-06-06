@@ -16,10 +16,21 @@
         <div class="icr-desc text-center">
           Sertifikat ini hanya diterbitkan oleh Indonesian Canine Registry.<br/>
           Harap membaca ketentuan dan peraturan yang ada di bagian belakang sertifikat.<br/>
-          Silsilah yang ada di dalam sertifikat ini dapat diakses secara online melalui website www.icrpedigree.com<br/>
+          Silsilah yang ada di dalam sertifikat ini dapat diakses secara online melalui website ICRPedigree<br/>
         </div>
       </div>
-      <div class="col md-4"><span class="desc"><?= $rules->set_rule; ?></span></div>
+      <div class="col md-4"><span class="desc">
+        <ul>
+          <li>Apabila Stambum hilang dapat melakukan pengajuan pembuatan stambum baru (duplikat)</li>
+          <li>Anggota ICR dapat mengajukan pergantian nama kennel</li>
+          <li>Anggota ICR dapat mengajukan pergantian nama, alamat kepemilikan serta update foto terbaru</li>
+          <li>Syarat, ketentuan serta biaya dapat di lihat melalui web ICRPedigree <br></li>
+        </ul><p><br></p><p>Catatan:</p>
+        <ul>
+          <li>Pihak ICR berhak melakukan pembatalan pengajuan apabila salah satu syarat dan ketentuan tidak dipenuhi</li>
+          <li>Syarat dan ketentuan dapat berubah sewaktu waktu dan akan di informasikan melalui website ICRPedigree<br></li>
+        </ul>
+      </span></div>
       <div class="col md-4">
         <div class="notes-title mb-3">NOTES:</div>
             <ol class="p-0">
