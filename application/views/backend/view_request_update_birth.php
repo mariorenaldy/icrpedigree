@@ -70,7 +70,11 @@
                                         <?php if ($r->req_dam_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/births/'.$r->req_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
                                         <?php } else{ ?>
-                                            <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                            <?php if ($r->req_old_dam_photo != '-'){ ?>
+                                                <img src="<?= base_url('uploads/births/'.$r->req_old_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                            <?php } else{ ?>
+                                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                            <?php } ?>
                                         <?php } ?><br/><?= $r->can_a_s; ?>
                                     </td>
                                     <td class="text-nowrap">
