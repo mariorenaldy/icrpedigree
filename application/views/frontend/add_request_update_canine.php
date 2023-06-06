@@ -46,7 +46,7 @@
                 </div>
                 <div class="text-center">
                     <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
-                    <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatecanine'"><?= lang("common_back"); ?></button>
+                    <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><?= lang("common_back"); ?></button>
                 </div>   
             </form>
         </div>

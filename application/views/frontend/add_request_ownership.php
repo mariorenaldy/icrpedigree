@@ -97,7 +97,7 @@
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>"/>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestownershipcanine'"><?= lang("common_back"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
