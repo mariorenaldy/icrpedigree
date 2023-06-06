@@ -91,11 +91,6 @@
                 window.location = "<?= base_url(); ?>backend/Requestreset/reject/"+id+"/"+encodeURI(proceed);
             }
         }
-        <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
-			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
-			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
-			window.open(wa, "_blank");
-	    <?php } ?>
     </script>
 </body>
 </html>

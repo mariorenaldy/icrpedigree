@@ -174,12 +174,6 @@
             modal.style.display = "none";
         }
 
-        <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
-			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
-			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
-			window.open(wa, "_blank");
-	    <?php } ?>
-
         $(document).ready(function () {
             $('#keywords').on("change", function(){
                 $('#formStud').attr('action', "<?= base_url(); ?>backend/Studs/search_approve").submit();

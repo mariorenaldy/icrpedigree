@@ -183,12 +183,6 @@
             modal.style.display = "none";
         }
 
-        <?php if ($this->session->flashdata('telp') && $this->session->flashdata('mesg')){ ?>
-			mesg = window.encodeURIComponent("<?= $this->session->flashdata('mesg') ?>");
-			wa = "https://wa.me/" + <?= $this->session->flashdata('telp') ?> + "?text=" + mesg;
-			window.open(wa, "_blank");
-	    <?php } ?>
-
         $(document).ready(function () {
             $('#keywords').on("change", function(){
                 $('#formBirth').attr('action', "<?= base_url(); ?>backend/Births/search_approve").submit();
