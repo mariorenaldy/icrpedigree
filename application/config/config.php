@@ -580,7 +580,7 @@ $config['default_img'] = 'avatar.jpg';
 $config['dam_id'] = 87;
 $config['sire_id'] = 86;
 
-$config['backend_breed'] = 2;
+$config['backend_breed'] = 1;
 $config['frontend_breed'] = 1;
 
 $config['deleted'] = 0;
