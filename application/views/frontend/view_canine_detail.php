@@ -155,7 +155,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><i class="fa fa-arrow-left"></i></button>
+                <button class="btn btn-primary" type="button" onclick="history.back()"><i class="fa fa-arrow-left"></i></button>
             </div>
         </div>
     </div>
