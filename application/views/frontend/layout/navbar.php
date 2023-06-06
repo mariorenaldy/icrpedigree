@@ -36,6 +36,7 @@
                     <ul class="dropdown-menu">
                         <?php if ($this->session->userdata('mem_type') == $this->config->item('pro_member')){ ?>
                             <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestmember/edit_profile"><?= lang("nav_report_kennel_change"); ?></a></li>
+                            <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestmember"><?= lang("nav_kennel_change_list"); ?></a></li>
                         <?php } else { ?>
                             <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestpro/become_pro"><?= lang("nav_become_pro"); ?></a></li>
                         <?php } ?>

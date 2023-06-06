@@ -17,6 +17,7 @@ $lang["nav_my_dogs"] = "Anjing Saya";
 $lang["nav_export_stambum"] = "Ekspor Stambum";
 
 $lang["nav_report_kennel_change"] = "Lapor Ubah Kennel";
+$lang["nav_kennel_change_list"] = "List Laporan Ubah Kennel";
 $lang["nav_become_pro"] = "Menjadi Pro";
 $lang["nav_profile"] = "Profil";
 $lang["nav_change_password"] = "Ubah Password";

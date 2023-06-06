@@ -17,6 +17,7 @@ $lang["nav_my_dogs"] = "My Dogs";
 $lang["nav_export_stambum"] = "Export Stambum";
 
 $lang["nav_report_kennel_change"] = "Report Update Kennel";
+$lang["nav_kennel_change_list"] = "Update Kennel List";
 $lang["nav_become_pro"] = "Become Pro";
 $lang["nav_profile"] = "Profile";
 $lang["nav_change_password"] = "Change Password";
