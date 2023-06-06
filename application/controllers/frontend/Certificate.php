@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Certificate extends CI_Controller{
     public function __construct(){
         parent::__construct();
-        $this->load->model(array('caninesModel', 'settingModel'));
+        $this->load->model(array('caninesModel'));
         $this->load->library(array('session'));
         $this->load->helper(array('url'));
         $this->load->database();
