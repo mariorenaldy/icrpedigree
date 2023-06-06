@@ -64,7 +64,11 @@
                             <?php if ($r->req_dam_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/births/'.$r->req_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
                             <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php if ($r->req_old_dam_photo != '-'){ ?>
+                                    <img src="<?= base_url('uploads/births/'.$r->req_old_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php } else{ ?>
+                                    <img src="<?= base_url('assets/img/'.$this->config->item('canine_img')) ?>" class="img-fluid img-thumbnail" alt="canine" id="newImg<?= $r->req_id ?>" onclick="display('newImg<?= $r->req_id ?>')">
+                                <?php } ?>
                             <?php } ?><br/><?= $r->can_a_s; ?>
                         </div>
                         <div class="col-sm-2">
@@ -106,6 +110,11 @@
                 <br/>
                 <?= $this->pagination->create_links(); ?>
             </div>                           
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <button class="btn btn-primary" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'"><i class="fa fa-arrow-left"></i></button>
+            </div>
         </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
                 <div class="modal-dialog modal-lg">

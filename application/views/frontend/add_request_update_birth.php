@@ -77,7 +77,7 @@
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary" type="button" id="saveBtn"><?= lang("common_save"); ?></button>
-                        <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestupdatebirth'"><?= lang("common_back"); ?></button>
+                        <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Births'"><?= lang("common_back"); ?></button>
                     </div>
                 </form>
             </div>

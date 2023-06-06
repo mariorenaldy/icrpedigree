@@ -37,8 +37,8 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-info" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><?= lang('owner_report_list'); ?></button>
-                        <button type="button" class="btn btn-info" onclick="list_edit_canine()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><?= lang('can_report_change_photo_rip_list'); ?></button>
+                        <button type="button" class="btn btn-info" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("owner_report_list"); ?>"><?= lang('owner_report_list'); ?></button>
+                        <button type="button" class="btn btn-info" onclick="list_edit_canine()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_report_change_photo_rip_list"); ?>"><?= lang('can_report_change_photo_rip_list'); ?></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>

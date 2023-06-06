@@ -34,6 +34,11 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang("birth_report"); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <div class="row my-3">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-info" onclick="list_edit_birth()" data-toggle="tooltip" data-placement="top" title="<?= lang("birth_edit_list"); ?>"><?= lang("birth_edit_list"); ?></button>
+                    </div>
+                </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-1 text-center"><b><?= lang("common_photo"); ?></b></div>
@@ -158,6 +163,9 @@
         }
         function editBirth(birthId){
             window.location = "<?= base_url(); ?>frontend/Requestupdatebirth/add/"+birthId;
+        }
+        function list_edit_birth(){
+            window.location = "<?= base_url(); ?>frontend/Requestupdatebirth";
         }
         $(document).ready(function () {
             $('#keywords').on("change", function(){
