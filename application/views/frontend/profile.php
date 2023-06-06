@@ -18,7 +18,7 @@
                     <div class="col-sm-4"></div>
                     <div class="col-sm-4 profilepic text-center">
                         <div class="d-inline-block" style="position: relative;">
-                            <img src="<?php if ($member->mem_pp != '-') echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile profilepic__image" alt="PP">
+                            <img src="<?php if ($member->mem_pp != '-' && $member->mem_pp != null) echo base_url().'uploads/members/'.$member->mem_pp; else echo base_url().'assets/img/avatar.jpg'; ?>" class="img-fluid img-thumbnail profile profilepic__image" alt="PP">
                             <div class="profilepic__content">
                                 <span class="profilepic__icon"><i class="fa-solid fa-file-image"></i></span>
                                 <span class="profilepic__text"><?= lang("profile_change_pp"); ?></span>
