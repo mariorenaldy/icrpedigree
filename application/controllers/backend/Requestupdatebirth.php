@@ -9,7 +9,7 @@ class Requestupdatebirth extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestupdatebirthModel', 'birthModel', 'logbirthModel', 'memberModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'notif'));
+			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -82,12 +82,6 @@ class Requestupdatebirth extends CI_Controller {
 								$result = $this->notification_model->add(15, $this->uri->segment(4), $req->req_member_id, "Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
 								if ($result){
 									$this->db->trans_complete();
-									$notif = $this->notificationtype_model->get_by_id(15);
-									$whe['mem_id'] = $req->req_member_id;
-									$member = $this->memberModel->get_members($whe)->row();
-									if ($member->mem_firebase_token){
-										firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-									}
 									$this->session->set_flashdata('approve', TRUE);
 									redirect('backend/Requestupdatebirth');
 								}
@@ -144,12 +138,6 @@ class Requestupdatebirth extends CI_Controller {
 						$result = $this->notification_model->add(16, $this->uri->segment(4), $req->req_member_id, "Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
 						if ($result){
 							$this->db->trans_complete();
-							$notif = $this->notificationtype_model->get_by_id(16);
-							$whe['mem_id'] = $req->req_member_id;
-							$member = $this->memberModel->get_members($whe)->row();
-							if ($member->mem_firebase_token){
-								firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-							}
 							$this->session->set_flashdata('reject', TRUE);
 							redirect('backend/Requestupdatebirth');
 						}

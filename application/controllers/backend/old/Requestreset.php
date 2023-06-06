@@ -9,7 +9,7 @@ class Requestreset extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestresetModel', 'memberModel'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'mail'));
+			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -55,15 +55,7 @@ class Requestreset extends CI_Controller {
 						$res = $this->memberModel->update_members($dataMember, $wheMember);
 						if ($res){
 							$this->db->trans_complete();
-							$this->session->set_flashdata('mesg', 'Username: '.$member->mem_username.'\nPassword: '.$member->mem_hp.'\nIni adalah password sementara. Harap diganti.');
-							$this->session->set_flashdata('telp', $member->mem_hp);
-							$mail = send_reset_password($member->mem_email, $member->mem_username, $member->mem_hp);
-							if (!$mail){
-								$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-							}
-							else{
-								$this->session->set_flashdata('success', TRUE);
-							}
+							$this->session->set_flashdata('success', TRUE);
 							redirect('backend/Requestreset');
 						}
 						else{

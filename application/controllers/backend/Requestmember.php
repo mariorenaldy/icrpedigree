@@ -9,7 +9,7 @@ class Requestmember extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestmemberModel', 'memberModel', 'kennelModel', 'logmemberModel', 'logkennelModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'notif'));
+			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -104,12 +104,6 @@ class Requestmember extends CI_Controller {
 										$res = $this->notification_model->add(24, $this->uri->segment(4), $req->req_member_id);
 										if ($res){
 											$this->db->trans_complete();
-											$notif = $this->notificationtype_model->get_by_id(24);
-											$whe_member['mem_id'] = $req->req_member_id;
-											$member = $this->memberModel->get_members($whe_member)->row();
-											if ($member->mem_firebase_token){
-												firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-											}
 											$this->session->set_flashdata('approve', TRUE);
 											redirect('backend/Requestmember');
 										}
@@ -169,12 +163,6 @@ class Requestmember extends CI_Controller {
 						$result = $this->notification_model->add(25, $this->uri->segment(4), $req->req_member_id);
 						if ($result){
 							$this->db->trans_complete();
-							$notif = $this->notificationtype_model->get_by_id(25);
-							$whe_member['mem_id'] = $req->req_member_id;
-							$member = $this->memberModel->get_members($whe_member)->row();
-							if ($member->mem_firebase_token){
-								firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-							}
 							$this->session->set_flashdata('reject', TRUE);
 							redirect('backend/Requestmember');
 						}

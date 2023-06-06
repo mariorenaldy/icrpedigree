@@ -9,7 +9,7 @@ class Members extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel', 'CaninesModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url', 'mail', 'notif'));
+			$this->load->helper(array('url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -447,10 +447,6 @@ class Members extends CI_Controller {
 									}	
 									if (!$err){
 										$this->db->trans_complete();
-										if ($this->input->post('mem_type'))
-											$mail = send_greeting($this->input->post('mem_email'), $this->input->post('mem_name'));
-										else
-											$mail = send_greeting($this->input->post('email'), $this->input->post('name'));
 										$this->session->set_flashdata('add_success', TRUE);
 										redirect("backend/Members");
 									}
@@ -817,13 +813,7 @@ class Members extends CI_Controller {
 									$result = $this->notification_model->add(17, $member->mem_id, $member->mem_id);
 									if ($result){
 										$this->db->trans_complete();
-										$mail = send_greeting($member->mem_email, $member->mem_name);
-										if ($mail){
-											$this->session->set_flashdata('approve', TRUE);
-										}
-										else{
-											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-										}
+										$this->session->set_flashdata('approve', TRUE);
 										redirect('backend/Members/view_approve');
 									}
 									else{
@@ -1101,11 +1091,6 @@ class Members extends CI_Controller {
 								$res = $this->notification_model->add(19, $this->uri->segment(4), $this->uri->segment(4));
 								if ($res){
 									$this->db->trans_complete();
-									$member = $this->MemberModel->get_members($where)->row();
-									if ($member->mem_firebase_token){
-										$notif = $this->notificationtype_model->get_by_id(19);
-										firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-									}
 									$this->session->set_flashdata('payment_success', TRUE);
 									redirect('backend/Members');
 								}
@@ -1196,24 +1181,6 @@ class Members extends CI_Controller {
 				$wheLog['log_kennel_id'] = $data['member'][0]->ken_id;
 				$data['kennel'] = $this->LogkennelModel->get_logs($wheLog)->result();
 				$this->load->view('backend/log_member', $data);
-			}
-			else{
-				redirect('backend/Members');
-			}
-		}
-
-		public function send_reg_mail(){
-			if ($this->uri->segment(4)){
-				$where['mem_id'] = $this->uri->segment(4);
-				$member = $this->MemberModel->get_members($where)->row();
-				$mail = send_greeting($member->mem_email, $member->mem_name);
-                // $mail = send_greeting("riskadewi@yahoo.com", $member->mem_name);
-				if ($mail){
-					echo 'success';
-				}
-				else{
-					echo show_error($this->email->print_debugger());
-				}
 			}
 			else{
 				redirect('backend/Members');

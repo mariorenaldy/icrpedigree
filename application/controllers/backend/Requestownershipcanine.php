@@ -9,7 +9,7 @@ class Requestownershipcanine extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestownershipcanineModel', 'caninesModel', 'memberModel', 'logcanineModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'notif'));
+			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -74,13 +74,6 @@ class Requestownershipcanine extends CI_Controller {
 									$res = $this->notification_model->add(3, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 									if ($res){
 										$this->db->trans_complete();
-										$notif = $this->notificationtype_model->get_by_id(3);
-										if ($member_old->mem_firebase_token){
-											firebase_notif($member_old->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
-										if ($member_new->mem_firebase_token){
-											firebase_notif($member_new->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
 										$this->session->set_flashdata('approve', TRUE);
 										redirect('backend/Requestownershipcanine');
 									}
@@ -147,13 +140,6 @@ class Requestownershipcanine extends CI_Controller {
 							$res = $this->notification_model->add(8, $this->uri->segment(4), $req->req_member_id, 'Nama anjing / Canine name: '.$can->can_a_s.'<br/>Pemilik lama / Previous owner: '.$member_old->mem_name.' ('.$member_old->ken_name.')<br/>Pemilik baru / New owner: '.$member_new->mem_name.' ('.$member_new->ken_name.')');
 							if ($res){
 								$this->db->trans_complete();
-								$notif = $this->notificationtype_model->get_by_id(3);
-								if ($member_old->mem_firebase_token){
-									firebase_notif($member_old->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-								}
-								if ($member_new->mem_firebase_token){
-									firebase_notif($member_new->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-								}
 								$this->session->set_flashdata('reject', TRUE);
 								redirect('backend/Requestownershipcanine');
 							}

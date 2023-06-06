@@ -9,7 +9,7 @@ class Studs extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model', 'pedigreesModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url', 'notif', 'mail'));
+			$this->load->helper(array('url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -937,22 +937,7 @@ class Studs extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
-												$notif = $this->notificationtype_model->get_by_id(14);
-												if ($member->mem_firebase_token){
-													firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												}
-												if ($partner->mem_firebase_token){
-													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												}
-												$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $stud);
-												if (!$mail){
-													$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-												}
-												else{
-													$this->session->set_flashdata('mesg', 'Lapor Lahir:\n'.base_url().'frontend/Births/add/'.$stud);
-													$this->session->set_flashdata('telp', $partner->mem_hp);
-													$this->session->set_flashdata('add_success', TRUE);
-												}
+												$this->session->set_flashdata('add_success', TRUE);
 												redirect('backend/Studs');
 											}
 											else{
@@ -1519,21 +1504,7 @@ class Studs extends CI_Controller {
 									$result = $this->notification_model->add(1, $this->input->post('stu_id'), $can->can_member_id, 'Nama jantan / Sire name: '.$canSire->can_a_s.'<br>Nama betina / Dam name: '.$can->can_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->input->post('stu_id').'">Lapor Lahir / Birth Report</a>');
 									if ($result){
 										$this->db->trans_complete();
-										$whePartner['mem_id'] = $can->can_member_id;
-										$partner = $this->memberModel->get_members($whePartner)->row();
-										if ($partner->mem_firebase_token){
-											$notif = $this->notificationtype_model->get_by_id(1);
-											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
-										$mail = send_birth_link($partner->mem_email, $partner->mem_username, $canSire->can_a_s, $can->can_a_s, $this->input->post('stu_id'));
-										if (!$mail){
-											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-										}
-										else{
-											$this->session->set_flashdata('mesg', 'Lapor Lahir / Birth Report:\n'.base_url().'frontend/Births/add/'.$this->input->post('stu_id'));
-											$this->session->set_flashdata('telp', $partner->mem_hp);
-											$this->session->set_flashdata('edit_success', TRUE);
-										}
+										$this->session->set_flashdata('edit_success', TRUE);
 										redirect('backend/Studs');
 									}
 									else{
@@ -1643,22 +1614,7 @@ class Studs extends CI_Controller {
 									$news = $this->news_model->add($dataNews);
 									if ($news){
 										$this->db->trans_complete();
-										$notif = $this->notificationtype_model->get_by_id(1);
-										if ($member->mem_firebase_token){
-											firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
-										if ($partner->mem_firebase_token){
-											firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-										}
-										$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
-										if (!$mail){
-											$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-										}
-										else{
-											$this->session->set_flashdata('mesg', 'Lapor Lahir / Birth Report:\n'.base_url().'frontend/Births/add/'.$this->uri->segment(4));
-											$this->session->set_flashdata('telp', $partner->mem_hp);
-											$this->session->set_flashdata('approve', TRUE);
-										}
+										$this->session->set_flashdata('approve', TRUE);
 										redirect('backend/Studs/view_approve');
 									}
 									else{
@@ -1730,12 +1686,6 @@ class Studs extends CI_Controller {
 							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
-								$whe['mem_id'] = $stud->stu_member;
-								$member = $this->memberModel->get_members($whe)->row();
-								if ($member->mem_firebase_token){
-									$notif = $this->notificationtype_model->get_by_id(6);
-									firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-								}
 								$this->session->set_flashdata('reject', TRUE);
 								redirect('backend/Studs/view_approve');
 							}
@@ -1830,33 +1780,6 @@ class Studs extends CI_Controller {
 					$data['dam'][] = $this->caninesModel->get_canines($wheDam)->row();
 				}
 				$this->load->view('backend/log_stud', $data);
-			}
-			else{
-				redirect('backend/Studs');
-			}
-		}
-
-		public function send_birth_link(){
-			if ($this->uri->segment(4)){
-				$where['stu_id'] = $this->uri->segment(4);
-				$stud = $this->studModel->get_studs($where)->row();
-
-				$whePartner['mem_id'] = $stud->stu_partner_id;
-				$partner = $this->memberModel->get_members($whePartner)->row();
-
-				$wheDam['can_id'] = $stud->stu_dam_id;
-				$can = $this->caninesModel->get_canines($wheDam)->row();
-
-				$wheSire['can_id'] = $stud->stu_sire_id;
-				$c = $this->caninesModel->get_canines($wheSire)->row();
-
-				$mail = send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
-				if ($mail){
-					echo 'success';
-				}
-				else{
-					echo show_error($this->email->print_debugger());
-				}
 			}
 			else{
 				redirect('backend/Studs');

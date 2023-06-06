@@ -69,4 +69,3 @@
     </div>
 </nav>
 <hr>
-<a href="<?= 'https://wa.me/6287777802288' ?>" class="text-decoration-none text-reset link-warning position-fixed btn btn-success end-0 wa"><i class="fa-brands fa-whatsapp"></i> <span class="nav-text">Chat to WA</span></a>

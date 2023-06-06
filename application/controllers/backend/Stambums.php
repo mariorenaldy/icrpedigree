@@ -10,7 +10,7 @@ class Stambums extends CI_Controller {
         $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-        $this->load->helper(array('url', 'notif'));
+        $this->load->helper(array('url'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
     }
@@ -687,10 +687,6 @@ class Stambums extends CI_Controller {
                                                             $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
                                                             if ($result){
                                                                 $this->db->trans_complete();
-                                                                if ($member->mem_firebase_token){
-                                                                    $notif = $this->notificationtype_model->get_by_id(18);
-                                                                    firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                                                                }
                                                                 $this->session->set_flashdata('add_success', true);
                                                                 if ($maleFull && $femaleFull)
                                                                     redirect("backend/Stambums");
@@ -705,7 +701,6 @@ class Stambums extends CI_Controller {
                                                             $result = $this->notification_model->add(18, $result, $mem_id, "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
                                                             if ($result){
                                                                 $this->db->trans_complete();
-                                                                $mail = send_greeting($this->input->post('email'));
                                                                 $this->session->set_flashdata('add_success', true);
                                                                 if ($maleFull && $femaleFull)
                                                                     redirect("backend/Stambums");
@@ -980,12 +975,6 @@ class Stambums extends CI_Controller {
                                         $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                                         if ($res){
                                             $this->db->trans_complete();
-                                            $whereMember['mem_id'] = $stb->stb_member_id;
-                                            $member = $this->memberModel->get_members($whereMember)->row();
-                                            if ($member->mem_firebase_token){
-                                                $notif = $this->notificationtype_model->get_by_id(4);
-                                                firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                                            }
                                             $this->session->set_flashdata('approve', TRUE);
                                             redirect('backend/Stambums/view_approve');
                                         }
@@ -1072,12 +1061,6 @@ class Stambums extends CI_Controller {
                         $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                         if ($res){
                             $this->db->trans_complete();
-                            $wheMember['mem_id'] = $stb->stb_member_id;
-                            $member = $this->memberModel->get_members($wheMember)->row();
-                            if ($member->mem_firebase_token){
-                                $notif = $this->notificationtype_model->get_by_id(5);
-                                firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                            }
                             $this->session->set_flashdata('reject', TRUE);
                             redirect('backend/Stambums/view_approve');
                         }

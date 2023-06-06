@@ -9,7 +9,7 @@ class Requestexport extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestexportModel', 'memberModel', 'trahModel', 'caninesModel', 'pedigreesModel', 'logcanineModel', 'logpedigreeModel', 'kennelModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'notif'));
+			$this->load->helper(array('form', 'url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -50,12 +50,6 @@ class Requestexport extends CI_Controller {
                         $res = $this->notification_model->add(30, $this->uri->segment(4), $req->req_member_id);
                         if ($res){
                             $this->db->trans_complete();
-                            $notif = $this->notificationtype_model->get_by_id(30);
-                            $whe_member['mem_id'] = $req->req_member_id;
-                            $member = $this->memberModel->get_members($whe_member)->row();
-                            if ($member->mem_firebase_token){
-                                firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-                            }
                             $this->session->set_flashdata('approve', TRUE);
                             redirect('backend/Requestexport');
                         }
@@ -102,12 +96,6 @@ class Requestexport extends CI_Controller {
 						$result = $this->notification_model->add(31, $this->uri->segment(4), $req->req_member_id);
 						if ($result){
 							$this->db->trans_complete();
-							$notif = $this->notificationtype_model->get_by_id(31);
-							$whe_member['mem_id'] = $req->req_member_id;
-							$member = $this->memberModel->get_members($whe_member)->row();
-							if ($member->mem_firebase_token){
-								firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-							}
 							$this->session->set_flashdata('reject', TRUE);
 							redirect('backend/Requestexport');
 						}

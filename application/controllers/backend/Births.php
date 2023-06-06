@@ -10,7 +10,7 @@ class Births extends CI_Controller {
 			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel', 'logstudModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url', 'notif', 'mail'));
+			$this->load->helper(array('url'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -676,21 +676,7 @@ class Births extends CI_Controller {
 													$news = $this->news_model->add($dataNews);
 													if ($news){
 														$this->db->trans_complete();
-														$notif = $this->notificationtype_model->get_by_id(21);
-														if ($member->mem_firebase_token)
-															firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-														if ($partner->mem_firebase_token)
-															firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-
-														$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $birth);
-														if (!$mail){
-															$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-														}
-														else{
-															$this->session->set_flashdata('mesg', 'Lapor Anak / Puppy Report:\n'.base_url().'frontend/Stambums/add/'.$birth);
-															$this->session->set_flashdata('telp', $partner->mem_hp);
-															$this->session->set_flashdata('add_success', true);
-														}
+														$this->session->set_flashdata('add_success', true);
 														redirect("backend/Births");
 													}
 													else{
@@ -990,20 +976,7 @@ class Births extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
-												$notif = $this->notificationtype_model->get_by_id(2);
-												if ($member->mem_firebase_token)
-													firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												if ($partner->mem_firebase_token)
-													firebase_notif($partner->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-												$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
-												if (!$mail){
-													$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-												}
-												else{
-													$this->session->set_flashdata('mesg', 'Lapor Anak / Puppy Report:\n'.base_url().'frontend/Stambums/add/'.$this->uri->segment(4));
-													$this->session->set_flashdata('telp', $partner->mem_hp);
-													$this->session->set_flashdata('approve', TRUE);
-												}
+												$this->session->set_flashdata('approve', TRUE);
 												redirect('backend/Births/view_approve');
 											}
 											else{
@@ -1085,12 +1058,6 @@ class Births extends CI_Controller {
 							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
-								$wheBirth['mem_id'] = $birth->bir_member_id;
-								$member = $this->memberModel->get_members($wheBirth)->row();
-								if ($member->mem_firebase_token){
-									$notif = $this->notificationtype_model->get_by_id(7);
-									firebase_notif($member->mem_firebase_token, $notif[0]->title, $notif[0]->description);
-								}
 								$this->session->set_flashdata('reject', TRUE);
 								redirect('backend/Births/view_approve');
 							}
@@ -1243,39 +1210,6 @@ class Births extends CI_Controller {
 				$where['log_bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->logbirthModel->get_logs($where)->result();
 				$this->load->view('backend/log_birth', $data);
-			}
-			else{
-				redirect('backend/Births');
-			}
-		}
-
-		public function send_stambum_link(){
-			if ($this->uri->segment(4)){
-				$where['bir_id'] = $this->uri->segment(4);
-				$birth = $this->birthModel->get_births($where)->row();
-
-				$wheStud['stu_id'] = $birth->bir_stu_id;
-				$stud = $this->studModel->get_studs($wheStud)->row();
-							
-				$whe['mem_id'] = $stud->stu_member_id;
-				$member = $this->memberModel->get_members($whe)->row();
-
-				$whePartner['mem_id'] = $stud->stu_partner_id;
-				$partner = $this->memberModel->get_members($whePartner)->row();
-
-				$wheDam['can_id'] = $stud->stu_dam_id;
-				$can = $this->caninesModel->get_canines($wheDam)->row();
-
-				$wheSire['can_id'] = $stud->stu_sire_id;
-				$c = $this->caninesModel->get_canines($wheSire)->row();
-
-				$mail = send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s, $this->uri->segment(4));
-				if ($mail){
-					echo 'success';
-				}
-				else{
-					echo show_error($this->email->print_debugger());
-				}
 			}
 			else{
 				redirect('backend/Births');

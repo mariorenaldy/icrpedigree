@@ -9,7 +9,7 @@ class Members extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'mail', 'cookie'));
+			$this->load->helper(array('form', 'url', 'cookie'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {
@@ -768,13 +768,7 @@ class Members extends CI_Controller {
 				$wheMember['mem_id'] = $mem_id;
 				$res = $this->MemberModel->update_members($dataMember, $wheMember);
 				if ($res){
-					$mail = send_reset_password($member->mem_email, $member->mem_username, $member->mem_hp);
-					if (!$mail){
-						$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
-					}
-					else{
-						$this->session->set_flashdata('success', TRUE);
-					}
+					$this->session->set_flashdata('success', TRUE);
 				}
 				else{
 					if ($site_lang == 'indonesia') {
