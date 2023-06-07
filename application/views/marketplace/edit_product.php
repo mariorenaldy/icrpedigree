@@ -80,6 +80,16 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Stock</label>
+                            <div class="col-md-10">
+                                <?php if (!$mode){ ?>
+                                    <input class="form-control" type="number" placeholder="Stock" name="pro_stock" min="0" oninput="this.value = Math.abs(this.value)" value="<?= $product->pro_stock; ?>">
+                                <?php } else { ?>
+                                    <input class="form-control" type="number" placeholder="Stock" name="pro_stock" min="0" oninput="this.value = Math.abs(this.value)" value="<?= set_value('pro_stock'); ?>">
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
                             <label class="control-label col-md-2">Description</label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>

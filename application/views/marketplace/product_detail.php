@@ -26,6 +26,7 @@
                             <span class="fa fa-minus"></span>
                         </button>
                     </span>
+                    <input type="hidden" id="stock" name="stock" value="<?= $products->pro_stock; ?>">
                     <input type="number" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
                     <span class="input-group-btn">
                         <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
@@ -44,7 +45,9 @@
             window.location = "<?= base_url(); ?>marketplace/Products/product_payment/" + id + "/" + $('#quantity').val();
         }
         $(document).ready(function() {
-            var quantitiy = 0;
+            var quantity = 0;
+            var stock = document.getElementById("stock").value;
+            console.log(stock);
             $('.quantity-right-plus').click(function(e) {
 
                 // Stop acting like a button
@@ -53,7 +56,7 @@
                 var quantity = parseInt($('#quantity').val());
 
                 // Increment
-                if (quantity < 100) {
+                if (quantity < stock) {
                     $('#quantity').val(quantity + 1);
                 }
             });
@@ -76,8 +79,8 @@
                 if (quantity < 0 ) {
                     $('#quantity').val(1);
                 }
-                else if(quantity > 100){
-                    $('#quantity').val(100);
+                else if(quantity > stock){
+                    $('#quantity').val(stock);
                 }
             });
 

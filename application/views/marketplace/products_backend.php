@@ -65,11 +65,12 @@
                                 <th class="no-sort">Type</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Stock</th>
                                 <th class="no-sort">Description</th>
-                                <th class="no-sort">Created User</th>
-                                <th class="no-sort">Updated User</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
+                                <th class="no-sort">Created by</th>
+                                <th class="no-sort">Updated by</th>
+                                <th>Created at</th>
+                                <th>Updated at</th>
                                 <th class="no-sort">Status</th>
                             </tr>
                         </thead>
@@ -99,6 +100,7 @@
                                     <td><?= $p->pro_type_name; ?></td>
                                     <td><?= $p->pro_name; ?></td>
                                     <td><?= $p->pro_price; ?></td>
+                                    <td><?= $p->pro_stock; ?></td>
                                     <td><?= $p->pro_desc; ?></td>
                                     <td><?= $p->pro_created_user; ?></td>
                                     <td><?= $p->pro_updated_user; ?></td>

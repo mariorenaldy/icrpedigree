@@ -31,12 +31,6 @@
                 echo validation_errors();
                 ?>
             </div>
-            <div class="input-group mb-3">
-                <label for="mem_address" class="control-label col-sm-2">Alamat</label>
-                <div class="col-sm-10">
-                    <input class="form-control" type="text" placeholder="Alamat" name="address" value="<?= set_value('address'); ?>">
-                </div>
-            </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" id="checkout-button">Bayar</button>
                 <button class="btn btn-danger" type="button" onclick="back(<?= $products->pro_id ?>)">Kembali</button>
@@ -48,24 +42,19 @@
     <script type="text/javascript">
         var checkoutButton = document.getElementById('checkout-button');
         checkoutButton.addEventListener('click', function () {
-            if(!$('input[name="address"]').val()){
-                alert("Alamat belum diisi!");
-            }
-            else{
-                let amount = <?= $products->pro_price * $this->uri->segment(5) ?>;
-                $.ajax({
-                    url: "<?= base_url() ?>marketplace/Payment/checkout",
-                    method: 'post',
-                    data: {amount: amount},
-                    success: function(response){
-                        if(response.status == 'success'){
-                            loadJokulCheckout(response.url);
-                        }else if(response.status == 'error'){
-                            alert("HTTP code: " + response.code + "\n" + response.message);
-                        }
+            let amount = <?= $products->pro_price * $this->uri->segment(5) ?>;
+            $.ajax({
+                url: "<?= base_url() ?>marketplace/Payment/checkout",
+                method: 'post',
+                data: {amount: amount},
+                success: function(response){
+                    if(response.status == 'success'){
+                        loadJokulCheckout(response.url);
+                    }else if(response.status == 'error'){
+                        alert("HTTP code: " + response.code + "\n" + response.message);
                     }
-                });
-            }
+                }
+            });
         });
 
         function back(id){

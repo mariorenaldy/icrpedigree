@@ -28,7 +28,7 @@ class Products extends CI_Controller
 		$where['pro_stat'] = $this->config->item('accepted');
 		$data['products'] = $this->productModel->fetch_data($where, $config['per_page'], $data['start'])->result();
 
-		$this->load->view("marketplace/products", $data);
+		$this->load->view("marketplace/products_frontend", $data);
 	}
 	public function search()
 	{
@@ -56,7 +56,7 @@ class Products extends CI_Controller
 		$where['pro_stat'] = $this->config->item('accepted');
 		$data['products'] = $this->productModel->search_products($where, $config['per_page'], $data['start'], $like)->result();
 
-		$this->load->view("marketplace/products", $data);
+		$this->load->view("marketplace/products_frontend", $data);
 	}
 	public function product_detail()
 	{
@@ -96,7 +96,7 @@ class Products extends CI_Controller
 	{
 		$where['pro_stat'] = $this->config->item('accepted');
 		$data['products'] = $this->productModel->get_products($where)->result();
-		$this->load->view("marketplace/view_products", $data);
+		$this->load->view("marketplace/products_backend", $data);
 	}
 	public function add()
 	{
@@ -280,6 +280,7 @@ class Products extends CI_Controller
             $this->form_validation->set_rules('pro_name', 'Name ', 'trim|required');
             $this->form_validation->set_rules('pro_type_id', 'Type id ', 'trim|required');
             $this->form_validation->set_rules('pro_price', 'Price ', 'trim|required');
+            $this->form_validation->set_rules('pro_stock', 'Stock ', 'trim|required');
 
             $where['pro_id'] = $this->input->post('pro_id');
 			$data['products_type'] = $this->productTypeModel->get_type()->result();
@@ -331,6 +332,7 @@ class Products extends CI_Controller
 						'pro_type_id' => $this->input->post('pro_type_id'),
 						'pro_name' => $this->input->post('pro_name'),
 						'pro_price' => $this->input->post('pro_price'),
+						'pro_stock' => $this->input->post('pro_stock'),
 						'pro_desc' => $this->input->post('pro_desc'),
 						'pro_updated_user' => $this->session->userdata('use_id'),
 						'pro_updated_at' => date('Y-m-d H:i:s')
@@ -344,6 +346,7 @@ class Products extends CI_Controller
 						'log_product_type_id' => $this->input->post('pro_type_id'),
 						'log_product_name' => $this->input->post('pro_name'),
 						'log_product_price' => $this->input->post('pro_price'),
+						'log_product_stock' => $this->input->post('pro_stock'),
 						'log_product_desc' => $this->input->post('pro_desc'),
 						'log_product_photo' => $photo,
 						'log_product_updated_user' => $this->session->userdata('use_id'),
