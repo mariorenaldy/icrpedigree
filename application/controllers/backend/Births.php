@@ -536,10 +536,10 @@ class Births extends CI_Controller {
 					}
 
                     if (!$err && !$this->input->post('mode')){
-						$data['warning'] = Array();
 						$whereStud['stu_id'] = $this->input->post('bir_stu_id');
 						$stud = $this->studModel->get_studs($whereStud)->row();
-						if ($stud){
+
+						if (isset($stud)){
 							$piece = explode("-", $this->input->post('bir_date_of_birth'));
 							$date = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -548,22 +548,30 @@ class Births extends CI_Controller {
 
 							$ts = new DateTime($date);
 							$ts_stud = new DateTime($studDate);
-							if ($ts_stud > $ts){
+
+							$ts_today = new DateTime();
+							if ($ts > $ts_today){
 								$err++;
-								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
+								$this->session->set_flashdata('error_message', "The Date of Birth must be before today's date");
 							}
 							else{
-								$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
-								if ($diff < 1){
+								if ($ts_stud > $ts){
 									$err++;
-									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
+									$this->session->set_flashdata('error_message', 'The Date of Birth must be after the Stud Date');
 								}
-
-								if (!$err){
-									$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
-									if ($diff > 1){
+								else{
+									$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
+									if ($diff < 1){
 										$err++;
-										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
+										$this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+									}
+	
+									if (!$err){
+										$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
+										if ($diff > 1){
+											$err++;
+											$this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+										}
 									}
 								}
 							}
@@ -780,43 +788,25 @@ class Births extends CI_Controller {
 					}
 
                     if (!$err && !$this->input->post('mode')){
-						$data['warning'] = Array();
 						$whereStud['stu_id'] = $data['birth']->bir_stu_id;
 						$stud = $this->studModel->get_studs($whereStud)->row();
-						if ($stud){
-							$piece = explode("-", $this->input->post('bir_date_of_birth'));
-							$date = $piece[2]."-".$piece[1]."-".$piece[0];
-
-							$piece = explode("-", $stud->stu_stud_date);
-							$studDate = $piece[2]."-".$piece[1]."-".$piece[0];
-
-							$ts = new DateTime($date);
-							$ts_stud = new DateTime($studDate);
-							if ($ts_stud > $ts){
-								$err++;
-								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
-							}
-							else{
-								$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
-								if ($diff < 1){
-									$err++;
-									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
-								}
-
-								if (!$err){
-									$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
-									if ($diff > 1){
-										$err++;
-										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
-									}
-								}
-							}
-						}
-						else{
+						if (!isset($stud)){
 							$err++;
 							$this->session->set_flashdata('error_message', 'Invalid stud id'); 
 						}
                     }
+
+					if (!$err){
+						$piece = explode("-", $this->input->post('bir_date_of_birth'));
+						$date = $piece[2]."-".$piece[1]."-".$piece[0];
+	
+						$ts = new DateTime();
+						$ts_birth = new DateTime($date);
+						if ($ts_birth > $ts){
+							$err++;
+							$this->session->set_flashdata('error_message', "The Date of Birth must be before today's date");
+						}
+					}
 	
 					if (!$err){
 						if (isset($uploadedImg)){

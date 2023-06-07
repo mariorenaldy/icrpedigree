@@ -211,21 +211,6 @@
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>
-
-            <?php if (isset($warning)){ ?>
-                var proceed = confirm("<?php 
-                    foreach ($warning AS $r){
-                        echo $r.'\n';
-                    }
-                    echo 'Proceed?';
-                ?>");
-                if (proceed){
-                    $('#mode').val(1);
-                }
-                else{
-                    window.location = '<?= base_url() ?>backend/Births';
-                }
-            <?php } ?>
         });
     </script>
 </body>
