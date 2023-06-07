@@ -28,3 +28,5 @@ $lang["mem_contact_admin"] = "Contact admin or wait for approval";
 $lang["mem_edit_kennel"] = "Report Update Kennel";
 $lang["mem_edit_kennel_list"] = "Report Update Kennel List";
 $lang["mem_edit_kennel_success"] = "Report Update Kennel has been saved";
+
+$lang["mem_payment_photo"] = "Proof of Payment Photo";

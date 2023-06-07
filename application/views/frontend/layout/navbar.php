@@ -39,17 +39,26 @@
                             <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestmember"><?= lang("nav_kennel_change_list"); ?></a></li>
                         <?php } else { ?>
                             <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestpro/become_pro"><?= lang("nav_become_pro"); ?></a></li>
+                            <li><a class="dropdown-item" href="<?= base_url() ?>frontend/Requestpro"><?= lang("nav_become_pro_list"); ?></a></li>
                         <?php } ?>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/profile' ?>"><?= lang("nav_profile"); ?></a></li>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/view_edit_password' ?>"><?= lang("nav_change_password"); ?></a></li>
                         <li><a class="dropdown-item" href="<?= base_url().'frontend/Members/logout' ?>">Logout</a></li>
                     </ul>
                 </div>
+                <div class="dropdown">
+                    <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span> 
+                    </span>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= base_url().'Marketplace/marketplace' ?>">Produk</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url().'Marketplace/marketplace' ?>">Orders</a></li>
+                    </ul>
+                </div>
             <?php } else { ?>
                 <a href="<?= base_url().'frontend/Pedigree/view' ?>" class="text-decoration-none text-reset link-warning"><i class="fas fa-book-open"></i> <span class="nav-text"><?= lang("nav_find_dogs"); ?></span></a>
                 <a href="<?= base_url().'frontend/Members' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-user"></i> <span class="nav-text">Members</span></a>
             <?php } ?>
-                <!-- <a href="<?= base_url().'marketplace/Marketplace' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span></a> -->
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <?php if ($this->input->cookie('site_lang') && $this->input->cookie('site_lang') == 'english') { ?>

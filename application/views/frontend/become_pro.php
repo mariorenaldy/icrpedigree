@@ -136,9 +136,18 @@
                                     echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
                             ?>
                         </div>
+                        <hr/>
+                        <div class="input-group mb-3 gap-3">
+                            <label for="imageInputPayment" class="control-label col-md-12 text-center"><?= lang('mem_payment_photo'); ?></label>
+                            <div class="col-md-12 text-center">
+                                <img id="imgPreviewPayment" width="15%" src="<?= base_url('assets/img/upload.jpg') ?>">
+                                <input type="file" class="upload" id="imageInputPayment" onclick="resetImage('payment')"/>
+                                <input type="hidden" name="attachment_payment" id="attachment_payment">
+                            </div>
+                        </div>
                         <div class="text-center">
                             <button class="btn btn-primary btn-lg" type="button" id="saveBtn"><?= lang('mem_become_pro'); ?></button>
-                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestpro'"><?= lang('common_back'); ?></button>
+                            <button class="btn btn-danger btn-lg" type="button" onclick="window.location = '<?= base_url() ?>frontend/Beranda'"><?= lang('common_back'); ?></button>
                         </div>
                     </form>
                 </div>
@@ -223,6 +232,11 @@
                                 <div class="col-4"><?= lang('mem_kennel_format'); ?></div>
                                 <div class="col">: <span id="confirm-canine_name_format"></span></div>
                             </div>
+                            <div class="row">
+                                <div class="col-4"><?= lang('mem_payment_photo'); ?></div>
+                                <div class="col-auto pe-0">:</div>
+                                <div class="col"><img id="confirm-foto_pembayaran" width="50%"/></div>
+                            </div>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-primary" id="submitBtn"><?= lang('common_yes'); ?></button>
@@ -262,19 +276,39 @@
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
         const imageInputLogo = document.querySelector("#imageInputLogo");
+        const imageInputPayment = document.querySelector("#imageInputPayment");
         var croppingImage = null;
 
         var resetImage = function(input) {
-            imageInputLogo.value = null;
+            if(input === "logo"){
+                imageInputLogo.value = null;
+            }
+            else if(input === "payment"){
+                imageInputPayment.value = null;
+            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
             var previewLogo = document.getElementById('imgPreviewLogo');
+            var previewPayment = document.getElementById('imgPreviewPayment');
             var modalImage = document.getElementById('sample_image');
+            var latestImage = null;
             var cropper;
+            var width;
+            var height;
 
             imageInputLogo.addEventListener("change", function(event) {
+                croppingImage = "logo";
+                width = <?= $this->config->item('img_width_ratio') ?>;
+                height = <?= $this->config->item('img_height_ratio') ?>;
+                showModalImg(event);
+            })
+
+            imageInputPayment.addEventListener("change", function(event) {
+                croppingImage = "payment";
+                width = <?= $this->config->item('img_height_ratio') ?>;
+                height = <?= $this->config->item('img_width_ratio') ?>;
                 showModalImg(event);
             })
 
@@ -295,7 +329,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: 1,
+                    aspectRatio: width/height,
                     viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
@@ -306,8 +340,8 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('pp') ?>,
-                    height: <?= $this->config->item('pp') ?>
+                    width: <?= $this->config->item('img_width') ?>,
+                    height: <?= $this->config->item('img_height') ?>
                 });
                 canvas.toBlob(function(blob) {
                     url = URL.createObjectURL(blob);
@@ -315,8 +349,14 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        previewLogo.src = base64data;
-                        $('#attachment_logo').val(base64data);
+                        if(croppingImage === "logo"){
+                            previewLogo.src = base64data;
+                            $('#attachment_logo').val(base64data);
+                        }
+                        else if(croppingImage === "payment"){
+                            previewPayment.src = base64data;
+                            $('#attachment_payment').val(base64data);
+                        }
                         $modal.modal('hide');
                     };
                 });
@@ -339,6 +379,7 @@
                 $('#confirm-foto').attr("src",  $('#imgPreviewLogo').attr("src"));
                 $('#confirm-kennel_name').text($('input[name="ken_name"]').val());
                 $('#confirm-canine_name_format').text($('#ken_type_id option:selected').text());
+                $('#confirm-foto_pembayaran').attr("src",  $('#imgPreviewPayment').attr("src"));
                 $('#confirm-modal').modal('show');
             });
 

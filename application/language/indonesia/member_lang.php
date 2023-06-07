@@ -28,3 +28,5 @@ $lang["mem_contact_admin"] = "Hubungi admin atau tunggu persetujuan";
 $lang["mem_edit_kennel"] = "Laporan Ubah Kennel";
 $lang["mem_edit_kennel_list"] = "List Laporan Ubah Kennel";
 $lang["mem_edit_kennel_success"] = "Lapor Ubah Kennel berhasil disimpan";
+
+$lang["mem_payment_photo"] = "Foto Bukti Pembayaran";
