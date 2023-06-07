@@ -59,16 +59,16 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_address" class="control-label col-sm-2"><?= lang("mem_mailing_address"); ?></label>
+                                <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("mem_mailing_address"); ?></label>
                                 <div class="col-sm-10"> 
-                                    <input class="form-control" type="text" placeholder="<?= lang("mem_mailing_address"); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang("mem_mailing_address"); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("mem_certificate_address"); ?></label>
+                                <label for="mem_address" class="control-label col-sm-2"><?= lang("mem_certificate_address"); ?></label>
                                 <div class="col-sm-10 gap-1">
                                     <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> Sama dengan alamat surat menyurat</label>
-                                    <input class="form-control" type="text" placeholder="<?= lang("mem_certificate_address"); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang("mem_certificate_address"); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
@@ -425,13 +425,13 @@
                 $('#confirm-number').text($('input[name="mem_hp"]').val());
                 $('#confirm-email').text($('input[name="mem_email"]').val());
                 $('#confirm-ktp').text($('input[name="mem_ktp"]').val());
-                $('#confirm-address').text($('input[name="mem_address"]').val());
+                $('#confirm-address').text($('input[name="mem_mail_address"]').val());
 
                 if($('input[name="same"]').is(":checked")){
-                    $('#confirm-mail_address').text($('input[name="mem_address"]').val());
+                    $('#confirm-mail_address').text($('input[name="mem_mail_address"]').val());
                 }
                 else{
-                    $('#confirm-mail_address').text($('input[name="mem_mail_address"]').val());
+                    $('#confirm-mail_address').text($('input[name="mem_address"]').val());
                 }
 
                 $('#confirm-kota').text($('input[name="mem_kota"]').val());

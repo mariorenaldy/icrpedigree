@@ -25,13 +25,13 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_name" class="control-label col-sm-2"><?= lang("can_name"); ?></label>
+                            <label for="can_name" class="control-label col-sm-2"><?= lang("can_name"); ?></label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="<?= lang('can_name'); ?>" name="can_a_s" value="<?= set_value('can_a_s'); ?>" maxlength="30">
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("can_breed"); ?></label>
+                            <label for="can_breed" class="control-label col-sm-2"><?= lang("can_breed"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $pil = [];
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2"><?= lang("can_gender"); ?></label>
+                            <label for="can_gender" class="control-label col-sm-2"><?= lang("can_gender"); ?></label>
                             <div class="col-sm-10">
                                 <?php
                                     $gender['MALE'] = 'MALE';
@@ -53,13 +53,13 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang("can_dob"); ?></label>
+                            <label for="can_date_of_birth" class="control-label col-sm-2"><?= lang("can_dob"); ?></label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="<?= lang('can_dob'); ?>" name="can_date_of_birth" id="can_date_of_birth" value="<?= set_value('can_date_of_birth'); ?>" readonly>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_hp" class="control-label col-sm-2">Kennel</label>
+                            <label for="can_kennel_id" class="control-label col-sm-2">Kennel</label>
                             <div class="col-sm-10">
                                 <?php
                                     $ken = [];

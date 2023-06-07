@@ -49,12 +49,12 @@
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-3"><?= lang("mem_mailing_address"); ?></div>
-                <div class="col-sm-8"><?= $member->mem_address ?></div>
+                <div class="col-sm-8"><?= $member->mem_mail_address ?></div>
             </div>
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-3"><?= lang("mem_certificate_address"); ?></div>
-                <div class="col-sm-8"><?= $member->mem_mail_address ?></div>
+                <div class="col-sm-8"><?= $member->mem_address ?></div>
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>

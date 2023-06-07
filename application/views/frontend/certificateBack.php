@@ -104,7 +104,7 @@
         </div>
         <div class="col-1 text-center">:</div>
         <div class="col">
-          <?= $canine->mem_mail_address ?>
+          <?= $canine->mem_address ?>
         </div>
       </div>
     </div>

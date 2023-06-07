@@ -54,13 +54,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_mailing_address'); ?></div>
-                        <div class="col-sm-5"><?= $req->req_old_address ?></div>
-                        <div class="col-sm-5"><?= $req->req_address ?></div>
+                        <div class="col-sm-5"><?= $req->req_old_mail_address ?></div>
+                        <div class="col-sm-5"><?= $req->req_mail_address ?></div>
                     </div>
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_certificate_address'); ?></div>
-                        <div class="col-sm-5"><?= $req->req_old_mail_address ?></div>
-                        <div class="col-sm-5"><?= $req->req_mail_address ?></div>
+                        <div class="col-sm-5"><?= $req->req_old_address ?></div>
+                        <div class="col-sm-5"><?= $req->req_address ?></div>
                     </div>      
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_number'); ?></div>

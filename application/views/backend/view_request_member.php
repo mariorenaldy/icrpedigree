@@ -57,13 +57,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="col-sm-2">Alamat Surat Menyurat</div>
-                        <div class="col-sm-5"><?= $req->req_old_address ?></div>
-                        <div class="col-sm-5"><?= $req->req_address ?></div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-sm-2">Alamat yang Tertera di Sertifikat</div>
                         <div class="col-sm-5"><?= $req->req_old_mail_address ?></div>
                         <div class="col-sm-5"><?= $req->req_mail_address ?></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-sm-2">Alamat</div>
+                        <div class="col-sm-5"><?= $req->req_old_address ?></div>
+                        <div class="col-sm-5"><?= $req->req_address ?></div>
                     </div>      
                     <div class="row mb-1">
                         <div class="col-sm-2">No. HP WA Aktif</div>

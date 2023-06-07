@@ -57,8 +57,8 @@
                                         <td><?= $m->mem_name; ?></td>
                                         <td><?= $m->mem_hp; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
-                                        <td><?= $m->mem_address; ?></td>
                                         <td><?= $m->mem_mail_address; ?></td>
+                                        <td><?= $m->mem_address; ?></td>
                                         <td><?= $m->mem_kota; ?></td>
                                         <td><?= $m->mem_kode_pos; ?></td>
                                         <td><?= $m->mem_ktp; ?></td>

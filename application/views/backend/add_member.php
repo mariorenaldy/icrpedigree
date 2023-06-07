@@ -60,16 +60,16 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_address" class="control-label col-md-2">Mail Address</label>
+                                <label for="mem_mail_address" class="control-label col-md-2">Mail Address</label>
                                 <div class="col-md-10">
-                                    <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_mail_address" class="control-label col-md-2">Certificate Address</label>
+                                <label for="mem_address" class="control-label col-md-2">Address</label>
                                 <div class="col-md-10">
                                     <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> The same as mail address</label>
-                                    <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">

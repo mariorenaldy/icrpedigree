@@ -199,9 +199,9 @@ class Members extends CI_Controller {
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				if ($this->input->post('mem_type')){
 					$this->form_validation->set_rules('mem_name', 'KTP Name ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
+					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
 					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
+						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
 					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
@@ -329,7 +329,7 @@ class Members extends CI_Controller {
 							$data = array(
 								'mem_id' => $mem_id,
 								'mem_name' => strtoupper($this->input->post('mem_name')),
-								'mem_address' => $this->input->post('mem_address'),
+								'mem_mail_address' => $this->input->post('mem_mail_address'),
 								'mem_hp' => $this->input->post('mem_hp'),
 								'mem_kota' => $this->input->post('mem_kota'),
 								'mem_kode_pos' => $this->input->post('mem_kode_pos'),
@@ -363,7 +363,7 @@ class Members extends CI_Controller {
 							$dataLog = array(
 								'log_member_id' => $mem_id,
 								'log_name' => strtoupper($this->input->post('mem_name')),
-								'log_address' => $this->input->post('mem_address'),
+								'log_mail_address' => $this->input->post('mem_mail_address'),
 								'log_hp' => $this->input->post('mem_hp'),
 								'log_kota' => $this->input->post('mem_kota'),
 								'log_kode_pos' => $this->input->post('mem_kode_pos'),
@@ -390,12 +390,12 @@ class Members extends CI_Controller {
 							);
 
 							if ($this->input->post('same')){
-								$data['mem_mail_address'] = $this->input->post('mem_address');
-								$dataLog['log_mail_address'] = $this->input->post('mem_address');
+								$data['mem_address'] = $this->input->post('mem_mail_address');
+								$dataLog['log_address'] = $this->input->post('mem_mail_address');
 							}
 							else{
-								$data['mem_mail_address'] = $this->input->post('mem_mail_address');
-								$dataLog['log_mail_address'] = $this->input->post('mem_address');
+								$data['mem_address'] = $this->input->post('mem_address');
+								$dataLog['log_address'] = $this->input->post('mem_address');
 							}
 						}
 						else{
@@ -496,9 +496,9 @@ class Members extends CI_Controller {
 				$this->form_validation->set_error_delimiters('<div>','</div>');
 				if ($this->input->post('mem_type')){
 					$this->form_validation->set_rules('mem_name', 'KTP Name ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
+					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
 					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
+						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
 					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
@@ -673,12 +673,12 @@ class Members extends CI_Controller {
 							);
 
 							if ($this->input->post('same')){
-								$data['mem_mail_address'] = $this->input->post('mem_address');
-								$dataLog['log_mail_address'] = $this->input->post('mem_address');
+								$data['mem_address'] = $this->input->post('mem_mail_address');
+								$dataLog['log_address'] = $this->input->post('mem_mail_address');
 							}
 							else{
-								$data['mem_mail_address'] = $this->input->post('mem_mail_address');
-								$dataLog['log_mail_address'] = $this->input->post('mem_address');
+								$data['mem_address'] = $this->input->post('mem_mail_address');
+								$dataLog['log_address'] = $this->input->post('mem_mail_address');
 							}
 
 							$this->db->trans_strict(FALSE);

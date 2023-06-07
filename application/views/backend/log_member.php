@@ -46,8 +46,8 @@
                                         <td><?= $m->ken_name; ?></td>
                                         <td><?= $m->log_name; ?></td>
                                         <td><?= $m->log_hp; ?></td>
-                                        <td><?= $m->log_address; ?></td>
                                         <td><?= $m->log_mail_address; ?></td>
+                                        <td><?= $m->log_address; ?></td>
                                         <td><?= $m->log_kota; ?></td>
                                         <td><?= $m->log_kode_pos; ?></td>
                                         <td><?= $m->log_ktp; ?></td>

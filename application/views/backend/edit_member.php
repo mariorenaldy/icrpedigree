@@ -87,22 +87,22 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_address" class="control-label col-md-2">Mail Address</label>
+                                <label for="mem_mail_address" class="control-label col-md-2">Mail Address</label>
                                 <div class="col-md-10">
                                     <?php if (!$mode){ ?>
-                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= $member->mem_address; ?>">
+                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
                                     <?php } else { ?>
-                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                        <input class="form-control" type="text" placeholder="Mail Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                     <?php } ?>
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_mail_address" class="control-label col-md-2">Certificate Address</label>
+                                <label for="mem_address" class="control-label col-md-2">Address</label>
                                 <div class="col-md-10">
                                     <?php if (!$mode){ ?>
-                                        <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
+                                        <input class="form-control" type="text" placeholder="Address" name="mem_address" value="<?= $member->mem_address; ?>">
                                     <?php } else { ?>
-                                        <input class="form-control" type="text" placeholder="Certificate Address" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                        <input class="form-control" type="text" placeholder="Address" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                     <?php } ?>
                                 </div>
                             </div>

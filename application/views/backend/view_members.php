@@ -74,7 +74,7 @@
                                 <th class="no-sort">Phone Number</th>
                                 <th class="no-sort">Reg. Date</th>
                                 <th class="no-sort">Mail Address</th>
-                                <th class="no-sort">Certificate Address</th>
+                                <th class="no-sort">Address</th>
                                 <th class="no-sort">City</th>
                                 <th class="no-sort">Postal Code</th>
                                 <th>KTP</th>
@@ -114,8 +114,8 @@
                                         <td><?= $m->mem_name; ?></td>
                                         <td><?= $m->mem_hp; ?></td>
                                         <td class="text-nowrap"><?= $m->mem_created_at; ?></td>
-                                        <td><?= $m->mem_address; ?></td>
                                         <td><?= $m->mem_mail_address; ?></td>
+                                        <td><?= $m->mem_address; ?></td>
                                         <td><?= $m->mem_kota; ?></td>
                                         <td><?= $m->mem_kode_pos; ?></td>
                                         <td><?= $m->mem_ktp; ?></td>

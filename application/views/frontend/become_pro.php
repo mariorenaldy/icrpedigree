@@ -36,22 +36,22 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_address" class="control-label col-sm-2"><?= lang('mem_mailing_address'); ?></label>
+                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang('mem_mailing_address'); ?></label>
                             <div class="col-sm-10"> 
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_address" value="<?= $member->mem_address; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_mailing_address'); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="mem_mail_address" class="control-label col-sm-2"><?= lang('mem_certificate_address'); ?></label>
+                            <label for="mem_address" class="control-label col-sm-2"><?= lang('mem_certificate_address'); ?></label>
                             <div class="col-sm-10 gap-1">
                                 <?php if (!$mode){ ?>
-                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_mail_address" value="<?= $member->mem_mail_address; ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_address" value="<?= $member->mem_address; ?>">
                                 <?php } else { ?>
-                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_mail_address" value="<?= set_value('mem_mail_address'); ?>">
+                                    <input class="form-control" type="text" placeholder="<?= lang('mem_certificate_address'); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
@@ -331,8 +331,8 @@
             saveBtn.click(function(){
                 $('#confirm-ktp_number').text($('input[name="mem_ktp"]').val());
                 $('#confirm-ktp_name').text($('input[name="mem_name"]').val());
-                $('#confirm-mail_address').text($('input[name="mem_address"]').val());
-                $('#confirm-certificate_address').text($('input[name="mem_mail_address"]').val());
+                $('#confirm-mail_address').text($('input[name="mem_mail_address"]').val());
+                $('#confirm-certificate_address').text($('input[name="mem_address"]').val());
                 $('#confirm-phone_number').text($('input[name="mem_hp"]').val());
                 $('#confirm-city').text($('input[name="mem_kota"]').val());
                 $('#confirm-postal_code').text($('input[name="mem_kode_pos"]').val());

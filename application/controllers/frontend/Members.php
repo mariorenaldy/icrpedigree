@@ -164,9 +164,9 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
 					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-					$this->form_validation->set_rules('mem_address', 'Alamat surat menyurat ', 'trim|required');
+					$this->form_validation->set_rules('mem_mail_address', 'Alamat surat menyurat ', 'trim|required');
 					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_mail_address', 'Alamat yang tertera di sertifikat ', 'trim|required');
+						$this->form_validation->set_rules('mem_address', 'Alamat ', 'trim|required');
 					$this->form_validation->set_rules('mem_kota', 'Kota ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Kode pos ', 'trim|required');
 					$this->form_validation->set_rules('mem_ktp', 'No. KTP ', 'trim|required');
@@ -185,9 +185,9 @@ class Members extends CI_Controller {
 				$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
                 $this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
                 $this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-                $this->form_validation->set_rules('mem_address', 'Mail Address ', 'trim|required');
+                $this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
                 if (!$this->input->post('same'))
-                    $this->form_validation->set_rules('mem_mail_address', 'Certificate Address ', 'trim|required');
+                    $this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
                 $this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
                 $this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
                 $this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
@@ -418,7 +418,7 @@ class Members extends CI_Controller {
 						$dataMember = array(
 							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('mem_name')),
-							'mem_address' => $this->input->post('mem_address'),
+							'mem_mail_address' => $this->input->post('mem_mail_address'),
 							'mem_hp' => $this->input->post('mem_hp'),
 							'mem_kota' => $this->input->post('mem_kota'),
 							'mem_kode_pos' => $this->input->post('mem_kode_pos'),
@@ -434,9 +434,9 @@ class Members extends CI_Controller {
 						);
 						
 						if ($this->input->post('same'))
-							$dataMember['mem_mail_address'] = $this->input->post('mem_address');
+							$dataMember['mem_address'] = $this->input->post('mem_mail_address');
 						else
-							$dataMember['mem_mail_address'] = $this->input->post('mem_mail_address');
+							$dataMember['mem_address'] = $this->input->post('mem_address');
 						
 						$ken_id = $this->KennelModel->record_count() + 1;
 						$kennel_data = array(
