@@ -779,27 +779,19 @@ class Studs extends CI_Controller {
 						$piece = explode("-", $this->input->post('stu_stud_date'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						if (!$err && !$this->input->post('mode')){
-							$data['warning'] = Array();
-
 							// Jarak pacak utk dam yg sama adalah sbb:
-							// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
-							// Kurang dari 3 bulan dari lahir(ada lahir)
-							$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
-							$wheBirth['studs.stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-							$wheBirth['births.bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-							$birth = $this->birthModel->get_births($wheBirth)->row();
-							if (!$birth){
+							// Lebih dari 4 bulan dari pacak(tidak ada lahir) 
+							// Lebih dari 3 bulan dari lahir(ada lahir)
+							$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+							if ($res){
+								$err++;
+								$this->session->set_flashdata('error_message', "Stud interval must be more than ".$this->config->item('jarak_pacak_lahir')." days from dam's previous birth date");
+							}
+							else{
 								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
 								if ($res){
 									$err++;
-									$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak').' days from stud date';
-								}
-							}
-							else{
-								$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
-								if ($res){
-									$err++;
-									$data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak_lahir').' days from birth date';
+									$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak')." days from dam's previous stud date");
 								}
 							}
 								
@@ -835,6 +827,15 @@ class Studs extends CI_Controller {
 									$err++;
 									$data['warning'][] = 'Sire and dam are sibling';
 								}
+							}
+						}
+
+						if (!$err){
+							$ts = new DateTime();
+							$ts_stud = new DateTime($date);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', "The Stud Date must be before today's date");
 							}
 						}
 
@@ -1119,69 +1120,74 @@ class Studs extends CI_Controller {
 				$whereSire['can_stat'] = $this->config->item('accepted');
 				$whereSire['can_rip '] = $this->config->item('canine_alive');
 				$data['sire'] = $this->caninesModel->get_canines_simple($whereSire)->result();
-	
-				// Sire harus 12 bulan
-				$stat = Array();
-				foreach ($data['sire'] as $c){
-					$can = $this->caninesModel->get_dob_by_id($c->id);
-					$sire_dob = $can->can_date_of_birth;
-					
-					$ts_now = date('Y-m-d');
-					$ts = strtotime($ts_now);
-					$tssire = strtotime($sire_dob);
-					
-					$year = date('Y', $ts);
-					$yearsire = date('Y', $tssire);
-	
-					$month = date('m', $ts);
-					$monthsire = date('m', $tssire);
-	
-					$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
-					if (abs($diffsire) < $this->config->item('umur_canine')) {
-						$stat[] = 0;
+
+				if(isset($sire)){
+					// Sire harus 12 bulan
+					$stat = Array();
+					foreach ($data['sire'] as $c){
+						$can = $this->caninesModel->get_dob_by_id($c->id);
+						$sire_dob = $can->can_date_of_birth;
+						
+						$ts_now = date('Y-m-d');
+						$ts = strtotime($ts_now);
+						$tssire = strtotime($sire_dob);
+						
+						$year = date('Y', $ts);
+						$yearsire = date('Y', $tssire);
+		
+						$month = date('m', $ts);
+						$monthsire = date('m', $tssire);
+		
+						$diffsire = (($year - $yearsire) * 12) + ($month - $monthsire);
+						if (abs($diffsire) < $this->config->item('umur_canine')) {
+							$stat[] = 0;
+						}
+						else{
+							$stat[] = 1;
+						}
 					}
-					else{
-						$stat[] = 1;
+					$data['sireStat'] = $stat;
+		
+					$whereCan['can_id'] = $this->input->post('stu_sire_id');
+					$can = $this->caninesModel->get_canines($whereCan)->row();
+					$like['can_a_s'] = $this->input->post('can_a_s');
+					$whereDam['can_gender'] = 'FEMALE';
+					$whereDam['can_stat'] = $this->config->item('accepted');
+					$whereDam['can_id !='] = $this->config->item('dam_id');
+					$whereDam['can_member_id !='] = $this->config->item('no_member');
+					$whereDam['can_breed'] = $can->can_breed;
+					$whereDam['can_rip '] = $this->config->item('canine_alive');
+					$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
+		
+					// Dam harus 12 bulan
+					$stat = Array();
+					foreach ($data['dam'] as $c){
+						$can = $this->caninesModel->get_dob_by_id($c->id);
+						$dam_dob = $can->can_date_of_birth;
+						
+						$ts_now = date('Y-m-d');
+						$ts = strtotime($ts_now);
+						$tsdam = strtotime($dam_dob);
+						
+						$year = date('Y', $ts);
+						$yeardam = date('Y', $tsdam);
+		
+						$month = date('m', $ts);
+						$monthdam = date('m', $tsdam);
+		
+						$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+						if (abs($diffdam) < $this->config->item('umur_canine')) {
+							$stat[] = 0;
+						}
+						else{
+							$stat[] = 1;
+						}
 					}
+					$data['damStat'] = $stat;
 				}
-				$data['sireStat'] = $stat;
-	
-				$whereCan['can_id'] = $this->input->post('stu_sire_id');
-				$can = $this->caninesModel->get_canines($whereCan)->row();
-				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'FEMALE';
-				$whereDam['can_stat'] = $this->config->item('accepted');
-				$whereDam['can_id !='] = $this->config->item('dam_id');
-				$whereDam['can_member_id !='] = $this->config->item('no_member');
-				$whereDam['can_breed'] = $can->can_breed;
-				$whereDam['can_rip '] = $this->config->item('canine_alive');
-				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
-	
-				// Dam harus 12 bulan
-				$stat = Array();
-				foreach ($data['dam'] as $c){
-					$can = $this->caninesModel->get_dob_by_id($c->id);
-					$dam_dob = $can->can_date_of_birth;
-					
-					$ts_now = date('Y-m-d');
-					$ts = strtotime($ts_now);
-					$tsdam = strtotime($dam_dob);
-					
-					$year = date('Y', $ts);
-					$yeardam = date('Y', $tsdam);
-	
-					$month = date('m', $ts);
-					$monthdam = date('m', $tsdam);
-	
-					$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
-					if (abs($diffdam) < $this->config->item('umur_canine')) {
-						$stat[] = 0;
-					}
-					else{
-						$stat[] = 1;
-					}
+				else{
+					$data['sire'] = [];
 				}
-				$data['damStat'] = $stat;
 				$data['mode'] = 0;
 				$this->load->view('backend/edit_stud', $data);
 			}
@@ -1237,41 +1243,45 @@ class Studs extends CI_Controller {
 	
 				$whereCan['can_id'] = $this->input->post('stu_sire_id');
 				$can = $this->caninesModel->get_canines($whereCan)->row();
-				
-				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'FEMALE';
-				$whereDam['can_stat'] = $this->config->item('accepted');
-				$whereDam['can_id !='] = $this->config->item('dam_id');
-				$whereDam['can_member_id !='] = $this->config->item('no_member');
-				$whereDam['can_breed'] = $can->can_breed;
-				$whereDam['can_rip '] = $this->config->item('canine_alive');
-				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
-	
-				// Dam harus 12 bulan
-				$data['damStat'] = Array();
-				foreach ($data['dam'] as $c){
-					$can = $this->caninesModel->get_dob_by_id($c->id);
-					$dam_dob = $can->can_date_of_birth;
-					
-					$ts_now = date('Y-m-d');
-					$ts = strtotime($ts_now);
-					$tsdam = strtotime($dam_dob);
-					
-					$year = date('Y', $ts);
-					$yeardam = date('Y', $tsdam);
-	
-					$month = date('m', $ts);
-					$monthdam = date('m', $tsdam);
-	
-					$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
-					if (abs($diffdam) < $this->config->item('umur_canine')) {
-						$data['damStat'][] = 0;
-					}
-					else{
-						$data['damStat'][] = 1;
+				if(isset($can)){
+					$like['can_a_s'] = $this->input->post('can_a_s');
+					$whereDam['can_gender'] = 'FEMALE';
+					$whereDam['can_stat'] = $this->config->item('accepted');
+					$whereDam['can_id !='] = $this->config->item('dam_id');
+					$whereDam['can_member_id !='] = $this->config->item('no_member');
+					$whereDam['can_breed'] = $can->can_breed;
+					$whereDam['can_rip '] = $this->config->item('canine_alive');
+					$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
+		
+					// Dam harus 12 bulan
+					$data['damStat'] = Array();
+					foreach ($data['dam'] as $c){
+						$can = $this->caninesModel->get_dob_by_id($c->id);
+						$dam_dob = $can->can_date_of_birth;
+						
+						$ts_now = date('Y-m-d');
+						$ts = strtotime($ts_now);
+						$tsdam = strtotime($dam_dob);
+						
+						$year = date('Y', $ts);
+						$yeardam = date('Y', $tsdam);
+		
+						$month = date('m', $ts);
+						$monthdam = date('m', $tsdam);
+		
+						$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+						if (abs($diffdam) < $this->config->item('umur_canine')) {
+							$data['damStat'][] = 0;
+						}
+						else{
+							$data['damStat'][] = 1;
+						}
 					}
 				}
-				$data['mode'] = $this->input->post('mode');
+				else{
+					$data['dam'] = [];
+				}
+				$data['mode'] = 1;
 	
 				if ($this->form_validation->run() == FALSE){
 					$this->load->view('backend/edit_stud', $data);
@@ -1363,27 +1373,21 @@ class Studs extends CI_Controller {
                                 }
                             }
 
-                            // Jarak pacak utk dam yg sama adalah sbb:
-                            // Kurang dari 4 bulan dari pacak(tidak ada lahir) 
-                            // Kurang dari 3 bulan dari lahir(ada lahir)
-                            $wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
-                            $wheBirth['studs.stu_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-                            $wheBirth['births.bir_stat IN ('.$this->config->item('accepted').', '.$this->config->item('completed').')'] = null;
-                            $birth = $this->birthModel->get_births($wheBirth)->row();
-                            if (!$birth){
-                                $res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
-                                if ($res){
-                                    $err++;
-                                    $data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak').' days from stud date';
-                                }
-                            }
-                            else{
-                                $res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
-                                if ($res){
-                                    $err++;
-                                    $data['warning'][] = 'Stud interval must greater than '.$this->config->item('jarak_pacak_lahir').' days from birth date';
-                                }
-                            }
+                            // // Jarak pacak utk dam yg sama adalah sbb:
+                            // // Lebih dari 4 bulan dari pacak(tidak ada lahir) 
+                            // // Lebih dari 3 bulan dari lahir(ada lahir)
+							// $res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+							// if ($res){
+							// 	$err++;
+							// 	$this->session->set_flashdata('error_message', "Stud interval must be more than ".$this->config->item('jarak_pacak_lahir')." days from dam's previous birth date");
+							// }
+							// else{
+							// 	$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
+							// 	if ($res){
+							// 		$err++;
+							// 		$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak')." days from dam's previous stud date");
+							// 	}
+							// }
                                 
                             // dam anak dari sire
                             $wherePedSire['ped_sire_id'] = $this->input->post('stu_sire_id');
@@ -1419,6 +1423,15 @@ class Studs extends CI_Controller {
                                 }
                             }
                         }
+
+						if (!$err){
+							$ts = new DateTime();
+							$ts_stud = new DateTime($date);
+							if ($ts_stud > $ts){
+								$err++;
+								$this->session->set_flashdata('error_message', "The Stud Date must be before today's date");
+							}
+						}
 		
 						if (!$err){
 							if (isset($uploadedStud)){

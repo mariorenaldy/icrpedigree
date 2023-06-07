@@ -53,10 +53,15 @@
                                 <?php
                                     $i = 0;
                                     $opt = [];
-                                    foreach ($dam as $row) {
-                                        if ($damStat[$i])
-                                            $opt[$row->id] = $row->name;
-                                        $i++;
+                                    if(isset($dam)){
+                                        foreach ($dam as $row) {
+                                            if ($damStat[$i])
+                                                $opt[$row->id] = $row->name;
+                                            $i++;
+                                        }
+                                    }
+                                    else{
+                                        $dam = [];
                                     }
                                     if (!$mode)
                                         echo form_dropdown('stu_dam_id', $opt, $stud->stu_dam_id, 'class="form-control"');
@@ -68,15 +73,9 @@
                         <div class="input-group mb-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Stud Photo</label>
                             <div class="col-md-12 text-center">
-                                <?php 
-                                    if (!$mode){ 
-                                        if ($stud->stu_photo){
-                                ?>
+                                <?php if ($stud->stu_photo){ ?>
                                     <img id="imgPreview" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_photo ?>">
                                 <?php } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <?php } 
-                                } else { ?>
                                     <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stud')"/>
@@ -86,16 +85,10 @@
                         <div class="input-group mb-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Sire Photo</label>
                             <div class="col-md-12 text-center">
-                                <?php 
-                                    if (!$mode){ 
-                                        if ($stud->stu_sire_photo){
-                                ?>
-                                    <img id="imgPreviewSire" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_sire_photo ?>">
+                                <?php if ($stud->stu_sire_photo){ ?>
+                                    <img id="imgPreview" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_sire_photo ?>">
                                 <?php } else { ?>
-                                    <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <?php } 
-                                } else { ?>
-                                    <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('sire')"/>
                                 <input type="hidden" name="attachment_sire" id="attachment_sire">
@@ -104,16 +97,10 @@
                         <div class="input-group mb-3 gap-3">
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Dam Photo</label>
                             <div class="col-md-12 text-center">
-                                <?php 
-                                    if (!$mode){ 
-                                        if ($stud->stu_dam_photo){
-                                ?>
-                                    <img id="imgPreviewDam" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_dam_photo ?>">
+                                <?php if ($stud->stu_dam_photo){ ?>
+                                    <img id="imgPreview" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_dam_photo ?>">
                                 <?php } else { ?>
-                                    <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <?php } 
-                                } else { ?>
-                                    <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('dam')"/>
                                 <input type="hidden" name="attachment_dam" id="attachment_dam">
@@ -325,21 +312,6 @@
 
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
-            <?php } ?>
-
-            <?php if (isset($warning)){ ?>
-                var proceed = confirm("<?php 
-                    foreach ($warning AS $r){
-                        echo $r.'\n';
-                    }
-                    echo 'Proceed?';
-                ?>");
-                if (proceed){
-                    $('#mode').val(1);
-                }
-                else{
-                    window.location = '<?= base_url() ?>backend/Studs';
-                }
             <?php } ?>
         });
     </script>
