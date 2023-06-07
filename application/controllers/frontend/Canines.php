@@ -298,21 +298,21 @@ class Canines extends CI_Controller {
                     if ($ts_dob > $ts){
                         $err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+							$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus sebelum tanggal hari ini');
 						}
 						else{
-							$this->session->set_flashdata('error_message', "The dog's date of birth must be more than ".$this->config->item('min_jarak_lapor_anak').' days');
+							$this->session->set_flashdata('error_message', "The dog's date of birth must be before today's date");
 						}
                     }
                     else{ // min 45 hari
-                        $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
+                        $diff = $ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak');
                         if ($diff < 1){
                             $err++;
 							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+								$this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari sebelum hari ini');
 							}
 							else{
-								$this->session->set_flashdata('error_message', "The dog's date of birth must be more than ".$this->config->item('min_jarak_lapor_anak').' days');
+								$this->session->set_flashdata('error_message', "The dog's date of birth must be more than ".$this->config->item('min_jarak_lapor_anak').' days before today');
 							}
                         }
                     }

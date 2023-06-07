@@ -209,13 +209,13 @@ class Studs extends CI_Controller {
 				}
 				else{ // min 58 hari; max 75 hari
 					$err = 0;
-					$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+					$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 					if ($diff < 1){
 						$err++;
 					}
 
 					if (!$err){
-						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+						$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 						if ($diff > 1){
 							$err++;
 						}
@@ -600,157 +600,123 @@ class Studs extends CI_Controller {
 							}
 						}
 
-						// Lapor pacak harus kurang dari 7 hari
 						if (!$err){
-							$cek = true;
-							// $ts = new DateTime($date);
-							// $ts_now = new DateTime();
-							
-							// if ($ts > $ts_now)
-							// 	$cek = false;
-							// else{
-							// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
-							// 	if ($diff > 2)
-							// 		$cek = false;
-							// }
-							
-							$year = $piece[2];
-							$month = $piece[1];
-							$day = $piece[0];
-							if ($year != $this->config->item('tahun_lapor_pacak'))
-								$cek = false;
-							else{
-								if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak'))
-									$cek = false;
+							// Jarak pacak utk dam yg sama adalah sbb:
+							// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
+							// Kurang dari 3 bulan dari lahir(ada lahir)
+							$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
+							$wheBirth['studs.stu_stat != '] = $this->config->item('rejected');
+							$wheBirth['births.bir_stat != '] = $this->config->item('rejected');
+							$birth = $this->birthModel->get_births($wheBirth)->row();
+							if (!$birth){
+								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
 							}
+							else{
+								$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
+							}
+							if (!$res){ 
+								// dam anak dari sire
+								$wherePedSire['ped_sire_id'] = $this->input->post('stu_sire_id');
+								$wherePedSire['ped_canine_id'] = $this->input->post('stu_dam_id');
+								$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
+								if ($pedSire){
+									$err++;
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Dam cannot be the child of sire');
+									}
+								}
 
-							if ($cek){
-								// Jarak pacak utk dam yg sama adalah sbb:
-								// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
-								// Kurang dari 3 bulan dari lahir(ada lahir)
-								$wheBirth['studs.stu_dam_id'] = $this->input->post('stu_dam_id');
-								$wheBirth['studs.stu_stat != '] = $this->config->item('rejected');
-								$wheBirth['births.bir_stat != '] = $this->config->item('rejected');
-								$birth = $this->birthModel->get_births($wheBirth)->row();
-                                if (!$birth){
-                                    $res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
-								}
-								else{
-                                    $res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
-								}
-                                if (!$res){ 
-									// dam anak dari sire
-									$wherePedSire['ped_sire_id'] = $this->input->post('stu_sire_id');
-									$wherePedSire['ped_canine_id'] = $this->input->post('stu_dam_id');
-									$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
-									if ($pedSire){
+								if (!$err){
+									// sire anak dari dam
+									$wherePedDam['ped_dam_id'] = $this->input->post('stu_dam_id');
+									$wherePedDam['ped_canine_id'] = $this->input->post('stu_sire_id');
+									$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
+									if ($pedDam){
 										$err++;
 										if ($site_lang == 'indonesia') {
-											$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
+											$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'Dam cannot be the child of sire');
+											$this->session->set_flashdata('error_message', 'Sire cannot be the child of dam');
 										}
-									}
-
-									if (!$err){
-										// sire anak dari dam
-										$wherePedDam['ped_dam_id'] = $this->input->post('stu_dam_id');
-										$wherePedDam['ped_canine_id'] = $this->input->post('stu_sire_id');
-										$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
-										if ($pedDam){
-											$err++;
-											if ($site_lang == 'indonesia') {
-												$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
-											}
-											else{
-												$this->session->set_flashdata('error_message', 'Sire cannot be the child of dam');
-											}
-										}
-									}
-
-									if (!$err){ 
-										// sibling
-										$wherePed['ped_canine_id'] = $this->input->post('stu_sire_id');
-										$ped = $this->pedigreesModel->get_pedigrees($wherePed)->row();
-										if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
-											$sibling = $this->studModel->check_siblings($this->input->post('stu_sire_id'), $ped->ped_sire_id, $ped->ped_dam_id, $can->can_date_of_birth2)->result();
-											$cek = false;
-											foreach ($sibling AS $r){
-												if ($r->can_id == $this->input->post('stu_dam_id'))
-													$cek = true;
-											}
-											if ($cek){
-												$err++;
-												if ($site_lang == 'indonesia') {
-													$this->session->set_flashdata('error_message', 'Sire dan dam adalah sibling');
-												}
-												else{
-													$this->session->set_flashdata('error_message', 'Sire and dam are siblings');
-												}
-											}
-										}
-									}
-
-									if (!$err){
-										$data = array(
-											'stu_photo' => $photo,
-											'stu_sire_id' => $this->input->post('stu_sire_id'),
-											'stu_dam_id' => $this->input->post('stu_dam_id'),
-											'stu_sire_photo' => $sire,
-											'stu_dam_photo' => $dam,
-											'stu_stud_date' => $date,
-											'stu_member_id' => $this->session->userdata('mem_id'),
-											'stu_partner_id' => $can->can_member_id,
-										);
-										$stud = $this->studModel->add_studs($data);
-										if ($stud){
-											$this->session->set_flashdata('add_success', true);
-											redirect("frontend/Studs");
-										}
-										else{
-											if ($site_lang == 'indonesia') {
-												$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
-											}
-											else{
-												$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: 1');
-											}
-											$this->load->view('frontend/add_stud', $data);
-										}
-									}
-									if ($err){
-										$this->load->view('frontend/add_stud', $data);
 									}
 								}
-								else{
-									if (!$birth){
-										if ($site_lang == 'indonesia') {
-											$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak');
+
+								if (!$err){ 
+									// sibling
+									$wherePed['ped_canine_id'] = $this->input->post('stu_sire_id');
+									$ped = $this->pedigreesModel->get_pedigrees($wherePed)->row();
+									if ($ped->ped_sire_id != $this->config->item('sire_id') && $ped->ped_dam_id != $this->config->item('dam_id')){
+										$sibling = $this->studModel->check_siblings($this->input->post('stu_sire_id'), $ped->ped_sire_id, $ped->ped_dam_id, $can->can_date_of_birth2)->result();
+										$cek = false;
+										foreach ($sibling AS $r){
+											if ($r->can_id == $this->input->post('stu_dam_id'))
+												$cek = true;
 										}
-										else{
-											$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak').' days from stud date');
+										if ($cek){
+											$err++;
+											if ($site_lang == 'indonesia') {
+												$this->session->set_flashdata('error_message', 'Sire dan dam adalah sibling');
+											}
+											else{
+												$this->session->set_flashdata('error_message', 'Sire and dam are siblings');
+											}
 										}
-										$this->load->view('frontend/add_stud', $data);
+									}
+								}
+
+								if (!$err){
+									$data = array(
+										'stu_photo' => $photo,
+										'stu_sire_id' => $this->input->post('stu_sire_id'),
+										'stu_dam_id' => $this->input->post('stu_dam_id'),
+										'stu_sire_photo' => $sire,
+										'stu_dam_photo' => $dam,
+										'stu_stud_date' => $date,
+										'stu_member_id' => $this->session->userdata('mem_id'),
+										'stu_partner_id' => $can->can_member_id,
+									);
+									$stud = $this->studModel->add_studs($data);
+									if ($stud){
+										$this->session->set_flashdata('add_success', true);
+										redirect("frontend/Studs");
 									}
 									else{
 										if ($site_lang == 'indonesia') {
-											$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal lahir');
+											$this->session->set_flashdata('error_message', 'Gagal menyimpan data pacak. Err code: 1');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak_lahir').' days from birth date');
+											$this->session->set_flashdata('error_message', 'Failed to save stud. Err code: 1');
 										}
 										$this->load->view('frontend/add_stud', $data);
 									}
 								}
+								if ($err){
+									$this->load->view('frontend/add_stud', $data);
+								}
 							}
 							else{
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Pelaporan pacak harus kurang dari '.$this->config->item('hari_lapor_pacak').' hari');
+								if (!$birth){
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak').' days from stud date');
+									}
+									$this->load->view('frontend/add_stud', $data);
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Stud report must be less than '.$this->config->item('hari_lapor_pacak').' days');
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal lahir');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak_lahir').' days from birth date');
+									}
+									$this->load->view('frontend/add_stud', $data);
 								}
-								$this->load->view('frontend/add_stud', $data);
 							}
 						}
 						else{

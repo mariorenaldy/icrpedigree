@@ -196,13 +196,13 @@ class Births extends CI_Controller {
 				}
 				else{ // min 45 hari; max 100 hari
 					$err = 0;
-					$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+					$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 					if ($diff < 1){
 						$err++;
 					}
 
 					if (!$err){
-						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 						if ($diff > 1){
 							$err++;
 						}
@@ -241,14 +241,14 @@ class Births extends CI_Controller {
 					if ($ts_stud > $ts){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+							$this->session->set_flashdata('error_message', 'Tanggal pacak harus sebelum tanggal hari ini'); 
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date'); 
+							$this->session->set_flashdata('error_message', "Stud date must be before today's date"); 
 						}
 					}
 					else{
-						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+						$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 						if ($diff < 1){
 							$err++;
 							if ($site_lang == 'indonesia') {
@@ -260,7 +260,7 @@ class Births extends CI_Controller {
 						}
 
 						if (!$err){
-							$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+							$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 							if ($diff > 1){
 								$err++;
 								if ($site_lang == 'indonesia') {
@@ -402,36 +402,48 @@ class Births extends CI_Controller {
 
 							$ts = new DateTime($date);
 							$ts_stud = new DateTime($studDate);
-							if ($ts_stud > $ts){
+							$ts_today = new DateTime();
+							if ($ts > $ts_today){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak'); 
+									$this->session->set_flashdata('error_message', 'Tanggal lahir harus sebelum tanggal hari ini'); 
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date'); 
+									$this->session->set_flashdata('error_message', "Date of Birth must be before today's date"); 
 								}
 							}
 							else{
-								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
-								if ($diff < 1){
+								if ($ts_stud > $ts){
 									$err++;
 									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
+										$this->session->set_flashdata('error_message', 'Tanggal lahir harus setelah tanggal pacak'); 
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'Birth report must be more than '.$this->config->item('min_jarak_lapor_lahir').' days after stud date');
+										$this->session->set_flashdata('error_message', 'Date of Birth must be after stud date'); 
 									}
 								}
-
-								if (!$err){
-									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
-									if ($diff > 1){
+								else{
+									$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
+									if ($diff < 1){
 										$err++;
 										if ($site_lang == 'indonesia') {
-											$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+											$this->session->set_flashdata('error_message', 'Pelaporan lahir harus lebih dari '.$this->config->item('min_jarak_lapor_lahir').' hari dari waktu pacak');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date');
+											$this->session->set_flashdata('error_message', 'Birth report must be more than '.$this->config->item('min_jarak_lapor_lahir').' days after stud date');
+										}
+									}
+	
+									if (!$err){
+										$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
+										if ($diff > 1){
+											$err++;
+											if ($site_lang == 'indonesia') {
+												$this->session->set_flashdata('error_message', 'Pelaporan lahir harus kurang dari '.$this->config->item('jarak_lapor_lahir').' hari dari waktu pacak');
+											}
+											else{
+												$this->session->set_flashdata('error_message', 'Birth report must be less than '.$this->config->item('jarak_lapor_lahir').' days after stud date');
+											}
 										}
 									}
 								}

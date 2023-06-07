@@ -176,7 +176,7 @@ class Stambums extends CI_Controller {
 							}
 						}
 						else{
-							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 							if ($diff < 1){
 								$err++;
 								if ($site_lang == 'indonesia') {
@@ -187,7 +187,7 @@ class Stambums extends CI_Controller {
 								}
 							}
 
-							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 							if ($diff > 1){
 								$err++;
 								if ($site_lang == 'indonesia') {
@@ -405,7 +405,7 @@ class Stambums extends CI_Controller {
 						}
 					}
 					else{
-						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+						$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 						if ($diff < 1){
 							$err++;
 							if ($site_lang == 'indonesia') {
@@ -416,7 +416,7 @@ class Stambums extends CI_Controller {
 							}
 						}
 
-						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 						if ($diff > 1){
 							$err++;
 							if ($site_lang == 'indonesia') {
@@ -470,7 +470,7 @@ class Stambums extends CI_Controller {
 							'stb_reg_date' => date("Y/m/d"),
 							'stb_photo' => $photo,
 							'stb_stat' => $this->config->item('saved'),
-							'stb_user' => 0,
+							'stb_user' => $this->config->item('system'),
 							'stb_date' => date('Y-m-d H:i:s'),
 							'stb_member_id' => $kennel->mem_id,
 							'stb_kennel_id' => $kennel->ken_id,
@@ -535,7 +535,7 @@ class Stambums extends CI_Controller {
 					$whereStb['stb_bir_id'] = $this->uri->segment(4);
 					$dataStb = array(
 						'stb_stat' => $this->config->item('rejected'),
-						'stb_user' => 0,
+						'stb_user' => $this->config->item('system'),
 						'stb_date' => date('Y-m-d H:i:s'),
 					);
 					$res = $this->stambumModel->update_stambum($dataStb, $whereStb);
