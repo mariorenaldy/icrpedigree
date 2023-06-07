@@ -173,12 +173,12 @@ class Users extends CI_Controller {
                             $this->session->set_flashdata('delete_success', TRUE);
                         }
                         else{
-                            $this->session->set_flashdata('error_message', 'Failed to delete user');
+                            $this->session->set_flashdata('delete_message', 'Failed to delete user');
                         }
                         redirect("backend/Users");
                     }
                     else{
-                        $this->session->set_flashdata('error_message', 'Failed to delete user');
+                        $this->session->set_flashdata('delete_message', 'Failed to delete user');
                         redirect("backend/Users");
                     }
                 }
@@ -197,6 +197,7 @@ class Users extends CI_Controller {
 
 		public function validate_login(){
 			$where['use_username'] = $this->input->post('username');
+			$where['use_stat !='] = $this->config->item('deleted');
 			$user = $this->userModel->get_users($where)->row();
 	
 			$err = 0;
@@ -271,7 +272,7 @@ class Users extends CI_Controller {
 					}
 					else{
 						$err = 1;
-						$this->session->set_flashdata('error_message', 'Failed to edit user type');
+						$this->session->set_flashdata('delete_message', 'Failed to edit user type');
 					}
 				}
 			}
@@ -345,6 +346,7 @@ class Users extends CI_Controller {
 						$dataUser['use_photo'] = str_replace($this->config->item('path_user'), '', $img_name);
 						$res = $this->userModel->update_users($dataUser, $where);
 						if ($res){
+							$this->session->set_userdata('use_pp', base_url().'uploads/users/'.$dataUser['use_photo']);
 							$this->session->set_flashdata('edit_pp', TRUE);
 							redirect("backend/Users");
 						}

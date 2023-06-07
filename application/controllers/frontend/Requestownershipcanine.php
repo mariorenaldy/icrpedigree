@@ -7,7 +7,7 @@ class Requestownershipcanine extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('requestownershipcanineModel', 'caninesModel', 'memberModel', 'kennelModel', 'notification_model', 'notificationtype_model'));
+			$this->load->model(array('requestownershipcanineModel', 'caninesModel', 'memberModel', 'kennelModel', 'notification_model', 'notificationtype_model', 'LogmemberModel', 'LogkennelModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
@@ -337,7 +337,7 @@ class Requestownershipcanine extends CI_Controller {
 									'mem_password' => sha1($this->input->post('hp')),
 									'mem_stat' => $this->config->item('accepted'),
 									'mem_type' => $this->config->item('free_member'),
-									'mem_user' => $this->session->userdata('use_id'),
+									'mem_user' => $this->config->item('system'),
 									'mem_date' => date('Y-m-d H:i:s'),
 								);
 				
@@ -349,18 +349,51 @@ class Requestownershipcanine extends CI_Controller {
 									'ken_photo' => '-',
 									'ken_member_id' => $mem_id,
 									'ken_stat' => $this->config->item('accepted'),
-									'ken_user' => $this->session->userdata('use_id'),
+									'ken_user' => $this->config->item('system'),
 									'ken_date' => date('Y-m-d H:i:s'),
+								);
+
+								$dataLog = array(
+									'log_member_id' => $mem_id,
+									'log_name' => strtoupper($this->input->post('name')),
+									'log_hp' => $this->input->post('hp'),
+									'log_email' => $this->input->post('email'),
+									'log_stat' => $this->config->item('accepted'),
+									'log_mem_type' => $this->config->item('free_member'),
+									'log_user' => $this->config->item('system'),
+									'log_date' => date('Y-m-d H:i:s')
+								);
+	
+								$dataKennelLog = array(
+									'log_kennel_id' => $ken_id,
+									'log_kennel_name' => '',
+									'log_kennel_type_id' => 0,
+									'log_kennel_photo' => '-',
+									'log_stat' => $this->config->item('accepted'),
+									'log_user' => $this->config->item('system'),
+									'log_date' => date('Y-m-d H:i:s')
 								);
 								
 								$id = $this->memberModel->add_members($member_data);
 								if ($id){
 									$res = $this->kennelModel->add_kennels($kennel_data);
 									if ($res){
-									$result = $this->notification_model->add(17, $mem_id, $mem_id);
-									if (!$result){
-										$err = 'M1';
-									}
+										$result = $this->notification_model->add(17, $mem_id, $mem_id);
+										if ($result){
+											$log = $this->LogmemberModel->add_log($dataLog);
+											if ($log){
+												$logKenRes = $this->LogkennelModel->add_log($dataKennelLog);
+												if (!$logKenRes){
+													$err = 'M4';
+												}
+											}
+											else{
+												$err = 'M5';
+											}
+										}
+										if (!$result){
+											$err = 'M1';
+										}
 									}
 									else{
                                         $err = 'M2';

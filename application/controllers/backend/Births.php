@@ -84,13 +84,13 @@ class Births extends CI_Controller {
                     }
                     else{ // min 45 hari; max 100 hari
                         $err = 0;
-                        $diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+                        $diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
                         if ($diff < 1){
                             $err++;
                         }
 
                         if (!$err){
-                            $diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+                            $diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
                             if ($diff > 1){
                                 $err++;
                             }
@@ -220,13 +220,13 @@ class Births extends CI_Controller {
                     }
                     else{ // min 45 hari; max 100 hari
                         $err = 0;
-                        $diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+                        $diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
                         if ($diff < 1){
                             $err++;
                         }
 
                         if (!$err){
-                            $diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+                            $diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
                             if ($diff > 1){
                                 $err++;
                             }
@@ -313,7 +313,7 @@ class Births extends CI_Controller {
 
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-			$where['bir_stat != '] = $this->config->item('rejected');
+			// $where['bir_stat != '] = $this->config->item('rejected');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
 
@@ -331,6 +331,7 @@ class Births extends CI_Controller {
 		}
 
 		public function search_all(){
+			$data['type'] = 'All';
             if ($this->input->post('type')){
                 $this->session->set_userdata('type', $this->input->post('type'));
                 $data['type'] = $this->input->post('type');
@@ -407,7 +408,7 @@ class Births extends CI_Controller {
 				$where['bir_date_of_birth'] = $date;
 			}
 			if ($data['type'] == $this->config->item('all'))
-                $where['bir_stat != '] = $this->config->item('rejected');
+                $where = '';
             else
                 $where['bir_stat'] = $data['type'];
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
@@ -443,20 +444,20 @@ class Births extends CI_Controller {
                         $ts_stud = new DateTime($studDate);
                         if ($ts_stud > $ts){
                             $err++;
-                            $this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
+                            $this->session->set_flashdata('birth_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'); 
                         }
                         else{
-                            $diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+                            $diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
                             if ($diff < 1){
                                 $err++;
-                                $this->session->set_flashdata('error_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
+                                $this->session->set_flashdata('birth_message', 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud');
                             }
     
                             if (!$err){
-                                $diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+                                $diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
                                 if ($diff > 1){
                                     $err++;
-                                    $this->session->set_flashdata('error_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
+                                    $this->session->set_flashdata('birth_message', 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud');
                                 }
                             }
     
@@ -472,16 +473,16 @@ class Births extends CI_Controller {
                     }
                     else{
                         if ($birth->bir_stat == $this->config->item('saved')){
-                            $this->session->set_flashdata('error_message', 'Birth has been saved.');
+                            $this->session->set_flashdata('birth_message', 'Birth has been saved.');
                         }
                         else{
-                            $this->session->set_flashdata('error_message', 'Birth has been approved.');
+                            $this->session->set_flashdata('birth_message', 'Birth has been approved.');
                         }
                         redirect('backend/Studs');
                     }
                 }
                 else{
-                    $this->session->set_flashdata('error_message', 'Lapor lahir tidak valid');
+                    $this->session->set_flashdata('birth_message', 'Lapor lahir tidak valid');
                     redirect('backend/Studs');
                 }
 			}
@@ -552,14 +553,14 @@ class Births extends CI_Controller {
 								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
 							}
 							else{
-								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+								$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 								if ($diff < 1){
 									$err++;
 									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
 								}
 
 								if (!$err){
-									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+									$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 									if ($diff > 1){
 										$err++;
 										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
@@ -796,14 +797,14 @@ class Births extends CI_Controller {
 								$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud'; 
 							}
 							else{
-								$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+								$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 								if ($diff < 1){
 									$err++;
 									$data['warning'][] = 'Birth must be reported after '.$this->config->item('min_jarak_lapor_lahir').' days from stud';
 								}
 
 								if (!$err){
-									$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+									$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 									if ($diff > 1){
 										$err++;
 										$data['warning'][] = 'Birth must be reported before '.$this->config->item('jarak_lapor_lahir').' days from stud';
@@ -1146,7 +1147,7 @@ class Births extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to delete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('delete_message', 'Failed to delete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Births');
 					}
 				}
@@ -1192,7 +1193,7 @@ class Births extends CI_Controller {
                     }
                     if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to complete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
+						$this->session->set_flashdata('delete_message', 'Failed to complete birth id = '.$this->uri->segment(4).'. Err code: '.$err);
 						redirect('backend/Births');
 					}
                 }

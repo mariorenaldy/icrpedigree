@@ -60,15 +60,17 @@
                                         <td><span class="text-nowrap"><?= $m->log_payment_date; ?></span></td>
                                         <td>
                                             <?php
-                                                if ($kennel[$i]->log_kennel_photo && $kennel[$i]->log_kennel_photo != '-'){
-                                                    echo '<img src="'.base_url().'uploads/kennels/'.$kennel[$i]->log_kennel_photo.'" class="img-fluid img-thumbnail" alt="kennel" id="myImg'.$kennel[$i]->log_id.'" onclick="display(\'myImg'.$kennel[$i]->log_id.'\')">';
-                                                } 
-                                                else {
-                                                    echo '<img src="'.base_url().'assets/img/'.$this->config->item('canine_img').'" class="img-fluid img-thumbnail" alt="kennel" id="myImg'.$kennel[$i]->log_id.'" onclick="display(\'myImg'.$kennel[$i]->log_id.'\')">';
+                                                if(isset($kennel[$i])){
+                                                    if ($kennel[$i]->log_kennel_photo && $kennel[$i]->log_kennel_photo != '-'){
+                                                        echo '<img src="'.base_url().'uploads/kennels/'.$kennel[$i]->log_kennel_photo.'" class="img-fluid img-thumbnail" alt="kennel" id="myImg'.$kennel[$i]->log_id.'" onclick="display(\'myImg'.$kennel[$i]->log_id.'\')">';
+                                                    } 
+                                                    else {
+                                                        echo '<img src="'.base_url().'assets/img/'.$this->config->item('canine_img').'" class="img-fluid img-thumbnail" alt="kennel" id="myImg'.$kennel[$i]->log_id.'" onclick="display(\'myImg'.$kennel[$i]->log_id.'\')">';
+                                                    }
                                                 }
                                             ?>
                                         </td>
-                                        <td><?= $kennel[$i]->ken_type_name; ?></td>
+                                        <td><?php if(isset($kennel[$i])){ $kennel[$i]->ken_type_name; } ?></td>
                                         <td><?= $m->stat_name; ?></td>
                                     </tr>
                                     <?php $i++; 

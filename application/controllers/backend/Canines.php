@@ -449,7 +449,7 @@ class Canines extends CI_Controller {
                         $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
                     }
                     else{ // min 45 hari
-                        $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
+                        $diff = $ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak');
                         if ($diff < 1){
                             $err++;
                             $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
@@ -1187,7 +1187,7 @@ public function validate_edit_pedigree(){
                 }
                 if ($err){
                     $this->db->trans_rollback();
-                    $this->session->set_flashdata('error_message', 'Failed to delete canine id = '.$this->uri->segment(4).'. Error code: '.$err);
+                    $this->session->set_flashdata('delete_message', 'Failed to delete canine id = '.$this->uri->segment(4).'. Error code: '.$err);
                     redirect('backend/Canines');
                 }
             }

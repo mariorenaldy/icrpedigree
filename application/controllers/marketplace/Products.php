@@ -250,7 +250,7 @@ class Products extends CI_Controller
                 }
                 if ($err){
                     $this->db->trans_rollback();
-                    $this->session->set_flashdata('error_message', 'Failed to delete product id = '.$this->uri->segment(4).'. Error code: '.$err);
+                    $this->session->set_flashdata('delete_message', 'Failed to delete product id = '.$this->uri->segment(4).'. Error code: '.$err);
                     redirect('marketplace/Products/listProducts');
                 }
             }

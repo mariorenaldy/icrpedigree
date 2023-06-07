@@ -198,13 +198,13 @@ class Stambums extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Puppy must be reported before '.$this->config->item('jarak_lapor_anak').' days from birth'); 
 						}
 						else{
-							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 							if ($diff < 1){
 								$err++;
 								$this->session->set_flashdata('error_message', 'Puppy must be reported after '.$this->config->item('min_jarak_lapor_anak').' days from birth');
 							}
 
-							$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 							if ($diff > 1){
 								$err++;
 								$this->session->set_flashdata('error_message', 'Puppy must be reported before '.$this->config->item('jarak_lapor_anak').' days from birth');
@@ -238,7 +238,7 @@ class Stambums extends CI_Controller {
 					}
 				}
 				else {
-					$this->session->set_flashdata('error_message', 'Invalid birth');
+					$this->session->set_flashdata('delete_message', 'Invalid birth');
 					redirect("backend/Births");
 				}
             }
@@ -444,13 +444,13 @@ class Stambums extends CI_Controller {
 						$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'; 
 					}
 					else{
-						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak'));
+						$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 						if ($diff < 1){
 							$err++;
 							$data['warning'][] = 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date';
 						}
 
-						$diff = floor($ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak'));
+						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 						if ($diff > 1){
 							$err++;
 							$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date';
@@ -821,7 +821,7 @@ class Stambums extends CI_Controller {
                         $this->db->trans_complete();
                     else{
                         $this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to save puppy report. Err code: '.$err);
+						$this->session->set_flashdata('delete_message', 'Failed to save puppy report. Err code: '.$err);
 					}
                     redirect("backend/Stambums");
 				}
@@ -849,7 +849,7 @@ class Stambums extends CI_Controller {
 					);
 					$res = $this->birthModel->update_births($dataBirth, $wheBirth);
 					if (!$res){
-                        $this->session->set_flashdata('error_message', 'Failed to save puppy report.');
+                        $this->session->set_flashdata('delete_message', 'Failed to save puppy report.');
 					}
                     redirect("backend/Stambums");
 				}
@@ -1157,7 +1157,7 @@ public function delete(){
             }
             if ($err){
                 $this->db->trans_rollback();
-                $this->session->set_flashdata('error_message', 'Failed to delete puppy id = '.$this->uri->segment(4).'. Error code: '.$err);
+                $this->session->set_flashdata('delete_message', 'Failed to delete puppy id = '.$this->uri->segment(4).'. Error code: '.$err);
                 redirect('backend/Stambums');
             }
         }

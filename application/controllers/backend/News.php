@@ -111,7 +111,7 @@ class News extends CI_Controller{
                 redirect('backend/News');
             }
             else{
-                $this->session->set_flashdata('error_message', 'Failed to delete news');
+                $this->session->set_flashdata('delete_message', 'Failed to delete news');
                 redirect('backend/News');
             }
         }

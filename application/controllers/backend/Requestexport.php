@@ -190,7 +190,7 @@ class Requestexport extends CI_Controller {
                             $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
                         }
                         else{ // min 45 hari
-                            $diff = floor($ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak'));
+                            $diff = $ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak');
                             if ($diff < 1){
                                 $err++;
                                 $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');

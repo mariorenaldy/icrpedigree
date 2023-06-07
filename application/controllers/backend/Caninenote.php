@@ -164,12 +164,12 @@ class Caninenote extends CI_Controller{
                     redirect('backend/Caninenote/index/'.$this->uri->segment(4));
                 }
                 else{
-                    $this->session->set_flashdata('error_message', 'Failed to delete canine note');
+                    $this->session->set_flashdata('delete_message', 'Failed to delete canine note');
                     redirect('backend/Caninenote/index/'.$this->uri->segment(4));
                 }
             }
             else{
-                $this->session->set_flashdata('error_message', 'Invalid canine note id');
+                $this->session->set_flashdata('delete_message', 'Invalid canine note id');
                 redirect('backend/Caninenote/index/'.$this->uri->segment(4));
             }
         }
@@ -188,7 +188,7 @@ class Caninenote extends CI_Controller{
                 $this->load->view('backend/log_canine_notes', $data);
             }
             else{
-                $this->session->set_flashdata('error_message', 'No logs');
+                $this->session->set_flashdata('delete_message', 'No logs');
                 redirect('backend/Caninenote/index/'.$this->uri->segment(4));
             }
         }

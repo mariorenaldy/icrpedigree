@@ -105,7 +105,7 @@ class Breeds extends CI_Controller {
                         $this->session->set_flashdata('delete_success', TRUE);
                     }
                     else{
-                        $this->session->set_flashdata('error_message', 'Failed to delete breed');
+                        $this->session->set_flashdata('delete_message', 'Failed to delete breed');
                     }
                     redirect("backend/Breeds");
                 }
@@ -128,7 +128,7 @@ class Breeds extends CI_Controller {
                         $this->session->set_flashdata('activate_success', TRUE);
                     }
                     else{
-                        $this->session->set_flashdata('error_message', 'Failed to activate breed');
+                        $this->session->set_flashdata('delete_message', 'Failed to activate breed');
                     }
                     redirect("backend/Breeds");
                 }

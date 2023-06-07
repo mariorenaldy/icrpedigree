@@ -75,9 +75,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">
-                        <?php if ($this->session->flashdata('error_message')){ ?>
+                        <?php if ($this->session->flashdata('delete_message')){ ?>
                             <div class="row">
-                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                                <div class="col-12"><?= $this->session->flashdata('delete_message') ?></div>
                             </div>
                         <?php } ?>
                         <?php if (validation_errors()){ ?>
@@ -180,7 +180,7 @@
                     $('#message-modal').modal('show');
             <?php } ?>
 
-            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+            <?php if ($this->session->flashdata('delete_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>
         });

@@ -75,13 +75,13 @@ class Studs extends CI_Controller {
 				}
 				else{ // min 58 hari; max 75 hari
 					$err = 0;
-					$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+					$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 					if ($diff < 1){
 						$err++;
 					}
 
 					if (!$err){
-						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+						$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 						if ($diff > 1){
 							$err++;
 						}
@@ -209,13 +209,13 @@ class Studs extends CI_Controller {
 				}
 				else{ // min 58 hari; max 75 hari
 					$err = 0;
-					$diff = floor($ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir'));
+					$diff = $ts->diff($ts_stud)->days/$this->config->item('min_jarak_lapor_lahir');
 					if ($diff < 1){
 						$err++;
 					}
 
 					if (!$err){
-						$diff = floor($ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir'));
+						$diff = $ts->diff($ts_stud)->days/$this->config->item('jarak_lapor_lahir');
 						if ($diff > 1){
 							$err++;
 						}
@@ -296,11 +296,11 @@ class Studs extends CI_Controller {
 
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-			$where['stu_stat != '] = $this->config->item('rejected');
-			$data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
+			// $where['stu_stat != '] = $this->config->item('rejected');
+			$data['stud'] = $this->studModel->get_studs(null, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
 			
             $config['base_url'] = base_url().'/backend/Studs/all';
-            $config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->studModel->get_studs(null, $page * $config['per_page'], 0)->num_rows();
             $this->pagination->initialize($config);
 
             $data['keywords'] = '';
@@ -313,6 +313,7 @@ class Studs extends CI_Controller {
 		}
 
 		public function search_all(){
+			$data['type'] = 'All';
             if ($this->input->post('type')){
                 $this->session->set_userdata('type', $this->input->post('type'));
                 $data['type'] = $this->input->post('type');
@@ -389,7 +390,8 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			if ($data['type'] == $this->config->item('all'))
-                $where['stu_stat != '] = $this->config->item('rejected');
+                // $where['stu_stat != '] = $this->config->item('rejected');
+				$where = '';
             else
                 $where['stu_stat'] = $data['type'];
             if ($data['keywords']){
@@ -772,32 +774,7 @@ class Studs extends CI_Controller {
 						$piece = explode("-", $this->input->post('stu_stud_date'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
 						if (!$err && !$this->input->post('mode')){
-							// Lapor pacak harus kurang dari 7 hari
 							$data['warning'] = Array();
-							// $ts = new DateTime($date);
-							// $ts_now = new DateTime();
-							
-							// if ($ts > $ts_now)
-							// 	$cek = false;
-							// else{
-							// 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
-							// 	if ($diff > 2)
-							// 		$cek = false;
-							// }
-							
-							$year = $piece[2];
-							$month = $piece[1];
-							$day = $piece[0];
-							if ($year != $this->config->item('tahun_lapor_pacak')){
-								$err++;
-								$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
-							}
-							else{
-								if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak')){
-									$err++;
-									$data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
-								}
-							}
 
 							// Jarak pacak utk dam yg sama adalah sbb:
 							// Kurang dari 4 bulan dari pacak(tidak ada lahir) 
@@ -1365,18 +1342,7 @@ class Studs extends CI_Controller {
                         $piece = explode("-", $this->input->post('stu_stud_date'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
                         if (!$err && !$this->input->post('mode')){
-                            // Lapor pacak harus kurang dari 7 hari
                             $data['warning'] = Array();
-                            // $ts = new DateTime($date);
-                            // $ts_now = new DateTime();
-
-                            // if ($ts > $ts_now)
-                            // 	$cek = false;
-                            // else{
-                            // 	$diff = floor($ts->diff($ts_now)->days/$this->config->item('jarak_lapor_pacak'));
-                            // 	if ($diff > 2)
-                            // 		$cek = false;
-                            // }
 
                             $year = $piece[2];
                             $month = $piece[1];
@@ -1474,12 +1440,33 @@ class Studs extends CI_Controller {
 								'stu_date' => date('Y-m-d H:i:s'),
 								'stu_partner_id' => $can->can_member_id,
 							);
-							if ($photo)
+
+							if ($photo && $photo != '-'){
 								$data['stu_photo'] = $photo;
-							if ($sire)
+							}
+							else{
+								if ($data['stud']->stu_photo && $data['stud']->stu_photo != '-'){
+									$data['stu_photo'] = $data['stud']->stu_photo;
+								}
+							}
+
+							if ($sire && $sire != '-'){
 								$data['stu_sire_photo'] = $sire;
-							if ($dam)
+							}
+							else{
+								if ($data['stud']->stu_sire_photo && $data['stud']->stu_sire_photo != '-'){
+									$data['stu_sire_photo'] = $data['stud']->stu_sire_photo;
+								}
+							}
+
+							if ($dam && $dam != '-'){
 								$data['stu_dam_photo'] = $dam;
+							}
+							else{
+								if ($data['stud']->stu_dam_photo && $data['stud']->stu_dam_photo != '-'){
+									$data['stu_dam_photo'] = $data['stud']->stu_dam_photo;
+								}
+							}
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
@@ -1575,8 +1562,62 @@ class Studs extends CI_Controller {
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){
-							$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
-							if ($result){
+							if($stud->stu_member_id != $stud->stu_partner_id){
+								$result = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
+								if ($result){
+									$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->uri->segment(4).'">Lapor Lahir / Birth Report</a>');
+									if ($res){
+										$whe['mem_id'] = $stud->stu_member_id;
+										$member = $this->memberModel->get_members($whe)->row();
+	
+										$whePartner['mem_id'] = $stud->stu_partner_id;
+										$partner = $this->memberModel->get_members($whePartner)->row();
+	
+										$wheDam['can_id'] = $stud->stu_dam_id;
+										$can = $this->caninesModel->get_canines($wheDam)->row();
+	
+										$wheSire['can_id'] = $stud->stu_sire_id;
+										$c = $this->caninesModel->get_canines($wheSire)->row();
+	
+										$desc = 'Telah dilakukan pacak oleh '.$member->mem_name.' ('.$member->ken_name.')';
+										$desc .= ' pada tanggal '.$stud->stu_stud_date;
+										$desc .= ' antara '.$c->can_a_s;
+										$desc .= ' dan '.$can->can_a_s.'<br><hr>';
+										$desc .= $member->mem_name.' ('.$member->ken_name.')';
+										$desc .= ' has bred on '.$stud->stu_stud_date;
+										$desc .= ' between '.$c->can_a_s;
+										$desc .= ' and '.$can->can_a_s;
+	
+										$piece = explode("-", $stud->stu_stud_date);
+										$date = $piece[2]."-".$piece[1]."-".$piece[0];
+	
+										$dataNews = array(
+											'title' => 'Pacak / Bred '.$can->can_breed,
+											'description' => $desc,
+											'date' => $date,
+											'type' => $this->config->item('stud'),
+											'photo' => $stud->stu_photo,
+											'trans_id' => $this->uri->segment(4),
+										); 
+										$news = $this->news_model->add($dataNews);
+										if ($news){
+											$this->db->trans_complete();
+											$this->session->set_flashdata('approve', TRUE);
+											redirect('backend/Studs/view_approve');
+										}
+										else{
+											$err = 1;
+										}
+									}
+									else{
+										$err = 2;
+									}
+								}
+								else{
+									$err = 3;
+								}
+							}
+							else{
 								$res = $this->notification_model->add(1, $this->uri->segment(4), $stud->stu_partner_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s.'<br><a class="text-reset link-warning" href="'.base_url().'frontend/Births/add/'.$this->uri->segment(4).'">Lapor Lahir / Birth Report</a>');
 								if ($res){
 									$whe['mem_id'] = $stud->stu_member_id;
@@ -1595,7 +1636,7 @@ class Studs extends CI_Controller {
 									$desc .= ' pada tanggal '.$stud->stu_stud_date;
 									$desc .= ' antara '.$c->can_a_s;
 									$desc .= ' dan '.$can->can_a_s.'<br><hr>';
-                                    $desc .= $member->mem_name.' ('.$member->ken_name.')';
+									$desc .= $member->mem_name.' ('.$member->ken_name.')';
 									$desc .= ' has bred on '.$stud->stu_stud_date;
 									$desc .= ' between '.$c->can_a_s;
 									$desc .= ' and '.$can->can_a_s;
@@ -1624,9 +1665,6 @@ class Studs extends CI_Controller {
 								else{
 									$err = 2;
 								}
-							}
-							else{
-								$err = 3;
 							}
 						}
 						else{
@@ -1751,7 +1789,7 @@ class Studs extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to delete stud id = '.$this->uri->segment(4)).'. Err code: '.$err;
+						$this->session->set_flashdata('delete_message', 'Failed to delete stud id = '.$this->uri->segment(4)).'. Err code: '.$err;
 						redirect('backend/Studs');
 					}
 				}

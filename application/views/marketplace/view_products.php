@@ -32,8 +32,8 @@
                 </div>
                 <div class="text-danger">
                     <?php		
-                        if ($this->session->flashdata('error_message')){
-                            echo $this->session->flashdata('error_message').'<br/>';
+                        if ($this->session->flashdata('delete_message')){
+                            echo $this->session->flashdata('delete_message').'<br/>';
                         }
                     ?>
                 </div>

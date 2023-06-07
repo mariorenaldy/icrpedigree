@@ -497,8 +497,7 @@ class Members extends CI_Controller {
 				if ($this->input->post('mem_type')){
 					$this->form_validation->set_rules('mem_name', 'KTP Name ', 'trim|required');
 					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
-					if (!$this->input->post('same'))
-						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
+					$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
 					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
@@ -615,6 +614,7 @@ class Members extends CI_Controller {
 								'mem_name' => strtoupper($this->input->post('mem_name')),
 								'mem_address' => $this->input->post('mem_address'),
 								'mem_mail_address' => $this->input->post('mem_mail_address'),
+								'mem_address' => $this->input->post('mem_address'),
 								'mem_hp' => $this->input->post('mem_hp'),
 								'mem_kota' => $this->input->post('mem_kota'),
 								'mem_kode_pos' => $this->input->post('mem_kode_pos'),
@@ -671,15 +671,6 @@ class Members extends CI_Controller {
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s')
 							);
-
-							if ($this->input->post('same')){
-								$data['mem_address'] = $this->input->post('mem_mail_address');
-								$dataLog['log_address'] = $this->input->post('mem_mail_address');
-							}
-							else{
-								$data['mem_address'] = $this->input->post('mem_mail_address');
-								$dataLog['log_address'] = $this->input->post('mem_mail_address');
-							}
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();
@@ -1006,7 +997,7 @@ class Members extends CI_Controller {
 					}
 					if ($err){ 
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to delete member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						$this->session->set_flashdata('delete_message', 'Failed to delete member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect("backend/Members");
 					}
 				}
@@ -1108,7 +1099,7 @@ class Members extends CI_Controller {
 					}
 					if ($err){
 						$this->db->trans_rollback();
-						$this->session->set_flashdata('error_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
+						$this->session->set_flashdata('delete_message', 'Failed to set payment for member id = '.$this->uri->segment(4).'. Error code: '.$err);
 						redirect('backend/Members');
 					}
 				}
@@ -1126,7 +1117,7 @@ class Members extends CI_Controller {
 				$where['mem_id'] = $this->uri->segment(4);
 				$data['member'] = $this->MemberModel->get_members($where)->row();
 				if (!$data['member']) {
-					$this->session->set_flashdata('error_message', 'Not found');
+					$this->session->set_flashdata('delete_message', 'Not found');
 					redirect("backend/Members");
 				}
 				else{
@@ -1144,7 +1135,7 @@ class Members extends CI_Controller {
 				$data['member'] = $this->MemberModel->get_members($where)->row();
 				if (!$data['member']) {
 					$err = 1;
-					$this->session->set_flashdata('error_message', 'Not found');
+					$this->session->set_flashdata('delete_message', 'Not found');
 					redirect("backend/Members");
 				}
 				else{
