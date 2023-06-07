@@ -68,7 +68,12 @@
                                     <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
                                 <?php } 
                                 } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                                    <?php if ($canine->can_photo && $canine->can_photo != '-'){
+                                    ?>
+                                        <img id="imgPreview" width="15%" src="<?= base_url().'uploads/canine/'.$canine->can_photo ?>">
+                                    <?php } else { ?>
+                                        <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
+                                    <?php } ?>
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
                                 <input type="hidden" name="attachment" id="attachment">

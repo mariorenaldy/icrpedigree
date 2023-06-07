@@ -446,13 +446,13 @@ class Canines extends CI_Controller {
 					$ts_dob = new DateTime($dob);
                     if ($ts_dob > $ts){
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                        $this->session->set_flashdata('error_message', "The Date of Birth must be before today's date");
                     }
                     else{ // min 45 hari
                         $diff = $ts->diff($ts_dob)->days/$this->config->item('min_jarak_lapor_anak');
                         if ($diff < 1){
                             $err++;
-                            $this->session->set_flashdata('error_message', 'Tanggal lahir anjing harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari');
+                            $this->session->set_flashdata('error_message', 'The Date of Birth must be more than '.$this->config->item('min_jarak_lapor_anak').' days before today');
                         }
                     }
                 }
@@ -765,6 +765,18 @@ class Canines extends CI_Controller {
                 if (strlen($this->input->post('can_a_s')) >= $this->config->item('can_a_s_length')){
                     $err++;
                     $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+                }
+
+                if (!$err){
+                    $piece = explode("-", $this->input->post('can_date_of_birth'));
+                    $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
+
+                    $ts = new DateTime();
+                    $ts_dob = new DateTime($dob);
+                    if ($ts_dob > $ts){
+                        $err++;
+                        $this->session->set_flashdata('error_message', "The Date of Birth must be before today's date");
+                    }
                 }
 
                 if (!$err) {
