@@ -195,7 +195,7 @@ class Stambums extends CI_Controller {
 						$ts_birth = new DateTime($dob);
 						if ($ts_birth > $ts){
 							$err++;
-							$this->session->set_flashdata('error_message', 'Puppy must be reported before '.$this->config->item('jarak_lapor_anak').' days from birth'); 
+							$this->session->set_flashdata('error_message', "Puppy's date of birth must be before today's date"); 
 						}
 						else{
 							$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
@@ -432,8 +432,7 @@ class Stambums extends CI_Controller {
                     }
                 }
 
-                if (!$err && !$this->input->post('mode')){
-                    $data['warning'] = Array();
+                if (!$err){
 					$piece = explode("-", $birth->bir_date_of_birth);
 					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
@@ -441,19 +440,19 @@ class Stambums extends CI_Controller {
 					$ts_birth = new DateTime($dob);
 					if ($ts_birth > $ts){
 						$err++;
-						$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'; 
+                        $this->session->set_flashdata('error_message', "The puppy's date of birth must be before today's date");
 					}
 					else{
 						$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
 						if ($diff < 1){
 							$err++;
-							$data['warning'][] = 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date';
+                            $this->session->set_flashdata('error_message', "The puppy report must be more than ".$this->config->item('min_jarak_lapor_anak')." days after birth date");
 						}
 
 						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
 						if ($diff > 1){
 							$err++;
-							$data['warning'][] = 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date';
+                            $this->session->set_flashdata('error_message', "The puppy report must be less than ".$this->config->item('jarak_lapor_anak')." days after birth date");
 						}
 					}
 				}
