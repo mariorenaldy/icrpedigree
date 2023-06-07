@@ -273,6 +273,7 @@ class Users extends CI_Controller {
 					else{
 						$err = 1;
 						$this->session->set_flashdata('delete_message', 'Failed to edit user type');
+						redirect("backend/Users");
 					}
 				}
 			}
