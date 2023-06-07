@@ -144,6 +144,15 @@ class Requestpro extends CI_Controller {
 								}
 							}
 						}
+						else{
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto Kennel wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Kennel Photo is required');
+							}
+						}
 
 						$email = $this->test_input($this->input->post('mem_email'));
 						if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {

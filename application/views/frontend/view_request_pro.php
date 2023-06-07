@@ -106,13 +106,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_kennel_name'); ?></div>
-                        <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
+                        <div class="col-sm-5"><?= $req->ken_name ?></div>
                         <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
                     </div>     
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_kennel_format'); ?></div>
-                        <div class="col-sm-5"><?= $req->ken_type_name ?></div>
-                        <div class="col-sm-5"><?= $req->ken_type_name ?></div>
+                        <div class="col-sm-5"><?= $req->old_kennel_type ?></div>
+                        <div class="col-sm-5"><?= $req->new_kennel_type ?></div>
                     </div>
             <?php 
                     $i++;

@@ -6,7 +6,7 @@ class RequestproModel extends CI_Model {
     }
 
     public function get_requests($where){
-        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, kt2.ken_type_name AS new_kennel_type, kennels_type.ken_type_name AS old_kennel_type');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -15,6 +15,7 @@ class RequestproModel extends CI_Model {
         $this->db->join('users','users.use_id = requests_pro.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_pro.req_stat');
         $this->db->join('kennels_type','kennels.ken_type_id = kennels_type.ken_type_id');
+        $this->db->join('kennels_type kt2','kt2.ken_type_id = requests_pro.req_kennel_type_id');
         $this->db->order_by('requests_pro.req_id desc');
         return $this->db->get('requests_pro');
     }
