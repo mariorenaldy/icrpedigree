@@ -160,7 +160,7 @@ class Members extends CI_Controller {
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_message('matches', 'Password dan confirm password tidak sama');
-				// if ($this->input->post('mem_type')){
+				if ($this->input->post('mem_type')){
 					$this->form_validation->set_rules('mem_name', 'Nama sesuai KTP ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'No. HP Aktif WA ', 'trim|required');
 					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
@@ -174,27 +174,34 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 					$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
 					$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
-				// }
-				// else{
-				// 	$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
-				// 	$this->form_validation->set_rules('hp', 'No. HP Aktif WA ', 'trim|required');
-				// 	$this->form_validation->set_rules('email', 'email ', 'trim|required');
-				// }
+				}
+				else{
+					$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
+					$this->form_validation->set_rules('hp', 'No. HP Aktif WA ', 'trim|required');
+					$this->form_validation->set_rules('email', 'email ', 'trim|required');
+				}
 			}
 			else{
-				$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
-                $this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
-                $this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
-                $this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
-                if (!$this->input->post('same'))
-                    $this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
-                $this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
-                $this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
-                $this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
-                $this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
-                $this->form_validation->set_rules('password', 'Password ', 'trim|required');
-                $this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
-                $this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+				if ($this->input->post('mem_type')){
+					$this->form_validation->set_rules('mem_name', 'ID Card Name ', 'trim|required');
+					$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
+					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
+					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
+					if (!$this->input->post('same'))
+						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
+					$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
+					$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
+					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
+					$this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
+					$this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+				}
+				else{
+					$this->form_validation->set_rules('name', 'ID Card Name ', 'trim|required');
+					$this->form_validation->set_rules('hp', 'Active WhatsApp Number ', 'trim|required');
+					$this->form_validation->set_rules('email', 'email ', 'trim|required');
+				}
 			}
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
@@ -203,7 +210,7 @@ class Members extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				// if ($this->input->post('mem_type')){
+				if ($this->input->post('mem_type')){
 					if (!isset($_POST['attachment_logo']) || empty($_POST['attachment_logo'])) {
 						$err++;
 						if ($site_lang == 'indonesia') {
@@ -291,12 +298,12 @@ class Members extends CI_Controller {
 							}
 						}
 					}
-				// }
+				}
 
-				// if ($this->input->post('mem_type'))
+				if ($this->input->post('mem_type'))
 					$email = $this->test_input($this->input->post('mem_email'));
-				// else
-				// 	$email = $this->test_input($this->input->post('email'));
+				else
+					$email = $this->test_input($this->input->post('email'));
 
 				if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 					$err++;
@@ -308,7 +315,7 @@ class Members extends CI_Controller {
 					}
 				}
 
-				// if ($this->input->post('mem_type')){
+				if ($this->input->post('mem_type')){
 					$whereMem['mem_name'] = $this->input->post('mem_name');
 					$mem = $this->MemberModel->get_members($whereMem)->row();
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
@@ -380,29 +387,29 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Duplicate kennel name');
 						}
 					}
-				// } else {
-				// 	$whereMem['mem_name'] = $this->input->post('name');
-				// 	$mem = $this->MemberModel->get_members($whereMem)->row();
-				// 	if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
-				// 		$err++;
-				// 		$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
-				// 	}
+				} else {
+					$whereMem['mem_name'] = $this->input->post('name');
+					$mem = $this->MemberModel->get_members($whereMem)->row();
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+					}
 
-				// 	if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
-				// 		$err++;
-				// 		$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
-				// 	}
+					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
+						$err++;
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+					}
 
-				// 	if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
-				// 		$err++;
-				// 		$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
-				// 	}
+					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+					}
 
-				// 	if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
-				// 		$err++;
-				// 		$this->session->set_flashdata('error_message', 'email tidak boleh sama');
-				// 	}
-				// }
+					if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
+						$err++;
+						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+					}
+				}
 				
 				if (!$err){
 					if (isset($uploadedPP)){
@@ -414,7 +421,7 @@ class Members extends CI_Controller {
 					$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
 
 					$mem_id = $this->MemberModel->record_count() + 1;
-					// if ($this->input->post('mem_type')){
+					if ($this->input->post('mem_type')){
 						$dataMember = array(
 							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('mem_name')),
@@ -449,33 +456,33 @@ class Members extends CI_Controller {
 							'ken_user' => $this->config->item('system'),
 							'ken_date' => date('Y-m-d H:i:s'),
 						);
-					// }
-					// else{
-					// 	$dataMember = array(
-					// 		'mem_id' => $mem_id,
-					// 		'mem_name' => strtoupper($this->input->post('name')),
-					// 		'mem_hp' => $this->input->post('hp'),
-					// 		'mem_email' => $this->input->post('email'),
-					// 		'mem_username' => $this->input->post('email'),
-					// 		'mem_password' => sha1($this->input->post('hp')),
-					// 		'mem_stat' => $this->config->item('accepted'),
-					// 		'mem_type' => $this->config->item('free_member'),
-					// 		'mem_user' => 0,
-					// 		'mem_date' => date('Y-m-d H:i:s'),
-					// 	);
+					}
+					else{
+						$dataMember = array(
+							'mem_id' => $mem_id,
+							'mem_name' => strtoupper($this->input->post('name')),
+							'mem_hp' => $this->input->post('hp'),
+							'mem_email' => $this->input->post('email'),
+							'mem_username' => $this->input->post('email'),
+							'mem_password' => sha1($this->input->post('hp')),
+							'mem_stat' => $this->config->item('accepted'),
+							'mem_type' => $this->config->item('free_member'),
+							'mem_user' => $this->config->item('system'),
+							'mem_date' => date('Y-m-d H:i:s'),
+						);
 
-					// 	$ken_id = $this->KennelModel->record_count() + 1;
-					// 	$kennel_data = array(
-					// 		'ken_id' => $ken_id,
-					// 		'ken_name' => '',
-					// 		'ken_type_id' => 0,
-					// 		'ken_photo' => '-',
-					// 		'ken_member_id' => $mem_id,
-					// 		'ken_stat' => $this->config->item('accepted'),
-					// 		'ken_user' => 0,
-					// 		'ken_date' => date('Y-m-d H:i:s'),
-					// 	);
-					// }
+						$ken_id = $this->KennelModel->record_count() + 1;
+						$kennel_data = array(
+							'ken_id' => $ken_id,
+							'ken_name' => '',
+							'ken_type_id' => 0,
+							'ken_photo' => '-',
+							'ken_member_id' => $mem_id,
+							'ken_stat' => $this->config->item('accepted'),
+							'ken_user' => $this->config->item('system'),
+							'ken_date' => date('Y-m-d H:i:s'),
+						);
+					}
 
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
@@ -484,12 +491,12 @@ class Members extends CI_Controller {
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
 							$this->db->trans_complete();
-							// if ($this->input->post('mem_type'))
+							if ($this->input->post('mem_type'))
 								$this->session->set_flashdata('pro', TRUE);
-							// else{
-							// 	$this->session->set_flashdata('free', TRUE);
-							// 	$this->session->set_flashdata('user', $this->input->post('email'));
-							// }
+							else{
+								$this->session->set_flashdata('free', TRUE);
+								$this->session->set_flashdata('user', $this->input->post('email'));
+							}
 							redirect("frontend/Members");
 						}
 						else{

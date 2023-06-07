@@ -256,7 +256,6 @@
                     </div>
                 </div>
             </div>
-            <?php $this->load->view('frontend/layout/footer'); ?>
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>

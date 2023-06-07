@@ -77,7 +77,6 @@ class Members extends CI_Controller {
             $this->session->set_userdata('keywords', '');
             $this->session->set_userdata('sort_by', 'mem_app_date2');
             $this->session->set_userdata('sort_type', 'desc');
-            $this->session->set_userdata('mem_type', $this->config->item('pro_member'));
 			$this->load->view('backend/view_members', $data);
 		}
 
