@@ -23,3 +23,5 @@ $lang["birth_new_number_of_males"] = "New Males Count";
 
 $lang["birth_old_number_of_females"] = "Old Females Count";
 $lang["birth_new_number_of_females"] = "New Females Count";
+
+$lang["birth_available_days"] = "Reports between 45 - 100 days before today";

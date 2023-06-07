@@ -23,3 +23,5 @@ $lang["birth_new_number_of_males"] = "Jumlah Jantan Baru";
 
 $lang["birth_old_number_of_females"] = "Jumlah Betina Lama";
 $lang["birth_new_number_of_females"] = "Jumlah Betina Baru";
+
+$lang["birth_available_days"] = "Laporan diantara 45 - 100 hari sebelum hari ini";

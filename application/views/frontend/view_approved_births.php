@@ -14,6 +14,7 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning"><?= lang('birth_choose'); ?></h3>
+                <p class="text-center text-warning"><?= lang('birth_available_days'); ?></p>
                 <div class="row mb-1">
                     <div class="col-sm-2 text-center"><b><?= lang('common_photo'); ?></b></div>
                     <div class="col-sm-2"><b><?= lang('common_male'); ?></b></div>
