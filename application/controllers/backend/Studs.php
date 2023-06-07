@@ -565,40 +565,45 @@ class Studs extends CI_Controller {
 	
 				$whereCan['can_id'] = $this->input->post('stu_sire_id');
 				$can = $this->caninesModel->get_canines($whereCan)->row();
-				$like['can_a_s'] = $this->input->post('can_a_s');
-				$whereDam['can_gender'] = 'FEMALE';
-				$whereDam['can_stat'] = $this->config->item('accepted');
-				$whereDam['can_id !='] = $this->config->item('dam_id');
-				$whereDam['can_member_id !='] = $this->config->item('no_member');
-				$whereDam['can_breed'] = $can->can_breed;
-				$whereDam['can_rip '] = $this->config->item('canine_alive');
-				$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
-	
-				// Dam harus 12 bulan
-				$stat = Array();
-				foreach ($data['dam'] as $c){
-					$can = $this->caninesModel->get_dob_by_id($c->id);
-					$dam_dob = $can->can_date_of_birth;
-					
-					$ts_now = date('Y-m-d');
-					$ts = strtotime($ts_now);
-					$tsdam = strtotime($dam_dob);
-					
-					$year = date('Y', $ts);
-					$yeardam = date('Y', $tsdam);
-	
-					$month = date('m', $ts);
-					$monthdam = date('m', $tsdam);
-	
-					$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
-					if (abs($diffdam) < $this->config->item('umur_canine')) {
-						$stat[] = 0;
+				if(isset($can)){
+					$like['can_a_s'] = $this->input->post('can_a_s');
+					$whereDam['can_gender'] = 'FEMALE';
+					$whereDam['can_stat'] = $this->config->item('accepted');
+					$whereDam['can_id !='] = $this->config->item('dam_id');
+					$whereDam['can_member_id !='] = $this->config->item('no_member');
+					$whereDam['can_breed'] = $can->can_breed;
+					$whereDam['can_rip '] = $this->config->item('canine_alive');
+					$data['dam'] = $this->caninesModel->search_canines_simple($like, $whereDam)->result();
+		
+					// Dam harus 12 bulan
+					$stat = Array();
+					foreach ($data['dam'] as $c){
+						$can = $this->caninesModel->get_dob_by_id($c->id);
+						$dam_dob = $can->can_date_of_birth;
+						
+						$ts_now = date('Y-m-d');
+						$ts = strtotime($ts_now);
+						$tsdam = strtotime($dam_dob);
+						
+						$year = date('Y', $ts);
+						$yeardam = date('Y', $tsdam);
+		
+						$month = date('m', $ts);
+						$monthdam = date('m', $tsdam);
+		
+						$diffdam = (($year - $yeardam) * 12) + ($month - $monthdam);
+						if (abs($diffdam) < $this->config->item('umur_canine')) {
+							$stat[] = 0;
+						}
+						else{
+							$stat[] = 1;
+						}
 					}
-					else{
-						$stat[] = 1;
-					}
+					$data['damStat'] = $stat;
 				}
-				$data['damStat'] = $stat;
+				else{
+					$data['dam'] = [];
+				}
 				$data['mode'] = 0;
 				$this->load->view('backend/add_stud', $data);
 			}
