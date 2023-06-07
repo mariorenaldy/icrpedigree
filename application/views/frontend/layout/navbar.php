@@ -51,8 +51,8 @@
                         <i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span> 
                     </span>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= base_url().'marketplace/Products' ?>"><?= lang("nav_products"); ?></a></a></li>
-                        <li><a class="dropdown-item" href="<?= base_url().'Marketplace/orders' ?>"><?= lang("nav_orders"); ?></a></a></li>
+                        <li><a class="dropdown-item" href="<?= base_url().'Marketplace/marketplace' ?>">Produk</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url().'Marketplace/marketplace' ?>">Orders</a></li>
                     </ul>
                 </div>
             <?php } else { ?>
