@@ -598,11 +598,6 @@ $config['canine_alive'] = 0;
 
 $config['jarak_hapus'] = 60;
 
-$config['jarak_lapor_pacak'] = 7;
-$config['tanggal_lapor_pacak'] = 5;
-$config['bulan_lapor_pacak'] = 2;
-$config['tahun_lapor_pacak'] = 2023;
-$config['hari_lapor_pacak'] = '5 Feb 2023';
 $config['jarak_pacak'] = 120;
 $config['jarak_pacak_lahir'] = 90;
 $config['jarak_lapor_lahir'] = 75;
@@ -633,3 +628,4 @@ $config['carousel_width'] = "1920px";
 $config['youtube_width'] = "420";
 $config['youtube_height'] = "315";
 
+$config['all'] = 'All';
