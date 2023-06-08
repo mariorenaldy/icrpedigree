@@ -801,7 +801,7 @@ class Studs extends CI_Controller {
 							$pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
 							if ($pedSire){
 								$err++;
-								$data['warning'][] = 'Dam is sire\'s child';
+								$this->session->set_flashdata('error_message', 'Dam is sire\'s child');
 							}
 
 							// sire anak dari dam
@@ -810,7 +810,7 @@ class Studs extends CI_Controller {
 							$pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
 							if ($pedDam){
 								$err++;
-								$data['warning'][] = 'Sire is dam\' child';
+								$this->session->set_flashdata('error_message', 'Sire is dam\' child');
 							}
 									
 							// sibling
@@ -825,7 +825,7 @@ class Studs extends CI_Controller {
 								}
 								if ($cek){
 									$err++;
-									$data['warning'][] = 'Sire and dam are sibling';
+									$this->session->set_flashdata('error_message', 'Sire and dam are sibling');
 								}
 							}
 						}
@@ -1357,22 +1357,6 @@ class Studs extends CI_Controller {
                         $piece = explode("-", $this->input->post('stu_stud_date'));
 						$date = $piece[2]."-".$piece[1]."-".$piece[0];
                         if (!$err && !$this->input->post('mode')){
-                            $data['warning'] = Array();
-
-                            $year = $piece[2];
-                            $month = $piece[1];
-                            $day = $piece[0];
-                            if ($year != $this->config->item('tahun_lapor_pacak')){
-                                $err++;
-                                $data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
-                            }
-                            else{
-                                if ($month == $this->config->item('bulan_lapor_pacak') && (int)$day < $this->config->item('tanggal_lapor_pacak')){
-                                    $err++;
-                                    $data['warning'][] = 'Stud must be reported before '.$this->config->item('hari_lapor_pacak').' days';
-                                }
-                            }
-
                             // // Jarak pacak utk dam yg sama adalah sbb:
                             // // Lebih dari 4 bulan dari pacak(tidak ada lahir) 
                             // // Lebih dari 3 bulan dari lahir(ada lahir)
@@ -1395,7 +1379,7 @@ class Studs extends CI_Controller {
                             $pedSire = $this->pedigreesModel->get_pedigrees($wherePedSire)->row();
                             if ($pedSire){
                                 $err++;
-                                $data['warning'][] = 'Dam is sire\'s child';
+								$this->session->set_flashdata('error_message', 'Dam is sire\'s child');
                             }
 
                             // sire anak dari dam
@@ -1404,7 +1388,7 @@ class Studs extends CI_Controller {
                             $pedDam = $this->pedigreesModel->get_pedigrees($wherePedDam)->row();
                             if ($pedDam){
                                 $err++;
-                                $data['warning'][] = 'Sire is dam\' child';
+								$this->session->set_flashdata('error_message', 'Sire is dam\' child');
                             }
                                     
                             // sibling
@@ -1419,7 +1403,7 @@ class Studs extends CI_Controller {
                                 }
                                 if ($cek){
                                     $err++;
-                                    $data['warning'][] = 'Sire and dam are sibling';
+									$this->session->set_flashdata('error_message', 'Sire and dam are sibling');
                                 }
                             }
                         }

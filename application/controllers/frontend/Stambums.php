@@ -389,7 +389,6 @@ class Stambums extends CI_Controller {
 				}
 
 				if (!$err){
-                    $data['warning'] = Array();
 					$piece = explode("-", $data['birth']->bir_date_of_birth);
 					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
 
