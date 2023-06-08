@@ -596,15 +596,13 @@ $config['all_member'] = 2;
 $config['canine_rip'] = 1;
 $config['canine_alive'] = 0;
 
-$config['jarak_hapus'] = 60;
-
-$config['jarak_pacak'] = 120;
-$config['jarak_pacak_lahir'] = 90;
-$config['jarak_lapor_lahir'] = 75;
-$config['min_jarak_lapor_lahir'] = 58;
-$config['jarak_lapor_anak'] = 100;
-$config['min_jarak_lapor_anak'] = 45;
-$config['umur_canine'] = 12;
+$config['jarak_pacak'] = 120; //jarak pacak untuk dam yang sama adalah 4 bulan jika tidak ada laporan lahir
+$config['jarak_pacak_lahir'] = 90; //jarak pacak untuk dam yang sama adalah 3 bulan jika ada laporan lahir
+$config['jarak_lapor_lahir'] = 75; //batas akhir laporan kelahiran setelah laporan pacak (75 hari setelah lapor pacak)
+$config['min_jarak_lapor_lahir'] = 58; //batas awal laporan kelahiran setelah laporan pacak (58 hari setelah lapor pacak)
+$config['jarak_lapor_anak'] = 100; //batas akhir laporan/pendaftaran anak anjing yang lahir (100 hari setelah lapor lahir)
+$config['min_jarak_lapor_anak'] = 45; //batas awal laporan/pendaftaran anjing (45 hari dari tanggal lahir)
+$config['umur_canine'] = 12; //umur minimal anjing untuk pacak (12 bulan)
 
 $config['admin'] = 0;
 $config['user'] = 1;
@@ -625,7 +623,5 @@ $config['system'] = 4;
 
 $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
-$config['youtube_width'] = "420";
-$config['youtube_height'] = "315";
 
 $config['all'] = 'All';
