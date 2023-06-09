@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Product</title>
+    <title><?= lang("pro_detail"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 
@@ -16,10 +16,10 @@
             <?php } else { ?>
                 <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:500px;" alt="product">
             <?php } ?>
-            <h3 class="text-warning"><?= $products->pro_name ?></h3>
-            <figcaption class="figure-caption"><?= $products->pro_desc ?></figcaption>
-            <p><?= $products->pro_price ?></p>
-            <div class="col-3">
+            <h4 class="text-warning"><?= $products->pro_name ?></h4>
+            <p class="mb-5"><?= $products->pro_desc ?></p>
+            <h5 class="text-warning mb-4">Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
+            <div class="col-3 mb-5">
                 <div class="input-group mb-3">
                     <span class="input-group-btn">
                         <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus" data-field="">
@@ -35,8 +35,8 @@
                     </span>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="payment(<?= $products->pro_id ?>)">Beli</button>
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Products'">Kembali</button>
+            <button type="button" class="btn btn-primary" onclick="payment(<?= $products->pro_id ?>)"><?= lang("common_buy"); ?></button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Products'"><?= lang("common_back"); ?></button>
         </figure>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
@@ -47,7 +47,6 @@
         $(document).ready(function() {
             var quantity = 0;
             var stock = document.getElementById("stock").value;
-            console.log(stock);
             $('.quantity-right-plus').click(function(e) {
 
                 // Stop acting like a button

@@ -27,6 +27,24 @@ class ProductModel extends CI_Model {
         return $this->db->get('products');
     }
 
+    public function get_stock($where = null){
+        $this->db->select('pro_stock');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        return $this->db->get('products')->row()->pro_stock;
+    }
+
+    public function update_stock($where, $amount){
+        $currStock = $this->get_stock($where);
+        $newStock = $currStock + $amount;
+
+        $data = array('pro_stock' => $newStock);
+        $this->db->set($data);
+        $this->db->where($where);
+        return $this->db->update('products');
+    }
+
     public function add_products($data = null){
         $result = false;
         if ($data != null) {

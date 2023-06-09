@@ -6,31 +6,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Payment extends CI_Controller {
     public function __construct(){
 		parent::__construct();
+		$this->load->model(array('OrderModel', 'ProductModel'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('url'));
 		$this->load->database();
+		date_default_timezone_set("Asia/Bangkok");
+
+		if ($this->input->cookie('site_lang')) {
+            $this->lang->load('common', $this->input->cookie('site_lang'));
+        } else {
+            set_cookie('site_lang', 'indonesia', '2147483647'); 
+            $this->lang->load('common','indonesia');
+        }
 	}
 	function generate_signature($componentSignature, $secretKey){
 		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
 		return $signature;
 	}
 	public function checkout(){
-		date_default_timezone_set('UTC');
-
 		$clientId = "BRN-0222-1677984841764";
-		$requestId = $this->getRandomString();
-		$requestDate = date('Y-m-d\TH:i:s\Z');
+		$requestId = $this->input->post('inv');
+		$date = new DateTime("now", new DateTimeZone('UTC'));
+		$requestDate = $date->format('Y-m-d\TH:i:s\Z');
 		$targetPath = "/checkout/v1/payment";
 		$secretKey = "SK-WjYbHmZGDEhveR9kBxCW";
 
 		$amount = $this->input->post('amount');
-		$inv = $this->getRandomString();;
+		$inv = $requestId;
 
 		// Data
 		$order = array(
 			"amount" => $amount,
 			"invoice_number" => $inv,
-			"callback_url" => "http://localhost/icrpedigree/frontend/Beranda"
+			"callback_url" => "http://localhost/icrpedigree/marketplace/Orders/cek_status/".$requestId
 		);
 		$payment = array(
 			"payment_due_date" => 60
@@ -85,6 +93,7 @@ class Payment extends CI_Controller {
 				$url = json_decode($result)->response->payment->url;
 				$response['status'] = 'success';
 				$response['url'] = $url;
+				$response['inv'] = $inv;
 				header('Content-type: application/json');
 				echo json_encode($response);
 				break;
@@ -100,14 +109,81 @@ class Payment extends CI_Controller {
 		// Close cURL
 		curl_close($ch);
 	}
-	function getRandomString($length = 8) {
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	// function getRandomString($length = 8) {
+	// 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	// 	$string = '';
+	
+	// 	for ($i = 0; $i < $length; $i++) {
+	// 		$string .= $characters[mt_rand(0, strlen($characters) - 1)];
+	// 	}
+	
+	// 	return $string;
+	// }
+	function generateInvoice($length = 8) {
+		$characters = '0123456789';
 		$string = '';
 	
 		for ($i = 0; $i < $length; $i++) {
 			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
 		}
 	
+		$string = 'INV-'.$string;
 		return $string;
+	}
+	function saveOrder(){
+		$pro_id = $this->input->post('pro_id');
+		$quantity = $this->input->post('quantity');
+		$inv = $this->generateInvoice();
+		$amount = $this->input->post('amount');
+
+		$ord_id = $this->OrderModel->record_count() + 1;
+		$data = array(
+			'ord_id' => $ord_id,
+			'ord_mem_id' => $this->session->userdata('mem_id'),
+			'ord_pro_id' => $pro_id,
+			'ord_invoice' => $inv,
+			'ord_quantity' => $quantity,
+			'ord_total_price' => $amount,
+			'ord_created_at' => date('Y-m-d H:i:s'),
+			'ord_pay_due_date' => date('Y-m-d H:i:s', strtotime('1 hour')),
+			'ord_stat_id' => $this->config->item('order_not_paid')
+		);
+
+		$err = 0;
+
+		//update product stock
+		$whePro['pro_id'] = $pro_id;
+		$stock = $this->ProductModel->get_stock($whePro);
+		$dataPro = array(
+			'pro_stock' => $stock-$quantity
+		);
+
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
+		$products = $this->ProductModel->update_products($dataPro, $whePro);
+		if ($products) {
+			$id = $this->OrderModel->add_orders($data);
+			if ($id) {
+				$this->db->trans_complete();
+			} else {
+				$err = 2;
+			}
+	
+			if ($err) {
+				$this->db->trans_rollback();
+				echo 'failed';
+			}
+			else{
+				echo $inv;
+			}
+		} else {
+			$err = 1;
+		}
+
+		if ($err) {
+			$this->db->trans_rollback();
+			echo 'failed';
+		}
+
 	}
 }

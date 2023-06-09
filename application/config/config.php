@@ -561,6 +561,7 @@ $config['pp'] = 400;
 $config['mode'] = 0;
 
 $config['canine_count'] = 5;
+$config['order_count'] = 5;
 $config['stud_count'] = 5;
 $config['birth_count'] = 5;
 $config['stb_count'] = 5;
@@ -575,6 +576,7 @@ $config['backend_stb_count'] = 10;
 $config['backend_news_count'] = 10;
 
 $config['canine_img'] = 'Dog.svg';
+$config['product_img'] = 'product.jpg';
 $config['default_img'] = 'avatar.jpg';
 
 $config['dam_id'] = 87;
@@ -588,6 +590,12 @@ $config['saved'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
 $config['completed'] = 3;
+
+$config['order_rejected'] = 7;
+$config['order_not_paid'] = 1;
+$config['order_paid'] = 2;
+$config['order_failed'] = 8;
+$config['order_cancelled'] = 6;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;

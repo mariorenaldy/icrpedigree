@@ -22,3 +22,6 @@ $lang["nav_become_pro"] = "Become Pro";
 $lang["nav_become_pro_list"] = "Become Pro Reports";
 $lang["nav_profile"] = "Profile";
 $lang["nav_change_password"] = "Change Password";
+
+$lang["nav_products"] = "Products";
+$lang["nav_orders"] = "Orders";

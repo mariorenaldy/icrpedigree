@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Marketplace</title>
+    <title><?= lang("pro_products"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header'); ?>
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <h3 class="text-center text-warning">Products</h3>
+        <h3 class="text-center text-warning"><?= lang("pro_products"); ?></h3>
         <div class="search-container">
             <form action="<?= base_url().'marketplace/Products/search'?>" method="get">
                 <div class="input-group my-3 d-flex justify-content-center">
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="Nama Produk" name="keyword" value="<?= set_value('keyword') ?>">
+                        <input type="text" class="form-control" placeholder="<?= lang("pro_name"); ?>" name="keyword" value="<?= set_value('keyword') ?>">
                     </div>
                     <div class="col-sm-1 ms-1">
-                        <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Cari Produk"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang("pro_search"); ?>"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </form>
@@ -39,8 +39,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"><?= $p->pro_name ?></h5>
-                        <p class="card-text"><?= $p->pro_desc ?></p>
-                        <p class="card-text"><?= $p->pro_price ?></p>
+                        <p class="card-text">Rp <?= number_format($p->pro_price,0,",",".") ?></p>
                         <button type="button" class="btn btn-primary stretched-link" onclick="detail(<?= $p->pro_id ?>)">Detail</button>
                     </div>
                 </div>
@@ -57,7 +56,7 @@
         </div>
         <?= $this->pagination->create_links(); ?>
         <div class="text-center">
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Marketplace'">Kembali</button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Marketplace'"><?= lang("common_back"); ?></button>
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>

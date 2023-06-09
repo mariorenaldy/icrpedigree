@@ -27,3 +27,9 @@ $lang["common_number_of_males"] = "Males Count";
 $lang["common_number_of_females"] = "Females Count";
 $lang["common_family_tree"] = "Family Tree";
 $lang["common_dog_name"] = "Dog Name";
+
+$lang["common_buy"] = "Buy";
+$lang["common_pay"] = "Pay";
+$lang["common_cancel_payment"] = "Cancel order";
+
+$lang["common_confirm"] = "Confirm";

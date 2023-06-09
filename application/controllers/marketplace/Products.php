@@ -12,6 +12,18 @@ class Products extends CI_Controller
 		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
+		date_default_timezone_set("Asia/Bangkok");
+
+		if ($this->input->cookie('site_lang')) {
+            $this->lang->load('common', $this->input->cookie('site_lang'));
+            $this->lang->load('order', $this->input->cookie('site_lang'));
+            $this->lang->load('product', $this->input->cookie('site_lang'));
+        } else {
+            set_cookie('site_lang', 'indonesia', '2147483647'); 
+            $this->lang->load('common','indonesia');
+            $this->lang->load('order','indonesia');
+            $this->lang->load('product','indonesia');
+        }
 	}
 	public function index()
 	{
@@ -26,6 +38,7 @@ class Products extends CI_Controller
 
 		$data['start'] = $this->uri->segment(4);
 		$where['pro_stat'] = $this->config->item('accepted');
+		$where['pro_stock !='] = 0;
 		$data['products'] = $this->productModel->fetch_data($where, $config['per_page'], $data['start'])->result();
 
 		$this->load->view("marketplace/products_frontend", $data);
@@ -63,6 +76,7 @@ class Products extends CI_Controller
 		if ($this->uri->segment(4)) {
 			$where['pro_id'] = $this->uri->segment(4);
 			$where['pro_stat'] = $this->config->item('accepted');
+			$where['pro_stock !='] = 0;
 			$data['products'] = $this->productModel->get_products($where)->row();
 			if($data['products']){
 				$this->load->view("marketplace/product_detail", $data);
