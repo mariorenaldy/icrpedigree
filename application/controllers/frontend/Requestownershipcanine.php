@@ -181,7 +181,8 @@ class Requestownershipcanine extends CI_Controller {
 				$like['ken_name'] = $this->input->post('mem_name');
 				$where['mem_stat'] = $this->config->item('accepted');
 				$where['ken_stat'] = $this->config->item('accepted');
-				$data['member'] = $this->memberModel->search_other_members($this->session->userdata('mem_id'), $like, $where)->result();
+				$where['mem_id !='] = $this->session->userdata('mem_id');
+				$data['member'] = $this->memberModel->search_members($like, $where)->result();
 		
 				if ($data['member']){
 					$whe['ken_member_id'] =  $data['member'][0]->mem_id;
