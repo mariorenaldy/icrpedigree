@@ -10,13 +10,14 @@
     <?php $this->load->view('frontend/layout/header'); ?>
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
-        <figure class="figure w-25">
+        <h3 class="text-center text-warning mb-5"><?= lang("ord_detail"); ?></h3>
+        <figure class="figure w-50">
             <?php if ($products->pro_photo != '-' &&  $products->pro_photo != null){ ?>
                 <img src="<?= base_url('uploads/products/'.$products->pro_photo) ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
             <?php } else{ ?>
                 <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
             <?php } ?>
-            <h3 class="text-warning"><?= $products->pro_name ?></h3>
+            <h4 class="text-warning"><?= $products->pro_name ?></h4>
             <p><?= lang("pro_price"); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></p>
             <p><?= lang("ord_quantity"); ?>: <?= $this->uri->segment(5); ?></p>
             <p class="h5 text-warning"><?= lang("ord_total_price"); ?>: Rp <?= number_format($products->pro_price * $this->uri->segment(5),0,",","."); ?></p>

@@ -87,6 +87,10 @@
                             <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $o->ord_invoice;?>', <?= $o->ord_total_price;?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
+                            <?php if ($o->ord_stat_id == $this->config->item('order_arrived')){ ?>
+                            <button type="button" class="btn btn-primary mb-1" onclick="accept('<?= $o->ord_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("ord_accepted"); ?>"><i class="fa-solid fa-check"></i></button>
+                            <button type="button" class="btn btn-danger mb-1" onclick="complain('<?= $o->ord_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("ord_complain"); ?>"><i class="fa-solid fa-file-pen"></i></button>
+                            <?php } ?>
                         </div>
                     </div>
                 <?php } ?>
@@ -127,6 +131,16 @@
                             <?php if ($this->session->flashdata('cancel_success')){ ?>
                                 <div class="row">
                                     <div class="col-12"><?= lang("ord_cancel_success"); ?></div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('accept_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("ord_accept_success"); ?></div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('complain_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("ord_complain_success"); ?></div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -191,6 +205,12 @@
             cancelId = id;
             $('#confirm-modal').modal('show');
         }
+        function accept(id){
+            window.location = "<?= base_url(); ?>marketplace/Orders/accept/"+id;
+        }
+        function complain(id){
+            window.location = "<?= base_url(); ?>marketplace/Orders/complain/"+id;
+        }
 
         var modal = document.getElementById("myModal");
         function display(id){
@@ -213,6 +233,11 @@
 
             <?php		
                 if ($this->session->flashdata('cancel_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('accept_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
 

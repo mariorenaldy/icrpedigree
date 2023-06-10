@@ -56,7 +56,7 @@
         </div>
         <?= $this->pagination->create_links(); ?>
         <div class="text-center">
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Marketplace'"><?= lang("common_back"); ?></button>
+            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Beranda'"><?= lang("common_back"); ?></button>
         </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>

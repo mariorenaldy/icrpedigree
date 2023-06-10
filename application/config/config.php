@@ -532,6 +532,9 @@ $config['file_name_kennel'] = 'kennel_'.time().'.png';
 $config['path_canine'] = 'uploads/canine/';
 $config['file_name_canine'] = 'canine_'.time().'.png';
 
+$config['path_complain'] = 'uploads/complain/';
+$config['file_name_complain'] = 'complain_'.time().'.png';
+
 $config['path_stud'] = 'uploads/stud/';
 $config['file_name_stud'] = 'stud_'.time().'.png';
 $config['file_name_sire'] = 'sire_'.time().'.png';
@@ -591,11 +594,15 @@ $config['accepted'] = 1;
 $config['rejected'] = 2;
 $config['completed'] = 3;
 
-$config['order_rejected'] = 7;
 $config['order_not_paid'] = 1;
 $config['order_paid'] = 2;
-$config['order_failed'] = 8;
+$config['order_delivered'] = 3;
+$config['order_arrived'] = 4;
+$config['order_complained'] = 5;
 $config['order_cancelled'] = 6;
+$config['order_rejected'] = 7;
+$config['order_failed'] = 8;
+$config['order_completed'] = 9;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;

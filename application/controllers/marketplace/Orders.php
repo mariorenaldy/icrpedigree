@@ -8,7 +8,7 @@ class Orders extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('OrderModel', 'ProductModel'));
+		$this->load->model(array('OrderModel', 'ProductModel', 'logorderModel', 'RejectReasonsModel', 'OrderComplainModel', 'OrderStatusModel', 'memberModel'));
 		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
@@ -82,6 +82,13 @@ class Orders extends CI_Controller
 			redirect('frontend/Members');
 		}
     }
+	public function detail(){
+		if($this->uri->segment(4)){
+			$where['ord_id'] = $this->uri->segment(4);
+			$data['order'] = $this->OrderModel->get_orders($where)->row();
+			$this->load->view('marketplace/order_detail', $data);
+		}
+	}
 
 	public function search(){
 		if ($this->session->userdata('mem_id')){
@@ -153,6 +160,8 @@ class Orders extends CI_Controller
     }
 	public function cek_status($invoice){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
+
 			$where['ord_invoice'] = $invoice;
 			$orders = $this->OrderModel->get_orders($where)->row();
 	
@@ -203,53 +212,70 @@ class Orders extends CI_Controller
 					case 200:  # OK
 						$statRes = json_decode($result)->transaction->status;
 						if($statRes == 'FAILED'){
-							var_dump('gagal status');
-							die;
+							var_dump($result);die;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment failed');
+							}
+							redirect('marketplace/Orders');
 						}
 						if($statRes == 'SUCCESS'){
-							var_dump('berhasil');
 							$res = $this->payOrder($orders->ord_id);
 							if($res){
-								var_dump('berhasil bayar data');
-								die;
 								$this->session->set_flashdata('add_success', true);
 								redirect('marketplace/Orders');
 							}
 							else{
-								var_dump('gagal bayar data');
-								die;
-								$this->session->set_flashdata('error_message', 'Failed to pay order with id = ');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal membayar order dengan id = '.$orders->ord_id);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to pay order with id = '.$orders->ord_id);
+								}
 								redirect('marketplace/Orders');
 							}
 						}
 						if($statRes == 'EXPIRED'){
-							var_dump('expired status');
-							die;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The payment due date has passed');
+							}
+						}
+						else{
+							var_dump($result);die;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment failed');
+							}
+							redirect('marketplace/Orders');
 						}
 						break;
 					default:
-						var_dump('gagal');
-						var_dump($result);die;
-						$this->session->set_flashdata('error_message', 'Failed to check status for order id = '.$orders->ord_id.'. Error code: '.$http_code.' '.json_decode($result)->message[0]);
 						redirect('marketplace/Orders');
 				}
 			}
 			else{
-				var_dump('aneh');
+				redirect('marketplace/Orders');
 			}
 	
 			// Close cURL
 			curl_close($ch);
 		}
 		else{
-			redirect('frontend/Beranda');
+			redirect('marketplace/Orders');
 		}
 	}
 	function generate_signature($componentSignature, $secretKey){
 		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
 		return $signature;
 	}
-	function payOrder($ord_id){
+	public function payOrder($ord_id){
 		$data = array(
 			'ord_id' => $ord_id,
 			'ord_pay_date' => date('Y-m-d H:i:s'),
@@ -307,7 +333,7 @@ class Orders extends CI_Controller
 	
 		}
 	}
-	function cancel(){
+	public function cancel(){
 		if ($this->uri->segment(4)){
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
@@ -346,4 +372,542 @@ class Orders extends CI_Controller
 			redirect('marketplace/Orders');
 		}
 	}
+	public function accept(){
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$dataOrd = array(
+				'ord_id' => $ord_id,
+				'ord_completed_date' => date('Y-m-d H:i:s'),
+				'ord_stat_id' => $this->config->item('order_completed')
+			);
+	
+			$err = 0;
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			$whereOrd['ord_id'] = $ord_id;
+			$orders = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+			if ($orders) {
+				$this->db->trans_complete();
+				$this->session->set_flashdata('accept_success', TRUE);
+				redirect('marketplace/Orders');
+			} else {
+				$err = 1;
+			}
+
+			if ($err) {
+				$this->db->trans_rollback();
+				$this->session->set_flashdata('error_message', 'Failed to accept order. Error code: '.$err);
+				redirect('marketplace/Orders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders');
+		}
+	}
+	public function complain(){
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['mode'] = 0;
+			$this->load->view('marketplace/order_complain', $data);
+		}
+		else{
+			redirect('marketplace/Orders');
+		}
+	}
+	public function validate_complain(){
+		if ($this->session->userdata('mem_id')){
+			$site_lang = $this->input->cookie('site_lang');
+			$this->form_validation->set_error_delimiters('<div>','</div>');
+			if ($site_lang == 'indonesia') {
+				$this->form_validation->set_message('required', '%s wajib diisi');
+				$this->form_validation->set_rules('com_desc', 'Deskripsi komplain ', 'trim|required');
+			}
+			else{
+				$this->form_validation->set_message('required', '%s required');
+				$this->form_validation->set_rules('com_desc', 'Complaint description ', 'trim|required');
+			}
+
+			$ord_id = $this->input->post('ord_id');
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['mode'] = 0;
+
+			if ($this->form_validation->run() == FALSE){
+				$this->load->view('marketplace/order_complain', $data);
+			}
+			else{
+				$err = 0;
+				$photo = '-';
+				if ($this->input->post('attachment')) {
+					$uploadedImg = $this->input->post('attachment');
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+                        if ($site_lang == 'indonesia') {
+                            $data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+                        }
+                        else{
+                            $data['error_message'] = 'File size is too big (> 1 MB).<br/>';
+                        }
+					}
+					else{
+						$image_name = $this->config->item('path_complain').$this->config->item('file_name_complain');
+						if (!is_dir($this->config->item('path_complain')) or !is_writable($this->config->item('path_complain'))) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder complain tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Complain folder is not found or is not writable.');
+							}
+						} else{
+							if (is_file($image_name) and !is_writable($image_name)) {
+								$err++;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
+								}
+							}
+						}
+
+						if (!$err){
+							file_put_contents($image_name, $uploadedImg);
+							$photo = str_replace($this->config->item('path_complain'), '', $image_name);
+						}
+					}
+				}
+
+                if (!$err){
+                    $dataCom = array(
+						'com_ord_id' => $ord_id,
+                        'com_desc' => $this->input->post('com_desc'),
+						'com_photo' => $photo
+                    );
+
+					$dataOrd = array(
+						'ord_completed_date' => date('Y-m-d H:i:s'),
+						'ord_stat_id' => $this->config->item('order_complained')
+					);
+
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$complain = $this->OrderComplainModel->add_complains($dataCom);
+					if ($complain){
+						$whereOrd['ord_id'] = $ord_id;
+						$orders = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+						if ($orders) {
+							$this->db->trans_complete();
+							$this->session->set_flashdata('complain_success', TRUE);
+							redirect('marketplace/Orders');
+						} else {
+							$err = 1;
+						}
+					}
+					else{
+						$err = 2;
+					}
+                }
+
+				if ($err){
+					$this->db->trans_rollback();
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Gagal menyimpan data komplain');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Failed to save complaint file');
+					}
+					$this->load->view('marketplace/Orders', $data);
+				}
+			}
+		}
+		else{
+			redirect("frontend/Members");
+		}
+	}
+
+	//backend
+	public function listOrders()
+	{
+		$data['orders'] = $this->OrderModel->get_processed_orders()->result();
+		$this->load->view("marketplace/orders_backend", $data);
+	}
+	public function deliver()
+	{
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$dataOrd = array(
+				'ord_updated_at' => date('Y-m-d H:i:s'),
+				'ord_updated_by' => $this->session->userdata('use_id'),
+				'ord_stat_id' => $this->config->item('order_delivered')
+			);
+
+			$whereOrd['ord_id'] = $ord_id;
+			$order = $this->OrderModel->get_orders($whereOrd)->row();
+			$dataLog = array(
+				'log_ord_id' => $ord_id,
+				'log_mem_id' => $order->ord_mem_id,
+				'log_pro_id' => $order->ord_pro_id,
+				'log_invoice' => $order->ord_invoice,
+				'log_quantity' => $order->ord_quantity,
+				'log_total_price' => $order->ord_total_price,
+				'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+				'log_updated_at' => date('Y-m-d H:i:s'),
+				'log_updated_by' => $this->session->userdata('use_id'),
+				'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
+				'log_pay_due_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_due_date)),
+				'log_arrived_date' => date('Y-m-d H:i:s', strtotime($order->ord_arrived_date)),
+				'log_completed_date' => date('Y-m-d H:i:s', strtotime($order->ord_completed_date)),
+				'log_stat_id' => $this->config->item('order_delivered'),
+				'log_reject_note' => $order->ord_reject_note,
+			);
+	
+			$err = 0;
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			$whereOrd['ord_id'] = $ord_id;
+			$orders = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+			if ($orders) {
+				$log = $this->logorderModel->add_log($dataLog);
+				if($log){
+					$this->db->trans_complete();
+					$this->session->set_flashdata('deliver_success', TRUE);
+					redirect('marketplace/Orders/listOrders');
+				}
+				else{
+					$err = 1;
+				}
+			} else {
+				$err = 2;
+			}
+
+			if ($err) {
+				$this->db->trans_rollback();
+				$this->session->set_flashdata('error_message', 'Failed to deliver order. Error code: '.$err);
+				redirect('marketplace/Orders/listOrders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders/listOrders');
+		}
+	}
+	public function arrive()
+	{
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$dataOrd = array(
+				'ord_updated_at' => date('Y-m-d H:i:s'),
+				'ord_updated_by' => $this->session->userdata('use_id'),
+				'ord_arrived_date' => date('Y-m-d H:i:s'),
+				'ord_stat_id' => $this->config->item('order_arrived')
+			);
+
+			$whereOrd['ord_id'] = $ord_id;
+			$order = $this->OrderModel->get_orders($whereOrd)->row();
+			$dataLog = array(
+				'log_ord_id' => $ord_id,
+				'log_mem_id' => $order->ord_mem_id,
+				'log_pro_id' => $order->ord_pro_id,
+				'log_invoice' => $order->ord_invoice,
+				'log_quantity' => $order->ord_quantity,
+				'log_total_price' => $order->ord_total_price,
+				'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+				'log_updated_at' => date('Y-m-d H:i:s'),
+				'log_updated_by' => $this->session->userdata('use_id'),
+				'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
+				'log_pay_due_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_due_date)),
+				'log_arrived_date' => date('Y-m-d H:i:s', strtotime($order->ord_arrived_date)),
+				'log_completed_date' => date('Y-m-d H:i:s', strtotime($order->ord_completed_date)),
+				'log_stat_id' => $this->config->item('order_arrived'),
+				'log_reject_note' => $order->ord_reject_note,
+			);
+	
+			$err = 0;
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			$whereOrd['ord_id'] = $ord_id;
+			$orders = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+			if ($orders) {
+				$log = $this->logorderModel->add_log($dataLog);
+				if($log){
+					$this->db->trans_complete();
+					$this->session->set_flashdata('arrive_success', TRUE);
+					redirect('marketplace/Orders/listOrders');
+				}
+				else{
+					$err = 1;
+				}
+			} else {
+				$err = 2;
+			}
+
+			if ($err) {
+				$this->db->trans_rollback();
+				$this->session->set_flashdata('error_message', 'Failed to set order as arrived. Error code: '.$err);
+				redirect('marketplace/Orders/listOrders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders/listOrders');
+		}
+	}
+	public function reject()
+	{
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['reasons'] = $this->RejectReasonsModel->get_order_reasons()->result();
+			$data['mode'] = 0;
+			if ($data['order']) {
+				$this->load->view("marketplace/reject_order", $data);
+			} else {
+				redirect('marketplace/Orders/listOrders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders/listOrders');
+		}
+	}
+	public function validate_reject(){ 
+        if ($this->session->userdata('use_id')) {
+
+			$valid = false;
+            if (!$this->input->post('dropdown_reason')){
+				$this->form_validation->set_error_delimiters('<div>', '</div>');
+                $this->form_validation->set_rules('ord_reject_note', 'Other Reason required', 'trim|required');
+				if($this->form_validation->run() == TRUE){
+					$valid = true;
+				}
+            }
+			else{
+				$valid = true;
+			}
+
+			$ord_id = $this->input->post('ord_id');
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['reasons'] = $this->RejectReasonsModel->get_order_reasons()->result();
+            $data['mode'] = 1;
+            
+			if($data['order']){
+				if(!$valid){
+					$this->load->view('marketplace/reject_order', $data);
+				} else {
+					$err = 0;
+
+					$order = $data['order'];
+					$dataOrd = array(
+						'ord_updated_at' => date('Y-m-d H:i:s'),
+						'ord_updated_by' => $this->session->userdata('use_id'),
+						'ord_stat_id' => $this->config->item('order_rejected')
+					);
+					
+					$dataLog = array(
+						'log_ord_id' => $ord_id,
+						'log_mem_id' => $order->ord_mem_id,
+						'log_pro_id' => $order->ord_pro_id,
+						'log_invoice' => $order->ord_invoice,
+						'log_quantity' => $order->ord_quantity,
+						'log_total_price' => $order->ord_total_price,
+						'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+						'log_updated_at' => date('Y-m-d H:i:s'),
+						'log_updated_by' => $this->session->userdata('use_id'),
+						'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
+						'log_pay_due_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_due_date)),
+						'log_arrived_date' => date('Y-m-d H:i:s', strtotime($order->ord_arrived_date)),
+						'log_completed_date' => date('Y-m-d H:i:s', strtotime($order->ord_completed_date)),
+						'log_stat_id' => $this->config->item('order_rejected')
+					);
+
+					if($this->input->post('dropdown_reason')){
+						$dataOrd['ord_reject_note'] = $this->input->post('ord_reject');
+						$dataLog['log_reject_note'] = $this->input->post('ord_reject');
+					}
+					else{
+						$dataOrd['ord_reject_note'] = $this->input->post('ord_reject_note');
+						$dataLog['log_reject_note'] = $this->input->post('ord_reject_note');
+					}
+			
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					$rejected = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+					if ($rejected) {
+						$log = $this->logorderModel->add_log($dataLog);
+						if ($log){
+							$whePro['pro_id'] = $order->ord_pro_id;
+							$product = $this->ProductModel->update_stock($whePro, $order->ord_quantity);
+							if($product){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('reject_success', TRUE);
+								redirect("marketplace/Orders/listOrders");
+							}
+							else{
+								$err = 3;
+							}
+						}
+						else{
+							$err = 2;
+						}
+					} else {
+						$err = 1;
+					}
+	
+					if ($err) {
+						$this->db->trans_rollback();
+						$this->session->set_flashdata('error_message', 'Failed to reject order. Error code: '.$err);
+						redirect('marketplace/Orders/listOrders');
+					}
+				}
+			}
+			else{
+				$this->session->set_flashdata('error_message', 'Failed to get order data.');
+				redirect('marketplace/Orders/listOrders');
+			}
+        } 
+        else {
+            redirect("marketplace/Orders/listOrders");
+        }
+    }
+	public function edit()
+	{
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+            $data['status'] = $this->OrderStatusModel->get_status()->result();
+
+			$data['mode'] = 0;
+			if ($data['order']) {
+				$this->load->view("marketplace/edit_order", $data);
+			} else {
+				redirect('marketplace/Orders/listOrders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders/listOrders');
+		}
+	}
+	public function validate_edit(){ 
+        if ($this->session->userdata('use_username')) {
+            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
+            $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
+            $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
+            $this->form_validation->set_rules('ord_stat_id', 'Status ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
+
+			$ord_id = $this->input->post('ord_id');
+			$whereOrd['ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+            $data['status'] = $this->OrderStatusModel->get_status()->result();
+			$data['mode'] = 1;
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('marketplace/edit_order', $data);
+            } else {
+                $err = 0;
+                
+                if (!$err && $this->input->post('ord_invoice') != "-" && $this->OrderModel->check_for_duplicate($this->input->post('ord_id'), 'ord_invoice', $this->input->post('ord_invoice'))){
+                    $err = 1;
+                    $this->session->set_flashdata('error_message', 'Invoice number already exist');
+                }
+
+                if (!$err) {
+					$payDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_pay_date')));
+					$payDueDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_pay_due_date')));
+					$arrivedDate = null;
+					$completedDate = null;
+					if($this->input->post('ord_arrived_date') != null){
+						$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_arrived_date')));
+					}
+					if($this->input->post('ord_completed_date') != null){
+						$completedDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_completed_date')));
+					}
+
+					$dataOrd = array(
+						'ord_invoice' => $this->input->post('ord_invoice'),
+						'ord_quantity' => $this->input->post('ord_quantity'),
+						'ord_total_price' => $this->input->post('ord_total_price'),
+						'ord_updated_at' => date('Y-m-d H:i:s'),
+						'ord_updated_by' => $this->session->userdata('use_id'),
+						'ord_pay_date' => $payDate,
+						'ord_pay_due_date' => $payDueDate,
+						'ord_arrived_date' => $arrivedDate,
+						'ord_completed_date' => $completedDate,
+						'ord_stat_id' => $this->input->post('ord_stat_id'),
+						'ord_reject_note' => $this->input->post('ord_reject_note')
+					);
+
+					$dataLog = array(
+						'log_ord_id' => $ord_id,
+						'log_mem_id' => $data['order']->ord_mem_id,
+						'log_pro_id' => $data['order']->ord_pro_id,
+						'log_invoice' => $this->input->post('ord_invoice'),
+						'log_quantity' => $this->input->post('ord_quantity'),
+						'log_total_price' => $this->input->post('ord_total_price'),
+						'log_created_at' => $data['order']->ord_created_at,
+						'log_updated_at' => date('Y-m-d H:i:s'),
+						'log_updated_by' => $this->session->userdata('use_id'),
+						'log_pay_date' => $payDate,
+						'log_pay_due_date' => $payDueDate,
+						'log_arrived_date' => $arrivedDate,
+						'log_completed_date' => $completedDate,
+						'log_stat_id' => $this->input->post('ord_stat_id'),
+						'log_reject_note' => $this->input->post('ord_reject_note')
+					);
+
+                    if (!$err) {
+                        $this->db->trans_strict(FALSE);
+                        $this->db->trans_start();
+                        $order = $this->OrderModel->update_orders($dataOrd, $whereOrd);
+                        if ($order) {
+                            $log = $this->logorderModel->add_log($dataLog);
+                            if ($log){
+                                $this->db->trans_complete();
+                                $this->session->set_flashdata('edit_success', true);
+                                redirect("marketplace/Orders/listOrders");
+                            }
+                            else{
+                                $err = 2;
+                            }
+                        } else {
+                            $err = 3;
+                        }
+                    }
+				}
+
+				if ($err) {
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error_message', 'Failed to edit order id = '.$this->input->post('ord_id').'. Error code: '.$err);
+					$this->load->view('marketplace/edit_order', $data);
+				}
+            }
+        }
+        else{
+            redirect('backend/Users/login');
+        }
+    }
+	public function add()
+	{
+		$data['member'] = [];
+		$data['product'] = [];
+		$data['status'] = $this->OrderStatusModel->get_status()->result();
+		$this->load->view("marketplace/add_order", $data);
+	}
+	
+	public function search_member(){
+		$like['mem_name'] = $this->input->post('mem_name');
+		$where['mem_stat'] = $this->config->item('accepted');
+		$member = $this->memberModel->search_members($like, $where)->result();
+		$json = json_encode($member);
+		echo $json;
+    }
 }

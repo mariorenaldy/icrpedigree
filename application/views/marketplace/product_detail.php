@@ -17,8 +17,9 @@
                 <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:500px;" alt="product">
             <?php } ?>
             <h4 class="text-warning"><?= $products->pro_name ?></h4>
-            <p class="mb-5"><?= $products->pro_desc ?></p>
-            <h5 class="text-warning mb-4">Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
+            <p class="mb-5" style="white-space: pre-line"><?= $products->pro_desc ?></p>
+            <h5 class="text-warning mb-4"><?= lang('pro_price'); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
+            <span><?= lang('pro_quantity'); ?>: </span>
             <div class="col-3 mb-5">
                 <div class="input-group mb-3">
                     <span class="input-group-btn">
