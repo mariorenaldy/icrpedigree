@@ -1,5 +1,9 @@
 <?php
 class TrahModel extends CI_Model {
+    public function record_count() {
+        return $this->db->count_all("trah");
+    }
+
     public function get_trah($where){
         $this->db->select('*');
         if ($where != null) {

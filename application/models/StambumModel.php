@@ -4,6 +4,10 @@ class StambumModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
+    public function record_count() {
+        return $this->db->count_all("stambums");
+    }
+
     public function get_stambum($where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date, DATE_FORMAT(stambums.stb_date, "%d-%m-%Y") as stb_date');
         if ($where != null) {

@@ -34,3 +34,5 @@ $lang["common_cancel_payment"] = "Batalkan pesanan";
 
 $lang["common_confirm"] = "Konfirmasi";
 $lang["common_reason"] = "Alasan";
+
+$lang["common_photo_proof"] = "Foto Bukti Pembayaran";

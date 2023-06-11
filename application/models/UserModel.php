@@ -1,5 +1,9 @@
 <?php
 class UserModel extends CI_Model {
+    public function record_count() {
+        return $this->db->count_all("users");
+    }
+
     public function get_max_id(){
 		$this->db->select_max('use_id', 'max');
 		$query = $this->db->get('users');

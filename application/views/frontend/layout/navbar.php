@@ -16,7 +16,6 @@
                         </span>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Canines/add' ?>"><?= lang("nav_add_first_generation"); ?></a></li>
-                            <li><a class="dropdown-item" href="<?= base_url().'frontend/Requestexport/add' ?>"><?= lang("nav_export_stambum"); ?></a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/add' ?>"><?= lang("nav_report_stud"); ?></a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Studs/view_approved' ?>"><?= lang("nav_report_birth"); ?></a></li>
                             <li><a class="dropdown-item" href="<?= base_url().'frontend/Births/view_approved' ?>"><?= lang("nav_report_puppy"); ?></a></li>

@@ -37,8 +37,14 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-info" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("owner_report_list"); ?>"><?= lang('owner_report_list'); ?></button>
-                        <button type="button" class="btn btn-info" onclick="list_edit_canine()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_report_change_photo_rip_list"); ?>"><?= lang('can_report_change_photo_rip_list'); ?></button>
+                        <button type="button" class="btn btn-success" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("owner_report_list"); ?>"><?= lang('owner_report_list'); ?></button>
+                        <button type="button" class="btn btn-light" onclick="list_edit_canine()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_report_change_photo_rip_list"); ?>"><?= lang('can_report_change_photo_rip_list'); ?></button>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-warning" onclick="list_req_cert()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_cert_list"); ?>"><?= lang('can_req_cert_list'); ?></button>
+                        <button type="button" class="btn btn-danger" onclick="list_req_micro()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro_list"); ?>"><?= lang('can_req_micro_list'); ?></button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
@@ -51,7 +57,7 @@
                     <div class="col-sm-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
-                    <div class="row">
+                    <div class="row mb-5">
                         <div class="col-sm-2 mb-1">
                             <?php if ($c->can_photo != '-'){ ?>
                                 <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
@@ -103,6 +109,8 @@
                             <button type="button" class="btn btn-primary mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Pedigree"><i class="fas fa-book-open"></i></button>
                             <button type="button" class="btn btn-success mb-1" onclick="edit_owner(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_change_owner"); ?>"><i class="fa fa-edit" aria-hidden="true"></i></button>
                             <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="<?= lang("can_change_dog_data"); ?>"><i class="fa fa-pencil"></i></button>
+                            <button type="button" class="btn btn-warning mb-1" onclick="certificate(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_cert"); ?>"><i class="fa fa-file-lines"></i></button>
+                            <button type="button" class="btn btn-danger mb-1" onclick="microchip(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro"); ?>"><i class="fa fa-microchip"></i></button>
                             <?php } ?>
                         </div>
                     </div>
@@ -122,6 +130,16 @@
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
                                     <div class="col-12"><?= lang("can_add_success"); ?></div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('req_cert_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("can_req_cert_success"); ?></div>
+                                </div>
+                            <?php } ?>
+                            <?php if ($this->session->flashdata('req_micro_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("can_req_micro_success"); ?></div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -156,6 +174,18 @@
         function list_edit_canine(){
             window.location = "<?= base_url(); ?>frontend/Requestupdatecanine";
         }
+        function list_req_cert(){
+            window.location = "<?= base_url(); ?>frontend/Requestcertificate";
+        }
+        function list_req_micro(){
+            window.location = "<?= base_url(); ?>frontend/Requestmicrochip";
+        }
+        function certificate(id){
+            window.location = "<?= base_url(); ?>frontend/Requestcertificate/add/"+id;
+        }
+        function microchip(id){
+            window.location = "<?= base_url(); ?>frontend/Requestmicrochip/add/"+id;
+        }
 
         var modal = document.getElementById("myModal");
         function display(id){
@@ -173,6 +203,16 @@
         $(document).ready(function(){
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('req_cert_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('req_micro_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
         });

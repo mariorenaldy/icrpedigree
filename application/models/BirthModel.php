@@ -5,6 +5,10 @@ class BirthModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
+    public function record_count() {
+        return $this->db->count_all("births");
+    }
+
     public function get_births($where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {

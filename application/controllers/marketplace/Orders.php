@@ -432,7 +432,7 @@ class Orders extends CI_Controller
 			$ord_id = $this->input->post('ord_id');
 			$whereOrd['ord_id'] = $ord_id;
 			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
-			$data['mode'] = 0;
+			$data['mode'] = 1;
 
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view('marketplace/order_complain', $data);
@@ -622,7 +622,7 @@ class Orders extends CI_Controller
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
 				'log_pay_due_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_due_date)),
-				'log_arrived_date' => date('Y-m-d H:i:s', strtotime($order->ord_arrived_date)),
+				'log_arrived_date' => date('Y-m-d H:i:s'),
 				'log_completed_date' => date('Y-m-d H:i:s', strtotime($order->ord_completed_date)),
 				'log_stat_id' => $this->config->item('order_arrived'),
 				'log_reject_note' => $order->ord_reject_note,

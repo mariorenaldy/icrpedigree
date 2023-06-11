@@ -14,7 +14,7 @@
                 <h3 class="text-center text-primary">Dashboard</h3>
             </div>
         </div>
-        <div class="reports mb-5">
+        <div class="reports">
             <div class="input-group mb-3">
                 <label class="control-label col-md-2">Number of Canines</label>
                 <div class="col-md-10">
@@ -76,6 +76,7 @@
                 </div>
             </div>
         </div>
+        <canvas id="dailyIncomeChart"></canvas>
         <div id="incomeChart" style="width: 800px; height: 400px;"></div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
@@ -127,12 +128,6 @@
             return item.total_income;
         });
 
-        // Daftar nama bulan dalam bahasa Indonesia
-        var monthNamesEnglish = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        ];
-
         var chart = echarts.init(document.getElementById('incomeChart'));
         var option = {
             title: {
@@ -151,12 +146,8 @@
                 type: 'category',
                 data: dailyDates,
                 axisLabel: {
-                    rotate: 0,
-                    interval: 0,
-                    formatter: function(value) {
-                        var date = new Date(value);
-                        return monthNamesEnglish[date.getMonth()];
-                    }
+                    rotate: 45,
+                    interval: 0
                 }
             },
             yAxis: {

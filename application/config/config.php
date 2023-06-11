@@ -532,6 +532,9 @@ $config['file_name_kennel'] = 'kennel_'.time().'.png';
 $config['path_canine'] = 'uploads/canine/';
 $config['file_name_canine'] = 'canine_'.time().'.png';
 
+$config['path_payment'] = 'uploads/payment/';
+$config['file_name_payment'] = 'payment_'.time().'.png';
+
 $config['path_complain'] = 'uploads/complain/';
 $config['file_name_complain'] = 'complain_'.time().'.png';
 
@@ -549,9 +552,6 @@ $config['file_name_user'] = 'user_'.time().'.png';
 $config['path_ownership'] = 'uploads/ownership/';
 $config['file_name_ownership'] = 'stambum_'.time().'.png';
 
-$config['path_export'] = 'uploads/export/';
-$config['file_name_export'] = 'stambum_'.time().'.png';
-
 $config['path_product'] = 'uploads/products/';
 $config['file_name_product'] = 'product_'.time().'.png';
 
@@ -565,6 +565,7 @@ $config['mode'] = 0;
 
 $config['canine_count'] = 5;
 $config['order_count'] = 5;
+$config['request_count'] = 5;
 $config['stud_count'] = 5;
 $config['birth_count'] = 5;
 $config['stb_count'] = 5;
@@ -590,6 +591,7 @@ $config['frontend_breed'] = 1;
 
 $config['deleted'] = 0;
 $config['saved'] = 0;
+$config['processed'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
 $config['completed'] = 3;
@@ -603,6 +605,13 @@ $config['order_cancelled'] = 6;
 $config['order_rejected'] = 7;
 $config['order_failed'] = 8;
 $config['order_completed'] = 9;
+
+$config['cert_processed'] = 1;
+$config['cert_delivered'] = 2;
+$config['cert_arrived'] = 3;
+$config['cert_cancelled'] = 4;
+$config['cert_rejected'] = 5;
+$config['cert_completed'] = 6;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;

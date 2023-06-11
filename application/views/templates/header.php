@@ -22,8 +22,8 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Canines/') ?>">Manage</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestownershipcanine') ?>">Approve Change Ownership</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatecanine') ?>">Approve Update Photo & RIP</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport') ?>">Approve Export Stambum</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestexport/manage') ?>">Manage Export Stambum</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestcertificate') ?>">Manage Certificate Requests</a></li>
+                           <li><a class="dropdown-item" href="<?= base_url('backend/Requestmicrochip') ?>">Manage Microchip Requests</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">

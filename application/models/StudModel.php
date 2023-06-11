@@ -5,6 +5,10 @@ class StudModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
+    public function record_count() {
+        return $this->db->count_all("studs");
+    }
+
     public function get_studs($where, $offset = 0, $limit = 0){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){

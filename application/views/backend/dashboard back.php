@@ -14,7 +14,7 @@
                 <h3 class="text-center text-primary">Dashboard</h3>
             </div>
         </div>
-        <div class="reports mb-5">
+        <div class="reports">
             <div class="input-group mb-3">
                 <label class="control-label col-md-2">Number of Canines</label>
                 <div class="col-md-10">
@@ -76,7 +76,8 @@
                 </div>
             </div>
         </div>
-        <div id="incomeChart" style="width: 800px; height: 400px;"></div>
+        <canvas id="dailyIncomeChart"></canvas>
+        <canvas id="monthlyIncomeChart"></canvas>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -106,12 +107,12 @@
     <?php $this->load->view('templates/footer'); ?>
     </div>
     <?php $this->load->view('templates/script'); ?>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var dailyIncomeData = <?php echo json_encode($daily_income); ?>;
         var monthlyIncomeData = <?php echo json_encode($monthly_income); ?>;
 
-        var dailyDates = dailyIncomeData.map(function(item) {
+        var dates = dailyIncomeData.map(function(item) {
             return item.date;
         });
 
@@ -119,63 +120,95 @@
             return item.month;
         });
 
-        var dailyIncome = dailyIncomeData.map(function(item) {
+        var income = dailyIncomeData.map(function(item) {
             return item.total_income;
         });
 
-        var monthlyIncome = monthlyIncomeData.map(function(item) {
-            return item.total_income;
-        });
-
-        // Daftar nama bulan dalam bahasa Indonesia
-        var monthNamesEnglish = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        ];
-
-        var chart = echarts.init(document.getElementById('incomeChart'));
-        var option = {
-            title: {
-                text: 'Income Chart'
+        var ctx = document.getElementById('dailyIncomeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Daily Income',
+                    data: income,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
             },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                data: ['Daily Income', 'Monthly Income']
-            },
-            xAxis: {
-                type: 'category',
-                data: dailyDates,
-                axisLabel: {
-                    rotate: 0,
-                    interval: 0,
-                    formatter: function(value) {
-                        var date = new Date(value);
-                        return monthNamesEnglish[date.getMonth()];
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Income'
+                        }
                     }
                 }
             },
-            yAxis: {
-                type: 'value',
-                name: 'Income'
-            },
-            series: [{
-                    name: 'Daily Income',
-                    type: 'bar',
-                    data: dailyIncome
-                },
-                {
-                    name: 'Monthly Income',
-                    type: 'bar',
-                    data: monthlyIncome
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+                            var value = context.dataset.data[context.dataIndex];
+                            return label + ': ' + value;
+                        }
+                    }
                 }
-            ]
-        };
-        chart.setOption(option);
+            }
+        });
+
+        var ctx = document.getElementById('monthlyIncomeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthlyDates,
+                datasets: [{
+                    label: 'Monthly Income',
+                    data: income,
+                    backgroundColor: 'rgba(192, 75, 192, 0.2)',
+                    borderColor: 'rgba(192, 75, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Income'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+                            var value = context.dataset.data[context.dataIndex];
+                            return label + ': ' + value;
+                        }
+                    }
+                }
+            }
+        });
 
         $(document).ready(function() {
             <?php

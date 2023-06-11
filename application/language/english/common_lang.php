@@ -34,3 +34,5 @@ $lang["common_cancel_payment"] = "Cancel order";
 
 $lang["common_confirm"] = "Confirm";
 $lang["common_reason"] = "Reason";
+
+$lang["common_photo_proof"] = "Photo Proof of Payment";
