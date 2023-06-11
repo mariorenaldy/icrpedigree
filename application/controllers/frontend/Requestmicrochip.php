@@ -217,7 +217,7 @@ class Requestmicrochip extends CI_Controller {
 			$req_id = $this->uri->segment(4);
 			$dataReq = array(
 				'req_id' => $req_id,
-				'req_stat_id' => $this->config->item('cert_cancelled')
+				'req_stat_id' => $this->config->item('cancelled')
 			);
 	
 			$err = 0;

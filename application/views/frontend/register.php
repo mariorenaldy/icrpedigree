@@ -146,6 +146,14 @@
                                     echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
                                 ?>
                             </div>
+                            <div class="input-group my-3 gap-3 mt-5 mb-5">
+                                <label class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>
+                                <div class="col-sm-12 text-center">
+                                    <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
+                                    <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
+                                    <input type="hidden" name="attachment_proof" id="attachment_proof">
+                                </div>
+                            </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary btn-lg" type="button" id="registerBtn">Register</button>
@@ -266,6 +274,11 @@
                                 <div class="col-6"><?= lang("mem_kennel_format"); ?></div>
                                 <div class="col">: <span id="confirm-ken_type"></span></div>
                             </div>
+                            <div class="row">
+                                <div class="col-6"><?= lang("common_photo_proof"); ?></div>
+                                <div class="col-auto pe-0">:</div>
+                                <div class="col"><img id="confirm-proof" width="50%"/></div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -324,6 +337,7 @@
 
         const imageInputPP = document.querySelector("#imageInputPP");
         const imageInputLogo = document.querySelector("#imageInputLogo");
+        const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
 
         var resetImage = function(input) {
@@ -333,12 +347,16 @@
             else if(input === "logo"){
                 imageInputLogo.value = null;
             }
+            else if(input === "proof"){
+                imageInputProof.value = null;
+            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
             var previewPP = document.getElementById('imgPreviewPP');
             var previewLogo = document.getElementById('imgPreviewLogo');
+            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var cropper;
 
@@ -349,6 +367,11 @@
 
             imageInputLogo.addEventListener("change", function(event) {
                 croppingImage = "logo";
+                showModalImg(event);
+            })
+
+            imageInputProof.addEventListener("change", function(event) {
+                croppingImage = "proof";
                 showModalImg(event);
             })
 
@@ -397,6 +420,10 @@
                             previewLogo.src = base64data;
                             $('#attachment_logo').val(base64data);
                         }
+                        else if(croppingImage === "proof"){
+                            previewProof.src = base64data;
+                            $('#attachment_proof').val(base64data);
+                        }
                         $modal.modal('hide');
                     };
                 });
@@ -441,6 +468,7 @@
                 $('#confirm-logo').attr("src",  $('#imgPreviewLogo').attr("src"));
                 $('#confirm-ken_name').text($('input[name="ken_name"]').val());
                 $('#confirm-ken_type').text($('#ken_type_id option:selected').text());
+                $('#confirm-proof').attr("src",  $('#imgPreviewProof').attr("src"));
             }
 
             $('#confirm-modal').modal('show');

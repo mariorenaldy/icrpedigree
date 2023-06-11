@@ -61,6 +61,8 @@ class Requestpro extends CI_Controller {
 							'mem_stat' => $this->config->item('accepted'),
 							'mem_type' => $this->config->item('pro_member'),
 						);
+						if ($req->req_pay_photo != '-')
+								$dataMember['mem_pay_photo'] = $req->req_pay_photo;
 						$wheMember['mem_id'] = $req->req_member_id;
 						$res = $this->memberModel->update_members($dataMember, $wheMember);
 						if ($res){
@@ -95,6 +97,8 @@ class Requestpro extends CI_Controller {
 									'log_stat' => $this->config->item('accepted'),
 									'log_mem_type' => $this->config->item('pro_member'),
 								);
+								if ($req->req_pay_photo != '-')
+									$dataLog['log_pay_photo'] = $req->req_pay_photo;
 								$log = $this->logmemberModel->add_log($dataLog);
 								if ($log){
 									$dataKennelLog = array(

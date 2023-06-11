@@ -220,9 +220,20 @@ class Members extends CI_Controller {
 							$this->session->set_flashdata('error_message', 'Kennel Photo is required');
 						}
 					}
+
+					if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])) {
+						$err++;
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+						}
+					}
 	
 					$pp = '-';
 					$logo = '-';
+					$proof = '-';
 					if (!$err){
 						if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
 							$uploadedPP = $_POST['attachment_pp'];
@@ -276,6 +287,21 @@ class Members extends CI_Controller {
 								$this->session->set_flashdata('error_message', "Kennel Photo file size is too big (> 1 MB).<br/>");
 							}
 						}
+
+						$uploadedProof = $_POST['attachment_proof'];
+						$image_array_1 = explode(";", $uploadedProof);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedProof = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedProof) > $this->config->item('file_size'))){
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', "Ukuran file Foto Bukti Pembayaran terlalu besar (> 1 MB).<br/>");
+							}
+							else{
+								$this->session->set_flashdata('error_message', "Photo Proof of Payment file size is too big (> 1 MB).<br/>");
+							}
+						}
 						
 						$logo_name = $this->config->item('path_kennel').$this->config->item('file_name_kennel');
 						if (!is_dir($this->config->item('path_kennel')) or !is_writable($this->config->item('path_kennel'))){
@@ -294,6 +320,27 @@ class Members extends CI_Controller {
 								}
 								else{
 									$this->session->set_flashdata('error_message', 'Kennel Photo file is already exist and is not writable.');
+								}
+							}
+						}
+
+						$proof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+						if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))){
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'payment folder is not found or is not writable.');
+							}
+						} else {
+							if (is_file($proof_name) and !is_writable($proof_name)){
+								$err++;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File Foto Bukti Pembayaran sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Photo Proof of Payment file is already exist and is not writable.');
 								}
 							}
 						}
@@ -412,16 +459,19 @@ class Members extends CI_Controller {
 				}
 				
 				if (!$err){
-					if (isset($uploadedPP)){
-						file_put_contents($pp_name, $uploadedPP);
-						$pp = str_replace($this->config->item('path_member'), '', $pp_name);
-					}
-
-					file_put_contents($logo_name, $uploadedLogo);
-					$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
-
 					$mem_id = $this->MemberModel->record_count() + 1;
 					if ($this->input->post('mem_type')){
+						if (isset($uploadedPP)){
+							file_put_contents($pp_name, $uploadedPP);
+							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
+						}
+	
+						file_put_contents($logo_name, $uploadedLogo);
+						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
+	
+						file_put_contents($proof_name, $uploadedProof);
+						$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
+						
 						$dataMember = array(
 							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('mem_name')),
@@ -432,6 +482,7 @@ class Members extends CI_Controller {
 							'mem_email' => $this->input->post('mem_email'),
 							'mem_ktp' => $this->input->post('mem_ktp'),
 							'mem_pp' => $pp,
+							'mem_pay_photo' => $proof,
 							'mem_username' => $this->input->post('mem_username'),
 							'mem_password' => sha1($this->input->post('password')),
 							'mem_stat' => $this->config->item('saved'),

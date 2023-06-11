@@ -595,6 +595,7 @@ $config['processed'] = 0;
 $config['accepted'] = 1;
 $config['rejected'] = 2;
 $config['completed'] = 3;
+$config['cancelled'] = 4;
 
 $config['order_not_paid'] = 1;
 $config['order_paid'] = 2;

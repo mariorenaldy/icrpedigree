@@ -39,10 +39,11 @@
                 <div class="row mb-1">
                     <div class="col-sm-2"><b><?= lang("common_photo"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("common_name"); ?></b></div>
-                    <div class="col-sm-2"><b><?= lang("common_desc"); ?></b></div>
+                    <div class="col-sm-1"><b><?= lang("common_desc"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("common_dob"); ?></b></div>
                     <div class="col-sm-2"><b>Kennel</b></div>
                     <div class="col-sm-2"><b>Status</b></div>
+                    <div class="col-sm-1"></div>
                 </div>
                 <?php foreach ($stambum AS $r){ ?>
                     <div class="row">
@@ -52,7 +53,7 @@
                         <div class="col-sm-2">
                             <?php echo $r->stb_a_s; ?>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <?php 
                                 echo $r->stb_breed.'<br/>';
                                 echo $r->stb_gender; 
@@ -79,6 +80,12 @@
                                 else
                                     echo '-'; 
                             } ?>
+                        </div>
+                        <div class="col-sm-1 mb-1">
+                            <?php if ($r->stb_stat == $this->config->item('rejected')){ ?>
+                                <img src="<?= base_url('uploads/payment/'.$r->stb_pay_photo) ?>" class="d-none img-fluid img-thumbnail" alt="payment" id="myProof<?= $r->stb_id ?>">
+                                <button type="button" class="btn btn-light mb-1" onclick="display('myProof<?= $r->stb_id ?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_see_proof"); ?>"><i class="fa fa-receipt"></i></button>
+                            <?php } ?>
                         </div>
                     </div>
                 <?php } ?>

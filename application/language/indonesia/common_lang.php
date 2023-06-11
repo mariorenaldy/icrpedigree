@@ -36,3 +36,4 @@ $lang["common_confirm"] = "Konfirmasi";
 $lang["common_reason"] = "Alasan";
 
 $lang["common_photo_proof"] = "Foto Bukti Pembayaran";
+$lang["common_see_proof"] = "Lihat Bukti Pembayaran";

@@ -12,7 +12,7 @@
     <span class="close">&times;</span>
     <img class="modal-content" id="modalImg">
 </div>
-<?php $this->load->view('frontend/layout/header_non_paid'); ?> 
+<?php $this->load->view('frontend/layout/header_member'); ?> 
 <?php $this->load->view('frontend/layout/navbar'); ?>
     <div class="container">
         <div class="row">     
@@ -21,9 +21,8 @@
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-3">
                     <div class="col"><b><?= lang("can_dog_name"); ?></b></div>
-                    <div class="col"><b><?= lang("can_micro_date"); ?></b></div>
-                    <div class="col"><b><?= lang("can_micro_desc"); ?></b></div>
-                    <div class="col"><b><?= lang("can_micro_arrived_date"); ?></b></div>
+                    <div class="col"><b><?= lang("can_appointment_date"); ?></b></div>
+                    <div class="col"><b><?= lang("common_photo_proof"); ?></b></div>
                     <div class="col"><b>Status</b></div>
                     <div class="col"></div>
                 </div>
@@ -33,13 +32,12 @@
                             <?php echo $r->can_a_s.'<br/>'; ?>
                         </div>
                         <div class="col">
-                            <?php echo $r->req_created_at.'<br/>'; ?>
+                            <?php echo $r->req_datetime.'<br/>'; ?>
                         </div>
                         <div class="col">
-                            <?php echo $r->req_desc.'<br/>'; ?>
-                        </div>
-                        <div class="col">
-                            <?php echo $r->req_arrived_date.'<br/>'; ?>
+                            <?php if ($r->req_pay_photo != '-'){ ?>
+                                <img src="<?= base_url('uploads/payment/'.$r->req_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myImg<?= $r->req_pay_photo ?>" onclick="display('myImg<?= $r->req_pay_photo ?>')">
+                            <?php } ?>
                         </div>
                         <div class="col">
                             <?php echo $r->stat_name; 

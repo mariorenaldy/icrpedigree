@@ -368,6 +368,7 @@ class Stambums extends CI_Controller {
                 }
         
                 $photo = '-';
+                $photoProof = '-';
                 if (!$err){
                     $uploadedImg = $_POST['attachment'];
                     $image_array_1 = explode(";", $uploadedImg);
@@ -387,6 +388,31 @@ class Stambums extends CI_Controller {
                         if (is_file($img_name) and !is_writable($img_name)) {
                         $err++;
                         $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                        }
+                    }
+                }
+
+                if (!$err){
+                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+                        $uploadedProof = $_POST['attachment_proof'];
+                        $image_array_1 = explode(";", $uploadedProof);
+                        $image_array_2 = explode(",", $image_array_1[1]);
+                        $uploadedProof = base64_decode($image_array_2[1]);
+                
+                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+                        }
+                
+                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'payment folder not found or not writable.');
+                        } else{
+                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
                         }
                     }
                 }
@@ -535,15 +561,19 @@ class Stambums extends CI_Controller {
                     }
                 
                     if (!$err){
-                        file_put_contents($img_name, $uploadedImg);
-                        $photo = str_replace($this->config->item('path_canine'), '', $img_name);
+                        if (isset($uploadedImg)){
+                            file_put_contents($img_name, $uploadedImg);
+                            $photo = str_replace($this->config->item('path_canine'), '', $img_name);
+						}
+                        if (isset($uploadedProof)){
+                            file_put_contents($imgProof_name, $uploadedProof);
+                            $photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
+						}
                         
                         $piece = explode("-", $birth->bir_date_of_birth);
                         $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 
-                        $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
                         $dataCan = array(
-                            'can_id' => $id,
                             'can_reg_number' => '-',
                             'can_breed' => $dam->can_breed,
                             'can_gender' => $this->input->post('stb_gender'),
@@ -551,6 +581,7 @@ class Stambums extends CI_Controller {
                             'can_color' => '-',
                             'can_reg_date' => date("Y/m/d"),
                             'can_photo' => $photo,
+                            'can_pay_photo' => $photoProof,
                             'can_stat' => $this->config->item('accepted'),
                             'can_app_user' => $this->session->userdata('use_id'),
                             'can_app_date' => date('Y-m-d H:i:s'),
@@ -576,7 +607,6 @@ class Stambums extends CI_Controller {
 
                         if (!$err) {
                             $dataLog = array(
-                                'log_canine_id' => $id,
                                 'log_reg_number' => '-',
                                 'log_a_s' => $dataCan['can_a_s'],
                                 'log_breed' => $dam->can_breed,
@@ -584,6 +614,7 @@ class Stambums extends CI_Controller {
                                 'log_date_of_birth' => $dob,
                                 'log_color' => '-',
                                 'log_photo' => $photo,
+                                'log_pay_photo' => $photoProof,
                                 'log_stat' => $this->config->item('accepted'),
                                 'log_app_user' => $this->session->userdata('use_id'),
                                 'log_app_date' => date('Y-m-d H:i:s'),
@@ -602,12 +633,12 @@ class Stambums extends CI_Controller {
                                 'stb_date_of_birth' => $dob,
                                 'stb_reg_date' => date("Y/m/d"),
                                 'stb_photo' => $photo,
+                                'stb_pay_photo' => $photoProof,
                                 'stb_stat' => $this->config->item('accepted'),
                                 'stb_app_user' => $this->session->userdata('use_id'),
                                 'stb_app_date' => date('Y-m-d H:i:s'),
                                 'stb_user' => $this->session->userdata('use_id'),
                                 'stb_date' => date('Y-m-d H:i:s'),
-                                'stb_can_id' => $id,
                             );
         
                             $dataLogStb = array(
@@ -617,12 +648,12 @@ class Stambums extends CI_Controller {
                                 'log_gender' => $this->input->post('stb_gender'),
                                 'log_date_of_birth' => $dob,
                                 'log_photo' => $photo,
+                                'log_pay_photo' => $photoProof,
                                 'log_stat' => $this->config->item('accepted'),
                                 'log_app_user' => $this->session->userdata('use_id'),
                                 'log_app_date' => date('Y-m-d H:i:s'),
                                 'log_user' => $this->session->userdata('use_id'),
                                 'log_date' => date('Y-m-d H:i:s'),
-                                'log_can_id' => $id,
                             );
 
                             if ($this->input->post('reg_member')){
@@ -649,19 +680,24 @@ class Stambums extends CI_Controller {
                             $dataPed = array(
                                 'ped_sire_id' => $stud->stu_sire_id,
                                 'ped_dam_id' => $stud->stu_dam_id,
-                                'ped_canine_id' => $id,
                             );
             
                             $dataLogPed = array(
                                 'log_sire_id' => $stud->stu_sire_id,
                                 'log_dam_id' => $stud->stu_dam_id,
-                                'log_canine_id' => $id,
                                 'log_user' => $this->session->userdata('use_id'),
                                 'log_date' => date('Y-m-d H:i:s'),
                             );
 
                             $canines = $this->caninesModel->add_canines($dataCan);
                             if ($canines) {
+                                $insertedID = $this->db->insert_id();
+                                $dataLog['log_canine_id'] = $insertedID;
+                                $dataStb['stb_can_id'] = $insertedID;
+                                $dataLogStb['log_can_id'] = $insertedID;
+                                $dataPed['ped_canine_id'] = $insertedID;
+                                $dataLogPed['log_canine_id'] = $insertedID;
+
                                 $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
                                 if ($pedigree) {
                                     $log = $this->logcanineModel->add_log($dataLog);
@@ -874,9 +910,7 @@ class Stambums extends CI_Controller {
 
                 $this->db->trans_strict(FALSE);
                 $this->db->trans_start();
-                $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
                 $dataCan = array(
-                    'can_id' => $id,
                     'can_a_s' => $stb->stb_a_s,
                     'can_reg_number' => '-', 
                     'can_breed' => $stb->stb_breed,
@@ -885,6 +919,7 @@ class Stambums extends CI_Controller {
                     'can_color' => '-', 
                     'can_reg_date' => date("Y/m/d"),
                     'can_photo' => $stb->stb_photo,
+                    'can_pay_photo' => $stb->stb_pay_photo,
                     'can_chip_number' => '-', 
                     'can_icr_number' => '-', 
                     'can_stat' => $this->config->item('accepted'),
@@ -898,8 +933,9 @@ class Stambums extends CI_Controller {
                 );
                 $canines = $this->caninesModel->add_canines($dataCan);
                 if ($canines){
+                    $insertedID = $this->db->insert_id();
                     $dataStb = array(
-                        'stb_can_id' => $id,
+                        'stb_can_id' => $insertedID,
                         'stb_stat' => $this->config->item('accepted'),
                         'stb_app_user' => $this->session->userdata('use_id'),
                         'stb_app_date' => date('Y-m-d H:i:s'),
@@ -916,19 +952,20 @@ class Stambums extends CI_Controller {
                             'log_gender' => $stb->stb_gender,
                             'log_date_of_birth' => $dob,
                             'log_photo' => $stb->stb_photo,
+                            'log_pay_photo' => $stb->stb_pay_photo,
                             'log_stat' => $this->config->item('accepted'),
                             'log_app_user' => $this->session->userdata('use_id'),
                             'log_app_date' => date('Y-m-d H:i:s'),
                             'log_user' => $this->session->userdata('use_id'),
                             'log_date' => date('Y-m-d H:i:s'),
-                            'log_can_id' => $id,
+                            'log_can_id' => $insertedID,
                             'log_member_id' => $stb->stb_member_id,
                             'log_kennel_id' => $stb->stb_kennel_id,
                         );
                         $log = $this->logstambumModel->add_log($dataLogStb);
                         if ($log){
                             $dataLog = array(
-                                'log_canine_id' => $id,
+                                'log_canine_id' => $insertedID,
                                 'log_reg_number' => '-',
                                 'log_a_s' => $stb->stb_a_s,
                                 'log_breed' => $stb->stb_breed,
@@ -937,6 +974,7 @@ class Stambums extends CI_Controller {
                                 'log_color' => '-',
                                 'log_kennel_id' => $stb->stb_kennel_id,
                                 'log_photo' => $stb->stb_photo,
+                                'log_pay_photo' => $stb->stb_pay_photo,
                                 'log_stat' => $this->config->item('accepted'),
                                 'log_app_user' => $this->session->userdata('use_id'),
                                 'log_app_date' => date('Y-m-d H:i:s'),
@@ -958,14 +996,14 @@ class Stambums extends CI_Controller {
                                 $dataPed = array(
                                     'ped_sire_id' => $stud->stu_sire_id,
                                     'ped_dam_id' => $stud->stu_dam_id,
-                                    'ped_canine_id' => $id,
+                                    'ped_canine_id' => $insertedID,
                                 );
                                 $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
                                 if ($pedigree){
                                     $dataLogPed = array(
                                         'log_sire_id' => $stud->stu_sire_id,
                                         'log_dam_id' => $stud->stu_dam_id,
-                                        'log_canine_id' => $id,
+                                        'log_canine_id' => $insertedID,
                                         'log_user' => $this->session->userdata('use_id'),
                                         'log_date' => date('Y-m-d H:i:s'),
                                     );
@@ -1048,6 +1086,7 @@ class Stambums extends CI_Controller {
                         'log_gender' => $stb->stb_gender,
                         'log_date_of_birth' => $dob,
                         'log_photo' => $stb->stb_photo,
+                        'log_pay_photo' => $stb->stb_pay_photo,
                         'log_stat' => $this->config->item('rejected'),
                         'log_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),

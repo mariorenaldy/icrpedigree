@@ -288,14 +288,25 @@ class Stambums extends CI_Controller {
 				if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
 					$err++;
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+						$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Photo is required');
+						$this->session->set_flashdata('error_message', 'Dog photo is required');
+					}
+				}
+
+				if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])){
+					$err++;
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
 					}
 				}
 
 				$photo = '-';
+				$photoProof = '-';
 				if (!$err){
 					$uploadedImg = $_POST['attachment'];
 					$image_array_1 = explode(";", $uploadedImg);
@@ -336,6 +347,49 @@ class Stambums extends CI_Controller {
 					if (!$err){
 						file_put_contents($img_name, $uploadedImg);
 						$photo = str_replace($this->config->item('path_canine'), '', $img_name);
+					}
+				}
+
+				if (!$err){
+					$uploadedImg = $_POST['attachment_proof'];
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+						}
+					}
+
+					$img_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+					if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+						$err++;
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Payment folder is not found or is not writable.');
+						}
+					} else{
+						if (is_file($img_name) and !is_writable($img_name)) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
+							}
+						}
+					}
+
+					if (!$err){
+						file_put_contents($img_name, $uploadedImg);
+						$photoProof = str_replace($this->config->item('path_payment'), '', $img_name);
 					}
 				}
 
@@ -468,6 +522,7 @@ class Stambums extends CI_Controller {
 							'stb_date_of_birth' => $dob,
 							'stb_reg_date' => date("Y/m/d"),
 							'stb_photo' => $photo,
+							'stb_pay_photo' => $photoProof,
 							'stb_stat' => $this->config->item('saved'),
 							'stb_user' => $this->config->item('system'),
 							'stb_date' => date('Y-m-d H:i:s'),

@@ -100,7 +100,13 @@
                             ?>
                                 <img width="15%" src="<?= base_url().'uploads/kennels/'.$req->req_kennel_photo ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
                             <?php } else { ?>
-                                <img width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php 
+                                    if ($req->req_old_kennel_photo && $req->req_old_kennel_photo != '-'){
+                                ?>
+                                    <img width="15%" src="<?= base_url().'uploads/kennels/'.$req->req_old_kennel_photo ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php } else { ?>
+                                    <img width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
@@ -113,6 +119,28 @@
                         <div class="col-sm-2"><?= lang('mem_kennel_format'); ?></div>
                         <div class="col-sm-5"><?= $req->old_kennel_type ?></div>
                         <div class="col-sm-5"><?= $req->new_kennel_type ?></div>
+                    </div>
+                    <hr/>
+                    <div class="row mb-2">
+                        <div class="col-sm-2"><?= lang('common_photo_proof'); ?></div>
+                        <div class="col-sm-5">
+                            <?php 
+                                if ($req->mem_pay_photo && $req->mem_pay_photo != '-'){
+                            ?>
+                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->mem_pay_photo ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
+                            <?php } else { ?>
+                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
+                            <?php } ?>
+                        </div>
+                        <div class="col-sm-5">
+                            <?php 
+                                if ($req->req_pay_photo && $req->req_pay_photo != '-'){
+                            ?>
+                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->req_pay_photo ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } else { ?>
+                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } ?>
+                        </div>
                     </div>
             <?php 
                     $i++;

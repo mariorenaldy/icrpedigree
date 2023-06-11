@@ -74,7 +74,7 @@
                             <label class="control-label col-md-12 text-center">Canine Photo</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
+                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
                                 <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
@@ -92,6 +92,14 @@
                                 $gender['FEMALE'] = 'FEMALE';
                                 echo form_dropdown('stb_gender', $gender, set_value('stb_gender'), 'class="form-control"');
                                 ?>
+                            </div>
+                        </div>
+                        <div class="input-group mt-3 mb-3 gap-3">
+                            <label class="control-label col-sm-12 text-center">Payment Proof</label>
+                            <div class="col-sm-12 text-center">
+                                <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
+                                <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
+                                <input type="hidden" name="attachment_proof" id="attachment_proof">
                             </div>
                         </div>
                         <input type="hidden" name="stb_bir_id" value="<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>"/>
@@ -209,18 +217,36 @@
         }
 
         const imageInput = document.querySelector("#imageInput");
-        var resetImage = function() {
-            imageInput.value = null;
+        const imageInputProof = document.querySelector("#imageInputProof");
+        var croppingImage = null;
+
+        var resetImage = function(input) {
+            if(input === "canine"){
+                imageInput.value = null;
+            }
+            else if(input === "proof"){
+                imageInputProof.value = null;
+            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
-            var previewImg = document.getElementById('imgPreview');
+            var preview = document.getElementById('imgPreview');
+            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
+            var ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
 
             imageInput.addEventListener("change", function(event) {
+                croppingImage = "canine";
+                ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
+                showModalImg(event);
+            })
+
+            imageInputProof.addEventListener("change", function(event) {
+                croppingImage = "proof";
+                ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
                 showModalImg(event);
             })
 
@@ -241,7 +267,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
+                    aspectRatio: ratio,
                     viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
@@ -261,15 +287,21 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        previewImg.src = base64data;
-                        $('#attachment').val(base64data);
+                        if(croppingImage === "canine"){
+                            preview.src = base64data;
+                            $('#attachment').val(base64data);
+                        }
+                        else if(croppingImage === "proof"){
+                            previewProof.src = base64data;
+                            $('#attachment_proof').val(base64data);
+                        }
                         $modal.modal('hide');
                     };
                 });
             });
 
             $('#cancel-btn').click(function() {
-                resetImage();
+                resetImage(croppingImage);
             });
 
             <?php		

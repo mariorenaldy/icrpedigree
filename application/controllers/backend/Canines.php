@@ -406,6 +406,7 @@ class Canines extends CI_Controller {
                 }
         
                 $photo = '-';
+                $photoProof = '-';
                 if (!$err){
                     $uploadedImg = $_POST['attachment'];
                     $image_array_1 = explode(";", $uploadedImg);
@@ -425,6 +426,36 @@ class Canines extends CI_Controller {
                         if (is_file($img_name) and !is_writable($img_name)) {
                         $err++;
                         $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                        }
+                    }
+                }
+
+                if (!$err){
+                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+                        $uploadedProof = $_POST['attachment_proof'];
+                        $image_array_1 = explode(";", $uploadedProof);
+                        $image_array_2 = explode(",", $image_array_1[1]);
+                        $uploadedProof = base64_decode($image_array_2[1]);
+                
+                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+                        }
+                
+                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
+                        } else{
+                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
+                                $err++;
+                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
+                        }
+
+                        if(!$err){
+                            file_put_contents($imgProof_name, $uploadedProof);
+							$photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
                         }
                     }
                 }
@@ -461,9 +492,7 @@ class Canines extends CI_Controller {
                     file_put_contents($img_name, $uploadedImg);
                     $photo = str_replace($this->config->item('path_canine'), '', $img_name);
 
-                    $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
                     $dataCan = array(
-                        'can_id' => $id,
                         'can_member_id' => $this->input->post('can_member_id'),
                         'can_reg_number' => strtoupper($this->input->post('can_reg_number')),
                         'can_breed' => $this->input->post('can_breed'),
@@ -473,6 +502,7 @@ class Canines extends CI_Controller {
                         'can_kennel_id' => $this->input->post('can_kennel_id'),
                         'can_reg_date' => date("Y/m/d"),
                         'can_photo' => $photo,
+                        'can_pay_photo' => $photoProof,
                         'can_stat' => $this->config->item('accepted'),
                         'can_app_user' => $this->session->userdata('use_id'),
                         'can_app_date' => date('Y-m-d H:i:s'),
@@ -510,7 +540,6 @@ class Canines extends CI_Controller {
                     }
 
                     $dataLog = array(
-                        'log_canine_id' => $id,
                         'log_reg_number' => strtoupper($this->input->post('can_reg_number')),
                         'log_a_s' => $dataCan['can_a_s'],
                         'log_breed' => $this->input->post('can_breed'),
@@ -519,6 +548,7 @@ class Canines extends CI_Controller {
                         'log_color' => $this->input->post('can_color'),
                         'log_kennel_id' => $this->input->post('can_kennel_id'),
                         'log_photo' => $photo,
+                        'log_pay_photo' => $photoProof,
                         'log_stat' => $this->config->item('accepted'),
                         'log_app_user' => $this->session->userdata('use_id'),
                         'log_app_date' => date('Y-m-d H:i:s'),
@@ -533,13 +563,11 @@ class Canines extends CI_Controller {
                     $dataPed = array(
                         'ped_sire_id' => $this->config->item('sire_id'),
                         'ped_dam_id' => $this->config->item('dam_id'),
-                        'ped_canine_id' => $id,
                     );
 
                     $dataLogPed = array(
                         'log_sire_id' => $this->config->item('sire_id'),
                         'log_dam_id' => $this->config->item('dam_id'),
-                        'log_canine_id' => $id,
                         'log_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),
                     );
@@ -549,13 +577,18 @@ class Canines extends CI_Controller {
                         $this->db->trans_start();
                         $canines = $this->caninesModel->add_canines($dataCan);
                         if ($canines) {
+                            $insertedID = $this->db->insert_id();
+                            $dataLog['log_canine_id'] = $insertedID;
+                            $dataPed['ped_canine_id'] = $insertedID;
+                            $dataLogPed['log_canine_id'] = $insertedID;
+
                             $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
                             if ($pedigree) {
                                 $log = $this->logcanineModel->add_log($dataLog);
                                 if ($log){
                                     $res = $this->logpedigreeModel->add_log($dataLogPed);
                                     if ($res){
-                                        $result = $this->notification_model->add(13, $id, $this->input->post('can_member_id'), "Nama anjing / Canine Name: ".$dataCan['can_a_s']);
+                                        $result = $this->notification_model->add(13, $insertedID, $this->input->post('can_member_id'), "Nama anjing / Canine Name: ".$dataCan['can_a_s']);
                                         if ($result){
                                             $this->db->trans_complete();
                                             $this->session->set_flashdata('add_success', true);
@@ -722,6 +755,7 @@ class Canines extends CI_Controller {
             } else {
                 $err = 0;
                 $photo = '-';
+                $photoProof = '-';
                 if (!$err){
                     if (isset($_POST['attachment']) && !empty($_POST['attachment'])){
                         $uploadedImg = $_POST['attachment'];
@@ -740,6 +774,31 @@ class Canines extends CI_Controller {
                             $this->session->set_flashdata('error_message', 'Canine folder not found or not writable.');
                         } else{
                             if (is_file($img_name) and !is_writable($img_name)) {
+                                $err++;
+                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
+                            }
+                        }
+                    }
+                }
+
+                if (!$err){
+                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+                        $uploadedProof = $_POST['attachment_proof'];
+                        $image_array_1 = explode(";", $uploadedProof);
+                        $image_array_2 = explode(",", $image_array_1[1]);
+                        $uploadedProof = base64_decode($image_array_2[1]);
+            
+                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+                        }
+            
+                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+                            $err++;
+                            $this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
+                        } else{
+                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
                                 $err++;
                                 $this->session->set_flashdata('error_message', 'File already exists and not writable.');
                             }
@@ -784,6 +843,10 @@ class Canines extends CI_Controller {
                         file_put_contents($img_name, $uploadedImg);
                         $photo = str_replace($this->config->item('path_canine'), '', $img_name);
                     }
+                    if (isset($uploadedProof)){
+                        file_put_contents($imgProof_name, $uploadedProof);
+                        $photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
+                    }
 
                     $piece = explode("-", $this->input->post('can_date_of_birth'));
                     $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
@@ -819,6 +882,16 @@ class Canines extends CI_Controller {
                             $dataCan['can_photo'] = $data['canine']->can_photo;
                         }
                     }
+
+                    if ($photoProof != '-'){
+                        $dataCan['can_pay_photo'] = $photoProof;
+                    }
+                    else{
+                        if ($data['canine']->can_pay_photo != '-'){
+                            $photoProof = $data['canine']->can_pay_photo;
+                            $dataCan['can_pay_photo'] = $data['canine']->can_pay_photo;
+                        }
+                    }
                     
                     $dataLog = array(
                         'log_canine_id' => $this->input->post('can_id'),
@@ -830,6 +903,7 @@ class Canines extends CI_Controller {
                         'log_color' => $this->input->post('can_color'),
                         'log_kennel_id' => $this->input->post('can_kennel_id'),
                         'log_photo' => $photo,
+                        'log_pay_photo' => $photoProof,
                         'log_stat' => $this->config->item('accepted'),
                         'log_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),
@@ -1034,6 +1108,7 @@ public function validate_edit_pedigree(){
                         'log_color' => $can->can_color,
                         'log_kennel_id' => $can->can_kennel_id,
                         'log_photo' => $can->can_photo,
+                        'log_pay_photo' => $can->can_pay_photo,
                         'log_stat' => $this->config->item('accepted'),
                         'log_app_user' => $this->session->userdata('use_id'),
                         'log_app_date' => date('Y-m-d H:i:s'),
@@ -1121,6 +1196,7 @@ public function validate_edit_pedigree(){
                         'log_color' => $can->can_color,
                         'log_kennel_id' => $can->can_kennel_id,
                         'log_photo' => $can->can_photo,
+                        'log_pay_photo' => $can->can_pay_photo,
                         'log_stat' => $this->config->item('rejected'),
                         'log_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),

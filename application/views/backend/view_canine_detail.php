@@ -3,8 +3,13 @@
 <head>
     <title>Canine Detail</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>
@@ -105,6 +110,15 @@
                     <div class="col-md-2">Note</div>
                     <div class="col-md-4">: <?= $canine->can_note ?></div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-2">Payment Proof</div>
+                    <div class="col-sm-2">
+                        <?php if ($canine->can_pay_photo && $canine->can_pay_photo != '-'){ ?>
+                            <img src="<?= base_url('uploads/payment/'.$canine->can_pay_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="payment" id="myProof<?= $canine->can_id ?>" onclick="display('myProof<?= $canine->can_id ?>')">
+                        <?php } ?>
+                    </div>
+                </div>
                 <hr/>
                 <div class="row">
                     <div class="col-md-3"></div>
@@ -159,5 +173,19 @@
         <?php $this->load->view('templates/footer'); ?>
     </div>
     <?php $this->load->view('templates/script'); ?>
+    <script>
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
 </body>
 </html>

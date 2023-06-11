@@ -199,19 +199,11 @@ class Canines extends CI_Controller {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
 				$this->form_validation->set_rules('can_a_s', 'Nama ', 'trim|required');
-				// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
-				// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-				// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
-				// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 				$this->form_validation->set_rules('can_date_of_birth', 'Tanggal Lahir ', 'trim|required');
 			}
 			else{
 				$this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
 				$this->form_validation->set_rules('can_a_s', 'Name ', 'trim|required');
-				// $this->form_validation->set_rules('can_reg_number', 'No. Registration ', 'trim|required');
-				// $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-				// $this->form_validation->set_rules('can_chip_number', 'No. Microchip ', 'trim');
-				// $this->form_validation->set_rules('can_color', 'Warna ', 'trim|required');
 				$this->form_validation->set_rules('can_date_of_birth', 'Date of Birth ', 'trim|required');
 			}
 
@@ -226,6 +218,7 @@ class Canines extends CI_Controller {
 			else{
 				$err = 0;
 				$photo = '-';
+				$photoProof = '-';
 				if ($this->input->post('attachment')) {
 					$uploadedImg = $this->input->post('attachment');
 					$image_array_1 = explode(";", $uploadedImg);
@@ -270,25 +263,69 @@ class Canines extends CI_Controller {
 					}
 				}
 
-				if (!$err && $photo == "-"){
-					$err++;
-					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Foto wajib diisi');
+				if ($this->input->post('attachment_proof')) {
+					$uploadedImg = $this->input->post('attachment_proof');
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err++;
+                        if ($site_lang == 'indonesia') {
+                            $data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+                        }
+                        else{
+                            $data['error_message'] = 'File size is too big (> 1 MB).<br/>';
+                        }
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Photo is required');
+						$image_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+						if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment folder is not found or is not writable.');
+							}
+						} else{
+							if (is_file($image_name) and !is_writable($image_name)) {
+								$err++;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'File is already exists and is not writable.');
+								}
+							}
+						}
+
+						if (!$err){
+							file_put_contents($image_name, $uploadedImg);
+							$photoProof = str_replace($this->config->item('path_payment'), '', $image_name);
+						}
 					}
 				}
 
-				// if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
-				// }
+				if (!$err && $photo == "-"){
+					$err++;
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Dog photo is required');
+					}
+				}
 
-				// if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
-				// 	$err++;
-				// 	$this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
-				// }
+				if (!$err && $photoProof == "-"){
+					$err++;
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Foto bukti pembayaran wajib diisi');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Photo proof of payment is required');
+					}
+				}
 
                 $piece = explode("-", $this->input->post('can_date_of_birth'));
                 $dob = $piece[2]."-".$piece[1]."-".$piece[0];
@@ -319,9 +356,7 @@ class Canines extends CI_Controller {
                 }
 
                 if (!$err){
-                    $id = $this->caninesModel->record_count() + 895; // gara2 data canine dihapus
                     $data = array(
-                        'can_id' => $id,
                         'can_member_id' => $this->session->userdata('mem_id'),
                         'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
                         'can_breed' => $this->input->post('can_breed'),
@@ -331,6 +366,7 @@ class Canines extends CI_Controller {
                         'can_kennel_id' => $this->input->post('can_kennel_id'),
                         'can_reg_date' => date("Y/m/d"),
                         'can_photo' => $photo,
+                        'can_pay_photo' => $photoProof,
                         'can_chip_number' => '-', // $this->input->post('can_chip_number'),
                         'can_icr_number' => '-', // $this->input->post('can_icr_number'),
                     );
@@ -370,14 +406,15 @@ class Canines extends CI_Controller {
                     if (!$err){
                         $dataPed = array(
                             'ped_sire_id' => $this->config->item('sire_id'),
-                            'ped_dam_id' => $this->config->item('dam_id'),
-                            'ped_canine_id' => $id,
+                            'ped_dam_id' => $this->config->item('dam_id')
                         );
 
                         $this->db->trans_strict(FALSE);
                         $this->db->trans_start();
                         $canines = $this->caninesModel->add_canines($data);
                         if ($canines){
+							$insertedID = $this->db->insert_id();
+							$dataPed['ped_canine_id'] = $insertedID;
                             $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
                             if ($pedigree){
                                 $this->db->trans_complete();
@@ -415,56 +452,4 @@ class Canines extends CI_Controller {
 			redirect("frontend/Members");
 		}
 	}
-
-	// public function search_canine(){
-	// 	$data['canines'] = [];
-	// 	$data['kennel'] = [];
-	// 	$this->load->view('frontend/search_canine', $data);
-    // }
-
-    // public function validate_canine(){
-	// 	if ($this->session->userdata('mem_id')){
-	// 		$like['can_a_s'] = $this->input->post('can_a_s');
-	// 		$where['can_member_id'] = 0;
-	// 		$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
-
-	// 		$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-	// 		$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
-	// 		$this->load->view('frontend/search_canine', $data);
-	// 	}
-	// 	else{
-	// 		redirect("frontend/Members");
-	// 	}
-    // }
-
-	// public function validate_claim_canine(){
-	// 	if ($this->session->userdata('mem_id')){
-	// 		$like['can_a_s'] = $this->input->post('can_a_s');
-	// 		$where['can_member_id'] = 0;
-	// 		$data['canines'] = $this->caninesModel->search_canines($like, $where)->result();
-
-	// 		$wheKennel['ken_member_id'] = $this->session->userdata('mem_id');
-	// 		$data['kennel'] = $this->KennelModel->get_kennels($wheKennel)->result();
-
-	// 		$dataCanine = array(
-	// 			'can_stat' => $this->config->item('saved'),
-	// 			'can_app_user' => 0,
-	// 			'can_member_id' => $this->session->userdata('mem_id'),
-	// 			'can_kennel_id' => $this->input->post('ken_id'),
-	// 		);
-	// 		$wheCanine['can_id'] = $this->input->post('can_id');
-	// 		$res = $this->caninesModel->update_canines($dataCanine, $wheCanine);
-	// 		if ($res){
-	// 			$this->session->set_flashdata('claim_success', TRUE);
-	// 			redirect("frontend/Canines/search_canine");
-	// 		}
-	// 		else{
-	// 			$this->session->set_flashdata('error_message', 'Gagal menyimpan klaim canine');
-	// 			$this->load->view('frontend/search_canine', $data);
-	// 		}
-	// 	}
-	// 	else{
-	// 		redirect("frontend/Members");
-	// 	}
-    // }
 }

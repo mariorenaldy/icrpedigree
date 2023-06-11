@@ -46,37 +46,37 @@
                         <div class="col date"><?= $req->req_date ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">No. KTP</div>
+                        <div class="col-sm-2">ID Card Number</div>
                         <div class="col-sm-5"><?= $req->req_old_ktp ?></div>
                         <div class="col-sm-5"><?= $req->req_ktp ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Nama Sesuai KTP</div>
+                        <div class="col-sm-2">ID Card Name</div>
                         <div class="col-sm-5"><?= $req->req_old_name ?></div>
                         <div class="col-sm-5"><?= $req->req_name ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Alamat Surat Menyurat</div>
+                        <div class="col-sm-2">Mail Address</div>
                         <div class="col-sm-5"><?= $req->req_old_mail_address ?></div>
                         <div class="col-sm-5"><?= $req->req_mail_address ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Alamat</div>
+                        <div class="col-sm-2">Address</div>
                         <div class="col-sm-5"><?= $req->req_old_address ?></div>
                         <div class="col-sm-5"><?= $req->req_address ?></div>
                     </div>      
                     <div class="row mb-1">
-                        <div class="col-sm-2">No. HP WA Aktif</div>
+                        <div class="col-sm-2">Active WhatsApp Number</div>
                         <div class="col-sm-5"><?= $req->req_old_hp ?></div>
                         <div class="col-sm-5"><?= $req->req_hp ?></div>
                     </div>      
                     <div class="row mb-1">
-                        <div class="col-sm-2">Kota</div>
+                        <div class="col-sm-2">City</div>
                         <div class="col-sm-5"><?= $req->req_old_kota ?></div>
                         <div class="col-sm-5"><?= $req->req_kota ?></div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Kode Pos</div>
+                        <div class="col-sm-2">Postal Code</div>
                         <div class="col-sm-5"><?= $req->req_old_kode_pos ?></div>
                         <div class="col-sm-5"><?= $req->req_kode_pos ?></div>
                     </div>     
@@ -103,19 +103,47 @@
                             ?>
                                 <img width="15%" src="<?= base_url().'uploads/kennels/'.$req->req_kennel_photo ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
                             <?php } else { ?>
-                                <img width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php 
+                                    if ($req->req_old_kennel_photo && $req->req_old_kennel_photo != '-'){
+                                ?>
+                                    <img width="15%" src="<?= base_url().'uploads/kennels/'.$req->req_old_kennel_photo ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php } else { ?>
+                                    <img width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>" alt="member" id="new_member<?= $req->req_id ?>" onclick="display('new_member<?= $req->req_id ?>')">
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">Nama Kennel</div>
-                        <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
+                        <div class="col-sm-2">Kennel Name</div>
+                        <div class="col-sm-5"><?= $req->req_old_kennel_name ?></div>
                         <div class="col-sm-5"><?= $req->req_kennel_name ?></div>
                     </div>     
                     <div class="row mb-1">
-                        <div class="col-sm-2">Format Penamaan Anjing</div>
-                        <div class="col-sm-5"><?= $req->ken_type_name ?></div>
-                        <div class="col-sm-5"><?= $req->ken_type_name ?></div>
+                        <div class="col-sm-2">Dog Naming Format</div>
+                        <div class="col-sm-5"><?= $req->old_kennel_type ?></div>
+                        <div class="col-sm-5"><?= $req->new_kennel_type ?></div>
+                    </div>
+                    <hr/>
+                    <div class="row mb-2">
+                        <div class="col-sm-2">Payment Proof</div>
+                        <div class="col-sm-5">
+                            <?php 
+                                if ($req->mem_pay_photo && $req->mem_pay_photo != '-'){
+                            ?>
+                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->mem_pay_photo ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
+                            <?php } else { ?>
+                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
+                            <?php } ?>
+                        </div>
+                        <div class="col-sm-5">
+                            <?php 
+                                if ($req->req_pay_photo && $req->req_pay_photo != '-'){
+                            ?>
+                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->req_pay_photo ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } else { ?>
+                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } ?>
+                        </div>
                     </div>
             <?php 
                     $i++;

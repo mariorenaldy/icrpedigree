@@ -212,7 +212,6 @@ class Orders extends CI_Controller
 					case 200:  # OK
 						$statRes = json_decode($result)->transaction->status;
 						if($statRes == 'FAILED'){
-							var_dump($result);die;
 							if ($site_lang == 'indonesia') {
 								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
 							}
@@ -245,8 +244,10 @@ class Orders extends CI_Controller
 								$this->session->set_flashdata('error_message', 'The payment due date has passed');
 							}
 						}
+						if($statRes == 'PENDING'){
+							redirect('marketplace/Orders');
+						}
 						else{
-							var_dump($result);die;
 							if ($site_lang == 'indonesia') {
 								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
 							}

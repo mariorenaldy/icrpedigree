@@ -35,6 +35,7 @@
                         <button type="button" class="btn btn-warning" onclick="add()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_add"); ?>"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?php if ($this->session->userdata('mem_type') == '1'){ ?>
                 <div class="row my-3">
                     <div class="col-sm-12">
                         <button type="button" class="btn btn-success" onclick="list_edit_owner()" data-toggle="tooltip" data-placement="top" title="<?= lang("owner_report_list"); ?>"><?= lang('owner_report_list'); ?></button>
@@ -47,13 +48,14 @@
                         <button type="button" class="btn btn-danger" onclick="list_req_micro()" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro_list"); ?>"><?= lang('can_req_micro_list'); ?></button>
                     </div>
                 </div>
+                <?php }; ?>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-1">
                     <div class="col-sm-2"><b><?= lang("can_photo"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("can_name"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("can_desc"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("can_kennel"); ?></b></div>
-                    <div class="col-sm-2"><b>Status</b></div>
+                    <div class="col-sm-1"><b>Status</b></div>
                     <div class="col-sm-2"></div>
                 </div>
                 <?php foreach ($canines AS $c){ ?>
@@ -87,7 +89,7 @@
                         <div class="col-sm-2">
                             <?= $c->mem_name.' ('.$c->ken_name.')'; ?>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <?php echo $c->stat_name; 
                             if ($c->can_stat == $this->config->item('rejected')){
                                 $site_lang = $this->input->cookie('site_lang');
@@ -111,6 +113,10 @@
                             <button type="button" class="btn btn-light mb-1" onclick="edit_canine(<?= $c->can_id ?>)" data-bs-toggle="modal" data-placement="top" title="<?= lang("can_change_dog_data"); ?>"><i class="fa fa-pencil"></i></button>
                             <button type="button" class="btn btn-warning mb-1" onclick="certificate(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_cert"); ?>"><i class="fa fa-file-lines"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="microchip(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro"); ?>"><i class="fa fa-microchip"></i></button>
+                            <?php } ?>
+                            <?php if ($c->can_stat == $this->config->item('rejected')){ ?>
+                                <img src="<?= base_url('uploads/payment/'.$c->can_pay_photo) ?>" class="d-none img-fluid img-thumbnail" alt="payment" id="myProof<?= $c->can_id ?>">
+                                <button type="button" class="btn btn-light mb-1" onclick="display('myProof<?= $c->can_id ?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_see_proof"); ?>"><i class="fa fa-receipt"></i></button>
                             <?php } ?>
                         </div>
                     </div>

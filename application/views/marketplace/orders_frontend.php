@@ -241,6 +241,11 @@
                     $('#message-modal').modal('show');
             <?php } ?>
 
+            <?php		
+                if ($this->session->flashdata('complain_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>

@@ -70,6 +70,7 @@
                                 <th>Kennel</th>
                                 <th class="no-sort">Owner</th>
                                 <th class="no-sort">Reg. Date</th>
+                                <th class="no-sort">Payment Proof</th>
                                 <th style="display: none;"></th>
                             </tr>
                         </thead>
@@ -97,6 +98,11 @@
                                     <td><?= $c->ken_name; ?></td>
                                     <td><?= $c->mem_name; ?></td>
                                     <td class="text-nowrap"><?= $c->can_reg_date; ?></td>
+                                    <td>
+                                        <?php if ($c->can_pay_photo && $c->can_pay_photo != '-'){ ?>
+                                            <img src="<?= base_url('uploads/payment/'.$c->can_pay_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="payment" id="myProof<?= $c->can_id ?>" onclick="display('myProof<?= $c->can_id ?>')">
+                                        <?php } ?>
+                                    </td>
                                     <td style="display: none;"><?= $c->can_reg_date2; ?></td>
                                 </tr>
                             <?php } ?>

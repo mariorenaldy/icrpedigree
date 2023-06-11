@@ -57,3 +57,8 @@ $lang["can_cert_add_success"] = "Print certificate request has been saved";
 $lang["can_cert_cancel_success"] = "Print certificate request has been cancelled";
 $lang["can_cert_accept_success"] = "Certificate has been received";
 $lang["can_cert_complain_success"] = "Complaint has been filed successfully";
+
+$lang["can_micro_add_success"] = "Microchip implant request has been saved";
+$lang["can_micro_cancel_success"] = "Microchip implant request has been cancelled";
+$lang["can_cert_accept_success"] = "Microchip has been implanted";
+$lang["can_micro_complain_success"] = "Complaint has been filed successfully";

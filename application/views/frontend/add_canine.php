@@ -20,7 +20,7 @@
                             <label for="stu_dam_id" class="control-label col-sm-12 text-center text-danger"><b><?= lang("can_full_body"); ?></b></label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
+                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
                                 <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
@@ -68,6 +68,14 @@
                                     }
                                     echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control", id="can_kennel_id"');
                                 ?>
+                            </div>
+                        </div>
+                        <div class="input-group my-3 gap-3 mt-5 mb-5">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>
+                            <div class="col-sm-12 text-center">
+                                <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
+                                <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
+                                <input type="hidden" name="attachment_proof" id="attachment_proof">
                             </div>
                         </div>
                         <div class="text-center">
@@ -137,6 +145,11 @@
                             <div class="col-4">Kennel</div>
                             <div class="col">: <span id="confirm-kennel"></span></div>
                         </div>
+                        <div class="row">
+                            <div class="col-4"><?= lang("common_photo_proof"); ?></div>
+                            <div class="col-auto pe-0">:</div>
+                            <div class="col"><img id="confirm-proof" width="50%"/></div>
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
@@ -182,19 +195,40 @@
         setDatePicker('#can_date_of_birth');
 
         const imageInput = document.querySelector("#imageInput");
-        var resetImage = function() {
-            imageInput.value = null;
+        const imageInputProof = document.querySelector("#imageInputProof");
+        var croppingImage = null;
+
+        var resetImage = function(input) {
+            if(input === "canine"){
+                imageInput.value = null;
+            }
+            else if(input === "proof"){
+                imageInputProof.value = null;
+            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
-            var image = document.getElementById('imgPreview');
+            var preview = document.getElementById('imgPreview');
+            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
+            var ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
 
             imageInput.addEventListener("change", function(event) {
+                croppingImage = "canine";
+                ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
+                showModalImg(event);
+            })
 
+            imageInputProof.addEventListener("change", function(event) {
+                croppingImage = "proof";
+                ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
+                showModalImg(event);
+            })
+
+            function showModalImg(event) {
                 var files = event.target.files;
                 var done = function(url) {
                     modalImage.src = url;
@@ -207,11 +241,11 @@
                     };
                     reader.readAsDataURL(files[0]);
                 }
-            })
+            }
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
+                    aspectRatio: ratio,
                     viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
@@ -231,16 +265,21 @@
                     reader.readAsDataURL(blob);
                     reader.onloadend = function() {
                         base64data = reader.result;
-                        image.src = base64data;
-                        latestImage = base64data;
-                        $('#attachment').val(latestImage);
+                        if(croppingImage === "canine"){
+                            preview.src = base64data;
+                            $('#attachment').val(base64data);
+                        }
+                        else if(croppingImage === "proof"){
+                            previewProof.src = base64data;
+                            $('#attachment_proof').val(base64data);
+                        }
                         $modal.modal('hide');
                     };
                 });
             });
 
-            $('#cancel-btn').click(function(event) {
-                resetImage();
+            $('#cancel-btn').click(function() {
+                resetImage(croppingImage);
             });
 
             let saveBtn = $("#saveBtn");
@@ -251,6 +290,7 @@
                 $('#confirm-jenis_kelamin').text($('#can_gender option:selected').text());
                 $('#confirm-tanggal_lahir').text($('input[name="can_date_of_birth"]').val());
                 $('#confirm-kennel').text($('#can_kennel_id option:selected').text());
+                $('#confirm-proof').attr("src",  $('#imgPreviewProof').attr("src"));
 
                 $('#confirm-modal').modal('show');
             });

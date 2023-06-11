@@ -54,6 +54,11 @@ $lang["can_req_complain"] = "Ajukan komplain";
 $lang["can_req_cert_accepted"] = "Terima sertifikat";
 
 $lang["can_cert_add_success"] = "Pengajuan cetak sertifikat berhasil disimpan";
-$lang["can_cert_cancel_success"] = "Pembatalan pengajuan cetak sertifikat berhasil";
+$lang["can_cert_cancel_success"] = "Pengajuan cetak sertifikat telah dibatalkan";
 $lang["can_cert_accept_success"] = "Sertifikat telah diterima";
 $lang["can_cert_complain_success"] = "Komplain pengajuan berhasil dibuat";
+
+$lang["can_micro_add_success"] = "Pengajuan pemasangan microchip berhasil disimpan";
+$lang["can_micro_cancel_success"] = "Pengajuan pemasangan microchip telah dibatalkan";
+$lang["can_cert_accept_success"] = "Microchip telah dipasang";
+$lang["can_micro_complain_success"] = "Komplain pengajuan berhasil dibuat";

@@ -3,8 +3,13 @@
 <head>
     <title>Approve Kennel</title>
     <?php $this->load->view('templates/head'); ?>
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('templates/redirect'); ?>
     <div class="container">
         <?php $this->load->view('templates/header'); ?>  
@@ -38,6 +43,7 @@
                                 <th>Postal Code</th>
                                 <th>KTP</th>
                                 <th>email</th>
+                                <th>Payment Proof</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,6 +69,11 @@
                                         <td><?= $m->mem_kode_pos; ?></td>
                                         <td><?= $m->mem_ktp; ?></td>
                                         <td><?= $m->mem_email; ?></td>
+                                        <td>
+                                            <?php if ($m->mem_pay_photo && $m->mem_pay_photo != '-'){ ?>
+                                                <img src="<?= base_url('uploads/payment/'.$m->mem_pay_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="payment" id="myProof<?= $m->mem_pay_photo ?>" onclick="display('myProof<?= $m->mem_pay_photo ?>')">
+                                            <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php $i++; 
                                 } 
@@ -141,6 +152,19 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Members/reject/"+id+"/"+encodeURI(proceed);
             }
+        }
+
+        var modal = document.getElementById("myModal");
+        function display(id){
+            var img = document.getElementById(id);
+            var modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
         }
 
         $(document).ready(function(){

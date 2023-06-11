@@ -6,8 +6,13 @@
     <link href="<?= base_url().'assets/css/pp-styles.css' ?>" rel="stylesheet" />
     <link href="<?= base_url().'assets/css/cropper.min.css' ?>" rel="stylesheet" />
     <link href="<?= base_url().'assets/css/crop-modal-styles.css' ?>" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
 </head>
 <body class="text-white text-break">
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
     <?php $this->load->view('frontend/layout/header_non_paid'); ?>  
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
@@ -97,6 +102,20 @@
                 <div class="col-sm-1"></div>
                 <div class="col-sm-3"><?= lang("mem_kennel_format"); ?></div>
                 <div class="col-sm-8"><?= $kennel->ken_type_name ?></div>
+            </div>
+            <hr/>
+            <div class="row mb-2">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5"><?= lang("common_photo_proof"); ?></div>
+                <div class="col-md-12 text-center">
+                    <?php 
+                        if ($member->mem_pay_photo && $member->mem_pay_photo != '-'){
+                    ?>
+                        <img id="myProof<?= $member->mem_id ?>" width="15%" src="<?= base_url().'uploads/payment/'.$member->mem_pay_photo ?>" onclick="display('myProof<?= $member->mem_id ?>')">
+                    <?php } else { ?>
+                        <img id="myProof<?= $member->mem_id ?>" width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" onclick="display('myProof<?= $member->mem_id ?>')">
+                    <?php } ?>
+                </div>
             </div>
         </div>
         <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -190,6 +209,19 @@
         editBtns.style.display = "none";
         image.src = imageOri;
     };
+
+    var modal = document.getElementById("myModal");
+    function display(id){
+        var img = document.getElementById(id);
+        var modalImg = document.getElementById("modalImg");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+    }
+
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
 
     $(document).ready(function() {
         var $modal = $('#modal');

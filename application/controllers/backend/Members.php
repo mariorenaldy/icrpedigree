@@ -232,6 +232,7 @@ class Members extends CI_Controller {
 		
 						$pp = '-';
 						$logo = '-';
+						$proof = '-';
 						if (!$err){
 							if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
 								$uploadedPP = $_POST['attachment_pp'];
@@ -274,6 +275,29 @@ class Members extends CI_Controller {
 								if (is_file($logo_name) and !is_writable($logo_name)){
 									$err++;
 									$this->session->set_flashdata('error_message', 'Kennel Photo file already exists and not writable.');
+								}
+							}
+
+							if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+								$uploadedProof = $_POST['attachment_proof'];
+								$image_array_1 = explode(";", $uploadedProof);
+								$image_array_2 = explode(",", $image_array_1[1]);
+								$uploadedProof = base64_decode($image_array_2[1]);
+			
+								if ((strlen($uploadedProof) > $this->config->item('file_size'))){
+									$err++;
+									$this->session->set_flashdata('error_message', 'The Payment Proof file size is too big (> 1 MB).');
+								}
+
+								$proof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+								if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))){
+									$err++;
+									$this->session->set_flashdata('error_message', 'payment folder not found or not writable.');
+								} else {
+									if (is_file($proof_name) and !is_writable($proof_name)){
+										$err++;
+										$this->session->set_flashdata('error_message', 'Payment Proof file already exists and not writable.');
+									}
 								}
 							}
 						}
@@ -319,6 +343,11 @@ class Members extends CI_Controller {
 							file_put_contents($pp_name, $uploadedPP);
 							$pp = str_replace($this->config->item('path_member'), '', $pp_name);
 						}
+
+						if (isset($uploadedProof)){
+							file_put_contents($proof_name, $uploadedProof);
+							$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
+						}
 	
 						file_put_contents($logo_name, $uploadedLogo);
 						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
@@ -335,6 +364,7 @@ class Members extends CI_Controller {
 								'mem_email' => $this->input->post('mem_email'),
 								'mem_ktp' => $this->input->post('mem_ktp'),
 								'mem_pp' => $pp,
+								'mem_pay_photo' => $proof,
 								'mem_username' => $this->input->post('mem_username'),
 								'mem_password' => sha1($this->input->post('password')),
 								'mem_app_user' => $this->session->userdata('use_id'),
@@ -374,6 +404,7 @@ class Members extends CI_Controller {
 								'log_mem_type' => $this->config->item('pro_member'),
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
+								'log_pay_photo' => $proof
 							);
 
 							$dataKennelLog = array(
@@ -522,6 +553,7 @@ class Members extends CI_Controller {
 					if ($this->input->post('mem_type')){
 						$pp = '-';
 						$logo = '-';
+						$proof = '-';
 						if (isset($_POST['attachment_pp']) && !empty($_POST['attachment_pp'])){
 							$uploadedPP = $_POST['attachment_pp'];
 							$image_array_1 = explode(";", $uploadedPP);
@@ -566,6 +598,29 @@ class Members extends CI_Controller {
 								}
 							}
 						}
+
+						if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+							$uploadedProof = $_POST['attachment_proof'];
+							$image_array_1 = explode(";", $uploadedProof);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedProof = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedProof) > $this->config->item('file_size'))){
+								$err++;
+								$this->session->set_flashdata('error_message', "The Payment Proof file size is too big (> 1 MB).");
+							}
+
+							$proof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+							if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))){
+								$err++;
+								$this->session->set_flashdata('error_message', 'payment folder not found or not writable.');
+							} else {
+								if (is_file($proof_name) and !is_writable($proof_name)){
+									$err++;
+									$this->session->set_flashdata('error_message', 'Payment Proof Photo file already exists and not writable.');
+								}
+							}
+						}
 					}
 
 					if ($this->input->post('mem_type'))
@@ -607,6 +662,10 @@ class Members extends CI_Controller {
 							file_put_contents($logo_name, $uploadedLogo);
 							$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
 						}
+						if (isset($uploadedProof)){
+							file_put_contents($proof_name, $uploadedProof);
+							$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
+						}
 						
 						if ($this->input->post('mem_type')){
 							$data = array(
@@ -625,6 +684,8 @@ class Members extends CI_Controller {
 							);
 							if ($pp != '-')
 								$data['mem_pp'] = $pp;
+							if ($proof != '-')
+								$data['mem_pay_photo'] = $proof;
 							if (!$dataReg['member']->mem_user){
 								$data['mem_payment_date'] = date('Y-m-d', strtotime('+1 year'));
 								$data['mem_app_user'] = $this->session->userdata('use_id');
@@ -654,6 +715,7 @@ class Members extends CI_Controller {
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
 								'log_mem_type' => $this->input->post('mem_type'),
+								'log_pay_photo' => $proof
 							);
 							if (!$dataReg['member']->mem_user){
 								$dataLog['log_payment_date'] = date('Y-m-d', strtotime('+1 year'));
@@ -777,6 +839,7 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $member->mem_kode_pos,
 								'log_email' => $member->mem_email,
 								'log_ktp' => $member->mem_ktp,
+								'log_pay_photo' => $member->mem_pay_photo,
 								'log_app_user' => $this->session->userdata('use_id'),
 								'log_app_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('accepted'),
@@ -874,6 +937,7 @@ class Members extends CI_Controller {
 								'log_kode_pos' => $member->mem_kode_pos,
 								'log_email' => $member->mem_email,
 								'log_ktp' => $member->mem_ktp,
+								'log_pay_photo' => $member->mem_pay_photo,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_stat' => $this->config->item('rejected'),

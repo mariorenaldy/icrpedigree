@@ -36,3 +36,4 @@ $lang["common_confirm"] = "Confirm";
 $lang["common_reason"] = "Reason";
 
 $lang["common_photo_proof"] = "Photo Proof of Payment";
+$lang["common_see_proof"] = "See Payment Proof";

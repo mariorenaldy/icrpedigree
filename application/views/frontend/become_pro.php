@@ -138,11 +138,11 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInputPayment" class="control-label col-md-12 text-center"><?= lang('mem_payment_photo'); ?></label>
+                            <label for="imageInputProof" class="control-label col-md-12 text-center"><?= lang('common_photo_proof'); ?></label>
                             <div class="col-md-12 text-center">
-                                <img id="imgPreviewPayment" width="15%" src="<?= base_url('assets/img/upload.jpg') ?>">
-                                <input type="file" class="upload" id="imageInputPayment" onclick="resetImage('payment')"/>
-                                <input type="hidden" name="attachment_payment" id="attachment_payment">
+                                <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
+                                <input type="file" class="upload" id="imageInputProof" onclick="resetImage('proof')"/>
+                                <input type="hidden" name="attachment_proof" id="attachment_proof">
                             </div>
                         </div>
                         <div class="text-center">
@@ -233,7 +233,7 @@
                                 <div class="col">: <span id="confirm-canine_name_format"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4"><?= lang('mem_payment_photo'); ?></div>
+                                <div class="col-4"><?= lang('common_photo_proof'); ?></div>
                                 <div class="col-auto pe-0">:</div>
                                 <div class="col"><img id="confirm-foto_pembayaran" width="50%"/></div>
                             </div>
@@ -276,39 +276,33 @@
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
         const imageInputLogo = document.querySelector("#imageInputLogo");
-        const imageInputPayment = document.querySelector("#imageInputPayment");
+        const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
 
         var resetImage = function(input) {
             if(input === "logo"){
                 imageInputLogo.value = null;
             }
-            else if(input === "payment"){
-                imageInputPayment.value = null;
+            else if(input === "proof"){
+                imageInputProof.value = null;
             }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
             var previewLogo = document.getElementById('imgPreviewLogo');
-            var previewPayment = document.getElementById('imgPreviewPayment');
+            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
-            var width;
-            var height;
 
             imageInputLogo.addEventListener("change", function(event) {
                 croppingImage = "logo";
-                width = <?= $this->config->item('img_width_ratio') ?>;
-                height = <?= $this->config->item('img_height_ratio') ?>;
                 showModalImg(event);
             })
 
-            imageInputPayment.addEventListener("change", function(event) {
-                croppingImage = "payment";
-                width = <?= $this->config->item('img_height_ratio') ?>;
-                height = <?= $this->config->item('img_width_ratio') ?>;
+            imageInputProof.addEventListener("change", function(event) {
+                croppingImage = "proof";
                 showModalImg(event);
             })
 
@@ -329,7 +323,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: width/height,
+                    aspectRatio: 1,
                     viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
@@ -340,8 +334,8 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('img_width') ?>,
-                    height: <?= $this->config->item('img_height') ?>
+                    width: <?= $this->config->item('pp') ?>,
+                    height: <?= $this->config->item('pp') ?>,
                 });
                 canvas.toBlob(function(blob) {
                     url = URL.createObjectURL(blob);
@@ -353,9 +347,9 @@
                             previewLogo.src = base64data;
                             $('#attachment_logo').val(base64data);
                         }
-                        else if(croppingImage === "payment"){
-                            previewPayment.src = base64data;
-                            $('#attachment_payment').val(base64data);
+                        else if(croppingImage === "proof"){
+                            previewProof.src = base64data;
+                            $('#attachment_proof').val(base64data);
                         }
                         $modal.modal('hide');
                     };
@@ -379,7 +373,7 @@
                 $('#confirm-foto').attr("src",  $('#imgPreviewLogo').attr("src"));
                 $('#confirm-kennel_name').text($('input[name="ken_name"]').val());
                 $('#confirm-canine_name_format').text($('#ken_type_id option:selected').text());
-                $('#confirm-foto_pembayaran').attr("src",  $('#imgPreviewPayment').attr("src"));
+                $('#confirm-foto_pembayaran').attr("src",  $('#imgPreviewProof').attr("src"));
                 $('#confirm-modal').modal('show');
             });
 

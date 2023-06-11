@@ -20,7 +20,7 @@
                 <div class="text-success">
                     <?php		
                         if ($this->session->flashdata('approve_success')){
-                            echo 'Microchip request has been saved<br/>';
+                            echo 'Microchip request has been approved<br/>';
                         }
                         if ($this->session->flashdata('delete_success')){
                             echo 'Microchip request has been deleted<br/>';
@@ -83,6 +83,9 @@
                                         <?php if ($r->req_stat_id == $this->config->item('processed')){ ?>
                                             <button type="button" class="btn btn-danger mb-1" onclick="reject(<?= $r->req_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject Appointment"><i class="fa fa-xmark"></i></button>
                                         <?php } ?>
+                                        <?php if ($r->req_stat_id == $this->config->item('accepted')){ ?>
+                                            <button type="button" class="btn btn-primary mb-1" onclick='complete(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Complete Request"><i class="fa fa-check"></i></button>
+                                        <?php } ?>
                                     </td>
                                     <td class="text-center">
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
@@ -118,8 +121,17 @@
     </div>
     <?php $this->load->view('templates/script'); ?>
     <script>
-        function reject(id, inv){
+        function approve(id){
+            var proceed = confirm("Approve request with ID "+id+" ?");
+            if (proceed){             
+                window.location = "<?= base_url(); ?>backend/Requestmicrochip/approve/"+id;
+            }
+        }
+        function reject(id){
             window.location = "<?= base_url(); ?>backend/Requestmicrochip/reject/"+id;
+        }
+        function complete(id){
+            window.location = "<?= base_url(); ?>backend/Requestmicrochip/complete/"+id;
         }
         function log(id){
             window.location = "<?= base_url(); ?>backend/Requestmicrochip/log/"+id;
