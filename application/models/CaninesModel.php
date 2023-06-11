@@ -81,6 +81,17 @@ class CaninesModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function get_exist_pedigrees($where){
+        $this->db->select('can_a_s, can_photo, can_gender, ped_sire_id, ped_dam_id');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->from('canines');
+        $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
+        $this->db->order_by('can_id', 'desc');
+        return $this->db->get();
+    }
+
     public function add_canines($data){
         return $this->db->insert('canines', $data);
     }

@@ -1235,26 +1235,99 @@ public function validate_edit_pedigree(){
         }
     }
 
-    public function to_csv(){
-        $where['can_stat'] = $this->config->item('accepted');
-        $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $canine = $this->caninesModel->get_canines($where, 'can_icr_number, can_chip_number', 0, 0)->result();
+    public function tree(){
+        if ($this->uri->segment(4)) {
+            $can_id = $this->uri->segment(4);
+            $max_level = 1;
+            if($this->input->post('level') != null){
+                $max_level = $this->input->post('level');
+            }
+            $pedigree = $this->get_can_pedigree($can_id, 0, $max_level);
+            
+            if ($pedigree) {
+                $data['array'] = $this->create_array($pedigree);
+                $this->load->view('backend/tree', $data);
+            } else {
+                $this->session->set_flashdata('error', "Dog's pedigree not found");
+                redirect('backend/Canines');
+            }
+        } else {
+            redirect('backend/Canines');
+        }
+    }
+    public function get_can_pedigree($can_id, $level = 0, $max_level = 3)
+    {
+        // get the canine data for the current level
+        $where['can_id'] = $can_id;
+        $data['canine'] = $this->caninesModel->get_exist_pedigrees($where)->row();
 
-        $Arr = Array(); 
-        $Arr[] = array('Current Reg. Number','ICR Number','Chip Number','Name','Breed','Gender','Color','Date of Birth','Kennel','Owner','Note','Reg. Date','Status');
-        foreach ($canine as $row){
-            $Arr[] = array($row->can_reg_number, $row->can_icr_number, $row->can_chip_number, $row->can_a_s, $row->can_breed, $row->can_gender, $row->can_color, $row->can_date_of_birth, $row->ken_name, $row->mem_name, $row->can_note, $row->can_reg_date, $row->stat_name.'( '.$row->use_username.' / '.$row->can_app_date.' )');
+        if($can_id == $this->config->item('dam_id') || $can_id == $this->config->item('sire_id')){
+            return [];
         }
 
-        header("Content-type: application/csv");
-        header('Content-Disposition: attachment; filename="canines_'.date('d-m-Y').'.csv"');
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        $handle = fopen('php://output', 'w');
-        foreach ($Arr as $row) {
-            fputcsv($handle, $row);
+        // if there is no canine data or max level reached, return an empty array
+        if (!$data['canine'] || $level > $max_level) {
+            return [];
         }
-        fclose($handle);
+
+        // get the pedigree for the sire and dam at the current level
+        $sire['can_id'] = $data['canine']->ped_sire_id;
+        $data['sire'] = $this->get_can_pedigree($sire['can_id'], $level + 1, $max_level);
+
+        $dam['can_id'] = $data['canine']->ped_dam_id;
+        $data['dam'] = $this->get_can_pedigree($dam['can_id'], $level + 1, $max_level);
+
+        // add the pedigree data for the current level
+        $data['level'] = $level;
+
+        // return the data for the current level
+        return $data;
+    }
+    function create_array($pedigree)
+    {
+        $stack = [];
+        $arr = 'nodes: [';
+
+        $data = $pedigree;
+        $arr .= $this->printers($stack, $data);
+
+        $arr .= ']';
+        return $arr;
+    }
+    function printers($stack, $data)
+    {
+        if (empty($data)) {
+            return '';
+        }
+
+        global $idx;
+        $idx++;
+        array_push($stack, $idx);
+        end($stack);
+        $pid = prev($stack);
+        $status = 'Sire';
+        if($data['canine']->can_gender == 'FEMALE'){
+            $status = 'Dam';
+        }
+
+        $arr = '';
+        if ($idx == 1) {
+            $arr .= '{ id: 1, name: "' . $data['canine']->can_a_s . '", status: "' . '' .'", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
+        } else if ($data['canine']->can_a_s != 'NO MALE' && $data['canine']->can_a_s != 'NO FEMALE'){
+            $arr .= '{ id: ' . $idx . ', pid: ' . $pid . ', name: "' . $data['canine']->can_a_s . '", status: "' . $status . '", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
+        }
+
+        if (!empty($data['sire']) || !empty($data['dam'])) {
+
+            if (!empty($data['sire'])) {
+                $arr .= $this->printers($stack, $data['sire']);
+            }
+
+            if (!empty($data['dam'])) {
+                $arr .= $this->printers($stack, $data['dam']);
+            }
+        }
+
+        return $arr;
     }
 }

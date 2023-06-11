@@ -57,7 +57,6 @@
                 <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Canine"><i class="fa fa-plus"></i></button>
-                        <button type="button" class="btn btn-primary" onclick="to_csv()" data-toggle="tooltip" data-placement="top" title="To csv">CSV</button>
                     </div>
                 </div>
                 <?= $this->pagination->create_links(); ?>
@@ -103,6 +102,7 @@
                                         <?php } ?>
                                     </td>
                                     <td class="text-center text-nowrap">
+                                        <button type="button" class="btn btn-dark mb-1" onclick="tree(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Canine Pedigree"><i class="fas fa-book-open"></i></button><br/>
                                         <button type="button" class="btn btn-primary mb-1" onclick="print(<?= $c->can_id; ?>)" data-toggle="tooltip" data-placement="top" title="Print Certificate"><i class="fa fa-print"></i> (<?= $c->can_print; ?>)</button><br/>
                                         <?php if ($c->can_last_print) echo $c->can_last_print; else echo '-'; ?>
                                     </td>
@@ -213,6 +213,9 @@
         function pedigree(id){
             window.location = "<?= base_url(); ?>backend/Canines/edit_pedigree/"+id;
         }
+        function tree(id){
+            window.location = "<?= base_url(); ?>backend/Canines/tree/"+id;
+        }
         function del(id, nama){
             var proceed = window.prompt("Delete "+nama+" ?", "");
             if (proceed){             
@@ -230,9 +233,6 @@
         }
         function note(id){
             window.location = "<?= base_url(); ?>backend/Caninenote/index/"+id;
-        }
-        function to_csv(){
-            window.location = "<?= base_url(); ?>backend/Canines/to_csv";
         }
 
         var modal = document.getElementById("myModal");
