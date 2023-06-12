@@ -76,11 +76,11 @@ body{
 }
 .navbar a{
     font-weight: 500;
-    font-size: 1.05em;
+    font-size: 1.2em;
 }
 .navbar span{
     font-weight: 500;
-    font-size: 1.05em;
+    font-size: 1.2em;
 }
 #article-paragraph{
     color: #FFD600;
@@ -141,12 +141,28 @@ div.container{
 .nav-text{
     font-size: 1em !important;
 }
-@media (max-width: 1350px) {                  
+@media (max-width: 1400px) {                  
     #main-nav-container{
         align-items: start !important;
         justify-content: start !important;
         height: 100%  !important;
         margin-top: 0  !important;;
+    }
+}
+@media (max-width: 1700px) {                  
+    .navbar a{
+        font-size: 1.1em;
+    }
+    .navbar span{
+        font-size: 1.1em;
+    }
+}
+@media (max-width: 1500px) {                  
+    .navbar a{
+        font-size: 1em;
+    }
+    .navbar span{
+        font-size: 1em;
     }
 }
 #main-nav-container .dropdown-menu {
