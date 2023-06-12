@@ -58,12 +58,7 @@
                     </div>
                 </div>
             </section>
-            <hr class="mt-3" />    
-            <div class="row footer">
-                <div class="col-sm-12 text-center copyright">
-                    Copyright &copy; 2021 <a href="" class="text-decoration-none text-reset"><span class="text-danger">ART</span>echnology</a>. All rights reserved
-                </div>
-            </div>
+            <hr class="mt-3" />
         </div>
     </div>
 </footer>
