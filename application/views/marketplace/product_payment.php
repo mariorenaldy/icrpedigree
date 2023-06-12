@@ -18,6 +18,7 @@
                 <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:300px;" alt="product">
             <?php } ?>
             <h4 class="text-warning"><?= $products->pro_name ?></h4>
+            <p class="mb-5 h6 text-info"><?= $products->pro_type_name ?></p>
             <p><?= lang("pro_price"); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></p>
             <p><?= lang("ord_quantity"); ?>: <?= $this->uri->segment(5); ?></p>
             <p class="h5 text-warning"><?= lang("ord_total_price"); ?>: Rp <?= number_format($products->pro_price * $this->uri->segment(5),0,",","."); ?></p>

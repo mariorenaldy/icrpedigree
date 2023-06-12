@@ -1207,6 +1207,7 @@ class Studs extends CI_Controller {
 				
 				$where['stu_id'] = $this->input->post('stu_id');
 				$data['stud'] = $this->studModel->get_studs($where)->row();
+				$oldDataStud = $data['stud'];
 				$whereMember['mem_id'] = $data['stud']->stu_member_id;
 				$data['member'] = $this->memberModel->get_members($whereMember)->row();
 
@@ -1443,12 +1444,17 @@ class Studs extends CI_Controller {
 								'stu_partner_id' => $can->can_member_id,
 							);
 
+							$oldPhoto = '-';
+							$oldSirePhoto = '-';
+							$oldDamPhoto = '-';
 							if ($photo && $photo != '-'){
 								$data['stu_photo'] = $photo;
 							}
 							else{
-								if ($data['stud']->stu_photo && $data['stud']->stu_photo != '-'){
-									$data['stu_photo'] = $data['stud']->stu_photo;
+								
+								if ($oldDataStud->stu_photo && $oldDataStud->stu_photo != '-'){
+									$data['stu_photo'] = $oldDataStud->stu_photo;
+									$oldPhoto = $oldDataStud->stu_photo;
 								}
 							}
 
@@ -1456,8 +1462,9 @@ class Studs extends CI_Controller {
 								$data['stu_sire_photo'] = $sire;
 							}
 							else{
-								if ($data['stud']->stu_sire_photo && $data['stud']->stu_sire_photo != '-'){
-									$data['stu_sire_photo'] = $data['stud']->stu_sire_photo;
+								if ($oldDataStud->stu_sire_photo && $oldDataStud->stu_sire_photo != '-'){
+									$data['stu_sire_photo'] = $oldDataStud->stu_sire_photo;
+									$oldSirePhoto = $oldDataStud->stu_sire_photo;
 								}
 							}
 
@@ -1465,8 +1472,9 @@ class Studs extends CI_Controller {
 								$data['stu_dam_photo'] = $dam;
 							}
 							else{
-								if ($data['stud']->stu_dam_photo && $data['stud']->stu_dam_photo != '-'){
-									$data['stu_dam_photo'] = $data['stud']->stu_dam_photo;
+								if ($oldDataStud->stu_dam_photo && $oldDataStud->stu_dam_photo != '-'){
+									$data['stu_dam_photo'] = $oldDataStud->stu_dam_photo;
+									$oldDamPhoto = $oldDataStud->stu_dam_photo;
 								}
 							}
 
@@ -1476,16 +1484,34 @@ class Studs extends CI_Controller {
 							if ($stud){
 								$dataLog = array(
 									'log_stu_id' => $this->input->post('stu_id'),
-									'log_photo' => $photo,
 									'log_sire_id' => $this->input->post('stu_sire_id'),
 									'log_dam_id' => $this->input->post('stu_dam_id'),
-									'log_sire_photo' => $sire,
-									'log_dam_photo' => $dam,
 									'log_stud_date' => $date,
 									'log_user' => $this->session->userdata('use_id'),
 									'log_date' => date('Y-m-d H:i:s'),
 									'log_partner_id' => $can->can_member_id,
 								);
+								if ($photo && $photo != '-'){
+									$dataLog['log_photo'] = $photo;
+								}
+								else{
+									$dataLog['log_photo'] = $oldPhoto;
+								}
+
+								if ($sire && $sire != '-'){
+									$dataLog['log_sire_photo'] = $sire;
+								}
+								else{
+									$dataLog['log_sire_photo'] = $oldSirePhoto;
+								}
+
+								if ($dam && $dam != '-'){
+									$dataLog['log_dam_photo'] = $dam;
+								}
+								else{
+									$dataLog['log_dam_photo'] = $oldDamPhoto;
+								}
+
 								$log = $this->logstudModel->add_log($dataLog);
 								if ($log){
 									$wheSire['can_id'] = $this->input->post('stu_sire_id');

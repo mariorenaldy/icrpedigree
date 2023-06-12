@@ -698,9 +698,7 @@ class Members extends CI_Controller {
 								'ken_user' => $this->session->userdata('use_id'),
 								'ken_date' => date('Y-m-d H:i:s'),
 							);
-							if ($logo != '-')
-								$kennel_data['ken_photo'] = $logo;
-							
+
 							$dataLog = array(
 								'log_member_id' => $this->input->post('mem_id'),
 								'log_name' => strtoupper($this->input->post('mem_name')),
@@ -727,11 +725,18 @@ class Members extends CI_Controller {
 								'log_kennel_id' => $this->input->post('ken_id'),
 								'log_kennel_name' => strtoupper($this->input->post('ken_name')),
 								'log_kennel_type_id' => $this->input->post('ken_type_id'),
-								'log_kennel_photo' => $logo,
 								'log_stat' => $this->config->item('accepted'),
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s')
 							);
+
+							if ($logo != '-'){
+								$kennel_data['ken_photo'] = $logo;
+								$dataKennelLog['log_kennel_photo'] = $logo;
+							}
+							else{
+								$dataKennelLog['log_kennel_photo'] = $dataReg['member']->ken_photo;
+							}
 
 							$this->db->trans_strict(FALSE);
 							$this->db->trans_start();

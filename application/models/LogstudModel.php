@@ -16,7 +16,7 @@ class LogstudModel extends CI_Model {
         // $this->db->join('members AS m_dam','m_dam.mem_id = logs_stud.log_partner_id');
         // $this->db->join('kennels AS k_dam','k_dam.ken_member_id = m_dam.mem_id');
         $this->db->join('canines AS c_dam','c_dam.can_id = logs_stud.log_dam_id');
-        $this->db->join('users','users.use_id = logs_stud.log_app_user');
+        $this->db->join('users','users.use_id = logs_stud.log_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_stud.log_stat');
         $this->db->order_by('logs_stud.log_date', 'desc');
         return $this->db->get();

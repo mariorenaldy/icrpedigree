@@ -12,11 +12,12 @@
     <main class="container">
         <figure class="figure w-50">
             <?php if ($products->pro_photo != '-' &&  $products->pro_photo != null) { ?>
-                <img src="<?= base_url('uploads/products/' . $products->pro_photo) ?>" class="figure-img img-fluid rounded" style="max-height:500px;" alt="product">
+                <img src="<?= base_url('uploads/products/' . $products->pro_photo) ?>" class="figure-img img-fluid rounded mb-3" style="max-height:500px;" alt="product">
             <?php } else { ?>
-                <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded" style="max-height:500px;" alt="product">
+                <img src="<?= base_url('assets/img/product.jpg') ?>" class="figure-img img-fluid rounded mb-3" style="max-height:500px;" alt="product">
             <?php } ?>
-            <h4 class="text-warning"><?= $products->pro_name ?></h4>
+            <h4 class="text-warning mb-3"><?= $products->pro_name ?></h4>
+            <p class="mb-5 h6 text-info"><?= $products->pro_type_name ?></p>
             <p class="mb-5" style="white-space: pre-line"><?= $products->pro_desc ?></p>
             <h5 class="text-warning mb-4"><?= lang('pro_price'); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
             <span><?= lang('pro_quantity'); ?>: </span>

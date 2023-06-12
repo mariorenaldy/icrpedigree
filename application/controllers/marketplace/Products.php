@@ -363,9 +363,6 @@ class Products extends CI_Controller
 						'pro_updated_at' => date('Y-m-d H:i:s')
 					);
 
-                    if ($photo != '-')
-                        $dataPro['pro_photo'] = $photo;
-
 					$dataLog = array(
 						'log_product_id' => $this->input->post('pro_id'),
 						'log_product_type_id' => $this->input->post('pro_type_id'),
@@ -378,6 +375,14 @@ class Products extends CI_Controller
 						'log_product_updated_at' => date('Y-m-d H:i:s'),
 						'log_stat' => $this->config->item('accepted')
 					);
+
+					if ($photo != '-'){
+						$dataPro['pro_photo'] = $photo;
+						$dataLog['log_product_photo'] = $photo;
+					}
+					else{
+						$dataLog['log_product_photo'] = $data['product']->pro_photo;
+					}
 
                     if (!$err) {
                         $this->db->trans_strict(FALSE);
@@ -528,7 +533,7 @@ class Products extends CI_Controller
 			
 		$data['products'] = $this->productModel->search_products($like, $where, $page * $config['per_page'], 9)->result();
 		$data['pro_types'] = $this->productTypeModel->get_type()->result();
-		
+
 		$config['base_url'] = base_url() . 'marketplace/Products/index';
 		$config['total_rows'] = $this->productModel->search_products($like, $where, $page * $config['per_page'], 0)->num_rows();
 		$this->pagination->initialize($config);

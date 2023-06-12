@@ -824,19 +824,30 @@ class Births extends CI_Controller {
 							'bir_user' => $this->session->userdata('use_id'),
 							'bir_date' => date('Y-m-d H:i:s'),
 						);
-						
-						if ($damPhoto != '-')
-							$dataBirth['bir_dam_photo'] = $damPhoto;
 
 						$dataLog = array(
 							'log_bir_id' => $this->input->post('bir_id'),
+							'log_stu_id' => $data['birth']->bir_stu_id,
+							'log_member_id' => $data['birth']->bir_member_id,
+							'log_date' => date('Y-m-d H:i:s'),
 							'log_male' => $this->input->post('bir_male'),
 							'log_female' => $this->input->post('bir_female'),
 							'log_dam_photo' => $damPhoto,
 							'log_date_of_birth' => $date,
 							'log_user' => $this->session->userdata('use_id'),
+							'log_app_user' => $data['birth']->bir_app_user,
+							'log_app_date' => $data['birth']->bir_app_date,
 							'log_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $data['birth']->bir_stat
 						);
+
+						if ($damPhoto != '-'){
+							$dataBirth['bir_dam_photo'] = $damPhoto;
+							$dataLog['log_dam_photo'] = $damPhoto;
+						}
+						else{
+							$dataLog['log_dam_photo'] = $data['birth']->bir_dam_photo;
+						}
 
 						$this->db->trans_strict(FALSE);
 						$this->db->trans_start();

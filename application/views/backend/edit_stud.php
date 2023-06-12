@@ -86,9 +86,9 @@
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Sire Photo</label>
                             <div class="col-md-12 text-center">
                                 <?php if ($stud->stu_sire_photo){ ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_sire_photo ?>">
+                                    <img id="imgPreviewSire" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_sire_photo ?>">
                                 <?php } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <img id="imgPreviewSire" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInputSire" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('sire')"/>
                                 <input type="hidden" name="attachment_sire" id="attachment_sire">
@@ -98,9 +98,9 @@
                             <label for="stu_dam_id" class="control-label col-md-12 text-center">Dam Photo</label>
                             <div class="col-md-12 text-center">
                                 <?php if ($stud->stu_dam_photo){ ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_dam_photo ?>">
+                                    <img id="imgPreviewDam" width="15%" src="<?= base_url().'uploads/stud/'.$stud->stu_dam_photo ?>">
                                 <?php } else { ?>
-                                    <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                    <img id="imgPreviewDam" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <?php } ?>
                                 <input type="file" class="upload" id="imageInputDam" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('dam')"/>
                                 <input type="hidden" name="attachment_dam" id="attachment_dam">

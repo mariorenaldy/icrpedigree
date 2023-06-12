@@ -21,6 +21,9 @@
                 <span><?= lang("pro_name"); ?>: </span>
                 <span class="text-warning mb-5"><?= $order->pro_name ?></span>
                 <br>
+                <span><?= lang("pro_type"); ?>: </span>
+                <span class="text-warning mb-5"><?= $order->pro_type_name ?></span>
+                <br>
                 <div class="text-center">
                     <?php if ($order->pro_photo != '-' &&  $order->pro_photo != null) { ?>
                         <img src="<?= base_url('uploads/products/' . $order->pro_photo) ?>" class="figure-img img-fluid rounded mt-3" style="max-height:150px;" alt="product">

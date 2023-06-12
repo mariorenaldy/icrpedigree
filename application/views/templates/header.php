@@ -53,6 +53,7 @@
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Marketplace</span>
                         <ul class="dropdown-menu">
+                           <li><a class="dropdown-item" href="<?= base_url('marketplace/Product_Type/') ?>">Manage Product Type</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Products/listProducts') ?>">Manage Products</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Orders/listOrders') ?>">Manage Orders</a></li>
                         </ul>

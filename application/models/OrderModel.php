@@ -18,6 +18,7 @@ class OrderModel extends CI_Model {
         $this->db->join('products','orders.ord_pro_id = products.pro_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
         $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
+        $this->db->join('products_type','products.pro_type_id = products_type.pro_type_id', 'left');
         $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);
