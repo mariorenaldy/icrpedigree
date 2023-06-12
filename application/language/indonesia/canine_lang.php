@@ -21,7 +21,7 @@ $lang["can_dob"] = "Tanggal Lahir";
 $lang["can_full_body"] = "Foto Anjing Seluruh Badan";
 $lang["can_dog_photo"] = "Foto Anjing";
 $lang["can_stambum_photo"] = "Foto Stambum";
-$lang["can_add_success"] = "Anjing berhasil disimpan";
+$lang["can_add_success"] = "Pendaftaran anjing berhasil disimpan. Hubungi admin atau tunggu persetujuan";
 
 $lang["can_add_puppy"] = "Tambah Anak";
 $lang["can_can_photo"] = "Foto Anjing";
@@ -60,5 +60,5 @@ $lang["can_cert_complain_success"] = "Komplain pengajuan berhasil dibuat";
 
 $lang["can_micro_add_success"] = "Pengajuan pemasangan microchip berhasil disimpan";
 $lang["can_micro_cancel_success"] = "Pengajuan pemasangan microchip telah dibatalkan";
-$lang["can_cert_accept_success"] = "Microchip telah dipasang";
+$lang["can_micro_accept_success"] = "Microchip telah dipasang";
 $lang["can_micro_complain_success"] = "Komplain pengajuan berhasil dibuat";

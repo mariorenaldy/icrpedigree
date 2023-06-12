@@ -13,7 +13,8 @@ class Notificationtype extends CI_Controller{
 	}
 
 	public function index(){
-		$data['notif'] = $this->notificationtype_model->get_notificationtype()->result();
+        $where['title !='] = '';
+		$data['notif'] = $this->notificationtype_model->get_notificationtype($where)->result();
         $this->load->view('backend/view_notificationtypes', $data);
 	}
 

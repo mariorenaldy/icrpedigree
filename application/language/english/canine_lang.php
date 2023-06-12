@@ -21,7 +21,7 @@ $lang["can_dob"] = "Date of Birth";
 $lang["can_full_body"] = "Full Body Dog Photo";
 $lang["can_dog_photo"] = "Dog Photo";
 $lang["can_stambum_photo"] = "Stambum Photo";
-$lang["can_add_success"] = "Dog saved successfully";
+$lang["can_add_success"] = "Dog registration has been saved. Contact admin or wait for approval";
 
 $lang["can_add_puppy"] = "Add Puppy";
 $lang["can_can_photo"] = "Dog Photo";
@@ -60,5 +60,5 @@ $lang["can_cert_complain_success"] = "Complaint has been filed successfully";
 
 $lang["can_micro_add_success"] = "Microchip implant request has been saved";
 $lang["can_micro_cancel_success"] = "Microchip implant request has been cancelled";
-$lang["can_cert_accept_success"] = "Microchip has been implanted";
+$lang["can_micro_accept_success"] = "Microchip has been implanted";
 $lang["can_micro_complain_success"] = "Complaint has been filed successfully";

@@ -13,8 +13,11 @@ class Notificationtype_model extends CI_Model{
         return $query->result();  		
 	}
 
-	function get_notificationtype(){
+	function get_notificationtype($where = null){
 		$this->db->select('*');
+		if ($where != null) {
+            $this->db->where($where);
+        }
         $this->db->order_by('notificationtype_id', 'asc');
         return $this->db->get('notificationtype');  		
 	}

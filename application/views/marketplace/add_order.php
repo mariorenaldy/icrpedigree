@@ -41,7 +41,7 @@
                         <div class="input-group my-3">
                             <label class="control-label col-md-2">Product's Name</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Product's Name" name="pro_name" value="<?php echo set_value('pro_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Product's Name" id="pro_name" name="pro_name" value="<?php echo set_value('pro_name'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="proSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
@@ -200,9 +200,18 @@
         setDatePicker('#ord_arrived_date');
         setDatePicker('#ord_completed_date');
 
-        $('#memSearch').on("click", function(e){
+        $('#buttonSubmit').on("click", function(e){
             e.preventDefault();
-            // $('#formOrder').attr('action', "<?= base_url(); ?>marketplace/Orders/search_member").submit();
+            $('#formOrder').attr('action', "<?= base_url(); ?>marketplace/Orders/validate_add").submit();
+        });
+
+        $(document).ready(function(){
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+
+            $('#memSearch').on("click", function(e){
+            e.preventDefault();
             let mem_name = $('#mem_name').val();
             $.ajax({
                 url: "<?= base_url() ?>marketplace/Orders/search_member",
@@ -220,12 +229,9 @@
                         });
 
                         $.each(newOptions, function(value, text) {
-                            memDropdown.append($('<option>').val(value).text(text));
-                        });
-
-                        memDropdown.each(function()
-                        {
-                            console.log($(this).val());
+                            if(text !== undefined){
+                                memDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                            }
                         });
                     }
                     else{
@@ -237,18 +243,38 @@
 
         $('#proSearch').on("click", function(e){
             e.preventDefault();
-            $('#formOrder').attr('action', "<?= base_url(); ?>marketplace/Orders/search_product").submit();
-        });
+            let pro_name = $('#pro_name').val();
+            console.log(pro_name);
+            $.ajax({
+                url: "<?= base_url() ?>marketplace/Orders/search_product",
+                method: 'post',
+                data: {pro_name: pro_name},
+                success: function(response){
+                    if(response){
+                        let proDropdown = $('#ord_pro_id')
+                        proDropdown.empty();
+                        
+                        let result = JSON.parse(response);
+                        let newOptions = [];
+                        $.each(result, function(value, text) {
+                            newOptions[text.pro_id] = text.pro_name;
+                        });
 
-        $('#buttonSubmit').on("click", function(e){
-            e.preventDefault();
-            $('#formOrder').attr('action', "<?= base_url(); ?>marketplace/Orders/validate_add").submit();
+                        $.each(newOptions, function(value, text) {
+                            if(text !== undefined){
+                                proDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                            }
+                        });
+                    }
+                    else{
+                        $('#error-modal').modal('show');
+                    }
+                },
+                error: function(jqxhr, status, exception) {
+                    alert('Exception:', exception);
+                }
+            });
         });
-
-        $(document).ready(function(){
-            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
-                $('#error-modal').modal('show');
-            <?php } ?>
         });
     </script>
 </body>

@@ -7,7 +7,7 @@ class Requestmicrochip extends CI_Controller {
 	public function __construct(){
 		// Call the CI_Controller constructor
 		parent::__construct();
-		$this->load->model(array('requestmicrochipModel', 'caninesModel', 'memberModel', 'logrequestMicrochipModel', 'RejectReasonsModel'));
+		$this->load->model(array('requestmicrochipModel', 'caninesModel', 'memberModel', 'logrequestMicrochipModel', 'RejectReasonsModel', 'notification_model'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('form', 'url'));
 		$this->load->database();
@@ -52,9 +52,15 @@ class Requestmicrochip extends CI_Controller {
 			if ($requests) {
 				$log = $this->logrequestMicrochipModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('approve_success', TRUE);
-					redirect('backend/Requestmicrochip');
+					$result = $this->notification_model->add(37, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('approve_success', true);
+						redirect("backend/Requestmicrochip");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -106,9 +112,15 @@ class Requestmicrochip extends CI_Controller {
 			if ($requests) {
 				$log = $this->logrequestMicrochipModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('complete_success', TRUE);
-					redirect('backend/Requestmicrochip');
+					$result = $this->notification_model->add(39, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('complete_success', true);
+						redirect("backend/Requestmicrochip");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -207,9 +219,15 @@ class Requestmicrochip extends CI_Controller {
 					if ($rejected) {
 						$log = $this->logrequestMicrochipModel->add_log($dataLog);
 						if ($log){
-							$this->db->trans_complete();
-							$this->session->set_flashdata('reject_success', TRUE);
-							redirect("backend/Requestmicrochip");
+							$result = $this->notification_model->add(38, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('reject_success', true);
+								redirect("backend/Requestmicrochip");
+							}
+							else{
+								$err = 3;
+							}
 						}
 						else{
 							$err = 2;

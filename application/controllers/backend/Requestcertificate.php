@@ -7,7 +7,7 @@ class Requestcertificate extends CI_Controller {
 	public function __construct(){
 		// Call the CI_Controller constructor
 		parent::__construct();
-		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel'));
+		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel', 'notification_model'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('form', 'url'));
 		$this->load->database();
@@ -52,9 +52,15 @@ class Requestcertificate extends CI_Controller {
 			if ($requests) {
 				$log = $this->logrequestCertificateModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('deliver_success', TRUE);
-					redirect('backend/Requestcertificate');
+					$result = $this->notification_model->add(34, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('deliver_success', true);
+						redirect("backend/Requestcertificate");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -107,9 +113,15 @@ class Requestcertificate extends CI_Controller {
 			if ($requests) {
 				$log = $this->logrequestCertificateModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('arrive_success', TRUE);
-					redirect('backend/Requestcertificate');
+					$result = $this->notification_model->add(35, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('arrive_success', true);
+						redirect("backend/Requestcertificate");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -208,9 +220,15 @@ class Requestcertificate extends CI_Controller {
 					if ($rejected) {
 						$log = $this->logrequestCertificateModel->add_log($dataLog);
 						if ($log){
-							$this->db->trans_complete();
-							$this->session->set_flashdata('reject_success', TRUE);
-							redirect("backend/Requestcertificate");
+							$result = $this->notification_model->add(36, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('reject_success', true);
+								redirect("backend/Requestcertificate");
+							}
+							else{
+								$err = 3;
+							}
 						}
 						else{
 							$err = 2;
@@ -235,4 +253,11 @@ class Requestcertificate extends CI_Controller {
             redirect("backend/Requestcertificate");
         }
     }
+	// public function add()
+	// {
+	// 	$data['member'] = [];
+	// 	$data['product'] = [];
+	// 	$data['status'] = $this->OrderStatusModel->get_status()->result();
+	// 	$this->load->view("marketplace/add_req_certificate", $data);
+	// }
 }

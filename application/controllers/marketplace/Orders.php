@@ -8,7 +8,7 @@ class Orders extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array('OrderModel', 'ProductModel', 'logorderModel', 'RejectReasonsModel', 'OrderComplainModel', 'OrderStatusModel', 'memberModel'));
+		$this->load->model(array('OrderModel', 'ProductModel', 'logorderModel', 'RejectReasonsModel', 'OrderComplainModel', 'OrderStatusModel', 'memberModel', 'notification_model'));
 		$this->load->library(array('session', 'form_validation', 'pagination'));
 		$this->load->helper(array('url'));
 		$this->load->database();
@@ -577,9 +577,15 @@ class Orders extends CI_Controller
 			if ($orders) {
 				$log = $this->logorderModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('deliver_success', TRUE);
-					redirect('marketplace/Orders/listOrders');
+					$result = $this->notification_model->add(30, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('deliver_success', TRUE);
+						redirect("marketplace/Orders/listOrders");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -637,9 +643,15 @@ class Orders extends CI_Controller
 			if ($orders) {
 				$log = $this->logorderModel->add_log($dataLog);
 				if($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('arrive_success', TRUE);
-					redirect('marketplace/Orders/listOrders');
+					$result = $this->notification_model->add(31, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
+					if ($result){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('arrive_success', TRUE);
+						redirect("marketplace/Orders/listOrders");
+					}
+					else{
+						$err = 3;
+					}
 				}
 				else{
 					$err = 1;
@@ -745,9 +757,15 @@ class Orders extends CI_Controller
 							$whePro['pro_id'] = $order->ord_pro_id;
 							$product = $this->ProductModel->update_stock($whePro, $order->ord_quantity);
 							if($product){
-								$this->db->trans_complete();
-								$this->session->set_flashdata('reject_success', TRUE);
-								redirect("marketplace/Orders/listOrders");
+								$result = $this->notification_model->add(32, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
+								if ($result){
+									$this->db->trans_complete();
+									$this->session->set_flashdata('reject_success', TRUE);
+									redirect("marketplace/Orders/listOrders");
+								}
+								else{
+									$err = 4;
+								}
 							}
 							else{
 								$err = 3;
@@ -802,8 +820,6 @@ class Orders extends CI_Controller
             $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
             $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
             $this->form_validation->set_rules('ord_stat_id', 'Status ', 'trim|required');
-            $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
-            $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
 
 			$ord_id = $this->input->post('ord_id');
 			$whereOrd['ord_id'] = $ord_id;
@@ -903,12 +919,166 @@ class Orders extends CI_Controller
 		$data['status'] = $this->OrderStatusModel->get_status()->result();
 		$this->load->view("marketplace/add_order", $data);
 	}
-	
 	public function search_member(){
 		$like['mem_name'] = $this->input->post('mem_name');
 		$where['mem_stat'] = $this->config->item('accepted');
+		$where['mem_id !='] = $this->config->item('no_member');
 		$member = $this->memberModel->search_members($like, $where)->result();
 		$json = json_encode($member);
 		echo $json;
+    }
+
+	public function search_product(){
+		$like['pro_name'] = $this->input->post('pro_name');
+		$where['pro_stat'] = $this->config->item('accepted');
+		$product = $this->ProductModel->search_products($like, $where)->result();
+		$jsonPro = json_encode($product);
+		echo $jsonPro;
+    }
+	public function validate_add(){ 
+        if ($this->session->userdata('use_username')) {
+            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $this->form_validation->set_rules('ord_mem_id', 'Member ', 'trim|required');
+            $this->form_validation->set_rules('ord_pro_id', 'Product ', 'trim|required');
+            $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
+            $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
+            $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
+
+			$data['status'] = $this->OrderStatusModel->get_status()->result();
+
+            $like['mem_name'] = $this->input->post('mem_name');
+            $where['mem_stat'] = $this->config->item('accepted');
+			$where['mem_id !='] = $this->config->item('no_member');
+            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+
+            $likePro['pro_name'] = $this->input->post('pro_name');
+            $wherePro['pro_stat'] = $this->config->item('accepted');
+            $data['product'] = $this->ProductModel->search_products($likePro, $wherePro)->result();
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('marketplace/add_order', $data);
+            } else {
+				$payDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_pay_date')));
+				$payDueDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_pay_due_date')));
+				$arrivedDate = null;
+				$completedDate = null;
+				if($this->input->post('ord_arrived_date') != null){
+					$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_arrived_date')));
+				}
+				if($this->input->post('ord_completed_date') != null){
+					$completedDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_completed_date')));
+				}
+
+				$dataOrd = array(
+					'ord_mem_id' => $this->input->post('ord_mem_id'),
+					'ord_pro_id' => $this->input->post('ord_pro_id'),
+					'ord_invoice' => $this->input->post('ord_invoice'),
+					'ord_quantity' => $this->input->post('ord_quantity'),
+					'ord_total_price' => $this->input->post('ord_total_price'),
+					'ord_created_at' => date('Y-m-d H:i:s'),
+					'ord_updated_at' => date('Y-m-d H:i:s'),
+					'ord_pay_date' => $payDate,
+					'ord_pay_due_date' => $payDueDate,
+					'ord_arrived_date' => $arrivedDate,
+					'ord_completed_date' => $completedDate,
+					'ord_updated_by' => $this->session->userdata('use_id'),
+					'ord_stat_id' => $this->input->post('ord_stat_id'),
+					'ord_reject_note' => $this->input->post('ord_reject_note')
+				);
+
+				$dataLog = array(
+					'log_mem_id' => $this->input->post('ord_mem_id'),
+					'log_pro_id' => $this->input->post('ord_pro_id'),
+					'log_invoice' => $this->input->post('ord_invoice'),
+					'log_quantity' => $this->input->post('ord_quantity'),
+					'log_total_price' => $this->input->post('ord_total_price'),
+					'log_created_at' => date('Y-m-d H:i:s'),
+					'log_updated_at' => date('Y-m-d H:i:s'),
+					'log_pay_date' => $payDate,
+					'log_pay_due_date' => $payDueDate,
+					'log_arrived_date' => $arrivedDate,
+					'log_completed_date' => $completedDate,
+					'log_updated_by' => $this->session->userdata('use_id'),
+					'log_stat_id' => $this->input->post('ord_stat_id'),
+					'log_reject_note' => $this->input->post('ord_reject_note')
+				);
+
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$orders = $this->OrderModel->add_orders($dataOrd);
+				if ($orders) {
+					$insertedID = $this->db->insert_id();
+					$dataLog['log_ord_id'] = $insertedID;
+
+					$log = $this->logorderModel->add_log($dataLog);
+					if ($log){
+						if($this->input->post('ord_stat_id') == 3){
+							$result = $this->notification_model->add(30, $insertedID, $this->input->post('ord_mem_id'), "Invoice Pesanan / Order: ".$this->input->post('ord_invoice'));
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("marketplace/Orders/listOrders");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 4){
+							$result = $this->notification_model->add(31, $insertedID, $this->input->post('ord_mem_id'), "Invoice Pesanan / Order: ".$this->input->post('ord_invoice'));
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("marketplace/Orders/listOrders");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 7){
+							$result = $this->notification_model->add(32, $insertedID, $this->input->post('ord_mem_id'), "Invoice Pesanan / Order: ".$this->input->post('ord_invoice'));
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("marketplace/Orders/listOrders");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 8){
+							$result = $this->notification_model->add(33, $insertedID, $this->input->post('ord_mem_id'), "Invoice Pesanan / Order: ".$this->input->post('ord_invoice'));
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("marketplace/Orders/listOrders");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$this->db->trans_complete();
+							$this->session->set_flashdata('add_success', true);
+							redirect("marketplace/Orders/listOrders");
+						}
+					}
+					else{
+						$err = 3;
+					}
+				} else {
+					$err = 5;
+				}
+				if ($err) {
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error_message', 'Failed to save order. Error code: '.$err);
+					$this->load->view('marketplace/add_order', $data);
+				}
+            }
+        } 
+        else {
+            redirect("backend/Users/login");
+        }
     }
 }

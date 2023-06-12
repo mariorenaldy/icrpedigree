@@ -77,13 +77,8 @@
                         <tbody>
                             <?php foreach ($canine AS $c){ ?>
                                 <tr>
-                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <td><button type="button" class="btn btn-success" onclick='approve(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
-                                        <td><button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
-                                    <?php } else { ?>
-                                        <td></td>
-                                        <td></td>
-                                    <?php } ?>
+                                    <td><button type="button" class="btn btn-success" onclick='approve(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick='reject(<?= $c->can_id; ?>, "<?= $c->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                     <td>
                                         <?php if ($c->can_photo && $c->can_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$c->can_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="canine" id="myImg<?= $c->can_id ?>" onclick="display('myImg<?= $c->can_id ?>')">
