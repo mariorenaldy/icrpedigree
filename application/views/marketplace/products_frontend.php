@@ -10,13 +10,24 @@
     <main class="container">
         <h3 class="text-center text-warning"><?= lang("pro_products"); ?></h3>
         <div class="search-container">
-            <form action="<?= base_url().'marketplace/Products/search'?>" method="get">
+            <form id="formProduct" action="<?= base_url().'marketplace/Products/search_all'?>" method="POST">
                 <div class="input-group my-3 d-flex justify-content-center">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <input type="text" class="form-control" placeholder="<?= lang("pro_name"); ?>" name="keyword" value="<?= set_value('keyword') ?>">
                     </div>
                     <div class="col-sm-1 ms-1">
                         <button type="submit" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="<?= lang("pro_search"); ?>"><i class="fa fa-search"></i></button>
+                    </div>
+                    <label for="types" class="col-md-1 my-2 me-2 text-center"><?= lang("pro_type"); ?>: </label>
+                    <div class="col-md-4 my-1 text-end">
+                        <?php
+                            $typeOpts = [];
+                            $typeOpts[0] = lang("pro_all");
+                            foreach($pro_types as $type){
+                                $typeOpts[$type->pro_type_id] = $type->pro_type_name;
+                            }
+                            echo form_dropdown('types', $typeOpts, $types, 'class="form-control", id="types"');
+                    ?>
                     </div>
                 </div>
             </form>
@@ -29,7 +40,7 @@
             if($counter % 3 == 0){ ?>
                 <div class="row m-5">
             <?php } ?>
-                <div class="card col m-5">
+                <div class="card m-5" style="width:300px;">
                     <div class="d-flex align-items-center" style="height: 300px;">
                         <?php if ($p->pro_photo != '-' &&  $p->pro_photo != null){ ?>
                                 <img src="<?= base_url('uploads/products/'.$p->pro_photo) ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="product">
@@ -37,9 +48,10 @@
                             <img src="<?= base_url('assets/img/product.jpg') ?>" class="card-img-top img-fluid img-thumbnail mh-100" alt="product">
                         <?php } ?>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $p->pro_name ?></h5>
-                        <p class="card-text">Rp <?= number_format($p->pro_price,0,",",".") ?></p>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-danger"><?= $p->pro_name ?></h5>
+                        <p class="card-text flex-grow-1"><?= $p->pro_type_name ?></p>
+                        <h5 class="card-text">Rp <?= number_format($p->pro_price,0,",",".") ?></h5>
                         <button type="button" class="btn btn-primary stretched-link" onclick="detail(<?= $p->pro_id ?>)">Detail</button>
                     </div>
                 </div>
@@ -55,9 +67,6 @@
             endforeach; ?>
         </div>
         <?= $this->pagination->create_links(); ?>
-        <div class="text-center">
-            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Beranda'"><?= lang("common_back"); ?></button>
-        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
@@ -68,6 +77,12 @@
         if ( window.history.replaceState ) {
             window.history.replaceState( null, null, window.location.href );
         }
+
+        $(document).ready(function () {
+            $('#types').on("change", function(){
+                $('#formProduct').attr('action', "<?= base_url(); ?>marketplace/Products/search_all").submit();
+            });
+        });
     </script>
 </body>
 </html>

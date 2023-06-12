@@ -57,6 +57,12 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Stock</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" placeholder="Stock" name="pro_stock" min="0" oninput="this.value = Math.abs(this.value)" value="<?= set_value('pro_stock'); ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
                             <label class="control-label col-md-2">Description</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="10" name="pro_desc"><?= set_value('pro_desc') ?></textarea>
@@ -140,7 +146,7 @@
 
             $modal.on('shown.bs.modal', function() {
                 cropper = new Cropper(modalImage, {
-                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
+                    aspectRatio: <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
                     viewMode: <?= $this->config->item('mode') ?>,
                     preview: '.preview'
                 });
@@ -151,7 +157,7 @@
 
             $('#crop').click(function() {
                 canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('img_width') ?>,
+                    width: <?= $this->config->item('img_height') ?>,
                     height: <?= $this->config->item('img_height') ?>
                 });
                 canvas.toBlob(function(blob) {

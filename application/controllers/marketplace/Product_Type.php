@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 #[\AllowDynamicProperties]
 
-class Products extends CI_Controller
+class Product_Type extends CI_Controller
 {
 	public function __construct()
 	{
@@ -25,60 +25,26 @@ class Products extends CI_Controller
             $this->lang->load('product','indonesia');
         }
 	}
-	public function index(){
-        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
-        $config['per_page'] = 9;
-        $config['uri_segment'] = 4;
-        $config['use_page_numbers'] = TRUE;
-
-        //Encapsulate whole pagination 
-        $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
-        $config['full_tag_close'] = '</ul>';
-
-        //First link of pagination
-        $config['first_link'] = 'First';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-
-        //Customizing the “Digit” Link
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-
-        //For PREVIOUS PAGE Setup
-        $config['prev_link'] = '<';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-
-        //For NEXT PAGE Setup
-        $config['next_link'] = '>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-
-        //For LAST PAGE Setup
-        $config['last_link'] = 'Last';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-
-        //For CURRENT page on which you are
-        $config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-
-        $config['attributes'] = array('class' => 'page-link bg-light text-primary');
-
-		$where['pro_stat'] = $this->config->item('accepted');
-		$where['pro_stock !='] = 0;
-		$data['products'] = $this->productModel->search_products(null, $where, $page * $config['per_page'], 9)->result();
-		$data['pro_types'] = $this->productTypeModel->get_type()->result();
-		$data['types'] = 0;
-        
+	public function index()
+	{
+		//pagination
 		$config['base_url'] = base_url() . 'marketplace/Products/index';
-        $config['total_rows'] = $this->productModel->search_products(null, $where, $page * $config['per_page'], 0)->num_rows();
+		$config['total_rows'] = $this->productModel->record_count();
+		$config['per_page'] = 9;
+		$config['attributes'] = array('class' => 'page-link');
+
+		//initialize pagination
 		$this->pagination->initialize($config);
 
-        $data['keyword'] = '';
-        $this->session->set_userdata('keyword', '');
-        $this->load->view("marketplace/products_frontend", $data);
-    }
+		$data['start'] = $this->uri->segment(4);
+		$where['pro_stat'] = $this->config->item('accepted');
+		$where['pro_stock !='] = 0;
+		$data['products'] = $this->productModel->search_products($where, $config['per_page'], $data['start'])->result();
+		$data['pro_types'] = $this->productTypeModel->get_type()->result();
+		$data['types'] = 0;
+
+		$this->load->view("marketplace/products_frontend", $data);
+	}
 	public function product_detail()
 	{
 		if ($this->uri->segment(4)) {
@@ -131,7 +97,6 @@ class Products extends CI_Controller
 			$this->form_validation->set_error_delimiters('<div>', '</div>');
 			$this->form_validation->set_rules('pro_name', 'Name ', 'trim|required');
 			$this->form_validation->set_rules('pro_price', 'Price ', 'trim|required');
-			$this->form_validation->set_rules('pro_stock', 'Stock ', 'trim|required');
 
 			$data['products_type'] = $this->productTypeModel->get_type()->result();
 
@@ -183,7 +148,6 @@ class Products extends CI_Controller
 						'pro_type_id' => $this->input->post('pro_type_id'),
 						'pro_name' => $this->input->post('pro_name'),
 						'pro_price' => $this->input->post('pro_price'),
-						'pro_stock' => $this->input->post('pro_stock'),
 						'pro_desc' => $this->input->post('pro_desc'),
 						'pro_photo' => $photo,
 						'pro_created_user' => $this->session->userdata('use_id'),
@@ -198,7 +162,6 @@ class Products extends CI_Controller
 						'log_product_type_id' => $this->input->post('pro_type_id'),
 						'log_product_name' => $this->input->post('pro_name'),
 						'log_product_price' => $this->input->post('pro_price'),
-						'log_product_stock' => $this->input->post('pro_stock'),
 						'log_product_desc' => $this->input->post('pro_desc'),
 						'log_product_photo' => $photo,
 						'log_product_created_user' => $this->session->userdata('use_id'),
@@ -473,65 +436,30 @@ class Products extends CI_Controller
 			}
 		}
 
-		$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+		//pagination
+		$config['base_url'] = base_url() . 'marketplace/Products/index';
+		$config['total_rows'] = $this->productModel->record_count();
 		$config['per_page'] = 9;
-		$config['uri_segment'] = 4;
-		$config['use_page_numbers'] = TRUE;
+		$config['attributes'] = array('class' => 'page-link');
 
-		//Encapsulate whole pagination 
-		$config['full_tag_open'] = '<ul class="pagination justify-content-end">';
-		$config['full_tag_close'] = '</ul>';
-
-		//First link of pagination
-		$config['first_link'] = 'First';
-		$config['first_tag_open'] = '<li>';
-		$config['first_tag_close'] = '</li>';
-
-		//Customizing the “Digit” Link
-		$config['num_tag_open'] = '<li>';
-		$config['num_tag_close'] = '</li>';
-
-		//For PREVIOUS PAGE Setup
-		$config['prev_link'] = '<';
-		$config['prev_tag_open'] = '<li>';
-		$config['prev_tag_close'] = '</li>';
-
-		//For NEXT PAGE Setup
-		$config['next_link'] = '>';
-		$config['next_tag_open'] = '<li>';
-		$config['next_tag_close'] = '</li>';
-
-		//For LAST PAGE Setup
-		$config['last_link'] = 'Last';
-		$config['last_tag_open'] = '<li>';
-		$config['last_tag_close'] = '</li>';
-
-		//For CURRENT page on which you are
-		$config['cur_tag_open'] = '<li class="active"><a class="page-link bg-primary text-light border-primary" href="#">';
-		$config['cur_tag_close'] = '</a></li>';
-
-		$config['attributes'] = array('class' => 'page-link bg-light text-primary');
+		//initialize pagination
+		$this->pagination->initialize($config);
 
 		if ($data['types'] == 0)
 			$where = '';
 		else
 			$where['products.pro_type_id'] = $data['types'];
-
-		$where['pro_stat'] = $this->config->item('accepted');
 		$where['pro_stock !='] = 0;
-
 		if ($data['keyword']){
 			$like['pro_name'] = $this->input->post('keyword');
 		}
 		else
 			$like = null;
-			
-		$data['products'] = $this->productModel->search_products($like, $where, $page * $config['per_page'], 9)->result();
+		$where['pro_stat'] = $this->config->item('accepted');
+		$where['pro_stock !='] = 0;
+		$data['products'] = $this->productModel->search_products($like, $where, $config['per_page'], 0)->result();
 		$data['pro_types'] = $this->productTypeModel->get_type()->result();
-		
-		$config['base_url'] = base_url() . 'marketplace/Products/index';
-		$config['total_rows'] = $this->productModel->search_products($like, $where, $page * $config['per_page'], 0)->num_rows();
-		$this->pagination->initialize($config);
+
 		$this->load->view("marketplace/products_frontend", $data);
 	}
 }

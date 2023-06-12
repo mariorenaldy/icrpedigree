@@ -8,15 +8,6 @@ class ProductModel extends CI_Model {
       return $this->db->count_all("products");
     }
 
-    public function fetch_data($where = null, $num, $offset) {
-        $this->db->order_by('pro_id', 'desc');
-        if ($where != null) {
-            $this->db->where($where);
-        }
-        $data = $this->db->get('products', $num, $offset);
-        return $data;
-    }
-
     public function get_products($where = null){
         $this->db->select('*');
         if ($where != null) {
@@ -60,17 +51,21 @@ class ProductModel extends CI_Model {
         return $this->db->update('products');
     }
 
-    public function search_products($where, $num, $offset, $like){
+    public function search_products($like, $where, $offset = 0, $limit = 0){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);
         }
         if ($like != null) {
-            $this->db->like($like);
+            $this->db->group_start();
+            $this->db->or_like($like);
+            $this->db->group_end();
         }
-        $this->db->order_by('pro_id', 'desc');
         $this->db->join('products_type', 'products.pro_type_id = products_type.pro_type_id', 'left');
-        return $this->db->get('products', $num, $offset);
+        $this->db->order_by('pro_id', 'desc');
+        if ($limit)
+            $this->db->limit($limit, $offset);
+        return $this->db->get('products');
     }
 
     public function check_for_duplicate($id, $field, $val){

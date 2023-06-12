@@ -8,3 +8,5 @@ $lang["pro_price"] = "Unit Price";
 $lang["pro_quantity"] = "Quantity";
 $lang["pro_total_price"] = "Total Price";
 $lang["pro_detail"] = "Product Detail";
+$lang["pro_type"] = "Product Type";
+$lang["pro_all"] = "All";
