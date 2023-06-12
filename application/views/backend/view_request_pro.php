@@ -16,7 +16,7 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Approve Become Pro</h3>
-                <div class="search-container sticky-top">
+                <div class="search-container">
                     <form action="<?= base_url().'backend/Requestpro/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">

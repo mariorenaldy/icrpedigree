@@ -18,7 +18,7 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Birth Log</h3>
-                <div class="search-container my-3 sticky-top">
+                <div class="search-container my-3">
                     <form id="formBirth" action="<?= base_url().'backend/Births/search_all'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-3 me-1">

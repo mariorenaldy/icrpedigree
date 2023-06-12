@@ -43,7 +43,7 @@
                         }
                     ?>
                 </div>
-                <div class="search-container my-3 sticky-top">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Requestcertificate/search_list'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">

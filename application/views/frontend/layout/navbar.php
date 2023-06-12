@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark my-navbar">
+<nav class="navbar navbar-expand-xxl navbar-dark my-navbar">
     <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainCollapse" aria-controls="mainCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span style="color:white">MENU</span>
     </button>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-shopping-cart"></i> <span class="nav-text">Marketplace</span> 
+                        <i class="fa fa-shopping-cart"></i> <span class="nav-text">Market</span> 
                     </span>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= base_url().'marketplace/Products' ?>"><?= lang("nav_products"); ?></a></li>

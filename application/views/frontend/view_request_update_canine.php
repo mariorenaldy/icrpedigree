@@ -18,7 +18,7 @@
         <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning"><?= lang('can_report_change_photo_rip_list'); ?></h3>
-                <div class="search-container sticky-top">
+                <div class="search-container">
                     <form action="<?= base_url().'frontend/Requestupdatecanine/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">

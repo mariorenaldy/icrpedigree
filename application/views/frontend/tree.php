@@ -13,7 +13,7 @@
   <?php $this->load->view('frontend/layout/navbar'); ?>
   <h3 class="text-center text-warning"><?= lang("common_family_tree"); ?></h3>
   <div class="d-flex justify-content-center">
-    <div class="search-container sticky-top">
+    <div class="search-container">
       <form action="<?= base_url().'frontend/Certificate/index/'.$this->uri->segment(4) ?>" method="post">
           <div class="input-group my-3">
               <label for="level" class="control-label col-sm-3 h4 mt-1">Level: </label>

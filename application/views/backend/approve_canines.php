@@ -19,7 +19,7 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Approve Canine</h3>
-                <div class="search-container my-3 sticky-top">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Canines/search_approve'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">

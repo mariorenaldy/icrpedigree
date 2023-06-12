@@ -14,7 +14,7 @@
             <div class="col-md-12">
                 <h3 class="text-center text-primary">Pedigree</h3>
                 <div class="d-flex justify-content-center">
-                    <div class="search-container sticky-top">
+                    <div class="search-container">
                         <form action="<?= base_url() . 'backend/Canines/tree/' . $this->uri->segment(4) ?>" method="post">
                             <div class="input-group my-3">
                                 <label for="level" class="control-label col-sm-3 h4 mt-1">Level: </label>

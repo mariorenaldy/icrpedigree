@@ -18,7 +18,7 @@
         <div class="row">     
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning"><?= lang("can_my_dogs"); ?></h3>
-                <div class="search-container sticky-top">
+                <div class="search-container">
                     <form action="<?= base_url().'frontend/Canines/search'?>" method="post">
                         <div class="input-group my-3">
                             <div class="col-sm-6">

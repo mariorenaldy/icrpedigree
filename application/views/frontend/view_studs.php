@@ -14,7 +14,7 @@
     <div class="row">            
             <div class="col-sm-12">                          
                 <h3 class="text-center text-warning"><?= lang("stud_list"); ?></h3>
-                <div class="search-container my-3 sticky-top">
+                <div class="search-container my-3">
                     <form id="formStud" action="<?= base_url().'frontend/Studs/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-3 me-1">

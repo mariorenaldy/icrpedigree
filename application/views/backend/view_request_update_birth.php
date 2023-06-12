@@ -21,7 +21,7 @@
                 <h3 class="text-center text-primary">Approve Update Birth</h3>
                 <div class="search-container">
                     <form action="<?= base_url().'backend/Requestupdatebirth/search'?>" method="post">
-                        <div class="input-group my-3 sticky-top">
+                        <div class="input-group my-3">
                             <div class="col-md-3 me-1">
                                 <input type="text" class="form-control" placeholder="Name" name="keywords" value="<?= set_value('keywords') ?>">
                             </div>

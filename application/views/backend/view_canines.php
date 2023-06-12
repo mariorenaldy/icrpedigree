@@ -17,7 +17,7 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Canine List</h3>
-                <div class="search-container my-3 sticky-top">
+                <div class="search-container my-3">
                     <form action="<?= base_url().'backend/Canines/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
