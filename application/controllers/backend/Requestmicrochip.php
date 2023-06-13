@@ -252,4 +252,14 @@ class Requestmicrochip extends CI_Controller {
             redirect("backend/Requestmicrochip");
         }
     }
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_req_id'] = $this->uri->segment(4);
+            $data['request'] = $this->logrequestMicrochipModel->get_logs($where)->result();
+            $this->load->view('backend/log_request_microchip', $data);
+        }
+        else{
+            redirect('backend/Requestmicrochip');
+        }
+    }
 }

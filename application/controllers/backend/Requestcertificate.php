@@ -260,4 +260,14 @@ class Requestcertificate extends CI_Controller {
 	// 	$data['status'] = $this->OrderStatusModel->get_status()->result();
 	// 	$this->load->view("marketplace/add_req_certificate", $data);
 	// }
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_req_id'] = $this->uri->segment(4);
+            $data['request'] = $this->logrequestCertificateModel->get_logs($where)->result();
+            $this->load->view('backend/log_request_certificate', $data);
+        }
+        else{
+            redirect('backend/Requestcertificate');
+        }
+    }
 }

@@ -818,6 +818,8 @@ class Orders extends CI_Controller
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
             $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
+            $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
             $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
             $this->form_validation->set_rules('ord_stat_id', 'Status ', 'trim|required');
 
@@ -1079,6 +1081,16 @@ class Orders extends CI_Controller
         } 
         else {
             redirect("backend/Users/login");
+        }
+    }
+	public function log(){
+        if ($this->uri->segment(4)){
+            $where['log_ord_id'] = $this->uri->segment(4);
+            $data['order'] = $this->logorderModel->get_logs($where)->result();
+            $this->load->view('marketplace/log_order', $data);
+        }
+        else{
+            redirect('marketplace/Orders/listOrders');
         }
     }
 }

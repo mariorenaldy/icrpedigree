@@ -5,11 +5,16 @@ class LogorderModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(logs_order.log_updated_at, "%d-%m-%Y %H:%i:%s") as log_date, u1.use_username AS user, DATE_FORMAT(logs_order.log_pay_date, "%d-%m-%Y %H:%i:%s") as log_pay_date, DATE_FORMAT(logs_order.log_pay_due_date, "%d-%m-%Y %H:%i:%s") as log_pay_due_date, DATE_FORMAT(logs_order.log_arrived_date, "%d-%m-%Y %H:%i:%s") as log_arrived_date, DATE_FORMAT(logs_order.log_completed_date, "%d-%m-%Y %H:%i:%s") as log_completed_date');
         $this->db->from('logs_order');
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('users u1','u1.use_id = logs_order.log_updated_by');
+        $this->db->join('order_status','order_status.ord_stat_id = logs_order.log_stat_id');
+        $this->db->join('products', 'logs_order.log_pro_id = products.pro_id');
+        $this->db->join('members', 'logs_order.log_mem_id = members.mem_id');
+        $this->db->order_by('logs_order.log_updated_at', 'desc');
         return $this->db->get();
     }
 
