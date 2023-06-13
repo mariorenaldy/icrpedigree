@@ -7,7 +7,7 @@ class Requestmicrochip extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-		$this->load->model(array('requestmicrochipModel', 'caninesModel', 'memberModel', 'logrequestMicrochipModel', 'RejectReasonsModel'));
+		$this->load->model(array('requestmicrochipModel', 'caninesModel', 'memberModel', 'logrequestMicrochipModel', 'RejectReasonsModel', 'MicrochipComplainModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -170,41 +170,44 @@ class Requestmicrochip extends CI_Controller {
 					else{
 						$this->session->set_flashdata('error_message', 'Photo is required');
 					}
+					$this->load->view('frontend/add_request_microchip', $data);
+				}
+				else{
+					if (!$err){
+						$dataReq = array(
+							'req_mem_id' => $this->session->userdata('mem_id'),
+							'req_can_id' => $can_id,
+							'req_stat_id' => $this->config->item('micro_processed'),
+							'req_created_at' => date('Y-m-d H:i:s'),
+							'req_datetime' => $req_datetime,
+							'req_pay_photo' => $photo
+						);
+	
+						$this->db->trans_strict(FALSE);
+						$this->db->trans_start();
+						$request = $this->requestmicrochipModel->add_requests($dataReq);
+						if ($request){
+							$this->db->trans_complete();
+							$this->session->set_flashdata('req_micro_success', TRUE);
+							redirect('frontend/Canines');
+						}
+						else{
+							$err = 1;
+						}
+					}
+	
+					if ($err){
+						$this->db->trans_rollback();
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Gagal menyimpan pengajuan pemasangan microchip');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Failed to save microchip implant request');
+						}
+						$this->load->view('frontend/add_request_microchip', $data);
+					}
 				}
 
-                if (!$err){
-                    $dataReq = array(
-						'req_mem_id' => $this->session->userdata('mem_id'),
-						'req_can_id' => $can_id,
-						'req_stat_id' => $this->config->item('processed'),
-						'req_created_at' => date('Y-m-d H:i:s'),
-						'req_datetime' => $req_datetime,
-						'req_pay_photo' => $photo
-                    );
-
-					$this->db->trans_strict(FALSE);
-					$this->db->trans_start();
-					$request = $this->requestmicrochipModel->add_requests($dataReq);
-					if ($request){
-						$this->db->trans_complete();
-						$this->session->set_flashdata('req_micro_success', TRUE);
-						redirect('frontend/Canines');
-					}
-					else{
-						$err = 1;
-					}
-                }
-
-				if ($err){
-					$this->db->trans_rollback();
-					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Gagal menyimpan pengajuan pemasangan microchip');
-					}
-					else{
-						$this->session->set_flashdata('error_message', 'Failed to save microchip implant request');
-					}
-					$this->load->view('frontend/Canines', $data);
-				}
 			}
 		}
 		else{
@@ -217,7 +220,7 @@ class Requestmicrochip extends CI_Controller {
 			$req_id = $this->uri->segment(4);
 			$dataReq = array(
 				'req_id' => $req_id,
-				'req_stat_id' => $this->config->item('cancelled')
+				'req_stat_id' => $this->config->item('micro_cancelled')
 			);
 	
 			$err = 0;
@@ -249,7 +252,7 @@ class Requestmicrochip extends CI_Controller {
 			$req_id = $this->uri->segment(4);
 			$dataReq = array(
 				'req_id' => $req_id,
-				'req_stat_id' => $this->config->item('cert_completed')
+				'req_stat_id' => $this->config->item('micro_completed')
 			);
 	
 			$err = 0;
@@ -281,10 +284,10 @@ class Requestmicrochip extends CI_Controller {
 			$whereReq['req_id'] = $req_id;
 			$data['request'] = $this->requestmicrochipModel->get_requests($whereReq)->row();
 			$data['mode'] = 0;
-			$this->load->view('marketplace/request_complain', $data);
+			$this->load->view('frontend/microchip_complain', $data);
 		}
 		else{
-			redirect('marketplace/Orders');
+			redirect('frontend/Requestmicrochip');
 		}
 	}
 	public function validate_complain(){
@@ -306,7 +309,7 @@ class Requestmicrochip extends CI_Controller {
 			$data['mode'] = 1;
 
 			if ($this->form_validation->run() == FALSE){
-				$this->load->view('marketplace/request_complain', $data);
+				$this->load->view('frontend/microchip_complain', $data);
 			}
 			else{
 				$err = 0;
@@ -363,20 +366,19 @@ class Requestmicrochip extends CI_Controller {
                     );
 
 					$dataReq = array(
-						'req_completed_date' => date('Y-m-d H:i:s'),
-						'req_stat_id' => $this->config->item('request_complained')
+						'req_stat_id' => $this->config->item('micro_complained')
 					);
 
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$complain = $this->OrderComplainModel->add_complains($dataCom);
+					$complain = $this->MicrochipComplainModel->add_complains($dataCom);
 					if ($complain){
 						$whereReq['req_id'] = $req_id;
 						$requests = $this->requestmicrochipModel->update_requests($dataReq, $whereReq);
 						if ($requests) {
 							$this->db->trans_complete();
 							$this->session->set_flashdata('complain_success', TRUE);
-							redirect('marketplace/Orders');
+							redirect('frontend/Requestmicrochip');
 						} else {
 							$err = 1;
 						}
@@ -394,7 +396,7 @@ class Requestmicrochip extends CI_Controller {
 					else{
 						$this->session->set_flashdata('error_message', 'Failed to save complaint file');
 					}
-					$this->load->view('marketplace/Orders', $data);
+					$this->load->view('frontend/Requestmicrochip', $data);
 				}
 			}
 		}

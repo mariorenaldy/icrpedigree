@@ -24,6 +24,9 @@
                     <div class="col"><b><?= lang("can_appointment_date"); ?></b></div>
                     <div class="col"><b><?= lang("common_photo_proof"); ?></b></div>
                     <div class="col"><b>Status</b></div>
+                    <div class="col"><b>Tanggal Komplain</b></div>
+                    <div class="col"><b>Deskripsi Komplain</b></div>
+                    <div class="col"><b>Foto Komplain</b></div>
                     <div class="col"></div>
                 </div>
                 <?php foreach ($requests AS $r){ ?>
@@ -40,7 +43,7 @@
                             <?php } ?>
                         </div>
                         <div class="col">
-                            <?php echo $r->stat_name; 
+                            <?php echo $r->micro_stat_name; 
                             if ($r->req_stat_id == $this->config->item('rejected')){
                                 $site_lang = $this->input->cookie('site_lang');
                                 if ($site_lang == 'indonesia') {
@@ -56,10 +59,21 @@
                             } ?>
                         </div>
                         <div class="col">
+                            <?php echo $r->com_created_at.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $r->com_desc.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php if ($r->com_photo && $r->com_photo != '-') { ?>
+                                <img src="<?= base_url('uploads/complain/' . $r->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $r->req_id ?>" onclick="display('myCom<?= $r->req_id ?>')" style="max-height:100px;">
+                            <?php } ?>
+                        </div>
+                        <div class="col">
                             <?php if ($r->req_stat_id == $this->config->item('processed')){ ?>
                             <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $r->req_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_cancel_req"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
-                            <?php if ($r->req_stat_id == $this->config->item('arrived')){ ?>
+                            <?php if ($r->req_stat_id == $this->config->item('completed')){ ?>
                             <button type="button" class="btn btn-primary mb-1" onclick="accept('<?= $r->req_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro_accepted"); ?>"><i class="fa-solid fa-check"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="complain('<?= $r->req_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_complain"); ?>"><i class="fa-solid fa-file-pen"></i></button>
                             <?php } ?>

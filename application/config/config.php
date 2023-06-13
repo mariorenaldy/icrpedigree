@@ -613,6 +613,15 @@ $config['cert_arrived'] = 3;
 $config['cert_cancelled'] = 4;
 $config['cert_rejected'] = 5;
 $config['cert_completed'] = 6;
+$config['cert_complained'] = 7;
+
+$config['micro_processed'] = 0;
+$config['micro_accepted'] = 1;
+$config['micro_rejected'] = 2;
+$config['micro_implanted'] = 3;
+$config['micro_cancelled'] = 4;
+$config['micro_completed'] = 5;
+$config['micro_complained'] = 6;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;

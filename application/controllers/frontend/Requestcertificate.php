@@ -7,7 +7,7 @@ class Requestcertificate extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel'));
+		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel', 'CertificateComplainModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -146,7 +146,7 @@ class Requestcertificate extends CI_Controller {
 					else{
 						$this->session->set_flashdata('error_message', 'Failed to save certificate request');
 					}
-					$this->load->view('frontend/Canines', $data);
+					$this->load->view('frontend/add_request_certificate', $data);
 				}
 			}
 		}
@@ -224,10 +224,10 @@ class Requestcertificate extends CI_Controller {
 			$whereReq['req_id'] = $req_id;
 			$data['request'] = $this->requestcertificateModel->get_requests($whereReq)->row();
 			$data['mode'] = 0;
-			$this->load->view('marketplace/request_complain', $data);
+			$this->load->view('frontend/certificate_complain', $data);
 		}
 		else{
-			redirect('marketplace/Orders');
+			redirect('frontend/Requestcertificate');
 		}
 	}
 	public function validate_complain(){
@@ -249,7 +249,7 @@ class Requestcertificate extends CI_Controller {
 			$data['mode'] = 1;
 
 			if ($this->form_validation->run() == FALSE){
-				$this->load->view('marketplace/request_complain', $data);
+				$this->load->view('frontend/certificate_complain', $data);
 			}
 			else{
 				$err = 0;
@@ -306,20 +306,19 @@ class Requestcertificate extends CI_Controller {
                     );
 
 					$dataReq = array(
-						'req_completed_date' => date('Y-m-d H:i:s'),
-						'req_stat_id' => $this->config->item('request_complained')
+						'req_stat_id' => $this->config->item('cert_complained')
 					);
 
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
-					$complain = $this->OrderComplainModel->add_complains($dataCom);
+					$complain = $this->CertificateComplainModel->add_complains($dataCom);
 					if ($complain){
 						$whereReq['req_id'] = $req_id;
 						$requests = $this->requestcertificateModel->update_requests($dataReq, $whereReq);
 						if ($requests) {
 							$this->db->trans_complete();
 							$this->session->set_flashdata('complain_success', TRUE);
-							redirect('marketplace/Orders');
+							redirect('frontend/Requestcertificate');
 						} else {
 							$err = 1;
 						}
@@ -337,7 +336,7 @@ class Requestcertificate extends CI_Controller {
 					else{
 						$this->session->set_flashdata('error_message', 'Failed to save complaint file');
 					}
-					$this->load->view('marketplace/Orders', $data);
+					$this->load->view('frontend/Requestcertificate', $data);
 				}
 			}
 		}

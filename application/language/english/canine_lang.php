@@ -51,6 +51,8 @@ $lang["can_cancel_req"] = "Cancel Request";
 $lang["can_confirm_cancel_req"] = "Cancel request?";
 
 $lang["can_req_complain"] = "File a complaint";
+$lang["can_req_cert_complain"] = "File a Certificate Complaint";
+$lang["can_req_micro_complain"] = "File a Microchip Complaint";
 $lang["can_req_cert_accepted"] = "Accept certificate";
 
 $lang["can_cert_add_success"] = "Print certificate request has been saved";
@@ -62,3 +64,8 @@ $lang["can_micro_add_success"] = "Microchip implant request has been saved";
 $lang["can_micro_cancel_success"] = "Microchip implant request has been cancelled";
 $lang["can_micro_accept_success"] = "Microchip has been implanted";
 $lang["can_micro_complain_success"] = "Complaint has been filed successfully";
+
+$lang["can_complain_photo_if"] = "Photo proof (if any)";
+$lang["can_complain_photo"] = "Photo proof";
+$lang["can_complain_desc"] = "Complaint description";
+$lang["can_complain_success"] = "Complaint filed successfully";

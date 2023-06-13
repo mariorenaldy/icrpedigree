@@ -26,7 +26,7 @@
                             echo 'Microchip request has been deleted<br/>';
                         }
                         if ($this->session->flashdata('complete_success')){
-                            echo 'Microchip request has been set to complete<br/>';
+                            echo 'Microchip request has been set to implanted<br/>';
                         }
                     ?>
                 </div>
@@ -108,7 +108,7 @@
                                             <img src="<?= base_url('uploads/payment/'.$r->req_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myPay<?= $r->req_id ?>" onclick="display('myPay<?= $r->req_id ?>')" style="max-height:100px;">
                                         <?php } ?>
                                     </td>
-                                    <td><?= $r->stat_name; ?></td>
+                                    <td><?= $r->micro_stat_name; ?></td>
                                     <td><?= $r->req_reject_note; ?></td>
                                 </tr>
                             <?php } ?>

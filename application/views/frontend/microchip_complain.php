@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="min-vh-100">
 <head>
-    <title><?= lang("ord_complain_title"); ?></title>
+    <title><?= lang("can_req_micro_complain"); ?></title>
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
@@ -12,41 +12,29 @@
     <?php $this->load->view('frontend/layout/navbar'); ?>
     <main class="container">
         <div class="container">
-            <h3 class="text-center text-warning"><?= lang("ord_complain_title"); ?></h3>
+            <h3 class="text-center text-warning"><?= lang("can_req_micro_complain"); ?></h3>
             <div class="row">            
                 <div class="col-sm-12 align-items-center">                          
-                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>marketplace/Orders/validate_complain" method="post" enctype="multipart/form-data">
+                    <form id="mainForm" class="form-horizontal" action="<?= base_url(); ?>frontend/Requestmicrochip/validate_complain" method="post" enctype="multipart/form-data">
                         <div class="mb-1">
                             <?php if (!$mode){ ?>
-                                <input type="hidden" name="ord_id" value="<?= $order->ord_id ?>">
+                                <input type="hidden" name="req_id" value="<?= $request->req_id ?>">
                             <?php } else { ?>
-                                <input type="hidden" name="ord_id" value="<?= set_value('ord_id'); ?>">
+                                <input type="hidden" name="req_id" value="<?= set_value('req_id'); ?>">
                             <?php } ?>
-                            <span class="d-inline-block" style="width: 200px;">Invoice</span>
-                            <span><?= $order->ord_invoice ?></span>
+                            <span class="d-inline-block" style="width: 200px;"><?= lang("can_dog_name"); ?></span>
+                            <span><?= $request->can_a_s ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Date</span>
-                            <span><?= $order->ord_created_at ?></span>
+                            <span class="d-inline-block" style="width: 200px;"><?= lang("can_appointment_date"); ?></span>
+                            <span><?= $request->req_datetime ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Payment Date</span>
-                            <span><?= $order->ord_pay_date ?></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Product's Name</span>
-                            <span><?= $order->pro_name ?></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Quantity</span>
-                            <span><?= $order->ord_quantity ?></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Total Price</span>
-                            <span><?= $order->ord_total_price ?></span>
+                            <span class="d-inline-block" style="width: 200px;"><?= lang("can_micro_implant_date"); ?></span>
+                            <span><?= $request->req_updated_at ?></span>
                         </div>
                         <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center"><?= lang("ord_complain_photo_if"); ?></label>
+                            <label class="control-label col-md-12 text-center"><?= lang("can_complain_photo_if"); ?></label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
@@ -54,14 +42,14 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="com_desc" class="d-inline-block" style="width: 200px;"><?= lang("ord_complain_desc"); ?></label>
+                            <label for="com_desc" class="d-inline-block" style="width: 200px;"><?= lang("can_complain_desc"); ?></label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" placeholder="<?= lang("ord_complain_desc"); ?>" name="com_desc" value="<?= set_value('com_desc'); ?>" rows="3"></textarea>
+                                <textarea class="form-control" placeholder="<?= lang("can_complain_desc"); ?>" name="com_desc" value="<?= set_value('com_desc'); ?>" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary" type="button" id="saveBtn"><?= lang("common_save"); ?></button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Orders'"><?= lang("common_back"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Requestmicrochip'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
@@ -102,12 +90,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4"><?= lang("ord_complain_photo"); ?></div>
+                            <div class="col-4"><?= lang("can_complain_photo"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
                         </div>
                         <div class="row">
-                            <div class="col-4"><?= lang("ord_complain_desc"); ?></div>
+                            <div class="col-4"><?= lang("can_complain_desc"); ?></div>
                             <div class="col">: <span id="confirm-deskripsi"></span></div>
                         </div>
                     </div>

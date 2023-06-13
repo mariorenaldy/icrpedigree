@@ -51,14 +51,22 @@ $lang["can_cancel_req"] = "Batalkan pengajuan";
 $lang["can_confirm_cancel_req"] = "Batalkan pengajuan?";
 
 $lang["can_req_complain"] = "Ajukan komplain";
+$lang["can_req_cert_complain"] = "Ajukan Komplain Sertifikat";
+$lang["can_req_micro_complain"] = "Ajukan Komplain Microchip";
 $lang["can_req_cert_accepted"] = "Terima sertifikat";
+$lang["can_micro_implant_date"] = "Tanggal Dipasang";
 
 $lang["can_cert_add_success"] = "Pengajuan cetak sertifikat berhasil disimpan";
 $lang["can_cert_cancel_success"] = "Pengajuan cetak sertifikat telah dibatalkan";
 $lang["can_cert_accept_success"] = "Sertifikat telah diterima";
-$lang["can_cert_complain_success"] = "Komplain pengajuan berhasil dibuat";
+$lang["can_cert_complain_success"] = "Komplain cetak sertifikat berhasil dibuat";
 
 $lang["can_micro_add_success"] = "Pengajuan pemasangan microchip berhasil disimpan";
 $lang["can_micro_cancel_success"] = "Pengajuan pemasangan microchip telah dibatalkan";
 $lang["can_micro_accept_success"] = "Microchip telah dipasang";
-$lang["can_micro_complain_success"] = "Komplain pengajuan berhasil dibuat";
+$lang["can_micro_complain_success"] = "Komplain pemasangan microchip berhasil dibuat";
+
+$lang["can_complain_photo_if"] = "Bukti foto (jika ada)";
+$lang["can_complain_photo"] = "Bukti foto";
+$lang["can_complain_desc"] = "Deskripsi komplain";
+$lang["can_complain_success"] = "Komplain berhasil diajukan";

@@ -5,8 +5,8 @@ class RequestcertificateModel extends CI_Model {
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function get_requests($where = null, $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(req_created_at, "%d-%m-%Y %H:%i:%s") AS req_created_at, DATE_FORMAT(req_updated_at, "%d-%m-%Y %H:%i:%s") AS req_updated_at, DATE_FORMAT(req_arrived_date, "%d-%m-%Y %H:%i:%s") AS req_arrived_date');
+    public function get_requests($where = null, $sort = 'req_id desc', $offset = 0, $limit = 0){
+        $this->db->select('*, DATE_FORMAT(com_created_at, "%d-%m-%Y %H:%i:%s") AS com_created_at, DATE_FORMAT(req_created_at, "%d-%m-%Y %H:%i:%s") AS req_created_at, DATE_FORMAT(req_updated_at, "%d-%m-%Y %H:%i:%s") AS req_updated_at, DATE_FORMAT(req_arrived_date, "%d-%m-%Y %H:%i:%s") AS req_arrived_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -14,7 +14,8 @@ class RequestcertificateModel extends CI_Model {
         $this->db->join('members','members.mem_id = requests_certificate.req_mem_id');
         $this->db->join('users','users.use_id = requests_certificate.req_updated_by', 'left');
         $this->db->join('certificate_status','certificate_status.cert_stat_id = requests_certificate.req_stat_id');
-        $this->db->order_by('requests_certificate.req_id DESC');
+        $this->db->join('certificate_complain','requests_certificate.req_id = certificate_complain.com_req_id', 'left');
+        $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);
         return $this->db->get('requests_certificate');

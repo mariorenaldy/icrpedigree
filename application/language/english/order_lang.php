@@ -22,6 +22,7 @@ $lang["ord_complained_date"] = "Complaint filed date";
 $lang["ord_completed_date"] = "Completed date";
 $lang["ord_accepted"] = "Order accepted";
 $lang["ord_complain"] = "File a complaint";
+$lang["ord_complain_title"] = "File an Order Complaint";
 $lang["ord_complain_photo_if"] = "Photo proof (if any)";
 $lang["ord_complain_photo"] = "Photo proof";
 $lang["ord_complain_desc"] = "Complaint description";

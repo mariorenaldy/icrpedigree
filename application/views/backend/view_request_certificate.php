@@ -77,6 +77,8 @@
                                 <th>Status</th>
                                 <th>Arrived Date</th>
                                 <th>Reject Reason</th>
+                                <th>Complain Photo</th>
+                                <th>Complain Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,6 +119,12 @@
                                     <td><?= $r->cert_stat_name; ?></td>
                                     <td><?= $r->req_arrived_date; ?></td>
                                     <td><?= $r->req_reject_note; ?></td>
+                                    <td>
+                                        <?php if ($r->com_photo && $r->com_photo != '-') { ?>
+                                            <img src="<?= base_url('uploads/complain/' . $r->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $r->req_id ?>" onclick="display('myCom<?= $r->req_id ?>')" style="max-height:100px;">
+                                        <?php } ?>
+                                    </td>
+                                    <td><?= $r->com_desc; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

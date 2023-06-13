@@ -86,7 +86,7 @@ class Requestmicrochip extends CI_Controller {
 			$dataReq = array(
 				'req_updated_at' => date('Y-m-d H:i:s'),
 				'req_updated_by' => $this->session->userdata('use_id'),
-				'req_stat_id' => $this->config->item('completed')
+				'req_stat_id' => $this->config->item('micro_implanted')
 			);
 
 			$whereReq['req_id'] = $req_id;
@@ -95,7 +95,7 @@ class Requestmicrochip extends CI_Controller {
 				'log_req_id' => $req_id,
 				'log_mem_id' => $request->req_mem_id,
 				'log_can_id' => $request->req_can_id,
-				'log_stat_id' => $this->config->item('completed'),
+				'log_stat_id' => $this->config->item('micro_implanted'),
 				'log_created_at' => date('Y-m-d H:i:s', strtotime($request->req_created_at)),
 				'log_updated_at' => date('Y-m-d H:i:s'),
 				'log_updated_by' => $this->session->userdata('use_id'),

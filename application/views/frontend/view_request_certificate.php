@@ -25,6 +25,9 @@
                     <div class="col"><b><?= lang("can_cert_desc"); ?></b></div>
                     <div class="col"><b><?= lang("can_cert_arrived_date"); ?></b></div>
                     <div class="col"><b>Status</b></div>
+                    <div class="col"><b>Tanggal Komplain</b></div>
+                    <div class="col"><b>Deskripsi Komplain</b></div>
+                    <div class="col"><b>Foto Komplain</b></div>
                     <div class="col"></div>
                 </div>
                 <?php foreach ($requests AS $r){ ?>
@@ -56,6 +59,17 @@
                                 else
                                     echo '-'; 
                             } ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $r->com_created_at.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $r->com_desc.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php if ($r->com_photo && $r->com_photo != '-') { ?>
+                                <img src="<?= base_url('uploads/complain/' . $r->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $r->req_id ?>" onclick="display('myCom<?= $r->req_id ?>')" style="max-height:100px;">
+                            <?php } ?>
                         </div>
                         <div class="col">
                             <?php if ($r->req_stat_id == $this->config->item('cert_processed')){ ?>
@@ -192,6 +206,11 @@
 
             <?php		
                 if ($this->session->flashdata('accept_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('complain_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
 
