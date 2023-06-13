@@ -47,17 +47,12 @@
                         <tbody>
                             <?php foreach ($req AS $r){ ?>
                                 <tr>
-                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <td>
-                                            <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Photo & RIP"><i class="fa fa-check"></i></button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Photo & RIP"><i class="fa fa-close"></i></button>
-                                        </td>
-                                    <?php } else { ?>
-                                        <td></td>
-                                        <td></td>
-                                    <?php } ?>
+                                    <td>
+                                        <button type="button" class="btn btn-success" onclick='approve(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Photo & RIP"><i class="fa fa-check"></i></button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Photo & RIP"><i class="fa fa-close"></i></button>
+                                    </td>
                                     <td>
                                         <?= $r->can_a_s; ?>
                                     </td>

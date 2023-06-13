@@ -35,10 +35,8 @@
             ?>
                     <div class="row">
                         <div class="col-sm-12">
-                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                <button type="button" class="btn btn-success" onclick='approve(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Kennel"><i class="fa fa-check"></i></button>
-                                <button type="button" class="btn btn-danger" onclick='reject(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Kennel"><i class="fa fa-close"></i></button>
-                            <?php } ?>
+                            <button type="button" class="btn btn-success" onclick='approve(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Update Kennel"><i class="fa fa-check"></i></button>
+                            <button type="button" class="btn btn-danger" onclick='reject(<?= $req->req_id; ?>, "<?= $req->mem_name; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Update Kennel"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                     <br/>
