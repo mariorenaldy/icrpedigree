@@ -16,7 +16,7 @@
                     <form id="formMember" action="<?= base_url().'backend/Members/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">    
-                                <input type="text" class="form-control" placeholder="Name/Phone number/Kennel/KTP number" name="keywords" value="<?= $keywords ?>">
+                                <input type="text" class="form-control" placeholder="Name / Phone number / Kennel / KTP number" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Kennel"><i class="fa fa-search"></i></button>
@@ -38,7 +38,7 @@
                         <label class="col-md-1">Sort by: </label>
                         <div class="col-md-2">
                             <?php
-                                $pil['mem_app_date2'] = 'Date';
+                                $pil['mem_app_date2'] = 'Updated Date';
                                 $pil['ken_name'] = 'Kennel';
                                 $pil['mem_name'] = 'Name';
                                 echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 

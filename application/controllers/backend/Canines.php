@@ -142,6 +142,7 @@ class Canines extends CI_Controller {
             $like['can_icr_number'] = $data['keywords'];
             $like['can_chip_number'] = $data['keywords'];
             $like['ken_name'] = $data['keywords'];
+            $like['stat_name'] = $data['keywords'];
         }
         else
             $like = null;

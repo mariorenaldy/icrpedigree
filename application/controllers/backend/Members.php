@@ -64,6 +64,7 @@ class Members extends CI_Controller {
 			$where['mem_type'] = $this->config->item('pro_member');
 			// $where['mem_stat'] = $this->config->item('accepted');
 			$where['mem_stat !='] = $this->config->item('processed');
+			$where['mem_id !='] = 0;
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
 			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
@@ -83,6 +84,16 @@ class Members extends CI_Controller {
 		}
 
 		public function search(){
+			$data['mem_type'] = $this->config->item('pro_member');
+			if ($this->input->post('mem_type') != null){
+				$this->session->set_userdata('mem_type', $this->input->post('mem_type'));
+				$data['mem_type'] = $this->input->post('mem_type');
+			}
+			else{
+				if ($this->uri->segment(4)){
+					$data['mem_type'] = $this->session->userdata('mem_type');
+				}
+			}
             if ($this->input->post('keywords')){
                 $this->session->set_userdata('keywords', $this->input->post('keywords'));
                 $data['keywords'] = $this->input->post('keywords');
@@ -107,8 +118,6 @@ class Members extends CI_Controller {
                 $data['sort_by'] = $this->session->userdata('sort_by');
                 $data['sort_type'] = $this->session->userdata('sort_type');
             }
-
-            $data['mem_type'] = $this->input->post('mem_type');
 
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
             $config['per_page'] = $this->config->item('backend_member_count');
@@ -162,12 +171,16 @@ class Members extends CI_Controller {
 			$where['mem_stat !='] = $this->config->item('processed');
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
-			if ($data['mem_type'] == $this->config->item('all_member'))
-				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
-			else
+			// if ($data['mem_type'] == $this->config->item('all_member'))
+			// 	$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
+			// else
+			// 	$where['mem_type'] = $data['mem_type'];
+			if ($data['mem_type'] != $this->config->item('all_member'))
 				$where['mem_type'] = $data['mem_type'];
+			$where['mem_id !='] = 0;
 			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
+			// var_dump($data['member']);
             $config['base_url'] = base_url().'/backend/Members/search';
             $config['total_rows'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
             $this->pagination->initialize($config);

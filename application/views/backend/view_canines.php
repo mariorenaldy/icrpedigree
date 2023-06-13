@@ -21,7 +21,7 @@
                     <form action="<?= base_url().'backend/Canines/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="ICR number/Chip number/Name/Kennel" name="keywords" value="<?= $keywords ?>">
+                                <input type="text" class="form-control" placeholder="ICR number / Chip number / Name/Kennel / Status" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Canine"><i class="fa fa-search"></i></button>

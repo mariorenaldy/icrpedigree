@@ -648,5 +648,3 @@ $config['system'] = 4;
 
 $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
-
-$config['all'] = 'All';
