@@ -348,4 +348,144 @@ class Requestcertificate extends CI_Controller {
             redirect('backend/Users/login');
         }
     }
+	public function add()
+	{
+		$data['member'] = [];
+		$data['canine'] = [];
+		$data['status'] = $this->CertificateStatusModel->get_status()->result();
+		$this->load->view("backend/add_request_certificate", $data);
+	}
+	public function search_member(){
+		$like['mem_name'] = $this->input->post('mem_name');
+		$where['mem_stat'] = $this->config->item('accepted');
+		$where['mem_id !='] = $this->config->item('no_member');
+		$member = $this->memberModel->search_members($like, $where)->result();
+		$json = json_encode($member);
+		echo $json;
+    }
+
+	public function search_dog(){
+		$where['can_member_id'] = $this->input->post('mem_id');
+		$where['can_stat'] = $this->config->item('accepted');
+		$canine = $this->caninesModel->search_canines(null, $where)->result();
+		$jsonCan = json_encode($canine);
+		echo $jsonCan;
+    }
+	public function validate_add(){ 
+        if ($this->session->userdata('use_username')) {
+            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $this->form_validation->set_rules('req_mem_id', 'Member ', 'trim|required');
+            $this->form_validation->set_rules('req_can_id', 'Dog ', 'trim|required');
+
+			$data['status'] = $this->CertificateStatusModel->get_status()->result();
+
+            $like['mem_name'] = $this->input->post('mem_name');
+            $where['mem_stat'] = $this->config->item('accepted');
+			$where['mem_id !='] = $this->config->item('no_member');
+            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+
+			$wheCan['can_member_id'] = $this->input->post('mem_id');
+			$wheCan['can_stat'] = $this->config->item('accepted');
+			$canine = $this->caninesModel->search_canines(null, $wheCan)->result();
+
+			$whereCan['can_id'] = $this->input->post('req_can_id');
+			$dogData = $this->caninesModel->get_canines($whereCan)->row();
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('backend/add_request_certificate', $data);
+            } else {
+				$arrivedDate = null;
+				if($this->input->post('req_arrived_date')){
+					$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_arrived_date')));
+				}
+
+				$dataReq = array(
+					'req_mem_id' => $this->input->post('req_mem_id'),
+					'req_can_id' => $this->input->post('req_can_id'),
+					'req_stat_id' => $this->input->post('req_stat_id'),
+					'req_created_at' => date('Y-m-d H:i:s'),
+					'req_updated_at' => date('Y-m-d H:i:s'),
+					'req_updated_by' => $this->session->userdata('use_id'),
+					'req_arrived_date' => $arrivedDate,
+					'req_reject_note' => $this->input->post('req_reject_note'),
+					'req_desc' => $this->input->post('req_desc'),
+				);
+
+				$dataLog = array(
+					'log_mem_id' => $this->input->post('req_mem_id'),
+					'log_can_id' => $this->input->post('req_can_id'),
+					'log_stat_id' => $this->input->post('req_stat_id'),
+					'log_created_at' => date('Y-m-d H:i:s'),
+					'log_updated_at' => date('Y-m-d H:i:s'),
+					'log_updated_by' => $this->session->userdata('use_id'),
+					'log_arrived_date' => $arrivedDate,
+					'log_reject_note' => $this->input->post('req_reject_note'),
+					'log_desc' => $this->input->post('req_desc'),
+				);
+
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$requests = $this->requestcertificateModel->add_requests($dataReq);
+				if ($requests) {
+					$insertedID = $this->db->insert_id();
+					$dataLog['log_req_id'] = $insertedID;
+
+					$log = $this->logrequestCertificateModel->add_log($dataLog);
+					if ($log){
+						if($this->input->post('req_stat_id') == 2){
+							$result = $this->notification_model->add(34, $insertedID, $this->input->post('req_mem_id'), "Sertifikat untuk anjing / Certificate for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestcertificate");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 3){
+							$result = $this->notification_model->add(35, $insertedID, $this->input->post('req_mem_id'), "Sertifikat untuk anjing / Certificate for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestcertificate");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 5){
+							$result = $this->notification_model->add(36, $insertedID, $this->input->post('req_mem_id'), "Sertifikat untuk anjing / Certificate for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestcertificate");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$this->db->trans_complete();
+							$this->session->set_flashdata('add_success', true);
+							redirect("backend/Requestcertificate");
+						}
+					}
+					else{
+						$err = 3;
+					}
+				} else {
+					$err = 5;
+				}
+				if ($err) {
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error_message', 'Failed to save certificate request. Error code: '.$err);
+					$this->load->view('backend/add_request_certificate', $data);
+				}
+            }
+        } 
+        else {
+            redirect("backend/Users/login");
+        }
+    }
 }
