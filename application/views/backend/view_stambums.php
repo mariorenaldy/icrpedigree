@@ -21,7 +21,7 @@
                     <form action="<?= base_url().'backend/Stambums/search'?>" method="post">
                         <div class="input-group">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Name/Kennel" name="keywords" value="<?= $keywords ?>">
+                                <input type="text" class="form-control" placeholder="Name / Kennel" name="keywords" value="<?= $keywords ?>">
                             </div>
                             <div class="col-md-1 ms-1">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
@@ -34,10 +34,10 @@
                         <label class="col-md-1">Sort by: </label>
                         <div class="col-md-2">
                             <?php
-                                $pil['can_app_date2'] = 'Date';
-                                $pil['can_date_of_birth2'] = 'Date of Birth';
-                                $pil['can_breed'] = 'Breed';
-                                $pil['can_gender'] = 'Gender';
+                                $pil['stb_app_date2'] = 'Approved Date';
+                                $pil['stb_date_of_birth2'] = 'Date of Birth';
+                                $pil['stb_breed'] = 'Breed';
+                                $pil['stb_gender'] = 'Gender';
                                 echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 
                             ?>
                         </div>

@@ -38,7 +38,7 @@
                         <label class="col-md-1">Sort by: </label>
                         <div class="col-md-2">
                             <?php
-                                $pil['mem_app_date2'] = 'Updated Date';
+                                $pil['mem_app_date2'] = 'Approved Date';
                                 $pil['ken_name'] = 'Kennel';
                                 $pil['mem_name'] = 'Name';
                                 echo form_dropdown('sort_by', $pil, $sort_by, 'class="form-control"'); 

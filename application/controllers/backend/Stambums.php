@@ -155,10 +155,10 @@ class Stambums extends CI_Controller {
         // $where['stb_stat'] = $this->config->item('accepted');
         $where['stb_stat !='] = $this->config->item('processed');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
+        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
 
         $config['base_url'] = base_url().'/backend/Stambums/search';
-        $config['total_rows'] = $this->stambumModel->search_stambum($like, $where, $page * $config['per_page'], 0)->num_rows();
+        $config['total_rows'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
         $this->pagination->initialize($config);
         $this->load->view('backend/view_stambums', $data);
     }
