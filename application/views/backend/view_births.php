@@ -61,26 +61,21 @@
                             foreach ($birth AS $b){ ?>
                                 <tr>
                                     <td>
-                                        <?php if (!$stambum[$i]){ ?>
-                                            <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
-                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $b->bir_stat != $this->config->item('rejected')){ ?>
-                                            <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
-                                            <?php } 
-                                        } ?>
+                                        <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $b->bir_stat != $this->config->item('rejected')){ ?>
+                                        <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
+                                        <?php } ?>
                                     </td>
                                     <td class="text-nowrap">
-                                        <?php if ($stat[$i]){ 
+                                        <?php if ($stat[$i] && !$completed[$i]){ 
                                             if ($stb_date[$i]){ ?>
                                             <button type="button" class="btn btn-warning mb-1" onclick="addMoreStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
                                             <?php echo '<br/>'.$stb_date[$i].'<br/>'; 
-                                        } else { ?>
-                                            <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
-                                        <?php }
+                                            } else { ?>
+                                                <button type="button" class="btn btn-warning mb-1" onclick="addStambum(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Puppy"><i class="fa fa-plus"></i></button>
+                                            <?php }
                                         }
-                                            if ($this->session->userdata('use_type_id') == $this->config->item('super')){ 
-                                                if ($stb_date[$i]){ ?>
-                                                    <button type="button" class="btn btn-primary mb-1" onclick="complete(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Complete Birth"><i class="fa fa-check"></i></button>
-                                            <?php } ?>
+                                        if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Birth Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
                                     </td>
@@ -117,7 +112,6 @@
                         </tbody>
                     </table>
                     <br/>
-                    <?= $this->pagination->create_links(); ?>
                 </div>
             </div>
         </div> 
