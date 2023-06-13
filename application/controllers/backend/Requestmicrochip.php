@@ -387,4 +387,171 @@ class Requestmicrochip extends CI_Controller {
             redirect('backend/Users/login');
         }
     }
+	public function add()
+	{
+		$data['member'] = [];
+		$data['canine'] = [];
+		$data['status'] = $this->MicrochipStatusModel->get_status()->result();
+		$this->load->view("backend/add_request_microchip", $data);
+	}
+	public function search_member(){
+		$like['mem_name'] = $this->input->post('mem_name');
+		$where['mem_stat'] = $this->config->item('accepted');
+		$where['mem_id !='] = $this->config->item('no_member');
+		$member = $this->memberModel->search_members($like, $where)->result();
+		$json = json_encode($member);
+		echo $json;
+    }
+
+	public function search_dog(){
+		$where['can_member_id'] = $this->input->post('mem_id');
+		$where['can_stat'] = $this->config->item('accepted');
+		$canine = $this->caninesModel->search_canines(null, $where)->result();
+		$jsonCan = json_encode($canine);
+		echo $jsonCan;
+    }
+	public function validate_add(){ 
+        if ($this->session->userdata('use_username')) {
+            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $this->form_validation->set_rules('req_mem_id', 'Member ', 'trim|required');
+            $this->form_validation->set_rules('req_can_id', 'Dog ', 'trim|required');
+            $this->form_validation->set_rules('req_datetime', 'Appointment Date ', 'trim|required');
+
+			$data['status'] = $this->MicrochipStatusModel->get_status()->result();
+
+            $like['mem_name'] = $this->input->post('mem_name');
+            $where['mem_stat'] = $this->config->item('accepted');
+			$where['mem_id !='] = $this->config->item('no_member');
+            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+
+			$wheCan['can_member_id'] = $this->input->post('mem_id');
+			$wheCan['can_stat'] = $this->config->item('accepted');
+			$canine = $this->caninesModel->search_canines(null, $wheCan)->result();
+
+			$whereCan['can_id'] = $this->input->post('req_can_id');
+			$dogData = $this->caninesModel->get_canines($whereCan)->row();
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('backend/add_request_microchip', $data);
+            } else {
+				$appointmentDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_datetime')));
+
+				$proof = '-';
+				if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
+					$uploadedImg = $_POST['attachment_proof'];
+					$image_array_1 = explode(";", $uploadedImg);
+					$image_array_2 = explode(",", $image_array_1[1]);
+					$uploadedImg = base64_decode($image_array_2[1]);
+		
+					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+						$err = 1;
+						$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+					}
+		
+					$img_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+					if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+						$err++;
+						$this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
+					} else{
+						if (is_file($img_name) and !is_writable($img_name)) {
+							$err++;
+							$this->session->set_flashdata('error_message', 'File already exists and not writable.');
+						}
+					}
+				}
+
+				if (isset($uploadedImg)){
+					file_put_contents($img_name, $uploadedImg);
+					$proof = str_replace($this->config->item('path_payment'), '', $img_name);
+				}
+
+				$dataReq = array(
+					'req_mem_id' => $this->input->post('req_mem_id'),
+					'req_can_id' => $this->input->post('req_can_id'),
+					'req_stat_id' => $this->input->post('req_stat_id'),
+					'req_created_at' => date('Y-m-d H:i:s'),
+					'req_updated_at' => date('Y-m-d H:i:s'),
+					'req_updated_by' => $this->session->userdata('use_id'),
+					'req_datetime' => $appointmentDate,
+					'req_reject_note' => $this->input->post('req_reject_note'),
+					'req_pay_photo' => $proof
+				);
+
+				$dataLog = array(
+					'log_mem_id' => $this->input->post('req_mem_id'),
+					'log_can_id' => $this->input->post('req_can_id'),
+					'log_stat_id' => $this->input->post('req_stat_id'),
+					'log_created_at' => date('Y-m-d H:i:s'),
+					'log_updated_at' => date('Y-m-d H:i:s'),
+					'log_updated_by' => $this->session->userdata('use_id'),
+					'log_datetime' => $appointmentDate,
+					'log_reject_note' => $this->input->post('req_reject_note'),
+					'log_pay_photo' => $proof
+				);
+
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$requests = $this->requestmicrochipModel->add_requests($dataReq);
+				if ($requests) {
+					$insertedID = $this->db->insert_id();
+					$dataLog['log_req_id'] = $insertedID;
+
+					$log = $this->logrequestMicrochipModel->add_log($dataLog);
+					if ($log){
+						if($this->input->post('req_stat_id') == 1){
+							$result = $this->notification_model->add(37, $insertedID, $this->input->post('req_mem_id'), "Microchip untuk anjing / Microchip for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestmicrochip");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 2){
+							$result = $this->notification_model->add(38, $insertedID, $this->input->post('req_mem_id'), "Microchip untuk anjing / Microchip for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestmicrochip");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else if($this->input->post('ord_stat_id') == 3){
+							$result = $this->notification_model->add(39, $insertedID, $this->input->post('req_mem_id'), "Microchip untuk anjing / Microchip for dog: ".$dogData->can_a_s);
+							if ($result){
+								$this->db->trans_complete();
+								$this->session->set_flashdata('add_success', true);
+								redirect("backend/Requestmicrochip");
+							}
+							else{
+								$err = 1;
+							}
+						}
+						else{
+							$this->db->trans_complete();
+							$this->session->set_flashdata('add_success', true);
+							redirect("backend/Requestmicrochip");
+						}
+					}
+					else{
+						$err = 3;
+					}
+				} else {
+					$err = 5;
+				}
+				if ($err) {
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error_message', 'Failed to save microchip request. Error code: '.$err);
+					$this->load->view('backend/add_request_microchip', $data);
+				}
+            }
+        } 
+        else {
+            redirect("backend/Users/login");
+        }
+    }
 }

@@ -23,9 +23,12 @@
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Request Microchip List</h3>
                 <div class="text-success">
-                    <?php		
+                    <?php
                         if ($this->session->flashdata('approve_success')){
                             echo 'Microchip request has been approved<br/>';
+                        }
+                        if ($this->session->flashdata('add_success')){
+                            echo 'Microchip request has been saved<br/>';
                         }
                         if ($this->session->flashdata('delete_success')){
                             echo 'Microchip request has been deleted<br/>';
@@ -129,6 +132,9 @@
     </div>
     <?php $this->load->view('templates/script'); ?>
     <script>
+        function add(){
+            window.location = "<?= base_url(); ?>backend/Requestmicrochip/add";
+        }
         function approve(id){
             var proceed = confirm("Approve request with ID "+id+" ?");
             if (proceed){             
