@@ -536,6 +536,7 @@ class Orders extends CI_Controller
 	//backend
 	public function listOrders()
 	{
+		$this->updateExpired();
 		$data['orders'] = $this->OrderModel->get_processed_orders()->result();
 		$this->load->view("marketplace/orders_backend", $data);
 	}

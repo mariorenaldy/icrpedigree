@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Beranda extends CI_Controller {
     public function __construct(){
 		parent::__construct();
-        $this->load->model(array('caninesModel'));
+        $this->load->model(array('caninesModel', 'MemberModel'));
 		$this->load->library(array('session'));
         $this->load->helper(array('url', 'cookie'));
         $this->load->database();
@@ -22,7 +22,22 @@ class Beranda extends CI_Controller {
 	}
 
 	public function index(){
-        $data['dogs'] = $this->caninesModel->get_random_canines();
-        $this->load->view("frontend/beranda", $data);
+        $this->updateToFree();
+        $this->load->view("frontend/beranda");
 	}
+
+    function updateToFree(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired member type to free
+        $members = $this->MemberModel->update_expired_members();
+        if ($members) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
+        }
+    }
 }

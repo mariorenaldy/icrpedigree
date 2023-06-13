@@ -36,6 +36,7 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
+			$this->updateToFree();
             if (!$this->session->userdata('username')){
                 $this->load->view("frontend/login_form");
             }
@@ -43,6 +44,21 @@ class Members extends CI_Controller {
                 redirect("frontend/Beranda");
             }
         }
+
+		function updateToFree(){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+
+			//update all expired member type to free
+			$members = $this->MemberModel->update_expired_members();
+			if ($members) {
+				$this->db->trans_complete();
+				return true;
+			} else {
+				$this->db->trans_rollback();
+				return false;
+			}
+		}
 
 		public function validate_login(){
 			$this->form_validation->set_error_delimiters('<div>','</div>');

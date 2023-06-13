@@ -22,6 +22,7 @@ class Members extends CI_Controller {
 		}
 
 		public function index(){
+			$this->updateToFree();
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
             $config['per_page'] = $this->config->item('backend_member_count');
             $config['uri_segment'] = 4;
@@ -81,6 +82,21 @@ class Members extends CI_Controller {
             $this->session->set_userdata('sort_by', 'mem_app_date2');
             $this->session->set_userdata('sort_type', 'desc');
 			$this->load->view('backend/view_members', $data);
+		}
+
+		function updateToFree(){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+
+			//update all expired member type to free
+			$members = $this->MemberModel->update_expired_members();
+			if ($members) {
+				$this->db->trans_complete();
+				return true;
+			} else {
+				$this->db->trans_rollback();
+				return false;
+			}
 		}
 
 		public function search(){
@@ -798,6 +814,8 @@ class Members extends CI_Controller {
 								'mem_email' => $this->input->post('email'),
 								'mem_type' => $this->input->post('mem_type'),
 								'mem_user' => $this->session->userdata('use_id'),
+								'mem_pay_photo' => null,
+								'mem_payment_date' => null,
 								'mem_date' => date('Y-m-d H:i:s'),
 							);
 	

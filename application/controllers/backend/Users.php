@@ -7,7 +7,7 @@ class Users extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('userModel', 'usertypeModel'));
+			$this->load->model(array('userModel', 'usertypeModel', 'MemberModel'));
 			$this->load->library(array('session', 'form_validation'));
 			$this->load->helper(array('form', 'url'));
 			$this->load->database();
@@ -17,6 +17,21 @@ class Users extends CI_Controller {
 			$where['use_stat'] = $this->config->item('accepted'); 
 			$data['users'] = $this->userModel->get_users($where)->result();
 			$this->load->view('backend/view_users', $data);
+		}
+
+		function updateToFree(){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+
+			//update all expired member type to free
+			$members = $this->MemberModel->update_expired_members();
+			if ($members) {
+				$this->db->trans_complete();
+				return true;
+			} else {
+				$this->db->trans_rollback();
+				return false;
+			}
 		}
 
 		public function add(){
@@ -192,6 +207,7 @@ class Users extends CI_Controller {
 		}
 
 		public function login(){
+			$this->updateToFree();
 			$this->load->view('backend/login_form');
 		}
 

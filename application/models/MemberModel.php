@@ -24,6 +24,22 @@ class MemberModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function get_member_type($id){
+        $this->db->select('mem_type');
+        $this->db->where('mem_id', $id);
+        $this->db->from('members');
+        return $this->db->get();
+    }
+
+    public function update_expired_members(){
+        $this->db->set('mem_type', $this->config->item('free_member'));
+        $this->db->set('mem_payment_date', null);
+        $this->db->set('mem_pay_photo', null);
+        $this->db->where('mem_payment_date < NOW()');
+        $this->db->where('mem_type', $this->config->item('pro_member'));
+        return $this->db->update('members');
+    }
+
     public function search_members($like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');

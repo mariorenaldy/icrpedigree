@@ -1,3 +1,14 @@
+<?php 
+$sql = "SELECT COUNT(notification_id) AS count FROM notification WHERE mem_id = '".$this->session->userdata('mem_id')."'";
+$notif_count = $this->db->query($sql)->row()->count; 
+
+$sqlType = "SELECT mem_type FROM members WHERE mem_id = '".$this->session->userdata('mem_id')."'";
+$mem_type = $this->db->query($sqlType)->row()->mem_type; 
+if($mem_type != $this->session->userdata('mem_type')){
+    $this->session->set_userdata('mem_type', $mem_type);
+}
+?>
+
 <nav class="navbar navbar-expand-xxl navbar-dark my-navbar">
     <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainCollapse" aria-controls="mainCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span style="color:white">MENU</span>
@@ -27,7 +38,7 @@
                     </div>
                 <?php } ?>
                 <a href="<?= base_url().'frontend/Canines' ?>" class="text-decoration-none text-reset link-warning"><i class="fa fa-dog"></i> <span class="nav-text"><?= lang("nav_my_dogs"); ?></span></a>
-                <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text notif-text text-warning"><?= $this->session->userdata('notif_count') ?></span></a></li>
+                <a href="<?= base_url().'frontend/Notification' ?>" class="text-decoration-none text-reset link-warning" id="notif-nav"><i class="fas fa-envelope"></i><br> <span class="nav-text notif-text text-warning"><?= $notif_count ?></span></a></li>
                 <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="<?= $this->session->userdata('mem_pp') ?>" class="img-fluid pp" alt="pp"> <span class="nav-text notif-text"><?= $this->session->userdata('mem_name') ?></span>

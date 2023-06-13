@@ -60,7 +60,9 @@ class Requestpro extends CI_Controller {
 							'mem_app_date' => date('Y-m-d H:i:s'),
 							'mem_stat' => $this->config->item('accepted'),
 							'mem_type' => $this->config->item('pro_member'),
+							'mem_payment_date' => date('Y-m-d', strtotime('+1 year')),
 						);
+
 						if ($req->req_pay_photo != '-')
 								$dataMember['mem_pay_photo'] = $req->req_pay_photo;
 						$wheMember['mem_id'] = $req->req_member_id;
