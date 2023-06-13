@@ -52,13 +52,8 @@
                                 foreach ($member AS $m){ 
                                     if ($m->mem_id) { ?>
                                     <tr>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                            <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Approve Kennel"><i class="fa fa-check"></i></button></td>
-                                            <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Reject Kennel"><i class="fa fa-close"></i></button></td>
-                                        <?php } else { ?>
-                                            <td></td>
-                                            <td></td>
-                                        <?php } ?>
+                                        <td><button type="button" class="btn btn-success" onclick="approve(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Approve Kennel"><i class="fa fa-check"></i></button></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="reject(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Reject Kennel"><i class="fa fa-close"></i></button></td>
                                         <td><?= $m->ken_name ?></td>
                                         <td><?= $m->mem_name; ?></td>
                                         <td><?= $m->mem_hp; ?></td>

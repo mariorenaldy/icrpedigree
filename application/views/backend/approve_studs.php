@@ -49,17 +49,12 @@
                             $i = 0; 
                             foreach ($stud AS $s){ ?>
                             <tr>
-                                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                    <td>
-                                        <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
-                                    </td>
-                                    <td>    
-                                        <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
-                                    </td>
-                                <?php } else { ?>
-                                    <td></td>
-                                    <td></td>
-                                <?php } ?>
+                                <td>
+                                    <button type="button" class="btn btn-success" onclick="approve(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fa fa-check"></i></button>
+                                </td>
+                                <td>    
+                                    <button type="button" class="btn btn-danger" onclick="reject(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Reject"><i class="fa fa-close"></i></button>
+                                </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$s->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $s->stu_id ?>" onclick="display('stud<?= $s->stu_id ?>')">
                                 </td>

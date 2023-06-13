@@ -48,13 +48,8 @@
                         <tbody>
                             <?php foreach ($stambum AS $r){ ?>
                                 <tr>
-                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                        <td><button type="button" class="btn btn-success" onclick='approve(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
-                                        <td><button type="button" class="btn btn-danger" onclick='reject(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
-                                    <?php } else { ?>
-                                        <td></td>
-                                        <td></td>
-                                    <?php } ?>
+                                    <td><button type="button" class="btn btn-success" onclick='approve(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Accept Canine"><i class="fa fa-check"></i></button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick='reject(<?= $r->stb_id; ?>, "<?= $r->stb_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Canine"><i class="fa fa-close"></i></button></td>
                                     <td>
                                         <img src="<?= base_url('uploads/births/'.$r->bir_dam_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="birth<?= $r->stb_id ?>" onclick="display('birth<?= $r->stb_id ?>')">
                                     </td>

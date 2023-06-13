@@ -936,7 +936,9 @@ class Members extends CI_Controller {
 					
 					$data['mem_stat'] = $this->config->item('rejected');
 					$data['mem_user'] = $this->session->userdata('use_id');
+					$data['mem_app_user'] = $this->session->userdata('use_id');
 					$data['mem_date'] = date('Y-m-d H:i:s');
+					$data['mem_app_date'] = date('Y-m-d H:i:s');
 					if ($this->uri->segment(5)){
 						$data['mem_app_note'] = urldecode($this->uri->segment(5));
 					}

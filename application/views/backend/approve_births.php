@@ -51,17 +51,12 @@
                         <?php
                             foreach ($birth AS $b){ ?>
                             <tr>
-                                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
-                                    <td>
-                                        <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve Birth"><i class="fa fa-check"></i></button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject Birth"><i class="fa fa-close"></i></button>
-                                    </td>
-                                <?php } else { ?>
-                                    <td></td>
-                                    <td></td>
-                                <?php } ?>
+                                <td>
+                                    <button type="button" class="btn btn-success" onclick='approve(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Approve Birth"><i class="fa fa-check"></i></button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick='reject(<?= $b->bir_id ?>)' data-toggle="tooltip" data-placement="top" title="Reject Birth"><i class="fa fa-close"></i></button>
+                                </td>
                                 <td align="center">
                                     <img src="<?= base_url('uploads/stud/'.$b->stu_photo) ?>" class="img-fluid img-thumbnail" alt="Stud" id="stud<?= $b->bir_id ?>" onclick="display('stud<?= $b->bir_id ?>')"><br/><?= $b->stu_stud_date; ?>
                                 </td>

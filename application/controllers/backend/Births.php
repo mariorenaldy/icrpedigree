@@ -210,6 +210,7 @@ class Births extends CI_Controller {
 			$data['stambum'] = array();
             $data['stb_date'] = array();
 			$data['stat'] = array();
+			$data['completed'] = array();
 			foreach ($data['birth'] as $r){
 				$whereStambum = [];
 				$whereStambum['stb_bir_id'] = $r->bir_id;
@@ -220,6 +221,13 @@ class Births extends CI_Controller {
                     $data['stb_date'][] = $stb->row()->stb_date;
                 else
                     $data['stb_date'][] = '';
+
+				if($r->bir_stat == $this->config->item('completed') || $r->bir_stat == $this->config->item('rejected')){
+					$data['completed'][] = true;
+				}
+				else{
+					$data['completed'][] = false;
+				}
 
                 if ($stb->num_rows() < ($r->bir_male + $r->bir_female)){
                     $piece = explode("-", $r->bir_date_of_birth);
@@ -890,7 +898,9 @@ class Births extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$data['bir_user'] = $this->session->userdata('use_id');
+					$data['bir_app_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
+					$data['bir_app_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
 					if ($this->uri->segment(5)){
 						$data['bir_app_note'] = urldecode($this->uri->segment(5));
