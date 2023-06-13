@@ -60,7 +60,7 @@
                             <tr>
                                 <td>
                                     <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
-                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $s->stu_stat != $this->config->item('rejected')){ ?>
                                     <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Stud"><i class="fa fa-trash"></i></button>
                                     <?php } ?>
                                 </td>

@@ -55,7 +55,8 @@ class Births extends CI_Controller {
 
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-			$where['bir_stat'] = $this->config->item('accepted');
+			// $where['bir_stat'] = $this->config->item('accepted');
+			$where['bir_stat !='] = $this->config->item('processed');
             $where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
 
@@ -185,7 +186,8 @@ class Births extends CI_Controller {
 			if ($date){
 				$where['bir_date_of_birth'] = $date;
 			}
-			$where['bir_stat'] = $this->config->item('accepted');
+			// $where['bir_stat'] = $this->config->item('accepted');
+			$where['bir_stat !='] = $this->config->item('processed');
             $where['kennels.ken_stat'] = $this->config->item('accepted');
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $this->input->post('keywords');
@@ -1050,7 +1052,9 @@ class Births extends CI_Controller {
 							'log_female' => $birth->bir_female,
 							'log_date_of_birth' => $date,
 							'log_user' => $this->session->userdata('use_id'),
+							'log_app_user' => $this->session->userdata('use_id'),
 							'log_date' => date('Y-m-d H:i:s'),
+							'log_app_date' => date('Y-m-d H:i:s'),
 							'log_stat' => $this->config->item('rejected'),
 						);
 						$log = $this->logbirthModel->add_log($dataLog);
@@ -1095,7 +1099,9 @@ class Births extends CI_Controller {
                     $err = 0;
 					$where['bir_id'] = $this->uri->segment(4);
 					$data['bir_user'] = $this->session->userdata('use_id');
+					$data['bir_app_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
+					$data['bir_app_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
                     if ($this->uri->segment(5)){
                         $data['bir_app_note'] = urldecode($this->uri->segment(5));
@@ -1103,11 +1109,20 @@ class Births extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->birthModel->update_births($data, $where);
+					$oldBirth = $this->birthModel->get_births($where)->row();
 					if ($res){
 						$dataLog = array(
 							'log_bir_id' => $this->uri->segment(4),
+							'log_stu_id' => $oldBirth->bir_stu_id,
+							'log_member_id' => $oldBirth->bir_member_id,
 							'log_user' => $this->session->userdata('use_id'),
+							'log_app_user' => $this->session->userdata('use_id'),
 							'log_date' => date('Y-m-d H:i:s'),
+							'log_app_date' => date('Y-m-d H:i:s'),
+							'log_dam_photo' => $oldBirth->bir_dam_photo,
+							'log_male' => $oldBirth->bir_male,
+							'log_female' => $oldBirth->bir_female,
+							'log_date_of_birth' => date('Y-m-d', strtotime($oldBirth->bir_date_of_birth)),
 							'log_stat' => $this->config->item('rejected'),
 						);
 						$log = $this->logbirthModel->add_log($dataLog);

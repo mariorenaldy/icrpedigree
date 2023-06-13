@@ -10,12 +10,13 @@ class MemberModel extends CI_Model {
     }
 
     public function get_members($where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->from('members');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('approval_status','approval_status.stat_id = members.mem_stat');
         $this->db->join('users','users.use_id = members.mem_app_user');
         $this->db->order_by($sort);
         if ($limit)
@@ -24,7 +25,7 @@ class MemberModel extends CI_Model {
     }
 
     public function search_members($like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
@@ -35,6 +36,7 @@ class MemberModel extends CI_Model {
             $this->db->group_end();
         }
         $this->db->join('kennels','members.mem_id = kennels.ken_member_id');
+        $this->db->join('approval_status','approval_status.stat_id = members.mem_stat');
         $this->db->join('users','members.mem_app_user = users.use_id');
         $this->db->order_by($sort);
         if ($limit)

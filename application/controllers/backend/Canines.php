@@ -7,7 +7,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'logpedigreeModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'kennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'logpedigreeModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'kennelModel', 'stambumModel', 'logstambumModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url'));
         $this->load->database();
@@ -54,7 +54,8 @@ class Canines extends CI_Controller {
 
         $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-        $where['can_stat'] = $this->config->item('accepted');
+        // $where['can_stat'] = $this->config->item('accepted');
+        $where['can_stat !='] = $this->config->item('processed');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('backend_canine_count'))->result();
         
@@ -144,7 +145,8 @@ class Canines extends CI_Controller {
         }
         else
             $like = null;
-        $where['can_stat'] = $this->config->item('accepted');
+        // $where['can_stat'] = $this->config->item('accepted');
+        $where['can_stat !='] = $this->config->item('processed');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_canine_count'))->result();
 
@@ -1174,6 +1176,8 @@ public function validate_edit_pedigree(){
                 $this->db->trans_strict(FALSE);
                 $this->db->trans_start();
                 $data['can_user'] = $this->session->userdata('use_id');
+                $data['can_app_user'] = $this->session->userdata('use_id');
+                $data['can_app_date'] = date('Y-m-d H:i:s');
                 $data['can_date'] = date('Y-m-d H:i:s');
                 $data['can_stat'] = $this->config->item('rejected');
                 if ($this->uri->segment(5)){
@@ -1187,23 +1191,23 @@ public function validate_edit_pedigree(){
                         $piece = explode("-", $can->can_date_of_birth);
                         $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
                         $dataLog = array(
-                        'log_canine_id' => $can->can_id,
-                        'log_reg_number' => $can->can_reg_number,
-                        'log_a_s' => $can->can_a_s,
-                        'log_breed' => $can->can_breed,
-                        'log_gender' => $can->can_gender,
-                        'log_date_of_birth' => $dob,
-                        'log_color' => $can->can_color,
-                        'log_kennel_id' => $can->can_kennel_id,
-                        'log_photo' => $can->can_photo,
-                        'log_pay_photo' => $can->can_pay_photo,
-                        'log_stat' => $this->config->item('rejected'),
-                        'log_user' => $this->session->userdata('use_id'),
-                        'log_date' => date('Y-m-d H:i:s'),
-                        'log_chip_number' => $can->can_chip_number,
-                        'log_icr_number' => $can->can_icr_number,
-                        'log_member_id' => $can->can_member_id,
-                        'log_note' => $can->can_note,
+                            'log_canine_id' => $can->can_id,
+                            'log_reg_number' => $can->can_reg_number,
+                            'log_a_s' => $can->can_a_s,
+                            'log_breed' => $can->can_breed,
+                            'log_gender' => $can->can_gender,
+                            'log_date_of_birth' => $dob,
+                            'log_color' => $can->can_color,
+                            'log_kennel_id' => $can->can_kennel_id,
+                            'log_photo' => $can->can_photo,
+                            'log_pay_photo' => $can->can_pay_photo,
+                            'log_stat' => $this->config->item('rejected'),
+                            'log_user' => $this->session->userdata('use_id'),
+                            'log_date' => date('Y-m-d H:i:s'),
+                            'log_chip_number' => $can->can_chip_number,
+                            'log_icr_number' => $can->can_icr_number,
+                            'log_member_id' => $can->can_member_id,
+                            'log_note' => $can->can_note,
                         );
                         $log = $this->logcanineModel->add_log($dataLog);
                         if ($log){
@@ -1244,17 +1248,71 @@ public function validate_edit_pedigree(){
                 $where['can_id'] = $this->uri->segment(4);
                 $data['can_stat'] = $this->config->item('rejected');
                 $data['can_user'] = $this->session->userdata('use_id');
+                $data['can_app_user'] = $this->session->userdata('use_id');
                 $data['can_date'] = date('Y-m-d H:i:s');
+                $data['can_app_date'] = date('Y-m-d H:i:s');
                 if ($this->uri->segment(5)){
                     $data['can_app_note'] = urldecode($this->uri->segment(5));
                 }
 
+                $oldCan = $this->caninesModel->get_canines($where)->row();
+    
                 $dataLog = array(
                     'log_canine_id' => $this->uri->segment(4),
+                    'log_reg_number' => $oldCan->can_reg_number,
+                    'log_a_s' => $oldCan->can_a_s,
+                    'log_breed' => $oldCan->can_breed,
+                    'log_gender' => $oldCan->can_gender,
+                    'log_date_of_birth' => date('Y-m-d', strtotime($oldCan->can_date_of_birth)),
+                    'log_color' => $oldCan->can_color,
+                    'log_kennel_id' => $oldCan->can_kennel_id,
+                    'log_photo' => $oldCan->can_photo,
+                    'log_pay_photo' => $oldCan->can_pay_photo,
                     'log_stat' => $this->config->item('rejected'),
                     'log_user' => $this->session->userdata('use_id'),
+                    'log_app_user' => $this->session->userdata('use_id'),
                     'log_date' => date('Y-m-d H:i:s'),
+                    'log_app_date' => date('Y-m-d H:i:s'),
+                    'log_chip_number' => $oldCan->can_chip_number,
+                    'log_icr_number' => $oldCan->can_icr_number,
+                    'log_member_id' => $oldCan->can_member_id,
+                    'log_note' => $oldCan->can_note,
                 );
+
+                $whe['stb_can_id'] = $oldCan->can_id;
+                $stb = $this->stambumModel->get_stambum($whe)->row();
+
+                if($stb){
+                    $dataStb = array(
+                        'stb_stat' => $this->config->item('rejected'),
+                        'stb_user' => $this->session->userdata('use_id'),
+                        'stb_app_user' => $this->session->userdata('use_id'),
+                        'stb_date' => date('Y-m-d H:i:s'),
+                        'stb_app_date' => date('Y-m-d H:i:s'),
+                    );
+                    if ($this->uri->segment(5)){
+                        $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
+                    }
+        
+                    $logStb = array(
+                        'log_stb_id' => $stb->stb_id,
+                        'log_bir_id' => $stb->stb_bir_id,
+                        'log_a_s' => $stb->stb_a_s,
+                        'log_breed' => $stb->stb_breed,
+                        'log_gender' => $stb->stb_gender,
+                        'log_member_id' => $stb->stb_member_id,
+                        'log_kennel_id' => $stb->ken_id,
+                        'log_date_of_birth' => date('Y-m-d', strtotime($stb->stb_date_of_birth)),
+                        'log_photo' => $stb->stb_photo,
+                        'log_pay_photo' => $stb->stb_pay_photo,
+                        'log_stat' => $this->config->item('rejected'),
+                        'log_user' => $this->session->userdata('use_id'),
+                        'log_app_user' => $this->session->userdata('use_id'),
+                        'log_date' => date('Y-m-d H:i:s'),
+                        'log_app_date' => date('Y-m-d H:i:s'),
+                        'log_can_id' => $stb->stb_can_id,
+                    );
+                }
 
                 $this->db->trans_strict(FALSE);
                 $this->db->trans_start();
@@ -1262,9 +1320,29 @@ public function validate_edit_pedigree(){
                 if ($res){
                     $log = $this->logcanineModel->add_log($dataLog);
                     if ($log){
-                        $this->db->trans_complete();
-                        $this->session->set_flashdata('delete_success', TRUE);
-                        redirect("backend/Canines");
+                        if($stb){
+                            $stbRes = $this->stambumModel->update_stambum($dataStb, $whe);
+                            if($stbRes){
+                                $logStbRes = $this->logstambumModel->add_log($logStb);
+                                if($logStbRes){
+                                    $this->db->trans_complete();
+                                    $this->session->set_flashdata('delete_success', TRUE);
+                                    redirect("backend/Canines");
+                                }
+                                else{
+                                    $err = 4;
+                                }
+                            }
+                            else{
+                                $err = 3;
+                            }
+                        }
+                        else{
+                            $this->db->trans_complete();
+                            $this->session->set_flashdata('delete_success', TRUE);
+                            redirect("backend/Canines");
+                        }
+                        
                     }
                     else{
                         $err = 1;

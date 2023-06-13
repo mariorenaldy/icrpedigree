@@ -62,8 +62,10 @@ class Members extends CI_Controller {
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
 			$where['mem_type'] = $this->config->item('pro_member');
-			$where['mem_stat'] = $this->config->item('accepted');
-			$where['ken_stat'] = $this->config->item('accepted');
+			// $where['mem_stat'] = $this->config->item('accepted');
+			$where['mem_stat !='] = $this->config->item('processed');
+			// $where['ken_stat'] = $this->config->item('accepted');
+			$where['ken_stat !='] = $this->config->item('processed');
 			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
             $config['base_url'] = base_url().'/backend/Members/index';
@@ -156,8 +158,10 @@ class Members extends CI_Controller {
             else
                 $like = null;
 
-			$where['mem_stat'] = $this->config->item('accepted');
-			$where['ken_stat'] = $this->config->item('accepted');
+			// $where['mem_stat'] = $this->config->item('accepted');
+			$where['mem_stat !='] = $this->config->item('processed');
+			// $where['ken_stat'] = $this->config->item('accepted');
+			$where['ken_stat !='] = $this->config->item('processed');
 			if ($data['mem_type'] == $this->config->item('all_member'))
 				$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
 			else
@@ -172,7 +176,7 @@ class Members extends CI_Controller {
 
 		public function view_approve(){
 			$where['mem_stat'] = $this->config->item('saved');
-			$where['ken_stat'] = $this->config->item('saved');
+			// $where['ken_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->get_members($where)->result();
 			$this->load->view('backend/approve_members', $data);
 		}
@@ -182,7 +186,7 @@ class Members extends CI_Controller {
 			$like['mem_hp'] = $this->input->post('keywords');
 			$like['ken_name'] = $this->input->post('keywords');
 			$where['mem_stat'] = $this->config->item('saved');
-			$where['ken_stat'] = $this->config->item('saved');
+			// $where['ken_stat'] = $this->config->item('saved');
 			$data['member'] = $this->MemberModel->search_members($like, $where)->result();
 			$this->load->view('backend/approve_members', $data);
 		}
@@ -1020,15 +1024,36 @@ class Members extends CI_Controller {
 						$res2 = $this->KennelModel->update_kennels($dataKennel, $wheKennel);
 						if ($res2){
 							$dataLog = array(
-								'log_member_id' => $this->uri->segment(4),
+								'log_member_id' => $member->mem_id,
+								'log_name' => $member->mem_name,
+								'log_address' => $member->mem_address,
+								'log_mail_address' => $member->mem_mail_address,
+								'log_hp' => $member->mem_hp,
+								'log_kota' => $member->mem_kota,
+								'log_kode_pos' => $member->mem_kode_pos,
+								'log_email' => $member->mem_email,
+								'log_ktp' => $member->mem_ktp,
+								'log_pay_photo' => $member->mem_pay_photo,
 								'log_user' => $this->session->userdata('use_id'),
+								'log_app_user' => $member->mem_app_user,
 								'log_date' => date('Y-m-d H:i:s'),
+								'log_app_date' => date('Y-m-d', strtotime($member->mem_app_date)),
 								'log_stat' => $this->config->item('rejected'),
+								'log_mem_type' => $this->config->item('pro_member'),
 							);
 							$log = $this->LogmemberModel->add_log($dataLog);
 							if ($log){
 								$dataKennelLog = array(
 									'log_kennel_id' => $member->ken_id,
+									'log_stat' => $this->config->item('rejected'),
+									'log_user' => $this->session->userdata('use_id'),
+									'log_date' => date('Y-m-d H:i:s')
+								);
+								$dataKennelLog = array(
+									'log_kennel_id' => $member->ken_id,
+									'log_kennel_name' => $member->ken_name,
+									'log_kennel_type_id' => $member->ken_type_id,
+									'log_kennel_photo' => $member->ken_photo,
 									'log_stat' => $this->config->item('rejected'),
 									'log_user' => $this->session->userdata('use_id'),
 									'log_date' => date('Y-m-d H:i:s')
@@ -1102,19 +1127,29 @@ class Members extends CI_Controller {
 					if ($res){
 						$err = 0;
 						$dataLog = array(
-							'log_member_id' => $this->uri->segment(4),
+							'log_member_id' => $member->mem_id,
 							'log_payment_date' => date('Y-m-d', strtotime('+1 year')),
+							'log_name' => $member->mem_name,
+							'log_address' => $member->mem_address,
+							'log_mail_address' => $member->mem_mail_address,
+							'log_hp' => $member->mem_hp,
+							'log_kota' => $member->mem_kota,
+							'log_kode_pos' => $member->mem_kode_pos,
+							'log_email' => $member->mem_email,
+							'log_ktp' => $member->mem_ktp,
+							'log_pay_photo' => $member->mem_pay_photo,
 							'log_user' => $this->session->userdata('use_id'),
 							'log_date' => date('Y-m-d H:i:s'),
+							'log_stat' => $this->config->item('accepted'),
 							'log_mem_type' => $this->config->item('pro_member'),
 						);
 						if (!$member->mem_app_user){
 							$dataLog['log_app_user'] = $this->session->userdata('use_id');
 							$dataLog['log_app_date'] = date('Y-m-d H:i:s');
-							$dataLog['log_name'] = $member->mem_name;
-							$dataLog['log_hp'] = $member->mem_hp;
-							$dataLog['log_email'] = $member->mem_email;
-							$dataLog['log_stat'] = $this->config->item('accepted');
+						}
+						else{
+							$dataLog['log_app_user'] = $member->mem_app_user;
+							$dataLog['log_app_date'] = date('Y-m-d', strtotime($member->mem_app_date));
 						}
 						$log = $this->LogmemberModel->add_log($dataLog);
 						if ($log){

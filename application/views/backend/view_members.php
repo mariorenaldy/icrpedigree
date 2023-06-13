@@ -81,6 +81,7 @@
                                 <th class="no-sort">email</th>
                                 <th class="no-sort">Type</th>
                                 <th class="no-sort">Last Login</th>
+                                <th class="no-sort">Status</th>
                                 <th style="display: none;"></th>
                             </tr>
                         </thead>
@@ -98,7 +99,7 @@
                                             <?php } ?>
                                         </td>
                                         <td class="text-center">
-                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $m->mem_stat != $this->config->item('rejected')){ ?>
                                             <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $m->mem_id ?>, '<?= $m->mem_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Member"><i class="fa fa-trash"></i></button>
                                             <?php }
                                                 if ($m->mem_type == $this->config->item('free_member')){ ?>
@@ -126,6 +127,7 @@
                                                 echo 'Free'; 
                                             ?></td>
                                         <td class="text-nowrap"><?= $m->last_login; ?></td>
+                                        <td><?= $m->stat_name.'<br/>'.$m->use_username.' (<span class="text-nowrap">'.$m->mem_date.'</span>)'; ?></td>
                                         <td style="display: none;"><?= $m->mem_app_date2; ?></td>
                                     </tr>
                                     <?php $i++; 

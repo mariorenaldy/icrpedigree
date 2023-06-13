@@ -62,7 +62,8 @@ class Stambums extends CI_Controller {
 
         $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-        $where['stb_stat'] = $this->config->item('accepted');
+        // $where['stb_stat'] = $this->config->item('accepted');
+        $where['stb_stat !='] = $this->config->item('processed');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
 
@@ -80,6 +81,7 @@ class Stambums extends CI_Controller {
     }
 
     public function search(){
+        $where = null;
         if ($this->input->post('keywords')){
             $this->session->set_userdata('keywords', $this->input->post('keywords'));
             $data['keywords'] = $this->input->post('keywords');
@@ -150,7 +152,8 @@ class Stambums extends CI_Controller {
         }
         else  
             $like = null;
-        $where['stb_stat'] = $this->config->item('accepted');
+        // $where['stb_stat'] = $this->config->item('accepted');
+        $where['stb_stat !='] = $this->config->item('processed');
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
 
@@ -1062,36 +1065,41 @@ class Stambums extends CI_Controller {
             if ($this->session->userdata('use_id')){
                 $whereStb['stb_id'] = $this->uri->segment(4);
                 $stb = $this->stambumModel->get_stambum($whereStb)->row();
-                
-                $piece = explode("-", $stb->stb_date_of_birth);
-                $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
 
                 $this->db->trans_strict(FALSE);
                 $this->db->trans_start();
                 $dataStb = array(
                     'stb_stat' => $this->config->item('rejected'),
                     'stb_user' => $this->session->userdata('use_id'),
+                    'stb_app_user' => $this->session->userdata('use_id'),
                     'stb_date' => date('Y-m-d H:i:s'),
+                    'stb_app_date' => date('Y-m-d H:i:s'),
                 );
                 if ($this->uri->segment(5)){
                     $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
                 }
                 $res = $this->stambumModel->update_stambum($dataStb, $whereStb);
                 if ($res){
+
                     $dataLogStb = array(
                         'log_stb_id' => $stb->stb_id,
                         'log_bir_id' => $stb->stb_bir_id,
                         'log_a_s' => $stb->stb_a_s,
                         'log_breed' => $stb->stb_breed,
                         'log_gender' => $stb->stb_gender,
-                        'log_date_of_birth' => $dob,
+                        'log_member_id' => $stb->stb_member_id,
+                        'log_kennel_id' => $stb->ken_id,
+                        'log_date_of_birth' => date('Y-m-d', strtotime($stb->stb_date_of_birth)),
                         'log_photo' => $stb->stb_photo,
                         'log_pay_photo' => $stb->stb_pay_photo,
                         'log_stat' => $this->config->item('rejected'),
                         'log_user' => $this->session->userdata('use_id'),
+                        'log_app_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),
-                        'log_can_id' => 0,
+                        'log_app_date' => date('Y-m-d H:i:s'),
+                        'log_can_id' => $stb->stb_can_id,
                     );
+
                     $log = $this->logstambumModel->add_log($dataLogStb);
                     if ($log){
                         $wheBirth['bir_id'] = $stb->stb_bir_id;
@@ -1137,31 +1145,63 @@ public function delete(){
             $dataStb = array(
                 'stb_stat' => $this->config->item('rejected'),
                 'stb_user' => $this->session->userdata('use_id'),
+                'stb_app_user' => $this->session->userdata('use_id'),
                 'stb_date' => date('Y-m-d H:i:s'),
+                'stb_app_date' => date('Y-m-d H:i:s'),
             );
             if ($this->uri->segment(5)){
                 $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
             }
 
             $data = array(
-                'log_stb_id' => $this->uri->segment(4),
+                'log_stb_id' => $stb->stb_id,
+                'log_bir_id' => $stb->stb_bir_id,
+                'log_a_s' => $stb->stb_a_s,
+                'log_breed' => $stb->stb_breed,
+                'log_gender' => $stb->stb_gender,
+                'log_member_id' => $stb->stb_member_id,
+                'log_kennel_id' => $stb->ken_id,
+                'log_date_of_birth' => date('Y-m-d', strtotime($stb->stb_date_of_birth)),
+                'log_photo' => $stb->stb_photo,
+                'log_pay_photo' => $stb->stb_pay_photo,
                 'log_stat' => $this->config->item('rejected'),
                 'log_user' => $this->session->userdata('use_id'),
+                'log_app_user' => $this->session->userdata('use_id'),
                 'log_date' => date('Y-m-d H:i:s'),
+                'log_app_date' => date('Y-m-d H:i:s'),
+                'log_can_id' => $stb->stb_can_id,
             );
 
             $whe['can_id'] = $stb->stb_can_id;
+            $oldCan = $this->caninesModel->get_canines($whe)->row();
             $dataCan = array(
                 'can_stat' => $this->config->item('rejected'),
                 'can_user' => $this->session->userdata('use_id'),
+                'can_app_user' => $this->session->userdata('use_id'),
                 'can_date' => date('Y-m-d H:i:s'),
+                'can_app_date' => date('Y-m-d H:i:s'),
             );
 
             $dataLog = array(
                 'log_canine_id' => $stb->stb_can_id,
+                'log_reg_number' => $oldCan->can_reg_number,
+                'log_a_s' => $oldCan->can_a_s,
+                'log_breed' => $oldCan->can_breed,
+                'log_gender' => $oldCan->can_gender,
+                'log_date_of_birth' => date('Y-m-d', strtotime($oldCan->can_date_of_birth)),
+                'log_color' => $oldCan->can_color,
+                'log_kennel_id' => $oldCan->can_kennel_id,
+                'log_photo' => $oldCan->can_photo,
+                'log_pay_photo' => $oldCan->can_pay_photo,
                 'log_stat' => $this->config->item('rejected'),
                 'log_user' => $this->session->userdata('use_id'),
+                'log_app_user' => $this->session->userdata('use_id'),
                 'log_date' => date('Y-m-d H:i:s'),
+                'log_app_date' => date('Y-m-d H:i:s'),
+                'log_chip_number' => $oldCan->can_chip_number,
+                'log_icr_number' => $oldCan->can_icr_number,
+                'log_member_id' => $oldCan->can_member_id,
+                'log_note' => $oldCan->can_note,
             );
 
             $this->db->trans_strict(FALSE);

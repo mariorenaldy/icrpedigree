@@ -80,7 +80,7 @@
                             <?php foreach ($stambum AS $r){ ?>
                                 <tr>
                                     <td>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $r->stb_stat != $this->config->item('rejected')){ ?>
                                         <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->stb_id ?>, '<?= $r->stb_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Puppy"><i class="fa fa-trash"></i></button>
                                         <?php } ?>
                                     </td>

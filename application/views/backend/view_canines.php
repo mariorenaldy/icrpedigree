@@ -90,7 +90,7 @@
                                     <td class="text-center">
                                         <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Canine"><i class="fa fa-edit"></i></button>
                                         <button type="button" class="btn btn-warning mb-1" onclick="pedigree(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Pedigree"><i class="fa fa-edit"></i></button>
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $c->can_stat != $this->config->item('rejected')){ ?>
                                         <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $c->can_id ?>, '<?= $c->can_a_s ?>')" data-toggle="tooltip" data-placement="top" title="Delete Canine"><i class="fa fa-trash"></i></button>
                                         <?php } ?>
                                     </td>

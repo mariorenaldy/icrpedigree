@@ -63,7 +63,7 @@
                                     <td>
                                         <?php if (!$stambum[$i]){ ?>
                                             <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Birth"><i class="fa fa-edit"></i></button>
-                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                            <?php if ($this->session->userdata('use_type_id') == $this->config->item('super') && $b->bir_stat != $this->config->item('rejected')){ ?>
                                             <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $b->bir_id ?>)" data-toggle="tooltip" data-placement="top" title="Delete Birth"><i class="fa fa-trash"></i></button>
                                             <?php } 
                                         } ?>

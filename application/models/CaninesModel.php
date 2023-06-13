@@ -16,7 +16,7 @@ class CaninesModel extends CI_Model {
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
-        $this->db->join('users', 'canines.can_app_user = users.use_id');
+        $this->db->join('users', 'canines.can_app_user = users.use_id', 'left');
         $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);

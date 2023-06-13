@@ -54,7 +54,8 @@ class Studs extends CI_Controller {
 
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-			$where['stu_stat'] = $this->config->item('accepted');
+			// $where['stu_stat'] = $this->config->item('accepted');
+			$where['stu_stat !='] = $this->config->item('processed');
             $data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
 
             $data['stat'] = array();
@@ -107,6 +108,7 @@ class Studs extends CI_Controller {
 		}
 
 		public function search(){
+			$where = null;
             if ($this->input->post('type')){
                 $this->session->set_userdata('type', $this->input->post('type'));
                 $data['type'] = $this->input->post('type');
@@ -182,7 +184,8 @@ class Studs extends CI_Controller {
 			if ($date){
 				$where['stu_stud_date'] = $date;
 			}
-			$where['stu_stat'] = $this->config->item('accepted');
+			// $where['stu_stat'] = $this->config->item('accepted');
+			$where['stu_stat !='] = $this->config->item('processed');
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $data['keywords'];
                 $like['can_dam.can_a_s'] = $data['keywords'];
@@ -1725,7 +1728,9 @@ class Studs extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$data['stu_user'] = $this->session->userdata('use_id');
+					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_date'] = date('Y-m-d H:i:s');
+					$data['stu_app_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('rejected');
 					if ($this->uri->segment(5)){
 						$data['stu_app_note'] = urldecode($this->uri->segment(5));
@@ -1786,7 +1791,9 @@ class Studs extends CI_Controller {
 				if ($this->session->userdata('use_username')) {
 					$where['stu_id'] = $this->uri->segment(4);
 					$data['stu_user'] = $this->session->userdata('use_id');
+					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_date'] = date('Y-m-d H:i:s');
+					$data['stu_app_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('rejected');
                     if ($this->uri->segment(5)){
                         $data['stu_app_note'] = urldecode($this->uri->segment(5));
@@ -1794,12 +1801,19 @@ class Studs extends CI_Controller {
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->studModel->update_studs($data, $where);
-					if ($res){
+					$oldStud = $this->studModel->get_studs($where)->row();
+					if ($res && $oldStud){
 						$err = 0;
 						$dataLog = array(
 							'log_stu_id' => $this->uri->segment(4),
+							'log_sire_id' => $oldStud->stu_sire_id,
+							'log_dam_id' => $oldStud->stu_dam_id,
 							'log_user' => $this->session->userdata('use_id'),
+							'log_photo' => $oldStud->stu_photo,
+							'log_sire_photo' => $oldStud->stu_sire_photo,
+							'log_dam_photo' => $oldStud->stu_dam_photo,
 							'log_date' => date('Y-m-d H:i:s'),
+							'log_stud_date' => date('Y-m-d', strtotime($oldStud->stu_stud_date)),
 							'log_stat' => $this->config->item('rejected'),
 						);
 						$log = $this->logstudModel->add_log($dataLog);
