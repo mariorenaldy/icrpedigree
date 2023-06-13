@@ -31,7 +31,6 @@
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Studs/') ?>">Manage</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Studs/all') ?>">Log</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
@@ -40,7 +39,6 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/view_approve') ?>">Approve</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Births/') ?>">Manage</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('backend/Requestupdatebirth') ?>">Approve Update Birth</a></li>
-                           <li><a class="dropdown-item" href="<?= base_url('backend/Births/all') ?>">Log</a></li>
                         </ul>
                      </div>
                      <div class="dropdown">
