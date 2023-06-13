@@ -5,6 +5,11 @@
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
+    <style>
+        .dataTables_filter {
+            text-align: left !important;
+        }
+    </style>
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -25,6 +30,9 @@
                         if ($this->session->flashdata('delete_success')){
                             echo 'Microchip request has been deleted<br/>';
                         }
+                        if ($this->session->flashdata('edit_success')){
+                            echo 'Microchip request has been edited<br/>';
+                        }
                         if ($this->session->flashdata('complete_success')){
                             echo 'Microchip request has been set to implanted<br/>';
                         }
@@ -36,18 +44,6 @@
                             echo $this->session->flashdata('delete_message').'<br/>';
                         }
                     ?>
-                </div>
-                <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Requestmicrochip/search_list'?>" method="post">
-                        <div class="input-group">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Invoice/Product's name" name="keywords" value="<?= set_value('keywords') ?>">
-                            </div>
-                            <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Request"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-12">
@@ -61,6 +57,7 @@
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
+                                <th class="no-sort"></th>
                                 <th>ID</th>
                                 <th>Member</th>
                                 <th>Dog's Name</th>
@@ -69,6 +66,8 @@
                                 <th>Payment Proof</th>
                                 <th>Status</th>
                                 <th>Reject Reason</th>
+                                <th>Complain Photo</th>
+                                <th>Complain Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,6 +85,9 @@
                                         <?php if ($r->req_stat_id == $this->config->item('accepted')){ ?>
                                             <button type="button" class="btn btn-primary mb-1" onclick='complete(<?= $r->req_id; ?>)' data-toggle="tooltip" data-placement="top" title="Complete Request"><i class="fa fa-check"></i></button>
                                         <?php } ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $r->req_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Request"><i class="fa fa-edit"></i></button>
                                     </td>
                                     <td class="text-center">
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
@@ -110,6 +112,12 @@
                                     </td>
                                     <td><?= $r->micro_stat_name; ?></td>
                                     <td><?= $r->req_reject_note; ?></td>
+                                    <td>
+                                        <?php if ($r->com_photo && $r->com_photo != '-') { ?>
+                                            <img src="<?= base_url('uploads/complain/' . $r->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $r->req_id ?>" onclick="display('myCom<?= $r->req_id ?>')" style="max-height:100px;">
+                                        <?php } ?>
+                                    </td>
+                                    <td><?= $r->com_desc; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -126,6 +134,9 @@
             if (proceed){             
                 window.location = "<?= base_url(); ?>backend/Requestmicrochip/approve/"+id;
             }
+        }
+        function edit(id){
+            window.location = "<?= base_url(); ?>backend/Requestmicrochip/edit/"+id;
         }
         function reject(id){
             window.location = "<?= base_url(); ?>backend/Requestmicrochip/reject/"+id;
@@ -150,8 +161,16 @@
             modal.style.display = "none";
         }
 
-        $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[5, 'desc']], dom: 'lpftrip',
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "lengthChange": false,
+                searching: true,
+                info: false,
+                "ordering": true,
+                order: [
+                    [4, 'desc']
+                ],
+                dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"

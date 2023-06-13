@@ -7,7 +7,7 @@ class Requestcertificate extends CI_Controller {
 	public function __construct(){
 		// Call the CI_Controller constructor
 		parent::__construct();
-		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel', 'notification_model'));
+		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel', 'notification_model', 'CertificateStatusModel'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('form', 'url'));
 		$this->load->database();
@@ -253,13 +253,6 @@ class Requestcertificate extends CI_Controller {
             redirect("backend/Requestcertificate");
         }
     }
-	// public function add()
-	// {
-	// 	$data['member'] = [];
-	// 	$data['product'] = [];
-	// 	$data['status'] = $this->OrderStatusModel->get_status()->result();
-	// 	$this->load->view("marketplace/add_req_certificate", $data);
-	// }
 	public function log(){
         if ($this->uri->segment(4)){
             $where['log_req_id'] = $this->uri->segment(4);
@@ -268,6 +261,91 @@ class Requestcertificate extends CI_Controller {
         }
         else{
             redirect('backend/Requestcertificate');
+        }
+    }
+	public function edit()
+	{
+		if ($this->uri->segment(4)){
+			$req_id = $this->uri->segment(4);
+			$whereReq['req_id'] = $req_id;
+			$data['request'] = $this->requestcertificateModel->get_requests($whereReq)->row();
+            $data['status'] = $this->CertificateStatusModel->get_status()->result();
+
+			$data['mode'] = 0;
+			if ($data['request']) {
+				$this->load->view("backend/edit_request_certificate", $data);
+			} else {
+				redirect('backend/Requestcertificate');
+			}
+		}
+		else{
+			redirect('backend/Requestcertificate');
+		}
+	}
+	public function validate_edit(){ 
+        if ($this->session->userdata('use_username')) {
+			$req_id = $this->input->post('req_id');
+			$whereReq['req_id'] = $req_id;
+			$data['request'] = $this->requestcertificateModel->get_requests($whereReq)->row();
+
+            $data['status'] = $this->CertificateStatusModel->get_status()->result();
+			$data['mode'] = 1;
+
+			$arrivedDate = null;
+			if($this->input->post('req_arrived_date') != null){
+				$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_arrived_date')));
+			}
+			
+			$requestReason = $this->input->post('req_desc');
+			$rejectNote = $this->input->post('req_reject_note');
+
+			$dataReq = array(
+				'req_stat_id' => $this->input->post('req_stat_id'),
+				'req_updated_at' => date('Y-m-d H:i:s'),
+				'req_updated_by' => $this->session->userdata('use_id'),
+				'req_arrived_date' => $arrivedDate,
+				'req_reject_note' => $rejectNote,
+				'req_desc' => $requestReason,
+			);
+
+			$dataLog = array(
+				'log_req_id' => $data['request']->req_id,
+				'log_mem_id' => $data['request']->req_mem_id,
+				'log_can_id' => $data['request']->req_can_id,
+				'log_stat_id' => $this->input->post('req_stat_id'),
+				'log_created_at' => $data['request']->req_created_at,
+				'log_updated_at' => date('Y-m-d H:i:s'),
+				'log_updated_by' => $this->session->userdata('use_id'),
+				'log_arrived_date' => $arrivedDate,
+				'log_reject_note' => $rejectNote,
+				'log_desc' => $requestReason,
+			);
+
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			$request = $this->requestcertificateModel->update_requests($dataReq, $whereReq);
+			if ($request) {
+				$log = $this->logrequestCertificateModel->add_log($dataLog);
+				if ($log){
+					$this->db->trans_complete();
+					$this->session->set_flashdata('edit_success', true);
+					redirect("backend/Requestcertificate");
+				}
+				else{
+					$err = 2;
+				}
+			} else {
+				$err = 3;
+			}
+
+			if ($err) {
+				$this->db->trans_rollback();
+				$this->session->set_flashdata('error_message', 'Failed to edit request with id = '.$this->input->post('req_id').'. Error code: '.$err);
+				$this->load->view('backend/edit_request_certificate', $data);
+			}
+        }
+        else{
+            redirect('backend/Users/login');
         }
     }
 }

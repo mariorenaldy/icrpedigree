@@ -50,7 +50,7 @@
                         </div>
                         <div class="mb-1">
                             <span class="d-inline-block" style="width: 150px;">Status</span>
-                            <span><?= $req->stat_name ?></span>
+                            <span><?= $req->micro_stat_name ?></span>
                         </div>
                         <hr/>
                         <label class="checkbox-inline"><input type="checkbox" name="dropdown_reason" value="1" <?php if (!$mode) echo 'checked'; else echo set_checkbox('dropdown_reason', '1'); ?> /> Use reason from dropdown</label>

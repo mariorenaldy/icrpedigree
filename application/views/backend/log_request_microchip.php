@@ -46,7 +46,7 @@
                                                 }
                                             ?>
                                         </td>
-                                        <td><?= $r->stat_name; ?></td>
+                                        <td><?= $r->micro_stat_name; ?></td>
                                         <td><?= $r->log_reject_note; ?></td>
                                     </tr>
                                 <?php } ?>

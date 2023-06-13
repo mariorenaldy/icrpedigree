@@ -5,6 +5,11 @@
     <?php $this->load->view('templates/head'); ?>
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/datatables.min.css" />
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/backend-modal.css" />
+    <style>
+        .dataTables_filter {
+            text-align: left !important;
+        }
+    </style>
 </head>
 <body>
     <div id="myModal" class="modal">
@@ -42,18 +47,6 @@
                             echo $this->session->flashdata('delete_message').'<br/>';
                         }
                     ?>
-                </div>
-                <div class="search-container my-3">
-                    <form action="<?= base_url().'backend/Requestcertificate/search_list'?>" method="post">
-                        <div class="input-group">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Invoice/Product's name" name="keywords" value="<?= set_value('keywords') ?>">
-                            </div>
-                            <div class="col-md-1 ms-1">
-                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Search Request"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-12">
@@ -174,8 +167,16 @@
             modal.style.display = "none";
         }
 
-        $(document).ready(function () {
-            $('#datatable').DataTable({searching: false, info: false, "ordering": true, order: [[5, 'desc']], dom: 'lpftrip',
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "lengthChange": false,
+                searching: true,
+                info: false,
+                "ordering": true,
+                order: [
+                    [4, 'desc']
+                ],
+                dom: 'lpftrip',
                 columnDefs: [{
                     orderable: false,
                     targets: "no-sort"
