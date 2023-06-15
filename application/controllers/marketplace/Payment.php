@@ -38,7 +38,7 @@ class Payment extends CI_Controller {
 		$order = array(
 			"amount" => $amount,
 			"invoice_number" => $inv,
-			"callback_url" => "http://localhost/icrpedigree/marketplace/Orders/cek_status/".$requestId
+			"callback_url" => base_url()."marketplace/Orders/cek_status/".$requestId
 		);
 		$payment = array(
 			"payment_due_date" => 60
