@@ -328,9 +328,7 @@ class Requestownershipcanine extends CI_Controller {
 							}
 
 							if (!$err){
-								$mem_id = $this->memberModel->record_count() + 1;
 								$member_data = array(
-									'mem_id' => $mem_id,
 									'mem_name' => strtoupper($this->input->post('name')),
 									'mem_hp' => $this->input->post('hp'),
 									'mem_email' => $this->input->post('email'),
@@ -342,20 +340,16 @@ class Requestownershipcanine extends CI_Controller {
 									'mem_date' => date('Y-m-d H:i:s'),
 								);
 				
-								$ken_id = $this->kennelModel->record_count() + 1;
 								$kennel_data = array(
-									'ken_id' => $ken_id,
 									'ken_name' => '',
 									'ken_type_id' => 0,
 									'ken_photo' => '-',
-									'ken_member_id' => $mem_id,
 									'ken_stat' => $this->config->item('accepted'),
 									'ken_user' => $this->config->item('system'),
 									'ken_date' => date('Y-m-d H:i:s'),
 								);
 
 								$dataLog = array(
-									'log_member_id' => $mem_id,
 									'log_name' => strtoupper($this->input->post('name')),
 									'log_hp' => $this->input->post('hp'),
 									'log_email' => $this->input->post('email'),
@@ -366,7 +360,6 @@ class Requestownershipcanine extends CI_Controller {
 								);
 	
 								$dataKennelLog = array(
-									'log_kennel_id' => $ken_id,
 									'log_kennel_name' => '',
 									'log_kennel_type_id' => 0,
 									'log_kennel_photo' => '-',
@@ -377,10 +370,15 @@ class Requestownershipcanine extends CI_Controller {
 								
 								$id = $this->memberModel->add_members($member_data);
 								if ($id){
+									$mem_id = $this->db->insert_id();
+									$kennel_data['ken_member_id'] = $mem_id;
 									$res = $this->kennelModel->add_kennels($kennel_data);
 									if ($res){
+										$ken_id = $this->db->insert_id();
+										$dataKennelLog['log_kennel_id'] = $ken_id;
 										$result = $this->notification_model->add(17, $mem_id, $mem_id);
 										if ($result){
+											$kennel_data['log_member_id'] = $mem_id;
 											$log = $this->LogmemberModel->add_log($dataLog);
 											if ($log){
 												$logKenRes = $this->LogkennelModel->add_log($dataKennelLog);

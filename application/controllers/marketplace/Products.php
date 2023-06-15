@@ -177,9 +177,7 @@ class Products extends CI_Controller
 					file_put_contents($img_name, $uploadedImg);
 					$photo = str_replace($this->config->item('path_product'), '', $img_name);
 
-					$id = $this->productModel->record_count() + 1;
 					$dataPro = array(
-						'pro_id' => $id,
 						'pro_type_id' => $this->input->post('pro_type_id'),
 						'pro_name' => $this->input->post('pro_name'),
 						'pro_price' => $this->input->post('pro_price'),
@@ -194,7 +192,6 @@ class Products extends CI_Controller
 					);
 
 					$dataLog = array(
-						'log_product_id' => $id,
 						'log_product_type_id' => $this->input->post('pro_type_id'),
 						'log_product_name' => $this->input->post('pro_name'),
 						'log_product_price' => $this->input->post('pro_price'),
@@ -213,6 +210,8 @@ class Products extends CI_Controller
 						$this->db->trans_start();
 						$products = $this->productModel->add_products($dataPro);
 						if ($products) {
+							$id = $this->db->insert_id();
+							$dataLog['log_product_id'] = $id;
 							$log = $this->logproductModel->add_log($dataLog);
 							if ($log) {
 								$this->db->trans_complete();

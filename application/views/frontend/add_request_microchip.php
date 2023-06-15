@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="input-group my-3 gap-3 mt-5 mb-5">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?><br>Rp. 150.000</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>

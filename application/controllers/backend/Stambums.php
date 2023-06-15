@@ -518,9 +518,7 @@ class Stambums extends CI_Controller {
                         }
 
                         if (!$err){
-                            $mem_id = $this->memberModel->record_count() + 1;
                             $member_data = array(
-                                'mem_id' => $mem_id,
                                 'mem_name' => strtoupper($this->input->post('name')),
                                 'mem_hp' => $this->input->post('hp'),
                                 'mem_email' => $this->input->post('email'),
@@ -532,13 +530,10 @@ class Stambums extends CI_Controller {
                                 'mem_date' => date('Y-m-d H:i:s'),
                             );
             
-                            $ken_id = $this->kennelModel->record_count() + 1;
                             $kennel_data = array(
-                                'ken_id' => $ken_id,
                                 'ken_name' => '',
                                 'ken_type_id' => 0,
                                 'ken_photo' => '-',
-                                'ken_member_id' => $mem_id,
                                 'ken_stat' => $this->config->item('accepted'),
                                 'ken_user' => $this->session->userdata('use_id'),
                                 'ken_date' => date('Y-m-d H:i:s'),
@@ -546,6 +541,8 @@ class Stambums extends CI_Controller {
                                 
                             $id = $this->memberModel->add_members($member_data);
                             if ($id){
+                                $mem_id = $this->db->insert_id();
+                                $kennel_data['ken_member_id'] = $mem_id;
                                 $res = $this->kennelModel->add_kennels($kennel_data);
                                 if ($res){
                                     $result = $this->notification_model->add(17, $mem_id, $mem_id);

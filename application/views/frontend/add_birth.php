@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label for="bir_female" class="control-label col-sm-2"><?= lang('birth_living_females'); ?></label>
+                            <label for="bir_female" class="control-label col-sm-2 pe-1"><?= lang('birth_living_females'); ?></label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" placeholder="<?= lang('birth_living_females'); ?>" name="bir_female" value="<?= set_value('bir_female'); ?>">
                             </div>

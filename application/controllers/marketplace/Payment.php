@@ -136,9 +136,7 @@ class Payment extends CI_Controller {
 		$inv = $this->generateInvoice();
 		$amount = $this->input->post('amount');
 
-		$ord_id = $this->OrderModel->record_count() + 1;
 		$data = array(
-			'ord_id' => $ord_id,
 			'ord_mem_id' => $this->session->userdata('mem_id'),
 			'ord_pro_id' => $pro_id,
 			'ord_invoice' => $inv,

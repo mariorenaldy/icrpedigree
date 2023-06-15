@@ -475,7 +475,6 @@ class Members extends CI_Controller {
 				}
 				
 				if (!$err){
-					$mem_id = $this->MemberModel->record_count() + 1;
 					if ($this->input->post('mem_type')){
 						if (isset($uploadedPP)){
 							file_put_contents($pp_name, $uploadedPP);
@@ -489,7 +488,6 @@ class Members extends CI_Controller {
 						$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
 						
 						$dataMember = array(
-							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('mem_name')),
 							'mem_mail_address' => $this->input->post('mem_mail_address'),
 							'mem_hp' => $this->input->post('mem_hp'),
@@ -512,13 +510,10 @@ class Members extends CI_Controller {
 						else
 							$dataMember['mem_address'] = $this->input->post('mem_address');
 						
-						$ken_id = $this->KennelModel->record_count() + 1;
 						$kennel_data = array(
-							'ken_id' => $ken_id,
 							'ken_name' => strtoupper($this->input->post('ken_name')),
 							'ken_type_id' => $this->input->post('ken_type_id'),
 							'ken_photo' => $logo,
-							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('saved'),
 							'ken_user' => $this->config->item('system'),
 							'ken_date' => date('Y-m-d H:i:s'),
@@ -526,7 +521,6 @@ class Members extends CI_Controller {
 					}
 					else{
 						$dataMember = array(
-							'mem_id' => $mem_id,
 							'mem_name' => strtoupper($this->input->post('name')),
 							'mem_hp' => $this->input->post('hp'),
 							'mem_email' => $this->input->post('email'),
@@ -538,13 +532,11 @@ class Members extends CI_Controller {
 							'mem_date' => date('Y-m-d H:i:s'),
 						);
 
-						$ken_id = $this->KennelModel->record_count() + 1;
 						$kennel_data = array(
 							'ken_id' => $ken_id,
 							'ken_name' => '',
 							'ken_type_id' => 0,
 							'ken_photo' => '-',
-							'ken_member_id' => $mem_id,
 							'ken_stat' => $this->config->item('accepted'),
 							'ken_user' => $this->config->item('system'),
 							'ken_date' => date('Y-m-d H:i:s'),
@@ -555,6 +547,8 @@ class Members extends CI_Controller {
 					$this->db->trans_start();
 					$id = $this->MemberModel->add_members($dataMember);
 					if ($id){
+						$mem_id = $this->db->insert_id();
+						$kennel_data['ken_member_id'] = $mem_id;
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
 							$this->db->trans_complete();

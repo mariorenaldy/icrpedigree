@@ -385,10 +385,8 @@ class Members extends CI_Controller {
 						file_put_contents($logo_name, $uploadedLogo);
 						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
 
-						$mem_id = $this->MemberModel->record_count() + 1;
 						if ($this->input->post('mem_type')){
 							$data = array(
-								'mem_id' => $mem_id,
 								'mem_name' => strtoupper($this->input->post('mem_name')),
 								'mem_mail_address' => $this->input->post('mem_mail_address'),
 								'mem_hp' => $this->input->post('mem_hp'),
@@ -408,13 +406,10 @@ class Members extends CI_Controller {
 								'mem_date' => date('Y-m-d H:i:s'),
 							);
 			
-							$ken_id = $this->KennelModel->record_count() + 1;
 							$kennel_data = array(
-								'ken_id' => $ken_id,
 								'ken_name' => strtoupper($this->input->post('ken_name')),
 								'ken_type_id' => $this->input->post('ken_type_id'),
 								'ken_photo' => $logo,
-								'ken_member_id' => $mem_id,
 								'ken_stat' => $this->config->item('accepted'),
 								'ken_app_user' => $this->session->userdata('use_id'),
 								'ken_app_date' => date('Y-m-d H:i:s'),
@@ -423,7 +418,6 @@ class Members extends CI_Controller {
 							);
 
 							$dataLog = array(
-								'log_member_id' => $mem_id,
 								'log_name' => strtoupper($this->input->post('mem_name')),
 								'log_mail_address' => $this->input->post('mem_mail_address'),
 								'log_hp' => $this->input->post('mem_hp'),
@@ -441,7 +435,6 @@ class Members extends CI_Controller {
 							);
 
 							$dataKennelLog = array(
-								'log_kennel_id' => $ken_id,
 								'log_kennel_name' => strtoupper($this->input->post('ken_name')),
 								'log_kennel_type_id' => $this->input->post('ken_type_id'),
 								'log_kennel_photo' => $logo,
@@ -463,7 +456,6 @@ class Members extends CI_Controller {
 						}
 						else{
 							$data = array(
-								'mem_id' => $mem_id,
 								'mem_name' => strtoupper($this->input->post('name')),
 								'mem_hp' => $this->input->post('hp'),
 								'mem_email' => $this->input->post('email'),
@@ -475,13 +467,10 @@ class Members extends CI_Controller {
 								'mem_date' => date('Y-m-d H:i:s'),
 							);
 	
-							$ken_id = $this->KennelModel->record_count() + 1;
 							$kennel_data = array(
-								'ken_id' => $ken_id,
 								'ken_name' => '',
 								'ken_type_id' => 0,
 								'ken_photo' => '-',
-								'ken_member_id' => $mem_id,
 								'ken_stat' => $this->config->item('accepted'),
 								'ken_user' => $this->session->userdata('use_id'),
 								'ken_date' => date('Y-m-d H:i:s'),
@@ -492,13 +481,18 @@ class Members extends CI_Controller {
 						$this->db->trans_start();
 						$id = $this->MemberModel->add_members($data);
 						if ($id){
+							$mem_id = $this->db->insert_id();
+							$kennel_data['ken_member_id'] = $mem_id;
 							$res = $this->KennelModel->add_kennels($kennel_data);
 							if ($res){
+								$ken_id = $this->db->insert_id();
 								$result = $this->notification_model->add(17, $mem_id, $mem_id);
 								if ($result){
 									if ($this->input->post('mem_type')){
+										$dataLog['log_member_id'] = $mem_id;
 										$log = $this->LogmemberModel->add_log($dataLog);
 										if ($log){
+											$dataKennelLog['log_kennel_id'] = $ken_id;
 											$res = $this->LogkennelModel->add_log($dataKennelLog);
 											if (!$res){
 												$err = 1;
