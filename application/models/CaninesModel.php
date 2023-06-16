@@ -34,7 +34,7 @@ class CaninesModel extends CI_Model {
             $this->db->group_end();
         }
         $this->db->join('members','members.mem_id = canines.can_member_id');
-        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by($sort);
@@ -76,7 +76,7 @@ class CaninesModel extends CI_Model {
         $this->db->from('canines');
         $this->db->join('pedigrees','pedigrees.ped_canine_id = canines.can_id');
         $this->db->join('members','members.mem_id = canines.can_member_id');
-        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
         $this->db->order_by('can_id', 'desc');
         return $this->db->get();
     }
