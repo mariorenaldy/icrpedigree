@@ -21,7 +21,7 @@
                     <div class="input-group mb-3">
                         <label for="password" class="control-label col-md-2">Password: </label>
                         <div class="col-md-6">
-                            <input class="form-control" type="password" id="password" name="password" placeholder="Kata Sandi">
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Password">
                         </div>
                     </div>
                     <div class="input-group mb-3">

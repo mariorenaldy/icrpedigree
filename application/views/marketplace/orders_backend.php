@@ -41,6 +41,9 @@
                     if ($this->session->flashdata('arrive_success')) {
                         echo 'Order has set to arrived<br/>';
                     }
+                    if ($this->session->flashdata('reject_success')) {
+                        echo 'Order has been rejected<br/>';
+                    }
                     ?>
                 </div>
                 <div class="text-danger">

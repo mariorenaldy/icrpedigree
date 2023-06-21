@@ -11,7 +11,7 @@ class LogcanineModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->join('members','members.mem_id = logs_canine.log_member_id');
-        $this->db->join('kennels','kennels.ken_id = logs_canine.log_kennel_id');
+        $this->db->join('kennels','kennels.ken_id = logs_canine.log_kennel_id', 'left');
         $this->db->join('users u1','u1.use_id = logs_canine.log_user');
         $this->db->join('users u2','u2.use_id = logs_canine.log_app_user');
         $this->db->join('approval_status','approval_status.stat_id = logs_canine.log_stat');

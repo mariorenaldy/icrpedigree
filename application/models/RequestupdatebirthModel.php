@@ -13,7 +13,7 @@ class RequestupdatebirthModel extends CI_Model {
         $this->db->join('births','births.bir_id = requests_update_birth.req_bir_id');
         $this->db->join('studs','studs.stu_id = births.bir_stu_id');
         $this->db->join('members','members.mem_id = requests_update_birth.req_member_id AND members.mem_id = studs.stu_partner_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('canines can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines can_dam','can_dam.can_id = studs.stu_dam_id');
         $this->db->join('users','users.use_id = requests_update_birth.req_app_user');
@@ -37,7 +37,7 @@ class RequestupdatebirthModel extends CI_Model {
         $this->db->join('births','births.bir_id = requests_update_birth.req_bir_id');
         $this->db->join('studs','studs.stu_id = births.bir_stu_id');
         $this->db->join('members','members.mem_id = requests_update_birth.req_member_id AND members.mem_id = studs.stu_partner_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('canines can_sire','can_sire.can_id = studs.stu_sire_id');
         $this->db->join('canines can_dam','can_dam.can_id = studs.stu_dam_id');
         $this->db->join('users','users.use_id = requests_update_birth.req_app_user');

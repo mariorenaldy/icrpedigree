@@ -28,7 +28,7 @@ $lang["can_can_photo"] = "Dog Photo";
 $lang["can_puppy_list"] = "Puppy List";
 $lang["can_search_puppy"] = "Search Puppy";
 $lang["can_report_puppy"] = "Report Puppy";
-$lang["can_add_puppy_success"] = "Puppy has been saved";
+$lang["can_add_puppy_success"] = "Puppy has been saved. Report the next puppy or press the Back button to finish";
 $lang["can_report_puppy_success"] = "Report puppy has been saved. Contact admin or wait for approval";
 
 $lang["can_report_change_photo_rip"] = "Report Change Photo & RIP";

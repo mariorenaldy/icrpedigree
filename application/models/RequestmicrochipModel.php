@@ -33,9 +33,9 @@ class RequestmicrochipModel extends CI_Model {
         }
         $this->db->join('canines','canines.can_id = requests_microchip.req_can_id');
         $this->db->join('members AS m1','m1.mem_id = requests_microchip.req_member_id');
-        $this->db->join('kennels AS k1','k1.ken_id = requests_microchip.req_kennel_id AND k1.ken_member_id = m1.mem_id');
+        $this->db->join('kennels AS k1','k1.ken_id = requests_microchip.req_kennel_id AND k1.ken_member_id = m1.mem_id', 'left');
         $this->db->join('members AS m2','m2.mem_id = requests_microchip.req_old_member_id');
-        $this->db->join('kennels AS k2','k2.ken_id = requests_microchip.req_old_kennel_id AND k2.ken_member_id = m2.mem_id');
+        $this->db->join('kennels AS k2','k2.ken_id = requests_microchip.req_old_kennel_id AND k2.ken_member_id = m2.mem_id', 'left');
         $this->db->join('users','users.use_id = requests_microchip.req_app_user');
         $this->db->join('microchip_status','microchip_status.micro_stat_id = requests_microchip.req_stat_id');
         $this->db->order_by('requests_microchip.req_id DESC');

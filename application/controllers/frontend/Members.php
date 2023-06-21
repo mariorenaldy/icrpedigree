@@ -116,7 +116,7 @@ class Members extends CI_Controller {
 				if (!$err && sha1($this->input->post('password')) != $member->mem_password){
 					$err++;
                     if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('login_error', 'Kata sandi salah');
+						$this->session->set_flashdata('login_error', 'Password salah');
 					}
 					else{
 						$this->session->set_flashdata('login_error', 'Invalid password');
@@ -468,7 +468,7 @@ class Members extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
 					}
 
-					if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
+					if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
 						$err++;
 						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
 					}

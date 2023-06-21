@@ -29,7 +29,7 @@ class Studs extends CI_Controller {
             $config['first_tag_open'] = '<li>';
             $config['first_tag_close'] = '</li>';
 
-            //Customizing the “Digit” Link
+            //Customizing the Digit Link
             $config['num_tag_open'] = '<li>';
             $config['num_tag_close'] = '</li>';
 
@@ -151,7 +151,7 @@ class Studs extends CI_Controller {
             $config['first_tag_open'] = '<li>';
             $config['first_tag_close'] = '</li>';
 
-            //Customizing the “Digit” Link
+            //Customizing the Digit Link
             $config['num_tag_open'] = '<li>';
             $config['num_tag_close'] = '</li>';
 

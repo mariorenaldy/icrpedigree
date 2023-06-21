@@ -12,7 +12,7 @@ class RequestupdatecanineModel extends CI_Model {
         }
         $this->db->join('canines','canines.can_id = requests_update_canine.req_can_id');
         $this->db->join('members','members.mem_id = requests_update_canine.req_member_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('users','users.use_id = requests_update_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_update_canine.req_stat');
         $this->db->order_by('requests_update_canine.req_id desc');
@@ -33,7 +33,7 @@ class RequestupdatecanineModel extends CI_Model {
         }
         $this->db->join('canines','canines.can_id = requests_update_canine.req_can_id');
         $this->db->join('members','members.mem_id = requests_update_canine.req_member_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('users','users.use_id = requests_update_canine.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_update_canine.req_stat');
         $this->db->order_by('requests_update_canine.req_id desc');

@@ -39,7 +39,7 @@ class Stambums extends CI_Controller {
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
-			//Customizing the “Digit” Link
+			//Customizing the Digit Link
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 
@@ -109,7 +109,7 @@ class Stambums extends CI_Controller {
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
-			//Customizing the “Digit” Link
+			//Customizing the Digit Link
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 
@@ -411,10 +411,10 @@ class Stambums extends CI_Controller {
 					if ($male >= $data['birth']->bir_male){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Anak jantan sudah semua');
+							$this->session->set_flashdata('error_message', 'Jumlah anak jantan sudah mencapai batas');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Male puppies is full');
+							$this->session->set_flashdata('error_message', 'The number of male puppies has reached the limit');
 						}
 					}
 					if ($male+1 == $data['birth']->bir_male){
@@ -428,10 +428,10 @@ class Stambums extends CI_Controller {
 					if ($female >= $data['birth']->bir_female){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Anak betina sudah semua');
+							$this->session->set_flashdata('error_message', 'Jumlah anak betina sudah mencapai batas');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Female puppies is full');
+							$this->session->set_flashdata('error_message', 'The number of female puppies has reached the limit');
 						}
 					}
 					if ($male == $data['birth']->bir_male){

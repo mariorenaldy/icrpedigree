@@ -39,6 +39,9 @@
                         if ($this->session->flashdata('arrive_success')){
                             echo 'Certificate request has been set to arrived<br/>';
                         }
+                        if ($this->session->flashdata('reject_success')){
+                            echo 'Certificate request has been rejected<br/>';
+                        }
                     ?>
                 </div>
                 <div class="text-danger">

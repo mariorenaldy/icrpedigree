@@ -11,7 +11,7 @@ class RequestproModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->join('members','members.mem_id = requests_pro.req_member_id');
-        $this->db->join('kennels','kennels.ken_id = requests_pro.req_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_id = requests_pro.req_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('users','users.use_id = requests_pro.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_pro.req_stat');
         $this->db->join('kennels_type','kennels.ken_type_id = kennels_type.ken_type_id');
@@ -31,7 +31,7 @@ class RequestproModel extends CI_Model {
         }
         $this->db->group_end();
         $this->db->join('members','members.mem_id = requests_pro.req_member_id');
-        $this->db->join('kennels','kennels.ken_id = requests_pro.req_kennel_id AND kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_id = requests_pro.req_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('users','users.use_id = requests_pro.req_app_user');
         $this->db->join('approval_status','approval_status.stat_id = requests_pro.req_stat');
         $this->db->join('kennels_type','kennels.ken_type_id = kennels_type.ken_type_id');

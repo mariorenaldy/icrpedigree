@@ -28,7 +28,7 @@ $lang["can_can_photo"] = "Foto Anjing";
 $lang["can_puppy_list"] = "List Anak";
 $lang["can_search_puppy"] = "Cari Anak";
 $lang["can_report_puppy"] = "Lapor Anak";
-$lang["can_add_puppy_success"] = "Anak berhasil disimpan";
+$lang["can_add_puppy_success"] = "Anak berhasil disimpan. Laporkan anak berikutnya atau tekan tombol Kembali untuk menyelesaikan laporan";
 $lang["can_report_puppy_success"] = "Lapor anak berhasil disimpan. Hubungi admin atau tunggu persetujuan";
 
 $lang["can_report_change_photo_rip"] = "Lapor Ubah Foto & RIP";

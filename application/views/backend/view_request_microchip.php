@@ -39,6 +39,9 @@
                         if ($this->session->flashdata('complete_success')){
                             echo 'Microchip request has been set to implanted<br/>';
                         }
+                        if ($this->session->flashdata('reject_success')){
+                            echo 'Microchip request has been rejected<br/>';
+                        }
                     ?>
                 </div>
                 <div class="text-danger">

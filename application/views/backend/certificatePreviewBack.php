@@ -386,7 +386,6 @@
       <div>
         <p class="text-center position-absolute president">CEO of Indonesian Canine Registry</p>
         <p class="text-center position-absolute president-name">KRIS JOHAN</p>
-        <p class="text-end position-absolute print-date"><?= date('d-m-Y'); ?></p>
       </div>
     </div>
     <div class="row bottom-0 start-50">

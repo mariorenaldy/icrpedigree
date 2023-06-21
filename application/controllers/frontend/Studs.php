@@ -38,7 +38,7 @@ class Studs extends CI_Controller {
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
-			//Customizing the “Digit” Link
+			//Customizing the Digit Link
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 
@@ -130,7 +130,7 @@ class Studs extends CI_Controller {
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
-			//Customizing the “Digit” Link
+			//Customizing the Digit Link
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 
@@ -684,7 +684,12 @@ class Studs extends CI_Controller {
 										$ts_stud = new DateTime($date);
 										if ($ts_stud > $ts){
 											$err++;
-											$this->session->set_flashdata('error_message', "The Stud Date must be before today's date");
+											if ($site_lang == 'indonesia') {
+												$this->session->set_flashdata('error_message', 'Tanggal Pacak harus sebelum tanggal hari ini');
+											}
+											else{
+												$this->session->set_flashdata('error_message', "The Stud Date must be before today's date");
+											}
 										}
 									}
 	

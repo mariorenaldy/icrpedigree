@@ -12,7 +12,7 @@ class LogbirthModel extends CI_Model {
         }
         $this->db->join('studs','studs.stu_id = logs_birth.log_stu_id');
         $this->db->join('members','members.mem_id = studs.stu_partner_id AND members.mem_id = logs_birth.log_member_id');
-        $this->db->join('kennels','kennels.ken_member_id = members.mem_id');
+        $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
         $this->db->join('canines','canines.can_id = studs.stu_dam_id');
         $this->db->join('users u1','u1.use_id = logs_birth.log_user');
         $this->db->join('users u2','u2.use_id = logs_birth.log_app_user');
