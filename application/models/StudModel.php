@@ -106,4 +106,23 @@ class StudModel extends CI_Model {
         $this->db->order_by('can_id');
         return $this->db->get();
     }
+
+    public function getMonthlyData($year = null){
+        $this->db->select("DATE_FORMAT(stu_app_date, '%b %Y') as month, COUNT(stu_id) as total_stud");
+        $this->db->from('studs');
+        if($year == null){
+            $this->db->where('YEAR(stu_app_date) = YEAR(CURDATE())');
+        }
+        else{
+            $this->db->where('YEAR(stu_app_date) = '.$year);
+        }
+        $this->db->group_by("DATE_FORMAT(stu_app_date, '%b %Y')");
+        $this->db->order_by("stu_app_date", 'ASC');
+        $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('stu_stat', $ignore);
+
+        $query = $this->db->get();
+        
+        return $query->result();
+    }
 }

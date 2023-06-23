@@ -28,12 +28,31 @@ class Dashboard extends CI_Controller
 			$data['orderCount'] = $this->orderModel->record_count();
 			$data['income'] = $this->orderModel->get_income()->income;
 
-			$data['daily_income'] = $this->orderModel->getDailyIncome();
 			$data['monthly_income'] = $this->orderModel->getMonthlyIncome();
+			$data['memberData'] = $this->memberModel->getMonthlyData();
+			$data['canineData'] = $this->caninesModel->getMonthlyData();
+			$data['studData'] = $this->studModel->getMonthlyData();
+			$data['birthData'] = $this->birthModel->getMonthlyData();
+			$data['year'] = date("Y");
 
 			$this->load->view('backend/dashboard', $data);
 		} else {
 			redirect('backend/Users/login');
 		}
 	}
+	public function getIncomeData(){
+		$year = $this->input->post('yearValue');
+		$income = $this->orderModel->getMonthlyIncome($year);
+		$jsonIncome = json_encode($income);
+		echo $jsonIncome;
+    }
+	public function getReportData(){
+		$year = $this->input->post('yearValue');
+		$data['member'] = $this->memberModel->getMonthlyData($year);
+		$data['canine'] = $this->caninesModel->getMonthlyData($year);
+		$data['stud'] = $this->studModel->getMonthlyData($year);
+		$data['birth'] = $this->birthModel->getMonthlyData($year);
+		$jsonIncome = json_encode($data);
+		echo $jsonIncome;
+    }
 }

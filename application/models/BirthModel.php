@@ -66,4 +66,23 @@ class BirthModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();
     }
+
+    public function getMonthlyData($year = null){
+        $this->db->select("DATE_FORMAT(bir_app_date, '%b %Y') as month, COUNT(bir_id) as total_birth");
+        $this->db->from('births');
+        if($year == null){
+            $this->db->where('YEAR(bir_app_date) = YEAR(CURDATE())');
+        }
+        else{
+            $this->db->where('YEAR(bir_app_date) = '.$year);
+        }
+        $this->db->group_by("DATE_FORMAT(bir_app_date, '%b %Y')");
+        $this->db->order_by("bir_app_date", 'ASC');
+        $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('bir_stat', $ignore);
+
+        $query = $this->db->get();
+        
+        return $query->result();
+    }
 }

@@ -97,23 +97,16 @@ class OrderModel extends CI_Model {
         return $this->db->get('orders')->row();
     }
 
-    public function getDailyIncome(){
-        $this->db->select("DATE(ord_pay_date) as date, SUM(ord_total_price) as total_income");
+    public function getMonthlyIncome($year = null){
+        $this->db->select("DATE_FORMAT(ord_pay_date, '%b %Y') as month, SUM(ord_total_price) as total_income");
         $this->db->from('orders');
-        $this->db->group_by("DATE(ord_pay_date)");
-        $this->db->order_by("DATE(ord_pay_date)", 'ASC');
-        $ignore = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_rejected'), $this->config->item('order_failed'));
-        $this->db->where_not_in('ord_stat_id', $ignore);
-        
-        $query = $this->db->get();
-        
-        return $query->result();
-    }
-
-    public function getMonthlyIncome(){
-        $this->db->select("DATE_FORMAT(ord_pay_date, '%Y-%m') as month, SUM(ord_total_price) as total_income");
-        $this->db->from('orders');
-        $this->db->group_by("DATE_FORMAT(ord_pay_date, '%Y-%m')");
+        if($year == null){
+            $this->db->where('YEAR(ord_pay_date) = YEAR(CURDATE())');
+        }
+        else{
+            $this->db->where('YEAR(ord_pay_date) = '.$year);
+        }
+        $this->db->group_by("DATE_FORMAT(ord_pay_date, '%b %Y')");
         $this->db->order_by("ord_pay_date", 'ASC');
         $ignore = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_rejected'), $this->config->item('order_failed'));
         $this->db->where_not_in('ord_stat_id', $ignore);

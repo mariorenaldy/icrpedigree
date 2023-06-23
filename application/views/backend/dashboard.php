@@ -4,6 +4,7 @@
 <head>
     <title>Dashboard</title>
     <?php $this->load->view('templates/head'); ?>
+    <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -76,7 +77,10 @@
                 </div>
             </div>
         </div>
+        <label for="yearpicker">Year: </label>
+        <select class="mb-3" name="yearpicker" id="yearpicker"></select>
         <div id="incomeChart" style="width: 800px; height: 400px;"></div>
+        <div id="memberChart" style="width: 800px; height: 400px;"></div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -103,28 +107,74 @@
             </div>
         </div>
     </div>
+    <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-danger">
+                    <div class="row">
+                        <div class="col-12">Data not found</div>
+                    </div>
+                    <div id="error-row" class="row" style="display: none;">
+                        <div id="error-col" class="col-12"></div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $this->load->view('templates/footer'); ?>
     </div>
     <?php $this->load->view('templates/script'); ?>
+    <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
     <script>
-        var dailyIncomeData = <?php echo json_encode($daily_income); ?>;
-        var monthlyIncomeData = <?php echo json_encode($monthly_income); ?>;
+        var startYear = 2009;
+        for (i = new Date().getFullYear(); i > startYear; i--) {
+            $('#yearpicker').append($('<option />').val(i).html(i));
+        }
 
-        var dailyDates = dailyIncomeData.map(function(item) {
-            return item.date;
-        });
-
-        var monthlyDates = monthlyIncomeData.map(function(item) {
-            return item.month;
-        });
-
-        var dailyIncome = dailyIncomeData.map(function(item) {
-            return item.total_income;
-        });
-
-        var monthlyIncome = monthlyIncomeData.map(function(item) {
-            return item.total_income;
+        $('#yearpicker').on("change", function(e) {
+            e.preventDefault();
+            let yearValue = $('#yearpicker').find(":selected").val();
+            $.ajax({
+                url: "<?= base_url() ?>backend/Dashboard/getIncomeData",
+                method: 'post',
+                data: {
+                    yearValue: yearValue
+                },
+                success: function(response) {
+                    if (response) {
+                        updateChart(yearValue, JSON.parse(response));
+                    } else {
+                        $('#error-modal').modal('show');
+                    }
+                }
+            });
+            $.ajax({
+                url: "<?= base_url() ?>backend/Dashboard/getReportData",
+                method: 'post',
+                data: {
+                    yearValue: yearValue
+                },
+                success: function(response) {
+                    if (response) {
+                        let result = JSON.parse(response);
+                        console.log(result.member);
+                        console.log(result.canine);
+                        console.log(result.stud);
+                        console.log(result.birth);
+                        updateRegChart(yearValue, result.member, result.canine, result.stud, result.birth);
+                    } else {
+                        $('#error-modal').modal('show');
+                    }
+                }
+            });
         });
 
         // Daftar nama bulan dalam bahasa Indonesia
@@ -133,49 +183,167 @@
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         ];
 
-        var chart = echarts.init(document.getElementById('incomeChart'));
-        var option = {
-            title: {
-                text: 'Income Chart'
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                data: ['Daily Income', 'Monthly Income']
-            },
-            xAxis: {
-                type: 'category',
-                data: dailyDates,
-                axisLabel: {
-                    rotate: 0,
-                    interval: 0,
-                    formatter: function(value) {
-                        var date = new Date(value);
-                        return monthNamesEnglish[date.getMonth()];
-                    }
-                }
-            },
-            yAxis: {
-                type: 'value',
-                name: 'Income'
-            },
-            series: [{
-                    name: 'Daily Income',
-                    type: 'bar',
-                    data: dailyIncome
+        function updateChart(year, data) {
+            var monthlyDates = data.map(function(item) {
+                return item.month;
+            });
+
+            var monthlyIncome = data.map(function(item) {
+                return item.total_income;
+            });
+
+            var chart = echarts.init(document.getElementById('incomeChart'));
+            var option = {
+                title: {
+                    text: 'Income Chart ' + year
                 },
-                {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['Monthly Income']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: monthlyDates,
+                    axisLabel: {
+                        rotate: 0,
+                        interval: 0,
+                        formatter: function(value) {
+                            var date = new Date(value);
+                            return monthNamesEnglish[date.getMonth()];
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Income'
+                },
+                series: [{
                     name: 'Monthly Income',
                     type: 'bar',
                     data: monthlyIncome
+                }]
+            };
+            chart.setOption(option);
+        }
+
+        function updateRegChart(year, data, dataCan, dataStud, dataBirth) {
+            var monthlyDates = data.map(function(item) {
+                return item.month;
+            });
+
+            var monthlyCanineDates = dataCan.map(function(item) {
+                return item.month;
+            });
+
+            var monthlyStudDates = dataStud.map(function(item) {
+                return item.month;
+            });
+
+            var monthlyBirthDates = dataBirth.map(function(item) {
+                return item.month;
+            });
+
+            Array.prototype.unique = function() {
+                var a = this.concat();
+                for (var i = 0; i < a.length; ++i) {
+                    for (var j = i + 1; j < a.length; ++j) {
+                        if (a[i] === a[j])
+                            a.splice(j--, 1);
+                    }
                 }
-            ]
-        };
-        chart.setOption(option);
+
+                return a;
+            };
+
+            var allDates = monthlyDates.concat(monthlyCanineDates).unique();
+            allDates = allDates.concat(monthlyStudDates).unique();
+            allDates = allDates.concat(monthlyBirthDates).unique();
+
+            var monthlyCount = data.map(function(item) {
+                return item.total_member;
+            });
+
+            var monthlyCanineCount = dataCan.map(function(item) {
+                return item.total_canine;
+            });
+
+            var monthlyStudCount = dataStud.map(function(item) {
+                return item.total_stud;
+            });
+
+            var monthlyBirthCount = dataBirth.map(function(item) {
+                return item.total_birth;
+            });
+
+            var chart = echarts.init(document.getElementById('memberChart'));
+            var option = {
+                title: {
+                    text: 'Report Chart ' + year
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    x: 'right',
+                    data: ['Member Registered', 'Dog Registered', 'Stud Reported', 'Birth Reported']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: allDates,
+                    axisLabel: {
+                        rotate: 0,
+                        interval: 0,
+                        formatter: function(value) {
+                            var date = new Date(value);
+                            return monthNamesEnglish[date.getMonth()];
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Count'
+                },
+                series: [{
+                        name: 'Member Registered',
+                        type: 'bar',
+                        data: monthlyCount
+                    },
+                    {
+                        name: 'Dog Registered',
+                        type: 'bar',
+                        data: monthlyCanineCount
+                    },
+                    {
+                        name: 'Stud Reported',
+                        type: 'bar',
+                        data: monthlyStudCount
+                    },
+                    {
+                        name: 'Birth Reported',
+                        type: 'bar',
+                        data: monthlyBirthCount
+                    }
+                ]
+            };
+            chart.setOption(option);
+        }
+
+        var monthlyIncomeData = <?php echo json_encode($monthly_income); ?>;
+        updateChart(<?= $year; ?>, monthlyIncomeData);
+
+        var memberData = <?php echo json_encode($memberData); ?>;
+        var canineData = <?php echo json_encode($canineData); ?>;
+        var studData = <?php echo json_encode($studData); ?>;
+        var birthData = <?php echo json_encode($birthData); ?>;
+        updateRegChart(<?= $year; ?>, memberData, canineData, studData, birthData);
 
         $(document).ready(function() {
             <?php

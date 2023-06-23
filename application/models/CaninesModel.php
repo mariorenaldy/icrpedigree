@@ -153,4 +153,23 @@ class CaninesModel extends CI_Model {
         $query = $this->db->get('canines');
         return $query->result_array();
     }
+
+    public function getMonthlyData($year = null){
+        $this->db->select("DATE_FORMAT(can_app_date, '%b %Y') as month, COUNT(can_id) as total_canine");
+        $this->db->from('canines');
+        if($year == null){
+            $this->db->where('YEAR(can_app_date) = YEAR(CURDATE())');
+        }
+        else{
+            $this->db->where('YEAR(can_app_date) = '.$year);
+        }
+        $this->db->group_by("DATE_FORMAT(can_app_date, '%b %Y')");
+        $this->db->order_by("can_app_date", 'ASC');
+        $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('can_stat', $ignore);
+
+        $query = $this->db->get();
+        
+        return $query->result();
+    }
 }
