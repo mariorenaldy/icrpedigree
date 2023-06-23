@@ -9,7 +9,7 @@ class Requestownershipcanine extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestownershipcanineModel', 'caninesModel', 'memberModel', 'kennelModel', 'notification_model', 'notificationtype_model', 'LogmemberModel', 'LogkennelModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'cookie'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 

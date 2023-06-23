@@ -8,7 +8,7 @@ class Rules extends CI_Controller {
 			// Call the CI_Controller constructor
 			parent::__construct();
 			$this->load->library(array('session'));
-			$this->load->helper(array('url'));
+			$this->load->helper(array('url', 'cookie'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {

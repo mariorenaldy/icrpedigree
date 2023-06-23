@@ -9,7 +9,7 @@ class Requestmember extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'RequestmemberModel'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'cookie'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {

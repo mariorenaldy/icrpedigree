@@ -10,7 +10,7 @@ class Certificate extends CI_Controller
         parent::__construct();
         $this->load->model(array('caninesModel'));
         $this->load->library(array('session', 'form_validation'));
-        $this->load->helper(array('url'));
+        $this->load->helper(array('url', 'cookie'));
         $this->load->database();
 
         if ($this->input->cookie('site_lang')) {

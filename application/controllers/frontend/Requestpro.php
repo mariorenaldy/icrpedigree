@@ -10,7 +10,7 @@ class Requestpro extends CI_Controller {
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model', 'RequestproModel'));
 			$this->load->library('upload', $this->config->item('upload_member'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'cookie'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {

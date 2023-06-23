@@ -9,7 +9,7 @@ class News extends CI_Controller {
 			parent::__construct();
 			$this->load->model('news_model');
 			$this->load->library(array('session', 'pagination'));
-			$this->load->helper(array('url'));
+			$this->load->helper(array('url', 'cookie'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {

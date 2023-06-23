@@ -9,7 +9,7 @@ class Requestupdatecanine extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('requestupdatecanineModel', 'caninesModel', 'notification_model', 'notificationtype_model'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('form', 'url'));
+			$this->load->helper(array('form', 'url', 'cookie'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 
