@@ -1412,30 +1412,32 @@ public function validate_edit_pedigree(){
     }
     public function get_can_pedigree($can_id, $level = 0, $max_level = 3)
     {
-        // get the canine data for the current level
+        // ambil data anjing pada level saat ini
         $where['can_id'] = $can_id;
         $data['canine'] = $this->caninesModel->get_exist_pedigrees($where)->row();
 
+        // jika data anjing adalah data dummy kosong (NO FEMALE atau NO MALE), return array kosong
         if($can_id == $this->config->item('dam_id') || $can_id == $this->config->item('sire_id')){
             return [];
         }
 
-        // if there is no canine data or max level reached, return an empty array
+        // jika data anjing tidak ditemukan atau max level sudah tercapai, return array kosong
         if (!$data['canine'] || $level > $max_level) {
             return [];
         }
 
-        // get the pedigree for the sire and dam at the current level
+        // ambil data ayah anjing dengan memanggil fungsi ini secara rekursif
         $sire['can_id'] = $data['canine']->ped_sire_id;
         $data['sire'] = $this->get_can_pedigree($sire['can_id'], $level + 1, $max_level);
 
+        // ambil data ibu anjing dengan memanggil fungsi ini secara rekursif
         $dam['can_id'] = $data['canine']->ped_dam_id;
         $data['dam'] = $this->get_can_pedigree($dam['can_id'], $level + 1, $max_level);
 
-        // add the pedigree data for the current level
+        // simpan data level saat ini
         $data['level'] = $level;
 
-        // return the data for the current level
+        // return data untuk level saat ini
         return $data;
     }
     function create_array($pedigree)
