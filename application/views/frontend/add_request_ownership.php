@@ -77,23 +77,6 @@
                                 <input class="form-control" type="text" placeholder="email" name="email" value="<?= set_value('email'); ?>">
                             </div>
                         </div>
-                        <hr/>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center"><?= lang("owner_old_stambum_photo"); ?></label>
-                            <div class="col-sm-12 text-center">
-                                <img id="imgPreviewStb" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <input type="file" class="upload" id="imageInputStb" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('stb')"/>
-                                <input type="hidden" name="attachment_stb" id="attachment_stb">
-                            </div>
-                        </div>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center"><?= lang("owner_new_dog_photo"); ?></label>
-                            <div class="col-sm-12 text-center">
-                                <img id="imgPreviewCanine" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <input type="file" class="upload" id="imageInputCanine" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
-                                <input type="hidden" name="attachment_canine" id="attachment_canine">
-                            </div>
-                        </div>
                         <input type="hidden" name="can_id" value="<?php if (!$mode) echo $canine->can_id; else echo set_value('can_id'); ?>"/>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="button"><?= lang("common_save"); ?></button>
@@ -137,16 +120,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row mb-1">
-                            <div class="col-4"><?= lang("owner_old_stambum_photo"); ?></div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-foto_stb" width="50%"/></div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-4"><?= lang("owner_new_dog_photo"); ?></div>
-                            <div class="col-auto pe-0">:</div>
-                            <div class="col"><img id="confirm-foto_canine" width="50%"/></div>
-                        </div>
                         <div id="memberContainer" style="display: none;">
                             <div class="row">
                                 <div class="col-4">Member</div>
@@ -232,77 +205,6 @@
         };
 
         $(document).ready(function(){
-            var $modal = $('#modal');
-            var previewStb = document.getElementById('imgPreviewStb');
-            var previewCanine = document.getElementById('imgPreviewCanine');
-            var modalImage = document.getElementById('sample_image');
-            var latestImage = null;
-            var cropper;
-
-            imageInputStb.addEventListener("change", function(event) {
-                croppingImage = "stb";
-                showModalImg(event);
-            })
-
-            imageInputCanine.addEventListener("change", function(event) {
-                croppingImage = "canine";
-                showModalImg(event);
-            })
-
-            function showModalImg(event) {
-                var files = event.target.files;
-                var done = function(url) {
-                    modalImage.src = url;
-                    $modal.modal('show');
-                };
-                if (files && files.length > 0) {
-                    reader = new FileReader();
-                    reader.onload = function(event) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(files[0]);
-                }
-            }
-
-            $modal.on('shown.bs.modal', function() {
-                cropper = new Cropper(modalImage, {
-                    aspectRatio: <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>,
-                    viewMode: <?= $this->config->item('mode') ?>,
-                    preview: '.preview'
-                });
-            }).on('hidden.bs.modal', function() {
-                cropper.destroy();
-                cropper = null;
-            });
-
-            $('#crop').click(function() {
-                canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('img_width') ?>,
-                    height: <?= $this->config->item('img_height') ?>
-                });
-                canvas.toBlob(function(blob) {
-                    url = URL.createObjectURL(blob);
-                    var reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = function() {
-                        base64data = reader.result;
-                        if (croppingImage === "stb"){
-                            previewStb.src = base64data;
-                            $('#attachment_stb').val(base64data);
-                        }
-                        else if (croppingImage === "canine"){
-                            previewCanine.src = base64data;
-                            $('#attachment_canine').val(base64data);
-                        }
-                        $modal.modal('hide');
-                    };
-                });
-            });
-
-            $('#cancel-btn').click(function() {
-                resetImage(croppingImage);
-            });
-
             let saveBtn = $("#buttonSubmit");
             saveBtn.click(function(){
                 if($('input[name="reg_member"]').is(":checked")){
@@ -318,9 +220,6 @@
                     $('#confirm-phone_number').text($('input[name="hp"]').val());
                     $('#confirm-email').text($('input[name="email"]').val());
                 }
-
-                $('#confirm-foto_stb').attr("src",  $('#imgPreviewStb').attr("src"));
-                $('#confirm-foto_canine').attr("src",  $('#imgPreviewCanine').attr("src"));
                 $('#confirm-modal').modal('show');
             });
 

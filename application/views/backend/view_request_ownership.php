@@ -36,8 +36,6 @@
                             <tr>
                                 <th width="1%"></th>
                                 <th width="1%"></th>
-                                <th width="15%">Stambum Photo</th>
-                                <th width="15%">Canine Photo</th>
                                 <th width="15%">Name</th>
                                 <th>Owner</th>
                                 <th>New Owner</th>
@@ -52,12 +50,6 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger" onclick='reject(<?= $r->req_id; ?>, "<?= $r->can_a_s; ?>")' data-toggle="tooltip" data-placement="top" title="Reject Change Canine Ownership"><i class="fa fa-close"></i></button>
-                                    </td>
-                                    <td align="center">
-                                        <img src="<?= base_url('uploads/ownership/'.$r->req_stb_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="stb<?= $r->req_id ?>" onclick="display('stb<?= $r->req_id ?>')">
-                                    </td>
-                                    <td align="center">
-                                        <img src="<?= base_url('uploads/canine/'.$r->req_photo) ?>" class="img-fluid img-thumbnail" alt="canine" id="canine<?= $r->req_id ?>" onclick="display('canine<?= $r->req_id ?>')">
                                     </td>
                                     <td align="center">
                                         <?php if ($r->can_photo != '-'){ ?>

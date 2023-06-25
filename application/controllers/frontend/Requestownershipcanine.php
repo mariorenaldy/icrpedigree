@@ -404,106 +404,6 @@ class Requestownershipcanine extends CI_Controller {
 							}
 						}
 
-						$stb = '-';
-						$photo = '-';
-						if (!isset($_POST['attachment_canine']) || empty($_POST['attachment_canine'])) {
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Dog photo is required');
-							}
-						}
-						if (!isset($_POST['attachment_stb']) || empty($_POST['attachment_stb'])) {
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Foto stambum wajib diisi');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Stambum photo is required');
-							}
-						}
-						if (!$err){
-							$uploadedStb = $_POST['attachment_stb'];
-							$image_array_1 = explode(";", $uploadedStb);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedStb = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedStb) > $this->config->item('file_size'))) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Ukuran file stambum terlalu besar (> 1 MB).');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'The stambum file size is too big (> 1 MB).');
-								}
-							}
-
-							$uploadedCanine = $_POST['attachment_canine'];
-							$image_array_1 = explode(";", $uploadedCanine);
-							$image_array_2 = explode(",", $image_array_1[1]);
-							$uploadedCanine = base64_decode($image_array_2[1]);
-		
-							if ((strlen($uploadedCanine) > $this->config->item('file_size'))) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Ukuran file anjing terlalu besar (> 1 MB).');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'The dog file size is too big (> 1 MB).');
-								}
-							}
-
-							$stb_name = $this->config->item('path_ownership').$this->config->item('file_name_ownership');
-							$canine_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
-
-							if (!is_dir($this->config->item('path_ownership')) or !is_writable($this->config->item('path_ownership'))) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Folder ownership tidak ditemukan atau tidak writable.');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'Ownership folder is not found or is not writable.');
-								}
-							} else if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
-								$err++;
-								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
-								}
-								else{
-									$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
-								}
-							} else {
-								if (is_file($stb_name) and !is_writable($stb_name)) {
-									$err++;
-									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'File stambum sudah ada dan tidak writable.');
-									}
-									else{
-										$this->session->set_flashdata('error_message', 'The stambum file is already exists and is not writable.');
-									}
-								}
-								if (is_file($canine_name) and !is_writable($canine_name)) {
-									$err++;
-									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'File anjing sudah ada dan tidak writable.');
-									}
-									else{
-										$this->session->set_flashdata('error_message', 'The dog file is already exists and is not writable.');
-									}
-								}
-							}
-
-							if (!$err){
-								file_put_contents($stb_name, $uploadedStb);
-								$stb = str_replace($this->config->item('path_ownership'), '', $stb_name);
-
-								file_put_contents($canine_name, $uploadedCanine);
-								$photo = str_replace($this->config->item('path_canine'), '', $canine_name);
-							}
-						}
-
 						if (!$err){
 							$wheKennel['ken_member_id'] = $this->session->userdata('mem_id'); 
 							$mem_kennel = $this->kennelModel->get_kennels($wheKennel)->row();
@@ -512,9 +412,7 @@ class Requestownershipcanine extends CI_Controller {
 								'req_old_member_id' => $this->session->userdata('mem_id'),
 								'req_old_kennel_id' => $mem_kennel->ken_id,
 								'req_stat' => $this->config->item('saved'),
-								'req_date' => date('Y-m-d H:i:s'),
-								'req_photo' => $photo,
-								'req_stb_photo' => $stb,
+								'req_date' => date('Y-m-d H:i:s')
 							);
 							if ($this->input->post('reg_member')){
 								$req_data['req_member_id'] = $member->mem_id;

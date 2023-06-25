@@ -50,7 +50,6 @@ class Requestownershipcanine extends CI_Controller {
 						$dataCan['can_date'] = date('Y-m-d H:i:s');
 						$dataCan['can_member_id'] = $req->req_member_id;
 						$dataCan['can_kennel_id'] = $req->req_kennel_id;
-						$dataCan['can_photo'] = $req->req_photo;
 						$wheCan['can_id'] = $req->req_can_id;
 						$res = $this->caninesModel->update_canines($dataCan, $wheCan);
 						if ($res){
@@ -59,8 +58,7 @@ class Requestownershipcanine extends CI_Controller {
 								'log_member_id' => $req->req_member_id,
 								'log_kennel_id' => $req->req_kennel_id,
 								'log_user' => $this->session->userdata('use_id'),
-								'log_date' => date('Y-m-d H:i:s'),
-								'log_photo' => $req->req_photo,
+								'log_date' => date('Y-m-d H:i:s')
 							);
 							$log = $this->logcanineModel->add_log($dataLog);
 							if ($log){
