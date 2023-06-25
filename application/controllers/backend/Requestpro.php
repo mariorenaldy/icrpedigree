@@ -23,7 +23,7 @@ class Requestpro extends CI_Controller {
 
 		public function search(){
 			$like['mem_name'] = $this->input->post('keywords');
-			$like['ken_name'] = $this->input->post('keywords');
+			$like['req_kennel_name'] = $this->input->post('keywords');
             $where['req_stat'] = $this->config->item('saved');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['request'] = $this->requestproModel->search_requests($like, $where)->result();

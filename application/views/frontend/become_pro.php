@@ -138,7 +138,7 @@
                         </div>
                         <hr/>
                         <div class="input-group mb-3 gap-3">
-                            <label for="imageInputProof" class="control-label col-md-12 text-center"><?= lang('common_photo_proof'); ?></label>
+                            <label for="imageInputProof" class="control-label col-md-12 text-center"><?= lang('common_photo_proof'); ?><br>Rp. 200.000</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
                                 <input type="file" class="upload" id="imageInputProof" onclick="resetImage('proof')"/>
