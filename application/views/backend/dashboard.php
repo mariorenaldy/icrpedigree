@@ -264,13 +264,19 @@
             allDates = allDates.concat(monthlyStudDates).unique();
             allDates = allDates.concat(monthlyBirthDates).unique();
 
+            //sort bulan
+            var allDates = monthlyDates.concat(monthlyCanineDates).unique();
+            allDates.sort(function(a, b) {
+                return new Date(a) - new Date(b);
+            });
+
             var monthlyCount = [];
             allDates.forEach(function(date) {
                 var index = monthlyDates.indexOf(date);
                 if (index !== -1) {
                     monthlyCount.push(data[index].total_member);
                 } else {
-                    monthlyCount.push(null); // Masukkan 0 jika tidak ada data member pada bulan yang sesuai
+                    monthlyCount.push(0); // Masukkan 0 jika tidak ada data member pada bulan yang sesuai
                 }
             });
 
@@ -280,7 +286,7 @@
                 if (index !== -1) {
                     monthlyCanineCount.push(dataCan[index].total_canine);
                 } else {
-                    monthlyCanineCount.push(null); // Masukkan 0 jika tidak ada data anjing pada bulan yang sesuai
+                    monthlyCanineCount.push(0); // Masukkan 0 jika tidak ada data anjing pada bulan yang sesuai
                 }
             });
 
@@ -290,7 +296,7 @@
                 if (index !== -1) {
                     monthlyStudCount.push(dataStud[index].total_stud);
                 } else {
-                    monthlyStudCount.push(null); // Masukkan 0 jika tidak ada data pacak pada bulan yang sesuai
+                    monthlyStudCount.push(0); // Masukkan 0 jika tidak ada data pacak pada bulan yang sesuai
                 }
             });
 
@@ -300,7 +306,7 @@
                 if (index !== -1) {
                     monthlyBirthCount.push(dataBirth[index].total_birth);
                 } else {
-                    monthlyBirthCount.push(null); // Masukkan 0 jika tidak ada data lahir pada bulan yang sesuai
+                    monthlyBirthCount.push(0); // Masukkan 0 jika tidak ada data lahir pada bulan yang sesuai
                 }
             });
 

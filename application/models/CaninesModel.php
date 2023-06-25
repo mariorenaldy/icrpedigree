@@ -164,16 +164,16 @@ class CaninesModel extends CI_Model {
     }
 
     public function getMonthlyData($year = null){
-        $this->db->select("DATE_FORMAT(can_app_date, '%b %Y') as month, COUNT(can_id) as total_canine");
+        $this->db->select("DATE_FORMAT(can_reg_date, '%b %Y') as month, COUNT(can_id) as total_canine");
         $this->db->from('canines');
         if($year == null){
-            $this->db->where('YEAR(can_app_date) = YEAR(CURDATE())');
+            $this->db->where('YEAR(can_reg_date) = YEAR(CURDATE())');
         }
         else{
-            $this->db->where('YEAR(can_app_date) = '.$year);
+            $this->db->where('YEAR(can_reg_date) = '.$year);
         }
-        $this->db->group_by("DATE_FORMAT(can_app_date, '%b %Y')");
-        $this->db->order_by("can_app_date", 'ASC');
+        $this->db->group_by("DATE_FORMAT(can_reg_date, '%b %Y')");
+        $this->db->order_by("can_reg_date", 'ASC');
         $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
         $this->db->where_not_in('can_stat', $ignore);
         $ignoreID = array($this->config->item('dam_id'), $this->config->item('sire_id'));
