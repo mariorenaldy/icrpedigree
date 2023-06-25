@@ -363,6 +363,9 @@ class Users extends CI_Controller {
 						$dataUser['use_photo'] = str_replace($this->config->item('path_user'), '', $img_name);
 						$res = $this->userModel->update_users($dataUser, $where);
 						if ($res){
+							if($this->input->post('use_id') == $this->session->userdata('use_id')){
+								$this->session->set_userdata('use_pp', base_url().'uploads/users/'.$dataUser['use_photo']);
+							}
 							$this->session->set_flashdata('edit_pp', TRUE);
 							redirect("backend/Users");
 						}
