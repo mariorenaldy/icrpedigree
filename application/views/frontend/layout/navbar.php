@@ -3,9 +3,12 @@ $sql = "SELECT COUNT(notification_id) AS count FROM notification WHERE mem_id = 
 $notif_count = $this->db->query($sql)->row()->count; 
 
 $sqlType = "SELECT mem_type FROM members WHERE mem_id = '".$this->session->userdata('mem_id')."'";
-$mem_type = $this->db->query($sqlType)->row()->mem_type; 
-if($mem_type != $this->session->userdata('mem_type')){
-    $this->session->set_userdata('mem_type', $mem_type);
+$memData = $this->db->query($sqlType)->row();
+if($memData){
+    $mem_type = $this->db->query($sqlType)->row()->mem_type; 
+    if($mem_type != $this->session->userdata('mem_type')){
+        $this->session->set_userdata('mem_type', $mem_type);
+    }
 }
 ?>
 
