@@ -29,3 +29,4 @@ $lang["ord_complain_desc"] = "Complaint description";
 $lang["ord_complain_success"] = "Complaint filed successfully";
 
 $lang["ord_confirm_cancel"] = "Do you want to cancel your order?";
+$lang["ord_confirm_accept"] = "Do you want to confirm acceptance of the order?";

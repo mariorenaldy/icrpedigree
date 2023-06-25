@@ -88,7 +88,7 @@
                             <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
                             <?php if ($o->ord_stat_id == $this->config->item('order_arrived')){ ?>
-                            <button type="button" class="btn btn-primary mb-1" onclick="accept('<?= $o->ord_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("ord_accepted"); ?>"><i class="fa-solid fa-check"></i></button>
+                            <button type="button" class="btn btn-primary mb-1" onclick="confirmAccept('<?= $o->ord_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("ord_accepted"); ?>"><i class="fa-solid fa-check"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="complain('<?= $o->ord_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("ord_complain"); ?>"><i class="fa-solid fa-file-pen"></i></button>
                             <?php } ?>
                         </div>
@@ -111,6 +111,23 @@
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-primary" onclick="cancel(<?= $o->ord_id ?>)"><?= lang("common_yes"); ?></button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetId()"><?= lang("common_no"); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-accept-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_confirm"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5><?= lang("ord_confirm_accept"); ?></h5>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" onclick="accept(<?= $o->ord_id ?>)"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetAcceptId()"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -195,8 +212,12 @@
             window.location = "<?= base_url(); ?>marketplace/Orders/detail/"+id;
         }
         let cancelId = null;
+        let acceptId = null;
         function resetId(){
             cancelId = null;
+        }
+        function resetAcceptId(){
+            acceptId = null;
         }
         function cancel(){
             window.location = "<?= base_url(); ?>marketplace/Orders/cancel/"+cancelId;
@@ -205,8 +226,12 @@
             cancelId = id;
             $('#confirm-modal').modal('show');
         }
+        function confirmAccept(id){
+            acceptId = id;
+            $('#confirm-accept-modal').modal('show');
+        }
         function accept(id){
-            window.location = "<?= base_url(); ?>marketplace/Orders/accept/"+id;
+            window.location = "<?= base_url(); ?>marketplace/Orders/accept/"+acceptId;
         }
         function complain(id){
             window.location = "<?= base_url(); ?>marketplace/Orders/complain/"+id;

@@ -29,3 +29,4 @@ $lang["ord_complain_desc"] = "Deskripsi komplain";
 $lang["ord_complain_success"] = "Komplain berhasil diajukan";
 
 $lang["ord_confirm_cancel"] = "Ingin membatalkan pesanan?";
+$lang["ord_confirm_accept"] = "Konfirmasi penerimaan pesanan?";
