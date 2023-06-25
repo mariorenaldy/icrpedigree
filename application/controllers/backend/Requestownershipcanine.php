@@ -51,15 +51,59 @@ class Requestownershipcanine extends CI_Controller {
 						$dataCan['can_member_id'] = $req->req_member_id;
 						$dataCan['can_kennel_id'] = $req->req_kennel_id;
 						$wheCan['can_id'] = $req->req_can_id;
+
+						$oldCanData = $this->caninesModel->get_canines($wheCan)->row();
+
+						$result = $oldCanData->can_a_s;
+						//hapus nama kennel lama
+						if ($req->old_ken_type_id == 1){
+							$string = $oldCanData->can_a_s;
+							$replace = " VON ".$req->old_ken_name;
+							$replacement = "";
+							$result = str_ireplace($replace, $replacement, $string);
+						}
+						else if ($req->old_ken_type_id == 2){
+							$string = $oldCanData->can_a_s;
+							$replace = $req->old_ken_name."` ";
+							$replacement = "";
+							$result = str_ireplace($replace, $replacement, $string);
+						}
+
+						//tambahkan nama kennel baru
+						if ($req->ken_type_id == 1){
+							$dataCan['can_a_s'] = $result." VON ".$req->ken_name;
+						}
+						else if ($req->ken_type_id == 2){
+							$dataCan['can_a_s'] = $req->ken_name."` ".$result;
+						}
+						else if ($req->ken_type_id == 0){
+							$dataCan['can_a_s'] = $result;
+						}
+
 						$res = $this->caninesModel->update_canines($dataCan, $wheCan);
 						if ($res){
 							$dataLog = array(
 								'log_canine_id' => $req->req_can_id,
-								'log_member_id' => $req->req_member_id,
+								'log_reg_number' => $oldCanData->can_reg_number, 
+								'log_a_s' => $oldCanData->can_a_s,
+								'log_breed' => $oldCanData->can_breed,
+								'log_gender' => $oldCanData->can_gender,
+								'log_date_of_birth' => date('Y-m-d', strtotime($oldCanData->can_date_of_birth)),
+								'log_color' => $oldCanData->can_color,
 								'log_kennel_id' => $req->req_kennel_id,
+								'log_photo' => $oldCanData->can_photo,
+								'log_pay_photo' => $oldCanData->can_pay_photo,
+								'log_stat' => $this->config->item('accepted'),
+								'log_app_user' => $oldCanData->can_app_user,
+								'log_app_date' => $oldCanData->can_app_date,
+								'log_chip_number' => $oldCanData->can_chip_number,
+								'log_icr_number' => $oldCanData->can_icr_number,
+								'log_member_id' => $req->req_member_id, 
+								'log_note' => $oldCanData->can_note,
 								'log_user' => $this->session->userdata('use_id'),
-								'log_date' => date('Y-m-d H:i:s')
+								'log_date' => date('Y-m-d H:i:s'),
 							);
+
 							$log = $this->logcanineModel->add_log($dataLog);
 							if ($log){
 								$can = $this->caninesModel->get_canines($wheCan)->row();

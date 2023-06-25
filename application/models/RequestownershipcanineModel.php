@@ -6,7 +6,7 @@ class RequestownershipcanineModel extends CI_Model {
     }
 
     public function get_requests($where, $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
+        $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name, k1.ken_type_id AS ken_type_id, k2.ken_type_id AS old_ken_type_id');
         if ($where != null) {
             $this->db->where($where);
         }
