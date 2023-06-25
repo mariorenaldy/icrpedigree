@@ -264,20 +264,44 @@
             allDates = allDates.concat(monthlyStudDates).unique();
             allDates = allDates.concat(monthlyBirthDates).unique();
 
-            var monthlyCount = data.map(function(item) {
-                return item.total_member;
+            var monthlyCount = [];
+            allDates.forEach(function(date) {
+                var index = monthlyDates.indexOf(date);
+                if (index !== -1) {
+                    monthlyCount.push(data[index].total_member);
+                } else {
+                    monthlyCount.push(null); // Masukkan 0 jika tidak ada data member pada bulan yang sesuai
+                }
             });
 
-            var monthlyCanineCount = dataCan.map(function(item) {
-                return item.total_canine;
+            var monthlyCanineCount = [];
+            allDates.forEach(function(date) {
+                var index = monthlyCanineDates.indexOf(date);
+                if (index !== -1) {
+                    monthlyCanineCount.push(dataCan[index].total_canine);
+                } else {
+                    monthlyCanineCount.push(null); // Masukkan 0 jika tidak ada data anjing pada bulan yang sesuai
+                }
             });
 
-            var monthlyStudCount = dataStud.map(function(item) {
-                return item.total_stud;
+            var monthlyStudCount = [];
+            allDates.forEach(function(date) {
+                var index = monthlyStudDates.indexOf(date);
+                if (index !== -1) {
+                    monthlyStudCount.push(dataStud[index].total_stud);
+                } else {
+                    monthlyStudCount.push(null); // Masukkan 0 jika tidak ada data pacak pada bulan yang sesuai
+                }
             });
 
-            var monthlyBirthCount = dataBirth.map(function(item) {
-                return item.total_birth;
+            var monthlyBirthCount = [];
+            allDates.forEach(function(date) {
+                var index = monthlyBirthDates.indexOf(date);
+                if (index !== -1) {
+                    monthlyBirthCount.push(dataBirth[index].total_birth);
+                } else {
+                    monthlyBirthCount.push(null); // Masukkan 0 jika tidak ada data lahir pada bulan yang sesuai
+                }
             });
 
             var chart = echarts.init(document.getElementById('memberChart'));
