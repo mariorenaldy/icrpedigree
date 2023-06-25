@@ -212,11 +212,22 @@ class Orders extends CI_Controller
 					case 200:  # OK
 						$statRes = json_decode($result)->transaction->status;
 						if($statRes == 'FAILED'){
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+							$res = $this->failOrder($orders->ord_id);
+							if($res){
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Payment failed');
+								}
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'Payment failed');
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal mengubah status order dengan id = '.$orders->ord_id);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to change order status with id = '.$orders->ord_id);
+								}
 							}
 							redirect('marketplace/Orders');
 						}
@@ -281,6 +292,27 @@ class Orders extends CI_Controller
 			'ord_id' => $ord_id,
 			'ord_pay_date' => date('Y-m-d H:i:s'),
 			'ord_stat_id' => $this->config->item('order_paid')
+		);
+
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
+		$where['ord_id'] = $ord_id;
+		$orders = $this->OrderModel->update_orders($data, $where);
+		if ($orders) {
+			$this->db->trans_complete();
+			return true;
+		} else {
+			$err = 1;
+		}
+		if ($err) {
+			$this->db->trans_rollback();
+			return false;
+		}
+	}
+	public function failOrder($ord_id){
+		$data = array(
+			'ord_id' => $ord_id,
+			'ord_stat_id' => $this->config->item('order_failed')
 		);
 
 		$this->db->trans_strict(FALSE);
