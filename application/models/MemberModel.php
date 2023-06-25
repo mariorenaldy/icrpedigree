@@ -89,16 +89,16 @@ class MemberModel extends CI_Model {
     }
 
     public function getMonthlyData($year = null){
-        $this->db->select("DATE_FORMAT(mem_app_date, '%b %Y') as month, COUNT(mem_id) as total_member");
+        $this->db->select("DATE_FORMAT(mem_created_at, '%b %Y') as month, COUNT(mem_id) as total_member");
         $this->db->from('members');
         if($year == null){
-            $this->db->where('YEAR(mem_app_date) = YEAR(CURDATE())');
+            $this->db->where('YEAR(mem_created_at) = YEAR(CURDATE())');
         }
         else{
-            $this->db->where('YEAR(mem_app_date) = '.$year);
+            $this->db->where('YEAR(mem_created_at) = '.$year);
         }
-        $this->db->group_by("DATE_FORMAT(mem_app_date, '%b %Y')");
-        $this->db->order_by("mem_app_date", 'ASC');
+        $this->db->group_by("DATE_FORMAT(mem_created_at, '%b %Y')");
+        $this->db->order_by("mem_created_at", 'ASC');
         $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
         $this->db->where_not_in('mem_stat', $ignore);
         $ignoreID = array($this->config->item('no_member'));

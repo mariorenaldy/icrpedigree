@@ -65,7 +65,7 @@ class Members extends CI_Controller {
 			$where['mem_type'] = $this->config->item('pro_member');
 			// $where['mem_stat'] = $this->config->item('accepted');
 			$where['mem_stat !='] = $this->config->item('processed');
-			$where['mem_id !='] = 0;
+			$where['mem_id !='] = 1;
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
 			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
@@ -193,7 +193,7 @@ class Members extends CI_Controller {
 			// 	$where['mem_type'] = $data['mem_type'];
 			if ($data['mem_type'] != $this->config->item('all_member'))
 				$where['mem_type'] = $data['mem_type'];
-			$where['mem_id !='] = 0;
+			$where['mem_id !='] = 1;
 			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
 			// var_dump($data['member']);
