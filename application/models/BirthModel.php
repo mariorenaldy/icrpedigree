@@ -9,6 +9,13 @@ class BirthModel extends CI_Model {
         return $this->db->count_all("births");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('bir_stat', $ignoreStat);
+        $this->db->from("births");
+        return $this->db->count_all_results();
+    }
+
     public function get_births($where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(bir_date_of_birth, "%d-%m-%Y") as bir_date_of_birth, DATE_FORMAT(bir_app_date, "%d-%m-%Y") as bir_app_date, can_sire.can_a_s AS sire, can_sire.can_id AS sire_id, can_dam.can_a_s AS dam, can_dam.can_id AS dam_id, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date');
         if ($where != null) {

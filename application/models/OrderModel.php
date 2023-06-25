@@ -9,6 +9,13 @@ class OrderModel extends CI_Model {
         return $this->db->count_all("orders");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_rejected'), $this->config->item('order_failed'));
+        $this->db->where_not_in('ord_stat_id', $ignoreStat);
+        $this->db->from("orders");
+        return $this->db->count_all_results();
+    }
+
     public function get_orders($where, $sort = 'ord_created_at desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(orders.ord_created_at, "%d-%m-%Y %H:%i:%s") as ord_created_at, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
         if ($where != null) {

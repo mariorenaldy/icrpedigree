@@ -8,6 +8,13 @@ class StambumModel extends CI_Model {
         return $this->db->count_all("stambums");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('stb_stat', $ignoreStat);
+        $this->db->from("stambums");
+        return $this->db->count_all_results();
+    }
+
     public function get_stambum($where, $sort = 'stb_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(stambums.stb_date_of_birth, "%d-%m-%Y") as stb_date_of_birth, DATE_FORMAT(stambums.stb_app_date, "%d-%m-%Y") as stb_app_date, DATE_FORMAT(stambums.stb_date, "%d-%m-%Y") as stb_date, DATE_FORMAT(stambums.stb_date_of_birth, "%Y-%m-%d") as stb_date_of_birth2, DATE_FORMAT(stambums.stb_app_date, "%Y-%m-%d") as stb_app_date2');
         if ($where != null) {

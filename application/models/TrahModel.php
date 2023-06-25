@@ -4,6 +4,13 @@ class TrahModel extends CI_Model {
         return $this->db->count_all("trah");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('tra_stat', $ignoreStat);
+        $this->db->from("trah");
+        return $this->db->count_all_results();
+    }
+
     public function get_trah($where){
         $this->db->select('*');
         if ($where != null) {

@@ -8,6 +8,13 @@ class ProductModel extends CI_Model {
       return $this->db->count_all("products");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('pro_stat', $ignoreStat);
+        $this->db->from("products");
+        return $this->db->count_all_results();
+    }
+
     public function get_products($where = null){
         $this->db->select('*');
         if ($where != null) {

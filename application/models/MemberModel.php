@@ -9,6 +9,15 @@ class MemberModel extends CI_Model {
         return $this->db->count_all("members");
     }
 
+    public function accepted_count() {
+        $ignore = array($this->config->item('no_member'));
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('mem_id', $ignore);
+        $this->db->where_not_in('mem_stat', $ignoreStat);
+        $this->db->from("members");
+        return $this->db->count_all_results();
+    }
+
     public function get_members($where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
@@ -92,6 +101,8 @@ class MemberModel extends CI_Model {
         $this->db->order_by("mem_app_date", 'ASC');
         $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
         $this->db->where_not_in('mem_stat', $ignore);
+        $ignoreID = array($this->config->item('no_member'));
+        $this->db->where_not_in('mem_id', $ignoreID);
 
         $query = $this->db->get();
         

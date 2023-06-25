@@ -8,6 +8,15 @@ class CaninesModel extends CI_Model {
         return $this->db->count_all("canines");
     }
 
+    public function accepted_count() {
+        $ignore = array($this->config->item('dam_id'), $this->config->item('sire_id'));
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('can_id', $ignore);
+        $this->db->where_not_in('can_stat', $ignoreStat);
+        $this->db->from("canines");
+        return $this->db->count_all_results();
+    }
+
     public function get_canines($where, $sort = 'can_id desc', $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(canines.can_date_of_birth, "%d-%m-%Y") as can_date_of_birth, DATE_FORMAT(canines.can_reg_date, "%d-%m-%Y") as can_reg_date, DATE_FORMAT(canines.can_app_date, "%d-%m-%Y") as can_app_date, DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") as can_app_date2, , DATE_FORMAT(canines.can_reg_date, "%Y-%m-%d %H:%i:%s") as can_reg_date2, DATE_FORMAT(canines.can_date_of_birth, "%Y-%m-%d") as can_date_of_birth2, DATE_FORMAT(canines.can_last_print, "%d-%m-%Y") as can_last_print, DATE_FORMAT(canines.can_date, "%d-%m-%Y") as can_date');
         if ($where != null) {
@@ -167,6 +176,8 @@ class CaninesModel extends CI_Model {
         $this->db->order_by("can_app_date", 'ASC');
         $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
         $this->db->where_not_in('can_stat', $ignore);
+        $ignoreID = array($this->config->item('dam_id'), $this->config->item('sire_id'));
+        $this->db->where_not_in('can_id', $ignoreID);
 
         $query = $this->db->get();
         

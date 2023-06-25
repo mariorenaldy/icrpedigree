@@ -9,6 +9,13 @@ class StudModel extends CI_Model {
         return $this->db->count_all("studs");
     }
 
+    public function accepted_count() {
+        $ignoreStat = array($this->config->item('deleted'), $this->config->item('rejected'));
+        $this->db->where_not_in('stu_stat', $ignoreStat);
+        $this->db->from("studs");
+        return $this->db->count_all_results();
+    }
+
     public function get_studs($where, $offset = 0, $limit = 0){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){
@@ -43,39 +50,6 @@ class StudModel extends CI_Model {
             $this->db->limit($limit, $offset);
         return $this->db->get('studs');
     }
-
-    // public function search_by_member_app($q, $stu_member, $offset){
-    //     $date = '';
-    //     if ($q){
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3){
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //         }
-    //     }
-
-    //     $sql = "SELECT * FROM studs s, users u, members m, approval_status a WHERE u.use_id = s.stu_app_user AND a.stat_id = s.stu_stat AND m.mem_id = s.stu_member_id AND m.mem_id = ".$stu_member;
-    //     if ($date)
-    //         $sql .= " AND s.stu_date LIKE '%".$date."%'";
-    //     $sql .= " ORDER BY s.stu_date DESC LIMIT ".$offset.", ".$this->config->item('stud_count');
-    //     $query = $this->db->query($sql);
-    //     return $query->result();
-    // }
-
-    // public function search_count_by_member_app($q, $stu_member){
-    //     $date = '';
-    //     if ($q){
-    //         $piece = explode("-", $q);
-    //         if (count($piece) == 3){
-    //             $date = $piece[2]."-".$piece[1]."-".$piece[0];
-    //         }
-    //     }
-
-    //     $sql = "SELECT COUNT(*) AS count FROM studs s, users u, members m, approval_status a WHERE u.use_id = s.stu_app_user AND a.stat_id = s.stu_stat AND m.mem_id = s.stu_member_id AND m.mem_id = ".$stu_member;
-    //     if ($date)
-    //         $sql .= " AND s.stu_date LIKE '%".$date."%'";
-    //     $query = $this->db->query($sql);
-    //     return $query->result();
-    // }
 
     public function add_studs($data){
         $this->db->insert('studs', $data);

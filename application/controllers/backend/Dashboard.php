@@ -17,15 +17,15 @@ class Dashboard extends CI_Controller
 	public function index()
 	{
 		if ($this->session->userdata('use_username')) {
-			$data['canCount'] = $this->caninesModel->record_count();
-			$data['memCount'] = $this->memberModel->record_count();
-			$data['studCount'] = $this->studModel->record_count();
-			$data['birthCount'] = $this->birthModel->record_count();
-			$data['stbCount'] = $this->stambumModel->record_count();
-			$data['trahCount'] = $this->trahModel->record_count();
-			$data['userCount'] = $this->userModel->record_count();
-			$data['proCount'] = $this->productModel->record_count();
-			$data['orderCount'] = $this->orderModel->record_count();
+			$data['canCount'] = $this->caninesModel->accepted_count();
+			$data['memCount'] = $this->memberModel->accepted_count();
+			$data['studCount'] = $this->studModel->accepted_count();
+			$data['birthCount'] = $this->birthModel->accepted_count();
+			$data['stbCount'] = $this->stambumModel->accepted_count();
+			$data['trahCount'] = $this->trahModel->accepted_count();
+			$data['userCount'] = $this->userModel->accepted_count();
+			$data['proCount'] = $this->productModel->accepted_count();
+			$data['orderCount'] = $this->orderModel->accepted_count();
 			$data['income'] = $this->orderModel->get_income()->income;
 
 			$data['monthly_income'] = $this->orderModel->getMonthlyIncome();

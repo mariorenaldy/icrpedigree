@@ -36,7 +36,7 @@
                                     <td>
                                         <?php 
                                             if ($this->session->userdata('use_type_id') == $this->config->item('super')){ 
-                                                if (!$r->tra_stat){ ?>
+                                                if (!$r->tra_stat || $r->tra_stat == $this->config->item('rejected')){ ?>
                                                     <button type="button" class="btn btn-primary mb-1" onclick="activate(<?= $r->tra_id ?>, '<?= $r->tra_name ?>')" data-toggle="tooltip" data-placement="top" title="Activate Breed"><i class="fa fa-check"></i></button>
                                         <?php } else { ?>
                                                     <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $r->tra_id ?>, '<?= $r->tra_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Breed"><i class="fa fa-trash"></i></button>
