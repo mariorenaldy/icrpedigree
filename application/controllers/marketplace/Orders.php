@@ -336,6 +336,7 @@ class Orders extends CI_Controller
 	}
 	public function cancel(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
 				'ord_id' => $ord_id,
@@ -365,7 +366,12 @@ class Orders extends CI_Controller
 
 			if ($err) {
 				$this->db->trans_rollback();
-				$this->session->set_flashdata('error_message', 'Failed to cancel order. Error code: '.$err);
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal membatalkan pesanan. Error code: '.$err);
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to cancel order. Error code: '.$err);
+				}
 				redirect('marketplace/Orders');
 			}
 		}
@@ -375,6 +381,7 @@ class Orders extends CI_Controller
 	}
 	public function accept(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
 				'ord_id' => $ord_id,
@@ -397,7 +404,12 @@ class Orders extends CI_Controller
 
 			if ($err) {
 				$this->db->trans_rollback();
-				$this->session->set_flashdata('error_message', 'Failed to accept order. Error code: '.$err);
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal menerima pesanan. Error code: '.$err);
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to accept order. Error code: '.$err);
+				}
 				redirect('marketplace/Orders');
 			}
 		}

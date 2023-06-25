@@ -157,6 +157,7 @@ class Requestcertificate extends CI_Controller {
 
 	public function cancel(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			$req_id = $this->uri->segment(4);
 			$dataReq = array(
 				'req_id' => $req_id,
@@ -179,7 +180,12 @@ class Requestcertificate extends CI_Controller {
 
 			if ($err) {
 				$this->db->trans_rollback();
-				$this->session->set_flashdata('error_message', 'Failed to cancel request. Error code: '.$err);
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal membatalkan pengajuan. Error code: '.$err);
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to cancel request. Error code: '.$err);
+				}
 				redirect('frontend/Requestcertificate');
 			}
 		}
@@ -189,6 +195,7 @@ class Requestcertificate extends CI_Controller {
 	}
 	public function accept(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			$req_id = $this->uri->segment(4);
 			$dataReq = array(
 				'req_id' => $req_id,
@@ -210,7 +217,12 @@ class Requestcertificate extends CI_Controller {
 
 			if ($err) {
 				$this->db->trans_rollback();
-				$this->session->set_flashdata('error_message', 'Failed to accept certificate. Error code: '.$err);
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal menerima sertifikat. Error code: '.$err);
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to accept certificate. Error code: '.$err);
+				}
 				redirect('frontend/Requestcertificate');
 			}
 		}
