@@ -156,6 +156,26 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
@@ -220,6 +240,10 @@
             <?php		
                 if ($this->session->flashdata('req_micro_success')){ ?>
                     $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
             <?php } ?>
         });
         

@@ -21,6 +21,16 @@ class RequestmicrochipModel extends CI_Model {
         return $this->db->get('requests_microchip');
     }
 
+    public function get_processed_requests($where = null){
+        $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $stats = array($this->config->item('micro_processed'), $this->config->item('micro_accepted'));
+        $this->db->where_in('req_stat_id', $stats);
+        return $this->db->get('requests_microchip');
+    }
+
     public function search_requests($like, $where, $offset = 0, $limit = 0){
         $this->db->select('*, DATE_FORMAT(req_date, "%d-%m-%Y") AS req_date, m1.mem_name AS mem_name, k1.ken_name AS ken_name, m2.mem_name AS old_mem_name, k2.ken_name AS old_ken_name');
         if ($where != null) {

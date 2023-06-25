@@ -82,10 +82,35 @@ class Requestmicrochip extends CI_Controller {
 
 	public function add(){
 		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
 			$where['can_id'] = $this->uri->segment(4);
 			$data['canine'] = $this->caninesModel->get_canines($where)->row();
-			$data['mode'] = 0;
-			$this->load->view('frontend/add_request_microchip', $data);
+			if($data['canine']->can_chip_number != '-' && $data['canine']->can_chip_number != null){
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Anjing yang bersangkutan sudah memiliki nomor microchip');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'The dog already has a microchip number');
+				}
+				redirect('frontend/Canines');
+			}
+			else{
+				$whereReq['req_can_id'] = $this->uri->segment(4);
+				$numReq = $this->requestmicrochipModel->get_processed_requests($whereReq)->num_rows();
+				if($numReq != 0){
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Permintaan pemasangan microchip untuk anjing yang bersangkutan sudah dibuat dan sedang diproses');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Microchip implant request for the dog has been made and is being processed');
+					}
+					redirect('frontend/Canines');
+				}
+				else{
+					$data['mode'] = 0;
+					$this->load->view('frontend/add_request_microchip', $data);
+				}
+			}
         }
         else{
           	redirect('frontend/Canines');
