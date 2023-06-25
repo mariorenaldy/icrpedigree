@@ -583,8 +583,8 @@ $config['canine_img'] = 'Dog.svg';
 $config['product_img'] = 'product.jpg';
 $config['default_img'] = 'avatar.jpg';
 
-$config['dam_id'] = 87;
-$config['sire_id'] = 86;
+$config['dam_id'] = 2;
+$config['sire_id'] = 1;
 
 $config['backend_breed'] = 1;
 $config['frontend_breed'] = 1;
@@ -644,7 +644,7 @@ $config['user'] = 1;
 $config['can_name_length'] = 20;
 $config['can_a_s_length'] = 60;
 
-$config['no_member'] = 0;
+$config['no_member'] = 1;
 
 $config['stud'] = 1;
 $config['birth'] = 2;
@@ -653,7 +653,8 @@ $config['canine'] = 4;
 $config['kennel'] = 5;
 
 $config['super'] = 0;
-$config['system'] = 4;
+$config['no_user'] = 0;
+$config['system'] = 1;
 
 $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
