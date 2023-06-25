@@ -82,16 +82,16 @@ class StudModel extends CI_Model {
     }
 
     public function getMonthlyData($year = null){
-        $this->db->select("DATE_FORMAT(stu_app_date, '%b %Y') as month, COUNT(stu_id) as total_stud");
+        $this->db->select("DATE_FORMAT(stu_reg_date, '%b %Y') as month, COUNT(stu_id) as total_stud");
         $this->db->from('studs');
         if($year == null){
-            $this->db->where('YEAR(stu_app_date) = YEAR(CURDATE())');
+            $this->db->where('YEAR(stu_reg_date) = YEAR(CURDATE())');
         }
         else{
-            $this->db->where('YEAR(stu_app_date) = '.$year);
+            $this->db->where('YEAR(stu_reg_date) = '.$year);
         }
-        $this->db->group_by("DATE_FORMAT(stu_app_date, '%b %Y')");
-        $this->db->order_by("stu_app_date", 'ASC');
+        $this->db->group_by("DATE_FORMAT(stu_reg_date, '%b %Y')");
+        $this->db->order_by("stu_reg_date", 'ASC');
         $ignore = array($this->config->item('deleted'), $this->config->item('rejected'));
         $this->db->where_not_in('stu_stat', $ignore);
 
