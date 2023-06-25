@@ -371,10 +371,10 @@ class Requestupdatebirth extends CI_Controller {
 				}
 				else{
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Laporan ubah lahir yang lama belum diproses. Harap menghubungi Admin.');
+						$this->session->set_flashdata('error_message', 'Laporan ubah lahir yang lama belum diproses. Harap tunggu persetujuan.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The previous birth change report has not been processed. Please contact Admin.');
+						$this->session->set_flashdata('error_message', 'The previous birth change report has not been processed. Please wait for approval.');
 					}
 					$this->load->view("frontend/add_request_update_birth", $data);
 				}

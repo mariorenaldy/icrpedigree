@@ -107,10 +107,10 @@ class Members extends CI_Controller {
 				if (!$err && $member->mem_stat == $this->config->item('saved')){
 					$err++;
                     if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap menghubungi admin atau tunggu persetujuan');
+						$this->session->set_flashdata('login_error', 'Data member belum di-approve. Harap tunggu persetujuan');
 					}
 					else{
-						$this->session->set_flashdata('login_error', 'Your membership has not been approved. Please contact admin or wait for approval');
+						$this->session->set_flashdata('login_error', 'Your membership has not been approved. Please wait for approval');
 					}
 				}
 				if (!$err && sha1($this->input->post('password')) != $member->mem_password){
@@ -384,10 +384,10 @@ class Members extends CI_Controller {
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar dan belum diproses. Harap menghubungi Admin atau tunggu persetujuan');
+							$this->session->set_flashdata('error_message', 'Nama sudah terdaftar dan belum diproses. Harap tunggu persetujuan');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please contact Admin or wait for approval');
+							$this->session->set_flashdata('error_message', 'Name is already registered and has not been processed. Please wait for approval');
 						}
 					}
 
@@ -455,7 +455,7 @@ class Members extends CI_Controller {
 					$mem = $this->MemberModel->get_members($whereMem)->row();
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap menghubungi Admin');
+						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap tunggu persetujuan');
 					}
 
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){

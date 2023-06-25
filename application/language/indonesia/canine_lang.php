@@ -21,7 +21,7 @@ $lang["can_dob"] = "Tanggal Lahir";
 $lang["can_full_body"] = "Foto Anjing Seluruh Badan";
 $lang["can_dog_photo"] = "Foto Anjing";
 $lang["can_stambum_photo"] = "Foto Stambum";
-$lang["can_add_success"] = "Pendaftaran anjing berhasil disimpan. Hubungi admin atau tunggu persetujuan";
+$lang["can_add_success"] = "Pendaftaran anjing berhasil disimpan. Harap tunggu persetujuan";
 
 $lang["can_add_puppy"] = "Tambah Anak";
 $lang["can_can_photo"] = "Foto Anjing";
@@ -29,7 +29,7 @@ $lang["can_puppy_list"] = "List Anak";
 $lang["can_search_puppy"] = "Cari Anak";
 $lang["can_report_puppy"] = "Lapor Anak";
 $lang["can_add_puppy_success"] = "Anak berhasil disimpan. Laporkan anak berikutnya atau tekan tombol Kembali untuk menyelesaikan laporan";
-$lang["can_report_puppy_success"] = "Lapor anak berhasil disimpan. Hubungi admin atau tunggu persetujuan";
+$lang["can_report_puppy_success"] = "Lapor anak berhasil disimpan. Harap tunggu persetujuan";
 
 $lang["can_report_change_photo_rip"] = "Lapor Ubah Foto & RIP";
 $lang["can_report_change_photo_rip_list"] = "List Laporan Ubah Foto & RIP";

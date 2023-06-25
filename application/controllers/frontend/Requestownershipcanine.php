@@ -454,10 +454,10 @@ class Requestownershipcanine extends CI_Controller {
 				}
 				else{
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap menghubungi Admin atau tunggu persetujuan.');
+						$this->session->set_flashdata('error_message', 'Laporan ubah pemilik yang lama belum diproses. Harap tunggu persetujuan.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The previous ownership change report has not been processed. Please contact Admin or wait for approval.');
+						$this->session->set_flashdata('error_message', 'The previous ownership change report has not been processed. Please wait for approval.');
 					}
 					$this->load->view("frontend/add_request_ownership", $data);
 				}

@@ -742,10 +742,10 @@ class Studs extends CI_Controller {
 				else{
 					if ($stud->stu_stat == $this->config->item('saved')){
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar dan belum diproses. Harap menghubungi Admin atau tunggu persetujuan');
+							$this->session->set_flashdata('error_message', 'Lapor pacak sudah terdaftar dan belum diproses. Harap tunggu persetujuan');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Stud report is already registered and has not been processed. Please contact Admin or wait for approval');
+							$this->session->set_flashdata('error_message', 'Stud report is already registered and has not been processed. Please wait for approval');
 						}
 						$this->load->view('frontend/add_stud', $data);
 					}

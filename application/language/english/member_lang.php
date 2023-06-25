@@ -23,7 +23,7 @@ $lang["mem_change_password_success"] = "Password has been changed";
 $lang["mem_new_password"] = "New Password";
 $lang["mem_confirm_password"] = "Confirm Password";
 $lang["mem_reset_success"] = "Password has been reset";
-$lang["mem_contact_admin"] = "Contact admin or wait for approval";
+$lang["mem_contact_admin"] = "Please wait for approval";
 
 $lang["mem_edit_kennel"] = "Report Update Kennel";
 $lang["mem_edit_kennel_list"] = "Report Update Kennel List";

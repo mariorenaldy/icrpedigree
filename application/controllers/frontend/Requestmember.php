@@ -66,10 +66,10 @@ class Requestmember extends CI_Controller {
 				$res = $this->RequestmemberModel->get_requests($where)->num_rows();
 				if ($res){
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Laporan ubah kennel yang lama belum diproses. Harap menghubungi Admin atau tunggu persetujuan.');
+						$this->session->set_flashdata('error_message', 'Laporan ubah kennel yang lama belum diproses. Harap tunggu persetujuan.');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'The previous kennel change report has not been processed. Please contact Admin or wait for approval.');
+						$this->session->set_flashdata('error_message', 'The previous kennel change report has not been processed. Please wait for approval.');
 					}
 					$this->load->view("frontend/edit_profile", $data);
 				}
