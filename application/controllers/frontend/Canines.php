@@ -356,7 +356,7 @@ class Canines extends CI_Controller {
                 }
 
                 if (!$err){
-                    $data = array(
+                    $dataCan = array(
                         'can_member_id' => $this->session->userdata('mem_id'),
                         'can_reg_number' => '-', // strtoupper($this->input->post('can_reg_number')),
                         'can_breed' => $this->input->post('can_breed'),
@@ -376,14 +376,14 @@ class Canines extends CI_Controller {
                     $kennel = $this->KennelModel->get_kennels($whereKennel)->result();
                     if ($kennel){
                         if ($kennel[0]->ken_type_id == 1)
-                            $data['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
+                            $dataCan['can_a_s'] = strtoupper($this->input->post('can_a_s'))." VON ".$kennel[0]->ken_name;
                         else if ($kennel[0]->ken_type_id == 2)
-                            $data['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
+                            $dataCan['can_a_s'] = $kennel[0]->ken_name."` ".strtoupper($this->input->post('can_a_s'));
                         else 
-                            $data['can_a_s'] = strtoupper($this->input->post('can_a_s'));
+                            $dataCan['can_a_s'] = strtoupper($this->input->post('can_a_s'));
                     }
         
-                    if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $data['can_a_s'])){
+                    if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
                         $err++;
 						if ($site_lang == 'indonesia') {
 							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
@@ -393,7 +393,7 @@ class Canines extends CI_Controller {
 						}
                     }
 
-                    if (strlen($data['can_a_s']) >= $this->config->item('can_a_s_length')){
+                    if (strlen($dataCan['can_a_s']) >= $this->config->item('can_a_s_length')){
                         $err++;
 						if ($site_lang == 'indonesia') {
 							$this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
@@ -411,7 +411,7 @@ class Canines extends CI_Controller {
 
                         $this->db->trans_strict(FALSE);
                         $this->db->trans_start();
-                        $canines = $this->caninesModel->add_canines($data);
+                        $canines = $this->caninesModel->add_canines($dataCan);
                         if ($canines){
 							$insertedID = $this->db->insert_id();
 							$dataPed['ped_canine_id'] = $insertedID;
