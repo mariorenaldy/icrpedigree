@@ -72,6 +72,7 @@ class Requestupdatebirth extends CI_Controller {
 								'log_date_of_birth' => $date,
 								'log_male' => $req->req_male,
 								'log_female' => $req->req_female,
+								'log_member_id' => $req->req_member_id,
 								'log_user' => $this->session->userdata('use_id'),
 								'log_date' => date('Y-m-d H:i:s'),
 							);
