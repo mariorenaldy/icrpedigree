@@ -207,7 +207,7 @@
         });
 
         function warning(){
-            var proceed = confirm("Simpan lapor anak?");
+            var proceed = confirm("Save puppy report?");
             if (proceed){
                 window.location = '<?= base_url() ?>backend/Stambums/force_complete/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
             }

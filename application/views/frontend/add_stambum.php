@@ -169,7 +169,15 @@
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script>
         function warning(){
-            var proceed = confirm("Simpan lapor anak?");
+            let site_lang = getCookie("site_lang");
+            proceed = null;
+            if(site_lang == "indonesia"){
+                proceed = confirm("Simpan lapor anak?");
+            }
+            else{
+                proceed = confirm("Save puppy report?");
+            }
+
             if (proceed){
                 window.location = '<?= base_url() ?>frontend/Stambums/force_complete/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
             }
@@ -177,6 +185,23 @@
                 window.location = '<?= base_url() ?>frontend/Stambums/cancel_all/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
             }
         }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
         const imageInput = document.querySelector("#imageInput");
         const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
