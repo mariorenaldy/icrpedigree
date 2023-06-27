@@ -31,16 +31,12 @@
                         <label for="stu_dam_id" class="control-label col-md-12 text-center"><?= lang("birth_photo_breastfed"); ?></label>
                         <div class="col-md-12 text-center">
                             <?php 
-                                if (!$mode){ 
                                     if ($birth->bir_dam_photo && $birth->bir_dam_photo != '-'){
                             ?>
                                 <img id="imgPreview" width="15%" src="<?= base_url().'uploads/births/'.$birth->bir_dam_photo ?>">
                             <?php } else { ?>
                                 <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                                <?php } 
-                            } else { ?>
-                                <img id="imgPreview" width="15%" src="<?= base_url().'assets/img/avatar.jpg' ?>">
-                            <?php } ?>
+                                <?php } ?>
                             <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg"  onclick="resetImage()"/>
                             <input type="hidden" name="attachment_dam" id="attachment">
                         </div>
