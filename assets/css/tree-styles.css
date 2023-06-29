@@ -13,6 +13,20 @@ body p {
 }
 #wrapper {
   position: relative;
+  color: white !important;
+}
+#wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/stbdepan.jpg');
+  /* background-size: 100%; */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  /* background-position: center; */
 }
 .branch {
   /* border: 2px solid black; */
@@ -115,10 +129,10 @@ body p {
   color: #e62225 !important;
   font-weight: 700;
 }
-.text-center.fs-5.black{
+.text-center.fs-5.white{
   font-family: Impact;
   font-size: 1.3em !important;
-  color: black !important;
+  color: white !important;
   font-weight: 700;
 }
 .label .fs-4{
@@ -132,10 +146,10 @@ body p {
   color: #e62225 !important;
   font-weight: 700;
 }
-.text-center.fs-4.black{
+.text-center.fs-4.white{
   font-family: Impact;
   font-size: 1.5em !important;
-  color: black !important;
+  color: white !important;
   font-weight: 700;
 }
 .label .fs-7{
@@ -160,9 +174,9 @@ body p {
   font-weight: 700;
   color: #e62225 !important;
 }
-.black {
+.white {
   font-weight: 700;
-  color: black !important;
+  color: white !important;
 }
 .canine{
   width: 250px;
@@ -176,11 +190,12 @@ body p {
   min-width: 320px;
   margin-left: 10px;
 }
-.bg-container {
+/* .bg-container {
   position: absolute;
-  height: 610px;
-  width: 800px;
+  height: 710px;
+  width: 1100px;
   background-image: url('../img/certificatebackgroundlogo.png');
+  background-image: url('../img/stbblkg.jpg');
   background-repeat: no-repeat;
   pointer-events: none;
   background-size: 100%;
@@ -189,7 +204,7 @@ body p {
   opacity: 0.3;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
-}
+} */
 .imgReplacement{
   height: 150px;
 }

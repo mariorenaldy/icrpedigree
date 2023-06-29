@@ -16,7 +16,10 @@
     </div>
     <div class="marginCertificate">
       <div class="row">
-        <div class="col md-4">
+        <div class="text-center">
+          <img src="<?= base_url('assets/img/stbblkg.jpg') ?>" style="width: 316mm;height: 148mm;">
+        </div>
+        <!-- <div class="col md-4">
           <figure class="text-center">
             <img src="<?= base_url('assets/img/frontcertificatelogo.png') ?>" class="center-block text-center" style="width: 23vw;">
           </figure>
@@ -35,7 +38,7 @@
                     echo '<li class="icr-note">'.$r->note_date.': '.$r->note_desc.'</li>'; 
                 } ?>
             </ol>
-        </div>
+        </div> -->
       </div>
       <div class="row">
         <div class="col text-center">
