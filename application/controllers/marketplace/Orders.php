@@ -68,10 +68,10 @@ class Orders extends CI_Controller
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$where['ord_mem_id'] = $this->session->userdata('mem_id');
-			$data['orders'] = $this->OrderModel->get_orders($where, 'ord_created_at desc', $page * $config['per_page'], $this->config->item('order_count'))->result();
+			$data['orders'] = $this->OrderModel->get_orders($where, 'sort_date desc', $page * $config['per_page'], $this->config->item('order_count'))->result();
 
 			$config['base_url'] = base_url().'/marketplace/Orders/index';
-			$config['total_rows'] = $this->OrderModel->get_orders($where, 'ord_created_at desc', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->OrderModel->get_orders($where, 'sort_date desc', $page * $config['per_page'], 0)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -273,6 +273,7 @@ class Orders extends CI_Controller
 				}
 			}
 			else{
+				echo 'Curl error: ' . curl_error($ch);
 				redirect('marketplace/Orders');
 			}
 	

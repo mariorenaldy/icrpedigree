@@ -105,6 +105,9 @@ class Payment extends CI_Controller {
 				echo json_encode($response);
 			}
 		}
+		else{
+			echo 'Curl error: ' . curl_error($ch);
+		}
 
 		// Close cURL
 		curl_close($ch);
