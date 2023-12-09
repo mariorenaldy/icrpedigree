@@ -15,29 +15,35 @@ class OrderModel extends CI_Model {
         $this->db->from("orders");
         return $this->db->count_all_results();
     }
-
-    public function get_orders($where, $sort = 'sort_date desc', $offset = 0, $limit = 0){
-        $this->db->select('*, , ord_created_at as sort_date, DATE_FORMAT(orders.ord_created_at, "%d-%m-%Y %H:%i:%s") as ord_created_at, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
+    public function get_orders($where = null, $sort = 'sort_date desc', $offset = 0, $limit = 0){
+        $this->db->select('*, ord_date as sort_date, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
         if ($where != null) {
             $this->db->where($where);
         }
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
-        $this->db->join('products','orders.ord_pro_id = products.pro_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
         $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
-        $this->db->join('products_type','products.pro_type_id = products_type.pro_type_id', 'left');
         $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);
         return $this->db->get('orders');
     }
 
-    public function get_processed_orders($sort = 'ord_created_at desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(orders.ord_created_at, "%d-%m-%Y %H:%i:%s") as ord_created_at, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
+    public function get_order_items($where = null){
+        $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        $this->db->join('orders','order_items.itm_ord_id = orders.ord_id');
+        $this->db->join('products','order_items.itm_pro_id = products.pro_id');
+        return $this->db->get('order_items');
+    }
+
+    public function get_processed_orders($sort = 'ord_date desc', $offset = 0, $limit = 0){
+        $this->db->select('*, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_created_at, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
         $where = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_failed'));
         $this->db->where_not_in('orders.ord_stat_id', $where);
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
-        $this->db->join('products','orders.ord_pro_id = products.pro_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
         $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
         $this->db->order_by($sort);
@@ -57,7 +63,6 @@ class OrderModel extends CI_Model {
             $this->db->group_end();
         }
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
-        $this->db->join('products','orders.ord_pro_id = products.pro_id');
         $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);
@@ -66,6 +71,10 @@ class OrderModel extends CI_Model {
 
     public function add_orders($data){
         return $this->db->insert('orders', $data);
+    }
+
+    public function add_order_items($data){
+        return $this->db->insert('order_items', $data);
     }
 
     public function update_orders($data, $where){

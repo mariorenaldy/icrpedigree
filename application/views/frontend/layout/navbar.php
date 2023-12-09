@@ -65,6 +65,7 @@ if($memData){
                     </span>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= base_url().'marketplace/Products' ?>"><?= lang("nav_products"); ?></a></li>
+                        <li><a class="dropdown-item" href="<?= base_url().'marketplace/Products/cart_detail' ?>"><?= lang("nav_cart"); ?> (<?= $this->cart->total_items().' '.lang("nav_items"); ?>)</a></li>
                         <li><a class="dropdown-item" href="<?= base_url().'marketplace/Orders' ?>"><?= lang("nav_orders"); ?></a></li>
                     </ul>
                 </div>

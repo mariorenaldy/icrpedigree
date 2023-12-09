@@ -24,3 +24,5 @@ $lang["nav_change_password"] = "Change Password";
 
 $lang["nav_products"] = "Products";
 $lang["nav_orders"] = "Orders";
+$lang["nav_cart"] = "Cart";
+$lang["nav_items"] = "items";

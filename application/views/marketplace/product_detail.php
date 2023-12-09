@@ -20,6 +20,7 @@
             <p class="mb-5 h6 text-info"><?= $products->pro_type_name ?></p>
             <p class="mb-5" style="white-space: pre-line"><?= $products->pro_desc ?></p>
             <h5 class="text-warning mb-4"><?= lang('pro_price'); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
+            <p class="mb-0"><?= lang('pro_stock'); ?>: <?= $products->pro_stock ?></p>
             <span><?= lang('pro_quantity'); ?>: </span>
             <div class="col-3 mb-5">
                 <div class="input-group mb-3">
@@ -37,14 +38,14 @@
                     </span>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="payment(<?= $products->pro_id ?>)"><?= lang("common_buy"); ?></button>
+            <button type="button" class="btn btn-primary" onclick="addtocart(<?= $products->pro_id ?>)"><?= lang("pro_add_to_cart"); ?></button>
             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>marketplace/Products'"><?= lang("common_back"); ?></button>
         </figure>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
-        function payment(id) {
-            window.location = "<?= base_url(); ?>marketplace/Products/product_payment/" + id + "/" + $('#quantity').val();
+        function addtocart(id){
+            window.location = "<?= base_url(); ?>marketplace/Products/add_to_cart/"+ id + "/" + $('#quantity').val();
         }
         $(document).ready(function() {
             var quantity = 0;

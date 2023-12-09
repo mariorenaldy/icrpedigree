@@ -79,6 +79,75 @@ class Products extends CI_Controller
         $this->session->set_userdata('keyword', '');
         $this->load->view("marketplace/products_frontend", $data);
     }
+	public function add_to_cart()
+	{
+		if ($this->uri->segment(4)) {
+			$quantity = 1;
+			if ($this->uri->segment(5)) {
+				$quantity = $this->uri->segment(5);
+			}
+			$where['pro_id'] = $this->uri->segment(4);
+			$where['pro_stat'] = $this->config->item('accepted');
+			$where['pro_stock !='] = 0;
+			$data['products'] = $this->productModel->get_products($where)->row();
+			$err = 0;
+			if($data['products']){
+				//check stock
+				$stock = $data['products']->pro_stock;
+
+				if (count($this->cart->contents())>0){
+					foreach ($this->cart->contents() as $cartItem){       
+						if($cartItem['id'] == $data['products']->pro_id){
+							if($cartItem['qty']+$quantity>$stock){
+								$err = 1;
+								break;
+							}
+						}
+					}
+				}
+
+				$site_lang = $this->input->cookie('site_lang');
+				if($err){
+					if ($site_lang == 'indonesia') {
+						$this->session->set_flashdata('error_message', 'Gagal menambahkan produk ke keranjang. Pastikan jumlah item yang ditambahkan tidak melebihi jumlah stok');
+					}
+					else{
+						$this->session->set_flashdata('error_message', 'Failed to add product to shopping cart. Make sure the number of items being added will not exceed the number of stock');
+					}
+				}
+				else{
+					$dataCart = array(
+						'id'      => $data['products']->pro_id,
+						'qty'     => $quantity,
+						'price'   => $data['products']->pro_price,
+						'name'    => $data['products']->pro_name,
+					);
+	
+					$this->cart->insert($dataCart);
+					$this->session->set_flashdata('add_success', true);
+				}
+				redirect('marketplace/products');
+			}
+			else{
+				redirect('marketplace/products');
+			}
+		} else {
+			redirect('marketplace/products');
+		}
+	}
+	public function cart_detail()
+	{
+		$this->load->view("marketplace/cart_detail");
+	}
+	public function clear_cart()
+	{
+		$this->cart->destroy();
+		redirect('marketplace/products/cart_detail');
+	}
+	public function checkout()
+	{
+		$this->load->view("marketplace/checkout");
+	}
 	public function product_detail()
 	{
 		if ($this->uri->segment(4)) {
@@ -94,22 +163,6 @@ class Products extends CI_Controller
 			}
 		} else {
 			redirect('marketplace/products');
-		}
-	}
-	public function product_payment()
-	{
-		if ($this->uri->segment(4)) {
-			$where['pro_id'] = $this->uri->segment(4);
-			$where['pro_stat'] = $this->config->item('accepted');
-			$data['products'] = $this->productModel->get_products($where)->row();
-			if($data['products']){
-				$this->load->view("marketplace/product_payment", $data);
-			}
-			else{
-				redirect('marketplace/products');
-			}
-		} else {
-			redirect('marketplace/product_detail');
 		}
 	}
 

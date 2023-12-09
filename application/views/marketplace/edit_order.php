@@ -23,12 +23,6 @@
                                 <?= $order->mem_name; ?>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Product</label>
-                            <div class="col-md-10">
-                                <?= $order->pro_name; ?>
-                            </div>
-                        </div>
                         <hr/>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Invoice</label>
@@ -39,16 +33,6 @@
                                 <?php } else { ?>
                                     <input type="hidden" name="ord_id" value="<?= set_value('ord_id'); ?>">
                                     <input class="form-control" type="text" placeholder="Invoice" name="ord_invoice" value="<?= set_value('ord_invoice'); ?>">
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Quantity</label>
-                            <div class="col-md-10">
-                                <?php if (!$mode){ ?>
-                                    <input class="form-control" type="number" placeholder="Quantity" name="ord_quantity" value="<?= $order->ord_quantity; ?>">
-                                <?php } else { ?>
-                                    <input class="form-control" type="number" placeholder="Quantity" name="ord_quantity" value="<?= set_value('ord_quantity'); ?>">
                                 <?php } ?>
                             </div>
                         </div>

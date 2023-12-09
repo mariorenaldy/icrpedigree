@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang["ord_orders"] = "Orders";
+$lang["ord_address"] = "Delivery Address";
+$lang["ord_shipping_type"] = "Shipping Type";
 $lang["ord_search"] = "Find Orders";
 $lang["ord_search_placeholder"] = "Product's Name/Invoice";
 $lang["ord_invoice"] = "Invoice";

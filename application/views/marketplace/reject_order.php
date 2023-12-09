@@ -31,19 +31,11 @@
                         </div>
                         <div class="mb-1">
                             <span class="d-inline-block" style="width: 150px;">Date</span>
-                            <span><?= $order->ord_created_at ?></span>
+                            <span><?= $order->ord_date ?></span>
                         </div>
                         <div class="mb-1">
                             <span class="d-inline-block" style="width: 150px;">Payment Date</span>
                             <span><?= $order->ord_pay_date ?></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="d-inline-block" style="width: 150px;">Product's Name</span>
-                            <span><?= $order->pro_name ?></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="d-inline-block" style="width: 150px;">Quantity</span>
-                            <span><?= $order->ord_quantity ?></span>
                         </div>
                         <div class="mb-1">
                             <span class="d-inline-block" style="width: 150px;">Total Price</span>

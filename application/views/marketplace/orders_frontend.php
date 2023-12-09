@@ -32,10 +32,9 @@
                 </div>
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-3">
-                    <div class="col"><b><?= lang("common_photo"); ?></b></div>
-                    <div class="col"><b><?= lang("pro_name"); ?></b></div>
                     <div class="col"><b><?= lang("ord_invoice"); ?></b></div>
-                    <div class="col"><b><?= lang("ord_quantity"); ?></b></div>
+                    <div class="col"><b><?= lang("ord_address"); ?></b></div>
+                    <div class="col"><b><?= lang("ord_shipping_type"); ?></b></div>
                     <div class="col"><b><?= lang("ord_total_price"); ?></b></div>
                     <div class="col"><b><?= lang("ord_date"); ?></b></div>
                     <div class="col"><b>Status</b></div>
@@ -43,27 +42,20 @@
                 </div>
                 <?php foreach ($orders AS $o){ ?>
                     <div class="row mb-5">
-                        <div class="col mb-1">
-                            <?php if ($o->pro_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/products/'.$o->pro_photo) ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $o->ord_id ?>" onclick="display('myImg<?= $o->ord_id ?>')">
-                            <?php } else{ ?>
-                                <img src="<?= base_url('assets/img/'.$this->config->item('product_img')) ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $o->ord_id ?>" onclick="display('myImg<?= $o->ord_id ?>')">
-                            <?php } ?>
-                        </div>
-                        <div class="col">
-                            <?php echo $o->pro_name.'<br/>'; ?>
-                        </div>
                         <div class="col">
                             <?php echo $o->ord_invoice.'<br/>'; ?>
                         </div>
                         <div class="col">
-                            <?php echo $o->ord_quantity.'<br/>'; ?>
+                            <?php echo $o->ord_address.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $o->ord_shipping.'<br/>'; ?>
                         </div>
                         <div class="col">
                             <?php echo 'Rp '.number_format($o->ord_total_price,0,",",".").'<br/>'; ?>
                         </div>
                         <div class="col">
-                            <?php echo $o->ord_created_at.'<br/>'; ?>
+                            <?php echo $o->ord_date.'<br/>'; ?>
                         </div>
                         <div class="col">
                             <?php echo $o->ord_stat_name; 

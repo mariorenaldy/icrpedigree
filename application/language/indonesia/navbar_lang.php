@@ -24,3 +24,5 @@ $lang["nav_change_password"] = "Ubah Password";
 
 $lang["nav_products"] = "Produk";
 $lang["nav_orders"] = "Pesanan";
+$lang["nav_cart"] = "Keranjang";
+$lang["nav_items"] = "barang";

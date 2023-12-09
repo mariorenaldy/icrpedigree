@@ -10,3 +10,8 @@ $lang["pro_total_price"] = "Total Harga";
 $lang["pro_detail"] = "Detail Produk";
 $lang["pro_type"] = "Tipe Produk";
 $lang["pro_all"] = "Semua";
+$lang["pro_add_to_cart"] = "Tambah ke Keranjang";
+$lang["pro_cart"] = "Keranjang Belanja";
+$lang["pro_stock"] = "Stok";
+
+$lang["pro_add_success"] = "Produk telah berhasil ditambahkan ke Keranjang Belanja";

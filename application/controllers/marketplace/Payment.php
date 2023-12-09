@@ -120,61 +120,74 @@ class Payment extends CI_Controller {
 			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
 		}
 	
-		$string = 'INV-'.$string;
+		$string = 'TES-'.$string;
 		return $string;
 	}
 	function saveOrder(){
-		$pro_id = $this->input->post('pro_id');
-		$quantity = $this->input->post('quantity');
 		$inv = $this->generateInvoice();
 		$amount = $this->input->post('amount');
-
 		$data = array(
 			'ord_mem_id' => $this->session->userdata('mem_id'),
-			'ord_pro_id' => $pro_id,
 			'ord_invoice' => $inv,
-			'ord_quantity' => $quantity,
-			'ord_total_price' => $amount,
-			'ord_created_at' => date('Y-m-d H:i:s'),
+			'ord_address' => $this->input->post('address'),
+			'ord_shipping' => $this->input->post('shipping'),
+			'ord_shipping_cost' => $this->input->post('shippingCost'),
+			'ord_date' => date('Y-m-d H:i:s'),
 			'ord_pay_due_date' => date('Y-m-d H:i:s', strtotime('1 hour')),
+			'ord_total_price' => $amount,
 			'ord_stat_id' => $this->config->item('order_not_paid')
 		);
 
 		$err = 0;
 
-		//update product stock
-		$whePro['pro_id'] = $pro_id;
-		$stock = $this->ProductModel->get_stock($whePro);
-		$dataPro = array(
-			'pro_stock' => $stock-$quantity
-		);
-
 		$this->db->trans_strict(FALSE);
 		$this->db->trans_start();
-		$products = $this->ProductModel->update_products($dataPro, $whePro);
-		if ($products) {
-			$id = $this->OrderModel->add_orders($data);
-			if ($id) {
-				$this->db->trans_complete();
+
+		$this->OrderModel->add_orders($data);
+		$idOrder = $this->db->insert_id();
+
+		foreach($this->cart->contents() as $item){
+			$data = array(
+				'itm_ord_id' => $idOrder,
+				'itm_pro_id' => $item['id'],
+				'itm_quantity' => $item['qty'],
+				'itm_subtotal' => $item['subtotal']
+			);
+
+			//update product stock
+			$whePro['pro_id'] = $item['id'];
+			$stock = $this->ProductModel->get_stock($whePro);
+			$stockAfter = $stock-$item['qty'];
+			if($stockAfter < 0){
+				$err = 4;
+				break;
+			}
+			$dataPro = array(
+				'pro_stock' => $stockAfter
+			);
+
+			$products = $this->ProductModel->update_products($dataPro, $whePro);
+			if ($products) {
+				$idItem = $this->OrderModel->add_order_items($data);
+				if (!$idItem) {
+					$err = 2;
+					break;
+				}
 			} else {
-				$err = 2;
+				$err = 1;
+				break;
 			}
-	
-			if ($err) {
-				$this->db->trans_rollback();
-				echo 'failed';
-			}
-			else{
-				echo $inv;
-			}
-		} else {
-			$err = 1;
 		}
+
+		$this->db->trans_complete();
+
+		$this->cart->destroy();
 
 		if ($err) {
-			$this->db->trans_rollback();
 			echo 'failed';
 		}
-
+		else{
+			echo $inv;
+		}
 	}
 }

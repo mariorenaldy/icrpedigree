@@ -22,9 +22,7 @@
                             <tr>
                                 <th>Last Modified</th>
                                 <th>Member</th>
-                                <th>Product</th>
                                 <th>Invoice</th>
-                                <th>Quantity</th>
                                 <th>Total Price</th>
                                 <th>Status</th>
                                 <th>Payment Date</th>
@@ -40,9 +38,7 @@
                                     <tr>
                                         <td><span class="text-nowrap"><?= $o->log_date; ?></span><br/>(<?= $o->user; ?>)</td>
                                         <td><?= $o->mem_name; ?></td>
-                                        <td><?= $o->pro_name; ?></td>
                                         <td><?= $o->log_invoice; ?></td>
-                                        <td><?= $o->log_quantity; ?></td>
                                         <td><?= $o->log_total_price; ?></td>
                                         <td><?= $o->ord_stat_name; ?></td>
                                         <td><?= $o->log_pay_date; ?></td>

@@ -66,18 +66,14 @@
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
+                                <th class="no-sort"></th>
                                 <th>Invoice</th>
                                 <th class="no-sort">Member</th>
-                                <th>Date</th>
-                                <th>Payment Date</th>
-                                <th class="no-sort">Product's name</th>
-                                <th class="no-sort">Photo</th>
-                                <th>Quantity</th>
+                                <th class="no-sort">Address</th>
+                                <th>Shipping Type</th>
                                 <th>Total Price</th>
+                                <th>Date</th>
                                 <th class="no-sort">Status</th>
-                                <th class="no-sort">Reject Reason</th>
-                                <th class="no-sort">Complain Photo</th>
-                                <th class="no-sort">Complain Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,28 +99,16 @@
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="Order Log"><i class="fa fa-history"></i></button>
                                         <?php } ?>
                                     </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-info mb-1" onclick="detail(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="Order Detail"><i class="fa-solid fa-list"></i></button>
+                                    </td>
                                     <td><?= $o->ord_invoice; ?></td>
                                     <td><?= $o->mem_name; ?></td>
-                                    <td class="text-nowrap"><?= $o->ord_created_at; ?></td>
-                                    <td class="text-nowrap"><?= $o->ord_pay_date; ?></td>
-                                    <td><?= $o->pro_name; ?></td>
-                                    <td>
-                                        <?php if ($o->pro_photo && $o->pro_photo != '-') { ?>
-                                            <img src="<?= base_url('uploads/products/' . $o->pro_photo) ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $o->ord_id ?>" onclick="display('myImg<?= $o->ord_id ?>')" style="max-height:100px;">
-                                        <?php } else { ?>
-                                            <img src="<?= base_url() . 'assets/img/product.jpg' ?>" class="img-fluid img-thumbnail" alt="product" id="myImg<?= $o->ord_id ?>" onclick="display('myImg<?= $o->ord_id ?>')" style="max-height:100px;">
-                                        <?php } ?>
-                                    </td>
-                                    <td><?= $o->ord_quantity; ?></td>
+                                    <td><?= $o->ord_address; ?></td>
+                                    <td><?= $o->ord_shipping; ?></td>
                                     <td><?= $o->ord_total_price; ?></td>
+                                    <td class="text-nowrap"><?= $o->ord_date; ?></td>
                                     <td><?= $o->ord_stat_name; ?></td>
-                                    <td><?= $o->ord_reject_note; ?></td>
-                                    <td>
-                                        <?php if ($o->com_photo && $o->com_photo != '-') { ?>
-                                            <img src="<?= base_url('uploads/complain/' . $o->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $o->ord_id ?>" onclick="display('myCom<?= $o->ord_id ?>')" style="max-height:100px;">
-                                        <?php } ?>
-                                    </td>
-                                    <td><?= $o->com_desc; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -151,6 +135,9 @@
         // }
         function reject(id, inv) {
             window.location = "<?= base_url(); ?>marketplace/Orders/reject/" + id;
+        }
+        function detail(id, inv) {
+            window.location = "<?= base_url(); ?>marketplace/Orders/order_detail/" + id;
         }
 
         function deliver(id, inv) {

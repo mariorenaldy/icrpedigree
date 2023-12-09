@@ -52,7 +52,8 @@
                         <h5 class="card-title text-danger"><?= $p->pro_name ?></h5>
                         <p class="card-text flex-grow-1"><?= $p->pro_type_name ?></p>
                         <h5 class="card-text">Rp <?= number_format($p->pro_price,0,",",".") ?></h5>
-                        <button type="button" class="btn btn-primary stretched-link" onclick="detail(<?= $p->pro_id ?>)">Detail</button>
+                        <button type="button" class="btn btn-primary mb-1" onclick="addtocart(<?= $p->pro_id ?>)"><?= lang("pro_add_to_cart"); ?></button>
+                        <button type="button" class="btn btn-success" onclick="detail(<?= $p->pro_id ?>)">Detail</button>
                     </div>
                 </div>
             <?php $counter++; if($counter % 3 == 0){ ?>
@@ -67,11 +68,66 @@
             endforeach; ?>
         </div>
         <?= $this->pagination->create_links(); ?>
+        <div class="modal fade text-dark" id="message-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><?= lang("common_notice"); ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-success">
+                            <?php if ($this->session->flashdata('add_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("pro_add_success"); ?></div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="error-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_error_message"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <?php if ($this->session->flashdata('error_message')){ ?>
+                            <div class="row">
+                                <div class="col-12"><?= $this->session->flashdata('error_message') ?></div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
+        $(document).ready(function(){
+            <?php		
+                if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
+                $('#error-modal').modal('show');
+            <?php } ?>
+        });
+
         function detail(id){
             window.location = "<?= base_url(); ?>marketplace/Products/product_detail/"+id;
+        }
+        function addtocart(id){
+            window.location = "<?= base_url(); ?>marketplace/Products/add_to_cart/"+id;
         }
 
         if ( window.history.replaceState ) {

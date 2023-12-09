@@ -83,10 +83,17 @@ class Orders extends CI_Controller
 		}
     }
 	public function detail(){
-		if($this->uri->segment(4)){
-			$where['ord_id'] = $this->uri->segment(4);
-			$data['order'] = $this->OrderModel->get_orders($where)->row();
-			$this->load->view('marketplace/order_detail', $data);
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$whereOrd['ord_id'] = $ord_id;
+			$whereItm['itm_ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['items'] = $this->OrderModel->get_order_items($whereItm)->result();
+			if ($data['order']) {
+				$this->load->view("marketplace/order_detail", $data);
+			} else {
+				redirect('marketplace/Orders/');
+			}
 		}
 	}
 
@@ -340,27 +347,32 @@ class Orders extends CI_Controller
 
 			//update product stock
 			foreach ($orders as $order) {
-				$productId = $order->ord_pro_id;
-				$quantity = $order->ord_quantity;
-	
-				$whePro['pro_id'] = $productId;
-				$product = $this->ProductModel->update_stock($whePro, $quantity);
-				if (!$product) {
-					$err = 1;
+				$whereItm['itm_ord_id'] = $order->ord_id;
+				$order_items = $this->OrderModel->get_order_items($whereItm)->result();
+
+				foreach ($order_items as $item) {
+					$productId = $item->itm_pro_id;
+					$quantity = $item->itm_quantity;
+		
+					$whePro['pro_id'] = $productId;
+					$product = $this->ProductModel->update_stock($whePro, $quantity);
+					if (!$product) {
+						$err = 1;
+					}
 				}
 			}
 
 			if($err){
-				$this->db->trans_rollback();
+				$this->db->trans_complete();
+				return false;
 			}
 			else{
 				//update all order status to expired
 				$orders = $this->OrderModel->update_expired_orders();
+				$this->db->trans_complete();
 				if ($orders) {
-					$this->db->trans_complete();
 					return true;
 				} else {
-					$this->db->trans_rollback();
 					return false;
 				}
 			}
@@ -372,7 +384,6 @@ class Orders extends CI_Controller
 			$site_lang = $this->input->cookie('site_lang');
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
-				'ord_id' => $ord_id,
 				'ord_stat_id' => $this->config->item('order_cancelled')
 			);
 	
@@ -383,15 +394,24 @@ class Orders extends CI_Controller
 			$orders = $this->OrderModel->update_orders($dataOrd, $whereOrd);
 			if ($orders) {
 				$order = $this->OrderModel->get_orders($whereOrd)->row();
-				$whePro['pro_id'] = $order->ord_pro_id;
-				$product = $this->ProductModel->update_stock($whePro, $order->ord_quantity);
-				if($product){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('cancel_success', TRUE);
-					redirect('marketplace/Orders');
-				}
-				else{
-					$err = 2;
+
+				$whereItm['itm_ord_id'] = $ord_id;
+				$order_items = $this->OrderModel->get_order_items($whereItm)->result();
+
+				foreach ($order_items as $item) {
+					$productId = $item->itm_pro_id;
+					$quantity = $item->itm_quantity;
+		
+					$whePro['pro_id'] = $productId;
+					$product = $this->ProductModel->update_stock($whePro, $quantity);
+					if($product){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('cancel_success', TRUE);
+						redirect('marketplace/Orders');
+					}
+					else{
+						$err = 2;
+					}
 				}
 			} else {
 				$err = 1;
@@ -569,7 +589,7 @@ class Orders extends CI_Controller
 					else{
 						$this->session->set_flashdata('error_message', 'Failed to save complaint file');
 					}
-					$this->load->view('marketplace/Orders', $data);
+					redirect('marketplace/Orders');
 				}
 			}
 		}
@@ -585,13 +605,29 @@ class Orders extends CI_Controller
 		$data['orders'] = $this->OrderModel->get_processed_orders()->result();
 		$this->load->view("marketplace/orders_backend", $data);
 	}
+	public function order_detail()
+	{
+		if ($this->uri->segment(4)){
+			$ord_id = $this->uri->segment(4);
+			$whereOrd['ord_id'] = $ord_id;
+			$whereItm['itm_ord_id'] = $ord_id;
+			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['items'] = $this->OrderModel->get_order_items($whereItm)->result();
+			if ($data['order']) {
+				$this->load->view("marketplace/order_detail_backend", $data);
+			} else {
+				redirect('marketplace/Orders/listOrders');
+			}
+		}
+		else{
+			redirect('marketplace/Orders/listOrders');
+		}
+	}
 	public function deliver()
 	{
 		if ($this->uri->segment(4)){
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
-				'ord_updated_at' => date('Y-m-d H:i:s'),
-				'ord_updated_by' => $this->session->userdata('use_id'),
 				'ord_stat_id' => $this->config->item('order_delivered')
 			);
 
@@ -600,11 +636,12 @@ class Orders extends CI_Controller
 			$dataLog = array(
 				'log_ord_id' => $ord_id,
 				'log_mem_id' => $order->ord_mem_id,
-				'log_pro_id' => $order->ord_pro_id,
 				'log_invoice' => $order->ord_invoice,
-				'log_quantity' => $order->ord_quantity,
+				'log_address' => $order->ord_address,
+				'log_shipping' => $order->ord_shipping,
+				'log_shipping_cost' => $order->ord_shipping_cost,
 				'log_total_price' => $order->ord_total_price,
-				'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+				'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
 				'log_updated_at' => date('Y-m-d H:i:s'),
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
@@ -655,8 +692,6 @@ class Orders extends CI_Controller
 		if ($this->uri->segment(4)){
 			$ord_id = $this->uri->segment(4);
 			$dataOrd = array(
-				'ord_updated_at' => date('Y-m-d H:i:s'),
-				'ord_updated_by' => $this->session->userdata('use_id'),
 				'ord_arrived_date' => date('Y-m-d H:i:s'),
 				'ord_stat_id' => $this->config->item('order_arrived')
 			);
@@ -666,11 +701,12 @@ class Orders extends CI_Controller
 			$dataLog = array(
 				'log_ord_id' => $ord_id,
 				'log_mem_id' => $order->ord_mem_id,
-				'log_pro_id' => $order->ord_pro_id,
 				'log_invoice' => $order->ord_invoice,
-				'log_quantity' => $order->ord_quantity,
+				'log_address' => $order->ord_address,
+				'log_shipping' => $order->ord_shipping,
+				'log_shipping_cost' => $order->ord_shipping_cost,
 				'log_total_price' => $order->ord_total_price,
-				'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+				'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
 				'log_updated_at' => date('Y-m-d H:i:s'),
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
@@ -763,19 +799,18 @@ class Orders extends CI_Controller
 
 					$order = $data['order'];
 					$dataOrd = array(
-						'ord_updated_at' => date('Y-m-d H:i:s'),
-						'ord_updated_by' => $this->session->userdata('use_id'),
 						'ord_stat_id' => $this->config->item('order_rejected')
 					);
-					
+
 					$dataLog = array(
 						'log_ord_id' => $ord_id,
 						'log_mem_id' => $order->ord_mem_id,
-						'log_pro_id' => $order->ord_pro_id,
 						'log_invoice' => $order->ord_invoice,
-						'log_quantity' => $order->ord_quantity,
+						'log_address' => $order->ord_address,
+						'log_shipping' => $order->ord_shipping,
+						'log_shipping_cost' => $order->ord_shipping_cost,
 						'log_total_price' => $order->ord_total_price,
-						'log_created_at' => date('Y-m-d H:i:s', strtotime($order->ord_created_at)),
+						'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
 						'log_updated_at' => date('Y-m-d H:i:s'),
 						'log_updated_by' => $this->session->userdata('use_id'),
 						'log_pay_date' => date('Y-m-d H:i:s', strtotime($order->ord_pay_date)),
@@ -800,32 +835,42 @@ class Orders extends CI_Controller
 					if ($rejected) {
 						$log = $this->logorderModel->add_log($dataLog);
 						if ($log){
-							$whePro['pro_id'] = $order->ord_pro_id;
-							$product = $this->ProductModel->update_stock($whePro, $order->ord_quantity);
-							if($product){
-								$result = $this->notification_model->add(32, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
-								if ($result){
-									$this->db->trans_complete();
-									$this->session->set_flashdata('reject_success', TRUE);
-									redirect("marketplace/Orders/listOrders");
-								}
-								else{
-									$err = 4;
+							//update product stock
+							$whereItm['itm_ord_id'] = $order->ord_id;
+							$order_items = $this->OrderModel->get_order_items($whereItm)->result();
+			
+							foreach ($order_items as $item) {
+								$productId = $item->itm_pro_id;
+								$quantity = $item->itm_quantity;
+					
+								$whePro['pro_id'] = $productId;
+								$product = $this->ProductModel->update_stock($whePro, $quantity);
+								if (!$product) {
+									$err = 1;
+									break;
 								}
 							}
-							else{
-								$err = 3;
+
+							if($err == 0){
+								$result = $this->notification_model->add(32, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
+								if ($result){
+									$this->session->set_flashdata('reject_success', TRUE);
+								}
+								else{
+									$err = 2;
+								}
 							}
 						}
 						else{
-							$err = 2;
+							$err = 3;
 						}
 					} else {
-						$err = 1;
+						$err = 4;
 					}
+
+					$this->db->trans_complete();
 	
 					if ($err) {
-						$this->db->trans_rollback();
 						$this->session->set_flashdata('error_message', 'Failed to reject order. Error code: '.$err);
 						redirect('marketplace/Orders/listOrders');
 					}
@@ -835,6 +880,7 @@ class Orders extends CI_Controller
 				$this->session->set_flashdata('error_message', 'Failed to get order data.');
 				redirect('marketplace/Orders/listOrders');
 			}
+			redirect("marketplace/Orders/listOrders");
         } 
         else {
             redirect("marketplace/Orders/listOrders");
@@ -863,7 +909,6 @@ class Orders extends CI_Controller
         if ($this->session->userdata('use_username')) {
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
-            $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
             $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
@@ -899,10 +944,10 @@ class Orders extends CI_Controller
 
 					$dataOrd = array(
 						'ord_invoice' => $this->input->post('ord_invoice'),
-						'ord_quantity' => $this->input->post('ord_quantity'),
+						'ord_address' => $this->input->post('ord_address'),
+						'ord_shipping' => $this->input->post('ord_shipping'),
+						'ord_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'ord_total_price' => $this->input->post('ord_total_price'),
-						'ord_updated_at' => date('Y-m-d H:i:s'),
-						'ord_updated_by' => $this->session->userdata('use_id'),
 						'ord_pay_date' => $payDate,
 						'ord_pay_due_date' => $payDueDate,
 						'ord_arrived_date' => $arrivedDate,
@@ -914,11 +959,12 @@ class Orders extends CI_Controller
 					$dataLog = array(
 						'log_ord_id' => $ord_id,
 						'log_mem_id' => $data['order']->ord_mem_id,
-						'log_pro_id' => $data['order']->ord_pro_id,
 						'log_invoice' => $this->input->post('ord_invoice'),
-						'log_quantity' => $this->input->post('ord_quantity'),
+						'log_address' => $this->input->post('ord_address'),
+						'log_shipping' => $this->input->post('ord_shipping'),
+						'log_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'log_total_price' => $this->input->post('ord_total_price'),
-						'log_created_at' => $data['order']->ord_created_at,
+						'log_date' => $data['order']->ord_date,
 						'log_updated_at' => date('Y-m-d H:i:s'),
 						'log_updated_by' => $this->session->userdata('use_id'),
 						'log_pay_date' => $payDate,
@@ -987,9 +1033,7 @@ class Orders extends CI_Controller
         if ($this->session->userdata('use_username')) {
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('ord_mem_id', 'Member ', 'trim|required');
-            $this->form_validation->set_rules('ord_pro_id', 'Product ', 'trim|required');
             $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
-            $this->form_validation->set_rules('ord_quantity', 'Quantity ', 'trim|required');
             $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
@@ -1018,15 +1062,15 @@ class Orders extends CI_Controller
 				if($this->input->post('ord_completed_date') != null){
 					$completedDate = date('Y-m-d H:i:s', strtotime($this->input->post('ord_completed_date')));
 				}
-
+				
 				$dataOrd = array(
 					'ord_mem_id' => $this->input->post('ord_mem_id'),
-					'ord_pro_id' => $this->input->post('ord_pro_id'),
 					'ord_invoice' => $this->input->post('ord_invoice'),
-					'ord_quantity' => $this->input->post('ord_quantity'),
+					'ord_address' => $this->input->post('ord_address'),
+					'ord_shipping' => $this->input->post('ord_shipping'),
+					'ord_shipping_cost' => $this->input->post('ord_shipping_cost'),
 					'ord_total_price' => $this->input->post('ord_total_price'),
-					'ord_created_at' => date('Y-m-d H:i:s'),
-					'ord_updated_at' => date('Y-m-d H:i:s'),
+					'ord_date' => date('Y-m-d H:i:s'),
 					'ord_pay_date' => $payDate,
 					'ord_pay_due_date' => $payDueDate,
 					'ord_arrived_date' => $arrivedDate,
@@ -1038,17 +1082,18 @@ class Orders extends CI_Controller
 
 				$dataLog = array(
 					'log_mem_id' => $this->input->post('ord_mem_id'),
-					'log_pro_id' => $this->input->post('ord_pro_id'),
 					'log_invoice' => $this->input->post('ord_invoice'),
-					'log_quantity' => $this->input->post('ord_quantity'),
+					'log_address' => $this->input->post('ord_address'),
+					'log_shipping' => $this->input->post('ord_shipping'),
+					'log_shipping_cost' => $this->input->post('ord_shipping_cost'),
 					'log_total_price' => $this->input->post('ord_total_price'),
-					'log_created_at' => date('Y-m-d H:i:s'),
+					'log_date' => date('Y-m-d H:i:s'),
 					'log_updated_at' => date('Y-m-d H:i:s'),
+					'log_updated_by' => $this->session->userdata('use_id'),
 					'log_pay_date' => $payDate,
 					'log_pay_due_date' => $payDueDate,
 					'log_arrived_date' => $arrivedDate,
 					'log_completed_date' => $completedDate,
-					'log_updated_by' => $this->session->userdata('use_id'),
 					'log_stat_id' => $this->input->post('ord_stat_id'),
 					'log_reject_note' => $this->input->post('ord_reject_note')
 				);
