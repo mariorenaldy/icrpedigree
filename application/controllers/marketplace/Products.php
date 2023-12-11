@@ -121,6 +121,7 @@ class Products extends CI_Controller
 						'qty'     => $quantity,
 						'price'   => $data['products']->pro_price,
 						'name'    => $data['products']->pro_name,
+						'weight'    => $data['products']->pro_weight,
 					);
 	
 					$this->cart->insert($dataCart);
@@ -357,6 +358,7 @@ class Products extends CI_Controller
             $this->form_validation->set_rules('pro_name', 'Name ', 'trim|required');
             $this->form_validation->set_rules('pro_type_id', 'Type id ', 'trim|required');
             $this->form_validation->set_rules('pro_price', 'Price ', 'trim|required');
+            $this->form_validation->set_rules('pro_weight', 'Weight ', 'trim|required');
             $this->form_validation->set_rules('pro_stock', 'Stock ', 'trim|required');
 
             $where['pro_id'] = $this->input->post('pro_id');
@@ -409,6 +411,7 @@ class Products extends CI_Controller
 						'pro_type_id' => $this->input->post('pro_type_id'),
 						'pro_name' => $this->input->post('pro_name'),
 						'pro_price' => $this->input->post('pro_price'),
+						'pro_weight' => $this->input->post('pro_weight'),
 						'pro_stock' => $this->input->post('pro_stock'),
 						'pro_desc' => $this->input->post('pro_desc'),
 						'pro_updated_user' => $this->session->userdata('use_id'),
@@ -420,6 +423,7 @@ class Products extends CI_Controller
 						'log_product_type_id' => $this->input->post('pro_type_id'),
 						'log_product_name' => $this->input->post('pro_name'),
 						'log_product_price' => $this->input->post('pro_price'),
+						'log_product_weight' => $this->input->post('pro_weight'),
 						'log_product_stock' => $this->input->post('pro_stock'),
 						'log_product_desc' => $this->input->post('pro_desc'),
 						'log_product_photo' => $photo,

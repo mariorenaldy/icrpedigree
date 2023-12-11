@@ -17,6 +17,11 @@ $lang["common_yes"] = "Ya";
 $lang["common_no"] = "Tidak";
 
 $lang["common_photo"] = "Foto";
+$lang["common_address"] = "Alamat";
+$lang["common_full_address"] = "Alamat Lengkap";
+$lang["common_province"] = "Provinsi";
+$lang["common_city/regency"] = "Kota/Kabupaten";
+$lang["common_and"] = "dan";
 $lang["common_desc"] = "Deskripsi";
 $lang["common_name"] = "Nama";
 $lang["common_male"] = "Jantan";

@@ -55,9 +55,10 @@
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
                                 <th class="no-sort">Photo</th>
-                                <th class="no-sort">Type</th>
+                                <th>Type</th>
                                 <th>Name</th>
-                                <th>Price</th>
+                                <th>Price (Rp)</th>
+                                <th>Weight (gram)</th>
                                 <th>Stock</th>
                                 <th>Created at</th>
                             </tr>
@@ -88,6 +89,7 @@
                                     <td><?= $p->pro_type_name; ?></td>
                                     <td><?= $p->pro_name; ?></td>
                                     <td><?= $p->pro_price; ?></td>
+                                    <td><?= $p->pro_weight; ?></td>
                                     <td><?= $p->pro_stock; ?></td>
                                     <td class="text-nowrap"><?= $p->pro_created_at; ?></td>
                                 </tr>

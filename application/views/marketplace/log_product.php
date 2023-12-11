@@ -25,6 +25,7 @@
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Weight</th>
                                 <th>Description</th>
                                 <th>Status</th>
                             </tr>
@@ -47,6 +48,7 @@
                                         <td><?= $p->pro_type_name; ?></td>
                                         <td><?= $p->log_product_name; ?></td>
                                         <td><?= $p->log_product_price; ?></td>
+                                        <td><?= $p->log_product_weight; ?></td>
                                         <td><?= $p->log_product_desc; ?></td>
                                         <td><?= $p->stat_name; ?></td>
                                     </tr>

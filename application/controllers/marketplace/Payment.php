@@ -68,6 +68,7 @@ class Payment extends CI_Controller {
 		curl_setopt_array($ch, array(
 			CURLOPT_URL => 'https://api-sandbox.doku.com/checkout/v1/payment',
 			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FAILONERROR => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
 			CURLOPT_TIMEOUT => 0,
@@ -129,8 +130,10 @@ class Payment extends CI_Controller {
 		$data = array(
 			'ord_mem_id' => $this->session->userdata('mem_id'),
 			'ord_invoice' => $inv,
+			'ord_city_id' => $this->input->post('city'),
 			'ord_address' => $this->input->post('address'),
-			'ord_shipping' => $this->input->post('shipping'),
+			'ord_shipping_id' => $this->input->post('shipping'),
+			'ord_shipping_type' => $this->input->post('shippingType'),
 			'ord_shipping_cost' => $this->input->post('shippingCost'),
 			'ord_date' => date('Y-m-d H:i:s'),
 			'ord_pay_due_date' => date('Y-m-d H:i:s', strtotime('1 hour')),

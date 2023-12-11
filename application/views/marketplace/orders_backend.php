@@ -69,10 +69,10 @@
                                 <th class="no-sort"></th>
                                 <th>Invoice</th>
                                 <th class="no-sort">Member</th>
-                                <th class="no-sort">Address</th>
-                                <th>Shipping Type</th>
-                                <th>Total Price</th>
-                                <th>Date</th>
+                                <th class="no-sort">Full Address</th>
+                                <th>Shipping Service</th>
+                                <th>Grand Total</th>
+                                <th>Order Date</th>
                                 <th class="no-sort">Status</th>
                             </tr>
                         </thead>
@@ -105,8 +105,8 @@
                                     <td><?= $o->ord_invoice; ?></td>
                                     <td><?= $o->mem_name; ?></td>
                                     <td><?= $o->ord_address; ?></td>
-                                    <td><?= $o->ord_shipping; ?></td>
-                                    <td><?= $o->ord_total_price; ?></td>
+                                    <td><?= $o->ship_name." (".$o->ord_shipping_type.")"; ?></td>
+                                    <td><?php echo 'Rp '.number_format($o->ord_total_price,0,",",".").'<br/>'; ?></td>
                                     <td class="text-nowrap"><?= $o->ord_date; ?></td>
                                     <td><?= $o->ord_stat_name; ?></td>
                                 </tr>

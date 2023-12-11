@@ -12,6 +12,11 @@ $lang["pro_type"] = "Tipe Produk";
 $lang["pro_all"] = "Semua";
 $lang["pro_add_to_cart"] = "Tambah ke Keranjang";
 $lang["pro_cart"] = "Keranjang Belanja";
+$lang["pro_empty_cart"] = "Kosongkan Keranjang";
+$lang["pro_continue_shopping"] = "Lanjutkan Belanja";
+$lang["pro_checkout"] = "Pembayaran";
 $lang["pro_stock"] = "Stok";
+$lang["pro_weight"] = "Berat";
 
 $lang["pro_add_success"] = "Produk telah berhasil ditambahkan ke Keranjang Belanja";
+$lang["pro_weight_exceed"] = "Berat produk tidak boleh lebih dari 30 KG atau 30.000 gram";

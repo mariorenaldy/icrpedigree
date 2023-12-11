@@ -27,16 +27,18 @@
                     <h3 class="text-center text-primary">Order Detail</h3>
                     <div class="btn btn-success mb-3">Invoice: <?= $order->ord_invoice ?></div>
                     <h6>Member Name: <?= $order->mem_name ?></h6>
-                    <h6>Delivery Address: <?= $order->ord_address ?></h6>
-                    <h6>Shipping Type: <?= $order->ord_shipping ?></h6>
+                    <h6>City/Regency: <?= $order->city_name ?></h6>
+                    <h6>Full Address: <?= $order->ord_address ?></h6>
+                    <h6>Shipping Service: <?= $order->ship_name ?></h6>
+                    <h6>Shipping Type: <?= $order->ord_shipping_type ?></h6>
                     <h6>Order Date: <?= $order->ord_date ?></h6>
                     <h6>Pay Date: <?= $order->ord_pay_date ?></h6>
                     <h6>Pay Due Date: <?= $order->ord_pay_due_date ?></h6>
                     <h6>Arrived Date: <?= $order->ord_arrived_date ?></h6>
                     <h6>Completed Date: <?= $order->ord_completed_date ?></h6>
                     <h6>Reject Note: <?= $order->ord_reject_note ?></h6>
-                    <h6>Complain Description: <?= $order->com_desc; ?></h6>
-                    <h6>Complain Photo: </h6>
+                    <h6>Complaint Description: <?= $order->com_desc; ?></h6>
+                    <h6>Complaint Photo Proof: </h6>
                     <?php if ($order->com_photo && $order->com_photo != '-') { ?>
                         <img src="<?= base_url('uploads/complain/' . $order->com_photo) ?>" class="img-fluid img-thumbnail" alt="proof" id="myCom<?= $order->ord_id ?>" onclick="display('myCom<?= $order->ord_id ?>')" style="max-height:100px;">
                     <?php } ?>
@@ -46,12 +48,15 @@
                             <th>Product ID</th>
                             <th>Product Name</th>
                             <th>Quantity</th>
+                            <th><?= lang("pro_weight"); ?></th>
                             <th>Unit Price</th>
                             <th>Subtotal</th>
                         </tr>
                         <?php 
+                        $totalWeight=0;
                         $total = 0;
                         foreach($items as $itm):
+                            $totalWeight = $totalWeight+($itm->itm_quantity*$itm->pro_weight);
                             $subtotal = $itm->itm_subtotal;
                             $total += $subtotal; 
                         ?>
@@ -60,18 +65,25 @@
                             <td><?= $itm->itm_id; ?></td>
                             <td><?= $itm->pro_name; ?></td>
                             <td><?= $itm->itm_quantity; ?></td>
+                            <td align="right"><?= $itm->itm_quantity*$itm->pro_weight;?> gram</td>
                             <td align="right">Rp <?= number_format($itm->pro_price,0,",","."); ?></td>
                             <td align="right">Rp <?= number_format($subtotal,0,",",".") ?></td>
                         </tr>
                         <?php endforeach; ?>
 
                         <tr>
-                            <td colspan="4" align="right">Shipping Cost (<?= $order->ord_shipping ?>)</td>
+                            <td colspan="3" align="right">Total <?= lang("pro_weight"); ?></td>
+                            <td align="right"><?= $totalWeight ?> gram</td>
+                            <td align="right">Total Price</td>
+                            <td align="right">Rp <?= number_format($total,0,",",".") ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" align="right">Shipping Cost</td>
                             <td align="right">Rp <?= number_format($order->ord_shipping_cost,0,",",".") ?></td>
                         </tr>
 
                         <tr>
-                            <td colspan="4" align="right">Grand Total</td>
+                            <td colspan="5" align="right">Grand Total</td>
                             <td align="right">Rp <?= number_format($order->ord_total_price,0,",",".") ?></td>
                         </tr>
                     </table>

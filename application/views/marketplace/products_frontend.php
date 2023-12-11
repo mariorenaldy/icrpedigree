@@ -51,6 +51,7 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-danger"><?= $p->pro_name ?></h5>
                         <p class="card-text flex-grow-1"><?= $p->pro_type_name ?></p>
+                        <p class="card-text text-danger mb-1"><?= $p->pro_weight ?> gram</p>
                         <h5 class="card-text">Rp <?= number_format($p->pro_price,0,",",".") ?></h5>
                         <button type="button" class="btn btn-primary mb-1" onclick="addtocart(<?= $p->pro_id ?>)"><?= lang("pro_add_to_cart"); ?></button>
                         <button type="button" class="btn btn-success" onclick="detail(<?= $p->pro_id ?>)">Detail</button>

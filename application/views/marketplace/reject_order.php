@@ -38,8 +38,8 @@
                             <span><?= $order->ord_pay_date ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 150px;">Total Price</span>
-                            <span><?= $order->ord_total_price ?></span>
+                            <span class="d-inline-block" style="width: 150px;">Grand Total</span>
+                            <span>Rp <?= number_format($order->ord_total_price,0,",",".") ?></span>
                         </div>
                         <div class="mb-1">
                             <span class="d-inline-block" style="width: 150px;">Status</span>

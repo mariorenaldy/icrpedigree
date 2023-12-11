@@ -70,12 +70,22 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Price</label>
+                            <label class="control-label col-md-2">Price (Rp)</label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>
                                     <input class="form-control" type="number" placeholder="Price" name="pro_price" value="<?= $product->pro_price; ?>">
                                 <?php } else { ?>
                                     <input class="form-control" type="number" placeholder="Price" name="pro_price" value="<?= set_value('pro_price'); ?>">
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Weight (gram)</label>
+                            <div class="col-md-10">
+                                <?php if (!$mode){ ?>
+                                    <input class="form-control" type="number" placeholder="Weight" name="pro_weight" value="<?= $product->pro_weight; ?>">
+                                <?php } else { ?>
+                                    <input class="form-control" type="number" placeholder="Weight" name="pro_weight" value="<?= set_value('pro_weight'); ?>">
                                 <?php } ?>
                             </div>
                         </div>

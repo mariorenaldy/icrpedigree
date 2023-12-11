@@ -20,7 +20,9 @@ class OrderModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('city','orders.ord_city_id = city.city_id');
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
+        $this->db->join('shipping','orders.ord_shipping_id = shipping.ship_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
         $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
         $this->db->order_by($sort);
@@ -40,10 +42,12 @@ class OrderModel extends CI_Model {
     }
 
     public function get_processed_orders($sort = 'ord_date desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_created_at, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
+        $this->db->select('*, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
         $where = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_failed'));
         $this->db->where_not_in('orders.ord_stat_id', $where);
+        $this->db->join('city','orders.ord_city_id = city.city_id');
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
+        $this->db->join('shipping','orders.ord_shipping_id = shipping.ship_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
         $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
         $this->db->order_by($sort);
@@ -52,7 +56,7 @@ class OrderModel extends CI_Model {
         return $this->db->get('orders');
     }
 
-    public function search_orders($like, $where, $sort = 'ord_created_at desc', $offset = 0, $limit = 0){
+    public function search_orders($like, $where, $sort = 'ord_date desc', $offset = 0, $limit = 0){
         $this->db->select('*');
         if ($where != null) {
             $this->db->where($where);
@@ -62,7 +66,11 @@ class OrderModel extends CI_Model {
             $this->db->or_like($like);
             $this->db->group_end();
         }
+        $this->db->join('city','orders.ord_city_id = city.city_id');
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
+        $this->db->join('shipping','orders.ord_shipping_id = shipping.ship_id');
+        $this->db->join('members','orders.ord_mem_id = members.mem_id');
+        $this->db->join('order_complain','orders.ord_id = order_complain.com_ord_id', 'left');
         $this->db->order_by($sort);
         if ($limit)
             $this->db->limit($limit, $offset);

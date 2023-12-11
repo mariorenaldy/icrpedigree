@@ -151,13 +151,12 @@ class Orders extends CI_Controller
 
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
-			$like['pro_name'] = $data['keywords'];
 			$like['ord_invoice'] = $data['keywords'];
 			$where['ord_mem_id'] = $this->session->userdata('mem_id');
-			$data['orders'] = $this->OrderModel->search_orders($like, $where, 'ord_updated_at desc', $page * $config['per_page'], $this->config->item('order_count'))->result();
+			$data['orders'] = $this->OrderModel->search_orders($like, $where, 'ord_date desc', $page * $config['per_page'], $this->config->item('order_count'))->result();
 
 			$config['base_url'] = base_url().'/marketplace/Orders/search';
-			$config['total_rows'] = $this->OrderModel->search_orders($like, $where, 'ord_updated_at desc', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->OrderModel->search_orders($like, $where, 'ord_date desc', $page * $config['per_page'], 0)->num_rows();
 			$this->pagination->initialize($config);
 			$this->load->view('marketplace/orders_frontend', $data);
 		}
@@ -196,6 +195,7 @@ class Orders extends CI_Controller
 			curl_setopt_array($ch, array(
 				CURLOPT_URL => 'https://api-sandbox.doku.com/orders/v1/status/'.$requestId,
 				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_FAILONERROR => true,
 				CURLOPT_ENCODING => '',
 				CURLOPT_MAXREDIRS => 10,
 				CURLOPT_TIMEOUT => 0,
@@ -637,8 +637,10 @@ class Orders extends CI_Controller
 				'log_ord_id' => $ord_id,
 				'log_mem_id' => $order->ord_mem_id,
 				'log_invoice' => $order->ord_invoice,
+				'log_city_id' => $order->ord_city_id,
 				'log_address' => $order->ord_address,
-				'log_shipping' => $order->ord_shipping,
+				'log_shipping_id' => $order->ord_shipping_id,
+				'log_shipping_type' => $order->ord_shipping_type,
 				'log_shipping_cost' => $order->ord_shipping_cost,
 				'log_total_price' => $order->ord_total_price,
 				'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
@@ -702,8 +704,10 @@ class Orders extends CI_Controller
 				'log_ord_id' => $ord_id,
 				'log_mem_id' => $order->ord_mem_id,
 				'log_invoice' => $order->ord_invoice,
+				'log_city_id' => $order->ord_city_id,
 				'log_address' => $order->ord_address,
-				'log_shipping' => $order->ord_shipping,
+				'log_shipping_id' => $order->ord_shipping_id,
+				'log_shipping_type' => $order->ord_shipping_type,
 				'log_shipping_cost' => $order->ord_shipping_cost,
 				'log_total_price' => $order->ord_total_price,
 				'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
@@ -806,8 +810,10 @@ class Orders extends CI_Controller
 						'log_ord_id' => $ord_id,
 						'log_mem_id' => $order->ord_mem_id,
 						'log_invoice' => $order->ord_invoice,
+						'log_city_id' => $order->ord_city_id,
 						'log_address' => $order->ord_address,
-						'log_shipping' => $order->ord_shipping,
+						'log_shipping_id' => $order->ord_shipping_id,
+						'log_shipping_type' => $order->ord_shipping_type,
 						'log_shipping_cost' => $order->ord_shipping_cost,
 						'log_total_price' => $order->ord_total_price,
 						'log_date' => date('Y-m-d H:i:s', strtotime($order->ord_date)),
@@ -944,8 +950,10 @@ class Orders extends CI_Controller
 
 					$dataOrd = array(
 						'ord_invoice' => $this->input->post('ord_invoice'),
+						'ord_city_id' => $this->input->post('ord_city'),
 						'ord_address' => $this->input->post('ord_address'),
-						'ord_shipping' => $this->input->post('ord_shipping'),
+						'ord_shipping_id' => $this->input->post('ord_shipping'),
+						'ord_shipping_type' => $this->input->post('ord_shipping_type'),
 						'ord_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'ord_total_price' => $this->input->post('ord_total_price'),
 						'ord_pay_date' => $payDate,
@@ -960,8 +968,10 @@ class Orders extends CI_Controller
 						'log_ord_id' => $ord_id,
 						'log_mem_id' => $data['order']->ord_mem_id,
 						'log_invoice' => $this->input->post('ord_invoice'),
+						'log_city_id' => $this->input->post('ord_city'),
 						'log_address' => $this->input->post('ord_address'),
-						'log_shipping' => $this->input->post('ord_shipping'),
+						'log_shipping_id' => $this->input->post('ord_shipping'),
+						'log_shipping_type' => $this->input->post('ord_shipping_type'),
 						'log_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'log_total_price' => $this->input->post('ord_total_price'),
 						'log_date' => $data['order']->ord_date,
@@ -1066,8 +1076,10 @@ class Orders extends CI_Controller
 				$dataOrd = array(
 					'ord_mem_id' => $this->input->post('ord_mem_id'),
 					'ord_invoice' => $this->input->post('ord_invoice'),
+					'ord_city_id' => $this->input->post('ord_city'),
 					'ord_address' => $this->input->post('ord_address'),
-					'ord_shipping' => $this->input->post('ord_shipping'),
+					'ord_shipping_id' => $this->input->post('ord_shipping'),
+					'ord_shipping_type' => $this->input->post('ord_shipping_type'),
 					'ord_shipping_cost' => $this->input->post('ord_shipping_cost'),
 					'ord_total_price' => $this->input->post('ord_total_price'),
 					'ord_date' => date('Y-m-d H:i:s'),
@@ -1083,8 +1095,10 @@ class Orders extends CI_Controller
 				$dataLog = array(
 					'log_mem_id' => $this->input->post('ord_mem_id'),
 					'log_invoice' => $this->input->post('ord_invoice'),
+					'log_city_id' => $this->input->post('ord_city'),
 					'log_address' => $this->input->post('ord_address'),
-					'log_shipping' => $this->input->post('ord_shipping'),
+					'log_shipping_id' => $this->input->post('ord_shipping'),
+					'log_shipping_type' => $this->input->post('ord_shipping_type'),
 					'log_shipping_cost' => $this->input->post('ord_shipping_cost'),
 					'log_total_price' => $this->input->post('ord_total_price'),
 					'log_date' => date('Y-m-d H:i:s'),

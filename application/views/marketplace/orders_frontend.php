@@ -33,9 +33,9 @@
                 <?= $this->pagination->create_links(); ?>
                 <div class="row mb-3">
                     <div class="col"><b><?= lang("ord_invoice"); ?></b></div>
-                    <div class="col"><b><?= lang("ord_address"); ?></b></div>
-                    <div class="col"><b><?= lang("ord_shipping_type"); ?></b></div>
-                    <div class="col"><b><?= lang("ord_total_price"); ?></b></div>
+                    <div class="col"><b><?= lang("common_full_address"); ?></b></div>
+                    <div class="col"><b><?= lang("ord_shipping"); ?></b></div>
+                    <div class="col"><b>Grand Total</b></div>
                     <div class="col"><b><?= lang("ord_date"); ?></b></div>
                     <div class="col"><b>Status</b></div>
                     <div class="col"></div>
@@ -49,7 +49,7 @@
                             <?php echo $o->ord_address.'<br/>'; ?>
                         </div>
                         <div class="col">
-                            <?php echo $o->ord_shipping.'<br/>'; ?>
+                            <?php echo $o->ship_name." (".$o->ord_shipping_type.")".'<br/>'; ?>
                         </div>
                         <div class="col">
                             <?php echo 'Rp '.number_format($o->ord_total_price,0,",",".").'<br/>'; ?>

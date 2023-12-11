@@ -26,16 +26,16 @@
                             <span><?= $order->ord_invoice ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Date</span>
+                            <span class="d-inline-block" style="width: 200px;"><?= lang("ord_date"); ?></span>
                             <span><?= $order->ord_date ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Payment Date</span>
+                            <span class="d-inline-block" style="width: 200px;"><?= lang("ord_pay_date"); ?></span>
                             <span><?= $order->ord_pay_date ?></span>
                         </div>
                         <div class="mb-1">
-                            <span class="d-inline-block" style="width: 200px;">Total Price</span>
-                            <span><?= $order->ord_total_price ?></span>
+                            <span class="d-inline-block" style="width: 200px;">Grand Total</span>
+                            <span>Rp <?= number_format($order->ord_total_price,0,",",".") ?></span>
                         </div>
                         <div class="input-group mt-3 mb-3 gap-3">
                             <label class="control-label col-md-12 text-center"><?= lang("ord_complain_photo_if"); ?></label>

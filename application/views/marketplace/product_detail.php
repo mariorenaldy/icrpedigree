@@ -20,6 +20,7 @@
             <p class="mb-5 h6 text-info"><?= $products->pro_type_name ?></p>
             <p class="mb-5" style="white-space: pre-line"><?= $products->pro_desc ?></p>
             <h5 class="text-warning mb-4"><?= lang('pro_price'); ?>: Rp <?= number_format($products->pro_price,0,",",".") ?></h5>
+            <p class="mb-5 h6 text-info"><?= lang('pro_weight'); ?>: <?= $products->pro_weight ?> gram</p>
             <p class="mb-0"><?= lang('pro_stock'); ?>: <?= $products->pro_stock ?></p>
             <span><?= lang('pro_quantity'); ?>: </span>
             <div class="col-3 mb-5">
