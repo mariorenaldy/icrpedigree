@@ -73,7 +73,7 @@
                                 <th>Shipping Service</th>
                                 <th>Grand Total</th>
                                 <th>Order Date</th>
-                                <th class="no-sort">Status</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>

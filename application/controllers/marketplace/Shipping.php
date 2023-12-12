@@ -173,5 +173,54 @@ class Shipping extends CI_Controller
             }
         }
     }
+	public function getCostBackend(){
+        $cityID = $_POST["cityID"];
+        $weight = $_POST["weight"];
+        $shipping = $_POST["shipping"];
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+          CURLOPT_SSL_VERIFYHOST => 0,
+          CURLOPT_SSL_VERIFYPEER => 0,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_FAILONERROR => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => "origin=23&destination=".$cityID."&weight=".$weight."&courier=".$shipping,
+          CURLOPT_HTTPHEADER => array(
+            "content-type: application/x-www-form-urlencoded",
+            "key: ab19f705c743f17f6d2b8d3f318638dc"
+          ),
+        ));
+        
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        
+        curl_close($curl);
+        
+        if ($err) {
+          echo "Error cURL Error #:" . $err;
+        } else {
+            $array_response = json_decode($response, TRUE);
+            switch ($array_response["rajaongkir"]["status"]["code"]) {
+                case 200:  # OK
+                    $costData = $array_response["rajaongkir"]["results"]["0"]["costs"];
+
+                    echo "<option value=''>--Select Shipping Type--</option>";
+                    foreach($costData as $key => $cost){
+                        echo "<option value='".$cost["service"]."' cost='".$cost["cost"]["0"]["value"]."' etd='".$cost["cost"]["0"]["etd"]."'>";
+                        echo $cost["service"].' (Rp '.$cost["cost"]["0"]["value"].') (Estimated arrival in '.str_ireplace(' hari', '', $cost["cost"]["0"]["etd"]).' days)';
+                        echo "</option>";
+                    }
+                    break;
+                default:
+                    echo "Error ".$array_response["rajaongkir"]["status"]["description"];
+            }
+        }
+    }
 }
 ?>

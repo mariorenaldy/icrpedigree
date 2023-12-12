@@ -21,6 +21,7 @@ class OrderModel extends CI_Model {
             $this->db->where($where);
         }
         $this->db->join('city','orders.ord_city_id = city.city_id');
+        $this->db->join('province','city.city_province_id = province.prov_id');
         $this->db->join('order_status','orders.ord_stat_id = order_status.ord_stat_id');
         $this->db->join('shipping','orders.ord_shipping_id = shipping.ship_id');
         $this->db->join('members','orders.ord_mem_id = members.mem_id');
@@ -140,4 +141,16 @@ class OrderModel extends CI_Model {
         return $query->result();
     }
 
+    public function get_provinces() {
+        $this->db->select('*');
+        return $this->db->get('province');
+    }
+
+    public function get_cities($where = null) {
+        $this->db->select('*');
+        if ($where != null) {
+            $this->db->where($where);
+        }
+        return $this->db->get('city');
+    }
 }

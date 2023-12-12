@@ -898,7 +898,11 @@ class Orders extends CI_Controller
 			$ord_id = $this->uri->segment(4);
 			$whereOrd['ord_id'] = $ord_id;
 			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['items'] = $this->OrderModel->get_order_items($whereOrd)->result();
             $data['status'] = $this->OrderStatusModel->get_status()->result();
+			$data['province'] = $this->OrderModel->get_provinces()->result();
+			$whereCity['city_province_id'] = $data['order']->prov_id;
+			$data['city'] = $this->OrderModel->get_cities($whereCity)->result();
 
 			$data['mode'] = 0;
 			if ($data['order']) {
@@ -915,15 +919,24 @@ class Orders extends CI_Controller
         if ($this->session->userdata('use_username')) {
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('ord_invoice', 'Invoice ', 'trim|required');
+            $this->form_validation->set_rules('city_id', 'City/Regency ', 'trim|required');
+            $this->form_validation->set_rules('ord_address', 'Full Address ', 'trim|required');
+            $this->form_validation->set_rules('shipping', 'Shipping Service ', 'trim|required');
+            $this->form_validation->set_rules('shipping_type', 'Shipping Type ', 'trim|required');
+            $this->form_validation->set_rules('ord_shipping_cost', 'Shipping Cost ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_date', 'Payment Date ', 'trim|required');
             $this->form_validation->set_rules('ord_pay_due_date', 'Payment Due Date ', 'trim|required');
-            $this->form_validation->set_rules('ord_total_price', 'Total Price ', 'trim|required');
+            $this->form_validation->set_rules('ord_total_price', 'Grand Total ', 'trim|required');
             $this->form_validation->set_rules('ord_stat_id', 'Status ', 'trim|required');
 
 			$ord_id = $this->input->post('ord_id');
 			$whereOrd['ord_id'] = $ord_id;
 			$data['order'] = $this->OrderModel->get_orders($whereOrd)->row();
+			$data['items'] = $this->OrderModel->get_order_items($whereOrd)->result();
             $data['status'] = $this->OrderStatusModel->get_status()->result();
+			$data['province'] = $this->OrderModel->get_provinces()->result();
+			$whereCity['city_province_id'] = set_value('prov_id');
+			$data['city'] = $this->OrderModel->get_cities($whereCity)->result();
 			$data['mode'] = 1;
 
             if ($this->form_validation->run() == FALSE) {
@@ -950,10 +963,10 @@ class Orders extends CI_Controller
 
 					$dataOrd = array(
 						'ord_invoice' => $this->input->post('ord_invoice'),
-						'ord_city_id' => $this->input->post('ord_city'),
+						'ord_city_id' => $this->input->post('city_id'),
 						'ord_address' => $this->input->post('ord_address'),
-						'ord_shipping_id' => $this->input->post('ord_shipping'),
-						'ord_shipping_type' => $this->input->post('ord_shipping_type'),
+						'ord_shipping_id' => $this->input->post('shipping'),
+						'ord_shipping_type' => $this->input->post('shipping_type'),
 						'ord_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'ord_total_price' => $this->input->post('ord_total_price'),
 						'ord_pay_date' => $payDate,
@@ -968,10 +981,10 @@ class Orders extends CI_Controller
 						'log_ord_id' => $ord_id,
 						'log_mem_id' => $data['order']->ord_mem_id,
 						'log_invoice' => $this->input->post('ord_invoice'),
-						'log_city_id' => $this->input->post('ord_city'),
+						'log_city_id' => $this->input->post('city_id'),
 						'log_address' => $this->input->post('ord_address'),
-						'log_shipping_id' => $this->input->post('ord_shipping'),
-						'log_shipping_type' => $this->input->post('ord_shipping_type'),
+						'log_shipping_id' => $this->input->post('shipping'),
+						'log_shipping_type' => $this->input->post('shipping_type'),
 						'log_shipping_cost' => $this->input->post('ord_shipping_cost'),
 						'log_total_price' => $this->input->post('ord_total_price'),
 						'log_date' => $data['order']->ord_date,

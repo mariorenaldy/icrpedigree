@@ -23,6 +23,29 @@
                                 <?= $order->mem_name; ?>
                             </div>
                         </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Total Weight</label>
+                            <div class="col-md-10">
+                                <?php 
+                                    $totalWeight=0;
+                                    $total=0;
+                                    foreach($items as $itm):
+                                        $totalWeight = $totalWeight+($itm->itm_quantity*$itm->pro_weight);
+                                        $subtotal = $itm->itm_subtotal;
+                                        $total += $subtotal; 
+                                    endforeach;
+                                    echo $totalWeight;
+                                ?> gram
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Total Price without Shipping</label>
+                            <div class="col-md-10">
+                                <?php 
+                                    echo "Rp ".number_format($total,0,",",".");
+                                ?>
+                            </div>
+                        </div>
                         <hr/>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Invoice</label>
@@ -37,7 +60,74 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Total Price</label>
+                            <label class="control-label col-md-2">Province</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $prov = [];
+                                    foreach($province as $row){
+                                        $prov[$row->prov_id] = $row->prov_name;
+                                    }
+                                    if (!$mode)
+                                        echo form_dropdown('prov_id', $prov, $order->prov_id, 'class="form-control", id="prov_id"');
+                                    else
+                                        echo form_dropdown('prov_id', $prov, set_value('prov_id'), 'class="form-control", id="prov_id"');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">City/Regency</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $cities = [];
+                                    foreach($city as $row){
+                                        $cities[$row->city_id] = $row->city_name;
+                                    }
+                                    if (!$mode)
+                                        echo form_dropdown('city_id', $cities, $order->city_id, 'class="form-control", id="city_id"');
+                                    else
+                                        echo form_dropdown('city_id', $cities, set_value('city_id'), 'class="form-control", id="city_id"');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Full Address</label>
+                            <div class="col-md-10">
+                                <?php if (!$mode){ ?>
+                                    <input class="form-control" type="text" placeholder="Full Address" name="ord_address" value="<?= $order->ord_address; ?>">
+                                <?php } else { ?>
+                                    <input class="form-control" type="text" placeholder="Full Address" name="ord_address" value="<?= set_value('ord_address'); ?>">
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Shipping Service</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="shipping" id="shipping">
+                                    <option shipCode="jne" value="1">JNE</option>
+                                    <option shipCode="tiki" value="2">TIKI</option>
+                                    <option shipCode="pos" value="3">POS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Shipping Type</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name="shipping_type" id="shipping_type">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Shipping Cost (Rp)</label>
+                            <div class="col-md-10">
+                                <?php if (!$mode){ ?>
+                                    <input class="form-control" type="number" placeholder="Shipping Cost" name="ord_shipping_cost" value="<?= $order->ord_shipping_cost; ?>">
+                                <?php } else { ?>
+                                    <input class="form-control" type="number" placeholder="Shipping Cost" name="ord_shipping_cost" value="<?= set_value('ord_shipping_cost'); ?>">
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Grand Total (Rp)</label>
                             <div class="col-md-10">
                                 <?php if (!$mode){ ?>
                                     <input class="form-control" type="number" placeholder="Total Price" name="ord_total_price" value="<?= $order->ord_total_price; ?>">
@@ -196,10 +286,77 @@
             $('#formOrder').attr('action', "<?= base_url(); ?>marketplace/Orders/validate_edit").submit();
         });
 
+        function getCost() {
+            var cityID = $("#city_id").find(":selected").val();
+            var weight = <?= $totalWeight; ?>;
+            var shipping = $("select[name=shipping]").find(":selected").attr("shipCode");
+
+            $.ajax({
+                url: "<?= base_url() ?>marketplace/Shipping/getCostBackend",
+                method: 'post',
+                data: {cityID: cityID, weight: weight, shipping: shipping},
+                success: function(response){
+                    if (response.includes("Error")) {
+                        if(response.includes("Weight tidak boleh lebih dari 30KG atau 30.000 gram")){
+                            $('#errorMesage').html("<?= lang("pro_weight_exceed"); ?>");
+                        }
+                        else{
+                            $('#errorMesage').html(response.slice(6));
+                        }
+                        $('#error-modal').modal('show');
+                    }
+                    else{
+                        $("select[name=shipping_type]").html(response);
+                        <?php if (!$mode){ ?>
+                            $('#shipping_type option[value="<?= $order->ord_shipping_type ?>"]').attr("selected", "selected");
+                        <?php } else { ?>
+                            $('#shipping_type option[value="<?= set_value('shipping_type'); ?>"]').attr("selected", "selected");
+                        <?php } ?>
+                    }
+                }
+            });
+        }
+
         $(document).ready(function(){
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>
+
+            <?php if (!$mode){ ?>
+                $('#shipping option[value="<?= $order->ord_shipping_id ?>"]').attr("selected", "selected");
+            <?php } else { ?>
+                $('#shipping option[value="<?= set_value('shipping'); ?>"]').attr("selected", "selected");
+            <?php } ?>
+
+            getCost();
+        });
+
+        $("#prov_id").on("change", function(){
+            $("select[name=shipping_type]").empty();
+            var provinceID = $(this).find(":selected").val();
+            $.ajax({
+                url: "<?= base_url() ?>marketplace/Shipping/getCity",
+                method: 'post',
+                data: 'provinceID='+provinceID,
+                success: function(response){
+                    if (response.includes("Error")) {
+                        $('#errorMesage').html(response.slice(6));
+                        $('#error-modal').modal('show');
+                    }
+                    else{
+                        $("#city_id").html(response);
+                        $('#city_id option:contains("Pilih")').text('--Select City/Regency--');
+                    }
+                }
+            });
+        });
+
+        $("#city_id").on("change", function(){
+            getCost();
+        });
+
+        $("#shipping").on("change", function(){
+            getCost();
         });
     </script>
 </body>
