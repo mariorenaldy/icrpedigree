@@ -167,6 +167,14 @@ class Members extends CI_Controller {
 
 		public function register(){
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+			$cities = $this->MemberModel->get_cities()->result();
+			$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+			foreach($cities as $key => $city){
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+				$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
+			}
+
 			$this->load->view("frontend/register", $dataReg);
 		}
 
@@ -205,7 +213,7 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
 					if (!$this->input->post('same'))
 						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
-					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'City/Regency ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 					$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');
 					$this->form_validation->set_rules('mem_username', 'Username ', 'trim|required');
@@ -221,6 +229,14 @@ class Members extends CI_Controller {
 			}
 
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
+			$cities = $this->MemberModel->get_cities()->result();
+			$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+			foreach($cities as $key => $city){
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+				$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
+			}
+
 			if ($this->form_validation->run() == FALSE){
 				$this->load->view("frontend/register", $dataReg);
 			}

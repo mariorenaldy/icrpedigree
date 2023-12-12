@@ -6,6 +6,7 @@
     <link href="<?= base_url(); ?>/assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -79,9 +80,12 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_kota" class="control-label col-md-2">City</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" type="text" placeholder="City" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
+                                <label class="control-label col-sm-2">City/Regency</label>
+                                <div class="col-sm-10">
+                                    <select id="mem_kota_select" name="mem_kota_select" placeholder="City/Regency" class="form-control">
+                                        <?= $cityOptions; ?>
+                                    </select>
+                                    <input type="hidden" name="mem_kota" id="mem_kota" value="<?= set_value('mem_kota'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
@@ -224,6 +228,7 @@
     <?php $this->load->view('templates/script'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         $('#mem_type').on("change", function(){
             mem_type = $('#mem_type').val();
@@ -254,7 +259,20 @@
             }
         };
 
+        var cityValue;
+
         $(document).ready(function(){
+            var $select = $('#mem_kota_select').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    cityValue = value;
+                    $('#mem_kota').val(value);
+                }
+            });
+
+            var selectize = $select[0].selectize;
+            selectize.setValue($('#mem_kota').val());
+
             var $modal = $('#modal');
             var previewPP = document.getElementById('imgPreviewPP');
             var previewLogo = document.getElementById('imgPreviewLogo');

@@ -10,6 +10,8 @@ class LogorderModel extends CI_Model {
         if ($where != null) {
             $this->db->where($where);
         }
+        $this->db->join('city','logs_order.log_city_id = city.city_id');
+        $this->db->join('shipping','logs_order.log_shipping_id = shipping.ship_id');
         $this->db->join('users u1','u1.use_id = logs_order.log_updated_by');
         $this->db->join('order_status','order_status.ord_stat_id = logs_order.log_stat_id');
         $this->db->join('members', 'logs_order.log_mem_id = members.mem_id');

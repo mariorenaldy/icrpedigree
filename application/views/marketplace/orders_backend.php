@@ -181,7 +181,7 @@
                 info: false,
                 "ordering": true,
                 order: [
-                    [6, 'desc']
+                    [10, 'desc']
                 ],
                 dom: 'lpftrip',
                 columnDefs: [{

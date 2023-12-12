@@ -68,7 +68,7 @@
                         <div class="col-sm-5"><?= $req->req_hp ?></div>
                     </div>      
                     <div class="row mb-1">
-                        <div class="col-sm-2"><?= lang('mem_city'); ?></div>
+                        <div class="col-sm-2"><?= lang('common_city/regency'); ?></div>
                         <div class="col-sm-5"><?= $req->req_old_kota ?></div>
                         <div class="col-sm-5"><?= $req->req_kota ?></div>
                     </div>

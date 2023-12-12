@@ -15,7 +15,7 @@ class OrderModel extends CI_Model {
         $this->db->from("orders");
         return $this->db->count_all_results();
     }
-    public function get_orders($where = null, $sort = 'sort_date desc', $offset = 0, $limit = 0){
+    public function get_orders($where = null, $sort = 'ord_date desc', $offset = 0, $limit = 0){
         $this->db->select('*, ord_date as sort_date, DATE_FORMAT(orders.ord_date, "%d-%m-%Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
         if ($where != null) {
             $this->db->where($where);

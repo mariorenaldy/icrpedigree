@@ -42,6 +42,14 @@ class Requestmember extends CI_Controller {
 
 		public function edit_profile(){
 			if ($this->session->userdata('mem_id')){
+				$cities = $this->MemberModel->get_cities()->result();
+				$data['cityOptions'] = "<option value=''>City/Regency</option>";
+				foreach($cities as $key => $city){
+					$data['cityOptions'] = $data['cityOptions']."<option value='".$city->city_name."'>";
+					$data['cityOptions'] = $data['cityOptions'].$city->city_name;
+					$data['cityOptions'] = $data['cityOptions']."</option>";
+				}
+
 				$data['kennelType'] = $this->KenneltypeModel->get_kennel_types('')->result();
 				$where['mem_id'] = $this->session->userdata('mem_id');
 				$data['member'] = $this->MemberModel->get_members($where)->row();
@@ -92,7 +100,7 @@ class Requestmember extends CI_Controller {
 						$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
 						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 						$this->form_validation->set_rules('mem_hp', 'Active WhatsApp Number ', 'trim|required');
-						$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+						$this->form_validation->set_rules('mem_kota', 'City/Regency ', 'trim|required');
 						$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 						$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
 						$this->form_validation->set_rules('mem_ktp', 'ID Card Number ', 'trim|required');

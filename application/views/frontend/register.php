@@ -5,6 +5,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header'); ?>  
@@ -67,7 +68,7 @@
                             <div class="input-group mb-3">
                                 <label for="mem_address" class="control-label col-sm-2"><?= lang("mem_certificate_address"); ?></label>
                                 <div class="col-sm-10 gap-1">
-                                    <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> Sama dengan alamat surat menyurat</label>
+                                    <label class="checkbox-inline"><input type="checkbox" name="same" value="1" <?php echo set_checkbox('same', '1'); ?> /> <?= lang("register_same_address"); ?></label>
                                     <input class="form-control" type="text" placeholder="<?= lang("mem_certificate_address"); ?>" name="mem_address" value="<?= set_value('mem_address'); ?>">
                                 </div>
                             </div>
@@ -78,10 +79,12 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_kota" class="control-label col-sm-2"><?= lang("mem_city"); ?></label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" placeholder="<?= lang("mem_city"); ?>" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
-                                </div>
+                                <label class="control-label col-sm-2"><?= lang("common_city/regency"); ?></label>
+                                <select id="mem_kota_select" name="mem_kota_select" placeholder="<?= lang("common_city/regency"); ?>" class="form-control">
+                                    <option value=""><?= lang("common_city/regency"); ?></option>
+                                    <?= $cityOptions; ?>
+                                </select>
+                                <input type="hidden" name="mem_kota" id="mem_kota" value="<?= set_value('mem_kota'); ?>">
                             </div>
                             <div class="input-group mb-3">
                                 <label for="mem_kode_pos" class="control-label col-sm-2"><?= lang("mem_postal_code"); ?></label>
@@ -241,7 +244,7 @@
                                 <div class="col">: <span id="confirm-number"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-6"><?= lang("mem_city"); ?></div>
+                                <div class="col-6"><?= lang("common_city/regency"); ?></div>
                                 <div class="col">: <span id="confirm-kota"></span></div>
                             </div>
                             <div class="row">
@@ -316,6 +319,7 @@
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         $('#mem_type').on("change", function(){
             mem_type = $('#mem_type').val();
@@ -352,7 +356,20 @@
             }
         };
 
+        var cityValue;
+
         $(document).ready(function(){
+            var $select = $('#mem_kota_select').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    cityValue = value;
+                    $('#mem_kota').val(value);
+                }
+            });
+
+            var selectize = $select[0].selectize;
+            selectize.setValue($('#mem_kota').val());
+            
             var $modal = $('#modal');
             var previewPP = document.getElementById('imgPreviewPP');
             var previewLogo = document.getElementById('imgPreviewLogo');
@@ -461,7 +478,7 @@
                     $('#confirm-mail_address').text($('input[name="mem_address"]').val());
                 }
 
-                $('#confirm-kota').text($('input[name="mem_kota"]').val());
+                $('#confirm-kota').text(cityValue);
                 $('#confirm-kode_pos').text($('input[name="mem_kode_pos"]').val());
                 $('#confirm-pp').attr("src",  $('#imgPreviewPP').attr("src"));
                 $('#confirm-username').text($('input[name="mem_username"]').val());

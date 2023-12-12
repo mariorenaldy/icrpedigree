@@ -23,7 +23,12 @@
                                 <th>Last Modified</th>
                                 <th>Member</th>
                                 <th>Invoice</th>
-                                <th>Total Price</th>
+                                <th>City/Regency</th>
+                                <th>Full Address</th>
+                                <th>Shipping Service</th>
+                                <th>Shipping Type</th>
+                                <th>Shipping Cost</th>
+                                <th>Grand Total</th>
                                 <th>Status</th>
                                 <th>Payment Date</th>
                                 <th>Payment Due Date</th>
@@ -39,6 +44,11 @@
                                         <td><span class="text-nowrap"><?= $o->log_date; ?></span><br/>(<?= $o->user; ?>)</td>
                                         <td><?= $o->mem_name; ?></td>
                                         <td><?= $o->log_invoice; ?></td>
+                                        <td><?= $o->city_name; ?></td>
+                                        <td><?= $o->log_address; ?></td>
+                                        <td><?= $o->ship_name; ?></td>
+                                        <td><?= $o->log_shipping_type; ?></td>
+                                        <td><?= $o->log_shipping_cost; ?></td>
                                         <td><?= $o->log_total_price; ?></td>
                                         <td><?= $o->ord_stat_name; ?></td>
                                         <td><?= $o->log_pay_date; ?></td>

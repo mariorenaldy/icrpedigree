@@ -5,6 +5,7 @@
     <?php $this->load->view('frontend/layout/head'); ?>
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_member'); ?>  
@@ -66,13 +67,12 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <label for="mem_kota" class="control-label col-sm-2"><?= lang('mem_city'); ?></label>
+                                <label class="control-label col-sm-2"><?= lang("common_city/regency"); ?></label>
                                 <div class="col-sm-10">
-                                    <?php if (!$mode){ ?>
-                                        <input class="form-control" type="text" placeholder="<?= lang('mem_city'); ?>" name="mem_kota" value="<?= $member->mem_kota; ?>">
-                                    <?php } else { ?>
-                                        <input class="form-control" type="text" placeholder="<?= lang('mem_city'); ?>" name="mem_kota" value="<?= set_value('mem_kota'); ?>">
-                                    <?php } ?>
+                                    <select id="mem_kota_select" name="mem_kota_select" placeholder="<?= lang("common_city/regency"); ?>" class="form-control">
+                                        <?= $cityOptions; ?>
+                                    </select>
+                                    <input type="hidden" name="mem_kota" id="mem_kota" value="<?= set_value('mem_kota'); ?>">
                                 </div>
                             </div>
                             <div class="input-group mb-3">
@@ -130,10 +130,12 @@
                                     foreach ($kennelType as $row) {
                                         $pil[$row->ken_type_id] = $row->ken_type_name;
                                     }
-                                    if (!$mode)
+                                    if (!$mode){
                                         echo form_dropdown('ken_type_id', $pil, $member->ken_type_id, 'class="form-control", id="ken_type_id"');
-                                    else
+                                    }
+                                    else{
                                         echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
+                                    }
                                 ?>
                             </div>
                             <div class="text-center">
@@ -199,7 +201,7 @@
                                 <div class="col">: <span id="confirm-phone_number"></span></div>
                             </div>
                             <div class="row">
-                                <div class="col-4"><?= lang('mem_city'); ?></div>
+                                <div class="col-4"><?= lang('common_city/regency'); ?></div>
                                 <div class="col">: <span id="confirm-city"></span></div>
                             </div>
                             <div class="row">
@@ -260,6 +262,7 @@
     </main>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         const imageInputLogo = document.querySelector("#imageInputLogo");
         var croppingImage = null;
@@ -268,7 +271,25 @@
             imageInputLogo.value = null;
         };
 
+        var cityValue;
+
         $(document).ready(function(){
+            var $select = $('#mem_kota_select').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    cityValue = value;
+                    $('#mem_kota').val(value);
+                }
+            });
+
+            var selectize = $select[0].selectize;
+
+            <?php if (!$mode){ ?>
+                selectize.setValue("<?= $member->mem_kota; ?>");
+            <?php } else { ?>
+                selectize.setValue($('#mem_kota').val());
+            <?php } ?>
+
             var $modal = $('#modal');
             var previewLogo = document.getElementById('imgPreviewLogo');
             var modalImage = document.getElementById('sample_image');

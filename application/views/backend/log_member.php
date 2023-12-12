@@ -26,7 +26,7 @@
                                 <th>Phone Number</th>
                                 <th>Mail Address</th>
                                 <th>Certificate Address</th>
-                                <th>City</th>
+                                <th>City/Regency</th>
                                 <th>Postal Code</th>
                                 <th>KTP</th>
                                 <th>email</th>

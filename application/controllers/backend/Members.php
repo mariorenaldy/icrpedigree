@@ -68,18 +68,18 @@ class Members extends CI_Controller {
 			$where['mem_id !='] = $this->config->item('no_member');
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
-			$data['member'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
+			$data['member'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
             $config['base_url'] = base_url().'/backend/Members/index';
-            $config['total_rows'] = $this->MemberModel->get_members($where, 'mem_app_date2 desc', $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], 0)->num_rows();
             $this->pagination->initialize($config);
 
             $data['keywords'] = '';
-            $data['sort_by'] = 'mem_app_date2';
+            $data['sort_by'] = 'created_date';
             $data['sort_type'] = 'desc';
             $data['mem_type'] = $this->config->item('pro_member');
             $this->session->set_userdata('keywords', '');
-            $this->session->set_userdata('sort_by', 'mem_app_date2');
+            $this->session->set_userdata('sort_by', 'created_date');
             $this->session->set_userdata('sort_type', 'desc');
 			$this->load->view('backend/view_members', $data);
 		}
@@ -221,6 +221,14 @@ class Members extends CI_Controller {
 		}
 
 		public function add(){
+			$cities = $this->MemberModel->get_cities()->result();
+			$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+			foreach($cities as $key => $city){
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+				$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+				$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
+			}
+
 			$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
 			$dataReg['mode'] = 0;
 			$this->load->view("backend/add_member", $dataReg);
@@ -235,7 +243,7 @@ class Members extends CI_Controller {
 					if (!$this->input->post('same'))
 						$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
-					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'City/Regency ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 					$this->form_validation->set_rules('mem_email', 'email ', 'trim|required');
 					$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required'); 
@@ -248,6 +256,14 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('name', 'KTP Name ', 'trim|required');
 					$this->form_validation->set_rules('hp', 'Phone Number ', 'trim|required');
 					$this->form_validation->set_rules('email', 'email ', 'trim|required');
+				}
+
+				$cities = $this->MemberModel->get_cities()->result();
+				$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+				foreach($cities as $key => $city){
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+					$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
 				}
 
 				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
@@ -537,6 +553,14 @@ class Members extends CI_Controller {
 
 		public function edit(){
 			if ($this->uri->segment(4)){
+				$cities = $this->MemberModel->get_cities()->result();
+				$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+				foreach($cities as $key => $city){
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+					$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
+				}
+
 				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
 				$where['mem_id'] = $this->uri->segment(4);
 				$dataReg['member'] = $this->MemberModel->get_members($where)->row();
@@ -556,7 +580,7 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('mem_mail_address', 'Mail Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_address', 'Address ', 'trim|required');
 					$this->form_validation->set_rules('mem_hp', 'Phone Number ', 'trim|required');
-					$this->form_validation->set_rules('mem_kota', 'City ', 'trim|required');
+					$this->form_validation->set_rules('mem_kota', 'City/Regency ', 'trim|required');
 					$this->form_validation->set_rules('mem_kode_pos', 'Postal Code ', 'trim|required');
 					$this->form_validation->set_rules('mem_email', 'Email ', 'trim|required');
 					$this->form_validation->set_rules('mem_ktp', 'KTP Number', 'trim|required'); 
@@ -566,6 +590,14 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('name', 'Name ', 'trim|required');
 					$this->form_validation->set_rules('hp', 'Phone Number ', 'trim|required');
 					$this->form_validation->set_rules('email', 'email ', 'trim|required');
+				}
+
+				$cities = $this->MemberModel->get_cities()->result();
+				$dataReg['cityOptions'] = "<option value=''>City/Regency</option>";
+				foreach($cities as $key => $city){
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."<option value='".$city->city_name."'>";
+					$dataReg['cityOptions'] = $dataReg['cityOptions'].$city->city_name;
+					$dataReg['cityOptions'] = $dataReg['cityOptions']."</option>";
 				}
 
 				$dataReg['kennelType'] = $this->KenneltypeModel->get_kennel_types(null)->result();
@@ -675,7 +707,7 @@ class Members extends CI_Controller {
 						$this->session->set_flashdata('error_message', 'Duplicate email');
 					}
 	
-					if (!$err && $this->KennelModel->check_for_duplicate($this->input->post('mem_id'), 'ken_name', $this->input->post('ken_name'))){
+					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate($this->input->post('mem_id'), 'ken_name', $this->input->post('ken_name'))){
 						$err++;
 						$this->session->set_flashdata('error_message', 'Duplicate kennel name');
 					}

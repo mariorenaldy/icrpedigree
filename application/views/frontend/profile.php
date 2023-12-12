@@ -68,7 +68,7 @@
             </div>      
             <div class="row mb-1">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-3"><?= lang("mem_city"); ?></div>
+                <div class="col-sm-3"><?= lang("common_city/regency"); ?></div>
                 <div class="col-sm-8"><?= $member->mem_kota ?></div>
             </div>
             <div class="row mb-1">

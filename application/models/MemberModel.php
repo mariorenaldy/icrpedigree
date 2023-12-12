@@ -19,7 +19,7 @@ class MemberModel extends CI_Model {
     }
 
     public function get_members($where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, members.mem_created_at as created_date, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -50,7 +50,7 @@ class MemberModel extends CI_Model {
     }
 
     public function search_members($like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
+        $this->db->select('*, members.mem_created_at as created_date, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
@@ -107,5 +107,11 @@ class MemberModel extends CI_Model {
         $query = $this->db->get();
         
         return $query->result();
+    }
+
+    public function get_cities(){
+        $this->db->select('*');
+        $this->db->from('city');
+        return $this->db->get();
     }
 }
