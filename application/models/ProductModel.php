@@ -16,7 +16,7 @@ class ProductModel extends CI_Model {
     }
 
     public function get_products($where = null){
-        $this->db->select('*');
+        $this->db->select('*, DATE_FORMAT(products.pro_created_at, "%d-%m-%Y %H:%i:%s") as pro_created_at');
         if ($where != null) {
             $this->db->where($where);
         }

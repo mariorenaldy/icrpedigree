@@ -34,7 +34,7 @@
                             <?php
                                 foreach ($product AS $p){ ?>
                                     <tr>
-                                        <td><span class="text-nowrap"><?= $p->log_product_updated_at; ?></span><br/>(<?= $p->user; ?>)</td>
+                                        <td><span class="text-nowrap"><?= $p->log_date; ?></span><br/>(<?= $p->user; ?>)</td>
                                         <td>
                                             <?php
                                                 if ($p->log_product_photo && $p->log_product_photo != '-'){

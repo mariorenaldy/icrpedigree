@@ -5,7 +5,7 @@ class LogorderModel extends CI_Model {
     }
 
     public function get_logs($where){
-        $this->db->select('*, DATE_FORMAT(logs_order.log_updated_at, "%d %M %Y %H:%i:%s") as log_date, u1.use_username AS user, DATE_FORMAT(logs_order.log_pay_date, "%d %M %Y %H:%i:%s") as log_pay_date, DATE_FORMAT(logs_order.log_pay_due_date, "%d %M %Y %H:%i:%s") as log_pay_due_date, DATE_FORMAT(logs_order.log_arrived_date, "%d %M %Y %H:%i:%s") as log_arrived_date, DATE_FORMAT(logs_order.log_completed_date, "%d %M %Y %H:%i:%s") as log_completed_date');
+        $this->db->select('*, DATE_FORMAT(logs_order.log_updated_at, "%d-%m-%Y %H:%i:%s") as log_date, u1.use_username AS user, DATE_FORMAT(logs_order.log_pay_date, "%d-%m-%Y %H:%i:%s") as log_pay_date, DATE_FORMAT(logs_order.log_pay_due_date, "%d-%m-%Y %H:%i:%s") as log_pay_due_date, DATE_FORMAT(logs_order.log_arrived_date, "%d-%m-%Y %H:%i:%s") as log_arrived_date, DATE_FORMAT(logs_order.log_completed_date, "%d-%m-%Y %H:%i:%s") as log_completed_date');
         $this->db->from('logs_order');
         if ($where != null) {
             $this->db->where($where);

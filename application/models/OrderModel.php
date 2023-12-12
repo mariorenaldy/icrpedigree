@@ -16,7 +16,7 @@ class OrderModel extends CI_Model {
         return $this->db->count_all_results();
     }
     public function get_orders($where = null, $sort = 'sort_date desc', $offset = 0, $limit = 0){
-        $this->db->select('*, ord_date as sort_date, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
+        $this->db->select('*, ord_date as sort_date, DATE_FORMAT(orders.ord_date, "%d-%m-%Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
         if ($where != null) {
             $this->db->where($where);
         }
@@ -43,7 +43,7 @@ class OrderModel extends CI_Model {
     }
 
     public function get_processed_orders($sort = 'ord_date desc', $offset = 0, $limit = 0){
-        $this->db->select('*, DATE_FORMAT(orders.ord_date, "%d %M %Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d %M %Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d %M %Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d %M %Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d %M %Y %H:%i:%s") as ord_completed_date');
+        $this->db->select('*, DATE_FORMAT(orders.ord_date, "%d-%m-%Y %H:%i:%s") as ord_date, DATE_FORMAT(orders.ord_pay_date, "%d-%m-%Y %H:%i:%s") as ord_pay_date, DATE_FORMAT(orders.ord_pay_due_date, "%d-%m-%Y %H:%i:%s") as ord_pay_due_date, DATE_FORMAT(orders.ord_arrived_date, "%d-%m-%Y %H:%i:%s") as ord_arrived_date, DATE_FORMAT(orders.ord_completed_date, "%d-%m-%Y %H:%i:%s") as ord_completed_date');
         $where = array($this->config->item('order_not_paid'), $this->config->item('order_cancelled'), $this->config->item('order_failed'));
         $this->db->where_not_in('orders.ord_stat_id', $where);
         $this->db->join('city','orders.ord_city_id = city.city_id');
