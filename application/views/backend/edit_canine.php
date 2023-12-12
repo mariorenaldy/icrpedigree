@@ -198,7 +198,7 @@
                         </div>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Canines'">Back</button>
+                            <button class="btn btn-danger" type="button" onclick="history.go(-1);">Back</button>
                         </div>
                     </form>
                 </div>

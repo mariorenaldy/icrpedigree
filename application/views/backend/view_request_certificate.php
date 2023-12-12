@@ -101,9 +101,9 @@
                                         <?php } ?>
                                     </td>
                                     <td><?= $r->req_id; ?></td>
-                                    <td class="text-nowrap"><?= $r->req_created_at; ?></td>
+                                    <td><?= $r->req_created_at; ?></td>
                                     <td><?= $r->mem_name; ?></td>
-                                    <td><?= $r->can_a_s; ?></td>
+                                    <td><a href="<?= base_url(); ?>backend/Certificate/front/<?= $r->can_id; ?>"><?= $r->can_a_s; ?></a></td>
                                     <td>
                                         <?php if ($r->can_photo && $r->can_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/canine/'.$r->can_photo) ?>" class="img-fluid img-thumbnail" alt="dog" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')" style="max-height:100px;">

@@ -11,7 +11,7 @@
         <div class="row">            
             <div class="col-md-12">                          
                 <h3 class="text-center text-primary">Product Type List</h3>
-                <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                <?php if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ ?>
                     <div class="row my-3">
                         <div class="col-md-12">
                             <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i></button>
@@ -31,11 +31,13 @@
                             <?php foreach ($product_types AS $pt){ ?>
                                 <tr>
                                     <td>
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ ?>
                                         <button type="button" class="btn btn-success mb-1" onclick="update(<?= $pt->pro_type_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Product Type"><i class="fa fa-pencil"></i></button>
+                                    <?php } ?>
                                     </td>
                                     <td>
                                         <?php 
-                                            if ($this->session->userdata('use_type_id') == $this->config->item('super')){ 
+                                            if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ 
                                                 if (!$pt->pro_type_stat){ ?>
                                                     <button type="button" class="btn btn-primary mb-1" onclick="activate(<?= $pt->pro_type_id ?>, '<?= $pt->pro_type_name ?>')" data-toggle="tooltip" data-placement="top" title="Activate Product Type"><i class="fa fa-check"></i></button>
                                         <?php } else { ?>

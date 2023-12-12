@@ -653,6 +653,9 @@ $config['canine'] = 4;
 $config['kennel'] = 5;
 
 $config['super'] = 0;
+$config['admin_user'] = 1;
+$config['stock_manager'] = 2;
+$config['staff'] = 3;
 $config['no_user'] = 0;
 $config['system'] = 1;
 

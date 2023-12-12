@@ -53,11 +53,13 @@
                     }
                     ?>
                 </div>
-                <div class="row my-3">
+                <?php if ($this->session->userdata('use_type_id') == $this->config->item('staff')) { ?>
+                <!-- <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Order"><i class="fa fa-plus"></i></button>
                     </div>
-                </div>
+                </div> -->
+                <?php } ?>
                 <div class="table-responsive">
                     <table id="datatable" class="table table-hover">
                         <thead>
@@ -80,19 +82,25 @@
                             <?php foreach ($orders as $o) { ?>
                                 <tr>
                                     <td class="text-center">
-                                        <?php if ($o->ord_stat_id == $this->config->item('order_paid')) { ?>
-                                            <button type="button" class="btn btn-primary mb-1" onclick="deliver(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Deliver Order"><i class="fa fa-truck"></i></button>
-                                        <?php } else if ($o->ord_stat_id == $this->config->item('order_delivered')) { ?>
-                                            <button type="button" class="btn btn-primary mb-1" onclick="arrive(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Order Arrived"><i class="fa fa-check"></i></button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('staff')) { ?>
+                                            <?php if ($o->ord_stat_id == $this->config->item('order_paid')) { ?>
+                                                <button type="button" class="btn btn-primary mb-1" onclick="deliver(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Deliver Order"><i class="fa fa-truck"></i></button>
+                                            <?php } else if ($o->ord_stat_id == $this->config->item('order_delivered')) { ?>
+                                                <button type="button" class="btn btn-primary mb-1" onclick="arrive(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Order Arrived"><i class="fa fa-check"></i></button>
+                                            <?php } ?>
                                         <?php } ?>
                                     </td>
                                     <td class="text-center">
-                                        <?php if ($o->ord_stat_id == $this->config->item('order_paid') || $o->ord_stat_id == $this->config->item('order_delivered')) { ?>
-                                            <button type="button" class="btn btn-danger mb-1" onclick="reject(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Reject Order"><i class="fa fa-xmark"></i></button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('staff')) { ?>
+                                            <?php if ($o->ord_stat_id == $this->config->item('order_paid') || $o->ord_stat_id == $this->config->item('order_delivered')) { ?>
+                                                <button type="button" class="btn btn-danger mb-1" onclick="reject(<?= $o->ord_id ?>, '<?= $o->ord_invoice ?>')" data-toggle="tooltip" data-placement="top" title="Reject Order"><i class="fa fa-xmark"></i></button>
+                                            <?php } ?>
                                         <?php } ?>
                                     </td>
                                     <td class="text-center">
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('staff')) { ?>
                                         <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Order"><i class="fa fa-edit"></i></button>
+                                    <?php } ?>
                                     </td>
                                     <td class="text-center">
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')) { ?>
@@ -127,12 +135,6 @@
         function edit(id) {
             window.location = "<?= base_url(); ?>marketplace/Orders/edit/" + id;
         }
-        // function reject(id, inv){
-        //     var proceed = window.prompt("Reject "+inv+" ?", "");
-        //     if (proceed){
-        //         window.location = "<?= base_url(); ?>marketplace/Orders/reject/"+id+"/"+encodeURIComponent(proceed);
-        //     }
-        // }
         function reject(id, inv) {
             window.location = "<?= base_url(); ?>marketplace/Orders/reject/" + id;
         }

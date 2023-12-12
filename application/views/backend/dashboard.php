@@ -16,6 +16,7 @@
             </div>
         </div>
         <div class="reports mb-5">
+        <?php if ($this->session->userdata('use_type_id') != $this->config->item('staff') && $this->session->userdata('use_type_id') != $this->config->item('stock_manager')){ ?>
             <div class="input-group mb-3">
                 <label class="control-label col-md-2">Number of Canines</label>
                 <div class="col-md-10">
@@ -58,6 +59,8 @@
                     <?= $userCount; ?>
                 </div>
             </div>
+            <?php } ?>
+            <?php if ($this->session->userdata('use_type_id') != $this->config->item('admin_user')){ ?>
             <div class="input-group mb-3">
                 <label class="control-label col-md-2">Number of Products</label>
                 <div class="col-md-10">
@@ -76,11 +79,16 @@
                     Rp <?= number_format($income, 0, ",", "."); ?>
                 </div>
             </div>
+            <?php } ?>
         </div>
         <label for="yearpicker">Year: </label>
         <select class="mb-3" name="yearpicker" id="yearpicker"></select>
+        <?php if ($this->session->userdata('use_type_id') != $this->config->item('admin_user')){ ?>
         <div id="incomeChart" style="width: 800px; height: 400px;"></div>
+        <?php } ?>
+        <?php if ($this->session->userdata('use_type_id') != $this->config->item('staff') && $this->session->userdata('use_type_id') != $this->config->item('stock_manager')){ ?>
         <div id="memberChart" style="width: 800px; height: 400px;"></div>
+        <?php } ?>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -367,8 +375,10 @@
         }
 
         var monthlyIncomeData = <?php echo json_encode($monthly_income); ?>;
+        <?php if ($this->session->userdata('use_type_id') != $this->config->item('admin_user')){ ?>
         updateChart(<?= $year; ?>, monthlyIncomeData);
-
+        <?php } ?>
+        
         var memberData = <?php echo json_encode($memberData); ?>;
         var canineData = <?php echo json_encode($canineData); ?>;
         var studData = <?php echo json_encode($studData); ?>;

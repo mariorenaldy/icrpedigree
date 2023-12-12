@@ -39,7 +39,9 @@
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-success mb-1" onclick="update_password(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Password"><i class="fa fa-pencil"></i></button>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
                                         <button type="button" class="btn btn-warning mb-1" onclick="update_pp(<?= $u->use_id ?>)" data-toggle="tooltip" data-placement="top" title="Change PP"><i class="fa fa-image"></i></button>
+                                        <?php } ?>
                                     </td>
                                     <td>
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>

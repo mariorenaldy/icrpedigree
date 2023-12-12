@@ -406,7 +406,7 @@
       };
     }
     function back(){
-      window.location = "<?= base_url(); ?>backend/Canines";
+      history.go(-2);
     }
   </script>
 </body>

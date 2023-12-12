@@ -42,11 +42,13 @@
                         }
                     ?>
                 </div>
+                <?php if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ ?>
                 <div class="row my-3">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-primary" onclick="add()" data-toggle="tooltip" data-placement="top" title="Add Product"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
+                <?php } ?>
                 <div class="table-responsive">
                     <table id="datatable" class="table table-hover">
                         <thead>
@@ -67,10 +69,12 @@
                             <?php foreach ($products AS $p){ ?>
                                 <tr>
                                     <td class="text-center">
+                                    <?php if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ ?>
                                         <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $p->pro_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Product"><i class="fa fa-edit"></i></button>
+                                    <?php } ?>
                                     </td>
                                     <td class="text-center">
-                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
+                                        <?php if ($this->session->userdata('use_type_id') == $this->config->item('stock_manager')){ ?>
                                         <button type="button" class="btn btn-danger mb-1" onclick="del(<?= $p->pro_id ?>, '<?= $p->pro_name ?>')" data-toggle="tooltip" data-placement="top" title="Delete Product"><i class="fa fa-trash"></i></button>
                                         <?php } ?>
                                     </td>

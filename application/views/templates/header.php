@@ -5,6 +5,7 @@
             <nav class="navbar navbar-dark bg-dark text-light fixed-top my-navbar">
                 <div class="container-fluid">
                   <a href="<?= base_url('backend/Dashboard') ?>" class="text-decoration-none text-reset link-primary">Dashboard</a>
+                  <?php if ($this->session->userdata('use_type_id') != $this->config->item('staff') && $this->session->userdata('use_type_id') != $this->config->item('stock_manager')){ ?>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Kennels</span>
                         <ul class="dropdown-menu">
@@ -48,14 +49,20 @@
                            <li><a class="dropdown-item" href="<?= base_url('backend/Stambums/') ?>">Manage</a></li>
                         </ul>
                      </div>
+                  <?php } ?>
+                  <?php if ($this->session->userdata('use_type_id') != $this->config->item('admin_user')){ ?>
                      <div class="dropdown">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Marketplace</span>
                         <ul class="dropdown-menu">
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Product_Type/') ?>">Manage Product Type</a></li>
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Products/listProducts') ?>">Manage Products</a></li>
+                           <?php if ($this->session->userdata('use_type_id') != $this->config->item('stock_manager')){ ?>
                            <li><a class="dropdown-item" href="<?= base_url('marketplace/Orders/listOrders') ?>">Manage Orders</a></li>
+                           <?php } ?>
                         </ul>
                      </div>
+                  <?php } ?>
+                     <?php if ($this->session->userdata('use_type_id') != $this->config->item('staff') && $this->session->userdata('use_type_id') != $this->config->item('stock_manager')){ ?>
                      <div class="dropdown">
                            <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               Config
@@ -67,6 +74,7 @@
                                 <li><a class="dropdown-item" href="<?= base_url('backend/Users') ?>">Users</a></li>
                            </ul>
                      </div>
+                     <?php } ?>
                      <div class="dropdown me-5">
                         <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                            <img src="<?= $this->session->userdata('use_pp') ?>" class="img-fluid pp" alt="pp"> <?= $this->session->userdata('use_username') ?>
