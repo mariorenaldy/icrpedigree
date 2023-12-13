@@ -142,6 +142,11 @@
                                     <div class="col-12"><?= lang("can_add_success"); ?></div>
                                 </div>
                             <?php } ?>
+                            <?php if ($this->session->flashdata('cancel_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("can_cancel_success"); ?></div>
+                                </div>
+                            <?php } ?>
                             <?php if ($this->session->flashdata('req_cert_success')){ ?>
                                 <div class="row">
                                     <div class="col-12"><?= lang("can_req_cert_success"); ?></div>
@@ -265,6 +270,11 @@
         $(document).ready(function(){
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('cancel_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
 

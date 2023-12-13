@@ -15,6 +15,7 @@ class Requestpro extends CI_Controller {
 		}
 
 		public function index(){
+			$this->updateExpired();
 			$where['req_stat'] = $this->config->item('saved');
 			$where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['request'] = $this->requestproModel->get_requests($where)->result();
@@ -201,6 +202,21 @@ class Requestpro extends CI_Controller {
 			}
 			else{
 				redirect("backend/Requestpro");
+			}
+		}
+		function updateExpired(){
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+	
+			//update all expired payment canine status
+			$requests = $this->requestproModel->update_expired_requests();
+			
+			if ($requests) {
+				$this->db->trans_complete();
+				return true;
+			} else {
+				$this->db->trans_rollback();
+				return false;
 			}
 		}
 }

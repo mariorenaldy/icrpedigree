@@ -30,3 +30,5 @@ $lang["mem_edit_kennel_list"] = "List Laporan Ubah Kennel";
 $lang["mem_edit_kennel_success"] = "Lapor Ubah Kennel berhasil disimpan";
 
 $lang["mem_payment_photo"] = "Foto Bukti Pembayaran";
+
+$lang["mem_pro_confirm_cancel"] = "Batalkan pengajuan menjadi pro ini?";

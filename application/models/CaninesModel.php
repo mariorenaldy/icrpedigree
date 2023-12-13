@@ -132,7 +132,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function check_for_duplicate($id, $field, $val){
-        $sql = "SELECT can_id from canines where ".$field." = '".$val."' AND can_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').")";
+        $sql = "SELECT can_id from canines where ".$field." = '".$val."' AND can_stat IN (".$this->config->item('saved').", ".$this->config->item('accepted').", ".$this->config->item('not_paid').")";
         if ($id){
             $sql .= ' AND can_id <> '.$id;
         }

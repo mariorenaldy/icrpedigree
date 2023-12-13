@@ -137,7 +137,25 @@
                             ?>
                         </div>
                         <hr/>
-                        <div class="input-group mb-3 gap-3">
+                        <div class="input-group mb-3">
+                            <label for="payment_method" class="control-label col-sm-2"><?= lang("common_payment_method"); ?></label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="upload-proof" value="upload-proof" typeText="Manual Transfer">
+                                    <label class="form-check-label" for="upload-proof">
+                                        <?= lang("common_upload_proof"); ?>
+                                        <br>BCA: XXXXXXXXXX<br>Rp. 200.000
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="doku" value="doku" typeText="DOKU">
+                                    <label class="form-check-label" for="doku">
+                                        Payment Gateway DOKU
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-proof input-group mb-3 gap-3">
                             <label for="imageInputProof" class="control-label col-md-12 text-center"><?= lang('common_photo_proof'); ?><br>Rp. 200.000</label>
                             <div class="col-md-12 text-center">
                                 <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
@@ -233,6 +251,10 @@
                                 <div class="col">: <span id="confirm-canine_name_format"></span></div>
                             </div>
                             <div class="row">
+                                <div class="col-4"><?= lang("common_payment_method"); ?></div>
+                                <div class="col">: <span id="confirm-payment_method"></span></div>
+                            </div>
+                            <div class="row input-proof">
                                 <div class="col-4"><?= lang('common_photo_proof'); ?></div>
                                 <div class="col-auto pe-0">:</div>
                                 <div class="col"><img id="confirm-foto_pembayaran" width="50%"/></div>
@@ -276,6 +298,15 @@
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
+        $('input[type=radio][name=payment_method]').change(function() {
+            if (this.value == 'upload-proof') {
+                $('.input-proof').show();
+            }
+            else if (this.value == 'doku') {
+                $('.input-proof').hide();
+            }
+        });
+
         const imageInputLogo = document.querySelector("#imageInputLogo");
         const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
@@ -292,6 +323,8 @@
         var cityValue;
 
         $(document).ready(function(){
+            $('.input-proof').hide();
+
             var $select = $('#mem_kota_select').selectize({
                 sortField: 'text',
                 onChange: function(value) {
@@ -392,6 +425,7 @@
                 $('#confirm-foto').attr("src",  $('#imgPreviewLogo').attr("src"));
                 $('#confirm-kennel_name').text($('input[name="ken_name"]').val());
                 $('#confirm-canine_name_format').text($('#ken_type_id option:selected').text());
+                $('#confirm-payment_method').text($('input[name=payment_method]:checked').attr("typeText"));
                 $('#confirm-foto_pembayaran').attr("src",  $('#imgPreviewProof').attr("src"));
                 $('#confirm-modal').modal('show');
             });

@@ -56,6 +56,8 @@ $lang["can_req_micro_complain"] = "Ajukan Komplain Microchip";
 $lang["can_req_cert_accepted"] = "Terima sertifikat";
 $lang["can_micro_implant_date"] = "Tanggal Dipasang";
 
+$lang["can_cancel_success"] = "Pendaftaran anjing berhasil dibatalkan";
+
 $lang["can_cert_add_success"] = "Pengajuan cetak sertifikat berhasil disimpan";
 $lang["can_cert_cancel_success"] = "Pengajuan cetak sertifikat telah dibatalkan";
 $lang["can_cert_accept_success"] = "Sertifikat telah diterima";

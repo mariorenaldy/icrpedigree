@@ -41,6 +41,32 @@
                             } ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12"><?= lang('common_payment_method'); ?>: <?= $req->pay_name ?></div>
+                    </div>
+                    <?php if($req->req_pay_id == $this->config->item('upload_proof')){ ?>
+                    <div class="row mb-2">
+                        <div class="col-sm-2"><?= lang('common_photo_proof'); ?>: </div>
+                        <div class="col-sm-5">
+                            <?php 
+                                if ($req->req_pay_photo && $req->req_pay_photo != '-'){
+                            ?>
+                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->req_pay_photo ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } else { ?>
+                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php }
+                    else if($req->req_pay_id == $this->config->item('doku')){ ?>
+                    <div class="row mb">
+                        <div class="col-sm-5">DOKU Invoice: <?= $req->req_pay_invoice ?></div>
+                    </div>
+                    <?php }?>
+                    <?php if ($req->req_stat == $this->config->item('not_paid')){ ?>
+                    <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $req->req_pay_invoice;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
+                    <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $req->req_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
+                    <?php } ?>
                     <br/>
                     <div class="row mb-1">
                         <div class="col-sm-2"><?= lang('mem_id_card_number'); ?></div>
@@ -120,31 +146,26 @@
                         <div class="col-sm-5"><?= $req->old_kennel_type ?></div>
                         <div class="col-sm-5"><?= $req->new_kennel_type ?></div>
                     </div>
-                    <hr/>
-                    <div class="row mb-2">
-                        <div class="col-sm-2"><?= lang('common_photo_proof'); ?></div>
-                        <div class="col-sm-5">
-                            <?php 
-                                if ($req->mem_pay_photo && $req->mem_pay_photo != '-'){
-                            ?>
-                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->mem_pay_photo ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
-                            <?php } else { ?>
-                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
-                            <?php } ?>
-                        </div>
-                        <div class="col-sm-5">
-                            <?php 
-                                if ($req->req_pay_photo && $req->req_pay_photo != '-'){
-                            ?>
-                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->req_pay_photo ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
-                            <?php } else { ?>
-                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="new_proof<?= $req->req_id ?>" onclick="display('new_proof<?= $req->req_id ?>')">
-                            <?php } ?>
-                        </div>
-                    </div>
             <?php 
                     $i++;
                 } ?>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_confirm"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5><?= lang("mem_pro_confirm_cancel"); ?></h5>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" onclick="cancel()"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetId()"><?= lang("common_no"); ?></button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal fade text-dark" id="message-modal" tabindex="-1">
                 <div class="modal-dialog modal-lg">
@@ -171,6 +192,22 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
 </body>
 <script>
+    function pay(inv){
+        window.location = "<?= base_url(); ?>frontend/Payment/checkout/Requestpro/"+200000+"/"+inv;
+    }
+
+    function confirm(id){
+        cancelId = id;
+        $('#confirm-modal').modal('show');
+    }
+    let cancelId = null;
+    function resetId(){
+        cancelId = null;
+    }
+    function cancel(){
+        window.location = "<?= base_url(); ?>frontend/Requestpro/cancel/"+cancelId;
+    }
+
     var modal = document.getElementById("myModal");
     function display(id){
         var img = document.getElementById(id);

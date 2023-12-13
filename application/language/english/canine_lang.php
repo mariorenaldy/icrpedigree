@@ -55,6 +55,8 @@ $lang["can_req_cert_complain"] = "File a Certificate Complaint";
 $lang["can_req_micro_complain"] = "File a Microchip Complaint";
 $lang["can_req_cert_accepted"] = "Accept certificate";
 
+$lang["can_cancel_success"] = "Dog registration cancelled successfully";
+
 $lang["can_cert_add_success"] = "Print certificate request has been saved";
 $lang["can_cert_cancel_success"] = "Print certificate request has been cancelled";
 $lang["can_cert_accept_success"] = "Certificate has been received";

@@ -122,17 +122,12 @@
                         <div class="col-sm-5"><?= $req->new_kennel_type ?></div>
                     </div>
                     <hr/>
+                    <div class="row">
+                        <div class="col-sm-12">Payment Method: <?= $req->pay_name ?></div>
+                    </div>
+                    <?php if($req->req_pay_id == $this->config->item('upload_proof')){ ?>
                     <div class="row mb-2">
-                        <div class="col-sm-2">Payment Proof</div>
-                        <div class="col-sm-5">
-                            <?php 
-                                if ($req->mem_pay_photo && $req->mem_pay_photo != '-'){
-                            ?>
-                                <img width="15%" src="<?= base_url().'uploads/payment/'.$req->mem_pay_photo ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
-                            <?php } else { ?>
-                                <img width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" alt="payment" id="old_proof<?= $req->req_id ?>" onclick="display('old_proof<?= $req->req_id ?>')">
-                            <?php } ?>
-                        </div>
+                        <div class="col-sm-2">Payment Proof: </div>
                         <div class="col-sm-5">
                             <?php 
                                 if ($req->req_pay_photo && $req->req_pay_photo != '-'){
@@ -143,6 +138,12 @@
                             <?php } ?>
                         </div>
                     </div>
+                    <?php } 
+                    else if($req->req_pay_id == $this->config->item('doku')){ ?>
+                    <div class="row mb">
+                        <div class="col-sm-5">DOKU Invoice: <?= $req->req_pay_invoice ?></div>
+                    </div>
+                    <?php }?>
             <?php 
                     $i++;
                 } ?>

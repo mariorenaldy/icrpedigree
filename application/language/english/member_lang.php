@@ -30,3 +30,5 @@ $lang["mem_edit_kennel_list"] = "Report Update Kennel List";
 $lang["mem_edit_kennel_success"] = "Report Update Kennel has been saved";
 
 $lang["mem_payment_photo"] = "Proof of Payment Photo";
+
+$lang["mem_pro_confirm_cancel"] = "Do you want to cancel this become pro submission?";
