@@ -198,6 +198,7 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 					$this->form_validation->set_rules('repass', 'Konfirmasi password ', 'trim|matches[password]');
 					$this->form_validation->set_rules('ken_name', 'Nama kennel ', 'trim|required');
+					$this->form_validation->set_rules('payment_method', 'Metode Pembayaran ', 'trim|required');
 				}
 				else{
 					$this->form_validation->set_rules('name', 'Nama sesuai KTP ', 'trim|required');
@@ -220,6 +221,7 @@ class Members extends CI_Controller {
 					$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 					$this->form_validation->set_rules('repass', 'Confirm Password ', 'trim|matches[password]');
 					$this->form_validation->set_rules('ken_name', 'Kennel Name ', 'trim|required');
+					$this->form_validation->set_rules('payment_method', 'Payment Method ', 'trim|required');
 				}
 				else{
 					$this->form_validation->set_rules('name', 'ID Card Name ', 'trim|required');
@@ -253,13 +255,15 @@ class Members extends CI_Controller {
 						}
 					}
 
-					if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])) {
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+					if($this->input->post('payment_method') == 'upload-proof'){
+						if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])) {
+							$err++;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+							}
 						}
 					}
 	
@@ -320,18 +324,20 @@ class Members extends CI_Controller {
 							}
 						}
 
-						$uploadedProof = $_POST['attachment_proof'];
-						$image_array_1 = explode(";", $uploadedProof);
-						$image_array_2 = explode(",", $image_array_1[1]);
-						$uploadedProof = base64_decode($image_array_2[1]);
-	
-						if ((strlen($uploadedProof) > $this->config->item('file_size'))){
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', "Ukuran file Foto Bukti Pembayaran terlalu besar (> 1 MB).<br/>");
-							}
-							else{
-								$this->session->set_flashdata('error_message', "Photo Proof of Payment file size is too big (> 1 MB).<br/>");
+						if($this->input->post('payment_method') == 'upload-proof'){
+							$uploadedProof = $_POST['attachment_proof'];
+							$image_array_1 = explode(";", $uploadedProof);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedProof = base64_decode($image_array_2[1]);
+		
+							if ((strlen($uploadedProof) > $this->config->item('file_size'))){
+								$err++;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', "Ukuran file Foto Bukti Pembayaran terlalu besar (> 1 MB).<br/>");
+								}
+								else{
+									$this->session->set_flashdata('error_message', "Photo Proof of Payment file size is too big (> 1 MB).<br/>");
+								}
 							}
 						}
 						
@@ -356,23 +362,25 @@ class Members extends CI_Controller {
 							}
 						}
 
-						$proof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-						if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))){
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'payment folder is not found or is not writable.');
-							}
-						} else {
-							if (is_file($proof_name) and !is_writable($proof_name)){
+						if($this->input->post('payment_method') == 'upload-proof'){
+							$proof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+							if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'File Foto Bukti Pembayaran sudah ada dan tidak writable.');
+									$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Photo Proof of Payment file is already exist and is not writable.');
+									$this->session->set_flashdata('error_message', 'payment folder is not found or is not writable.');
+								}
+							} else {
+								if (is_file($proof_name) and !is_writable($proof_name)){
+									$err++;
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File Foto Bukti Pembayaran sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'Photo Proof of Payment file is already exist and is not writable.');
+									}
 								}
 							}
 						}
@@ -500,8 +508,10 @@ class Members extends CI_Controller {
 						file_put_contents($logo_name, $uploadedLogo);
 						$logo = str_replace($this->config->item('path_kennel'), '', $logo_name);
 	
-						file_put_contents($proof_name, $uploadedProof);
-						$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
+						if($this->input->post('payment_method') == 'upload-proof'){
+							file_put_contents($proof_name, $uploadedProof);
+							$proof = str_replace($this->config->item('path_payment'), '', $proof_name);
+						}
 						
 						$dataMember = array(
 							'mem_name' => strtoupper($this->input->post('mem_name')),
@@ -525,6 +535,17 @@ class Members extends CI_Controller {
 							$dataMember['mem_address'] = $this->input->post('mem_mail_address');
 						else
 							$dataMember['mem_address'] = $this->input->post('mem_address');
+
+						if($this->input->post('payment_method') == 'upload-proof'){
+							$dataMember['mem_pay_id'] = $this->config->item('upload_proof');
+						}
+						else{
+							$dataMember['mem_stat'] = $this->config->item('not_paid');
+							$dataMember['mem_pay_id'] = $this->config->item('doku');
+							$inv = $this->generateInvoice();
+							$dataMember['mem_pay_invoice'] = $inv;
+							$dataMember['mem_pay_due_date'] = date('Y-m-d H:i:s', strtotime('1 hour'));
+						}
 						
 						$kennel_data = array(
 							'ken_name' => strtoupper($this->input->post('ken_name')),
@@ -568,13 +589,20 @@ class Members extends CI_Controller {
 						$res = $this->KennelModel->add_kennels($kennel_data);
 						if ($res){
 							$this->db->trans_complete();
-							if ($this->input->post('mem_type'))
-								$this->session->set_flashdata('pro', TRUE);
+							if ($this->input->post('mem_type')){
+								if($this->input->post('payment_method') == 'upload-proof'){
+									$this->session->set_flashdata('pro', TRUE);
+									redirect("frontend/Members");
+								}
+								else{
+									redirect("frontend/Payment/checkout/Members/200000/".$inv);
+								}
+							}
 							else{
 								$this->session->set_flashdata('free', TRUE);
 								$this->session->set_flashdata('user', $this->input->post('email'));
+								redirect("frontend/Members");
 							}
-							redirect("frontend/Members");
 						}
 						else{
 							$err = 2;
@@ -794,6 +822,188 @@ class Members extends CI_Controller {
 		}
 		else{
 			redirect("frontend/Members");
+		}
+	}
+	public function cek_status($invoice){
+		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
+
+			$where['mem_pay_invoice'] = $invoice;
+			$members = $this->MemberModel->get_members($where)->row();
+	
+			$clientId = "BRN-0222-1677984841764";
+			$requestId = $invoice;
+			$date = new DateTime("now", new DateTimeZone('UTC'));
+			$requestDate = $date->format('Y-m-d\TH:i:s\Z');
+	
+			$targetPath = "/orders/v1/status/".$requestId;
+			$secretKey = "SK-WjYbHmZGDEhveR9kBxCW";
+			
+			// Prepare Signature Component
+			$componentSignature = "Client-Id:" . $clientId . "\n" . 
+								  "Request-Id:" . $requestId . "\n" .
+								  "Request-Timestamp:" . $requestDate . "\n" . 
+								  "Request-Target:" . $targetPath;
+	
+			// Calculate HMAC-SHA256 base64 from all the components above
+			// $signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+			$signature = $this->generate_signature($componentSignature, $secretKey);
+	
+			// Initiate cURL
+			$ch = curl_init();
+	
+			curl_setopt_array($ch, array(
+				CURLOPT_URL => 'https://api-sandbox.doku.com/orders/v1/status/'.$requestId,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_FAILONERROR => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'GET',
+				CURLOPT_HTTPHEADER => array(
+					'Content-Type: application/json',
+					'Client-Id: '.$clientId,
+					'Request-Id: '.$requestId,
+					'Request-Timestamp: '.$requestDate,
+					'Signature: HMACSHA256='.$signature,
+				),
+			));
+	
+			// Execute the request
+			$result = curl_exec($ch);
+	
+			if (!curl_errno($ch)) {
+				switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+					case 200:  # OK
+						$statRes = json_decode($result)->transaction->status;
+						if($statRes == 'FAILED'){
+							$res = $this->failMember($members->mem_id);
+							if($res){
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Payment failed');
+								}
+							}
+							else{
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal mengubah status pendaftaran dengan id = '.$members->mem_id);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to change registration status with id = '.$members->mem_id);
+								}
+							}
+							redirect("frontend/Members/register");
+						}
+						if($statRes == 'SUCCESS'){
+							$res = $this->payMember($members->mem_id);
+							if($res){
+								$this->session->set_flashdata('pro', TRUE);
+								redirect("frontend/Members");
+							}
+							else{
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal membayar pendaftaran dengan id = '.$members->mem_id);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to pay registration with id = '.$members->mem_id);
+								}
+								redirect("frontend/Members/register");
+							}
+						}
+						if($statRes == 'EXPIRED'){
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The payment due date has passed');
+							}
+						}
+						if($statRes == 'PENDING'){
+							redirect('frontend/Members/register');
+						}
+						else{
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment failed');
+							}
+							redirect('frontend/Members/register');
+						}
+						break;
+					default:
+						redirect('frontend/Members/register');
+				}
+			}
+			else{
+				$this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
+				redirect('frontend/Members/register');
+			}
+	
+			// Close cURL
+			curl_close($ch);
+		}
+		else{
+			redirect("frontend/Members");
+		}
+	}
+	function generateInvoice($length = 8) {
+		$characters = '0123456789';
+		$string = '';
+	
+		for ($i = 0; $i < $length; $i++) {
+			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
+		}
+	
+		$string = 'TESMB-'.$string;
+		return $string;
+	}
+	function generate_signature($componentSignature, $secretKey){
+		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+		return $signature;
+	}
+	public function payMember($mem_id){
+		$data = array(
+			'mem_stat' => $this->config->item('processed')
+		);
+
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
+		$where['mem_id'] = $mem_id;
+		$members = $this->MemberModel->update_members($data, $where);
+		if ($members) {
+			$this->db->trans_complete();
+			return true;
+		} else {
+			$err = 1;
+		}
+		if ($err) {
+			$this->db->trans_rollback();
+			return false;
+		}
+	}
+	public function failMember($can_id){
+		$data = array(
+			'mem_stat' => $this->config->item('payment_failed')
+		);
+
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
+		$where['mem_id'] = $mem_id;
+		$members = $this->MemberModel->update_members($data, $where);
+		if ($members) {
+			$this->db->trans_complete();
+			return true;
+		} else {
+			$err = 1;
+		}
+		if ($err) {
+			$this->db->trans_rollback();
+			return false;
 		}
 	}
 }

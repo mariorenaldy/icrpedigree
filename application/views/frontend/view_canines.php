@@ -201,7 +201,7 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
         function pay(inv){
-            window.location = "<?= base_url(); ?>frontend/Payment/checkout/"+150000+"/"+inv;
+            window.location = "<?= base_url(); ?>frontend/Payment/checkout/Canines/"+150000+"/"+inv;
         }
 
         function confirm(id){

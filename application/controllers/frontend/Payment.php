@@ -23,7 +23,7 @@ class Payment extends CI_Controller {
 		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
 		return $signature;
 	}
-	public function checkout($amount, $inv){
+	public function checkout($controllers, $amount, $inv){
 		$clientId = "BRN-0222-1677984841764";
 		$requestId = $inv;
 		$date = new DateTime("now", new DateTimeZone('UTC'));
@@ -35,7 +35,7 @@ class Payment extends CI_Controller {
 		$order = array(
 			"amount" => $amount,
 			"invoice_number" => $inv,
-			"callback_url" => base_url()."frontend/Canines/cek_status/".$requestId
+			"callback_url" => base_url()."frontend/".$controllers."/cek_status/".$requestId
 		);
 		$payment = array(
 			"payment_due_date" => 60

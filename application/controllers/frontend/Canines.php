@@ -377,7 +377,6 @@ class Canines extends CI_Controller {
                         'can_photo' => $photo,
                         'can_pay_photo' => $photoProof,
                         'can_pay_invoice' => '-',
-                        'can_pay_due_date' => date('Y-m-d H:i:s', strtotime('1 hour')),
                         'can_chip_number' => '-', // $this->input->post('can_chip_number'),
                         'can_icr_number' => '-', // $this->input->post('can_icr_number'),
                     );
@@ -390,6 +389,7 @@ class Canines extends CI_Controller {
 						$inv = $this->generateInvoice();
 						$dataCan['can_pay_invoice'] = $inv;
 						$dataCan['can_stat'] = $this->config->item('not_paid');
+						$dataCan['can_pay_due_date'] = date('Y-m-d H:i:s', strtotime('1 hour'));
 					}
     
                     // nama diubah berdasarkan kennel
@@ -444,7 +444,7 @@ class Canines extends CI_Controller {
 									redirect("frontend/Canines");
 								}
 								else{
-									redirect("frontend/Payment/checkout/150000/".$inv);
+									redirect("frontend/Payment/checkout/Canines/150000/".$inv);
 								}
                             }
                             else{

@@ -25,6 +25,7 @@ class MemberModel extends CI_Model {
         }
         $this->db->from('members');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
+        $this->db->join('payment_method','payment_method.pay_id = members.mem_pay_id' , 'left');
         $this->db->join('approval_status','approval_status.stat_id = members.mem_stat');
         $this->db->join('users','users.use_id = members.mem_app_user');
         $this->db->order_by($sort);
@@ -61,6 +62,7 @@ class MemberModel extends CI_Model {
             $this->db->group_end();
         }
         $this->db->join('kennels','members.mem_id = kennels.ken_member_id', 'left');
+        $this->db->join('payment_method','payment_method.pay_id = members.mem_pay_id' , 'left');
         $this->db->join('approval_status','approval_status.stat_id = members.mem_stat');
         $this->db->join('users','members.mem_app_user = users.use_id');
         $this->db->order_by($sort);

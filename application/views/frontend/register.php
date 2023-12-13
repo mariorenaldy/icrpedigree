@@ -26,7 +26,7 @@
                             ?>
                             </div>
                         </div>
-                        <div id="freeForm" <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
+                        <div id="freeForm">
                             <div class="input-group mb-3">
                                 <label for="mem_name" class="control-label col-sm-2"><?= lang("mem_name"); ?></label>
                                 <div class="col-sm-10">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="proForm" <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
+                        <div id="proForm" style="display: none;">
                             <div class="input-group mb-3">
                                 <label for="mem_ktp" class="control-label col-sm-2"><?= lang("mem_id_card_number"); ?></label>
                                 <div class="col-sm-10">
@@ -149,8 +149,27 @@
                                     echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control", id="ken_type_id"');
                                 ?>
                             </div>
-                            <div class="input-group my-3 gap-3 mt-5 mb-5">
-                                <label class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?><br>Rp. 200.000</label>
+                            <hr/>
+                            <div class="input-group mb-3">
+                                <label for="payment_method" class="control-label col-sm-2"><?= lang("common_payment_method"); ?></label>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="upload-proof" value="upload-proof" typeText="Manual Transfer">
+                                        <label class="form-check-label" for="upload-proof">
+                                            <?= lang("common_upload_proof"); ?>
+                                            <br>BCA: XXXXXXXXXX<br>Rp. 200.000
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="doku" value="doku" typeText="DOKU">
+                                        <label class="form-check-label" for="doku">
+                                            Payment Gateway DOKU
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-proof input-group my-3 gap-3 mt-5 mb-5">
+                                <label class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>
                                 <div class="col-sm-12 text-center">
                                     <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
                                     <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
@@ -200,7 +219,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id=freeContainer <?php if (set_value('mem_type') == $this->config->item('pro_member')){ ?>style="display: none"<?php } ?>>
+                        <div id=freeContainer>
                             <div class="row">
                                 <div class="col-4"><?= lang("register_mem_type"); ?></div>
                                 <div class="col">: <span id="confirm-type_free"></span></div>
@@ -218,7 +237,7 @@
                                 <div class="col">: <span id="confirm-email_free"></span></div>
                             </div>
                         </div>
-                        <div id=proContainer <?php if (set_value('mem_type') == $this->config->item('free_member')){ ?>style="display: none"<?php } ?>>
+                        <div id=proContainer style="display: none;">
                             <div class="row">
                                 <div class="col-6"><?= lang("register_mem_type"); ?></div>
                                 <div class="col">: <span id="confirm-type"></span></div>
@@ -278,6 +297,10 @@
                                 <div class="col">: <span id="confirm-ken_type"></span></div>
                             </div>
                             <div class="row">
+                                <div class="col-6"><?= lang("common_payment_method"); ?></div>
+                                <div class="col">: <span id="confirm-payment_method"></span></div>
+                            </div>
+                            <div class="row input-proof">
                                 <div class="col-6"><?= lang("common_photo_proof"); ?></div>
                                 <div class="col-auto pe-0">:</div>
                                 <div class="col"><img id="confirm-proof" width="50%"/></div>
@@ -322,7 +345,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         $('#mem_type').on("change", function(){
-            mem_type = $('#mem_type').val();
+            var mem_type = this.value;
             if (mem_type == <?= $this->config->item('free_member') ?>){
                 $('#proForm').hide();
                 $('#freeForm').show();
@@ -336,6 +359,15 @@
 
                 $('#freeContainer').hide();
                 $('#proContainer').show();  
+            }
+        });
+
+        $('input[type=radio][name=payment_method]').change(function() {
+            if (this.value == 'upload-proof') {
+                $('.input-proof').show();
+            }
+            else if (this.value == 'doku') {
+                $('.input-proof').hide();
             }
         });
 
@@ -359,6 +391,25 @@
         var cityValue;
 
         $(document).ready(function(){
+            var mem_type = $('#mem_type').find(":selected").val();
+
+            if (mem_type == <?= $this->config->item('free_member') ?>){
+                $('#proForm').hide();
+                $('#freeForm').show();
+
+                $('#proContainer').hide();
+                $('#freeContainer').show();
+            }
+            else{
+                $('#freeForm').hide();
+                $('#proForm').show();   
+
+                $('#freeContainer').hide();
+                $('#proContainer').show();  
+            }
+
+            $('.input-proof').hide();
+
             var $select = $('#mem_kota_select').selectize({
                 sortField: 'text',
                 onChange: function(value) {
@@ -485,6 +536,7 @@
                 $('#confirm-logo').attr("src",  $('#imgPreviewLogo').attr("src"));
                 $('#confirm-ken_name').text($('input[name="ken_name"]').val());
                 $('#confirm-ken_type').text($('#ken_type_id option:selected').text());
+                $('#confirm-payment_method').text($('input[name=payment_method]:checked').attr("typeText"));
                 $('#confirm-proof').attr("src",  $('#imgPreviewProof').attr("src"));
             }
 

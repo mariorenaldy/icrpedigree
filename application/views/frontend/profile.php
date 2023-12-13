@@ -103,20 +103,6 @@
                 <div class="col-sm-3"><?= lang("mem_kennel_format"); ?></div>
                 <div class="col-sm-8"><?= $kennel->ken_type_name ?></div>
             </div>
-            <hr/>
-            <div class="row mb-2">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-5"><?= lang("common_photo_proof"); ?></div>
-                <div class="col-md-12 text-center">
-                    <?php 
-                        if ($member->mem_pay_photo && $member->mem_pay_photo != '-'){
-                    ?>
-                        <img id="myProof<?= $member->mem_id ?>" width="15%" src="<?= base_url().'uploads/payment/'.$member->mem_pay_photo ?>" onclick="display('myProof<?= $member->mem_id ?>')">
-                    <?php } else { ?>
-                        <img id="myProof<?= $member->mem_id ?>" width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>" onclick="display('myProof<?= $member->mem_id ?>')">
-                    <?php } ?>
-                </div>
-            </div>
         </div>
         <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">

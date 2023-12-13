@@ -72,7 +72,7 @@
                                 <th>Reg. Date</th>
                                 <th>Payment Method</th>
                                 <th>DOKU Invoice</th>
-                                <th class="no-sort">Proof of Payment</th>
+                                <th class="no-sort">Payment Proof</th>
                                 <th style="display: none;"></th>
                             </tr>
                         </thead>

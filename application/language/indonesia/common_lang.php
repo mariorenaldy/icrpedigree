@@ -42,3 +42,6 @@ $lang["common_reason"] = "Alasan";
 
 $lang["common_photo_proof"] = "Foto Bukti Pembayaran";
 $lang["common_see_proof"] = "Lihat Bukti Pembayaran";
+
+$lang["common_payment_method"] = "Metode Pembayaran";
+$lang["common_upload_proof"] = "Transfer manual dan upload bukti pembayaran";

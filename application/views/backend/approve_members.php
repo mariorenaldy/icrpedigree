@@ -43,6 +43,8 @@
                                 <th>Postal Code</th>
                                 <th>KTP</th>
                                 <th>email</th>
+                                <th>Payment Method</th>
+                                <th>DOKU Invoice</th>
                                 <th>Payment Proof</th>
                             </tr>
                         </thead>
@@ -64,6 +66,8 @@
                                         <td><?= $m->mem_kode_pos; ?></td>
                                         <td><?= $m->mem_ktp; ?></td>
                                         <td><?= $m->mem_email; ?></td>
+                                        <td><?= $m->pay_name; ?></td>
+                                        <td><?= $m->mem_pay_invoice; ?></td>
                                         <td>
                                             <?php if ($m->mem_pay_photo && $m->mem_pay_photo != '-'){ ?>
                                                 <img src="<?= base_url('uploads/payment/'.$m->mem_pay_photo) ?>" class="img-fluid img-thumbnail canine-img" alt="payment" id="myProof<?= $m->mem_pay_photo ?>" onclick="display('myProof<?= $m->mem_pay_photo ?>')">
