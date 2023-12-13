@@ -15,6 +15,7 @@ class Canines extends CI_Controller {
     }
 
     public function index(){
+        $this->updateExpired();
         $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
         $config['per_page'] = $this->config->item('backend_canine_count');
         $config['uri_segment'] = 4;
@@ -1487,4 +1488,19 @@ public function validate_edit_pedigree(){
 
         return $arr;
     }
+    function updateExpired(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired payment canine status
+        $canines = $this->caninesModel->update_expired_canines();
+        
+        if ($canines) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
+        }
+	}
 }

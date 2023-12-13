@@ -67,6 +67,9 @@ $lang["can_micro_accept_success"] = "Microchip telah dipasang";
 $lang["can_micro_complain_success"] = "Komplain pemasangan microchip berhasil dibuat";
 
 $lang["can_complain_photo_if"] = "Bukti foto (jika ada)";
-$lang["can_complain_photo"] = "Bukti foto";
-$lang["can_complain_desc"] = "Deskripsi komplain";
+$lang["can_complain_photo"] = "Bukti Foto Komplain";
+$lang["can_complain_desc"] = "Deskripsi Komplain";
 $lang["can_complain_success"] = "Komplain berhasil diajukan";
+$lang["can_complain_date"] = "Tanggal Komplain";
+
+$lang["can_confirm_cancel"] = "Batalkan pendaftaran ini?";

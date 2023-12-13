@@ -70,7 +70,24 @@
                                 ?>
                             </div>
                         </div>
-                        <div class="input-group my-3 gap-3 mt-5 mb-5">
+                        <div class="input-group mb-3">
+                            <label for="payment_method" class="control-label col-sm-2">Metode Pembayaran</label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="upload-proof" value="upload-proof">
+                                    <label class="form-check-label" for="upload-proof">
+                                        Upload Bukti Pembayaran
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="doku" value="doku">
+                                    <label class="form-check-label" for="doku">
+                                        DOKU
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="input-proof" class="input-group my-3 gap-3 mt-5 mb-5">
                             <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?><br>Rp. 150.000</label>
                             <div class="col-sm-12 text-center">
                                 <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
@@ -206,8 +223,19 @@
                 imageInputProof.value = null;
             }
         };
+        
+        $('input[type=radio][name=payment_method]').change(function() {
+            if (this.value == 'upload-proof') {
+                $('#input-proof').show();
+            }
+            else if (this.value == 'doku') {
+                $('#input-proof').hide();
+            }
+        });
 
         $(document).ready(function(){
+            $('#input-proof').hide();
+
             var $modal = $('#modal');
             var preview = document.getElementById('imgPreview');
             var previewProof = document.getElementById('imgPreviewProof');

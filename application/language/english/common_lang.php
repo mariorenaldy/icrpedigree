@@ -35,7 +35,7 @@ $lang["common_dog_name"] = "Dog Name";
 
 $lang["common_buy"] = "Buy";
 $lang["common_pay"] = "Pay";
-$lang["common_cancel_payment"] = "Cancel order";
+$lang["common_cancel_payment"] = "Cancel payment";
 
 $lang["common_confirm"] = "Confirm";
 $lang["common_reason"] = "Reason";

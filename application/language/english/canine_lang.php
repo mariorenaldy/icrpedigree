@@ -66,6 +66,9 @@ $lang["can_micro_accept_success"] = "Microchip has been implanted";
 $lang["can_micro_complain_success"] = "Complaint has been filed successfully";
 
 $lang["can_complain_photo_if"] = "Photo proof (if any)";
-$lang["can_complain_photo"] = "Photo proof";
-$lang["can_complain_desc"] = "Complaint description";
+$lang["can_complain_photo"] = "Complaint Photo Proof";
+$lang["can_complain_desc"] = "Complaint Description";
 $lang["can_complain_success"] = "Complaint filed successfully";
+$lang["can_complain_date"] = "Complaint Date";
+
+$lang["can_confirm_cancel"] = "Do you want to cancel this dog registration?";

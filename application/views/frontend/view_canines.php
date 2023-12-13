@@ -114,6 +114,10 @@
                             <button type="button" class="btn btn-warning mb-1" onclick="certificate(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_cert"); ?>"><i class="fa fa-file-lines"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="microchip(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro"); ?>"><i class="fa fa-microchip"></i></button>
                             <?php } ?>
+                            <?php if ($c->can_stat == $this->config->item('not_paid')){ ?>
+                            <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $c->can_pay_invoice;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
+                            <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
+                            <?php } ?>
                             <?php if ($c->can_stat == $this->config->item('rejected')){ ?>
                                 <img src="<?= base_url('uploads/payment/'.$c->can_pay_photo) ?>" class="d-none img-fluid img-thumbnail" alt="payment" id="myProof<?= $c->can_id ?>">
                                 <button type="button" class="btn btn-light mb-1" onclick="display('myProof<?= $c->can_id ?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_see_proof"); ?>"><i class="fa fa-receipt"></i></button>
@@ -156,6 +160,23 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_confirm"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5><?= lang("can_confirm_cancel"); ?></h5>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" onclick="cancel()"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetId()"><?= lang("common_no"); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade text-dark" id="error-modal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -179,6 +200,21 @@
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
+        function pay(inv){
+            window.location = "<?= base_url(); ?>frontend/Payment/checkout/"+150000+"/"+inv;
+        }
+
+        function confirm(id){
+            cancelId = id;
+            $('#confirm-modal').modal('show');
+        }
+        let cancelId = null;
+        function resetId(){
+            cancelId = null;
+        }
+        function cancel(){
+            window.location = "<?= base_url(); ?>frontend/Canines/cancel/"+cancelId;
+        }
         function add(){
             window.location = "<?= base_url(); ?>frontend/Canines/add";
         }

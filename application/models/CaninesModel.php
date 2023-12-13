@@ -24,6 +24,7 @@ class CaninesModel extends CI_Model {
         }
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
+        $this->db->join('payment_method','payment_method.pay_id = canines.can_pay_id' , 'left');
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id', 'left');
         $this->db->order_by($sort);
@@ -44,6 +45,7 @@ class CaninesModel extends CI_Model {
         }
         $this->db->join('members','members.mem_id = canines.can_member_id');
         $this->db->join('kennels','kennels.ken_id = canines.can_kennel_id AND kennels.ken_member_id = members.mem_id', 'left');
+        $this->db->join('payment_method','payment_method.pay_id = canines.can_pay_id' , 'left');
         $this->db->join('approval_status','approval_status.stat_id = canines.can_stat');
         $this->db->join('users', 'canines.can_app_user = users.use_id');
         $this->db->order_by($sort);
@@ -182,5 +184,12 @@ class CaninesModel extends CI_Model {
         $query = $this->db->get();
         
         return $query->result();
+    }
+
+    public function update_expired_canines(){
+        $this->db->set('can_stat', $this->config->item('payment_failed'));
+        $this->db->where('can_pay_due_date <= NOW()');
+        $this->db->where('can_stat', $this->config->item('not_paid'));
+        return $this->db->update('canines');
     }
 }

@@ -596,6 +596,8 @@ $config['accepted'] = 1;
 $config['rejected'] = 2;
 $config['completed'] = 3;
 $config['cancelled'] = 4;
+$config['not_paid'] = 5;
+$config['payment_failed'] = 6;
 
 $config['order_not_paid'] = 1;
 $config['order_paid'] = 2;
@@ -658,6 +660,9 @@ $config['stock_manager'] = 2;
 $config['staff'] = 3;
 $config['no_user'] = 0;
 $config['system'] = 1;
+
+$config['upload_proof'] = 1;
+$config['doku'] = 2;
 
 $config['carousel_interval'] = 90000;
 $config['carousel_width'] = "1920px";
