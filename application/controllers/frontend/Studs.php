@@ -326,6 +326,15 @@ class Studs extends CI_Controller {
 
 			$whereCan['can_id'] = $this->input->post('stu_sire_id');
 			$can = $this->caninesModel->get_canines($whereCan)->row();
+			if(!$can){
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Dam tidak ditemukan');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Dam not found');
+				}
+				redirect("frontend/Studs/add");
+			}
 			$like['can_a_s'] = $this->input->post('can_a_s');
 			$whereDam['can_gender'] = 'FEMALE';
 			$whereDam['can_stat'] = $this->config->item('accepted');

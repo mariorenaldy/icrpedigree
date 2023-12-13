@@ -363,7 +363,12 @@ class Births extends CI_Controller {
 
 						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 							$err++;
-							$data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'File size is too big (> 1 MB).');
+							}
 						}
 						else{
 							$image_name = $this->config->item('path_birth').$this->config->item('file_name_birth');

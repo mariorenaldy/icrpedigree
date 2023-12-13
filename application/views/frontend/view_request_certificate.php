@@ -25,9 +25,9 @@
                     <div class="col"><b><?= lang("can_cert_desc"); ?></b></div>
                     <div class="col"><b><?= lang("can_cert_arrived_date"); ?></b></div>
                     <div class="col"><b>Status</b></div>
-                    <div class="col"><b>Tanggal Komplain</b></div>
-                    <div class="col"><b>Deskripsi Komplain</b></div>
-                    <div class="col"><b>Foto Komplain</b></div>
+                    <div class="col"><b><?= lang("can_complain_date"); ?></b></div>
+                    <div class="col"><b><?= lang("can_complain_desc"); ?></b></div>
+                    <div class="col"><b><?= lang("can_complain_photo"); ?></b></div>
                     <div class="col"></div>
                 </div>
                 <?php foreach ($requests AS $r){ ?>

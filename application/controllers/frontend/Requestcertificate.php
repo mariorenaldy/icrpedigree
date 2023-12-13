@@ -275,10 +275,10 @@ class Requestcertificate extends CI_Controller {
 					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
 						$err++;
                         if ($site_lang == 'indonesia') {
-                            $data['error_message'] = 'Ukuran file terlalu besar (> 1 MB).<br/>';
+							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
                         }
                         else{
-                            $data['error_message'] = 'File size is too big (> 1 MB).<br/>';
+							$this->session->set_flashdata('error_message', 'File size is too big (> 1 MB).');
                         }
 					}
 					else{
