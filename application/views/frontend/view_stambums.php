@@ -39,7 +39,7 @@
                 <div class="row mb-1">
                     <div class="col-sm-2"><b><?= lang("common_photo"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("common_name"); ?></b></div>
-                    <div class="col-sm-1"><b><?= lang("common_desc"); ?></b></div>
+                    <div class="col-sm-1 text-nowrap"><b><?= lang("common_desc"); ?></b></div>
                     <div class="col-sm-2"><b><?= lang("common_dob"); ?></b></div>
                     <div class="col-sm-2"><b>Kennel</b></div>
                     <div class="col-sm-2"><b>Status</b></div>

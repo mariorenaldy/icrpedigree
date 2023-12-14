@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$lang["can_dog"] = "Anjing";
+$lang["can_num_dogs"] = "Jumlah anjing";
+$lang["can_num_dogs_register"] = "Jumlah anjing yang ingin didaftarkan";
+$lang["can_num_females_born"] = "Jumlah betina lahir";
+$lang["can_num_males_born"] = "Jumlah jantan lahir";
 $lang["can_search"] = "Cari Anjing";
 $lang["can_detail"] = "Detil Anjing";
 $lang["can_photo"] = "Foto";

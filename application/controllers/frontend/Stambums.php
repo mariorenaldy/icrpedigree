@@ -65,10 +65,10 @@ class Stambums extends CI_Controller {
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$where['stb_member_id'] = $this->session->userdata('mem_id');
-			$data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_a_s', $page * $config['per_page'], $this->config->item('stb_count'))->result();
+			$data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], $this->config->item('stb_count'))->result();
 			
             $config['base_url'] = base_url().'/frontend/Stambums/index';
-			$config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_a_s', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], 0)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -246,35 +246,51 @@ class Stambums extends CI_Controller {
         }
     }
 
-	public function add_more(){
-        if ($this->uri->segment(4)){  
-			if ($this->session->userdata('mem_id')){
-				$wheBirth['bir_id'] = $this->uri->segment(4);
-				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
-				$data['mode'] = 0;
-				$this->load->view('frontend/add_stambum', $data);
-			}
-			else{
-				redirect("frontend/Members");
-			}
-        }
-        else{
-			redirect("frontend/Births/view_approved");
-        }
-    }
-
 	public function validate_add(){ 
 		if ($this->session->userdata('mem_id')){
 			$site_lang = $this->input->cookie('site_lang');
+			$count = $this->input->post('count');
+			$countNum = (int)$count;
 			$this->form_validation->set_error_delimiters('<div>','</div>');
-			if ($site_lang == 'indonesia') {
-				$this->form_validation->set_message('required', '%s wajib diisi');
-				$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
-				$this->form_validation->set_rules('stb_a_s', 'Nama anjing ', 'trim|required');
+			if($count == '0'){
+				if ($site_lang == 'indonesia') {
+					$this->form_validation->set_message('required', '%s wajib diisi');
+					$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
+				}
+				else{
+					$this->form_validation->set_message('required', '%s required');
+					$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+				}
+			}
+			else if($count == 'NaN' || $count == ''){
+				if ($site_lang == 'indonesia') {
+					$this->form_validation->set_message('required', '%s wajib diisi');
+					$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
+					$this->form_validation->set_rules('count', 'Jumlah anjing ', 'trim|required');
+				}
+				else{
+					$this->form_validation->set_message('required', '%s required');
+					$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+					$this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
+				}
 			}
 			else{
-				$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
-				$this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
+				if ($site_lang == 'indonesia') {
+					$this->form_validation->set_message('required', '%s wajib diisi');
+					$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
+					for ($i = 1; $i <= $countNum; $i++) {
+						$this->form_validation->set_rules('stb_a_s'.$i, 'Nama anjing #'.$i.' ', 'trim|required');
+					}
+					$this->form_validation->set_rules('count', 'Jumlah anjing ', 'trim|required');
+				}
+				else{
+					$this->form_validation->set_message('required', '%s required');
+					$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+					for ($i = 1; $i <= $countNum; $i++) {
+						$this->form_validation->set_rules('stb_a_s'.$i, 'Name of dog #'.$i.' ', 'trim|required');
+					}
+					$this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
+				}
 			}
 			
 			$wheBirth['bir_id'] = $this->input->post('stb_bir_id');
@@ -285,282 +301,272 @@ class Stambums extends CI_Controller {
 			}
 			else{
 				$err = 0;
-				if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
-					$err++;
+				$maleNum = 0;
+				$femaleNum = 0;
+				for ($i = 1; $i <= $countNum; $i++) {
+					if($this->input->post('stb_gender'.$i) == 'MALE'){
+						$maleNum++;
+					}
+					else{
+						$femaleNum++;
+					}
+				}
+
+				if($maleNum > $data['birth']->bir_male){
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Foto anjing wajib diisi');
+						$this->session->set_flashdata('error_message', 'Jumlah jantan yang didaftarkan melebihi batas');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Dog photo is required');
+						$this->session->set_flashdata('error_message', 'The number of registered males exceeds the limit');
 					}
+					$err = 1;
 				}
-
-				if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])){
-					$err++;
+				if($femaleNum > $data['birth']->bir_female){
 					if ($site_lang == 'indonesia') {
-						$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+						$this->session->set_flashdata('error_message', 'Jumlah betina yang didaftarkan melebihi batas');
 					}
 					else{
-						$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+						$this->session->set_flashdata('error_message', 'The number of registered females exceeds the limit');
 					}
+					$err = 2;
 				}
 
-				$photo = '-';
-				$photoProof = '-';
-				if (!$err){
-					$uploadedImg = $_POST['attachment'];
-					$image_array_1 = explode(";", $uploadedImg);
-					$image_array_2 = explode(",", $image_array_1[1]);
-					$uploadedImg = base64_decode($image_array_2[1]);
-
-					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-						}
-					}
-
-					$img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
-					if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
-						}
-					} else{
-						if (is_file($img_name) and !is_writable($img_name)) {
-							$err++;
+				if(!$err){
+					for ($i = 1; $i <= $countNum; $i++) {
+						if (!isset($_POST['attachment'.$i]) || empty($_POST['attachment'.$i])){
+							$err = 3;
 							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								$this->session->set_flashdata('error_message', 'Foto anjing #'.$i.' wajib diisi');
 							}
 							else{
-								$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
+								$this->session->set_flashdata('error_message', 'Dog #'.$i.' photo is required');
 							}
 						}
 					}
-
+	
+					if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])){
+						$err = 4;
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+						}
+					}
+	
+					$photo = '-';
+					$photoProof = '-';
+					$photo = [];
 					if (!$err){
-						file_put_contents($img_name, $uploadedImg);
-						$photo = str_replace($this->config->item('path_canine'), '', $img_name);
-					}
-				}
-
-				if (!$err){
-					$uploadedImg = $_POST['attachment_proof'];
-					$image_array_1 = explode(";", $uploadedImg);
-					$image_array_2 = explode(",", $image_array_1[1]);
-					$uploadedImg = base64_decode($image_array_2[1]);
-
-					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-						}
-					}
-
-					$img_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-					if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Payment folder is not found or is not writable.');
-						}
-					} else{
-						if (is_file($img_name) and !is_writable($img_name)) {
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
-							}
-						}
-					}
-
-					if (!$err){
-						file_put_contents($img_name, $uploadedImg);
-						$photoProof = str_replace($this->config->item('path_payment'), '', $img_name);
-					}
-				}
-
-				// cek jumlah male & female
-				$maleFull = 0; 
-				$femaleFull = 0;
-
-				$wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
-				$wheStbMale['stb_gender'] = 'MALE';
-				$wheStbMale['stb_stat != '] = $this->config->item('rejected'); 
-				$male = $this->stambumModel->get_count($wheStbMale);
-
-				$wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
-				$wheStbFemale['stb_gender'] = 'FEMALE';
-				$wheStbFemale['stb_stat != '] = $this->config->item('rejected');
-				$female = $this->stambumModel->get_count($wheStbFemale);
-
-				if ($this->input->post('stb_gender') == 'MALE'){
-					if ($male >= $data['birth']->bir_male){
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Jumlah anak jantan sudah mencapai batas');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'The number of male puppies has reached the limit');
-						}
-					}
-					if ($male+1 == $data['birth']->bir_male){
-						$maleFull = 1;
-					}
-					if ($female == $data['birth']->bir_female){
-						$femaleFull = 1;
-					}
-				}
-				else{
-					if ($female >= $data['birth']->bir_female){
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Jumlah anak betina sudah mencapai batas');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'The number of female puppies has reached the limit');
-						}
-					}
-					if ($male == $data['birth']->bir_male){
-						$maleFull = 1;
-					}
-					if ($female+1 == $data['birth']->bir_female){
-						$femaleFull = 1;
-					}
-				}
-
-				if (!$err){
-					$piece = explode("-", $data['birth']->bir_date_of_birth);
-					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
-
-					$ts = new DateTime();
-					$ts_birth = new DateTime($dob);
-					if ($ts_birth > $ts){
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'); 
-						}
-					}
-					else{
-						$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
-						if ($diff < 1){
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date');
-							}
-						}
-
-						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
-						if ($diff > 1){
-							$err++;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date');
-							}
-						}
-					}
-				}
-
-				$wheStud['stu_id'] = $data['birth']->bir_stu_id;
-				$stud = $this->studModel->get_studs($wheStud)->row();
-				$wheDam['can_id'] = $stud->stu_dam_id;
-				$dam = $this->caninesModel->get_canines($wheDam)->row();
-				$wheKennel['mem_id'] = $stud->stu_partner_id;
-				$kennel = $this->memberModel->get_members($wheKennel)->row();
-
-				if (!$err){
-					// nama diubah berdasarkan kennel
-					if ($kennel->ken_type_id == 1)
-						$can_a_s = strtoupper($this->input->post('stb_a_s'))." VON ".$kennel->ken_name;
-					else if ($kennel->ken_type_id == 2)
-						$can_a_s = $kennel->ken_name."` ".strtoupper($this->input->post('stb_a_s'));
-					else 
-						$can_a_s = strtoupper($this->input->post('stb_a_s'));
-
-					if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $can_a_s)){
-						$err++;
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Duplicate dog name');
-						}
-					}
+						for ($i = 1; $i <= $countNum; $i++) {
+							$uploadedImg = $_POST['attachment'.$i];
+							$image_array_1 = explode(";", $uploadedImg);
+							$image_array_2 = explode(",", $image_array_1[1]);
+							$uploadedImg = base64_decode($image_array_2[1]);
 		
+							if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+								$err = 5;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Ukuran file foto anjing #'.$i.' terlalu besar (> 1 MB).');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The file size of dog #'.$i.' photo is too big (> 1 MB).');
+								}
+							}
+		
+							$img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
+							$img_name = substr_replace($img_name, $i, 32, 0);
+							if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
+								$err = 6;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Folder canine tidak ditemukan atau tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
+								}
+							} else{
+								if (is_file($img_name) and !is_writable($img_name)) {
+									$err = 7;
+									if ($site_lang == 'indonesia') {
+										$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+									}
+									else{
+										$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
+									}
+								}
+							}
+		
+							if (!$err){
+								file_put_contents($img_name, $uploadedImg);
+								$photo[$i] = str_replace($this->config->item('path_canine'), '', $img_name);
+							}
+						}
+					}
+	
+					if (!$err){
+						$uploadedImg = $_POST['attachment_proof'];
+						$image_array_1 = explode(";", $uploadedImg);
+						$image_array_2 = explode(",", $image_array_1[1]);
+						$uploadedImg = base64_decode($image_array_2[1]);
+	
+						if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+							$err = 8;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Ukuran file terlalu besar (> 1 MB).');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
+							}
+						}
+	
+						$img_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
+						if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
+							$err = 9;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Folder payment tidak ditemukan atau tidak writable.');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment folder is not found or is not writable.');
+							}
+						} else{
+							if (is_file($img_name) and !is_writable($img_name)) {
+								$err = 10;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'File sudah ada dan tidak writable.');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
+								}
+							}
+						}
+	
+						if (!$err){
+							file_put_contents($img_name, $uploadedImg);
+							$photoProof = str_replace($this->config->item('path_payment'), '', $img_name);
+						}
+					}
+	
 					if (!$err){
 						$piece = explode("-", $data['birth']->bir_date_of_birth);
 						$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+	
+						$ts = new DateTime();
+						$ts_birth = new DateTime($dob);
+						if ($ts_birth > $ts){
+							$err = 11;
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir'); 
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date'); 
+							}
+						}
+						else{
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
+							if ($diff < 1){
+								$err = 12;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan anak harus lebih dari '.$this->config->item('min_jarak_lapor_anak').' hari dari waktu lahir');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The puppy report must be more than '.$this->config->item('min_jarak_lapor_anak').' days after birth date');
+								}
+							}
+	
+							$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
+							if ($diff > 1){
+								$err = 13;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pelaporan anak harus kurang dari '.$this->config->item('jarak_lapor_anak').' hari dari waktu lahir');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The puppy report must be less than '.$this->config->item('jarak_lapor_anak').' days after birth date');
+								}
+							}
+						}
+					}
+	
+					$wheStud['stu_id'] = $data['birth']->bir_stu_id;
+					$stud = $this->studModel->get_studs($wheStud)->row();
+					$wheDam['can_id'] = $stud->stu_dam_id;
+					$dam = $this->caninesModel->get_canines($wheDam)->row();
+					$wheKennel['mem_id'] = $stud->stu_partner_id;
+					$kennel = $this->memberModel->get_members($wheKennel)->row();
+	
+					if (!$err){
+						$can_a_s = [];
+						for ($i = 1; $i <= $countNum; $i++) {
+							// nama diubah berdasarkan kennel
+							if ($kennel->ken_type_id == 1)
+								$can_a_s[$i] = strtoupper($this->input->post('stb_a_s'.$i))." VON ".$kennel->ken_name;
+							else if ($kennel->ken_type_id == 2)
+								$can_a_s[$i] = $kennel->ken_name."` ".strtoupper($this->input->post('stb_a_s'.$i));
+							else 
+								$can_a_s[$i] = strtoupper($this->input->post('stb_a_s'.$i));
+		
+							if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $can_a_s[$i])){
+								$err = 14;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Nama anjing #'.$i.' sudah terdaftar');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'The dog #'.$i.' name has been registered');
+								}
+							}
+						}
+			
+						if (!$err){
+							$piece = explode("-", $data['birth']->bir_date_of_birth);
+							$dob = $piece[2]."-".$piece[1]."-".$piece[0];
+	
+							$this->db->trans_strict(FALSE);
+							$this->db->trans_start();
 
-						$this->db->trans_strict(FALSE);
-						$this->db->trans_start();
-						$dataStb = array(
-							'stb_bir_id' => $this->input->post('stb_bir_id'),
-							'stb_a_s' => $can_a_s,
-							'stb_breed' => $dam->can_breed,
-							'stb_gender' => $this->input->post('stb_gender'),
-							'stb_date_of_birth' => $dob,
-							'stb_reg_date' => date("Y/m/d"),
-							'stb_photo' => $photo,
-							'stb_pay_photo' => $photoProof,
-							'stb_stat' => $this->config->item('saved'),
-							'stb_user' => $this->config->item('system'),
-							'stb_date' => date('Y-m-d H:i:s'),
-							'stb_member_id' => $kennel->mem_id,
-							'stb_kennel_id' => $kennel->ken_id,
-						);
-						
-						$result = $this->stambumModel->add_stambum($dataStb);
-						if ($result){
-							if ($maleFull && $femaleFull){ // anak lengkap
+							for ($i = 1; $i <= $countNum; $i++) {
+								$dataStb = array(
+									'stb_bir_id' => $this->input->post('stb_bir_id'),
+									'stb_a_s' => $can_a_s[$i],
+									'stb_breed' => $dam->can_breed,
+									'stb_gender' => $this->input->post('stb_gender'.$i),
+									'stb_date_of_birth' => $dob,
+									'stb_reg_date' => date("Y/m/d"),
+									'stb_photo' => $photo[$i],
+									'stb_pay_photo' => $photoProof,
+									'stb_stat' => $this->config->item('saved'),
+									'stb_user' => $this->config->item('system'),
+									'stb_date' => date('Y-m-d H:i:s'),
+									'stb_member_id' => $kennel->mem_id,
+									'stb_kennel_id' => $kennel->ken_id,
+								);
+								$result = $this->stambumModel->add_stambum($dataStb);
+								if (!$result){
+									$err = 15;
+								}
+							}
+							if(!$err){
 								$dataBirth['bir_stat'] = $this->config->item('completed');
 								$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
 								if ($bir){
-                                    $this->db->trans_complete();
-                                    $this->session->set_flashdata('add_success', true);
-                                    redirect("frontend/Stambums");
+									$this->db->trans_complete();
+									$this->session->set_flashdata('add_success', true);
+									redirect("frontend/Stambums");
 								}
 								else{
-									$err = 1;
+									$err = 16;
 								}
 							}
-							else{ // tambah anak lagi
-								$this->db->trans_complete();
-								$this->session->set_flashdata('add_success', true);
-								redirect("frontend/Stambums/add_more/".$this->input->post('stb_bir_id'));
-							}			
+							if ($err){
+								$this->db->trans_rollback();
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak anjing. Error code: '.$err);
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to save puppy data. Error code: '.$err);
+								}
+								$this->load->view('frontend/add_stambum', $data);
+							}
 						}
 						else{
-							$err = 2;
-						}
-						if ($err){
-							$this->db->trans_rollback();
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Gagal menyimpan data anak. Error code: '.$err);
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Failed to save puppy. Error code: '.$err);
-							}
 							$this->load->view('frontend/add_stambum', $data);
 						}
 					}
