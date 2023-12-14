@@ -236,8 +236,21 @@
             if(stbCount > 1){
                 $("#formCanine").append(
                 '<hr>'+
-                '<div class="input-group my-3 gap-3 mt-5 mb-5">'+
-                    '<label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?><br>Rp. '+price+'</label>'+
+                '<div class="input-group mb-3">'+
+                    '<label for="payment_method" class="control-label col-sm-2"><?= lang("common_payment_method"); ?></label>'+
+                    '<div class="col-sm-10">'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="payment_method" id="upload-proof" value="upload-proof" typeText="Manual Transfer">'+
+                            '<label class="form-check-label" for="upload-proof"><?= lang("common_upload_proof"); ?><br>BCA: XXXXXXXXXX<br>Rp. '+price+'</label>'+
+                        '</div>'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="payment_method" id="doku" value="doku" typeText="DOKU">'+
+                            '<label class="form-check-label" for="doku">Payment Gateway DOKU</label>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="input-proof input-group my-3 gap-3 mt-5 mb-5">'+
+                    '<label class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>'+
                     '<div class="col-sm-12 text-center">'+
                         '<img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">'+
                         '<input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>'+
@@ -249,6 +262,10 @@
                 $("#confirm-body").append(
                 '<hr style="background-color: red; height: 1px; border: 0;">'+
                 '<div class="row">'+
+                    '<div class="col-4"><?= lang("common_payment_method"); ?></div>'+
+                    '<div class="col">: <span id="confirm-payment_method"></span></div>'+
+                '</div>'+
+                '<div class="row input-proof">'+
                     '<div class="col-4"><?= lang("common_photo_proof"); ?></div>'+
                     '<div class="col-auto pe-0">:</div>'+
                     '<div class="col"><img id="confirm-proof" width="50%"/></div>'+
@@ -264,6 +281,17 @@
                 ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
                 showModalImg(event);
             })
+
+            $('.input-proof').hide();
+
+            $('input[type=radio][name=payment_method]').change(function() {
+                if (this.value == 'upload-proof') {
+                    $('.input-proof').show();
+                }
+                else if (this.value == 'doku') {
+                    $('.input-proof').hide();
+                }
+            });
         });
 
         var maxCount = <?= $birth->bir_male + $birth->bir_female; ?>
@@ -298,6 +326,7 @@
                     $('#confirm-nama'+j).text($('input[name="'+stb_name+'"]').val());
                     $('#confirm-jenis_kelamin'+j).text($('#stb_gender'+j+' option:selected').text());
                 }
+                $('#confirm-payment_method').text($('input[name=payment_method]:checked').attr("typeText"));
                 $('#confirm-proof').attr("src",  $('#imgPreviewProof').attr("src"));
             }
             $('#confirm-modal').modal('show');
