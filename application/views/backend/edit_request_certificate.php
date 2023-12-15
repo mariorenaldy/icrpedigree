@@ -7,6 +7,7 @@
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/jquery-ui-timepicker-addon.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -50,6 +51,32 @@
                                     <textarea class="form-control" rows="10" placeholder="Request Reason" name="req_desc"><?= $request->req_desc ?></textarea>
                                 <?php } else { ?>
                                     <textarea class="form-control" rows="10" placeholder="Request Reason" name="req_desc"><?= set_value('req_desc') ?></textarea>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">City/Regency</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $cities = [];
+                                    $cities[''] = '--Select City/Regency--';
+                                    foreach($city as $row){
+                                        $cities[$row->city_id] = $row->city_name;
+                                    }
+                                    if (!$mode)
+                                        echo form_dropdown('req_city_id', $cities, $request->req_city_id, 'class="form-control", id="req_city_id"');
+                                    else
+                                        echo form_dropdown('req_city_id', $cities, set_value('req_city_id'), 'class="form-control", id="req_city_id"');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Full Address</label>
+                            <div class="col-md-10">
+                                <?php if (!$mode){ ?>
+                                    <input class="form-control" type="text" placeholder="Full Address" name="req_address" value="<?= $request->req_address; ?>">
+                                <?php } else { ?>
+                                    <input class="form-control" type="text" placeholder="Full Address" name="req_address" value="<?= set_value('req_address'); ?>">
                                 <?php } ?>
                             </div>
                         </div>
@@ -130,6 +157,7 @@
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/jquery-ui-timepicker-addon.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         function setDatePicker(id) {
             $(id).datetimepicker({
@@ -144,6 +172,13 @@
             $('#formRequest').attr('action', "<?= base_url(); ?>backend/Requestcertificate/validate_edit").submit();
         });
         $(document).ready(function(){
+            var $select = $('#req_city_id').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    $('#req_city').val(value);
+                }
+            });
+
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>

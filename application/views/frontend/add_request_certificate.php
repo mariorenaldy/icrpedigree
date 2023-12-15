@@ -6,6 +6,7 @@
     <link href="<?= base_url(); ?>assets/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body class="text-white text-break">
     <?php $this->load->view('frontend/layout/header_member'); ?>  
@@ -29,6 +30,22 @@
                             <label for="com_desc" class="d-inline-block" style="width: 200px;"><?= lang("can_cert_desc"); ?></label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" placeholder="<?= lang("can_cert_desc"); ?>" name="req_desc" value="<?= set_value('req_desc'); ?>" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label" style="width: 200px;"><?= lang("common_city/regency"); ?></label>
+                            <div class="col-sm-10">
+                                <select id="req_city_select" name="req_city_select" placeholder="<?= lang("common_city/regency"); ?>" class="form-control col-sm-10">
+                                    <option value=""><?= lang("common_city/regency"); ?></option>
+                                    <?= $cityOptions; ?>
+                                </select>
+                            </div>
+                            <input type="hidden" name="req_city" id="req_city" value="<?= set_value('req_city'); ?>">
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="req_address" class="control-label" style="width: 200px;"><?= lang("common_full_address"); ?></label>
+                            <div class="col-sm-10"> 
+                                <input class="form-control" type="text" placeholder="<?= lang("common_full_address"); ?>" name="req_address" value="<?= set_value('req_address'); ?>">
                             </div>
                         </div>
                         <div class="text-center">
@@ -77,6 +94,14 @@
                             <div class="col-4"><?= lang("can_cert_desc"); ?></div>
                             <div class="col">: <span id="confirm-deskripsi"></span></div>
                         </div>
+                        <div class="row">
+                            <div class="col-4"><?= lang("common_city/regency"); ?></div>
+                            <div class="col">: <span id="confirm-kota"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"><?= lang("common_full_address"); ?></div>
+                            <div class="col">: <span id="confirm-address"></span></div>
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-primary" id="submitBtn"><?= lang("common_yes"); ?></button>
@@ -114,11 +139,21 @@
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
+            var $select = $('#req_city_select').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    $('#req_city').val(value);
+                }
+            });
+
             let saveBtn = $("#saveBtn");
             saveBtn.click(function(){
                 $('#confirm-deskripsi').text($('textarea[name="req_desc"]').val());
+                $('#confirm-kota').text($('#req_city_select option:selected').text());
+                $('#confirm-address').text($('input[name="req_address"]').val());
 
                 $('#confirm-modal').modal('show');
             });

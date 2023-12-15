@@ -7,6 +7,7 @@
     <link href="<?= base_url(); ?>assets/css/cropper.min.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/crop-modal-styles.css" rel="stylesheet" />
     <link href="<?= base_url(); ?>assets/css/jquery-ui-timepicker-addon.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
 <body>
     <?php $this->load->view('templates/redirect'); ?>
@@ -55,6 +56,25 @@
                             <label class="control-label col-md-2">Request Reason</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="10" placeholder="Request Reason" name="req_desc"><?= set_value('req_desc') ?></textarea>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">City/Regency</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $cities = [];
+                                    $cities[''] = '--Select City/Regency--';
+                                    foreach($city as $row){
+                                        $cities[$row->city_id] = $row->city_name;
+                                    }
+                                    echo form_dropdown('req_city_id', $cities, set_value('req_city_id'), 'class="form-control", id="req_city_id"');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Full Address</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" placeholder="Full Address" name="req_address" value="<?= set_value('req_address'); ?>">
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -149,6 +169,7 @@
     <script src="<?= base_url(); ?>assets/js/jquery-ui.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/jquery-ui-timepicker-addon.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <script>
         function setDatePicker(id) {
             $(id).datetimepicker({
@@ -163,7 +184,19 @@
             $('#formRequest').attr('action', "<?= base_url(); ?>backend/Requestcertificate/validate_add").submit();
         });
 
+        var initial = true;
         $(document).ready(function(){
+            if($('#req_mem_id').val()){
+                searchDog();
+            }
+
+            var $select = $('#req_city_id').selectize({
+                sortField: 'text',
+                onChange: function(value) {
+                    $('#req_city').val(value);
+                }
+            });
+
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>
@@ -192,39 +225,7 @@
                                 }
                             });
 
-                            let mem_id = $('#req_mem_id').val();
-                            if(mem_id != null){
-                                $.ajax({
-                                    url: "<?= base_url() ?>backend/Requestcertificate/search_dog",
-                                    method: 'post',
-                                    data: {mem_id: mem_id},
-                                    success: function(response){
-                                        if(response){
-                                            let dogDropdown = $('#req_can_id')
-                                            dogDropdown.empty();
-                                            
-                                            let result = JSON.parse(response);
-                                            let newOptions = [];
-                                            $.each(result, function(value, text) {
-                                                newOptions[text.can_id] = text.can_a_s;
-                                            });
-
-                                            $.each(newOptions, function(value, text) {
-                                                if(text !== undefined){
-                                                    dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
-                                                }
-                                            });
-                                        }
-                                        else{
-                                            $('#error-modal').modal('show');
-                                        }
-                                    }
-                                });
-                            }
-                            else{
-                                let dogDropdown = $('#req_can_id')
-                                dogDropdown.empty();
-                            }
+                            searchDog();
                         }
                         else{
                             $('#error-modal').modal('show');
@@ -233,8 +234,11 @@
                 });
             });
 
-            $('#req_mem_id').on("change", function(e){
-                e.preventDefault();
+            $('#req_mem_id').on("change", function(){
+                searchDog();
+            });
+
+            function searchDog(){
                 let mem_id = $('#req_mem_id').val();
                 $.ajax({
                     url: "<?= base_url() ?>backend/Requestcertificate/search_dog",
@@ -242,27 +246,43 @@
                     data: {mem_id: mem_id},
                     success: function(response){
                         if(response){
-                            let dogDropdown = $('#req_can_id')
-                            dogDropdown.empty();
-                            
                             let result = JSON.parse(response);
-                            let newOptions = [];
-                            $.each(result, function(value, text) {
-                                newOptions[text.can_id] = text.can_a_s;
-                            });
+                            if (result === undefined || result.length == 0) {
+                                let dogDropdown = $('#req_can_id')
+                                dogDropdown.empty();
+                                dogDropdown.append("<option value=''>No dogs found</option>");
+                            }
+                            else{
+                                let dogDropdown = $('#req_can_id')
+                                dogDropdown.empty();
+                                
+                                let newOptions = [];
+                                $.each(result, function(value, text) {
+                                    newOptions[text.can_id] = text.can_a_s;
+                                });
+    
+                                $.each(newOptions, function(value, text) {
+                                    if(text !== undefined){
+                                        dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                                    }
+                                });
+                            }
 
-                            $.each(newOptions, function(value, text) {
-                                if(text !== undefined){
-                                    dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
-                                }
-                            });
+                            if(initial){
+                                var dogVal;
+                                <?php if(set_value('req_can_id')){ ?>
+                                    dogVal = <?= set_value('req_can_id'); ?>;
+                                    $('#req_can_id [value="'+dogVal+'"]').prop('selected', true);
+                                    initial = false;
+                                <?php } ?>
+                            }
                         }
                         else{
                             $('#error-modal').modal('show');
                         }
                     }
                 });
-            });
+            }
         });
     </script>
 </body>

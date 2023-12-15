@@ -70,6 +70,8 @@
                                 <th>Dog's Name</th>
                                 <th class="no-sort">Dog's Photo</th>
                                 <th>Request Reason</th>
+                                <th>City/Regency</th>
+                                <th>Full Address</th>
                                 <th>Status</th>
                                 <th>Arrived Date</th>
                                 <th>Reject Reason</th>
@@ -112,6 +114,8 @@
                                         <?php } ?>
                                     </td>
                                     <td><?= $r->req_desc; ?></td>
+                                    <td><?= $r->city_name; ?></td>
+                                    <td><?= $r->req_address; ?></td>
                                     <td><?= $r->cert_stat_name; ?></td>
                                     <td><?= $r->req_arrived_date; ?></td>
                                     <td><?= $r->req_reject_note; ?></td>

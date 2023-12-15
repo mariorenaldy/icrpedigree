@@ -12,6 +12,7 @@ class LogrequestCertificateModel extends CI_Model {
         }
         $this->db->join('users u1','u1.use_id = logs_req_certificate.log_updated_by');
         $this->db->join('certificate_status','certificate_status.cert_stat_id = logs_req_certificate.log_stat_id');
+        $this->db->join('city','logs_req_certificate.log_city_id = city.city_id');
         $this->db->join('members', 'logs_req_certificate.log_mem_id = members.mem_id');
         $this->db->join('canines', 'logs_req_certificate.log_can_id = canines.can_id');
         $this->db->order_by('logs_req_certificate.log_updated_at', 'desc');

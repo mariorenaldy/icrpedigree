@@ -82,10 +82,34 @@ class Requestcertificate extends CI_Controller {
 
 	public function add(){
 		if ($this->uri->segment(4)){
-			$where['can_id'] = $this->uri->segment(4);
-			$data['canine'] = $this->caninesModel->get_canines($where)->row();
-			$data['mode'] = 0;
-			$this->load->view('frontend/add_request_certificate', $data);
+			$site_lang = $this->input->cookie('site_lang');
+			$whereReq['req_mem_id'] = $this->session->userdata('mem_id');
+			$whereReq['req_can_id'] = $this->uri->segment(4);
+			$where_in = array($this->config->item('cert_processed'),$this->config->item('cert_delivered'));
+			$res = $this->requestcertificateModel->get_processed_requests($whereReq, $where_in)->num_rows();
+			if ($res){
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Sudah ada pengajuan sertifikat untuk anjing ini yang sedang diproses.');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'There\'s already a certificate print request for this dog that is still being processed.');
+				}
+				redirect("frontend/Canines");
+			}
+			else{
+				$cities = $this->memberModel->get_cities()->result();
+				$data['cityOptions'] = "<option value=''>City/Regency</option>";
+				foreach($cities as $key => $city){
+					$data['cityOptions'] = $data['cityOptions']."<option value='".$city->city_id."'>";
+					$data['cityOptions'] = $data['cityOptions'].$city->city_name;
+					$data['cityOptions'] = $data['cityOptions']."</option>";
+				}
+	
+				$where['can_id'] = $this->uri->segment(4);
+				$data['canine'] = $this->caninesModel->get_canines($where)->row();
+				$data['mode'] = 0;
+				$this->load->view('frontend/add_request_certificate', $data);
+			}
         }
         else{
           	redirect('frontend/Canines');
@@ -99,10 +123,22 @@ class Requestcertificate extends CI_Controller {
 			if ($site_lang == 'indonesia') {
 				$this->form_validation->set_message('required', '%s wajib diisi');
 				$this->form_validation->set_rules('req_desc', 'Alasan pengajuan ', 'trim|required');
+				$this->form_validation->set_rules('req_city', 'Kota/Kabupaten ', 'trim|required');
+				$this->form_validation->set_rules('req_address', 'Alamat Lengkap ', 'trim|required');
 			}
 			else{
 				$this->form_validation->set_message('required', '%s required');
 				$this->form_validation->set_rules('req_desc', 'Request reason ', 'trim|required');
+				$this->form_validation->set_rules('req_city', 'City/Regency ', 'trim|required');
+				$this->form_validation->set_rules('req_address', 'Full Address ', 'trim|required');
+			}
+
+			$cities = $this->memberModel->get_cities()->result();
+			$data['cityOptions'] = "<option value=''>City/Regency</option>";
+			foreach($cities as $key => $city){
+				$data['cityOptions'] = $data['cityOptions']."<option value='".$city->city_id."'>";
+				$data['cityOptions'] = $data['cityOptions'].$city->city_name;
+				$data['cityOptions'] = $data['cityOptions']."</option>";
 			}
 
 			$can_id = $this->input->post('can_id');
@@ -122,7 +158,9 @@ class Requestcertificate extends CI_Controller {
 						'req_can_id' => $can_id,
 						'req_stat_id' => $this->config->item('cert_processed'),
 						'req_created_at' => date('Y-m-d H:i:s'),
-                        'req_desc' => $this->input->post('req_desc')
+                        'req_desc' => $this->input->post('req_desc'),
+                        'req_city_id' => $this->input->post('req_city'),
+                        'req_address' => $this->input->post('req_address')
                     );
 
 					$this->db->trans_strict(FALSE);

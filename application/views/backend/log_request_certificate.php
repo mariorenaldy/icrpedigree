@@ -26,6 +26,8 @@
                                 <th>Member</th>
                                 <th>Dog's Name</th>
                                 <th>Request Reason</th>
+                                <th>City/Regency</th>
+                                <th>Full Address</th>
                                 <th>Status</th>
                                 <th>Reject Reason</th>
                             </tr>
@@ -40,6 +42,8 @@
                                         <td><?= $r->mem_name; ?></td>
                                         <td><?= $r->can_a_s; ?></td>
                                         <td><?= $r->log_desc; ?></td>
+                                        <td><?= $r->city_name; ?></td>
+                                        <td><?= $r->log_address; ?></td>
                                         <td><?= $r->cert_stat_name; ?></td>
                                         <td><?= $r->log_reject_note; ?></td>
                                     </tr>

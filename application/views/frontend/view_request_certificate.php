@@ -24,8 +24,9 @@
                     <div class="col"><b><?= lang("can_cert_date"); ?></b></div>
                     <div class="col"><b><?= lang("can_cert_desc"); ?></b></div>
                     <div class="col"><b><?= lang("can_cert_arrived_date"); ?></b></div>
-                    <div class="col"><b>Status</b></div>
-                    <div class="col"><b><?= lang("can_complain_date"); ?></b></div>
+                    <div class="col"><b><?= lang("common_city/regency"); ?></b></div>
+                    <div class="col"><b><?= lang("common_full_address"); ?></b></div>
+                    <div class="col-sm-2"><b>Status</b></div>
                     <div class="col"><b><?= lang("can_complain_desc"); ?></b></div>
                     <div class="col"><b><?= lang("can_complain_photo"); ?></b></div>
                     <div class="col"></div>
@@ -45,6 +46,12 @@
                             <?php echo $r->req_arrived_date.'<br/>'; ?>
                         </div>
                         <div class="col">
+                            <?php echo $r->city_name.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $r->req_address.'<br/>'; ?>
+                        </div>
+                        <div class="col-sm-2">
                             <?php echo $r->cert_stat_name; 
                             if ($r->req_stat_id == $this->config->item('cert_rejected')){
                                 $site_lang = $this->input->cookie('site_lang');
@@ -59,9 +66,6 @@
                                 else
                                     echo '-'; 
                             } ?>
-                        </div>
-                        <div class="col">
-                            <?php echo $r->com_created_at.'<br/>'; ?>
                         </div>
                         <div class="col">
                             <?php echo $r->com_desc.'<br/>'; ?>

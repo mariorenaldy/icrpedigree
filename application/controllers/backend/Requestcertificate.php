@@ -15,7 +15,7 @@ class Requestcertificate extends CI_Controller {
 	}
 
 	public function index(){
-		$data['req'] = $this->requestcertificateModel->get_requests()->result();
+		$data['req'] = $this->requestcertificateModel->get_processed_requests()->result();
 		$this->load->view('backend/view_request_certificate', $data);
 	}
 
@@ -41,7 +41,9 @@ class Requestcertificate extends CI_Controller {
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_arrived_date' => date('Y-m-d H:i:s', strtotime($request->req_arrived_date)),
 				'log_reject_note' => $request->req_reject_note,
-				'log_desc' => $request->req_desc
+				'log_desc' => $request->req_desc,
+				'log_city_id' => $request->req_city_id,
+				'log_address' => $request->req_address
 			);
 	
 			$err = 0;
@@ -102,7 +104,9 @@ class Requestcertificate extends CI_Controller {
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_arrived_date' => date('Y-m-d H:i:s'),
 				'log_reject_note' => $request->req_reject_note,
-				'log_desc' => $request->req_desc
+				'log_desc' => $request->req_desc,
+				'log_city_id' => $request->req_city_id,
+				'log_address' => $request->req_address
 			);
 	
 			$err = 0;
@@ -202,7 +206,9 @@ class Requestcertificate extends CI_Controller {
 						'log_updated_by' => $this->session->userdata('use_id'),
 						'log_arrived_date' => date('Y-m-d H:i:s', strtotime($request->req_arrived_date)),
 						'log_reject_note' => $request->req_reject_note,
-						'log_desc' => $request->req_desc
+						'log_desc' => $request->req_desc,
+						'log_city_id' => $request->req_city_id,
+						'log_address' => $request->req_address
 					);
 
 					if($this->input->post('dropdown_reason')){
@@ -270,6 +276,7 @@ class Requestcertificate extends CI_Controller {
 			$whereReq['req_id'] = $req_id;
 			$data['request'] = $this->requestcertificateModel->get_requests($whereReq)->row();
             $data['status'] = $this->CertificateStatusModel->get_status()->result();
+			$data['city'] = $this->memberModel->get_cities()->result();
 
 			$data['mode'] = 0;
 			if ($data['request']) {
@@ -284,64 +291,78 @@ class Requestcertificate extends CI_Controller {
 	}
 	public function validate_edit(){ 
         if ($this->session->userdata('use_username')) {
+			$this->form_validation->set_error_delimiters('<div>', '</div>');
+			$this->form_validation->set_rules('req_city_id', 'City/Regency ', 'trim|required');
+			$this->form_validation->set_rules('req_address', 'Full Address ', 'trim|required');
+
 			$req_id = $this->input->post('req_id');
 			$whereReq['req_id'] = $req_id;
 			$data['request'] = $this->requestcertificateModel->get_requests($whereReq)->row();
 
             $data['status'] = $this->CertificateStatusModel->get_status()->result();
+			$data['city'] = $this->memberModel->get_cities()->result();
 			$data['mode'] = 1;
 
-			$arrivedDate = null;
-			if($this->input->post('req_arrived_date') != null){
-				$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_arrived_date')));
+			if ($this->form_validation->run() == FALSE) {
+                $this->load->view('backend/edit_request_certificate', $data);
 			}
-			
-			$requestReason = $this->input->post('req_desc');
-			$rejectNote = $this->input->post('req_reject_note');
-
-			$dataReq = array(
-				'req_stat_id' => $this->input->post('req_stat_id'),
-				'req_updated_at' => date('Y-m-d H:i:s'),
-				'req_updated_by' => $this->session->userdata('use_id'),
-				'req_arrived_date' => $arrivedDate,
-				'req_reject_note' => $rejectNote,
-				'req_desc' => $requestReason,
-			);
-
-			$dataLog = array(
-				'log_req_id' => $data['request']->req_id,
-				'log_mem_id' => $data['request']->req_mem_id,
-				'log_can_id' => $data['request']->req_can_id,
-				'log_stat_id' => $this->input->post('req_stat_id'),
-				'log_created_at' => $data['request']->req_created_at,
-				'log_updated_at' => date('Y-m-d H:i:s'),
-				'log_updated_by' => $this->session->userdata('use_id'),
-				'log_arrived_date' => $arrivedDate,
-				'log_reject_note' => $rejectNote,
-				'log_desc' => $requestReason,
-			);
-
-			$this->db->trans_strict(FALSE);
-			$this->db->trans_start();
-			$request = $this->requestcertificateModel->update_requests($dataReq, $whereReq);
-			if ($request) {
-				$log = $this->logrequestCertificateModel->add_log($dataLog);
-				if ($log){
-					$this->db->trans_complete();
-					$this->session->set_flashdata('edit_success', true);
-					redirect("backend/Requestcertificate");
+			else{
+				$arrivedDate = null;
+				if($this->input->post('req_arrived_date') != null){
+					$arrivedDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_arrived_date')));
 				}
-				else{
-					$err = 2;
+				
+				$requestReason = $this->input->post('req_desc');
+				$rejectNote = $this->input->post('req_reject_note');
+	
+				$dataReq = array(
+					'req_stat_id' => $this->input->post('req_stat_id'),
+					'req_updated_at' => date('Y-m-d H:i:s'),
+					'req_updated_by' => $this->session->userdata('use_id'),
+					'req_arrived_date' => $arrivedDate,
+					'req_reject_note' => $rejectNote,
+					'req_desc' => $requestReason,
+					'req_city_id' => $this->input->post('req_city_id'),
+					'req_address' => $this->input->post('req_address')
+				);
+	
+				$dataLog = array(
+					'log_req_id' => $data['request']->req_id,
+					'log_mem_id' => $data['request']->req_mem_id,
+					'log_can_id' => $data['request']->req_can_id,
+					'log_stat_id' => $this->input->post('req_stat_id'),
+					'log_created_at' => date('Y-m-d H:i:s', strtotime($data['request']->req_created_at)),
+					'log_updated_at' => date('Y-m-d H:i:s'),
+					'log_updated_by' => $this->session->userdata('use_id'),
+					'log_arrived_date' => $arrivedDate,
+					'log_reject_note' => $rejectNote,
+					'log_desc' => $requestReason,
+					'log_city_id' => $this->input->post('req_city_id'),
+					'log_address' => $this->input->post('req_address')
+				);
+	
+				$this->db->trans_strict(FALSE);
+				$this->db->trans_start();
+				$request = $this->requestcertificateModel->update_requests($dataReq, $whereReq);
+				if ($request) {
+					$log = $this->logrequestCertificateModel->add_log($dataLog);
+					if ($log){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('edit_success', true);
+						redirect("backend/Requestcertificate");
+					}
+					else{
+						$err = 2;
+					}
+				} else {
+					$err = 3;
 				}
-			} else {
-				$err = 3;
-			}
-
-			if ($err) {
-				$this->db->trans_rollback();
-				$this->session->set_flashdata('error_message', 'Failed to edit request with id = '.$this->input->post('req_id').'. Error code: '.$err);
-				$this->load->view('backend/edit_request_certificate', $data);
+	
+				if ($err) {
+					$this->db->trans_rollback();
+					$this->session->set_flashdata('error_message', 'Failed to edit request with id = '.$this->input->post('req_id').'. Error code: '.$err);
+					$this->load->view('backend/edit_request_certificate', $data);
+				}
 			}
         }
         else{
@@ -353,13 +374,14 @@ class Requestcertificate extends CI_Controller {
 		$data['member'] = [];
 		$data['canine'] = [];
 		$data['status'] = $this->CertificateStatusModel->get_status()->result();
+		$data['city'] = $this->memberModel->get_cities()->result();
 		$this->load->view("backend/add_request_certificate", $data);
 	}
 	public function search_member(){
 		$like['mem_name'] = $this->input->post('mem_name');
 		$where['mem_stat'] = $this->config->item('accepted');
 		$where['mem_id !='] = $this->config->item('no_member');
-		$member = $this->memberModel->search_members($like, $where)->result();
+		$member = $this->memberModel->search_members($like, $where, 'mem_id desc')->result();
 		$json = json_encode($member);
 		echo $json;
     }
@@ -373,16 +395,24 @@ class Requestcertificate extends CI_Controller {
     }
 	public function validate_add(){ 
         if ($this->session->userdata('use_username')) {
+			$data['member'] = [];
+			$data['canine'] = [];
+
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('req_mem_id', 'Member ', 'trim|required');
             $this->form_validation->set_rules('req_can_id', 'Dog ', 'trim|required');
+            $this->form_validation->set_rules('req_city_id', 'City/Regency ', 'trim|required');
+            $this->form_validation->set_rules('req_address', 'Full Address ', 'trim|required');
 
 			$data['status'] = $this->CertificateStatusModel->get_status()->result();
+			$data['city'] = $this->memberModel->get_cities()->result();
 
-            $like['mem_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-			$where['mem_id !='] = $this->config->item('no_member');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+			if($this->input->post('req_mem_id')){
+				$like['mem_name'] = $this->input->post('mem_name');
+				$where['mem_stat'] = $this->config->item('accepted');
+				$where['mem_id !='] = $this->config->item('no_member');
+				$data['member'] = $this->memberModel->search_members($like, $where, 'mem_id asc')->result();
+			}
 
 			$wheCan['can_member_id'] = $this->input->post('mem_id');
 			$wheCan['can_stat'] = $this->config->item('accepted');
@@ -409,6 +439,8 @@ class Requestcertificate extends CI_Controller {
 					'req_arrived_date' => $arrivedDate,
 					'req_reject_note' => $this->input->post('req_reject_note'),
 					'req_desc' => $this->input->post('req_desc'),
+					'req_city_id' => $this->input->post('req_city_id'),
+					'req_address' => $this->input->post('req_address')
 				);
 
 				$dataLog = array(
@@ -421,6 +453,8 @@ class Requestcertificate extends CI_Controller {
 					'log_arrived_date' => $arrivedDate,
 					'log_reject_note' => $this->input->post('req_reject_note'),
 					'log_desc' => $this->input->post('req_desc'),
+					'log_city_id' => $this->input->post('req_city_id'),
+					'log_address' => $this->input->post('req_address')
 				);
 
 				$this->db->trans_strict(FALSE);
