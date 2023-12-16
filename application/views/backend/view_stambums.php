@@ -153,7 +153,7 @@
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Puppy has been saved</div>
+                                    <div class="col-12">Puppies has been saved</div>
                                 </div>
                             <?php } ?>
                             <?php if ($this->session->flashdata('delete_success')){ ?>

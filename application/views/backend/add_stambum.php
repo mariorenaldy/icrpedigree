@@ -20,7 +20,7 @@
                         <div class="input-group my-3">
                             <label class="control-label col-md-2">Member Name/Kennel</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" placeholder="Member Name/Kennel" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
+                                <input class="form-control" type="text" placeholder="Member Name/Kennel" id="mem_name" name="mem_name" value="<?php echo set_value('mem_name'); ?>">
                             </div>
                             <div class="col-md-1 text-end">
                                 <button id="buttonSearch" class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
@@ -34,7 +34,7 @@
                                     foreach($member as $row){
                                         $mem[$row->mem_id] = $row->mem_name;
                                     }
-                                    echo form_dropdown('stb_member_id', $mem, set_value('stb_member_id'), 'class="form-control", id="stb_member_id"');
+                                    echo form_dropdown('stb_member_id', $mem, null, 'class="form-control", id="stb_member_id"');
                                 ?>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                                     foreach($kennel as $row){
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
-                                    echo form_dropdown('stb_kennel_id', $ken, $kennel_id, 'class="form-control"');
+                                    echo form_dropdown('stb_kennel_id', $ken, $kennel_id, 'class="form-control", id="stb_kennel_id"');
                                 ?>
                             </div>
                         </div>
@@ -70,42 +70,26 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Canine Photo</label>
-                            <div class="col-md-12 text-center">
-                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
-                                <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('canine')"/>
-                                <input type="hidden" name="attachment" id="attachment">
-                            </div>
+                        <div class="row">
+                            <div class="col-md-2">Number of males born</div>
+                            <div class="col-md-10">: <?= $birth->bir_male; ?></div>
                         </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Name</label>
+                        <div class="row">
+                            <div class="col-md-2">Number of females born</div>
+                            <div class="col-md-10">: <?= $birth->bir_female; ?></div>
+                        </div>
+                        <div class="row">
+                            <label for="stb_count" class="col-sm-2">Number of dogs to be registered</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="text" placeholder="Name" name="stb_a_s" value="<?php echo set_value('stb_a_s'); ?>">
+                                <input class="form-control" type="number" placeholder="Number of dogs to be registered" name="stb_count" id="stb_count" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Gender</label>
-                            <div class="col-md-10">
-                                <?php
-                                $gender['MALE'] = 'MALE';
-                                $gender['FEMALE'] = 'FEMALE';
-                                echo form_dropdown('stb_gender', $gender, set_value('stb_gender'), 'class="form-control"');
-                                ?>
-                            </div>
+                        <div id="can-input-body">
                         </div>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-sm-12 text-center">Payment Proof</label>
-                            <div class="col-sm-12 text-center">
-                                <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
-                                <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
-                                <input type="hidden" name="attachment_proof" id="attachment_proof">
-                            </div>
-                        </div>
-                        <input type="hidden" name="stb_bir_id" value="<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>"/>
+                        <input type="hidden" id="stb_bir_id" name="stb_bir_id" value="<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>"/>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="warning()">Back</button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Births'">Back</button>
                         </div>
                     </form>
                 </div>
@@ -147,7 +131,7 @@
                         <div class="modal-body text-success">
                             <?php if ($this->session->flashdata('add_success')){ ?>
                                 <div class="row">
-                                    <div class="col-12">Puppy has been saved</div>
+                                    <div class="col-12">Puppies has been saved</div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -198,7 +182,34 @@
         });
 
         $('#stb_member_id').on("change", function(){
-            $('#formCanine').attr('action', "<?= base_url(); ?>backend/Stambums/search_kennel").submit();
+            // $('#formCanine').attr('action', "<?= base_url(); ?>backend/Stambums/search_kennel").submit();
+            let stb_member_id = $('#stb_member_id').val();
+            $.ajax({
+                url: "<?= base_url() ?>backend/Stambums/search_kennel",
+                method: 'post',
+                data: {stb_member_id: stb_member_id},
+                success: function(response){
+                    if(response){
+                        let kenDropdown = $('#stb_kennel_id')
+                        kenDropdown.empty();
+                        
+                        let result = JSON.parse(response);
+                        let newOptions = [];
+                        $.each(result, function(value, text) {
+                            newOptions[text.ken_id] = text.ken_name;
+                        });
+
+                        $.each(newOptions, function(value, text) {
+                            if(text !== undefined){
+                                kenDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                            }
+                        });
+                    }
+                    else{
+                        $('#error-modal').modal('show');
+                    }
+                }
+            });
         });
 
         $('#buttonSubmit').on("click", function(e){
@@ -206,104 +217,133 @@
             $('#formCanine').attr('action', "<?= base_url(); ?>backend/Stambums/validate_add").submit();
         });
 
-        function warning(){
-            var proceed = confirm("Save puppy report?");
-            if (proceed){
-                window.location = '<?= base_url() ?>backend/Stambums/force_complete/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
+        var croppingImage = null;
+        var canNum = null;
+
+        var resetImage = function() {
+            $(this).val(null);
+        };
+
+        var stbCount;
+
+        $("#stb_count").on("change", function(){
+            $("#can-input-body").empty();
+            var i = 1;
+            <?php $i = 1; ?>
+            count = parseInt($(this).val());
+            stbCount = count+1;
+            for (i = 1; i < stbCount; ++i) {
+                $("#can-input-body").append(
+                '<hr>'+
+                '<p class="text-center">Dog #'+i+'</p>'+
+                '<div class="input-group my-3 gap-3">'+
+                    '<label class="control-label col-sm-12 text-center text-danger">Full Body Dog Photo</label>'+
+                    '<div class="col-sm-12 text-center">'+
+                        '<img id="imgPreview'+i+'" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">'+
+                        '<input type="file" class="upload" canNum="'+i+'" id="imageInput'+i+'" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>'+
+                        '<input type="hidden" name="attachment'+i+'" id="attachment'+i+'">'+
+                    '</div>'+
+                '</div>'+
+                '<div class="input-group mb-3">'+
+                    '<label class="control-label col-sm-2">Name</label>'+
+                    '<div class="col-sm-10">'+
+                        '<input class="form-control" type="text" placeholder="Name" name="stb_a_s'+i+'">'+
+                    '</div>'+
+                '</div>'+
+                '<div class="input-group mb-3">'+
+                    '<label class="control-label col-sm-2">Gender</label>'+
+                    '<div class="col-sm-10">'+
+                        '<select class="form-control" name="stb_gender'+i+'" id="stb_gender'+i+'" value="<?= set_value('stb_gender'.$i) ?>">'+
+                            '<option value="MALE">MALE</option>'+
+                            '<option value="FEMALE">FEMALE</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'
+                <?php $i++; ?>
+                );
+
+                $("#imageInput"+i).on("change", function(){
+                    croppingImage = "canine";
+                    canNum = event.target.getAttribute("canNum");
+                    ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
+                    showModalImg(event);
+                });
             }
-            else{  
-                window.location = '<?= base_url() ?>backend/Stambums/cancel_all/<?php if (!$mode) echo $birth->bir_id; else echo set_value('stb_bir_id'); ?>';
+
+            $("#can-input-body").append('<input type="hidden" name="count" id="count"/>');
+            $("#count").val(count);
+        });
+
+        var maxCount = <?= $birth->bir_male + $birth->bir_female; ?>
+
+        $('#stb_count').on("input", function() {
+            var stb_count = parseInt($('#stb_count').val());
+            
+            if (stb_count < 0 ) {
+                $('#stb_count').val(0);
+            }
+            else if(stb_count > maxCount){
+                $('#stb_count').val(maxCount);
+            }
+        });
+
+        var $modal = $('#modal');
+        var modalImage = document.getElementById('sample_image');
+        var latestImage = null;
+        var cropper;
+        var ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
+
+        function showModalImg(event) {
+            var files = event.target.files;
+            var done = function(url) {
+                modalImage.src = url;
+                $modal.modal('show');
+            };
+            if (files && files.length > 0) {
+                reader = new FileReader();
+                reader.onload = function(event) {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
             }
         }
 
-        const imageInput = document.querySelector("#imageInput");
-        const imageInputProof = document.querySelector("#imageInputProof");
-        var croppingImage = null;
+        $modal.on('shown.bs.modal', function() {
+            cropper = new Cropper(modalImage, {
+                aspectRatio: ratio,
+                viewMode: <?= $this->config->item('mode') ?>,
+                preview: '.preview'
+            });
+        }).on('hidden.bs.modal', function() {
+            cropper.destroy();
+            cropper = null;
+        });
 
-        var resetImage = function(input) {
-            if(input === "canine"){
-                imageInput.value = null;
-            }
-            else if(input === "proof"){
-                imageInputProof.value = null;
-            }
-        };
+        $('#crop').click(function() {
+            canvas = cropper.getCroppedCanvas({
+                width: <?= $this->config->item('img_width') ?>,
+                height: <?= $this->config->item('img_height') ?>
+            });
+            canvas.toBlob(function(blob) {
+                url = URL.createObjectURL(blob);
+                var reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function() {
+                    base64data = reader.result;
+                    if(croppingImage === "canine"){
+                        $('#imgPreview'+canNum).attr("src",base64data);
+                        $('#attachment'+canNum).val(base64data);
+                    }
+                    $modal.modal('hide');
+                };
+            });
+        });
+
+        $('#cancel-btn').click(function() {
+            resetImage(croppingImage);
+        });
 
         $(document).ready(function(){
-            var $modal = $('#modal');
-            var preview = document.getElementById('imgPreview');
-            var previewProof = document.getElementById('imgPreviewProof');
-            var modalImage = document.getElementById('sample_image');
-            var latestImage = null;
-            var cropper;
-            var ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-
-            imageInput.addEventListener("change", function(event) {
-                croppingImage = "canine";
-                ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-                showModalImg(event);
-            })
-
-            imageInputProof.addEventListener("change", function(event) {
-                croppingImage = "proof";
-                ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-                showModalImg(event);
-            })
-
-            function showModalImg(event) {
-                var files = event.target.files;
-                var done = function(url) {
-                    modalImage.src = url;
-                    $modal.modal('show');
-                };
-                if (files && files.length > 0) {
-                    reader = new FileReader();
-                    reader.onload = function(event) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(files[0]);
-                }
-            }
-
-            $modal.on('shown.bs.modal', function() {
-                cropper = new Cropper(modalImage, {
-                    aspectRatio: ratio,
-                    viewMode: <?= $this->config->item('mode') ?>,
-                    preview: '.preview'
-                });
-            }).on('hidden.bs.modal', function() {
-                cropper.destroy();
-                cropper = null;
-            });
-
-            $('#crop').click(function() {
-                canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('img_width') ?>,
-                    height: <?= $this->config->item('img_height') ?>
-                });
-                canvas.toBlob(function(blob) {
-                    url = URL.createObjectURL(blob);
-                    var reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = function() {
-                        base64data = reader.result;
-                        if(croppingImage === "canine"){
-                            preview.src = base64data;
-                            $('#attachment').val(base64data);
-                        }
-                        else if(croppingImage === "proof"){
-                            previewProof.src = base64data;
-                            $('#attachment_proof').val(base64data);
-                        }
-                        $modal.modal('hide');
-                    };
-                });
-            });
-
-            $('#cancel-btn').click(function() {
-                resetImage(croppingImage);
-            });
-
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
                     $('#message-modal').modal('show');

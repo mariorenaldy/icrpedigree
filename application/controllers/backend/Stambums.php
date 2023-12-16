@@ -281,6 +281,9 @@ class Stambums extends CI_Controller {
 
     public function search_member(){
         if ($this->session->userdata('use_id')) {
+            $wheBirth['bir_id'] = $this->input->post('stb_bir_id');
+            $data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+            
             $like['mem_name'] = $this->input->post('mem_name');
             $like['ken_name'] = $this->input->post('mem_name');
             $where['mem_stat'] = $this->config->item('accepted');
@@ -308,33 +311,59 @@ class Stambums extends CI_Controller {
       }
     }
 
-    public function search_kennel(){
-        if ($this->session->userdata('use_id')) {
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-            $where['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+    // public function search_kennel(){
+    //     if ($this->session->userdata('use_id')) {
+    //         $wheBirth['bir_id'] = $this->input->post('stb_bir_id');
+    //         $data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+            
+    //         $like['mem_name'] = $this->input->post('mem_name');
+    //         $like['ken_name'] = $this->input->post('mem_name');
+    //         $where['mem_stat'] = $this->config->item('accepted');
+    //         $where['ken_stat'] = $this->config->item('accepted');
+    //         $data['member'] = $this->memberModel->search_members($like, $where)->result();
 
-            $whe['ken_member_id'] =  $this->input->post('stb_member_id');
-            $whe['ken_stat'] = $this->config->item('accepted');
-            $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
-            if ($data['kennel'])
-                $data['kennel_id'] = $data['kennel'][0]->ken_id;
-            else
-                $data['kennel_id'] = 0;
-            $data['mode'] = 1;
-            $this->load->view('backend/add_stambum', $data);
-        }
-        else {
-            redirect("backend/Users/login");
-        }
+    //         $whe['ken_member_id'] =  $this->input->post('stb_member_id');
+    //         $whe['ken_stat'] = $this->config->item('accepted');
+    //         $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+    //         if ($data['kennel'])
+    //             $data['kennel_id'] = $data['kennel'][0]->ken_id;
+    //         else
+    //             $data['kennel_id'] = 0;
+    //         $data['mode'] = 1;
+    //         $this->load->view('backend/add_stambum', $data);
+    //     }
+    //     else {
+    //         redirect("backend/Users/login");
+    //     }
+    // }
+
+    public function search_kennel(){
+        $whe['ken_member_id'] =  $this->input->post('stb_member_id');
+        $whe['ken_stat'] = $this->config->item('accepted');
+        $kennel = $this->kennelModel->get_kennels($whe)->result();
+		$json = json_encode($kennel);
+		echo $json;
     }
   
     public function validate_add(){ 
         if ($this->session->userdata('use_id')) {
-            $this->form_validation->set_error_delimiters('<div>', '</div>');
+            $count = $this->input->post('count');
+			$countNum = (int)$count;
+			$this->form_validation->set_error_delimiters('<div>','</div>');
             $this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
+            $this->form_validation->set_message('required', '%s required');
+			if($count == '0'){
+			}
+			else if($count == 'NaN' || $count == ''){
+                $this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
+			}
+			else{
+                for ($i = 1; $i <= $countNum; $i++) {
+                    $this->form_validation->set_rules('stb_a_s'.$i, 'Name of dog #'.$i.' ', 'trim|required');
+                }
+                $this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
+			}
+            
             if ($this->input->post('reg_member')){
                 $this->form_validation->set_rules('stb_member_id', 'Member id ', 'trim|required');
                 $this->form_validation->set_rules('stb_kennel_id', 'Kennel id ', 'trim|required');
@@ -344,13 +373,13 @@ class Stambums extends CI_Controller {
                 $this->form_validation->set_rules('hp', 'Phone number ', 'trim|required');
                 $this->form_validation->set_rules('email', 'email ', 'trim|required');
             }
-            $this->form_validation->set_rules('stb_a_s', 'Canine name ', 'trim|required');
             
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-            $where['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+            $wheBirth['bir_id'] = $this->input->post('stb_bir_id');
+            $data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+            $birth = $data['birth'];
+
+            $where['mem_id'] = $this->input->post('stb_member_id');
+            $data['member'] = $this->memberModel->get_members($where)->result();
 
             $whe['ken_member_id'] =  $this->input->post('stb_member_id');
             $whe['ken_stat'] = $this->config->item('accepted');
@@ -364,414 +393,376 @@ class Stambums extends CI_Controller {
             if ($this->form_validation->run() == FALSE) {
                 $this->load->view('backend/add_stambum', $data);
             } else {
-                $err = 0;
-                if (!isset($_POST['attachment']) || empty($_POST['attachment'])){
-                    $err++;
-                    $this->session->set_flashdata('error_message', 'Photo is required');
-                }
-        
-                $photo = '-';
-                $photoProof = '-';
-                if (!$err){
-                    $uploadedImg = $_POST['attachment'];
-                    $image_array_1 = explode(";", $uploadedImg);
-                    $image_array_2 = explode(",", $image_array_1[1]);
-                    $uploadedImg = base64_decode($image_array_2[1]);
-            
-                    if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-                        $err++;
-                        $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-                    }
-            
-                    $img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
-                    if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
-                        $err++;
-                        $this->session->set_flashdata('error_message', 'canine folder not found or not writable.');
-                    } else{
-                        if (is_file($img_name) and !is_writable($img_name)) {
-                        $err++;
-                        $this->session->set_flashdata('error_message', 'File already exists and not writable.');
-                        }
-                    }
-                }
-
-                if (!$err){
-                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
-                        $uploadedProof = $_POST['attachment_proof'];
-                        $image_array_1 = explode(";", $uploadedProof);
-                        $image_array_2 = explode(",", $image_array_1[1]);
-                        $uploadedProof = base64_decode($image_array_2[1]);
-                
-                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-                        }
-                
-                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'payment folder not found or not writable.');
-                        } else{
-                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'File already exists and not writable.');
-                            }
-                        }
-                    }
-                }
-
-                // cek jumlah male & female
-                $wheBirth['bir_id'] = $this->input->post('stb_bir_id');
-                $birth = $this->birthModel->get_births($wheBirth)->row();
-
-                $wheStbMale['stb_bir_id'] = $this->input->post('stb_bir_id');
-                $wheStbMale['stb_gender'] = 'MALE';
-                $wheStbMale['stb_stat'] = $this->config->item('accepted');
-                $male = $this->stambumModel->get_count($wheStbMale);
-
-                $wheStbFemale['stb_bir_id'] = $this->input->post('stb_bir_id');
-                $wheStbFemale['stb_gender'] = 'FEMALE';
-                $wheStbFemale['stb_stat'] = $this->config->item('accepted');
-                $female = $this->stambumModel->get_count($wheStbFemale);
-
-                $maleFull = 0; 
-                $femaleFull = 0;
-                if ($this->input->post('stb_gender') == 'MALE'){
-                    if ($male >= $birth->bir_male){
-                        $err++;
-                        $this->session->set_flashdata('error_message', 'Male puppy is full');
-                    }
-                    if ($male+1 == $birth->bir_male){
-                        $maleFull = 1;
-                    }
-                    if ($female == $birth->bir_female){
-                        $femaleFull = 1;
-                    }
-                }
-                else{
-                    if ($female >= $birth->bir_female){
-                        $err++;
-                        $this->session->set_flashdata('error_message', 'Female puppy is full');
-                    }
-                    if ($male == $birth->bir_male){
-                        $maleFull = 1;
-                    }
-                    if ($female+1 == $birth->bir_female){
-                        $femaleFull = 1;
-                    }
-                }
-
-                if (!$err){
-					$piece = explode("-", $birth->bir_date_of_birth);
-					$dob = $piece[2]."-".$piece[1]."-".$piece[0];
-
-					$ts = new DateTime();
-					$ts_birth = new DateTime($dob);
-					if ($ts_birth > $ts){
-						$err++;
-                        $this->session->set_flashdata('error_message', "The puppy's date of birth must be before today's date");
-					}
-					else{
-						$diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
-						if ($diff < 1){
-							$err++;
-                            $this->session->set_flashdata('error_message', "The puppy report must be more than ".$this->config->item('min_jarak_lapor_anak')." days after birth date");
+                if($count != '0'){
+                    $err = 0;
+					$maleNum = 0;
+					$femaleNum = 0;
+					for ($i = 1; $i <= $countNum; $i++) {
+						if($this->input->post('stb_gender'.$i) == 'MALE'){
+							$maleNum++;
 						}
-
-						$diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
-						if ($diff > 1){
-							$err++;
-                            $this->session->set_flashdata('error_message', "The puppy report must be less than ".$this->config->item('jarak_lapor_anak')." days after birth date");
+						else{
+							$femaleNum++;
 						}
 					}
-				}
+	
+					if($maleNum > $data['birth']->bir_male){
+                        $this->session->set_flashdata('error_message', 'The number of registered males exceeds the limit');
+						$err = 1;
+					}
+					if($femaleNum > $data['birth']->bir_female){
+                        $this->session->set_flashdata('error_message', 'The number of registered females exceeds the limit');
+						$err = 2;
+					}
 
-                if (!$err) {
-                    $wheStud['stu_id'] = $birth->bir_stu_id;
-                    $stud = $this->studModel->get_studs($wheStud)->row();
-                    $wheDam['can_id'] = $stud->stu_dam_id;
-                    $dam = $this->caninesModel->get_canines($wheDam)->row();
-                    $wheKennel['mem_id'] = $stud->stu_partner_id;
-                    $kennel = $this->memberModel->get_members($wheKennel)->row();
+                    if(!$err){
+                        for ($i = 1; $i <= $countNum; $i++) {
+							if (!isset($_POST['attachment'.$i]) || empty($_POST['attachment'.$i])){
+								$err = 3;
+                                $this->session->set_flashdata('error_message', 'Dog #'.$i.' photo is required');
+							}
+						}
 
-                    $this->db->trans_strict(FALSE);
-                    $this->db->trans_start();
-                    if ($this->input->post('reg_member')){
-                        $wheMember['mem_id'] = $this->input->post('stb_member_id');
-                        $member = $this->memberModel->get_members($wheMember)->row();
-                    }
-                    else{
-                        $email = $this->test_input($this->input->post('email'));
-                        if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Invalid email format');
-                        }
-
-                        if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Duplicate phone number');
-                        }
-
-                        if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Duplicate email');
-                        }
-
+                        $photo = '-';
+                        $photoProof = '-';
+                        $photo = [];
                         if (!$err){
-                            $member_data = array(
-                                'mem_name' => strtoupper($this->input->post('name')),
-                                'mem_hp' => $this->input->post('hp'),
-                                'mem_email' => $this->input->post('email'),
-                                'mem_username' => $this->input->post('email'),
-                                'mem_password' => sha1($this->input->post('hp')),
-                                'mem_stat' => $this->config->item('accepted'),
-                                'mem_type' => $this->config->item('free_member'),
-                                'mem_user' => $this->session->userdata('use_id'),
-                                'mem_date' => date('Y-m-d H:i:s'),
-                            );
-            
-                            $kennel_data = array(
-                                'ken_name' => '',
-                                'ken_type_id' => 0,
-                                'ken_photo' => '-',
-                                'ken_stat' => $this->config->item('accepted'),
-                                'ken_user' => $this->session->userdata('use_id'),
-                                'ken_date' => date('Y-m-d H:i:s'),
-                            );
-                                
-                            $id = $this->memberModel->add_members($member_data);
-                            if ($id){
-                                $mem_id = $this->db->insert_id();
-                                $kennel_data['ken_member_id'] = $mem_id;
-                                $res = $this->kennelModel->add_kennels($kennel_data);
-                                if ($res){
-                                    $result = $this->notification_model->add(17, $mem_id, $mem_id);
-                                    if (!$result){
-                                        $err = 'M1';
-                                    }
-                                }
-                                else{
-                                    $err = 'M2';
-                                }
+							for ($i = 1; $i <= $countNum; $i++) {
+								$uploadedImg = $_POST['attachment'.$i];
+								$image_array_1 = explode(";", $uploadedImg);
+								$image_array_2 = explode(",", $image_array_1[1]);
+								$uploadedImg = base64_decode($image_array_2[1]);
+			
+								if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
+									$err = 5;
+                                    $this->session->set_flashdata('error_message', 'The file size of dog #'.$i.' photo is too big (> 1 MB).');
+								}
+			
+								$img_name = $this->config->item('path_canine').$this->config->item('file_name_canine');
+								$img_name = substr_replace($img_name, $i, 32, 0);
+								if (!is_dir($this->config->item('path_canine')) or !is_writable($this->config->item('path_canine'))) {
+									$err = 6;
+                                    $this->session->set_flashdata('error_message', 'Canine folder is not found or is not writable.');
+								} else{
+									if (is_file($img_name) and !is_writable($img_name)) {
+										$err = 7;
+                                        $this->session->set_flashdata('error_message', 'The file is already exists and is not writable.');
+									}
+								}
+			
+								if (!$err){
+									file_put_contents($img_name, $uploadedImg);
+									$photo[$i] = str_replace($this->config->item('path_canine'), '', $img_name);
+								}
+							}
+						}
+        
+                        if (!$err){
+                            $piece = explode("-", $birth->bir_date_of_birth);
+                            $dob = $piece[2]."-".$piece[1]."-".$piece[0];
+        
+                            $ts = new DateTime();
+                            $ts_birth = new DateTime($dob);
+                            if ($ts_birth > $ts){
+                                $err++;
+                                $this->session->set_flashdata('error_message', "The puppy's date of birth must be before today's date");
                             }
                             else{
-                                $err = 'M3';
+                                $diff = $ts->diff($ts_birth)->days/$this->config->item('min_jarak_lapor_anak');
+                                if ($diff < 1){
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', "The puppy report must be more than ".$this->config->item('min_jarak_lapor_anak')." days after birth date");
+                                }
+        
+                                $diff = $ts->diff($ts_birth)->days/$this->config->item('jarak_lapor_anak');
+                                if ($diff > 1){
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', "The puppy report must be less than ".$this->config->item('jarak_lapor_anak')." days after birth date");
+                                }
                             }
                         }
-                    }
-                
-                    if (!$err){
-                        if (isset($uploadedImg)){
-                            file_put_contents($img_name, $uploadedImg);
-                            $photo = str_replace($this->config->item('path_canine'), '', $img_name);
-						}
-                        if (isset($uploadedProof)){
-                            file_put_contents($imgProof_name, $uploadedProof);
-                            $photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
-						}
-                        
-                        $piece = explode("-", $birth->bir_date_of_birth);
-                        $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
-
-                        $dataCan = array(
-                            'can_reg_number' => '-',
-                            'can_breed' => $dam->can_breed,
-                            'can_gender' => $this->input->post('stb_gender'),
-                            'can_date_of_birth' => $dob,
-                            'can_color' => '-',
-                            'can_reg_date' => date("Y/m/d"),
-                            'can_photo' => $photo,
-                            'can_pay_photo' => $photoProof,
-                            'can_stat' => $this->config->item('accepted'),
-                            'can_app_user' => $this->session->userdata('use_id'),
-                            'can_app_date' => date('Y-m-d H:i:s'),
-                            'can_chip_number' => '-',
-                            'can_icr_number' => '-',
-                            'can_note' => '',
-                            'can_user' => $this->session->userdata('use_id'),
-                            'can_date' => date('Y-m-d H:i:s'),
-                        );
-
-                        // nama diubah berdasarkan kennel
-                        if ($kennel->ken_type_id == 1)
-                            $dataCan['can_a_s'] = strtoupper($this->input->post('stb_a_s'))." VON ".$kennel->ken_name;
-                        else if ($kennel->ken_type_id == 2)
-                            $dataCan['can_a_s'] = $kennel->ken_name."` ".strtoupper($this->input->post('stb_a_s'));
-                        else 
-                            $dataCan['can_a_s'] = strtoupper($this->input->post('stb_a_s'));
-
-                        if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Duplicate canine name');
-                        }
-
+        
                         if (!$err) {
-                            $dataLog = array(
-                                'log_reg_number' => '-',
-                                'log_a_s' => $dataCan['can_a_s'],
-                                'log_breed' => $dam->can_breed,
-                                'log_gender' => $this->input->post('stb_gender'),
-                                'log_date_of_birth' => $dob,
-                                'log_color' => '-',
-                                'log_photo' => $photo,
-                                'log_pay_photo' => $photoProof,
-                                'log_stat' => $this->config->item('accepted'),
-                                'log_app_user' => $this->session->userdata('use_id'),
-                                'log_app_date' => date('Y-m-d H:i:s'),
-                                'log_chip_number' => '-',
-                                'log_icr_number' => '-',
-                                'log_note' => '',
-                                'log_user' => $this->session->userdata('use_id'),
-                                'log_date' => date('Y-m-d H:i:s'),
-                            );
+                            $wheStud['stu_id'] = $birth->bir_stu_id;
+                            $stud = $this->studModel->get_studs($wheStud)->row();
+                            $wheDam['can_id'] = $stud->stu_dam_id;
+                            $dam = $this->caninesModel->get_canines($wheDam)->row();
+                            $wheKennel['mem_id'] = $stud->stu_partner_id;
+                            $kennel = $this->memberModel->get_members($wheKennel)->row();
         
-                            $dataStb = array(
-                                'stb_bir_id' => $this->input->post('stb_bir_id'),
-                                'stb_a_s' => $dataCan['can_a_s'],
-                                'stb_breed' => $dam->can_breed,
-                                'stb_gender' => $this->input->post('stb_gender'),
-                                'stb_date_of_birth' => $dob,
-                                'stb_reg_date' => date("Y/m/d"),
-                                'stb_photo' => $photo,
-                                'stb_pay_photo' => $photoProof,
-                                'stb_stat' => $this->config->item('accepted'),
-                                'stb_app_user' => $this->session->userdata('use_id'),
-                                'stb_app_date' => date('Y-m-d H:i:s'),
-                                'stb_user' => $this->session->userdata('use_id'),
-                                'stb_date' => date('Y-m-d H:i:s'),
-                            );
-        
-                            $dataLogStb = array(
-                                'log_bir_id' => $this->input->post('stb_bir_id'),
-                                'log_a_s' => $dataCan['can_a_s'],
-                                'log_breed' => $dam->can_breed,
-                                'log_gender' => $this->input->post('stb_gender'),
-                                'log_date_of_birth' => $dob,
-                                'log_photo' => $photo,
-                                'log_pay_photo' => $photoProof,
-                                'log_stat' => $this->config->item('accepted'),
-                                'log_app_user' => $this->session->userdata('use_id'),
-                                'log_app_date' => date('Y-m-d H:i:s'),
-                                'log_user' => $this->session->userdata('use_id'),
-                                'log_date' => date('Y-m-d H:i:s'),
-                            );
-
+                            $this->db->trans_strict(FALSE);
+                            $this->db->trans_start();
                             if ($this->input->post('reg_member')){
-                                $dataCan['can_member_id'] = $this->input->post('stb_member_id');
-                                $dataCan['can_kennel_id'] = $this->input->post('stb_kennel_id');
-                                $dataLog['log_member_id'] = $this->input->post('stb_member_id');
-                                $dataLog['log_kennel_id'] = $this->input->post('stb_kennel_id');
-                                $dataStb['stb_member_id'] = $this->input->post('stb_member_id');
-                                $dataStb['stb_kennel_id'] = $this->input->post('stb_kennel_id');
-                                $dataLogStb['log_member_id'] = $this->input->post('stb_member_id');
-                                $dataLogStb['log_kennel_id'] = $this->input->post('stb_kennel_id');
+                                $wheMember['mem_id'] = $this->input->post('stb_member_id');
+                                $member = $this->memberModel->get_members($wheMember)->row();
                             }
                             else{
-                                $dataCan['can_member_id'] = $mem_id;
-                                $dataCan['can_kennel_id'] = $ken_id;
-                                $dataLog['log_member_id'] = $mem_id;
-                                $dataLog['log_kennel_id'] = $ken_id;
-                                $dataStb['stb_member_id'] = $mem_id;
-                                $dataStb['stb_kennel_id'] = $ken_id;
-                                $dataLogStb['log_member_id'] = $mem_id;
-                                $dataLogStb['log_kennel_id'] = $ken_id;
-                            }
-
-                            $dataPed = array(
-                                'ped_sire_id' => $stud->stu_sire_id,
-                                'ped_dam_id' => $stud->stu_dam_id,
-                            );
-            
-                            $dataLogPed = array(
-                                'log_sire_id' => $stud->stu_sire_id,
-                                'log_dam_id' => $stud->stu_dam_id,
-                                'log_user' => $this->session->userdata('use_id'),
-                                'log_date' => date('Y-m-d H:i:s'),
-                            );
-
-                            $canines = $this->caninesModel->add_canines($dataCan);
-                            if ($canines) {
-                                $insertedID = $this->db->insert_id();
-                                $dataLog['log_canine_id'] = $insertedID;
-                                $dataStb['stb_can_id'] = $insertedID;
-                                $dataLogStb['log_can_id'] = $insertedID;
-                                $dataPed['ped_canine_id'] = $insertedID;
-                                $dataLogPed['log_canine_id'] = $insertedID;
-
-                                $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
-                                if ($pedigree) {
-                                    $log = $this->logcanineModel->add_log($dataLog);
-                                    if ($log){
-                                        $res = $this->logpedigreeModel->add_log($dataLogPed);
+                                $email = $this->test_input($this->input->post('email'));
+                                if (!$err && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', 'Invalid email format');
+                                }
+        
+                                if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', 'Duplicate phone number');
+                                }
+        
+                                if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
+                                    $err++;
+                                    $this->session->set_flashdata('error_message', 'Duplicate email');
+                                }
+        
+                                if (!$err){
+                                    $member_data = array(
+                                        'mem_name' => strtoupper($this->input->post('name')),
+                                        'mem_hp' => $this->input->post('hp'),
+                                        'mem_email' => $this->input->post('email'),
+                                        'mem_username' => $this->input->post('email'),
+                                        'mem_password' => sha1($this->input->post('hp')),
+                                        'mem_stat' => $this->config->item('accepted'),
+                                        'mem_type' => $this->config->item('free_member'),
+                                        'mem_user' => $this->session->userdata('use_id'),
+                                        'mem_date' => date('Y-m-d H:i:s'),
+                                    );
+                    
+                                    $kennel_data = array(
+                                        'ken_name' => '',
+                                        'ken_type_id' => 0,
+                                        'ken_photo' => '-',
+                                        'ken_stat' => $this->config->item('accepted'),
+                                        'ken_user' => $this->session->userdata('use_id'),
+                                        'ken_date' => date('Y-m-d H:i:s'),
+                                    );
+                                        
+                                    $id = $this->memberModel->add_members($member_data);
+                                    if ($id){
+                                        $mem_id = $this->db->insert_id();
+                                        $kennel_data['ken_member_id'] = $mem_id;
+                                        $res = $this->kennelModel->add_kennels($kennel_data);
                                         if ($res){
-                                            $result = $this->stambumModel->add_stambum($dataStb);
-                                            if ($result){
-                                                $dataLogStb['log_stb_id'] = $result;
-                                                $log = $this->logstambumModel->add_log($dataLogStb);
-                                                if ($log){
-                                                    if ($maleFull && $femaleFull){
-                                                        $dataBirth['bir_stat'] = $this->config->item('completed');
-                                                        $bir = $this->birthModel->update_births($dataBirth, $wheBirth);
-                                                        if (!$bir){
-                                                            $err = 1;
-                                                        } 
-                                                    }
-
-                                                    if (!$err){
-                                                        if ($this->input->post('reg_member')){
-                                                            $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
-                                                            if ($result){
-                                                                $this->db->trans_complete();
-                                                                $this->session->set_flashdata('add_success', true);
-                                                                if ($maleFull && $femaleFull)
-                                                                    redirect("backend/Stambums");
-                                                                else // tambah anak lg
-                                                                    redirect("backend/Stambums/add_more/".$this->input->post('stb_bir_id'));
-                                                            }
-                                                            else{
-                                                                $err = 2;
-                                                            }
-                                                        }
-                                                        else{
-                                                            $result = $this->notification_model->add(18, $result, $mem_id, "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
-                                                            if ($result){
-                                                                $this->db->trans_complete();
-                                                                $this->session->set_flashdata('add_success', true);
-                                                                if ($maleFull && $femaleFull)
-                                                                    redirect("backend/Stambums");
-                                                                else // tambah anak lg
-                                                                    redirect("backend/Stambums/add_more/".$this->input->post('stb_bir_id'));
-                                                            }
-                                                            else{
-                                                                $err = 2;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else{
-                                                    $err = 3;
-                                                }
-                                            }
-                                            else{
-                                                $err = 4;
+                                            $result = $this->notification_model->add(17, $mem_id, $mem_id);
+                                            if (!$result){
+                                                $err = 'M1';
                                             }
                                         }
                                         else{
-                                            $err = 5;
+                                            $err = 'M2';
                                         }
                                     }
                                     else{
-                                        $err = 6;
+                                        $err = 'M3';
+                                    }
+                                }
+                            }
+                        
+                            if (!$err){
+                                $can_a_s = [];
+                                for ($i = 1; $i <= $countNum; $i++) {
+                                    // nama diubah berdasarkan kennel
+                                    if ($kennel->ken_type_id == 1)
+                                        $can_a_s[$i] = strtoupper($this->input->post('stb_a_s'.$i))." VON ".$kennel->ken_name;
+                                    else if ($kennel->ken_type_id == 2)
+                                        $can_a_s[$i] = $kennel->ken_name."` ".strtoupper($this->input->post('stb_a_s'.$i));
+                                    else 
+                                        $can_a_s[$i] = strtoupper($this->input->post('stb_a_s'.$i));
+                
+                                    if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $can_a_s[$i])){
+                                        $err = 14;
+                                        $this->session->set_flashdata('error_message', 'The dog #'.$i.' name has already been registered');
+                                    }
+                                }
+        
+                                if (!$err) {
+                                    $piece = explode("-", $birth->bir_date_of_birth);
+                                    $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
+            
+                                    for ($i = 1; $i <= $countNum; $i++) {
+                                        $dataCan = array(
+                                            'can_a_s' => $can_a_s[$i],
+                                            'can_reg_number' => '-',
+                                            'can_breed' => $dam->can_breed,
+                                            'can_gender' => $this->input->post('stb_gender'.$i),
+                                            'can_date_of_birth' => $dob,
+                                            'can_color' => '-',
+                                            'can_reg_date' => date("Y/m/d"),
+                                            'can_photo' => $photo[$i],
+                                            'can_pay_photo' => $photoProof,
+                                            'can_pay_invoice' => '-',
+                                            'can_stat' => $this->config->item('accepted'),
+                                            'can_app_user' => $this->session->userdata('use_id'),
+                                            'can_app_date' => date('Y-m-d H:i:s'),
+                                            'can_chip_number' => '-',
+                                            'can_icr_number' => '-',
+                                            'can_note' => '',
+                                            'can_user' => $this->session->userdata('use_id'),
+                                            'can_date' => date('Y-m-d H:i:s'),
+                                        );
+    
+                                        $dataLog = array(
+                                            'log_reg_number' => '-',
+                                            'log_a_s' => $can_a_s[$i],
+                                            'log_breed' => $dam->can_breed,
+                                            'log_gender' => $this->input->post('stb_gender'.$i),
+                                            'log_date_of_birth' => $dob,
+                                            'log_color' => '-',
+                                            'log_photo' => $photo[$i],
+                                            'log_pay_photo' => $photoProof,
+                                            'log_stat' => $this->config->item('accepted'),
+                                            'log_app_user' => $this->session->userdata('use_id'),
+                                            'log_app_date' => date('Y-m-d H:i:s'),
+                                            'log_chip_number' => '-',
+                                            'log_icr_number' => '-',
+                                            'log_note' => '',
+                                            'log_user' => $this->session->userdata('use_id'),
+                                            'log_date' => date('Y-m-d H:i:s'),
+                                        );
+                    
+                                        $dataStb = array(
+                                            'stb_bir_id' => $this->input->post('stb_bir_id'),
+                                            'stb_a_s' => $can_a_s[$i],
+                                            'stb_breed' => $dam->can_breed,
+                                            'stb_gender' => $this->input->post('stb_gender'.$i),
+                                            'stb_date_of_birth' => $dob,
+                                            'stb_reg_date' => date("Y/m/d"),
+                                            'stb_photo' => $photo[$i],
+                                            'stb_pay_photo' => $photoProof,
+                                            'stb_pay_invoice' => '-',
+                                            'stb_count' => $countNum,
+                                            'stb_stat' => $this->config->item('accepted'),
+                                            'stb_app_user' => $this->session->userdata('use_id'),
+                                            'stb_app_date' => date('Y-m-d H:i:s'),
+                                            'stb_user' => $this->session->userdata('use_id'),
+                                            'stb_date' => date('Y-m-d H:i:s'),
+                                        );
+                    
+                                        $dataLogStb = array(
+                                            'log_bir_id' => $this->input->post('stb_bir_id'),
+                                            'log_a_s' => $can_a_s[$i],
+                                            'log_breed' => $dam->can_breed,
+                                            'log_gender' => $this->input->post('stb_gender'.$i),
+                                            'log_date_of_birth' => $dob,
+                                            'log_photo' => $photo[$i],
+                                            'log_pay_photo' => $photoProof,
+                                            'log_stat' => $this->config->item('accepted'),
+                                            'log_app_user' => $this->session->userdata('use_id'),
+                                            'log_app_date' => date('Y-m-d H:i:s'),
+                                            'log_user' => $this->session->userdata('use_id'),
+                                            'log_date' => date('Y-m-d H:i:s'),
+                                        );
+            
+                                        if ($this->input->post('reg_member')){
+                                            $dataCan['can_member_id'] = $this->input->post('stb_member_id');
+                                            $dataCan['can_kennel_id'] = $this->input->post('stb_kennel_id');
+                                            $dataLog['log_member_id'] = $this->input->post('stb_member_id');
+                                            $dataLog['log_kennel_id'] = $this->input->post('stb_kennel_id');
+                                            $dataStb['stb_member_id'] = $this->input->post('stb_member_id');
+                                            $dataStb['stb_kennel_id'] = $this->input->post('stb_kennel_id');
+                                            $dataLogStb['log_member_id'] = $this->input->post('stb_member_id');
+                                            $dataLogStb['log_kennel_id'] = $this->input->post('stb_kennel_id');
+                                        }
+                                        else{
+                                            $dataCan['can_member_id'] = $mem_id;
+                                            $dataCan['can_kennel_id'] = $ken_id;
+                                            $dataLog['log_member_id'] = $mem_id;
+                                            $dataLog['log_kennel_id'] = $ken_id;
+                                            $dataStb['stb_member_id'] = $mem_id;
+                                            $dataStb['stb_kennel_id'] = $ken_id;
+                                            $dataLogStb['log_member_id'] = $mem_id;
+                                            $dataLogStb['log_kennel_id'] = $ken_id;
+                                        }
+            
+                                        $dataPed = array(
+                                            'ped_sire_id' => $stud->stu_sire_id,
+                                            'ped_dam_id' => $stud->stu_dam_id,
+                                        );
+                        
+                                        $dataLogPed = array(
+                                            'log_sire_id' => $stud->stu_sire_id,
+                                            'log_dam_id' => $stud->stu_dam_id,
+                                            'log_user' => $this->session->userdata('use_id'),
+                                            'log_date' => date('Y-m-d H:i:s'),
+                                        );
+            
+                                        $canines = $this->caninesModel->add_canines($dataCan);
+                                        if ($canines) {
+                                            $insertedID = $this->db->insert_id();
+                                            $dataLog['log_canine_id'] = $insertedID;
+                                            $dataStb['stb_can_id'] = $insertedID;
+                                            $dataLogStb['log_can_id'] = $insertedID;
+                                            $dataPed['ped_canine_id'] = $insertedID;
+                                            $dataLogPed['log_canine_id'] = $insertedID;
+            
+                                            $pedigree = $this->pedigreesModel->add_pedigrees($dataPed);
+                                            if ($pedigree) {
+                                                $log = $this->logcanineModel->add_log($dataLog);
+                                                if ($log){
+                                                    $res = $this->logpedigreeModel->add_log($dataLogPed);
+                                                    if ($res){
+                                                        $result = $this->stambumModel->add_stambum($dataStb);
+                                                        if ($result){
+                                                            $dataLogStb['log_stb_id'] = $result;
+                                                            $log = $this->logstambumModel->add_log($dataLogStb);
+                                                            if ($log){
+                                                                $dataBirth['bir_stat'] = $this->config->item('completed');
+                                                                $bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+                                                                if (!$bir){
+                                                                    $err = 1;
+                                                                } 
+            
+                                                                if (!$err){
+                                                                    if ($this->input->post('reg_member')){
+                                                                        $result = $this->notification_model->add(18, $result, $this->input->post('stb_member_id'), "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
+                                                                        if (!$result){
+                                                                            $err = 2;
+                                                                        }
+                                                                    }
+                                                                    else{
+                                                                        $result = $this->notification_model->add(18, $result, $mem_id, "Nama anjing / Canine name: ".$dataCan['can_a_s']."<br>Nama jantan / sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
+                                                                        if (!$result){
+                                                                            $err = 2;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            else{
+                                                                $err = 3;
+                                                            }
+                                                        }
+                                                        else{
+                                                            $err = 4;
+                                                        }
+                                                    }
+                                                    else{
+                                                        $err = 5;
+                                                    }
+                                                }
+                                                else{
+                                                    $err = 6;
+                                                }
+                                            } else {
+                                                $err = 7;
+                                            }
+                                        } else {
+                                            $err = 8;
+                                        }
+                                    }
+                                    
+                                    if ($err) {
+                                        $this->db->trans_rollback();
+                                        $this->session->set_flashdata('error_message', 'Failed to save puppy. Error code: '.$err);
+                                        $this->load->view('backend/add_stambum', $data);
+                                    }
+                                    else{
+                                        $this->db->trans_complete();
+                                        $this->session->set_flashdata('add_success', true);
+                                        redirect("backend/Stambums");
                                     }
                                 } else {
-                                    $err = 7;
+                                    $this->load->view('backend/add_stambum', $data);
                                 }
-                            } else {
-                                $err = 8;
                             }
-                            if ($err) {
-                                $this->db->trans_rollback();
-                                $this->session->set_flashdata('error_message', 'Failed to save puppy. Error code: '.$err);
+                            else{
                                 $this->load->view('backend/add_stambum', $data);
                             }
                         } else {
@@ -779,94 +770,33 @@ class Stambums extends CI_Controller {
                         }
                     }
                     else{
-                        $this->load->view('backend/add_stambum', $data);
-                    }
-                } else {
-                    $this->load->view('backend/add_stambum', $data);
+						$this->load->view('backend/add_stambum', $data);
+					}
+                }
+                else{
+					$this->db->trans_strict(FALSE);
+					$this->db->trans_start();
+					
+					$dataBirth['bir_stat'] = $this->config->item('completed');
+					$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+					if ($bir){
+						$this->db->trans_complete();
+						$this->session->set_flashdata('add_success', true);
+						redirect("frontend/Stambums");
+					}
+					else{
+						$err = 17;
+					}
+					if ($err){
+						$this->db->trans_rollback();
+                        $this->session->set_flashdata('error_message', 'Failed to save puppy data. Error code: '.$err);
+						$this->load->view('frontend/add_stambum', $data);
+					}
                 }
             }
         } 
         else {
             redirect("backend/Users/login");
-        }
-    }
-
-    public function cancel_all(){
-        if ($this->uri->segment(4)){  
-			if ($this->session->userdata('use_id')){
-				$wheBirth['bir_id'] = $this->uri->segment(4);
-				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
-
-				if ($data['birth']->bir_stat == $this->config->item('accepted')){ 
-					$whereStb['stb_bir_id'] = $this->uri->segment(4);
-					$dataStb = array(
-						'stb_stat' => $this->config->item('rejected'),
-						'stb_user' => 0,
-						'stb_date' => date('Y-m-d H:i:s'),
-					);
-
-                    $this->db->trans_strict(FALSE);
-					$this->db->trans_start();
-                    $err = 0;
-					$res = $this->stambumModel->update_stambum($dataStb, $whereStb);
-					if ($res){
-                        $where['log_stb_id'] = $this->uri->segment(4);
-                        $data = array(
-                            'log_stat' => $this->config->item('rejected'),
-                            'log_user' => 0,
-                            'log_date' => date('Y-m-d H:i:s'),
-                        );
-                        $log = $this->logstambumModel->update_log($data, $where);
-                        if ($log){
-                            $stbs = $this->stambumModel->get_stambum($whereStb)->result();
-                            foreach ($stbs AS $stb){
-                                $whe = Array();
-                                $whe['can_id'] = $stb->stb_can_id;
-                                $dataCan = array(
-                                    'can_stat' => $this->config->item('rejected'),
-                                    'can_user' => 0,
-                                    'can_date' => date('Y-m-d H:i:s'),
-                                );
-                                $res = $this->caninesModel->update_canines($dataCan, $whe);
-                                if ($res){
-                                    $dataLog = array(
-                                        'log_canine_id' => $stb->stb_can_id,
-                                        'log_stat' => $this->config->item('rejected'),
-                                        'log_user' => 0,
-                                        'log_date' => date('Y-m-d H:i:s'),
-                                    );
-                                    $log = $this->logcanineModel->add_log($dataLog);
-                                    if (!$log){
-                                        $err = 1;
-                                    }
-                                }
-                                else{
-                                    $err = 2;
-                                }
-                            }
-                        }
-                        else{
-                            $err = 3;
-                        }
-                    }
-                    else{
-                        $err = 4;
-                    }
-                    if (!$err)
-                        $this->db->trans_complete();
-                    else{
-                        $this->db->trans_rollback();
-						$this->session->set_flashdata('delete_message', 'Failed to save puppy report. Err code: '.$err);
-					}
-                    redirect("backend/Stambums");
-				}
-			}
-			else{
-				redirect("backend/Users/login");
-			}
-        }
-        else{
-			redirect("backend/Stambums");
         }
     }
 
