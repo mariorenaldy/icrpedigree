@@ -162,6 +162,7 @@ class Members extends CI_Controller {
 			$this->session->unset_userdata('mem_type');
 			$this->session->unset_userdata('mem_pp');
 			$this->session->unset_userdata('notif_count');
+			$this->cart->destroy();
 			redirect('frontend/Members');
 		}
 

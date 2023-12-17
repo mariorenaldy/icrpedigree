@@ -140,6 +140,73 @@ class Products extends CI_Controller
 	{
 		$this->load->view("marketplace/cart_detail");
 	}
+	public function remove_item($id)
+	{
+		$this->cart->remove($id);
+		redirect('marketplace/products/cart_detail');
+	}
+	public function decrease($id, $qty)
+	{
+		$data = array(
+			'rowid' => $id,
+			'qty'   => $qty-1
+		);
+		$this->cart->update($data);
+		redirect('marketplace/products/cart_detail');
+	}
+	public function increase($rowid, $id)
+	{
+		$site_lang = $this->input->cookie('site_lang');
+		$where['pro_id'] = $id;
+		$where['pro_stat'] = $this->config->item('accepted');
+		$where['pro_stock !='] = 0;
+		$data['products'] = $this->productModel->get_products($where)->row();
+		$err = 0;
+		if($data['products']){
+			//check stock
+			$stock = $data['products']->pro_stock;
+			$qty = 0;
+			if (count($this->cart->contents())>0){
+				foreach ($this->cart->contents() as $cartItem){       
+					if($cartItem['id'] == $data['products']->pro_id){
+						if($cartItem['qty']+1>$stock){
+							$err = 1;
+							break;
+						}
+						else{
+							$qty = $cartItem['qty'];
+						}
+					}
+				}
+			}
+
+			if($err){
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal menambahkan produk ke keranjang. Pastikan jumlah item yang ditambahkan tidak melebihi jumlah stok');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to add product to shopping cart. Make sure the number of items being added will not exceed the number of stock');
+				}
+			}
+			else{
+				$data = array(
+					'rowid' => $rowid,
+					'qty'   => $qty+1
+				);
+				$this->cart->update($data);
+			}
+			redirect('marketplace/products/cart_detail');
+		}
+		else{
+			if ($site_lang == 'indonesia') {
+				$this->session->set_flashdata('error_message', 'Produk tidak ditemukan');
+			}
+			else{
+				$this->session->set_flashdata('error_message', 'Product not found');
+			}
+			redirect('marketplace/products/cart_detail');
+		}
+	}
 	public function clear_cart()
 	{
 		$this->cart->destroy();
