@@ -65,7 +65,7 @@
                                     <?php } ?>
                                 </td>
                                 <td>    
-                                    <?php if ($stat[$i]){ ?>
+                                    <?php if ($stat[$i] && $s->stu_stat == $this->config->item('accepted')){ ?>
                                     <button type="button" class="btn btn-warning mb-1" onclick="addBirth(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Add Birth"><i class="fa fa-plus"></i></button>
                                     <?php }
                                         if ($this->session->userdata('use_type_id') == $this->config->item('super')){ ?>
