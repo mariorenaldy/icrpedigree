@@ -106,9 +106,9 @@ class Certificate extends CI_Controller
 
         $arr = '';
         if ($idx == 1) {
-            $arr .= '{ id: 1, name: "' . $data['canine']->can_a_s . '", status: "' . '' .'", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
+            $arr .= '{ id: 1, name: "' . '<a href=\''. base_url().'/frontend/Canines/view_detail/'. $data['canine']->can_id . '\'>' . $data['canine']->can_a_s . '</a>", status: "' . '' .'", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
         } else if ($data['canine']->can_a_s != 'NO MALE' && $data['canine']->can_a_s != 'NO FEMALE'){
-            $arr .= '{ id: ' . $idx . ', pid: ' . $pid . ', name: "' . $data['canine']->can_a_s . '", status: "' . $status . '", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
+            $arr .= '{ id: ' . $idx . ', pid: ' . $pid . ', name: "' . '<a href=\''. base_url().'/frontend/Canines/view_detail/'. $data['canine']->can_id . '\'>' . $data['canine']->can_a_s . '</a>", status: "' . $status . '", img: "' . base_url('uploads/canine/' . $data['canine']->can_photo) . '" },';
         }
 
         if (!empty($data['sire']) || !empty($data['dam'])) {

@@ -93,7 +93,7 @@ class CaninesModel extends CI_Model {
     }
 
     public function get_exist_pedigrees($where){
-        $this->db->select('can_a_s, can_photo, can_gender, ped_sire_id, ped_dam_id');
+        $this->db->select('can_id, can_a_s, can_photo, can_gender, ped_sire_id, ped_dam_id');
         if ($where != null) {
             $this->db->where($where);
         }
