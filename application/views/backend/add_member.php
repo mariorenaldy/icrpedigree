@@ -151,15 +151,6 @@
                                     echo form_dropdown('ken_type_id', $pil, set_value('ken_type_id'), 'class="form-control"');
                                 ?>
                             </div>
-                            <hr />
-                            <div class="input-group my-3 gap-3 mt-5 mb-5">
-                                <label class="control-label col-sm-12 text-center">Payment Proof</label>
-                                <div class="col-sm-12 text-center">
-                                    <img id="imgPreviewProof" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
-                                    <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
-                                    <input type="hidden" name="attachment_proof" id="attachment_proof">
-                                </div>
-                            </div>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary" type="submit">Save</button>
@@ -244,7 +235,6 @@
 
         const imageInputPP = document.querySelector("#imageInputPP");
         const imageInputLogo = document.querySelector("#imageInputLogo");
-        const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
 
         var resetImage = function(input) {
@@ -254,14 +244,12 @@
             else if(input === "logo"){
                 imageInputLogo.value = null;
             }
-            else if(input === "proof"){
-                imageInputProof.value = null;
-            }
         };
 
         var cityValue;
 
         $(document).ready(function(){
+            
             var $select = $('#mem_kota_select').selectize({
                 sortField: 'text',
                 onChange: function(value) {
@@ -269,14 +257,13 @@
                     $('#mem_kota').val(value);
                 }
             });
-
+            
             var selectize = $select[0].selectize;
             selectize.setValue($('#mem_kota').val());
-
+            
             var $modal = $('#modal');
             var previewPP = document.getElementById('imgPreviewPP');
             var previewLogo = document.getElementById('imgPreviewLogo');
-            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var cropper;
 
@@ -287,11 +274,6 @@
 
             imageInputLogo.addEventListener("change", function(event) {
                 croppingImage = "logo";
-                showModalImg(event);
-            })
-
-            imageInputProof.addEventListener("change", function(event) {
-                croppingImage = "proof";
                 showModalImg(event);
             })
 
@@ -339,10 +321,6 @@
                         else if(croppingImage === "logo"){
                             previewLogo.src = base64data;
                             $('#attachment_logo').val(base64data);
-                        }
-                        else if(croppingImage === "proof"){
-                            previewProof.src = base64data;
-                            $('#attachment_proof').val(base64data);
                         }
                         $modal.modal('hide');
                     };

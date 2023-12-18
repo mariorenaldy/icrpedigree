@@ -69,6 +69,21 @@
                                 <?php } ?>
                             </div>
                         </div>
+                        <div class="input-group mb-3">
+                            <label class="control-label col-md-2">Status</label>
+                            <div class="col-md-10">
+                                <?php
+                                    $stat = [];
+                                    foreach($status as $row){
+                                        $stat[$row->stat_id] = $row->stat_name;
+                                    }
+                                    if (!$mode)
+                                        echo form_dropdown('bir_stat', $stat, $birth->bir_stat, 'class="form-control", id="bir_stat"');
+                                    else
+                                        echo form_dropdown('bir_stat', $stat, set_value('stat_id'), 'class="form-control", id="bir_stat"');
+                                ?>
+                            </div>
+                        </div>
                         <div class="text-center">
                             <input type="hidden" id="mode" name="mode" value="<?= $mode ?>" />
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>

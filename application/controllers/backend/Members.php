@@ -68,6 +68,7 @@ class Members extends CI_Controller {
 			$where['mem_id !='] = $this->config->item('no_member');
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
+			$where['mem_stat !='] = $this->config->item('delete_stat');
 			$data['member'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
             $config['base_url'] = base_url().'/backend/Members/index';
@@ -194,6 +195,7 @@ class Members extends CI_Controller {
 			if ($data['mem_type'] != $this->config->item('all_member'))
 				$where['mem_type'] = $data['mem_type'];
 			$where['mem_id !='] = $this->config->item('no_member');
+			$where['mem_stat !='] = $this->config->item('delete_stat');
 			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
 
 			// var_dump($data['member']);
@@ -1067,7 +1069,7 @@ class Members extends CI_Controller {
 					$data = array(
 						'mem_user' => $this->session->userdata('use_id'),
 						'mem_date' => date('Y-m-d H:i:s'),
-						'mem_stat' => $this->config->item('rejected'),
+						'mem_stat' => $this->config->item('delete_stat'),
 					);
                     if ($this->uri->segment(5)){
                         $data['mem_app_note'] = urldecode($this->uri->segment(5));
@@ -1076,7 +1078,7 @@ class Members extends CI_Controller {
 					$this->db->trans_start();
 					$res = $this->MemberModel->update_members($data, $where);
 					if ($res){
-						$dataKennel['ken_stat'] = $this->config->item('rejected');
+						$dataKennel['ken_stat'] = $this->config->item('delete_stat');
 						$dataKennel['ken_user'] = $this->session->userdata('use_id');
 						$dataKennel['ken_date'] = date('Y-m-d H:i:s');
 						$wheKennel['ken_member_id'] = $this->uri->segment(4);
@@ -1097,14 +1099,14 @@ class Members extends CI_Controller {
 								'log_app_user' => $member->mem_app_user,
 								'log_date' => date('Y-m-d H:i:s'),
 								'log_app_date' => date('Y-m-d', strtotime($member->mem_app_date)),
-								'log_stat' => $this->config->item('rejected'),
+								'log_stat' => $this->config->item('delete_stat'),
 								'log_mem_type' => $this->config->item('pro_member'),
 							);
 							$log = $this->LogmemberModel->add_log($dataLog);
 							if ($log){
 								$dataKennelLog = array(
 									'log_kennel_id' => $member->ken_id,
-									'log_stat' => $this->config->item('rejected'),
+									'log_stat' => $this->config->item('delete_stat'),
 									'log_user' => $this->session->userdata('use_id'),
 									'log_date' => date('Y-m-d H:i:s')
 								);
@@ -1113,7 +1115,7 @@ class Members extends CI_Controller {
 									'log_kennel_name' => $member->ken_name,
 									'log_kennel_type_id' => $member->ken_type_id,
 									'log_kennel_photo' => $member->ken_photo,
-									'log_stat' => $this->config->item('rejected'),
+									'log_stat' => $this->config->item('delete_stat'),
 									'log_user' => $this->session->userdata('use_id'),
 									'log_date' => date('Y-m-d H:i:s')
 								);

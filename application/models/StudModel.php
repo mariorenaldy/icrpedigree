@@ -16,10 +16,13 @@ class StudModel extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function get_studs($where, $offset = 0, $limit = 0){
+    public function get_studs($where, $offset = 0, $limit = 0, $where_not_in = null){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){
             $this->db->where($where);
+        }
+        if ($where_not_in != null) {
+            $this->db->where_not_in('stu_stat', $where_not_in);
         }
         $this->db->join('users','users.use_id = studs.stu_app_user');
         $this->db->join('approval_status','approval_status.stat_id = studs.stu_stat');
@@ -31,10 +34,13 @@ class StudModel extends CI_Model {
         return $this->db->get('studs');
     }
 
-    public function search_studs($like, $where, $offset = 0, $limit = 0){
+    public function search_studs($like, $where, $offset = 0, $limit = 0, $where_not_in = null){
         $this->db->select('*, can_sire.can_photo AS sire_photo, can_dam.can_photo AS dam_photo, can_sire.can_a_s AS sire_a_s, can_dam.can_a_s AS dam_a_s, DATE_FORMAT(stu_stud_date, "%d-%m-%Y") as stu_stud_date, DATE_FORMAT(stu_app_date, "%d-%m-%Y") as stu_app_date');
         if ($where != null){
             $this->db->where($where);
+        }
+        if ($where_not_in != null) {
+            $this->db->where_not_in('stu_stat', $where_not_in);
         }
         if ($like != null) {
             $this->db->group_start();

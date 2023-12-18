@@ -38,7 +38,7 @@ class Canines extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -57,7 +57,7 @@ class Canines extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -68,11 +68,12 @@ class Canines extends CI_Controller {
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$where['can_member_id'] = $this->session->userdata('mem_id');
-			$where['can_stat !='] = $this->config->item('cancelled');
-			$data['canines'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'))->result();
+			// $where['can_stat !='] = $this->config->item('cancelled');
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['canines'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'), $where_not_in)->result();
 
 			$config['base_url'] = base_url().'/frontend/Canines/index';
-			$config['total_rows'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->caninesModel->get_canines($where, 'can_id desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -109,7 +110,7 @@ class Canines extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -128,7 +129,7 @@ class Canines extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -141,11 +142,12 @@ class Canines extends CI_Controller {
 			$like['can_a_s'] = $data['keywords'];
 			$like['can_icr_number'] = $data['keywords'];
 			$where['can_member_id'] = $this->session->userdata('mem_id');
-			$where['can_stat !='] = $this->config->item('cancelled');
-			$data['canines'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'))->result();
+			// $where['can_stat !='] = $this->config->item('cancelled');
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['canines'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], $this->config->item('canine_count'), $where_not_in)->result();
 
 			$config['base_url'] = base_url().'/frontend/Canines/search';
-			$config['total_rows'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->caninesModel->search_canines($like, $where, 'can_id desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_canines', $data);
 		}

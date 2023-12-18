@@ -36,7 +36,7 @@
                                     if (!$mode)
                                         echo form_dropdown('can_member_id', $mem, $canine->can_member_id, 'class="form-control", id="can_member_id"');
                                     else
-                                        echo form_dropdown('can_member_id', $mem, set_value('can_member_id'), 'class="form-control", id="can_member_id"');
+                                        echo form_dropdown('can_member_id', $mem, null, 'class="form-control", id="can_member_id"');
                                 ?>
                             </div>
                         </div>
@@ -49,9 +49,9 @@
                                         $ken[$row->ken_id] = $row->ken_name;
                                     }
                                     if (!$mode)
-                                        echo form_dropdown('can_kennel_id', $ken, $canine->can_kennel_id, 'class="form-control"');
+                                        echo form_dropdown('can_kennel_id', $ken, $canine->can_kennel_id, 'class="form-control", id="can_kennel_id"');
                                     else
-                                        echo form_dropdown('can_kennel_id', $ken, set_value('can_kennel_id'), 'class="form-control"');
+                                        echo form_dropdown('can_kennel_id', $ken, null, 'class="form-control", id="can_kennel_id"');
                                 ?>
                             </div>
                         </div>
@@ -184,18 +184,6 @@
                                 <?php } ?>
                             </div>
                         </div>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Payment Proof</label>
-                            <div class="col-md-12 text-center">
-                                <?php if ($canine->can_pay_photo && $canine->can_pay_photo != '-'){ ?>
-                                    <img id="imgPreviewProof" width="15%" src="<?= base_url().'uploads/payment/'.$canine->can_pay_photo ?>">
-                                <?php } else { ?>
-                                    <img id="imgPreviewProof" width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>">
-                                <?php } ?>
-                                <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
-                                <input type="hidden" name="attachment_proof" id="attachment_proof">
-                            </div>
-                        </div>
                         <div class="text-center">
                             <button id="buttonSubmit" class="btn btn-primary" type="submit">Save</button>
                             <button class="btn btn-danger" type="button" onclick="history.go(-1);">Back</button>
@@ -278,7 +266,34 @@
         });
 
         $('#can_member_id').on("change", function(){
-            $('#formCanine').attr('action', "<?= base_url(); ?>backend/Canines/search_kennel_update").submit();
+            // $('#formCanine').attr('action', "<?= base_url(); ?>backend/Canines/search_kennel_update").submit();
+            let can_member_id = $('#can_member_id').val();
+            $.ajax({
+                url: "<?= base_url() ?>backend/Canines/search_kennel",
+                method: 'post',
+                data: {can_member_id: can_member_id},
+                success: function(response){
+                    if(response){
+                        let kenDropdown = $('#can_kennel_id')
+                        kenDropdown.empty();
+                        
+                        let result = JSON.parse(response);
+                        let newOptions = [];
+                        $.each(result, function(value, text) {
+                            newOptions[text.ken_id] = text.ken_name;
+                        });
+
+                        $.each(newOptions, function(value, text) {
+                            if(text !== undefined){
+                                kenDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                            }
+                        });
+                    }
+                    else{
+                        $('#error-modal').modal('show');
+                    }
+                }
+            });
         });
 
         $('#buttonSubmit').on("click", function(e){
@@ -287,22 +302,17 @@
         });
 
         const imageInput = document.querySelector("#imageInput");
-        const imageInputProof = document.querySelector("#imageInputProof");
         var croppingImage = null;
 
         var resetImage = function(input) {
             if(input === "canine"){
                 imageInput.value = null;
             }
-            else if(input === "proof"){
-                imageInputProof.value = null;
-            }
         };
 
         $(document).ready(function(){
             var $modal = $('#modal');
             var preview = document.getElementById('imgPreview');
-            var previewProof = document.getElementById('imgPreviewProof');
             var modalImage = document.getElementById('sample_image');
             var latestImage = null;
             var cropper;
@@ -311,12 +321,6 @@
             imageInput.addEventListener("change", function(event) {
                 croppingImage = "canine";
                 ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-                showModalImg(event);
-            })
-
-            imageInputProof.addEventListener("change", function(event) {
-                croppingImage = "proof";
-                ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
                 showModalImg(event);
             })
 
@@ -360,10 +364,6 @@
                         if(croppingImage === "canine"){
                             preview.src = base64data;
                             $('#attachment').val(base64data);
-                        }
-                        else if(croppingImage === "proof"){
-                            previewProof.src = base64data;
-                            $('#attachment_proof').val(base64data);
                         }
                         $modal.modal('hide');
                     };

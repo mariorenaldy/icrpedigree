@@ -23,6 +23,7 @@ class Stambums extends CI_Controller {
 		}
 
     public function index(){
+        $this->updateExpired();
         $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
         $config['per_page'] = $this->config->item('backend_stb_count');
         $config['uri_segment'] = 4;
@@ -62,13 +63,13 @@ class Stambums extends CI_Controller {
 
         $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
-        // $where['stb_stat'] = $this->config->item('accepted');
-        $where['stb_stat !='] = $this->config->item('processed');
+        // $where['stb_stat !='] = $this->config->item('processed');
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
+        $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], $this->config->item('backend_stb_count'), $where_not_in)->result();
 
         $config['base_url'] = base_url().'/backend/Stambums/index';
-        $config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], 0)->num_rows();
+        $config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
         $this->pagination->initialize($config);
 
         $data['keywords'] = '';
@@ -152,13 +153,13 @@ class Stambums extends CI_Controller {
         }
         else  
             $like = null;
-        // $where['stb_stat'] = $this->config->item('accepted');
-        $where['stb_stat !='] = $this->config->item('processed');
+        // $where['stb_stat !='] = $this->config->item('processed');
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_stb_count'))->result();
+        $data['stambum'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_stb_count'), $where_not_in)->result();
 
         $config['base_url'] = base_url().'/backend/Stambums/search';
-        $config['total_rows'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
+        $config['total_rows'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0, $where_not_in)->num_rows();
         $this->pagination->initialize($config);
         $this->load->view('backend/view_stambums', $data);
     }
@@ -624,7 +625,7 @@ class Stambums extends CI_Controller {
                                             'stb_breed' => $dam->can_breed,
                                             'stb_gender' => $this->input->post('stb_gender'.$i),
                                             'stb_date_of_birth' => $dob,
-                                            'stb_reg_date' => date("Y/m/d"),
+                                            'stb_reg_date' => date('Y-m-d H:i:s'),
                                             'stb_photo' => $photo[$i],
                                             'stb_pay_photo' => $photoProof,
                                             'stb_pay_invoice' => '-',
@@ -1070,7 +1071,7 @@ public function delete(){
             $where['stb_id'] = $this->uri->segment(4);
             $stb = $this->stambumModel->get_stambum($where)->row();
             $dataStb = array(
-                'stb_stat' => $this->config->item('rejected'),
+                'stb_stat' => $this->config->item('delete_stat'),
                 'stb_user' => $this->session->userdata('use_id'),
                 'stb_app_user' => $this->session->userdata('use_id'),
                 'stb_date' => date('Y-m-d H:i:s'),
@@ -1091,7 +1092,7 @@ public function delete(){
                 'log_date_of_birth' => date('Y-m-d', strtotime($stb->stb_date_of_birth)),
                 'log_photo' => $stb->stb_photo,
                 'log_pay_photo' => $stb->stb_pay_photo,
-                'log_stat' => $this->config->item('rejected'),
+                'log_stat' => $this->config->item('delete_stat'),
                 'log_user' => $this->session->userdata('use_id'),
                 'log_app_user' => $this->session->userdata('use_id'),
                 'log_date' => date('Y-m-d H:i:s'),
@@ -1198,4 +1199,19 @@ public function delete(){
             redirect('backend/Canines');
         }
     }
+    function updateExpired(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired payment stambum status
+        $stambums = $this->stambumModel->update_expired_stambum();
+        
+        if ($stambums) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
+        }
+	}
 }

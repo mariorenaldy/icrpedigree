@@ -598,6 +598,7 @@ $config['completed'] = 3;
 $config['cancelled'] = 4;
 $config['not_paid'] = 5;
 $config['payment_failed'] = 6;
+$config['delete_stat'] = 7;
 
 $config['order_not_paid'] = 1;
 $config['order_paid'] = 2;

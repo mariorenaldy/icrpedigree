@@ -56,12 +56,13 @@ class Canines extends CI_Controller {
         $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
         // $where['can_stat'] = $this->config->item('accepted');
-        $where['can_stat !='] = $this->config->item('processed');
+        // $where['can_stat !='] = $this->config->item('processed');
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('backend_canine_count'))->result();
+        $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('backend_canine_count'), $where_not_in)->result();
         
         $config['base_url'] = base_url().'/backend/Canines/index';
-        $config['total_rows'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], 0)->num_rows();
+        $config['total_rows'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
         $this->pagination->initialize($config);
 
         $data['keywords'] = '';
@@ -148,12 +149,13 @@ class Canines extends CI_Controller {
         else
             $like = null;
         // $where['can_stat'] = $this->config->item('accepted');
-        $where['can_stat !='] = $this->config->item('processed');
+        // $where['can_stat !='] = $this->config->item('processed');
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
-        $data['canine'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_canine_count'))->result();
+        $data['canine'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_canine_count'), $where_not_in)->result();
 
         $config['base_url'] = base_url().'/backend/Canines/search';
-        $config['total_rows'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
+        $config['total_rows'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0, $where_not_in)->num_rows();
         $this->pagination->initialize($config);
         $this->load->view('backend/view_canines', $data);
     }
@@ -354,25 +356,33 @@ class Canines extends CI_Controller {
         }
     }
 
+    // public function search_kennel(){
+    //     if ($this->session->userdata('use_username')) {
+    //         $wheTrah['tra_stat != '] = $this->config->item('deleted');
+    //         $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
+
+    //         $like['mem_name'] = $this->input->post('mem_name');
+    //         $like['ken_name'] = $this->input->post('mem_name');
+    //         $where['mem_stat'] = $this->config->item('accepted');
+    //         $where['ken_stat'] = $this->config->item('accepted');
+    //         $data['member'] = $this->memberModel->search_members($like, $where)->result();
+
+    //         $whe['ken_member_id'] =  $this->input->post('can_member_id');
+    //         $whe['ken_stat'] = $this->config->item('accepted');
+    //         $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
+    //         $this->load->view('backend/add_canine', $data);
+    //     }
+    //     else {
+    //       redirect("backend/Users/login");
+    //     }
+    // }
+
     public function search_kennel(){
-        if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat != '] = $this->config->item('deleted');
-            $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
-
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-            $where['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
-
-            $whe['ken_member_id'] =  $this->input->post('can_member_id');
-            $whe['ken_stat'] = $this->config->item('accepted');
-            $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
-            $this->load->view('backend/add_canine', $data);
-        }
-        else {
-          redirect("backend/Users/login");
-        }
+        $whe['ken_member_id'] =  $this->input->post('can_member_id');
+        $whe['ken_stat'] = $this->config->item('accepted');
+        $kennel = $this->kennelModel->get_kennels($whe)->result();
+		$json = json_encode($kennel);
+		echo $json;
     }
   
     public function validate_add(){ 
@@ -381,20 +391,13 @@ class Canines extends CI_Controller {
             $this->form_validation->set_rules('can_member_id', 'Member id ', 'trim|required');
             $this->form_validation->set_rules('can_kennel_id', 'Kennel id ', 'trim|required');
             $this->form_validation->set_rules('can_a_s', 'Name ', 'trim|required');
-            $this->form_validation->set_rules('can_reg_number', 'Current registration number', 'trim|required');
-            $this->form_validation->set_rules('can_icr_number', 'ICR number ', 'trim|required');
-            $this->form_validation->set_rules('can_chip_number', 'Microchip number ', 'trim');
-            $this->form_validation->set_rules('can_color', 'Color ', 'trim|required');
             $this->form_validation->set_rules('can_date_of_birth', 'Date of Birth ', 'trim|required');
         
             $wheTrah['tra_stat != '] = $this->config->item('deleted');
             $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
 
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-            $where['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+            $where['mem_id'] = $this->input->post('can_member_id');
+            $data['member'] = $this->memberModel->get_members($where)->result();
 
             $whe['ken_member_id'] =  $this->input->post('can_member_id');
             $whe['ken_stat'] = $this->config->item('accepted');
@@ -434,36 +437,6 @@ class Canines extends CI_Controller {
                     }
                 }
 
-                if (!$err){
-                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
-                        $uploadedProof = $_POST['attachment_proof'];
-                        $image_array_1 = explode(";", $uploadedProof);
-                        $image_array_2 = explode(",", $image_array_1[1]);
-                        $uploadedProof = base64_decode($image_array_2[1]);
-                
-                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-                        }
-                
-                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
-                        } else{
-                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
-                                $err++;
-                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
-                            }
-                        }
-
-                        if(!$err){
-                            file_put_contents($imgProof_name, $uploadedProof);
-							$photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
-                        }
-                    }
-                }
-
                 if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
                     $err++;
                     $this->session->set_flashdata('error_message', 'Duplicate ICR number');
@@ -498,11 +471,11 @@ class Canines extends CI_Controller {
 
                     $dataCan = array(
                         'can_member_id' => $this->input->post('can_member_id'),
-                        'can_reg_number' => strtoupper($this->input->post('can_reg_number')),
+                        'can_reg_number' => '-',
                         'can_breed' => $this->input->post('can_breed'),
                         'can_gender' => $this->input->post('can_gender'),
                         'can_date_of_birth' => $dob,
-                        'can_color' => $this->input->post('can_color'),
+                        'can_color' => '-',
                         'can_kennel_id' => $this->input->post('can_kennel_id'),
                         'can_reg_date' => date("Y/m/d"),
                         'can_photo' => $photo,
@@ -510,12 +483,22 @@ class Canines extends CI_Controller {
                         'can_stat' => $this->config->item('accepted'),
                         'can_app_user' => $this->session->userdata('use_id'),
                         'can_app_date' => date('Y-m-d H:i:s'),
-                        'can_chip_number' => $this->input->post('can_chip_number'),
-                        'can_icr_number' => $this->input->post('can_icr_number'),
+                        'can_chip_number' => '-',
+                        'can_icr_number' => '-',
                         'can_note' => $this->input->post('can_note'),
                         'can_user' => $this->session->userdata('use_id'),
                         'can_date' => date('Y-m-d H:i:s'),
                     );
+
+                    if($this->input->post('can_color')){
+                        $dataCan['can_color'] = $this->input->post('can_color');
+                    }
+                    if($this->input->post('can_chip_number')){
+                        $dataCan['can_chip_number'] = $this->input->post('can_chip_number');
+                    }
+                    if($this->input->post('can_icr_number')){
+                        $dataCan['can_icr_number'] = $this->input->post('can_icr_number');
+                    }
 
                     // nama diubah berdasarkan kennel
                     if (!$this->input->post('remove')){
@@ -684,39 +667,6 @@ class Canines extends CI_Controller {
         }
     }
 
-    public function search_kennel_update(){
-        if ($this->session->userdata('use_username')) {
-            $wheTrah['tra_stat != '] = $this->config->item('deleted');
-            $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
-            $where['can_id'] = $this->input->post('can_id');
-            $data['canine'] = $this->caninesModel->get_canines($where)->row();
-
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $wheMember['mem_stat'] = $this->config->item('accepted');
-            $wheMember['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
-
-            if ($data['member']){
-                $wheKennel['ken_member_id'] =  $this->input->post('can_member_id');
-                $wheKennel['ken_stat'] = $this->config->item('accepted');
-                $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
-            }
-            else{
-                $wheMember['mem_id'] = $data['canine']->can_member_id;
-                $data['member'] = $this->memberModel->get_members($wheMember)->result();
-                $wheKennel['ken_member_id'] = $data['canine']->can_member_id;
-                $wheKennel['ken_stat'] = $this->config->item('accepted');
-                $data['kennel'] = $this->kennelModel->get_kennels($wheKennel)->result();
-            }
-            $data['mode'] = 1;
-            $this->load->view('backend/edit_canine', $data);
-        }
-        else {
-            redirect("backend/Users/login");
-        }
-    }
-
     public function validate_edit_canine(){ 
         if ($this->session->userdata('use_username')) {
             $this->form_validation->set_error_delimiters('<div>', '</div>');
@@ -734,11 +684,8 @@ class Canines extends CI_Controller {
             $where['can_id'] = $this->input->post('can_id');
             $data['canine'] = $this->caninesModel->get_canines($where)->row();
             
-            $like['mem_name'] = $this->input->post('mem_name');
-            $like['ken_name'] = $this->input->post('mem_name');
-            $wheMember['mem_stat'] = $this->config->item('accepted');
-            $wheMember['ken_stat'] = $this->config->item('accepted');
-            $data['member'] = $this->memberModel->search_members($like, $wheMember)->result();
+            $whereMem['mem_id'] = $this->input->post('can_member_id');
+            $data['member'] = $this->memberModel->get_members($whereMem)->result();
 
             if ($data['member']){
                 $wheKennel['ken_member_id'] =  $this->input->post('can_member_id');
@@ -785,31 +732,6 @@ class Canines extends CI_Controller {
                     }
                 }
 
-                if (!$err){
-                    if (isset($_POST['attachment_proof']) && !empty($_POST['attachment_proof'])){
-                        $uploadedProof = $_POST['attachment_proof'];
-                        $image_array_1 = explode(";", $uploadedProof);
-                        $image_array_2 = explode(",", $image_array_1[1]);
-                        $uploadedProof = base64_decode($image_array_2[1]);
-            
-                        if ((strlen($uploadedProof) > $this->config->item('file_size'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-                        }
-            
-                        $imgProof_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-                        if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
-                            $err++;
-                            $this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
-                        } else{
-                            if (is_file($imgProof_name) and !is_writable($imgProof_name)) {
-                                $err++;
-                                $this->session->set_flashdata('error_message', 'File already exists and not writable.');
-                            }
-                        }
-                    }
-                }
-
                 if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_icr_number', $this->input->post('can_icr_number'))){
                     $err++;
                     $this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
@@ -847,10 +769,6 @@ class Canines extends CI_Controller {
                         file_put_contents($img_name, $uploadedImg);
                         $photo = str_replace($this->config->item('path_canine'), '', $img_name);
                     }
-                    if (isset($uploadedProof)){
-                        file_put_contents($imgProof_name, $uploadedProof);
-                        $photoProof = str_replace($this->config->item('path_payment'), '', $imgProof_name);
-                    }
 
                     $piece = explode("-", $this->input->post('can_date_of_birth'));
                     $dob = $piece[2] . "-" . $piece[1] . "-" . $piece[0];
@@ -884,16 +802,6 @@ class Canines extends CI_Controller {
                         if ($data['canine']->can_photo != '-'){
                             $photo = $data['canine']->can_photo;
                             $dataCan['can_photo'] = $data['canine']->can_photo;
-                        }
-                    }
-
-                    if ($photoProof != '-'){
-                        $dataCan['can_pay_photo'] = $photoProof;
-                    }
-                    else{
-                        if ($data['canine']->can_pay_photo != '-'){
-                            $photoProof = $data['canine']->can_pay_photo;
-                            $dataCan['can_pay_photo'] = $data['canine']->can_pay_photo;
                         }
                     }
                     
@@ -1248,7 +1156,7 @@ public function validate_edit_pedigree(){
             if ($this->session->userdata('use_username')){
                 $err = 0;
                 $where['can_id'] = $this->uri->segment(4);
-                $data['can_stat'] = $this->config->item('rejected');
+                $data['can_stat'] = $this->config->item('delete_stat');
                 $data['can_user'] = $this->session->userdata('use_id');
                 $data['can_app_user'] = $this->session->userdata('use_id');
                 $data['can_date'] = date('Y-m-d H:i:s');
@@ -1270,7 +1178,7 @@ public function validate_edit_pedigree(){
                     'log_kennel_id' => $oldCan->can_kennel_id,
                     'log_photo' => $oldCan->can_photo,
                     'log_pay_photo' => $oldCan->can_pay_photo,
-                    'log_stat' => $this->config->item('rejected'),
+                    'log_stat' => $this->config->item('delete_stat'),
                     'log_user' => $this->session->userdata('use_id'),
                     'log_app_user' => $this->session->userdata('use_id'),
                     'log_date' => date('Y-m-d H:i:s'),
@@ -1286,7 +1194,7 @@ public function validate_edit_pedigree(){
 
                 if($stb){
                     $dataStb = array(
-                        'stb_stat' => $this->config->item('rejected'),
+                        'stb_stat' => $this->config->item('delete_stat'),
                         'stb_user' => $this->session->userdata('use_id'),
                         'stb_app_user' => $this->session->userdata('use_id'),
                         'stb_date' => date('Y-m-d H:i:s'),
@@ -1307,7 +1215,7 @@ public function validate_edit_pedigree(){
                         'log_date_of_birth' => date('Y-m-d', strtotime($stb->stb_date_of_birth)),
                         'log_photo' => $stb->stb_photo,
                         'log_pay_photo' => $stb->stb_pay_photo,
-                        'log_stat' => $this->config->item('rejected'),
+                        'log_stat' => $this->config->item('delete_stat'),
                         'log_user' => $this->session->userdata('use_id'),
                         'log_app_user' => $this->session->userdata('use_id'),
                         'log_date' => date('Y-m-d H:i:s'),

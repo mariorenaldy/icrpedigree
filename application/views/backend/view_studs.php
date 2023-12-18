@@ -56,7 +56,7 @@
                         <?php
                             $i = 0; 
                             foreach ($stud AS $s){ 
-                                if (!$birth[$i]){ ?>
+                                // if (!$birth[$i]){ ?>
                             <tr>
                                 <td>
                                     <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $s->stu_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Stud"><i class="fa fa-edit"></i></button>
@@ -91,7 +91,7 @@
                                 </td>
                             </tr>
                         <?php
-                                }
+                                // }
                             $i++; 
                         } ?>
                         </tbody>

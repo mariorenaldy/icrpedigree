@@ -118,7 +118,7 @@
                             <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $c->can_pay_invoice;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $c->can_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
-                            <?php if ($c->can_stat == $this->config->item('rejected')){ ?>
+                            <?php if ($c->can_stat == $this->config->item('rejected') && $c->pay_name == $this->config->item('upload_proof')){ ?>
                                 <img src="<?= base_url('uploads/payment/'.$c->can_pay_photo) ?>" class="d-none img-fluid img-thumbnail" alt="payment" id="myProof<?= $c->can_id ?>">
                                 <button type="button" class="btn btn-light mb-1" onclick="display('myProof<?= $c->can_id ?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_see_proof"); ?>"><i class="fa fa-receipt"></i></button>
                             <?php } ?>

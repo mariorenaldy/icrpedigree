@@ -38,7 +38,7 @@ class Orders extends CI_Controller
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -57,7 +57,7 @@ class Orders extends CI_Controller
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -122,7 +122,7 @@ class Orders extends CI_Controller
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -141,7 +141,7 @@ class Orders extends CI_Controller
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 

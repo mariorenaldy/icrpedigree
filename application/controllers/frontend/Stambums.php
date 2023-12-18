@@ -24,6 +24,7 @@ class Stambums extends CI_Controller {
     }
 
 	public function index(){
+		$this->updateExpired();
 		if ($this->session->userdata('mem_id')){
             $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
 			$config['per_page'] = $this->config->item('stb_count');
@@ -35,7 +36,7 @@ class Stambums extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -54,7 +55,7 @@ class Stambums extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -65,10 +66,11 @@ class Stambums extends CI_Controller {
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$where['stb_member_id'] = $this->session->userdata('mem_id');
-			$data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], $this->config->item('stb_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], $this->config->item('stb_count'), $where_not_in)->result();
 			
             $config['base_url'] = base_url().'/frontend/Stambums/index';
-			$config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->stambumModel->get_stambum($where, 'stb_reg_date desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -105,7 +107,7 @@ class Stambums extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -124,7 +126,7 @@ class Stambums extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -136,10 +138,11 @@ class Stambums extends CI_Controller {
 
 			$like['stb_a_s'] = $data['keywords'];
 			$where['stb_member_id'] = $this->session->userdata('mem_id');
-			$data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], $this->config->item('stb_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['stambum'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], $this->config->item('stb_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/frontend/Stambums/search';
-			$config['total_rows'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->stambumModel->search_stambum($like, $where, 'stb_a_s', $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_stambums', $data);
 		}
@@ -157,7 +160,7 @@ class Stambums extends CI_Controller {
 
 				if ($data['birth']->bir_stat == $this->config->item('accepted')){ // harus kurang dari 100 hari
 					$whereStb['stb_bir_id'] = $this->uri->segment(4);
-					$whereStb['stb_stat != '] = $this->config->item('rejected');
+					$whereStb['stb_stat = '] = $this->config->item('accepted');
 					$stb = $this->stambumModel->get_stambum($whereStb)->num_rows();
 					if (!$stb){
 						$err = 0;
@@ -282,6 +285,7 @@ class Stambums extends CI_Controller {
 						$this->form_validation->set_rules('stb_a_s'.$i, 'Nama anjing #'.$i.' ', 'trim|required');
 					}
 					$this->form_validation->set_rules('count', 'Jumlah anjing ', 'trim|required');
+					$this->form_validation->set_rules('payment_method', 'Metode Pembayaran ', 'trim|required');
 				}
 				else{
 					$this->form_validation->set_message('required', '%s required');
@@ -290,6 +294,7 @@ class Stambums extends CI_Controller {
 						$this->form_validation->set_rules('stb_a_s'.$i, 'Name of dog #'.$i.' ', 'trim|required');
 					}
 					$this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
+					$this->form_validation->set_rules('payment_method', 'Payment Method ', 'trim|required');
 				}
 			}
 			
@@ -345,13 +350,15 @@ class Stambums extends CI_Controller {
 							}
 						}
 		
-						if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])){
-							$err = 4;
-							if ($site_lang == 'indonesia') {
-								$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
-							}
-							else{
-								$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+						if($this->input->post('payment_method') == 'upload-proof'){
+							if (!isset($_POST['attachment_proof']) || empty($_POST['attachment_proof'])){
+								$err = 4;
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Foto Bukti Pembayaran wajib diisi');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Photo Proof of Payment is required');
+								}
 							}
 						}
 		
@@ -404,7 +411,7 @@ class Stambums extends CI_Controller {
 							}
 						}
 		
-						if (!$err){
+						if (!$err && $this->input->post('payment_method') == 'upload-proof'){
 							$uploadedImg = $_POST['attachment_proof'];
 							$image_array_1 = explode(";", $uploadedImg);
 							$image_array_2 = explode(",", $image_array_1[1]);
@@ -511,7 +518,7 @@ class Stambums extends CI_Controller {
 										$this->session->set_flashdata('error_message', 'Nama anjing #'.$i.' sudah terdaftar');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'The dog #'.$i.' name has been registered');
+										$this->session->set_flashdata('error_message', 'The dog #'.$i.' name has already been registered');
 									}
 								}
 							}
@@ -522,6 +529,8 @@ class Stambums extends CI_Controller {
 		
 								$this->db->trans_strict(FALSE);
 								$this->db->trans_start();
+
+								$inv = $this->generateInvoice();
 	
 								for ($i = 1; $i <= $countNum; $i++) {
 									$dataStb = array(
@@ -530,15 +539,28 @@ class Stambums extends CI_Controller {
 										'stb_breed' => $dam->can_breed,
 										'stb_gender' => $this->input->post('stb_gender'.$i),
 										'stb_date_of_birth' => $dob,
-										'stb_reg_date' => date("Y/m/d"),
+										'stb_reg_date' => date('Y-m-d H:i:s'),
 										'stb_photo' => $photo[$i],
 										'stb_pay_photo' => $photoProof,
+										'stb_pay_invoice' => '-',
+										'stb_count' => $countNum,
 										'stb_stat' => $this->config->item('saved'),
 										'stb_user' => $this->config->item('system'),
 										'stb_date' => date('Y-m-d H:i:s'),
 										'stb_member_id' => $kennel->mem_id,
 										'stb_kennel_id' => $kennel->ken_id,
 									);
+
+									if($this->input->post('payment_method') == 'upload-proof'){
+										$dataStb['stb_pay_id'] = $this->config->item('upload_proof');
+									}
+									else{
+										$dataStb['stb_pay_id'] = $this->config->item('doku');
+										$dataStb['stb_pay_invoice'] = $inv;
+										$dataStb['stb_stat'] = $this->config->item('not_paid');
+										$dataStb['stb_pay_due_date'] = date('Y-m-d H:i:s', strtotime('1 hour'));
+									}
+
 									$result = $this->stambumModel->add_stambum($dataStb);
 									if (!$result){
 										$err = 15;
@@ -548,9 +570,16 @@ class Stambums extends CI_Controller {
 									$dataBirth['bir_stat'] = $this->config->item('completed');
 									$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
 									if ($bir){
-										$this->db->trans_complete();
-										$this->session->set_flashdata('add_success', true);
-										redirect("frontend/Stambums");
+										if($this->input->post('payment_method') == 'upload-proof'){
+											$this->db->trans_complete();
+											$this->session->set_flashdata('add_success', true);
+											redirect("frontend/Stambums");
+										}
+										else{
+											$this->db->trans_complete();
+											$price = $countNum*150000;
+											redirect("frontend/Payment/checkout/Stambums/".$price."/".$inv);
+										}
 									}
 									else{
 										$err = 16;
@@ -610,76 +639,273 @@ class Stambums extends CI_Controller {
 			redirect("frontend/Members");
 		}
 	}
-
-	public function cancel_all(){
-        if ($this->uri->segment(4)){  
+	public function cek_status($invoice){
+		if ($this->uri->segment(4)){
 			$site_lang = $this->input->cookie('site_lang');
-			if ($this->session->userdata('mem_id')){
-				$wheBirth['bir_id'] = $this->uri->segment(4);
-				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
 
-				if ($data['birth']->bir_stat == $this->config->item('accepted')){ 
-					$whereStb['stb_bir_id'] = $this->uri->segment(4);
-					$dataStb = array(
-						'stb_stat' => $this->config->item('rejected'),
-						'stb_user' => $this->config->item('system'),
-						'stb_date' => date('Y-m-d H:i:s'),
-					);
-					$res = $this->stambumModel->update_stambum($dataStb, $whereStb);
-					if (!$res){
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
+			$where['stb_pay_invoice'] = $invoice;
+			$stambums = $this->stambumModel->get_stambum($where)->result();
+	
+			$clientId = "BRN-0222-1677984841764";
+			$requestId = $invoice;
+			$date = new DateTime("now", new DateTimeZone('UTC'));
+			$requestDate = $date->format('Y-m-d\TH:i:s\Z');
+	
+			$targetPath = "/orders/v1/status/".$requestId;
+			$secretKey = "SK-WjYbHmZGDEhveR9kBxCW";
+			
+			// Prepare Signature Component
+			$componentSignature = "Client-Id:" . $clientId . "\n" . 
+								  "Request-Id:" . $requestId . "\n" .
+								  "Request-Timestamp:" . $requestDate . "\n" . 
+								  "Request-Target:" . $targetPath;
+	
+			// Calculate HMAC-SHA256 base64 from all the components above
+			// $signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+			$signature = $this->generate_signature($componentSignature, $secretKey);
+	
+			// Initiate cURL
+			$ch = curl_init();
+	
+			curl_setopt_array($ch, array(
+				CURLOPT_URL => 'https://api-sandbox.doku.com/orders/v1/status/'.$requestId,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_FAILONERROR => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'GET',
+				CURLOPT_HTTPHEADER => array(
+					'Content-Type: application/json',
+					'Client-Id: '.$clientId,
+					'Request-Id: '.$requestId,
+					'Request-Timestamp: '.$requestDate,
+					'Signature: HMACSHA256='.$signature,
+				),
+			));
+	
+			// Execute the request
+			$result = curl_exec($ch);
+	
+			if (!curl_errno($ch)) {
+				switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+					case 200:  # OK
+						$statRes = json_decode($result)->transaction->status;
+						if($statRes == 'FAILED'){
+							$res = $this->failStambum($stambums);
+							if($res){
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Payment failed');
+								}
+							}
+							else{
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal mengubah status pendaftaran anak anjing');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to change puppy registration status');
+								}
+							}
+							redirect("frontend/Stambums");
+						}
+						if($statRes == 'SUCCESS'){
+							$res = $this->payStambum($stambums);
+							if($res){
+								$this->session->set_flashdata('add_success', true);
+								redirect("frontend/Stambums");
+							}
+							else{
+								if ($site_lang == 'indonesia') {
+									$this->session->set_flashdata('error_message', 'Gagal membayar pendaftaran anak anjing');
+								}
+								else{
+									$this->session->set_flashdata('error_message', 'Failed to pay puppy registration');
+								}
+								redirect("frontend/Stambums");
+							}
+						}
+						if($statRes == 'EXPIRED'){
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'The payment due date has passed');
+							}
+						}
+						if($statRes == 'PENDING'){
+							redirect('frontend/Stambums');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Failed to save puppy report.');
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment failed');
+							}
+							redirect('frontend/Stambums');
 						}
-					}
-                    redirect("frontend/Stambums");
+						break;
+					default:
+						redirect('frontend/Stambums');
 				}
 			}
 			else{
-				redirect("frontend/Members");
+				$this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
+				redirect('frontend/Stambums');
 			}
-        }
-        else{
-			redirect("frontend/Stambums");
-        }
-    }
+	
+			// Close cURL
+			curl_close($ch);
+		}
+		else{
+			redirect("frontend/Members");
+		}
+	}
+	function generateInvoice($length = 8) {
+		$characters = '0123456789';
+		$string = '';
+	
+		for ($i = 0; $i < $length; $i++) {
+			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
+		}
+	
+		$string = 'TESCAN-'.$string;
+		return $string;
+	}
+	function generate_signature($componentSignature, $secretKey){
+		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+		return $signature;
+	}
+	public function payStambum($stambums){
+		$data = array(
+			'stb_stat' => $this->config->item('processed')
+		);
 
-	public function force_complete(){
-        if ($this->uri->segment(4)){  
-			if ($this->session->userdata('mem_id')){
-				$site_lang = $this->input->cookie('site_lang');
-				$wheBirth['bir_id'] = $this->uri->segment(4);
-				$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
 
-				if ($data['birth']->bir_stat == $this->config->item('accepted')){ 
-					$dataBirth = array(
-						'bir_stat' => $this->config->item('completed'),
-						'bir_user' => $this->config->item('system'),
-						'bir_date' => date('Y-m-d H:i:s'),
-					);
-					$res = $this->birthModel->update_births($dataBirth, $wheBirth);
-					if ($res){
-						redirect("frontend/Stambums");
-					}
-					else{
-						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Lapor anak gagal disimpan.');
-						}
-						else{
-							$this->session->set_flashdata('error_message', 'Failed to save puppy report.');
-						}
-						redirect("frontend/Stambums");
-					}
-				}
+		$err = 0;
+		foreach($stambums as $stambum){
+			$where['stb_id'] = $stambum->stb_id;
+			$result = $this->stambumModel->update_stambum($data, $where);
+			if (!$result) {
+				$err++;
+				break;
+			}
+		}
+		if ($err) {
+			$this->db->trans_rollback();
+			return false;
+		}
+		else{
+			$dataBirth['bir_stat'] = $this->config->item('completed');
+			$wheBirth['bir_id'] = $stambums[0]->stb_bir_id;
+			$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+			if ($bir){
+				$this->db->trans_complete();
+				return true;
 			}
 			else{
-				redirect("frontend/Members");
+				$this->db->trans_rollback();
+				return false;
 			}
+		}
+	}
+	public function failStambum($stambums){
+		$data = array(
+			'stb_stat' => $this->config->item('payment_failed')
+		);
+
+		$this->db->trans_strict(FALSE);
+		$this->db->trans_start();
+		$err = 0;
+		foreach($stambums as $stambum){
+			$where['stb_id'] = $stambum->stb_id;
+			$result = $this->stambumModel->update_stambum($data, $where);
+			if (!$result) {
+				$err++;
+				break;
+			}
+		}
+		if ($err) {
+			$this->db->trans_rollback();
+			return false;
+		}
+		else{
+			$this->db->trans_complete();
+			return true;
+		}
+	}
+	public function cancel(){
+		if ($this->uri->segment(4)){
+			$site_lang = $this->input->cookie('site_lang');
+			$stb_id = $this->uri->segment(4);
+			$dataStb = array(
+				'stb_stat' => $this->config->item('cancelled')
+			);
+
+			$err = 0;
+			$whereStb['stb_id'] = $stb_id;
+			$stb = $this->stambumModel->get_stambum($whereStb)->row();
+			$whereStbs['stb_bir_id'] = $stb->stb_bir_id;
+			$stambums = $this->stambumModel->get_stambum($whereStbs)->result();
+			$this->db->trans_strict(FALSE);
+			$this->db->trans_start();
+			foreach($stambums as $stambum){
+				$where['stb_id'] = $stambum->stb_id;
+				$result = $this->stambumModel->update_stambum($dataStb, $where);
+				if (!$result) {
+					$err++;
+					break;
+				}
+			}
+			if (!$err) {
+				$dataBirth['bir_stat'] = $this->config->item('accepted');
+				$wheBirth['bir_id'] = $stambums[0]->stb_bir_id;
+				$bir = $this->birthModel->update_births($dataBirth, $wheBirth);
+				if (!$bir){
+					$err = 101;
+				}
+			}
+
+			if ($err) {
+				$this->db->trans_rollback();
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Gagal membatalkan pendaftaran. Error code: '.$err);
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Failed to cancel registration. Error code: '.$err);
+				}
+				redirect('frontend/Stambums');
+			}
+			else{
+				$this->db->trans_complete();
+				$this->session->set_flashdata('cancel_success', TRUE);
+				redirect('frontend/Stambums');
+			}
+		}
+		else{
+			redirect('frontend/Stambums');
+		}
+	}
+	function updateExpired(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired payment stambum status
+        $stambums = $this->stambumModel->update_expired_stambum();
+        
+        if ($stambums) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
         }
-        else{
-			redirect("frontend/Stambums");
-        }
-    }
+	}
 }

@@ -35,7 +35,7 @@ class Births extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -54,7 +54,7 @@ class Births extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -65,10 +65,11 @@ class Births extends CI_Controller {
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
-			$data['births'] = $this->birthModel->get_births($wheBirth, $page * $config['per_page'], $this->config->item('birth_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['births'] = $this->birthModel->get_births($wheBirth, $page * $config['per_page'], $this->config->item('birth_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/frontend/Births/index';
-			$config['total_rows'] = $this->birthModel->get_births($wheBirth, $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->birthModel->get_births($wheBirth, $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -120,7 +121,7 @@ class Births extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -139,7 +140,7 @@ class Births extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -160,10 +161,11 @@ class Births extends CI_Controller {
 			$wheBirth['bir_member_id'] = $this->session->userdata('mem_id');
 			$like['can_sire.can_a_s'] = $data['keywords'];
 			$like['can_dam.can_a_s'] = $data['keywords'];
-			$data['births'] = $this->birthModel->search_births($like, $wheBirth, $page * $config['per_page'], $this->config->item('birth_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['births'] = $this->birthModel->search_births($like, $wheBirth, $page * $config['per_page'], $this->config->item('birth_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/frontend/Births/search';
-			$config['total_rows'] = $this->birthModel->search_births($like, $wheBirth, $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->birthModel->search_births($like, $wheBirth, $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_births', $data);
 		}
@@ -183,7 +185,7 @@ class Births extends CI_Controller {
 			foreach ($data['births'] as $r){
 				$whereStb = [];
 				$whereStb['stb_bir_id'] = $r->bir_id;
-				$whereStb['stb_stat != '] = $this->config->item('rejected');
+				$whereStb['stb_stat = '] = $this->config->item('accepted');
 				$data['stb'][] = $this->stambumModel->get_stambum($whereStb)->num_rows();
 
 				$piece = explode("-", $r->bir_date_of_birth);

@@ -82,9 +82,13 @@
                             } ?>
                         </div>
                         <div class="col-sm-1 mb-1">
-                            <?php if ($r->stb_stat == $this->config->item('rejected')){ ?>
+                            <?php if ($r->stb_stat == $this->config->item('rejected') && $r->pay_name == $this->config->item('upload_proof')){ ?>
                                 <img src="<?= base_url('uploads/payment/'.$r->stb_pay_photo) ?>" class="d-none img-fluid img-thumbnail" alt="payment" id="myProof<?= $r->stb_id ?>">
                                 <button type="button" class="btn btn-light mb-1" onclick="display('myProof<?= $r->stb_id ?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_see_proof"); ?>"><i class="fa fa-receipt"></i></button>
+                            <?php } ?>
+                            <?php if ($r->stb_stat == $this->config->item('not_paid')){ ?>
+                            <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $r->stb_pay_invoice;?>', '<?= $r->stb_count;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
+                            <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $r->stb_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
                         </div>
                     </div>
@@ -106,10 +110,32 @@
                                     <div class="col-12"><?= lang("can_report_puppy_success"); ?></div>
                                 </div>
                             <?php } ?>
+                            <?php if ($this->session->flashdata('cancel_success')){ ?>
+                                <div class="row">
+                                    <div class="col-12"><?= lang("can_cancel_puppy_success"); ?></div>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-dark" id="confirm-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><?= lang("common_confirm"); ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5><?= lang("can_confirm_cancel_puppy"); ?></h5>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" onclick="cancel()"><?= lang("common_yes"); ?></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetId()"><?= lang("common_no"); ?></button>
                     </div>
                 </div>
             </div>
@@ -137,6 +163,22 @@
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
+        function pay(inv, count){
+            var price = count*150000;
+            window.location = "<?= base_url(); ?>frontend/Payment/checkout/Stambums/"+price+"/"+inv;
+        }
+        let cancelId = null;
+        function cancel(){
+            window.location = "<?= base_url(); ?>frontend/Stambums/cancel/"+cancelId;
+        }
+        function resetId(){
+            cancelId = null;
+        }
+        function confirm(id){
+            cancelId = id;
+            $('#confirm-modal').modal('show');
+        }
+
         function add(){
             window.location = "<?= base_url(); ?>frontend/Births/view_approved";
         }
@@ -156,6 +198,10 @@
         $(document).ready(function(){
             <?php		
                 if ($this->session->flashdata('add_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+            <?php		
+                if ($this->session->flashdata('cancel_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
             <?php if ($this->session->flashdata('error_message')){ ?>

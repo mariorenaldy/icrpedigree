@@ -55,8 +55,9 @@ class Studs extends CI_Controller {
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
 			// $where['stu_stat'] = $this->config->item('accepted');
-			$where['stu_stat !='] = $this->config->item('processed');
-            $data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
+			// $where['stu_stat !='] = $this->config->item('processed');
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+            $data['stud'] = $this->studModel->get_studs(null, $page * $config['per_page'], $this->config->item('backend_stud_count'), $where_not_in)->result();
 
             $data['stat'] = array();
 			$data['birth'] = array();
@@ -96,7 +97,7 @@ class Studs extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/backend/Studs/index';
-            $config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->studModel->get_studs(null, $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 
             $data['keywords'] = '';
@@ -185,14 +186,15 @@ class Studs extends CI_Controller {
 				$where['stu_stud_date'] = $date;
 			}
 			// $where['stu_stat'] = $this->config->item('accepted');
-			$where['stu_stat !='] = $this->config->item('processed');
+			// $where['stu_stat !='] = $this->config->item('processed');
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $data['keywords'];
                 $like['can_dam.can_a_s'] = $data['keywords'];
             }
             else
                 $like = null;
-            $data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('backend_stud_count'))->result();
+            $data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('backend_stud_count'), $where_not_in)->result();
 
             $data['stat'] = array();
 			$data['birth'] = array();
@@ -232,7 +234,7 @@ class Studs extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/backend/Studs/search';
-            $config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 			$this->load->view('backend/view_studs', $data);
 		}
@@ -1642,7 +1644,7 @@ class Studs extends CI_Controller {
 					$data['stu_app_user'] = $this->session->userdata('use_id');
 					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
-					$data['stu_stat'] = $this->config->item('rejected');
+					$data['stu_stat'] = $this->config->item('delete_stat');
                     if ($this->uri->segment(5)){
                         $data['stu_app_note'] = urldecode($this->uri->segment(5));
                     }
@@ -1662,7 +1664,7 @@ class Studs extends CI_Controller {
 							'log_dam_photo' => $oldStud->stu_dam_photo,
 							'log_date' => date('Y-m-d H:i:s'),
 							'log_stud_date' => date('Y-m-d', strtotime($oldStud->stu_stud_date)),
-							'log_stat' => $this->config->item('rejected'),
+							'log_stat' => $this->config->item('delete_stat'),
 						);
 						$log = $this->logstudModel->add_log($dataLog);
 						if ($log){

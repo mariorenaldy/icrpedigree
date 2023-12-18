@@ -7,7 +7,7 @@ class Births extends CI_Controller {
 		public function __construct(){
 			// Call the CI_Controller constructor
 			parent::__construct();
-			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel', 'logstudModel'));
+			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel', 'logstudModel', 'approvalStatusModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
 			$this->load->helper(array('url'));
@@ -56,9 +56,10 @@ class Births extends CI_Controller {
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
 			// $where['bir_stat'] = $this->config->item('accepted');
-			$where['bir_stat !='] = $this->config->item('processed');
+			// $where['bir_stat !='] = $this->config->item('processed');
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
             $where['kennels.ken_stat'] = $this->config->item('accepted');
-			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
+			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'), $where_not_in)->result();
 
 			$data['stambum'] = array();
             $data['stb_date'] = array();
@@ -119,7 +120,7 @@ class Births extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/backend/Births/index';
-            $config['total_rows'] = $this->birthModel->get_births($where, $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->birthModel->get_births($where, $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 
             $data['keywords'] = '';
@@ -197,7 +198,8 @@ class Births extends CI_Controller {
 				$where['bir_date_of_birth'] = $date;
 			}
 			// $where['bir_stat'] = $this->config->item('accepted');
-			$where['bir_stat !='] = $this->config->item('processed');
+			// $where['bir_stat !='] = $this->config->item('processed');
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
             $where['kennels.ken_stat'] = $this->config->item('accepted');
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $this->input->post('keywords');
@@ -205,7 +207,7 @@ class Births extends CI_Controller {
             }
             else
                 $like = null;
-			$data['birth'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], $this->config->item('backend_birth_count'))->result();
+			$data['birth'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], $this->config->item('backend_birth_count'), $where_not_in)->result();
 
 			$data['stambum'] = array();
             $data['stb_date'] = array();
@@ -264,7 +266,7 @@ class Births extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/backend/Births/search';
-            $config['total_rows'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->birthModel->search_births($like, $where, $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 			$this->load->view('backend/view_births', $data);
 		}
@@ -606,6 +608,7 @@ class Births extends CI_Controller {
 			if ($this->uri->segment(4)){
 				$where['bir_id'] = $this->uri->segment(4);
 				$data['birth'] = $this->birthModel->get_births($where)->row();
+				$data['status'] = $this->approvalStatusModel->get_status()->result();
 				$data['mode'] = 0;
 				$this->load->view('backend/edit_birth', $data);
 			}
@@ -687,6 +690,7 @@ class Births extends CI_Controller {
 						$dataBirth = array(
 							'bir_male' => $this->input->post('bir_male'),
 							'bir_female' => $this->input->post('bir_female'),
+							'bir_stat' => $this->input->post('bir_stat'),
 							'bir_date_of_birth' => $date,
 							'bir_user' => $this->session->userdata('use_id'),
 							'bir_date' => date('Y-m-d H:i:s'),
@@ -700,6 +704,7 @@ class Births extends CI_Controller {
 							'log_male' => $this->input->post('bir_male'),
 							'log_female' => $this->input->post('bir_female'),
 							'log_dam_photo' => $damPhoto,
+							'log_stat' => $this->input->post('bir_stat'),
 							'log_date_of_birth' => $date,
 							'log_user' => $this->session->userdata('use_id'),
 							'log_app_user' => $data['birth']->bir_app_user,
@@ -969,7 +974,7 @@ class Births extends CI_Controller {
 					$data['bir_app_user'] = $this->session->userdata('use_id');
 					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_app_date'] = date('Y-m-d H:i:s');
-					$data['bir_stat'] = $this->config->item('rejected');
+					$data['bir_stat'] = $this->config->item('delete_stat');
                     if ($this->uri->segment(5)){
                         $data['bir_app_note'] = urldecode($this->uri->segment(5));
                     }
@@ -990,7 +995,7 @@ class Births extends CI_Controller {
 							'log_male' => $oldBirth->bir_male,
 							'log_female' => $oldBirth->bir_female,
 							'log_date_of_birth' => date('Y-m-d', strtotime($oldBirth->bir_date_of_birth)),
-							'log_stat' => $this->config->item('rejected'),
+							'log_stat' => $this->config->item('delete_stat'),
 						);
 						$log = $this->logbirthModel->add_log($dataLog);
 						if ($log){

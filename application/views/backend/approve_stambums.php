@@ -42,7 +42,9 @@
                                 <th>Date of Birth</th>
                                 <th>Kennel</th>
                                 <th>Owner</th>
-                                <th style="width: 10%">Payment Photo</th>
+                                <th>Payment Method</th>
+                                <th>DOKU Invoice</th>
+                                <th style="width: 10%">Payment Proof</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,6 +68,8 @@
                                     <td class="text-nowrap"><?= $r->stb_date_of_birth; ?></td>
                                     <td><?= $r->ken_name; ?></td>
                                     <td><?= $r->mem_name; ?></td>
+                                    <td><?= $r->pay_name; ?></td>
+                                    <td><?= $r->stb_pay_invoice; ?></td>
                                     <td>
                                         <?php if ($r->stb_pay_photo && $r->stb_pay_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/payment/'.$r->stb_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myProof<?= $r->stb_id ?>" onclick="display('myProof<?= $r->stb_id ?>')">

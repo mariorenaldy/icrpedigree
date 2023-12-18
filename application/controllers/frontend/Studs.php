@@ -34,7 +34,7 @@ class Studs extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -53,7 +53,7 @@ class Studs extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -64,7 +64,8 @@ class Studs extends CI_Controller {
 			$config['attributes'] = array('class' => 'page-link bg-dark text-light');
 
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
-			$data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('stud_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['stud'] = $this->studModel->get_studs($where, $page * $config['per_page'], $this->config->item('stud_count'), $where_not_in)->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -74,7 +75,7 @@ class Studs extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/frontend/Studs/index';
-			$config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->studModel->get_studs($where, $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 
 			$data['keywords'] = '';
@@ -126,7 +127,7 @@ class Studs extends CI_Controller {
 			$config['full_tag_close'] = '</ul>';
 
 			//First link of pagination
-			$config['first_link'] = 'Pertama';
+			$config['first_link'] = 'Pertama / First';
 			$config['first_tag_open'] = '<li>';
 			$config['first_tag_close'] = '</li>';
 
@@ -145,7 +146,7 @@ class Studs extends CI_Controller {
 			$config['next_tag_close'] = '</li>';
 
 			//For LAST PAGE Setup
-			$config['last_link'] = 'Akhir';
+			$config['last_link'] = 'Akhir / Last';
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';
 
@@ -166,7 +167,8 @@ class Studs extends CI_Controller {
 			$where['stu_member_id'] = $this->session->userdata('mem_id');
 			$like['can_sire.can_a_s'] = $data['keywords'];
 			$like['can_dam.can_a_s'] = $data['keywords'];
-			$data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('stud_count'))->result();
+			$where_not_in = array($this->config->item('cancelled'), $this->config->item('delete_stat'));
+			$data['stud'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], $this->config->item('stud_count'), $where_not_in)->result();
 
 			$data['birth'] = array();
 			foreach ($data['stud'] as $s){
@@ -176,7 +178,7 @@ class Studs extends CI_Controller {
 			}
 
             $config['base_url'] = base_url().'/frontend/Studs/search';
-			$config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0)->num_rows();
+			$config['total_rows'] = $this->studModel->search_studs($like, $where, $page * $config['per_page'], 0, $where_not_in)->num_rows();
 			$this->pagination->initialize($config);
 			$this->load->view('frontend/view_studs', $data);
 		}
