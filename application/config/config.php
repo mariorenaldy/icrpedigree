@@ -625,6 +625,8 @@ $config['micro_implanted'] = 3;
 $config['micro_cancelled'] = 4;
 $config['micro_completed'] = 5;
 $config['micro_complained'] = 6;
+$config['micro_not_paid'] = 7;
+$config['micro_payment_failed'] = 8;
 
 $config['free_member'] = 0;
 $config['pro_member'] = 1;

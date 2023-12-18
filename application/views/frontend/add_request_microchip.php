@@ -34,17 +34,35 @@
                                 <input class="form-control" type="text" placeholder="<?= lang('can_appointment_date'); ?>" name="req_datetime" id="req_datetime" value="<?= set_value('req_datetime'); ?>" readonly>
                             </div>
                         </div>
-                        <div class="input-group my-3 gap-3 mt-5 mb-5">
-                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?><br>Rp. 150.000</label>
+                        <div class="input-group mb-3">
+                            <label for="payment_method" class="control-label col-sm-2"><?= lang("common_payment_method"); ?></label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="upload-proof" value="upload-proof" typeText="Manual Transfer">
+                                    <label class="form-check-label" for="upload-proof">
+                                        <?= lang("common_upload_proof"); ?>
+                                        <br>BCA: XXXXXXXXXX<br>Rp. 150.000
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="doku" value="doku" typeText="DOKU">
+                                    <label class="form-check-label" for="doku">
+                                        Payment Gateway DOKU
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-proof input-group my-3 gap-3 mt-5 mb-5">
+                            <label for="stu_dam_id" class="control-label col-sm-12 text-center"><?= lang("common_photo_proof"); ?></label>
                             <div class="col-sm-12 text-center">
-                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/avatar.jpg') ?>">
+                                <img id="imgPreview" width="15%" src="<?= base_url('assets/img/proof.jpg') ?>">
                                 <input type="file" class="upload" id="imageInput" accept="image/jpeg, image/png, image/jpg" onclick="resetImage()"/>
                                 <input type="hidden" name="attachment" id="attachment">
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="button" id="saveBtn">Save</button>
-                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'">Back</button>
+                            <button class="btn btn-primary" type="button" id="saveBtn"><?= lang("common_save"); ?></button>
+                            <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>frontend/Canines'"><?= lang("common_back"); ?></button>
                         </div>
                     </form>
                 </div>
@@ -89,6 +107,10 @@
                             <div class="col">: <span id="confirm-tanggal_pertemuan"></span></div>
                         </div>
                         <div class="row">
+                            <div class="col-4"><?= lang("common_payment_method"); ?></div>
+                            <div class="col">: <span id="confirm-payment_method"></span></div>
+                        </div>
+                        <div class="row input-proof">
                             <div class="col-4"><?= lang("common_photo_proof"); ?></div>
                             <div class="col-auto pe-0">:</div>
                             <div class="col"><img id="confirm-foto" width="50%"/></div>
@@ -145,7 +167,18 @@
             imageInput.value = null;
         };
 
+        $('input[type=radio][name=payment_method]').change(function() {
+            if (this.value == 'upload-proof') {
+                $('.input-proof').show();
+            }
+            else if (this.value == 'doku') {
+                $('.input-proof').hide();
+            }
+        });
+
         $(document).ready(function(){
+            $('.input-proof').hide();
+
             var $modal = $('#modal');
             var image = document.getElementById('imgPreview');
             var modalImage = document.getElementById('sample_image');
@@ -205,6 +238,7 @@
             let saveBtn = $("#saveBtn");
             saveBtn.click(function(){
                 $('#confirm-tanggal_pertemuan').text($('input[name="req_datetime"]').val());
+                $('#confirm-payment_method').text($('input[name=payment_method]:checked').attr("typeText"));
                 $('#confirm-foto').attr("src",  $('#imgPreview').attr("src"));
 
                 $('#confirm-modal').modal('show');

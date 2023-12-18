@@ -57,14 +57,6 @@
                                 <input class="form-control" type="text" placeholder="Appointment Date" id="req_datetime" name="req_datetime" value="<?= set_value('req_datetime'); ?>" autocomplete="off">
                             </div>
                         </div>
-                        <div class="input-group mt-3 mb-3 gap-3">
-                            <label class="control-label col-md-12 text-center">Payment Proof</label>
-                            <div class="col-md-12 text-center">
-                                <img id="imgPreviewProof" width="15%" src="<?= base_url().'assets/img/proof.jpg' ?>">
-                                <input type="file" class="upload" id="imageInputProof" accept="image/jpeg, image/png, image/jpg" onclick="resetImage('proof')"/>
-                                <input type="hidden" name="attachment_proof" id="attachment_proof">
-                            </div>
-                        </div>
                         <div class="input-group mb-3">
                             <label class="control-label col-md-2">Status</label>
                             <div class="col-md-10">
@@ -88,32 +80,6 @@
                             <button class="btn btn-danger" type="button" onclick="window.location = '<?= base_url() ?>backend/Requestmicrochip'">Back</button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade text-dark" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crop Image</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="img-container">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <img src="" id="sample_image" />
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="preview"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="crop" class="btn btn-primary">Crop</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-btn">Batal</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -164,80 +130,12 @@
             e.preventDefault();
             $('#formRequest').attr('action', "<?= base_url(); ?>backend/Requestmicrochip/validate_add").submit();
         });
-
-        const imageInputProof = document.querySelector("#imageInputProof");
-        var croppingImage = null;
-
-        var resetImage = function(input) {
-            if(input === "proof"){
-                imageInputProof.value = null;
-            }
-        };
-
+        var initial = true;
         $(document).ready(function(){
-            var $modal = $('#modal');
-            var previewProof = document.getElementById('imgPreviewProof');
-            var modalImage = document.getElementById('sample_image');
-            var latestImage = null;
-            var cropper;
-            var ratio = <?= $this->config->item('img_width_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-
-            imageInputProof.addEventListener("change", function(event) {
-                croppingImage = "proof";
-                ratio = <?= $this->config->item('img_height_ratio') ?>/<?= $this->config->item('img_height_ratio') ?>;
-                showModalImg(event);
-            })
-
-            function showModalImg(event) {
-                var files = event.target.files;
-                var done = function(url) {
-                    modalImage.src = url;
-                    $modal.modal('show');
-                };
-                if (files && files.length > 0) {
-                    reader = new FileReader();
-                    reader.onload = function(event) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(files[0]);
-                }
+            if($('#req_mem_id').val()){
+                searchDog();
             }
-
-            $modal.on('shown.bs.modal', function() {
-                cropper = new Cropper(modalImage, {
-                    aspectRatio: ratio,
-                    viewMode: <?= $this->config->item('mode') ?>,
-                    preview: '.preview'
-                });
-            }).on('hidden.bs.modal', function() {
-                cropper.destroy();
-                cropper = null;
-            });
-
-            $('#crop').click(function() {
-                canvas = cropper.getCroppedCanvas({
-                    width: <?= $this->config->item('img_width') ?>,
-                    height: <?= $this->config->item('img_height') ?>
-                });
-                canvas.toBlob(function(blob) {
-                    url = URL.createObjectURL(blob);
-                    var reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = function() {
-                        base64data = reader.result;
-                        if(croppingImage === "proof"){
-                            previewProof.src = base64data;
-                            $('#attachment_proof').val(base64data);
-                        }
-                        $modal.modal('hide');
-                    };
-                });
-            });
-
-            $('#cancel-btn').click(function() {
-                resetImage(croppingImage);
-            });
-
+            
             <?php if ($this->session->flashdata('error_message') || validation_errors()){ ?>
                 $('#error-modal').modal('show');
             <?php } ?>
@@ -266,39 +164,7 @@
                                 }
                             });
 
-                            let mem_id = $('#req_mem_id').val();
-                            if(mem_id != null){
-                                $.ajax({
-                                    url: "<?= base_url() ?>backend/Requestmicrochip/search_dog",
-                                    method: 'post',
-                                    data: {mem_id: mem_id},
-                                    success: function(response){
-                                        if(response){
-                                            let dogDropdown = $('#req_can_id')
-                                            dogDropdown.empty();
-                                            
-                                            let result = JSON.parse(response);
-                                            let newOptions = [];
-                                            $.each(result, function(value, text) {
-                                                newOptions[text.can_id] = text.can_a_s;
-                                            });
-
-                                            $.each(newOptions, function(value, text) {
-                                                if(text !== undefined){
-                                                    dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
-                                                }
-                                            });
-                                        }
-                                        else{
-                                            $('#error-modal').modal('show');
-                                        }
-                                    }
-                                });
-                            }
-                            else{
-                                let dogDropdown = $('#req_can_id')
-                                dogDropdown.empty();
-                            }
+                            searchDog();
                         }
                         else{
                             $('#error-modal').modal('show');
@@ -307,8 +173,11 @@
                 });
             });
 
-            $('#req_mem_id').on("change", function(e){
-                e.preventDefault();
+            $('#req_mem_id').on("change", function(){
+                searchDog();
+            });
+
+            function searchDog(){
                 let mem_id = $('#req_mem_id').val();
                 $.ajax({
                     url: "<?= base_url() ?>backend/Requestmicrochip/search_dog",
@@ -316,27 +185,43 @@
                     data: {mem_id: mem_id},
                     success: function(response){
                         if(response){
-                            let dogDropdown = $('#req_can_id')
-                            dogDropdown.empty();
-                            
                             let result = JSON.parse(response);
-                            let newOptions = [];
-                            $.each(result, function(value, text) {
-                                newOptions[text.can_id] = text.can_a_s;
-                            });
+                            if (result === undefined || result.length == 0) {
+                                let dogDropdown = $('#req_can_id')
+                                dogDropdown.empty();
+                                dogDropdown.append("<option value=''>No dogs found</option>");
+                            }
+                            else{
+                                let dogDropdown = $('#req_can_id')
+                                dogDropdown.empty();
+                                
+                                let newOptions = [];
+                                $.each(result, function(value, text) {
+                                    newOptions[text.can_id] = text.can_a_s;
+                                });
+    
+                                $.each(newOptions, function(value, text) {
+                                    if(text !== undefined){
+                                        dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
+                                    }
+                                });
+                            }
 
-                            $.each(newOptions, function(value, text) {
-                                if(text !== undefined){
-                                    dogDropdown.append("<option value='"+value+"'>"+text+"</option>");
-                                }
-                            });
+                            if(initial){
+                                var dogVal;
+                                <?php if(set_value('req_can_id')){ ?>
+                                    dogVal = <?= set_value('req_can_id'); ?>;
+                                    $('#req_can_id [value="'+dogVal+'"]').prop('selected', true);
+                                    initial = false;
+                                <?php } ?>
+                            }
                         }
                         else{
                             $('#error-modal').modal('show');
                         }
                     }
                 });
-            });
+            }
         });
     </script>
 </body>

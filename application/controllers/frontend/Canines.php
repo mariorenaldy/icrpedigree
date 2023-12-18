@@ -7,7 +7,7 @@ class Canines extends CI_Controller {
     public function __construct(){
         // Call the CI_Controller constructor
         parent::__construct();
-        $this->load->model(array('caninesModel','memberModel', 'pedigreesModel', 'trahModel', 'KennelModel'));
+        $this->load->model(array('caninesModel','memberModel', 'pedigreesModel', 'trahModel', 'KennelModel', 'requestmicrochipModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->helper(array('url', 'cookie'));
         $this->load->database();
@@ -28,6 +28,7 @@ class Canines extends CI_Controller {
 	public function index(){
 		if ($this->session->userdata('mem_id')){
 			$this->updateExpired();
+			$this->updateExpiredMicrochip();
 			$page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
 			$config['per_page'] = $this->config->item('canine_count');
 			$config['uri_segment'] = 4;
@@ -701,6 +702,21 @@ class Canines extends CI_Controller {
         $canines = $this->caninesModel->update_expired_canines();
         
         if ($canines) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
+        }
+	}
+	function updateExpiredMicrochip(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired payment canine status
+        $requests = $this->requestmicrochipModel->update_expired_requests();
+        
+        if ($requests) {
             $this->db->trans_complete();
             return true;
         } else {

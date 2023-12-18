@@ -15,7 +15,9 @@ class Requestmicrochip extends CI_Controller {
 	}
 
 	public function index(){
-		$data['req'] = $this->requestmicrochipModel->get_requests()->result();
+		$this->updateExpired();
+		$where_not_in = array($this->config->item('micro_not_paid'),$this->config->item('micro_cancelled'),$this->config->item('micro_payment_failed'));
+		$data['req'] = $this->requestmicrochipModel->get_requests(null, null, 0, 0, $where_not_in)->result();
 		$this->load->view('backend/view_request_microchip', $data);
 	}
 
@@ -41,7 +43,10 @@ class Requestmicrochip extends CI_Controller {
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_datetime' => date('Y-m-d H:i:s', strtotime($request->req_datetime)),
 				'log_reject_note' => $request->req_reject_note,
-				'log_pay_photo' => $request->req_pay_photo
+				'log_pay_photo' => $request->req_pay_photo,
+				'log_pay_id' => $request->req_pay_id,
+				'log_pay_invoice' => $request->req_pay_invoice,
+				'log_pay_due_date' => $request->req_pay_due_date
 			);
 	
 			$err = 0;
@@ -101,7 +106,10 @@ class Requestmicrochip extends CI_Controller {
 				'log_updated_by' => $this->session->userdata('use_id'),
 				'log_datetime' => date('Y-m-d H:i:s', strtotime($request->req_datetime)),
 				'log_reject_note' => $request->req_reject_note,
-				'log_pay_photo' => $request->req_pay_photo
+				'log_pay_photo' => $request->req_pay_photo,
+				'log_pay_id' => $request->req_pay_id,
+				'log_pay_invoice' => $request->req_pay_invoice,
+				'log_pay_due_date' => $request->req_pay_due_date
 			);
 	
 			$err = 0;
@@ -201,7 +209,10 @@ class Requestmicrochip extends CI_Controller {
 						'log_updated_by' => $this->session->userdata('use_id'),
 						'log_datetime' => date('Y-m-d H:i:s', strtotime($request->req_datetime)),
 						'log_reject_note' => $request->req_reject_note,
-						'log_pay_photo' => $request->req_pay_photo
+						'log_pay_photo' => $request->req_pay_photo,
+						'log_pay_id' => $request->req_pay_id,
+						'log_pay_invoice' => $request->req_pay_invoice,
+						'log_pay_due_date' => $request->req_pay_due_date
 					);
 
 					if($this->input->post('dropdown_reason')){
@@ -297,40 +308,6 @@ class Requestmicrochip extends CI_Controller {
                 $this->load->view('backend/edit_request_microchip', $data);
             } else {
 				$err = 0;
-				$proof = '-';
-				if (isset($_POST['attachment']) && !empty($_POST['attachment'])){
-					$uploadedImg = $_POST['attachment'];
-					$image_array_1 = explode(";", $uploadedImg);
-					$image_array_2 = explode(",", $image_array_1[1]);
-					$uploadedImg = base64_decode($image_array_2[1]);
-		
-					if ((strlen($uploadedImg) > $this->config->item('file_size'))) {
-						$err = 1;
-						$this->session->set_flashdata('error_message', 'The file size is too big (> 1 MB).');
-					}
-		
-					$img_name = $this->config->item('path_payment').$this->config->item('file_name_payment');
-					if (!is_dir($this->config->item('path_payment')) or !is_writable($this->config->item('path_payment'))) {
-						$err++;
-						$this->session->set_flashdata('error_message', 'Payment folder not found or not writable.');
-					} else{
-						if (is_file($img_name) and !is_writable($img_name)) {
-							$err++;
-							$this->session->set_flashdata('error_message', 'File already exists and not writable.');
-						}
-					}
-				}
-
-				if (isset($uploadedImg)){
-					file_put_contents($img_name, $uploadedImg);
-					$proof = str_replace($this->config->item('path_payment'), '', $img_name);
-				}
-
-				if ($proof == '-'){
-					if ($data['request']->req_pay_photo != '-'){
-						$proof = $data['request']->req_pay_photo;
-					}
-				}
 
 				$appointmentDate = date('Y-m-d H:i:s', strtotime($this->input->post('req_datetime')));
 				$rejectNote = $this->input->post('req_reject_note');
@@ -340,8 +317,7 @@ class Requestmicrochip extends CI_Controller {
 					'req_updated_at' => date('Y-m-d H:i:s'),
 					'req_updated_by' => $this->session->userdata('use_id'),
 					'req_datetime' => $appointmentDate,
-					'req_reject_note' => $rejectNote,
-					'req_pay_photo' => $proof,
+					'req_reject_note' => $rejectNote
 				);
 
 				$dataLog = array(
@@ -354,7 +330,10 @@ class Requestmicrochip extends CI_Controller {
 					'log_updated_by' => $this->session->userdata('use_id'),
 					'log_datetime' => $appointmentDate,
 					'log_reject_note' => $rejectNote,
-					'log_pay_photo' => $proof,
+					'log_pay_photo' => $data['request']->req_pay_photo,
+					'log_pay_id' => $data['request']->req_pay_id,
+					'log_pay_invoice' => $data['request']->req_pay_invoice,
+					'log_pay_due_date' => $data['request']->req_pay_due_date
 				);
 
 				if (!$err) {
@@ -398,7 +377,7 @@ class Requestmicrochip extends CI_Controller {
 		$like['mem_name'] = $this->input->post('mem_name');
 		$where['mem_stat'] = $this->config->item('accepted');
 		$where['mem_id !='] = $this->config->item('no_member');
-		$member = $this->memberModel->search_members($like, $where)->result();
+		$member = $this->memberModel->search_members($like, $where, 'mem_id desc')->result();
 		$json = json_encode($member);
 		echo $json;
     }
@@ -412,6 +391,9 @@ class Requestmicrochip extends CI_Controller {
     }
 	public function validate_add(){ 
         if ($this->session->userdata('use_username')) {
+			$data['member'] = [];
+			$data['canine'] = [];
+
             $this->form_validation->set_error_delimiters('<div>', '</div>');
             $this->form_validation->set_rules('req_mem_id', 'Member ', 'trim|required');
             $this->form_validation->set_rules('req_can_id', 'Dog ', 'trim|required');
@@ -419,10 +401,12 @@ class Requestmicrochip extends CI_Controller {
 
 			$data['status'] = $this->MicrochipStatusModel->get_status()->result();
 
-            $like['mem_name'] = $this->input->post('mem_name');
-            $where['mem_stat'] = $this->config->item('accepted');
-			$where['mem_id !='] = $this->config->item('no_member');
-            $data['member'] = $this->memberModel->search_members($like, $where)->result();
+			if($this->input->post('req_mem_id')){
+				$like['mem_name'] = $this->input->post('mem_name');
+				$where['mem_stat'] = $this->config->item('accepted');
+				$where['mem_id !='] = $this->config->item('no_member');
+				$data['member'] = $this->memberModel->search_members($like, $where, 'mem_id asc')->result();
+			}
 
 			$wheCan['can_member_id'] = $this->input->post('mem_id');
 			$wheCan['can_stat'] = $this->config->item('accepted');
@@ -554,4 +538,19 @@ class Requestmicrochip extends CI_Controller {
             redirect("backend/Users/login");
         }
     }
+	function updateExpired(){
+        $this->db->trans_strict(FALSE);
+        $this->db->trans_start();
+
+        //update all expired payment canine status
+        $requests = $this->requestmicrochipModel->update_expired_requests();
+        
+        if ($requests) {
+            $this->db->trans_complete();
+            return true;
+        } else {
+            $this->db->trans_rollback();
+            return false;
+        }
+	}
 }

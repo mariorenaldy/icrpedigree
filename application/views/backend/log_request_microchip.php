@@ -25,8 +25,10 @@
                                 <th>Member</th>
                                 <th>Dog's Name</th>
                                 <th>Appointment Date</th>
-                                <th>Payment Proof</th>
                                 <th>Status</th>
+                                <th>Payment Method</th>
+                                <th>DOKU Invoice</th>
+                                <th>Payment Proof</th>
                                 <th>Reject Reason</th>
                             </tr>
                         </thead>
@@ -39,6 +41,9 @@
                                         <td><?= $r->mem_name; ?></td>
                                         <td><?= $r->can_a_s; ?></td>
                                         <td><?= $r->log_datetime; ?></td>
+                                        <td><?= $r->micro_stat_name; ?></td>
+                                        <td><?= $r->pay_name; ?></td>
+                                        <td><?= $r->log_pay_invoice; ?></td>
                                         <td>
                                             <?php
                                                 if ($r->log_pay_photo && $r->log_pay_photo != '-'){
@@ -46,7 +51,6 @@
                                                 }
                                             ?>
                                         </td>
-                                        <td><?= $r->micro_stat_name; ?></td>
                                         <td><?= $r->log_reject_note; ?></td>
                                     </tr>
                                 <?php } ?>

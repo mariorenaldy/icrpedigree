@@ -69,8 +69,10 @@
                                 <th>Dog's Name</th>
                                 <th class="no-sort">Dog's Photo</th>
                                 <th>Appointment Date</th>
-                                <th>Payment Proof</th>
                                 <th>Status</th>
+                                <th>Payment Method</th>
+                                <th>DOKU Invoice</th>
+                                <th class="no-sort">Payment Proof</th>
                                 <th>Reject Reason</th>
                                 <th>Complain Photo</th>
                                 <th>Complain Description</th>
@@ -110,13 +112,15 @@
                                             <img src="<?= base_url().'assets/img/Dog.svg' ?>" class="img-fluid img-thumbnail" alt="dog" id="myImg<?= $r->req_id ?>" onclick="display('myImg<?= $r->req_id ?>')" style="max-height:100px;">
                                         <?php } ?>
                                     </td>
-                                    <td class="text-nowrap"><?= $r->req_datetime; ?></td>
+                                    <td><?= $r->req_datetime; ?></td>
+                                    <td><?= $r->micro_stat_name; ?></td>
+                                    <td><?= $r->pay_name; ?></td>
+                                    <td><?= $r->req_pay_invoice; ?></td>
                                     <td>
                                         <?php if ($r->req_pay_photo && $r->req_pay_photo != '-'){ ?>
                                             <img src="<?= base_url('uploads/payment/'.$r->req_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myPay<?= $r->req_id ?>" onclick="display('myPay<?= $r->req_id ?>')" style="max-height:100px;">
                                         <?php } ?>
                                     </td>
-                                    <td><?= $r->micro_stat_name; ?></td>
                                     <td><?= $r->req_reject_note; ?></td>
                                     <td>
                                         <?php if ($r->com_photo && $r->com_photo != '-') { ?>

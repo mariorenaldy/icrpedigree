@@ -14,6 +14,7 @@ class LogrequestMicrochipModel extends CI_Model {
         $this->db->join('microchip_status','microchip_status.micro_stat_id = logs_req_microchip.log_stat_id');
         $this->db->join('members', 'logs_req_microchip.log_mem_id = members.mem_id');
         $this->db->join('canines', 'logs_req_microchip.log_can_id = canines.can_id');
+        $this->db->join('payment_method','payment_method.pay_id = logs_req_microchip.log_pay_id' , 'left');
         $this->db->order_by('logs_req_microchip.log_updated_at', 'desc');
         return $this->db->get();
     }

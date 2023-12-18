@@ -22,9 +22,10 @@
                 <div class="row mb-3">
                     <div class="col"><b><?= lang("can_dog_name"); ?></b></div>
                     <div class="col"><b><?= lang("can_appointment_date"); ?></b></div>
-                    <div class="col"><b><?= lang("common_photo_proof"); ?></b></div>
                     <div class="col"><b>Status</b></div>
-                    <div class="col"><b><?= lang("can_complain_date"); ?></b></div>
+                    <div class="col"><b>Payment Method</b></div>
+                    <div class="col"><b>DOKU Invoice</b></div>
+                    <div class="col"><b><?= lang("common_photo_proof"); ?></b></div>
                     <div class="col"><b><?= lang("can_complain_desc"); ?></b></div>
                     <div class="col"><b><?= lang("can_complain_photo"); ?></b></div>
                     <div class="col"></div>
@@ -36,11 +37,6 @@
                         </div>
                         <div class="col">
                             <?php echo $r->req_datetime.'<br/>'; ?>
-                        </div>
-                        <div class="col">
-                            <?php if ($r->req_pay_photo != '-'){ ?>
-                                <img src="<?= base_url('uploads/payment/'.$r->req_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myImg<?= $r->req_pay_photo ?>" onclick="display('myImg<?= $r->req_pay_photo ?>')">
-                            <?php } ?>
                         </div>
                         <div class="col">
                             <?php echo $r->micro_stat_name; 
@@ -59,7 +55,15 @@
                             } ?>
                         </div>
                         <div class="col">
-                            <?php echo $r->com_created_at.'<br/>'; ?>
+                            <?php echo $r->pay_name.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php echo $r->req_pay_invoice.'<br/>'; ?>
+                        </div>
+                        <div class="col">
+                            <?php if ($r->req_pay_photo != '-'){ ?>
+                                <img src="<?= base_url('uploads/payment/'.$r->req_pay_photo) ?>" class="img-fluid img-thumbnail" alt="payment" id="myImg<?= $r->req_pay_photo ?>" onclick="display('myImg<?= $r->req_pay_photo ?>')">
+                            <?php } ?>
                         </div>
                         <div class="col">
                             <?php echo $r->com_desc.'<br/>'; ?>
@@ -76,6 +80,10 @@
                             <?php if ($r->req_stat_id == $this->config->item('completed')){ ?>
                             <button type="button" class="btn btn-primary mb-1" onclick="accept('<?= $r->req_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_micro_accepted"); ?>"><i class="fa-solid fa-check"></i></button>
                             <button type="button" class="btn btn-danger mb-1" onclick="complain('<?= $r->req_id;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("can_req_complain"); ?>"><i class="fa-solid fa-file-pen"></i></button>
+                            <?php } ?>
+                            <?php if ($r->req_stat_id == $this->config->item('micro_not_paid')){ ?>
+                            <button type="button" class="btn btn-success mb-1" onclick="pay('<?= $r->req_pay_invoice;?>')" data-toggle="tooltip" data-placement="top" title="<?= lang("common_pay"); ?>"><i class="fa-solid fa-money-bill-1"></i></button>
+                            <button type="button" class="btn btn-danger mb-1" onclick="confirm(<?= $r->req_id ?>)" data-toggle="tooltip" data-placement="top" title="<?= lang("common_cancel_payment"); ?>"><i class="fa-solid fa-xmark"></i></button>
                             <?php } ?>
                         </div>
                     </div>
@@ -160,6 +168,9 @@
     </div>
     <?php $this->load->view('frontend/layout/footer'); ?>
     <script>
+        function pay(inv){
+            window.location = "<?= base_url(); ?>frontend/Payment/checkout/Requestmicrochip/"+150000+"/"+inv;
+        }
         let cancelId = null;
         function resetId(){
             cancelId = null;
@@ -204,6 +215,11 @@
 
             <?php		
                 if ($this->session->flashdata('accept_success')){ ?>
+                    $('#message-modal').modal('show');
+            <?php } ?>
+
+            <?php		
+                if ($this->session->flashdata('complain_success')){ ?>
                     $('#message-modal').modal('show');
             <?php } ?>
 
