@@ -27,13 +27,8 @@
                                 <th>Full Address</th>
                                 <th>Shipping Service</th>
                                 <th>Shipping Type</th>
-                                <th>Shipping Cost</th>
-                                <th>Grand Total</th>
+                                <th>Grand Total (Rp)</th>
                                 <th>Status</th>
-                                <th>Payment Date</th>
-                                <th>Payment Due Date</th>
-                                <th>Arrived Date</th>
-                                <th>Completed Date</th>
                                 <th>Reject Note</th>
                             </tr>
                         </thead>
@@ -48,13 +43,8 @@
                                         <td><?= $o->log_address; ?></td>
                                         <td><?= $o->ship_name; ?></td>
                                         <td><?= $o->log_shipping_type; ?></td>
-                                        <td><?= $o->log_shipping_cost; ?></td>
-                                        <td><?= $o->log_total_price; ?></td>
+                                        <td><?= number_format($o->log_total_price,0,",","."); ?></td>
                                         <td><?= $o->ord_stat_name; ?></td>
-                                        <td><?= $o->log_pay_date; ?></td>
-                                        <td><?= $o->log_pay_due_date; ?></td>
-                                        <td><?= $o->log_arrived_date; ?></td>
-                                        <td><?= $o->log_completed_date; ?></td>
                                         <td><?= $o->log_reject_note; ?></td>
                                     </tr>
                                 <?php } ?>

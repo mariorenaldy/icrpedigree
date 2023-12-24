@@ -66,14 +66,14 @@
                             <tr>
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
-                                <th class="no-sort"></th>
+                                <!-- <th class="no-sort"></th> -->
                                 <th class="no-sort"></th>
                                 <th class="no-sort"></th>
                                 <th>Invoice</th>
                                 <th class="no-sort">Member</th>
                                 <th class="no-sort">Full Address</th>
                                 <th>Shipping Service</th>
-                                <th>Grand Total</th>
+                                <th>Grand Total (Rp)</th>
                                 <th>Order Date</th>
                                 <th>Status</th>
                             </tr>
@@ -97,11 +97,11 @@
                                             <?php } ?>
                                         <?php } ?>
                                     </td>
-                                    <td class="text-center">
+                                    <!-- <td class="text-center">
                                     <?php if ($this->session->userdata('use_type_id') == $this->config->item('staff')) { ?>
                                         <button type="button" class="btn btn-success mb-1" onclick="edit(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="Edit Order"><i class="fa fa-edit"></i></button>
                                     <?php } ?>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center">
                                         <?php if ($this->session->userdata('use_type_id') == $this->config->item('super')) { ?>
                                             <button type="button" class="btn btn-dark mb-1" onclick="log(<?= $o->ord_id ?>)" data-toggle="tooltip" data-placement="top" title="Order Log"><i class="fa fa-history"></i></button>
@@ -114,7 +114,7 @@
                                     <td><?= $o->mem_name; ?></td>
                                     <td><?= $o->ord_address; ?></td>
                                     <td><?= $o->ship_name." (".$o->ord_shipping_type.")"; ?></td>
-                                    <td><?php echo 'Rp '.number_format($o->ord_total_price,0,",",".").'<br/>'; ?></td>
+                                    <td><?= number_format($o->ord_total_price,0,",","."); ?></td>
                                     <td class="text-nowrap"><?= $o->ord_date; ?></td>
                                     <td><?= $o->ord_stat_name; ?></td>
                                 </tr>

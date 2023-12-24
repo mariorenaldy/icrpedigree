@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="control-label col-md-2">Price</label>
+                            <label class="control-label col-md-2">Price (Rp)</label>
                             <div class="col-md-10">
                                 <input class="form-control" type="number" placeholder="Price" name="pro_price" value="<?php echo set_value('pro_price'); ?>">
                             </div>

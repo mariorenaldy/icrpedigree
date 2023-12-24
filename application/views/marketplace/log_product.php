@@ -24,7 +24,7 @@
                                 <th>Photo</th>
                                 <th>Type</th>
                                 <th>Name</th>
-                                <th>Price</th>
+                                <th>Price (Rp)</th>
                                 <th>Weight</th>
                                 <th>Description</th>
                                 <th>Status</th>
@@ -47,7 +47,7 @@
                                         </td>
                                         <td><?= $p->pro_type_name; ?></td>
                                         <td><?= $p->log_product_name; ?></td>
-                                        <td><?= $p->log_product_price; ?></td>
+                                        <td><?= number_format($p->log_product_price,0,",","."); ?></td>
                                         <td><?= $p->log_product_weight; ?></td>
                                         <td><?= $p->log_product_desc; ?></td>
                                         <td><?= $p->stat_name; ?></td>

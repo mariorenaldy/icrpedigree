@@ -92,7 +92,7 @@
                                     </td>
                                     <td><?= $p->pro_type_name; ?></td>
                                     <td><?= $p->pro_name; ?></td>
-                                    <td><?= $p->pro_price; ?></td>
+                                    <td><?= number_format($p->pro_price,0,",","."); ?></td>
                                     <td><?= $p->pro_weight; ?></td>
                                     <td><?= $p->pro_stock; ?></td>
                                     <td class="text-nowrap"><?= $p->pro_created_at; ?></td>
