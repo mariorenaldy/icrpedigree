@@ -347,7 +347,7 @@ class Requestmicrochip extends CI_Controller {
 							}
 							redirect("frontend/Requestmicrochip");
 						}
-						if($statRes == 'SUCCESS'){
+						else if($statRes == 'SUCCESS'){
 							$res = $this->payRequest($requests->req_id);
 							if($res){
 								$this->session->set_flashdata('add_success', true);
@@ -363,15 +363,22 @@ class Requestmicrochip extends CI_Controller {
 								redirect("frontend/Requestmicrochip");
 							}
 						}
-						if($statRes == 'EXPIRED'){
+						else if($statRes == 'EXPIRED'){
 							if ($site_lang == 'indonesia') {
 								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
 							}
 							else{
 								$this->session->set_flashdata('error_message', 'The payment due date has passed');
 							}
+							redirect("frontend/Requestmicrochip");
 						}
-						if($statRes == 'PENDING'){
+						else if($statRes == 'PENDING'){
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran belum diselesaikan');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment has not been completed');
+							}
 							redirect('frontend/Requestmicrochip');
 						}
 						else{
@@ -389,7 +396,13 @@ class Requestmicrochip extends CI_Controller {
 				}
 			}
 			else{
-				$this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Payment failed');
+				}
+				// $this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
 				redirect('frontend/Requestmicrochip');
 			}
 	

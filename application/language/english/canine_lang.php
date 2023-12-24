@@ -36,7 +36,7 @@ $lang["can_dob"] = "Date of Birth";
 $lang["can_full_body"] = "Full Body Dog Photo";
 $lang["can_dog_photo"] = "Dog Photo";
 $lang["can_stambum_photo"] = "Stambum Photo";
-$lang["can_add_success"] = "Dog registration has been saved. Contact admin or wait for approval";
+$lang["can_add_success"] = "Dog registration has been saved. Please wait for approval";
 
 $lang["can_add_puppy"] = "Add Puppy";
 $lang["can_can_photo"] = "Dog Photo";
@@ -44,7 +44,7 @@ $lang["can_puppy_list"] = "Puppy List";
 $lang["can_search_puppy"] = "Search Puppy";
 $lang["can_report_puppy"] = "Report Puppy";
 $lang["can_add_puppy_success"] = "Puppy has been saved. Report the next puppy or press the Back button to finish";
-$lang["can_report_puppy_success"] = "Report puppy has been saved. Contact admin or wait for approval";
+$lang["can_report_puppy_success"] = "Report puppy has been saved. Please wait for approval";
 $lang["can_cancel_puppy_success"] = "Puppy registration cancelled successfully";
 $lang["can_confirm_cancel_puppy"] = "Cancel all puppy registrations from the same birth report?";
 

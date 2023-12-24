@@ -9,7 +9,7 @@ class Members extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'KenneltypeModel', 'notification_model'));
 			$this->load->library(array('session', 'form_validation'));
-			$this->load->helper(array('form', 'url', 'cookie'));
+			$this->load->helper(array('form', 'url', 'cookie', 'mail'));
 			$this->load->database();
 
 			if ($this->input->cookie('site_lang')) {
@@ -596,6 +596,7 @@ class Members extends CI_Controller {
 									redirect("frontend/Members");
 								}
 								else{
+									$this->send_paylink($this->input->post('mem_email'), $this->input->post('mem_username'), base_url().'frontend/Payment/checkout/Members/200000/'.$inv);
 									redirect("frontend/Payment/checkout/Members/200000/".$inv);
 								}
 							}
@@ -899,7 +900,7 @@ class Members extends CI_Controller {
 							}
 							redirect("frontend/Members/register");
 						}
-						if($statRes == 'SUCCESS'){
+						else if($statRes == 'SUCCESS'){
 							$res = $this->payMember($members->mem_id);
 							if($res){
 								$this->session->set_flashdata('pro', TRUE);
@@ -915,15 +916,22 @@ class Members extends CI_Controller {
 								redirect("frontend/Members/register");
 							}
 						}
-						if($statRes == 'EXPIRED'){
+						else if($statRes == 'EXPIRED'){
 							if ($site_lang == 'indonesia') {
 								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
 							}
 							else{
 								$this->session->set_flashdata('error_message', 'The payment due date has passed');
 							}
+							redirect('frontend/Members/register');
 						}
-						if($statRes == 'PENDING'){
+						else if($statRes == 'PENDING'){
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran belum diselesaikan');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment has not been completed');
+							}
 							redirect('frontend/Members/register');
 						}
 						else{
@@ -941,7 +949,13 @@ class Members extends CI_Controller {
 				}
 			}
 			else{
-				$this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Payment failed');
+				}
+				// $this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
 				redirect('frontend/Members/register');
 			}
 	
@@ -975,6 +989,7 @@ class Members extends CI_Controller {
 		$this->db->trans_strict(FALSE);
 		$this->db->trans_start();
 		$where['mem_id'] = $mem_id;
+		$where['mem_stat'] = $this->config->item('not_paid');
 		$members = $this->MemberModel->update_members($data, $where);
 		if ($members) {
 			$this->db->trans_complete();
@@ -1007,4 +1022,17 @@ class Members extends CI_Controller {
 			return false;
 		}
 	}
+
+	public function send_paylink($email, $member, $link){
+        $mail = send_paylink($email, $member, $link);
+        if ($mail){
+			// echo "success";
+            return true;
+        }
+        else{
+			return false;
+			// echo show_error($this->email->print_debugger());
+        }
+		die;
+    }
 }

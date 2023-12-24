@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang["owner_report"] = "Change Ownership Report";
-$lang["owner_report_success"] = "Change Ownership has been saved. Contact admin or wait for approval";
+$lang["owner_report_success"] = "Change Ownership has been saved. Please wait for approval";
 $lang["owner_report_list"] = "Change Ownership Report List";
 $lang["owner_new"] = "New Owner";
 $lang["owner_old_stambum_photo"] = "Old Stambum Photo";

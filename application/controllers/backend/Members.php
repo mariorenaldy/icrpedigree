@@ -9,7 +9,7 @@ class Members extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('MemberModel', 'KennelModel', 'LogmemberModel', 'LogkennelModel', 'notification_model', 'notificationtype_model', 'KenneltypeModel', 'CaninesModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url'));
+			$this->load->helper(array('url', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -63,16 +63,14 @@ class Members extends CI_Controller {
             $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
 			$where['mem_type'] = $this->config->item('pro_member');
-			// $where['mem_stat'] = $this->config->item('accepted');
-			$where['mem_stat !='] = $this->config->item('processed');
 			$where['mem_id !='] = $this->config->item('no_member');
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
-			$where['mem_stat !='] = $this->config->item('delete_stat');
-			$data['member'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$data['member'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], $this->config->item('backend_member_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/backend/Members/index';
-            $config['total_rows'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 
             $data['keywords'] = '';
@@ -184,9 +182,6 @@ class Members extends CI_Controller {
             else
                 $like = null;
 
-			// $where['mem_stat'] = $this->config->item('accepted');
-			$where['mem_stat !='] = $this->config->item('processed');
-			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
 			// if ($data['mem_type'] == $this->config->item('all_member'))
 			// 	$where['mem_type IN ('.$this->config->item('pro_member').', '.$this->config->item('free_member').')'] = null;
@@ -195,12 +190,11 @@ class Members extends CI_Controller {
 			if ($data['mem_type'] != $this->config->item('all_member'))
 				$where['mem_type'] = $data['mem_type'];
 			$where['mem_id !='] = $this->config->item('no_member');
-			$where['mem_stat !='] = $this->config->item('delete_stat');
-			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'))->result();
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'), $where_not_in)->result();
 
-			// var_dump($data['member']);
             $config['base_url'] = base_url().'/backend/Members/search';
-            $config['total_rows'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0)->num_rows();
+            $config['total_rows'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], 0, $where_not_in)->num_rows();
             $this->pagination->initialize($config);
 			$this->load->view('backend/view_members', $data);
 		}
@@ -522,6 +516,10 @@ class Members extends CI_Controller {
 									}	
 									if (!$err){
 										$this->db->trans_complete();
+										if ($this->input->post('mem_type'))
+											$this->send_greeting($this->input->post('mem_email'), $this->input->post('mem_name'));
+										else
+											$this->send_greeting($this->input->post('email'), $this->input->post('name'));
 										$this->session->set_flashdata('add_success', TRUE);
 										redirect("backend/Members");
 									}
@@ -934,6 +932,7 @@ class Members extends CI_Controller {
 									$result = $this->notification_model->add(17, $member->mem_id, $member->mem_id);
 									if ($result){
 										$this->db->trans_complete();
+										$this->send_greeting($member->mem_email, $member->mem_name);
 										$this->session->set_flashdata('approve', TRUE);
 										redirect('backend/Members/view_approve');
 									}
@@ -1027,6 +1026,7 @@ class Members extends CI_Controller {
 								$res = $this->LogkennelModel->add_log($dataKennelLog);
 								if ($res){
 									$this->db->trans_complete();
+									$this->send_reject($member->mem_email, $member->mem_name, $data['mem_app_note']);
 									$this->session->set_flashdata('reject', TRUE);
 									redirect('backend/Members/view_approve');
 								}
@@ -1339,6 +1339,18 @@ class Members extends CI_Controller {
 			}
 			else{
 				redirect('backend/Members');
+			}
+		}
+		public function send_greeting($email, $member){
+			$mail = send_greeting($email, $member);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+			}
+		}
+		public function send_reject($email, $member, $note){
+			$mail = send_reject($email, $member, $note);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 			}
 		}
 }

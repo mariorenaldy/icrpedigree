@@ -10,7 +10,7 @@ class Births extends CI_Controller {
 			$this->load->model(array('studModel', 'birthModel', 'caninesModel', 'memberModel', 'logbirthModel', 'pedigreesModel', 'notification_model', 'notificationtype_model', 'news_model', 'stambumModel', 'logstudModel', 'approvalStatusModel'));
 			$this->load->library('upload', $this->config->item('upload_birth'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url'));
+			$this->load->helper(array('url', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -554,6 +554,7 @@ class Births extends CI_Controller {
 													$news = $this->news_model->add($dataNews);
 													if ($news){
 														$this->db->trans_complete();
+														$this->send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s);
 														$this->session->set_flashdata('add_success', true);
 														redirect("backend/Births");
 													}
@@ -850,6 +851,7 @@ class Births extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
+												$this->send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s);
 												$this->session->set_flashdata('approve', TRUE);
 												redirect('backend/Births/view_approve');
 											}
@@ -1102,6 +1104,12 @@ class Births extends CI_Controller {
 			}
 			else{
 				redirect('backend/Births');
+			}
+		}
+		public function send_stambum_link($email, $member, $sire, $dam){
+			$mail = send_stambum_link($email, $member, $sire, $dam);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 			}
 		}
 }

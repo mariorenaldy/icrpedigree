@@ -523,6 +523,16 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+$config['email'] = Array(
+    'protocol'  => 'smtp',
+    'smtp_host' => 'ssl://smtp.gmail.com',
+    'smtp_port' => 465,
+    'smtp_user' => 'indonesiancanineregistry@gmail.com',
+    'smtp_pass' => 'jzyw zoeg ahnw gbdx',
+    'mailtype'  => 'html',
+    'charset'   => 'iso-8859-1'
+);
+
 $config['path_member'] = 'uploads/members/';
 $config['file_name_member'] = 'member_'.time().'.png';
 

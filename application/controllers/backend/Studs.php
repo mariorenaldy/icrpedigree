@@ -9,7 +9,7 @@ class Studs extends CI_Controller {
 			parent::__construct();
 			$this->load->model(array('studModel', 'caninesModel', 'notification_model', 'notificationtype_model', 'memberModel', 'birthModel', 'logstudModel', 'news_model', 'pedigreesModel'));
 			$this->load->library(array('session', 'form_validation', 'pagination'));
-			$this->load->helper(array('url'));
+			$this->load->helper(array('url', 'mail'));
 			$this->load->database();
 			date_default_timezone_set("Asia/Bangkok");
 		}
@@ -773,6 +773,7 @@ class Studs extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
+												$this->send_birth_link($partner->mem_email, $partner->mem_username, $canSire->can_a_s, $can->can_a_s);
 												$this->session->set_flashdata('add_success', TRUE);
 												redirect('backend/Studs');
 											}
@@ -1483,6 +1484,7 @@ class Studs extends CI_Controller {
 										$news = $this->news_model->add($dataNews);
 										if ($news){
 											$this->db->trans_complete();
+											$this->send_birth_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s);
 											$this->session->set_flashdata('approve', TRUE);
 											redirect('backend/Studs/view_approve');
 										}
@@ -1713,6 +1715,13 @@ class Studs extends CI_Controller {
 			}
 			else{
 				redirect('backend/Studs');
+			}
+		}
+
+		public function send_birth_link($email, $member, $sire, $dam){
+			$mail = send_birth_link($email, $member, $sire, $dam);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 			}
 		}
 }

@@ -18,10 +18,13 @@ class MemberModel extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function get_members($where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
+    public function get_members($where, $sort = 'mem_id desc', $offset = 0, $limit = 0, $where_not_in = null){
         $this->db->select('*, members.mem_created_at as created_date, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         if ($where != null) {
             $this->db->where($where);
+        }
+        if ($where_not_in != null) {
+            $this->db->where_not_in('mem_stat', $where_not_in);
         }
         $this->db->from('members');
         $this->db->join('kennels','kennels.ken_member_id = members.mem_id', 'left');
@@ -50,11 +53,14 @@ class MemberModel extends CI_Model {
         return $this->db->update('members');
     }
 
-    public function search_members($like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0){
+    public function search_members($like, $where, $sort = 'mem_id desc', $offset = 0, $limit = 0, $where_not_in = null){
         $this->db->select('*, members.mem_created_at as created_date, DATE_FORMAT(members.mem_created_at, "%d-%m-%Y") as mem_created_at, DATE_FORMAT(members.mem_app_date, "%d-%m-%Y") as mem_app_date, DATE_FORMAT(members.mem_date, "%d-%m-%Y") as mem_date, DATE_FORMAT(members.mem_app_date, "%Y-%m-%d %H:%i:%s") AS mem_app_date2, DATE_FORMAT(members.last_login, "%d-%m-%Y") as last_login');
         $this->db->from('members');
         if ($where != null) {
             $this->db->where($where);
+        }
+        if ($where_not_in != null) {
+            $this->db->where_not_in('mem_stat', $where_not_in);
         }
         if ($like != null) {
             $this->db->group_start();

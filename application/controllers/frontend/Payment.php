@@ -96,13 +96,13 @@ class Payment extends CI_Controller {
 				$response['code'] = $http_code;
 				$response['message'] = json_decode($result)->message[0];
 				$this->session->set_flashdata('error_message', $response['status'].' '.$response['code'].': '.$response['message']);
-				redirect("frontend/Canines");
+				redirect("frontend/".$controllers);
 			}
 		}
 		else{
 			// echo 'Curl error: ' . curl_error($ch);
-			$this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
-			redirect('frontend/Canines');
+			// $this->session->set_flashdata('error_message', 'Curl error: '.curl_error($ch));
+			redirect('frontend/'.$controllers."/cek_status/".$requestId);
 		}
 
 		// Close cURL

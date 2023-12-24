@@ -238,7 +238,7 @@ class Orders extends CI_Controller
 							}
 							redirect('marketplace/Orders');
 						}
-						if($statRes == 'SUCCESS'){
+						else if($statRes == 'SUCCESS'){
 							$res = $this->payOrder($orders->ord_id);
 							if($res){
 								$this->session->set_flashdata('add_success', true);
@@ -254,15 +254,22 @@ class Orders extends CI_Controller
 								redirect('marketplace/Orders');
 							}
 						}
-						if($statRes == 'EXPIRED'){
+						else if($statRes == 'EXPIRED'){
 							if ($site_lang == 'indonesia') {
 								$this->session->set_flashdata('error_message', 'Batas pembayaran sudah lewat');
 							}
 							else{
 								$this->session->set_flashdata('error_message', 'The payment due date has passed');
 							}
+							redirect('marketplace/Orders');
 						}
-						if($statRes == 'PENDING'){
+						else if($statRes == 'PENDING'){
+							if ($site_lang == 'indonesia') {
+								$this->session->set_flashdata('error_message', 'Pembayaran belum diselesaikan');
+							}
+							else{
+								$this->session->set_flashdata('error_message', 'Payment has not been completed');
+							}
 							redirect('marketplace/Orders');
 						}
 						else{
@@ -280,7 +287,13 @@ class Orders extends CI_Controller
 				}
 			}
 			else{
-				echo 'Curl error: ' . curl_error($ch);
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Pembayaran gagal');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Payment failed');
+				}
+				// echo 'Curl error: ' . curl_error($ch);
 				redirect('marketplace/Orders');
 			}
 	
