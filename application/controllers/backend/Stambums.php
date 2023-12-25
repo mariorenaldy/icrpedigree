@@ -506,12 +506,12 @@ class Stambums extends CI_Controller {
         
                                 if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
                                     $err++;
-                                    $this->session->set_flashdata('error_message', 'Duplicate phone number');
+                                    $this->session->set_flashdata('error_message', 'Phone number is already registered');
                                 }
         
                                 if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
                                     $err++;
-                                    $this->session->set_flashdata('error_message', 'Duplicate email');
+                                    $this->session->set_flashdata('error_message', 'email is already registered');
                                 }
         
                                 if (!$err){

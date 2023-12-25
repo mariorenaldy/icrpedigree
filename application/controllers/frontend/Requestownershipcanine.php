@@ -312,20 +312,20 @@ class Requestownershipcanine extends CI_Controller {
 							if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+									$this->session->set_flashdata('error_message', 'No. HP sudah terdaftar');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Duplicate phone number');
+									$this->session->set_flashdata('error_message', 'Phone number is already registered');
 								}
 							}
 
 							if (!$err && $this->memberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
 								$err++;
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+									$this->session->set_flashdata('error_message', 'email sudah terdaftar');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Duplicate email');
+									$this->session->set_flashdata('error_message', 'email is already registered');
 								}
 							}
 

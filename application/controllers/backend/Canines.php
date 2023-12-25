@@ -439,12 +439,12 @@ class Canines extends CI_Controller {
 
                 if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_icr_number', $this->input->post('can_icr_number'))){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'Duplicate ICR number');
+                    $this->session->set_flashdata('error_message', 'ICR number is already registered');
                 }
         
                 if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate(0, 'can_chip_number', $this->input->post('can_chip_number'))){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'Duplicate microchip number');
+                    $this->session->set_flashdata('error_message', 'Microchip number is already registered');
                 }
 
                 $piece = explode("-", $this->input->post('can_date_of_birth'));
@@ -518,7 +518,7 @@ class Canines extends CI_Controller {
 
                     if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
                         $err++;
-                        $this->session->set_flashdata('error_message', 'Duplicate canine name');
+                        $this->session->set_flashdata('error_message', 'Dog name is already registered');
                     }
 
                     if (strlen($dataCan['can_a_s']) >= $this->config->item('can_a_s_length')){
@@ -734,22 +734,22 @@ class Canines extends CI_Controller {
 
                 if (!$err && $this->input->post('can_icr_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_icr_number', $this->input->post('can_icr_number'))){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'No. ICR tidak boleh sama');
+                    $this->session->set_flashdata('error_message', 'ICR number already registered');
                 }
 
                 if (!$err && $this->input->post('can_chip_number') != "-" && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_chip_number', $this->input->post('can_chip_number'))){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'No. Microchip tidak boleh sama');
+                    $this->session->set_flashdata('error_message', 'Microchip number already registered');
                 }
 
                 if (!$err && $this->caninesModel->check_for_duplicate($this->input->post('can_id'), 'can_a_s', $this->input->post('can_a_s'))){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'Nama canine tidak boleh sama');
+                    $this->session->set_flashdata('error_message', 'Dog name already registered');
                 }
 
                 if (strlen($this->input->post('can_a_s')) >= $this->config->item('can_a_s_length')){
                     $err++;
-                    $this->session->set_flashdata('error_message', 'Nama anjing terlalu panjang. Ditambah dengan nama kennel, harus di bawah '.$this->config->item('can_a_s_length').' karakter');
+                    $this->session->set_flashdata('error_message', 'The dog\'s name is too long. Plus the kennel name, must be under '.$this->config->item('can_a_s_length').' characters');
                 }
 
                 if (!$err){

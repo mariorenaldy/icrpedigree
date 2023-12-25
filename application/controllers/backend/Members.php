@@ -360,27 +360,27 @@ class Members extends CI_Controller {
 
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate KTP number');
+						$this->session->set_flashdata('error_message', 'KTP number is already registered');
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate phone number');
+						$this->session->set_flashdata('error_message', 'Phone number is already registered');
 					}
 	
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate email');
+						$this->session->set_flashdata('error_message', 'email is already registered');
 					}
 
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
+						$this->session->set_flashdata('error_message', 'Username is already registered');
 					}
 	
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate kennel name');
+						$this->session->set_flashdata('error_message', 'Kennel name is already registered');
 					}
 	
 					if (!$err){
@@ -694,22 +694,22 @@ class Members extends CI_Controller {
 
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->MemberModel->check_for_duplicate($this->input->post('mem_id'), 'mem_ktp', $this->input->post('mem_ktp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate KTP number');
+						$this->session->set_flashdata('error_message', 'ID Card Number is already registered');
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate($this->input->post('mem_id'), 'mem_hp', $this->input->post('mem_hp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate phone number');
+						$this->session->set_flashdata('error_message', 'Phone number is already registered');
 					}
 	
 					if (!$err && $this->MemberModel->check_for_duplicate($this->input->post('mem_id'), 'mem_email', $this->input->post('mem_email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate email');
+						$this->session->set_flashdata('error_message', 'email is already registered');
 					}
 	
 					if (!$err && $this->input->post('mem_type') == $this->config->item('pro_member') && $this->KennelModel->check_for_duplicate($this->input->post('mem_id'), 'ken_name', $this->input->post('ken_name'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Duplicate kennel name');
+						$this->session->set_flashdata('error_message', 'Kennel name is already registered');
 					}
 
 					if (!$err){

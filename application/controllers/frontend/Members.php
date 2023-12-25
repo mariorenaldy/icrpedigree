@@ -429,50 +429,50 @@ class Members extends CI_Controller {
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_ktp', $this->input->post('mem_ktp'))){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'No. KTP tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'No. KTP sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate ID Card Number');
+							$this->session->set_flashdata('error_message', 'ID Card Number is already registered');
 						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('mem_hp'))){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'No. HP sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate Phone number');
+							$this->session->set_flashdata('error_message', 'Phone number is already registered');
 						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('mem_email'))){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'email sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate email');
+							$this->session->set_flashdata('error_message', 'email is already registered');
 						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_username', $this->input->post('mem_username'))){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Username tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'Username sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate username');
+							$this->session->set_flashdata('error_message', 'Username is already registered');
 						}
 					}
 
 					if (!$err && $this->KennelModel->check_for_duplicate(0, 'ken_name', $this->input->post('ken_name'))){
 						$err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama kennel tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'Nama kennel sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate kennel name');
+							$this->session->set_flashdata('error_message', 'Kennel name is already registered');
 						}
 					}
 				} else {
@@ -480,22 +480,42 @@ class Members extends CI_Controller {
 					$mem = $this->MemberModel->get_members($whereMem)->row();
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('saved')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap tunggu persetujuan');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar dan belum diproses. Harap tunggu persetujuan');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Your name has been registered and has not been processed. Please wait for approval');
+						}
 					}
 
 					if (!$err && $mem && $mem->mem_stat == $this->config->item('accepted')){
 						$err++;
-						$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'Nama anda sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Your name is already registered');
+						}
 					}
 
 					if (!$err && $this->MemberModel->check_for_duplicate(0, 'mem_hp', $this->input->post('hp'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'No. HP tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'No. HP sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'Phone Number is already registered');
+						}
 					}
 
 					if (!$err && !$this->input->post('mem_type') && $this->MemberModel->check_for_duplicate(0, 'mem_email', $this->input->post('email'))){
 						$err++;
-						$this->session->set_flashdata('error_message', 'email tidak boleh sama');
+						if ($site_lang == 'indonesia') {
+							$this->session->set_flashdata('error_message', 'email sudah terdaftar');
+						}
+						else{
+							$this->session->set_flashdata('error_message', 'email is already registered');
+						}
 					}
 				}
 				

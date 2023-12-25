@@ -410,10 +410,10 @@ class Canines extends CI_Controller {
                     if (!$err && $this->caninesModel->check_for_duplicate(0, 'can_a_s', $dataCan['can_a_s'])){
                         $err++;
 						if ($site_lang == 'indonesia') {
-							$this->session->set_flashdata('error_message', 'Nama anjing tidak boleh sama');
+							$this->session->set_flashdata('error_message', 'Nama anjing sudah terdaftar');
 						}
 						else{
-							$this->session->set_flashdata('error_message', 'Duplicate dog name');
+							$this->session->set_flashdata('error_message', 'Dog name is already registered');
 						}
                     }
 
