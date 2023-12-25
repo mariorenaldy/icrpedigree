@@ -97,23 +97,23 @@
         var checkoutButton = document.getElementById('checkout-button');
         checkoutButton.addEventListener('click', function () {
             if(!$('select[name=province]').find(":selected").val()){
-                $('#errorMesage').html("Please select the province to deliver to");
+                $('#errorMesage').html("Provinsi wajib diisi / Province required");
                 $('#error-modal').modal('show');
             }
             else if(!$('select[name=city]').find(":selected").val()){
-                $('#errorMesage').html("Please select the city to deliver to");
+                $('#errorMesage').html("Kota/Kabupaten wajib diisi / City/Regency required");
                 $('#error-modal').modal('show');
             }
             else if(!$('input[name=address]').val()){
-                $('#errorMesage').html("Please input the address to deliver to");
+                $('#errorMesage').html("Alamat Lengkap wajib diisi / Full Address required");
                 $('#error-modal').modal('show');
             }
             else if(!$('select[name=shipping]').val()){
-                $('#errorMesage').html("Please select a shipping service");
+                $('#errorMesage').html("Ekspedisi wajib diisi / Shipping Service required");
                 $('#error-modal').modal('show');
             }
             else if(!$('select[name=shipping_type]').val()){
-                $('#errorMesage').html("Please select a shipping type");
+                $('#errorMesage').html("Tipe Pengiriman wajib diisi / Shipping Type required");
                 $('#error-modal').modal('show');
             }
             else{

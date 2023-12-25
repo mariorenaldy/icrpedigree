@@ -618,10 +618,10 @@ class Studs extends CI_Controller {
 							$res = $this->birthModel->check_date($this->input->post('stu_dam_id'), $date);
 							if($res){
 								if ($site_lang == 'indonesia') {
-									$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal dam melahirkan sebelumnya');
+									$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak_lahir').' hari dari tanggal betina melahirkan sebelumnya');
 								}
 								else{
-									$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak_lahir')." days from dam's previous birth date");
+									$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak_lahir')." days from female's previous birth date");
 								}
 								$this->load->view('frontend/add_stud', $data);
 							}
@@ -629,10 +629,10 @@ class Studs extends CI_Controller {
 								$res = $this->studModel->check_date($this->input->post('stu_dam_id'), $date);
 								if($res){
 									if ($site_lang == 'indonesia') {
-										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak dam sebelumnya');
+										$this->session->set_flashdata('error_message', 'Pacak interval harus lebih dari '.$this->config->item('jarak_pacak').' hari dari tanggal pacak betina sebelumnya');
 									}
 									else{
-										$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak')." days from dam's previous stud date");
+										$this->session->set_flashdata('error_message', 'Stud interval must be more than '.$this->config->item('jarak_pacak')." days from female's previous stud date");
 									}
 									$this->load->view('frontend/add_stud', $data);
 								}
@@ -644,10 +644,10 @@ class Studs extends CI_Controller {
 									if ($pedSire){
 										$err++;
 										if ($site_lang == 'indonesia') {
-											$this->session->set_flashdata('error_message', 'Dam tidak boleh anak dari sire');
+											$this->session->set_flashdata('error_message', 'Dam (betina) tidak boleh anak dari sire (male)');
 										}
 										else{
-											$this->session->set_flashdata('error_message', 'Dam cannot be the child of sire');
+											$this->session->set_flashdata('error_message', 'Dam (female) cannot be the child of sire (male)');
 										}
 									}
 	
@@ -659,10 +659,10 @@ class Studs extends CI_Controller {
 										if ($pedDam){
 											$err++;
 											if ($site_lang == 'indonesia') {
-												$this->session->set_flashdata('error_message', 'Sire tidak boleh anak dari dam');
+												$this->session->set_flashdata('error_message', 'Sire (jantan) tidak boleh anak dari dam (betina)');
 											}
 											else{
-												$this->session->set_flashdata('error_message', 'Sire cannot be the child of dam');
+												$this->session->set_flashdata('error_message', 'Sire (male) cannot be the child of dam (female)');
 											}
 										}
 									}
@@ -681,10 +681,10 @@ class Studs extends CI_Controller {
 											if ($cek){
 												$err++;
 												if ($site_lang == 'indonesia') {
-													$this->session->set_flashdata('error_message', 'Sire dan dam adalah sibling');
+													$this->session->set_flashdata('error_message', 'Sire (jantan) dan dam (betina) tidak boleh bersaudara');
 												}
 												else{
-													$this->session->set_flashdata('error_message', 'Sire and dam are siblings');
+													$this->session->set_flashdata('error_message', 'Sire (male) and dam (female) cannot be siblings');
 												}
 											}
 										}

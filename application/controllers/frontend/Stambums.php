@@ -265,19 +265,7 @@ class Stambums extends CI_Controller {
 					$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
 				}
 			}
-			else if($count == 'NaN' || $count == ''){
-				if ($site_lang == 'indonesia') {
-					$this->form_validation->set_message('required', '%s wajib diisi');
-					$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
-					$this->form_validation->set_rules('count', 'Jumlah anjing ', 'trim|required');
-				}
-				else{
-					$this->form_validation->set_message('required', '%s required');
-					$this->form_validation->set_rules('stb_bir_id', 'Birth id ', 'trim|required');
-					$this->form_validation->set_rules('count', 'Number of dogs ', 'trim|required');
-				}
-			}
-			else{
+			else if($count != 'NaN' && $count != ''){
 				if ($site_lang == 'indonesia') {
 					$this->form_validation->set_message('required', '%s wajib diisi');
 					$this->form_validation->set_rules('stb_bir_id', 'Id Birth ', 'trim|required');
@@ -297,11 +285,19 @@ class Stambums extends CI_Controller {
 					$this->form_validation->set_rules('payment_method', 'Payment Method ', 'trim|required');
 				}
 			}
-			
 			$wheBirth['bir_id'] = $this->input->post('stb_bir_id');
 			$data['birth'] = $this->birthModel->get_births($wheBirth)->row();
 			$data['mode'] = 1;
-			if ($this->form_validation->run() == FALSE){
+			if($count == 'NaN' || $count == ''){
+				if ($site_lang == 'indonesia') {
+					$this->session->set_flashdata('error_message', 'Jumlah anjing wajib diisi');
+				}
+				else{
+					$this->session->set_flashdata('error_message', 'Number of dogs required');
+				}
+				$this->load->view('frontend/add_stambum', $data);
+			}
+			else if ($this->form_validation->run() == FALSE){
 				$this->load->view('frontend/add_stambum', $data);
 			}
 			else{
