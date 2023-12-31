@@ -152,7 +152,7 @@
         function reject(id){
             var proceed = window.prompt("Reject stud?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Studs/reject/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Studs/reject/"+id+"?reason="+encodeURI(proceed);
             }
         }
 

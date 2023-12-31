@@ -909,8 +909,8 @@ class Births extends CI_Controller {
 					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_app_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('rejected');
-					if ($this->uri->segment(5)){
-						$data['bir_app_note'] = urldecode($this->uri->segment(5));
+					if(isset($_GET['reason'])) {
+						$data['bir_app_note'] = $_GET['reason'];
 					}
 					$res = $this->birthModel->update_births($data, $where);
 					if ($res){
@@ -938,6 +938,7 @@ class Births extends CI_Controller {
 							$result = $this->notification_model->add(7, $this->uri->segment(4), $stud->stu_member_id, "Nama Jantan / Sire Name: ".$stud->sire_a_s.'<br>Nama Betina / Dam Name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
+								$this->send_reject_birth($birth->mem_email, $birth->mem_name, $stud->sire_a_s, $stud->dam_a_s, $data['bir_app_note']);
 								$this->session->set_flashdata('reject', TRUE);
 								redirect('backend/Births/view_approve');
 							}
@@ -1108,6 +1109,13 @@ class Births extends CI_Controller {
 		}
 		public function send_stambum_link($email, $member, $sire, $dam){
 			$mail = send_stambum_link($email, $member, $sire, $dam);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+			}
+		}
+
+		public function send_reject_birth($email, $member, $sire, $dam, $reason){
+			$mail = send_reject_birth($email, $member, $sire, $dam, $reason);
 			if (!$mail){
 				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 			}

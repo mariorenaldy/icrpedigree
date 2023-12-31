@@ -9,7 +9,7 @@ class Canines extends CI_Controller {
         parent::__construct();
         $this->load->model(array('caninesModel','memberModel', 'logcanineModel', 'logpedigreeModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'trahModel', 'kennelModel', 'stambumModel', 'logstambumModel'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-        $this->load->helper(array('url'));
+        $this->load->helper(array('url', 'mail'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
     }
@@ -355,27 +355,6 @@ class Canines extends CI_Controller {
             redirect("backend/Users/login");
         }
     }
-
-    // public function search_kennel(){
-    //     if ($this->session->userdata('use_username')) {
-    //         $wheTrah['tra_stat != '] = $this->config->item('deleted');
-    //         $data['trah'] = $this->trahModel->get_trah($wheTrah)->result();
-
-    //         $like['mem_name'] = $this->input->post('mem_name');
-    //         $like['ken_name'] = $this->input->post('mem_name');
-    //         $where['mem_stat'] = $this->config->item('accepted');
-    //         $where['ken_stat'] = $this->config->item('accepted');
-    //         $data['member'] = $this->memberModel->search_members($like, $where)->result();
-
-    //         $whe['ken_member_id'] =  $this->input->post('can_member_id');
-    //         $whe['ken_stat'] = $this->config->item('accepted');
-    //         $data['kennel'] = $this->kennelModel->get_kennels($whe)->result();
-    //         $this->load->view('backend/add_canine', $data);
-    //     }
-    //     else {
-    //       redirect("backend/Users/login");
-    //     }
-    // }
 
     public function search_kennel(){
         $whe['ken_member_id'] =  $this->input->post('can_member_id');
@@ -1045,6 +1024,7 @@ public function validate_edit_pedigree(){
                             $res3 = $this->notification_model->add(11, $this->uri->segment(4), $can->can_member_id, "Nama anjing / Canine name: ".$can->can_a_s);
                             if ($res3){
                                 $this->db->trans_complete();
+                                $this->send_approve_dog($can->mem_email, $can->mem_name, $can->can_a_s);
                                 $this->session->set_flashdata('approve', TRUE);
                                 redirect('backend/Canines/view_approve');
                             }
@@ -1090,8 +1070,8 @@ public function validate_edit_pedigree(){
                 $data['can_app_date'] = date('Y-m-d H:i:s');
                 $data['can_date'] = date('Y-m-d H:i:s');
                 $data['can_stat'] = $this->config->item('rejected');
-                if ($this->uri->segment(5)){
-                    $data['can_app_note'] = urldecode($this->uri->segment(5));
+                if(isset($_GET['reason'])) {
+                    $data['can_app_note'] = $_GET['reason'];
                 }
                 $res = $this->caninesModel->update_canines($data, $where);
                 if ($res){
@@ -1122,6 +1102,7 @@ public function validate_edit_pedigree(){
                         $log = $this->logcanineModel->add_log($dataLog);
                         if ($log){
                             $this->db->trans_complete();
+                            $this->send_reject_dog($can->mem_email, $can->mem_name, $can->can_a_s, $data['can_app_note']);
                             $this->session->set_flashdata('reject', TRUE);
                             redirect('backend/Canines/view_approve');
                         }
@@ -1410,5 +1391,19 @@ public function validate_edit_pedigree(){
             $this->db->trans_rollback();
             return false;
         }
+	}
+
+    public function send_reject_dog($email, $member, $dog, $reason){
+		$mail = send_reject_dog($email, $member, $dog, $reason);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+    public function send_approve_dog($email, $member, $dog){
+		$mail = send_approve_dog($email, $member, $dog);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
 	}
 }

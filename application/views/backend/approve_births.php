@@ -161,7 +161,7 @@
         function reject(id){
             var proceed = window.prompt("Reject birth?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/reject/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Births/reject/"+id+"?reason="+encodeURI(proceed);
             }
         }
 

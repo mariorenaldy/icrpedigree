@@ -10,7 +10,7 @@ class Orders extends CI_Controller
 		parent::__construct();
 		$this->load->model(array('OrderModel', 'ProductModel', 'logorderModel', 'RejectReasonsModel', 'OrderComplainModel', 'OrderStatusModel', 'memberModel', 'notification_model'));
 		$this->load->library(array('session', 'form_validation', 'pagination'));
-		$this->load->helper(array('url', 'cookie'));
+		$this->load->helper(array('url', 'cookie', 'mail'));
 		$this->load->database();
 		date_default_timezone_set("Asia/Bangkok");
 
@@ -678,6 +678,7 @@ class Orders extends CI_Controller
 					$result = $this->notification_model->add(30, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
 					if ($result){
 						$this->db->trans_complete();
+						$this->send_deliver_order($order->mem_email, $order->mem_name, $order->ord_invoice);
 						$this->session->set_flashdata('deliver_success', TRUE);
 						redirect("marketplace/Orders/listOrders");
 					}
@@ -745,6 +746,7 @@ class Orders extends CI_Controller
 					$result = $this->notification_model->add(31, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
 					if ($result){
 						$this->db->trans_complete();
+						$this->send_arrived_order($order->mem_email, $order->mem_name, $order->ord_invoice, $order->ord_address);
 						$this->session->set_flashdata('arrive_success', TRUE);
 						redirect("marketplace/Orders/listOrders");
 					}
@@ -873,6 +875,7 @@ class Orders extends CI_Controller
 							if($err == 0){
 								$result = $this->notification_model->add(32, $ord_id, $order->ord_mem_id, "Invoice Pesanan / Order: ".$order->ord_invoice);
 								if ($result){
+									$this->send_reject_order($order->mem_email, $order->mem_name, $order->ord_invoice, $dataOrd['ord_reject_note']);
 									$this->session->set_flashdata('reject_success', TRUE);
 								}
 								else{
@@ -1224,4 +1227,25 @@ class Orders extends CI_Controller
             redirect('marketplace/Orders/listOrders');
         }
     }
+
+	public function send_deliver_order($email, $member, $invoice){
+		$mail = send_deliver_order($email, $member, $invoice);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_arrived_order($email, $member, $invoice, $address){
+		$mail = send_arrived_order($email, $member, $invoice, $address);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_reject_order($email, $member, $invoice, $reason){
+		$mail = send_reject_order($email, $member, $invoice, $reason);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
 }

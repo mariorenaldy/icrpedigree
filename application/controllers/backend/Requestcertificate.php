@@ -9,7 +9,7 @@ class Requestcertificate extends CI_Controller {
 		parent::__construct();
 		$this->load->model(array('requestcertificateModel', 'caninesModel', 'memberModel', 'logrequestCertificateModel', 'RejectReasonsModel', 'notification_model', 'CertificateStatusModel'));
 		$this->load->library(array('session', 'form_validation'));
-		$this->load->helper(array('form', 'url'));
+		$this->load->helper(array('form', 'url', 'mail'));
 		$this->load->database();
 		date_default_timezone_set("Asia/Bangkok");
 	}
@@ -57,6 +57,7 @@ class Requestcertificate extends CI_Controller {
 					$result = $this->notification_model->add(34, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
 					if ($result){
 						$this->db->trans_complete();
+						$this->send_deliver_certificate($request->mem_email, $request->mem_name, $request->can_a_s);
 						$this->session->set_flashdata('deliver_success', true);
 						redirect("backend/Requestcertificate");
 					}
@@ -120,6 +121,7 @@ class Requestcertificate extends CI_Controller {
 					$result = $this->notification_model->add(35, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
 					if ($result){
 						$this->db->trans_complete();
+						$this->send_arrived_certificate($request->mem_email, $request->mem_name, $request->can_a_s, $request->req_address);
 						$this->session->set_flashdata('arrive_success', true);
 						redirect("backend/Requestcertificate");
 					}
@@ -229,6 +231,7 @@ class Requestcertificate extends CI_Controller {
 							$result = $this->notification_model->add(36, $req_id, $request->req_mem_id, "Sertifikat untuk anjing / Certificate for dog: ".$request->can_a_s);
 							if ($result){
 								$this->db->trans_complete();
+								$this->send_reject_certificate($request->mem_email, $request->mem_name, $request->can_a_s, $dataReq['req_reject_note']);
 								$this->session->set_flashdata('reject_success', true);
 								redirect("backend/Requestcertificate");
 							}
@@ -522,4 +525,25 @@ class Requestcertificate extends CI_Controller {
             redirect("backend/Users/login");
         }
     }
+
+	public function send_deliver_certificate($email, $member, $dog){
+		$mail = send_deliver_certificate($email, $member, $dog);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_arrived_certificate($email, $member, $dog, $address){
+		$mail = send_arrived_certificate($email, $member, $dog, $address);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_reject_certificate($email, $member, $dog, $reason){
+		$mail = send_reject_certificate($email, $member, $dog, $reason);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
 }

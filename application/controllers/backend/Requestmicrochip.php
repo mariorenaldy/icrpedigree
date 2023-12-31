@@ -9,7 +9,7 @@ class Requestmicrochip extends CI_Controller {
 		parent::__construct();
 		$this->load->model(array('requestmicrochipModel', 'caninesModel', 'memberModel', 'logrequestMicrochipModel', 'RejectReasonsModel', 'notification_model', 'MicrochipStatusModel'));
 		$this->load->library(array('session', 'form_validation'));
-		$this->load->helper(array('form', 'url'));
+		$this->load->helper(array('form', 'url', 'mail'));
 		$this->load->database();
 		date_default_timezone_set("Asia/Bangkok");
 	}
@@ -60,6 +60,11 @@ class Requestmicrochip extends CI_Controller {
 					$result = $this->notification_model->add(37, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
 					if ($result){
 						$this->db->trans_complete();
+						setlocale(LC_ALL, 'IND');
+						$ind_date = strftime('%d %B %Y', strtotime($request->req_datetime));
+						$eng_date = date("F jS, Y", strtotime($request->req_datetime));
+						$req_time = date("H:i", strtotime($request->req_datetime));
+						$this->send_approve_microchip($request->mem_email, $request->mem_name, $request->can_a_s, $ind_date, $eng_date, $req_time);
 						$this->session->set_flashdata('approve_success', true);
 						redirect("backend/Requestmicrochip");
 					}
@@ -123,6 +128,7 @@ class Requestmicrochip extends CI_Controller {
 					$result = $this->notification_model->add(39, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
 					if ($result){
 						$this->db->trans_complete();
+						$this->send_implanted_microchip($request->mem_email, $request->mem_name, $request->can_a_s);
 						$this->session->set_flashdata('complete_success', true);
 						redirect("backend/Requestmicrochip");
 					}
@@ -233,6 +239,7 @@ class Requestmicrochip extends CI_Controller {
 							$result = $this->notification_model->add(38, $req_id, $request->req_mem_id, "Microchip untuk anjing / Microchip for dog: ".$request->can_a_s);
 							if ($result){
 								$this->db->trans_complete();
+								$this->send_reject_microchip($request->mem_email, $request->mem_name, $request->can_a_s, $dataReq['req_reject_note']);
 								$this->session->set_flashdata('reject_success', true);
 								redirect("backend/Requestmicrochip");
 							}
@@ -552,5 +559,26 @@ class Requestmicrochip extends CI_Controller {
             $this->db->trans_rollback();
             return false;
         }
+	}
+
+	public function send_approve_microchip($email, $member, $dog, $ind_date, $eng_date, $time){
+		$mail = send_approve_microchip($email, $member, $dog, $ind_date, $eng_date, $time);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_implanted_microchip($email, $member, $dog){
+		$mail = send_implanted_microchip($email, $member, $dog);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+	public function send_reject_microchip($email, $member, $dog, $reason){
+		$mail = send_reject_microchip($email, $member, $dog, $reason);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
 	}
 }

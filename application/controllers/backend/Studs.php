@@ -1577,6 +1577,8 @@ class Studs extends CI_Controller {
 				if ($this->session->userdata('use_username')){
 					$where['stu_id'] = $this->uri->segment(4);
 					$stud = $this->studModel->get_studs($where)->row();
+					$wheMem['mem_id'] = $stud->stu_member_id;
+					$memData = $this->memberModel->get_members($wheMem)->row();
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$data['stu_user'] = $this->session->userdata('use_id');
@@ -1584,8 +1586,8 @@ class Studs extends CI_Controller {
 					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('rejected');
-					if ($this->uri->segment(5)){
-						$data['stu_app_note'] = urldecode($this->uri->segment(5));
+					if(isset($_GET['reason'])) {
+						$data['stu_app_note'] = $_GET['reason'];
 					}
 					$res = $this->studModel->update_studs($data, $where);
 					if ($res){
@@ -1609,6 +1611,7 @@ class Studs extends CI_Controller {
 							$result = $this->notification_model->add(6, $this->uri->segment(4), $stud->stu_member_id, "Nama jantan / Sire name: ".$stud->sire_a_s.'<br>Nama betina / Dam name: '.$stud->dam_a_s);
 							if ($result){
 								$this->db->trans_complete();
+								$this->send_reject_stud($memData->mem_email, $memData->mem_name, $stud->sire_a_s, $stud->dam_a_s, $data['stu_app_note']);
 								$this->session->set_flashdata('reject', TRUE);
 								redirect('backend/Studs/view_approve');
 							}
@@ -1720,6 +1723,13 @@ class Studs extends CI_Controller {
 
 		public function send_birth_link($email, $member, $sire, $dam){
 			$mail = send_birth_link($email, $member, $sire, $dam);
+			if (!$mail){
+				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+			}
+		}
+
+		public function send_reject_stud($email, $member, $sire, $dam, $reason){
+			$mail = send_reject_stud($email, $member, $sire, $dam, $reason);
 			if (!$mail){
 				$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
 			}

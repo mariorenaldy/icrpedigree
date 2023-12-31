@@ -10,7 +10,7 @@ class Stambums extends CI_Controller {
         $this->load->model(array('stambumModel', 'caninesModel','memberModel', 'notification_model', 'notificationtype_model', 'pedigreesModel', 'kennelModel', 'birthModel', 'studModel', 'logcanineModel', 'logpedigreeModel', 'logstambumModel'));
         $this->load->library('upload', $this->config->item('upload_canine'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-        $this->load->helper(array('url'));
+        $this->load->helper(array('url', 'mail'));
         $this->load->database();
         date_default_timezone_set("Asia/Bangkok");
     }
@@ -943,6 +943,7 @@ class Stambums extends CI_Controller {
                                         $res = $this->notification_model->add(4, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                                         if ($res){
                                             $this->db->trans_complete();
+                                            $this->send_approve_puppy($stb->mem_email, $stb->mem_name, $stb->stb_a_s);
                                             $this->session->set_flashdata('approve', TRUE);
                                             redirect('backend/Stambums/view_approve');
                                         }
@@ -1003,8 +1004,8 @@ class Stambums extends CI_Controller {
                     'stb_date' => date('Y-m-d H:i:s'),
                     'stb_app_date' => date('Y-m-d H:i:s'),
                 );
-                if ($this->uri->segment(5)){
-                    $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
+                if(isset($_GET['reason'])) {
+                    $dataStb['stb_app_note'] = $_GET['reason'];
                 }
                 $res = $this->stambumModel->update_stambum($dataStb, $whereStb);
                 if ($res){
@@ -1035,6 +1036,7 @@ class Stambums extends CI_Controller {
                         $res = $this->notification_model->add(5, $this->uri->segment(4), $stb->stb_member_id, "Nama anjing / Canine name: ".$stb->stb_a_s."<br>Nama jantan / Sire name: ".$birth->sire.'<br>Nama betina / Dam name: '.$birth->dam);
                         if ($res){
                             $this->db->trans_complete();
+                            $this->send_reject_puppy($stb->mem_email, $stb->mem_name, $stb->stb_a_s, $dataStb['stb_app_note']);
                             $this->session->set_flashdata('reject', TRUE);
                             redirect('backend/Stambums/view_approve');
                         }
@@ -1213,5 +1215,19 @@ public function delete(){
             $this->db->trans_rollback();
             return false;
         }
+	}
+
+    public function send_reject_puppy($email, $member, $puppy, $reason){
+		$mail = send_reject_puppy($email, $member, $puppy, $reason);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
+	}
+
+    public function send_approve_puppy($email, $member, $puppy){
+		$mail = send_approve_puppy($email, $member, $puppy);
+		if (!$mail){
+			$this->session->set_flashdata('error_message', show_error($this->email->print_debugger()));
+		}
 	}
 }
