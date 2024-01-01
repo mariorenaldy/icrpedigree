@@ -26,7 +26,9 @@ function send_greeting($email, $member){
 	$message .= '<div>Kami mengucapkan terima kasih atas kepercayaan Anda dalam menjadi anggota di situs kami dan berharap Anda dapat menikmati pengalaman menggunakan layanan kami. Jangan ragu untuk menghubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
 	$message .= '<div>Salam,</div><br>';
 	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
 	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
 	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
 	$message .= '<div>We are pleased to inform you that your membership registration on the ';
 	$message .= 'ICRPedigree website has been approved. You can now access all features and services available on our site.</div><br>';
@@ -814,6 +816,416 @@ function send_reject_order($email, $member, $invoice, $reason){
 
 	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
 	$message .= '<div>We are sorry to inform you that your order with the invoice number <b>'.$invoice.'</b> has been rejected because:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+//kennel update
+function send_approve_kennel_update($email, $member){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Pengubahan Data Kennel Disetujui / Kennel Data Change Approved');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Kami ingin menginformasikan bahwa pengubahan data kennel Anda telah disetujui.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We would like to inform you that your kennel data change has been approved.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_reject_kennel_update($email, $member, $reason){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Pengubahan Data Kennel Ditolak / Kennel Data Change Rejected');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Mohon maaf, pengubahan data kennel Anda ditolak dengan alasan:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Mohon hubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are sorry to inform you that your kennel data change has been rejected because:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+//become pro
+function send_approve_pro($email, $member){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Menjadi Member Pro Disetujui / Become Pro Member Approved');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Dengan senang hati kami informasikan kepada Anda bahwa permintaan Anda untuk mengubah jenis keanggotaan menjadi Member Pro di website ';
+	$message .= 'ICRPedigree telah disetujui. Anda kini dapat mengakses semua fitur dan layanan yang tersedia di situs kami.</div><br>';
+	$message .= '<div>Sebagai anggota di situs kami, Anda dapat melakukan pendaftaran generasi pertama, pendaftaran pacak, lahir, dan pembuatan sertifikat untuk anjing kesayangan Anda.</div><br>';
+	$message .= '<div>Kami mengucapkan terima kasih atas kepercayaan Anda dalam menjadi anggota di situs kami dan berharap Anda dapat menikmati pengalaman menggunakan layanan kami. Jangan ragu untuk menghubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are pleased to inform you that your request to change your membership type to Member Pro on the ';
+	$message .= 'ICRPedigree website has been approved. You can now access all features and services available on our site.</div><br>';
+	$message .= '<div>As a member on our site, you can do first generation registration, stud registration, birth regsitration, and make certificates for your beloved dog.</div><br>';
+	$message .= '<div>We thank you for your trust in becoming a member on our site and hope that you will enjoy the experience of using our services. Do not hesitate to contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_reject_pro($email, $member, $reason){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Menjadi Member Pro Ditolak / Become Pro Member Rejected');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Mohon maaf, permintaan Anda untuk mengubah jenis keanggotaan menjadi Member Pro ditolak dengan alasan:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Mohon hubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are sorry to inform you that your request to change your membership type to Member Pro has been rejected because:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+//change dog owner
+function send_approve_ownership($email, $member, $dog, $newOwner){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Pengubahan Pemilik Anjing Disetujui / Dog Ownership Change Approved');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Kami ingin menginformasikan bahwa pengubahan pemilik anjing Anda dengan nama <b>'.$dog.'</b> kepada <b>'.$newOwner.'</b> telah disetujui.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We would like to inform you that the change of ownership for a dog with the name <b>'.$dog.'</b> to <b>'.$newOwner.'</b> has been approved.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_reject_ownership($email, $member, $dog, $newOwner, $reason){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Pengubahan Pemilik Anjing Ditolak / Dog Ownership Change Rejected');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Mohon maaf, pengubahan pemilik anjing Anda dengan nama <b>'.$dog.'</b> kepada <b>'.$newOwner.'</b> ditolak dengan alasan:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Mohon hubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are sorry to inform you that the change of ownership for a dog with the name <b>'.$dog.'</b> to <b>'.$newOwner.'</b> has been rejected because:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+//update photo & RIP
+function send_approve_update_canine($email, $member, $dog){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Laporan Ubah Foto & RIP Anjing Disetujui / Dog Photo & RIP Change Report Approved');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Kami ingin menginformasikan bahwa laporan ubah foto & RIP anjing Anda dengan nama <b>'.$dog.'</b> telah disetujui.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We would like to inform you that your photo & RIP change report for a dog with the name <b>'.$dog.'</b> has been approved.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_reject_update_canine($email, $member, $dog, $reason){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Laporan Ubah Foto & RIP Anjing Ditolak / Dog Photo & RIP Change Report Rejected');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Mohon maaf, laporan ubah foto & RIP anjing Anda dengan nama <b>'.$dog.'</b> ditolak dengan alasan:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Mohon hubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are sorry to inform you that your photo & RIP change report for a dog with the name <b>'.$dog.'</b> has been rejected because:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+//update birth
+function send_approve_update_birth($email, $member, $sire, $dam){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Laporan Ubah Lahir Disetujui / Birth Change Report Approved');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Kami ingin menginformasikan bahwa laporan ubah data kelahiran dari hasil pacak antara <b>'.$sire.'</b> dan <b>'.$dam.'</b> telah disetujui.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We would like to inform you that your birth change report from a stud between <b>'.$sire.'</b> and <b>'.$dam.'</b> has been approved.</div><br>';
+	$message .= '<div>Regards,</div><br>';
+	$message .= '<div>ICRPedigree Team</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-top: 1em; margin-bottom: 1em;">';
+	$message .= '<div>Address: Cisatu 2 Street 12b, Ciumbuleuit, Bandung</div>';
+	$message .= '<div>Contact: +6287777802288</div>';
+	$message .= '</div>';
+	
+	$ci->email->message($message);
+	return $ci->email->send();
+}
+
+function send_reject_update_birth($email, $member, $sire, $dam, $reason){
+	$ci =& get_instance();
+
+	$ci->load->library('email', $ci->config->item('email'));
+	$ci->email->set_newline("\r\n");
+
+	$ci->email->set_mailtype('html');
+	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
+	// $ci->email->to($email);
+	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->subject('Laporan Ubah Lahir Ditolak / Birth Change Report Rejected');
+
+	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
+	$message .= '<div style="display: flex; align-items:center;">';
+	$message .= '<img src="https://icrpedigree.com/assets/img/icr_logo_hitam.png" style="width: 100px; vertical-align: middle;">';
+	$message .= '<span style="font-size: 50px; margin: auto;">ICR Pedigree</span>';
+	$message .= '</div>';
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+	$message .= '<div>Yth. <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>Mohon maaf, laporan ubah data kelahiran dari hasil pacak antara <b>'.$sire.'</b> dan <b>'.$dam.'</b> ditolak dengan alasan:</div><br>';
+	$message .= '<div>"'.$reason.'"</div><br>';
+	$message .= '<div>Mohon hubungi kami jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut.</div><br>';
+	$message .= '<div>Salam,</div><br>';
+	$message .= '<div style="margin-bottom: 1em;">Tim ICRPedigree</div>';
+
+	$message .= '<hr style="border-top: 4px solid black; margin-bottom: 1em;">';
+
+	$message .= '<div>Dear <b>'.$member.'</b>,</div><br>';
+	$message .= '<div>We are sorry to inform you that your birth change report from the stud between <b>'.$sire.'</b> and <b>'.$dam.'</b> has been rejected because:</div><br>';
 	$message .= '<div>"'.$reason.'"</div><br>';
 	$message .= '<div>Please contact us if you need assistance or have further questions.</div><br>';
 	$message .= '<div>Regards,</div><br>';

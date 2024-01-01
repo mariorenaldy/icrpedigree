@@ -176,7 +176,7 @@
         function reject(id, nama){
             var proceed = window.prompt("Reject Update Birth?", "");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Requestupdatebirth/reject/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Requestupdatebirth/reject/"+id+"?reason="+encodeURI(proceed);
             }
         }
 

@@ -193,7 +193,7 @@
     function reject(id, nama){
         var proceed = window.prompt("Reject "+nama+" ?", "");
         if (proceed){             
-            window.location = "<?= base_url(); ?>backend/Requestmember/reject/"+id+"/"+encodeURI(proceed);
+            window.location = "<?= base_url(); ?>backend/Requestmember/reject/"+id+"?reason="+encodeURI(proceed);
         }
     }
 
