@@ -177,9 +177,9 @@
             window.location = "<?= base_url(); ?>backend/Births";
         }
         function del(id, nama){
-            var proceed = window.prompt("Delete "+nama+" ?", "");
+            var proceed = confirm("Delete "+nama+" ?");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Stambums/delete/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Stambums/delete/"+id;
             }
         }
         function log(id){

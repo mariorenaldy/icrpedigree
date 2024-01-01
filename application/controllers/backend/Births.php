@@ -57,7 +57,7 @@ class Births extends CI_Controller {
 
 			// $where['bir_stat'] = $this->config->item('accepted');
 			// $where['bir_stat !='] = $this->config->item('processed');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
             $where['kennels.ken_stat'] = $this->config->item('accepted');
 			$data['birth'] = $this->birthModel->get_births($where, $page * $config['per_page'], $this->config->item('backend_birth_count'), $where_not_in)->result();
 
@@ -199,7 +199,7 @@ class Births extends CI_Controller {
 			}
 			// $where['bir_stat'] = $this->config->item('accepted');
 			// $where['bir_stat !='] = $this->config->item('processed');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
             $where['kennels.ken_stat'] = $this->config->item('accepted');
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $this->input->post('keywords');
@@ -978,9 +978,6 @@ class Births extends CI_Controller {
 					$data['bir_date'] = date('Y-m-d H:i:s');
 					$data['bir_app_date'] = date('Y-m-d H:i:s');
 					$data['bir_stat'] = $this->config->item('delete_stat');
-                    if ($this->uri->segment(5)){
-                        $data['bir_app_note'] = urldecode($this->uri->segment(5));
-                    }
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->birthModel->update_births($data, $where);

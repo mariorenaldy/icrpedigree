@@ -217,9 +217,9 @@
             window.location = "<?= base_url(); ?>backend/Canines/tree/"+id;
         }
         function del(id, nama){
-            var proceed = window.prompt("Delete "+nama+" ?", "");
-            if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Canines/delete/"+id+"/"+encodeURI(proceed);
+            var proceed = confirm("Delete "+nama+" ?");
+            if (proceed){
+                window.location = "<?= base_url(); ?>backend/Canines/delete/"+id;
             }
         }
         function print(id){

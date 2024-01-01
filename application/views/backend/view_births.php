@@ -203,9 +203,9 @@
             window.location = "<?= base_url(); ?>backend/Births/edit/"+id;
         }
         function del(id){
-            var proceed = window.prompt("Delete birth?", "");
+            var proceed = confirm("Delete birth?");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Births/delete/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Births/delete/"+id;
             }
         }
         function complete(id){

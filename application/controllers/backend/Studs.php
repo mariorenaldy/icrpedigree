@@ -56,7 +56,7 @@ class Studs extends CI_Controller {
 
 			// $where['stu_stat'] = $this->config->item('accepted');
 			// $where['stu_stat !='] = $this->config->item('processed');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
             $data['stud'] = $this->studModel->get_studs(null, $page * $config['per_page'], $this->config->item('backend_stud_count'), $where_not_in)->result();
 
             $data['stat'] = array();
@@ -187,7 +187,7 @@ class Studs extends CI_Controller {
 			}
 			// $where['stu_stat'] = $this->config->item('accepted');
 			// $where['stu_stat !='] = $this->config->item('processed');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
             if ($data['keywords']){
                 $like['can_sire.can_a_s'] = $data['keywords'];
                 $like['can_dam.can_a_s'] = $data['keywords'];
@@ -1650,9 +1650,6 @@ class Studs extends CI_Controller {
 					$data['stu_date'] = date('Y-m-d H:i:s');
 					$data['stu_app_date'] = date('Y-m-d H:i:s');
 					$data['stu_stat'] = $this->config->item('delete_stat');
-                    if ($this->uri->segment(5)){
-                        $data['stu_app_note'] = urldecode($this->uri->segment(5));
-                    }
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->studModel->update_studs($data, $where);

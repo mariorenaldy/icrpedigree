@@ -180,9 +180,9 @@
             window.location = "<?= base_url(); ?>backend/Studs/edit/"+id;
         }
         function del(id){
-            var proceed = window.prompt("Delete stud?", "");
+            var proceed = confirm("Delete stud?");
             if (proceed){             
-                window.location = "<?= base_url(); ?>backend/Studs/delete/"+id+"/"+encodeURI(proceed);
+                window.location = "<?= base_url(); ?>backend/Studs/delete/"+id;
             }
         }
         function log(id){

@@ -57,7 +57,7 @@ class Canines extends CI_Controller {
 
         // $where['can_stat'] = $this->config->item('accepted');
         // $where['can_stat !='] = $this->config->item('processed');
-        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'),$this->config->item('rejected'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->get_canines($where, 'DATE_FORMAT(canines.can_app_date, "%Y-%m-%d %H:%i:%s") desc', $page * $config['per_page'], $this->config->item('backend_canine_count'), $where_not_in)->result();
         
@@ -150,7 +150,7 @@ class Canines extends CI_Controller {
             $like = null;
         // $where['can_stat'] = $this->config->item('accepted');
         // $where['can_stat !='] = $this->config->item('processed');
-        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'),$this->config->item('rejected'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['canine'] = $this->caninesModel->search_canines($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_canine_count'), $where_not_in)->result();
 
@@ -1142,9 +1142,6 @@ public function validate_edit_pedigree(){
                 $data['can_app_user'] = $this->session->userdata('use_id');
                 $data['can_date'] = date('Y-m-d H:i:s');
                 $data['can_app_date'] = date('Y-m-d H:i:s');
-                if ($this->uri->segment(5)){
-                    $data['can_app_note'] = urldecode($this->uri->segment(5));
-                }
 
                 $oldCan = $this->caninesModel->get_canines($where)->row();
     

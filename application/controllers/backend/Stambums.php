@@ -64,7 +64,7 @@ class Stambums extends CI_Controller {
         $config['attributes'] = array('class' => 'page-link bg-light text-primary');
 
         // $where['stb_stat !='] = $this->config->item('processed');
-        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'),$this->config->item('rejected'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['stambum'] = $this->stambumModel->get_stambum($where, 'stb_id desc', $page * $config['per_page'], $this->config->item('backend_stb_count'), $where_not_in)->result();
 
@@ -154,7 +154,7 @@ class Stambums extends CI_Controller {
         else  
             $like = null;
         // $where['stb_stat !='] = $this->config->item('processed');
-        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'));
+        $where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('not_paid'),$this->config->item('cancelled'),$this->config->item('payment_failed'),$this->config->item('rejected'));
         $where['kennels.ken_stat'] = $this->config->item('accepted');
         $data['stambum'] = $this->stambumModel->search_stambum($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_stb_count'), $where_not_in)->result();
 
@@ -1079,9 +1079,6 @@ public function delete(){
                 'stb_date' => date('Y-m-d H:i:s'),
                 'stb_app_date' => date('Y-m-d H:i:s'),
             );
-            if ($this->uri->segment(5)){
-                $dataStb['stb_app_note'] = urldecode($this->uri->segment(5));
-            }
 
             $data = array(
                 'log_stb_id' => $stb->stb_id,

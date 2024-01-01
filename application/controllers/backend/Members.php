@@ -66,7 +66,7 @@ class Members extends CI_Controller {
 			$where['mem_id !='] = $this->config->item('no_member');
 			// $where['ken_stat'] = $this->config->item('accepted');
 			$where['ken_stat !='] = $this->config->item('processed');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
 			$data['member'] = $this->MemberModel->get_members($where, 'created_date desc', $page * $config['per_page'], $this->config->item('backend_member_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/backend/Members/index';
@@ -190,7 +190,7 @@ class Members extends CI_Controller {
 			if ($data['mem_type'] != $this->config->item('all_member'))
 				$where['mem_type'] = $data['mem_type'];
 			$where['mem_id !='] = $this->config->item('no_member');
-			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'));
+			$where_not_in = array($this->config->item('delete_stat'),$this->config->item('processed'),$this->config->item('rejected'));
 			$data['member'] = $this->MemberModel->search_members($like, $where, $data['sort_by'].' '.$data['sort_type'], $page * $config['per_page'], $this->config->item('backend_member_count'), $where_not_in)->result();
 
             $config['base_url'] = base_url().'/backend/Members/search';
@@ -1070,9 +1070,6 @@ class Members extends CI_Controller {
 						'mem_date' => date('Y-m-d H:i:s'),
 						'mem_stat' => $this->config->item('delete_stat'),
 					);
-                    if ($this->uri->segment(5)){
-                        $data['mem_app_note'] = urldecode($this->uri->segment(5));
-                    }
 					$this->db->trans_strict(FALSE);
 					$this->db->trans_start();
 					$res = $this->MemberModel->update_members($data, $where);
