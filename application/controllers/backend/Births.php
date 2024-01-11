@@ -554,7 +554,7 @@ class Births extends CI_Controller {
 													$news = $this->news_model->add($dataNews);
 													if ($news){
 														$this->db->trans_complete();
-														$this->send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s);
+														$this->send_stambum_link($partner->mem_email, $partner->mem_name, $c->can_a_s, $can->can_a_s);
 														$this->session->set_flashdata('add_success', true);
 														redirect("backend/Births");
 													}
@@ -851,7 +851,7 @@ class Births extends CI_Controller {
 											$news = $this->news_model->add($dataNews);
 											if ($news){
 												$this->db->trans_complete();
-												$this->send_stambum_link($partner->mem_email, $partner->mem_username, $c->can_a_s, $can->can_a_s);
+												$this->send_stambum_link($partner->mem_email, $partner->mem_name, $c->can_a_s, $can->can_a_s);
 												$this->session->set_flashdata('approve', TRUE);
 												redirect('backend/Births/view_approve');
 											}
