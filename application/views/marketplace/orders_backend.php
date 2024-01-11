@@ -175,13 +175,14 @@
         }
 
         $(document).ready(function() {
+            $.fn.dataTable.moment( 'DD-MM-YYYY HH:mm:ss' );
             $('#datatable').DataTable({
                 "lengthChange": false,
                 searching: true,
                 info: false,
                 "ordering": true,
                 order: [
-                    [10, 'desc']
+                    [9, 'desc']
                 ],
                 dom: 'lpftrip',
                 columnDefs: [{
@@ -196,6 +197,8 @@
         }
     </script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/datetime-moment.js"></script>
 </body>
 
 </html>

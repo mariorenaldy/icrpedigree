@@ -121,7 +121,7 @@ class Payment extends CI_Controller {
 			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
 		}
 	
-		$string = 'TES-'.$string;
+		$string = 'INVB-'.$string;
 		return $string;
 	}
 	function saveOrder(){

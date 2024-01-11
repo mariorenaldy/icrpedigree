@@ -10,7 +10,7 @@ function send_greeting($email, $member){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Registrasi Keanggotaan di ICRPedigree Disetujui / Membership Registration on ICRPedigree Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -54,7 +54,7 @@ function send_reject($email, $member, $note){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Registrasi Keanggotaan di ICRPedigree Ditolak / Membership Registration on ICRPedigree Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -96,7 +96,7 @@ function send_paylink($email, $member, $link){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Menunggu Pembayaran Registrasi ICRPedigree / Waiting for ICRPedigree Registration Payment');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -138,7 +138,7 @@ function send_approve_dog($email, $member, $dog){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pendaftaran Anjing Disetujui / Dog Registration Has Been Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -176,7 +176,7 @@ function send_reject_dog($email, $member, $dog, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pendaftaran Anjing Ditolak / Dog Registration Has Been Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -218,7 +218,7 @@ function send_birth_link($email, $member, $sire, $dam){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Lapor Pacak Disetujui / Stud Report Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -260,7 +260,7 @@ function send_reject_stud($email, $member, $sire, $dam, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Lapor Pacak Ditolak / Stud Report Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -302,7 +302,7 @@ function send_stambum_link($email, $member, $sire, $dam){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Lapor Lahir Disetujui / Birth Report Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -346,7 +346,7 @@ function send_reject_birth($email, $member, $sire, $dam, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Lapor Lahir Ditolak / Birth Report Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -388,7 +388,7 @@ function send_approve_puppy($email, $member, $puppy){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pendaftaran Anak Anjing Disetujui / Puppy Registration Has Been Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -426,7 +426,7 @@ function send_reject_puppy($email, $member, $puppy, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pendaftaran Anak Anjing Ditolak / Puppy Registration Has Been Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -468,7 +468,7 @@ function send_deliver_certificate($email, $member, $dog){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Sertifikat Anjing Anda Sedang Dikirim / Your Dog Certificate Is Being Delivered');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -508,7 +508,7 @@ function send_arrived_certificate($email, $member, $dog, $address){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Sertifikat Anjing Anda Telah Sampai Pada Tujuan / Your Dog Certificate Has Arrived At Its Destination');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -548,7 +548,7 @@ function send_reject_certificate($email, $member, $dog, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Permintaan Cetak Sertifikat Anjing Anda Ditolak / Your Certificate Print Request Has Been Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -591,7 +591,7 @@ function send_approve_microchip($email, $member, $dog, $ind_date, $eng_date, $ti
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Permintaan Pemasangan Microchip Anda Disetujui / Your Microchip Implant Request Has Been Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -633,7 +633,7 @@ function send_implanted_microchip($email, $member, $dog){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Microchip Anjing Anda Telah Dipasang / Your Dog Microchip Has Been Implanted');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -673,7 +673,7 @@ function send_reject_microchip($email, $member, $dog, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Permintaan Pemasangan Microchip Anjing Anda Ditolak / Your Dog Microchip Implant Request Has Been Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -716,7 +716,7 @@ function send_deliver_order($email, $member, $invoice){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pesanan Anda Sedang Dikirim / Your Order Is Being Delivered');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -756,7 +756,7 @@ function send_arrived_order($email, $member, $invoice, $address){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pesanan Anda Telah Sampai Pada Tujuan / Your Order Has Arrived At Its Destination');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -796,7 +796,7 @@ function send_reject_order($email, $member, $invoice, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pesanan Anda Ditolak / Your Order Has Been Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -839,7 +839,7 @@ function send_approve_kennel_update($email, $member){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pengubahan Data Kennel Disetujui / Kennel Data Change Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -877,7 +877,7 @@ function send_reject_kennel_update($email, $member, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pengubahan Data Kennel Ditolak / Kennel Data Change Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -920,7 +920,7 @@ function send_approve_pro($email, $member){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Menjadi Member Pro Disetujui / Become Pro Member Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -964,7 +964,7 @@ function send_reject_pro($email, $member, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Menjadi Member Pro Ditolak / Become Pro Member Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1007,7 +1007,7 @@ function send_approve_ownership($email, $member, $dog, $newOwner){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pengubahan Pemilik Anjing Disetujui / Dog Ownership Change Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1045,7 +1045,7 @@ function send_reject_ownership($email, $member, $dog, $newOwner, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Pengubahan Pemilik Anjing Ditolak / Dog Ownership Change Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1087,7 +1087,7 @@ function send_approve_update_canine($email, $member, $dog){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Laporan Ubah Foto & RIP Anjing Disetujui / Dog Photo & RIP Change Report Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1125,7 +1125,7 @@ function send_reject_update_canine($email, $member, $dog, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Laporan Ubah Foto & RIP Anjing Ditolak / Dog Photo & RIP Change Report Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1168,7 +1168,7 @@ function send_approve_update_birth($email, $member, $sire, $dam){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Laporan Ubah Lahir Disetujui / Birth Change Report Approved');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';
@@ -1206,7 +1206,7 @@ function send_reject_update_birth($email, $member, $sire, $dam, $reason){
 	$ci->email->set_mailtype('html');
 	$ci->email->from($ci->config->item('email')['smtp_user'], 'ICR Pedigree Customer Service');
 	// $ci->email->to($email);
-	$ci->email->to("mariorenaldy2@gmail.com");
+	$ci->email->to("rizalafriandi01@gmail.com");
 	$ci->email->subject('Laporan Ubah Lahir Ditolak / Birth Change Report Rejected');
 
 	$message = '<div style="width: 500px; margin: auto; text-align: justify; text-justify: inter-word;">';

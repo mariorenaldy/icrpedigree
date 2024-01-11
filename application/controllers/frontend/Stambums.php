@@ -783,7 +783,7 @@ class Stambums extends CI_Controller {
 			$string .= $characters[mt_rand(0, strlen($characters) - 1)];
 		}
 	
-		$string = 'TESCAN-'.$string;
+		$string = 'INVS-'.$string;
 		return $string;
 	}
 	function generate_signature($componentSignature, $secretKey){
