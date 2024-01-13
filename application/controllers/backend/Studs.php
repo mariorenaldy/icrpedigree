@@ -1538,6 +1538,7 @@ class Studs extends CI_Controller {
 									$news = $this->news_model->add($dataNews);
 									if ($news){
 										$this->db->trans_complete();
+										$this->send_birth_link($partner->mem_email, $partner->mem_name, $c->can_a_s, $can->can_a_s);
 										$this->session->set_flashdata('approve', TRUE);
 										redirect('backend/Studs/view_approve');
 									}
