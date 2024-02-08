@@ -64,6 +64,8 @@ class Payment extends CI_Controller {
 
 		curl_setopt_array($ch, array(
 			CURLOPT_URL => 'https://api-sandbox.doku.com/checkout/v1/payment',
+			CURLOPT_SSL_VERIFYHOST => 0,
+			CURLOPT_SSL_VERIFYPEER => 0,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_FAILONERROR => true,
 			CURLOPT_ENCODING => '',

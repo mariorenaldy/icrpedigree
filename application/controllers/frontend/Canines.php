@@ -511,6 +511,8 @@ class Canines extends CI_Controller {
 	
 			curl_setopt_array($ch, array(
 				CURLOPT_URL => 'https://api-sandbox.doku.com/orders/v1/status/'.$requestId,
+				CURLOPT_SSL_VERIFYHOST => 0,
+				CURLOPT_SSL_VERIFYPEER => 0,
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_FAILONERROR => true,
 				CURLOPT_ENCODING => '',
